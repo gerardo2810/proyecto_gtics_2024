@@ -66,31 +66,31 @@ public class AdminSedeController {
     List<Medicamento> medicamentosSeleccionados = new ArrayList<>();
     List<String> listaCantidades = new ArrayList<>();
 
-    @GetMapping(value = "")
+    @GetMapping("")
     public String showIndexAdminSede(){
         return "adminsede/inicio";
     }
 
-    @GetMapping(value = {"/doctores"})
+    @GetMapping("/doctores")
     public String showDoctors(Model model){
         List<Doctor> listaDoctores = doctorRepository.listarDoctores();
         model.addAttribute("listaDoctoresD", listaDoctores);
         return "adminsede/doctores";
     }
 
-    @GetMapping(value = "/farmacista")
+    @GetMapping("/farmacista")
     public String showFarmacistas(Model model){
         List<Usuario> listaFarmacistas = usuarioRepository.listarFarmacistas();
         model.addAttribute("listaFarmacistas", listaFarmacistas);
         return "adminsede/farmacistas";
     }
 
-    @GetMapping(value = "/ordenes")
+    @GetMapping("/ordenes")
     public String showOrders(){
         return "adminsede/ordenes_reposicion";
     }
 
-    @GetMapping(value = "/editar_farmacista")
+    @GetMapping("/editar_farmacista")
     public String editFarmacista(@RequestParam("id") int id,
                                  Model model){
         Usuario usuarioFarmacista = usuarioRepository.encontrarFarmacistaporId(id);
@@ -107,12 +107,12 @@ public class AdminSedeController {
 
     }
 
-    @GetMapping(value = "/editar_orden_reposicion")
+    @GetMapping("/editar_orden_reposicion")
     public String editOrden(){
         return "adminsede/editar_orden_reposicion";
     }
 
-    @GetMapping(value = "/medicamentos")
+    @GetMapping("/medicamentos")
     public String showMedicamentos(Model model){
         List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
         sedeSession = sedeRepository.getSedeByIdSede(1);
