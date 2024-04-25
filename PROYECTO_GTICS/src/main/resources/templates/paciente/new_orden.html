@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
     <!--==========================================-->
 
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
 
     <title>Pre Ordenes | Bienestar San Miguel</title>
@@ -504,7 +504,6 @@
 
 <!---------Datatable---------->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
         var table = $('#miTabla').DataTable({
@@ -681,13 +680,9 @@
                 for(let i=0; i < alreadyOnList.length; i++){
                     if(alreadyOnList[i].innerText===titulo){
                         Swal.fire({
-                            icon: "warning",
-                            iconColor: '#DC3545',
-                            title: "ADVERTENCIA",
-                            text: "El medicamento ya fue agregado",
-                            confirmButtonText: "OK",
-                            confirmButtonColor: '#0D6EFD',
-                            width: 500,
+                            title: "Ya está en la lista",
+                            text: "El medicamento ya fue agregado.",
+                            icon: "info"
                         });
                         return;
                     }
@@ -870,7 +865,7 @@
 
 <script>
 
-        $(document).ready(function() {
+    $(document).ready(function() {
         $('#searchInput').on('input', function() { // Escuchar el evento 'input'
             var searchTerm = $(this).val().trim().toLowerCase();
             $('.item').each(function() {
