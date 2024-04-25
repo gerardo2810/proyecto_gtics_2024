@@ -225,7 +225,7 @@ public class PacienteController {
         }
 
         redirectAttributes.addFlashAttribute("msg", "Orden Creada");
-        return "redirect:/paciente/ordenes";
+        return "redirect://paciente/ordenes";
 
     }
 }
