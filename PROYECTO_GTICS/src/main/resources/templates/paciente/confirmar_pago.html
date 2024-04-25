@@ -170,47 +170,27 @@
 
 
                 <tbody>
-                <tr>
-                    <td>Paracetamol 100 mg</td>
-                    <td><img id="imagen" class="medicamento" src="/img/paracetamol.jpg"></td>
-                    <td>5</td>
-                    <td>S/. 6</td>
-                    <td>S/. 30</td>
-                </tr>
-                <tr>
-                    <td>Neurobion 100 mg</td>
-                    <td><img class="medicamento" src="/img/neurobion.jpg"></td>
-                    <td>5</td>
-                    <td>S/. 6</td>
-                    <td>S/. 30</td>
-                </tr>
-                <tr>
-                    <td>Nastzol 100 mg</td>
-                    <td><img class="medicamento" src="/img/nastzol.jpg"></td>
-                    <td>5</td>
-                    <td>S/. 6</td>
-                    <td>S/. 30</td>
-                </tr>
-                <tr>
-                    <td>Panadol 100 mg</td>
-                    <td><img class="medicamento"  src="/img/panadol.jpg"></td>
-                    <td>5</td>
-                    <td>S/. 6</td>
-                    <td>S/. 30</td>
-                </tr>
-                <tr>
-                    <td>Apronax 100 mg</td>
-                    <td><img class="medicamento"  src="/img/apronax.jpg"></td>
-                    <td>5</td>
-                    <td>S/. 6</td>
-                    <td>S/. 30</td>
-                </tr>
-                <tr>
-                    <td>Doloral 100 mg</td>
-                    <td><img class="medicamento"  src="/img/doloral.jpg"></td>
-                    <td>5</td>
-                    <td>S/. 6</td>
-                    <td>S/. 30</td>
+                <tr th:each="itemDeLaOrden: ${lista}">
+                    <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
+                    <td><img class="medicamento" th:src="${itemDeLaOrden.getIdMedicamento().imagen}"></td>
+                    <td th:text="${itemDeLaOrden.getCantidad()}"></td>
+                    <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
+                    <td class="resultado"></td>
+                    <script th:inline="javascript">
+                        function limitarDigitos(numero) {
+                            var numeroStr = numero.toString();
+                            // Obtener los primeros 4 dígitos
+                            var primerosCuatroDigitos = numeroStr.substring(0, 4);
+                            var numeroLimitado = parseFloat(primerosCuatroDigitos);
+                            return numeroLimitado;
+                        }
+                        var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
+                        var cantidad = [[${itemDeLaOrden.getCantidad()}]];
+                        var resultado = precioVenta * cantidad;
+                        console.log(resultado)
+                        var resultadoLimitado = limitarDigitos(resultado);
+                        document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
+                    </script>
                 </tr>
 
 
@@ -220,8 +200,6 @@
             <br>
             <br>
             <br>
-            <br>
-            <hr style="border-top: 2px solid #3c3c3c">
             <br>
 
 
