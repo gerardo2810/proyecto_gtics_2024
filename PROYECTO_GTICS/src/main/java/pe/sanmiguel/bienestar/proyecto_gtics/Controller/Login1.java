@@ -20,7 +20,7 @@ final UsuarioRepository usuarioRepository;
     public Login1(UsuarioRepository usuarioRepository) {this.usuarioRepository = usuarioRepository;}
 
     @GetMapping("")
-    public String inicio() {return "/login/login";}
+    public String inicio() {return "login/login";}
 
    @GetMapping("/new")
    public String nuevoUsuario() {

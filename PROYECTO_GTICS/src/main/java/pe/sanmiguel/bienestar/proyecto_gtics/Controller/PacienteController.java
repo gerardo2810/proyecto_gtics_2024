@@ -54,17 +54,17 @@ public class PacienteController {
     /*----------------- Method: GET -----------------*/
 
     @GetMapping(value="")
-    public String preOrdenes(){return "/paciente/pre_ordenes";}
+    public String preOrdenes(){return "paciente/pre_ordenes";}
 
     @GetMapping(value="/ordenes")
     public String ordenes(Model model){
         List<Orden> lista =  ordenRepository.findAll();
         model.addAttribute("lista",lista);
 
-        return "/paciente/ordenes";}
+        return "paciente/ordenes";}
 
     @GetMapping(value="/pago_tarjeta")
-    public String pago_tarjeta(){return "/paciente/pago_tarjeta";}
+    public String pago_tarjeta(){return "paciente/pago_tarjeta";}
 
     @GetMapping(value="/tracking")
     public String tracking(Model model, @RequestParam("id") String idOrden){
@@ -77,14 +77,14 @@ public class PacienteController {
         model.addAttribute("lista", lista);
         model.addAttribute("ordenActual", orden);
 
-        return "/paciente/tracking";
+        return "paciente/tracking";
     }
 
     @GetMapping(value="/tracking_wait")
-    public String tracking_wait(){ return "/paciente/tracking_pendiente";}
+    public String tracking_wait(){ return "paciente/tracking_pendiente";}
 
     @GetMapping(value="/tracking_end")
-    public String tracking_end(){ return "/paciente/tracking_finalizado";}
+    public String tracking_end(){ return "paciente/tracking_finalizado";}
 
     @GetMapping(value="/new_orden")
     public String new_orden(Model model){
@@ -92,42 +92,42 @@ public class PacienteController {
         List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
         model.addAttribute("listaMedicamentos", listaMedicamentos);
 
-        return "/paciente/new_orden";}
+        return "paciente/new_orden";}
 
     @GetMapping(value="/mensajeria")
-    public String mensajeria(){return "/paciente/mensajeria";}
+    public String mensajeria(){return "paciente/mensajeria";}
 
     @GetMapping(value = "/chatbot")
-    public String chatbot(){return "/paciente/chatbot";}
+    public String chatbot(){return "paciente/chatbot";}
 
     @GetMapping(value = "/orden_paciente")
     public String ordenPaciente(){
-        return "/paciente/orden_paciente";
+        return "paciente/orden_paciente";
     }
 
     @GetMapping(value = "/orden_paciente_stock")
     public String ordenPacienteStock(){
-        return "/paciente/orden_paciente_stock";
+        return "paciente/orden_paciente_stock";
     }
 
     @GetMapping(value = "/reemplazar_medicamentos")
     public String ordenReemplazoMedicamentos(){
-        return "/paciente/reemplazar_medicamentos";
+        return "paciente/reemplazar_medicamentos";
     }
 
     @GetMapping(value = "/perfil")
     public String perfil(){
-        return "/paciente/perfil";
+        return "paciente/perfil";
     }
 
     @GetMapping(value = "/cambio_contrasena")
     public String cambioContrasena(){
-        return "/paciente/cambioContraseña";
+        return "paciente/cambioContraseña";
     }
 
     @GetMapping(value = "/confirmar_pago")
     public String confirmarPago(){
-        return "/paciente/confirmar_pago";
+        return "paciente/confirmar_pago";
     }
 
 

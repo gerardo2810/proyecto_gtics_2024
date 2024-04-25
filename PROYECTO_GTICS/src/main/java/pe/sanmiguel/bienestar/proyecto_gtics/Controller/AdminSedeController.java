@@ -1,6 +1,5 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -43,24 +42,24 @@ public class AdminSedeController {
 
     @GetMapping(value = {""})
     public String showIndexAdminSede(){
-        return "/adminsede/inicio";
+        return "adminsede/inicio";
     }
 
     @GetMapping(value = {"/doctores"})
     public String showDoctors(){
-        return "/adminsede/doctores";
+        return "adminsede/doctores";
     }
 
     @GetMapping(value = {"/farmacista"})
     public String showFarmacistas(Model model){
         List<Usuario> listaFarmacistas = usuarioRepository.listarFarmacistas();
         model.addAttribute("listaFarmacistas", listaFarmacistas);
-        return "/adminsede/farmacistas";
+        return "adminsede/farmacistas";
     }
 
     @GetMapping(value = {"/ordenes"})
     public String showOrders(){
-        return "/adminsede/ordenes_reposicion";
+        return "adminsede/ordenes_reposicion";
     }
 
     @GetMapping(value = {"/editar_farmacista"})
@@ -74,7 +73,7 @@ public class AdminSedeController {
             //model.addAttribute("codigoMed", codigoMed);
             model.addAttribute("farmacista", usuarioFarmacista);
             model.addAttribute("sedeFarmacista", sedeFarmacista);
-            return "/adminsede/editar_farmacista";
+            return "adminsede/editar_farmacista";
         }else {
             return "redirect:/adminsede/farmacista";
 
@@ -84,42 +83,42 @@ public class AdminSedeController {
 
     @GetMapping(value = {"/editar_orden_reposicion"})
     public String editOrden(){
-        return "/adminsede/editar_orden_reposicion";
+        return "adminsede/editar_orden_reposicion";
     }
 
     @GetMapping(value = {"/medicamentos"}) //Aquiiiiiiiiiiiiiii
     public String showMedicamentos(){
-        return "/adminsede/medicamentos_sede";
+        return "adminsede/medicamentos_sede";
     }
 
     @GetMapping(value = {"/solicitud_farmacista"})
     public String solicitudFarmacista(){
-        return "/adminsede/solicitud_agregar_farmacista";
+        return "adminsede/solicitud_agregar_farmacista";
     }
 
     @GetMapping(value = {"/generar_orden"})
     public String generarOrden(){
-        return "/adminsede/generar_orden";
+        return "adminsede/generar_orden";
     }
 
     @GetMapping(value = {"/ver_ordenes_entregadas"})
     public String verOrdenesEntregadas(){
-        return "/adminsede/ver_ordenes_entregadas";
+        return "adminsede/ver_ordenes_entregadas";
     }
 
     @GetMapping(value = {"/cambiar_contrasena"})
     public String vistaCambiarContra(){
-        return "/adminsede/cambiar_contrasena_adminsede";
+        return "adminsede/cambiar_contrasena_adminsede";
     }
 
     @GetMapping(value = {"/perfil_adminsede"})
     public String vistaPerfil(){
-        return "/adminsede/perfil_adminsede";
+        return "adminsede/perfil_adminsede";
     }
 
     @GetMapping(value = {"/verDetalles"})
     public String verDetalles(){
-        return "/adminsede/verDetalles";
+        return "adminsede/verDetalles";
     }
 
     /*

@@ -68,7 +68,7 @@ public class FarmacistaController {
         sedeSession = sedeRepository.getSedeByIdSede(1);
         model.addAttribute("sedeSession", sedeSession);
         model.addAttribute("listaMedicamentos", listaMedicamentos);
-        return "/farmacista/inicio";
+        return "farmacista/inicio";
     }
 
     @PostMapping("/farmacista/continuar_compra")
@@ -78,7 +78,7 @@ public class FarmacistaController {
             listaCantidades = getCantidadesFromLista(listaSelectedIds);
             return "redirect:/farmacista/formulario_paciente";
         } else {
-            return "redirect:/farmacista";
+            return "redirect:farmacista";
         }
     }
 
@@ -98,7 +98,7 @@ public class FarmacistaController {
         model.addAttribute("stockSeleccionados", stockSeleccionados);
         model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
         model.addAttribute("listaCantidades", listaCantidades);
-        return "/farmacista/formulario_paciente";
+        return "farmacista/formulario_paciente";
     }
 
     @PostMapping("/farmacista/finalizar_compra")
@@ -174,7 +174,7 @@ public class FarmacistaController {
             this.cantidadesFaltantes = verificationStock.getCantidadesFaltantes();
             this.cantidadesExistentes = verificationStock.getCantidadesExistentes();
 
-            return "redirect:/farmacista/crear_preorden";
+            return "redirect:farmacista/crear_preorden";
         }
     }
 
@@ -185,7 +185,7 @@ public class FarmacistaController {
 
         idVerOrdenCreada = 6; // Ejemplo fijo, falta realizar comprobaciones y llenado a base de datos para hacerlo dinámico
 
-        return "redirect:/farmacista/ver_pre_orden";
+        return "redirect:farmacista/ver_pre_orden";
 
     }
 
@@ -200,7 +200,7 @@ public class FarmacistaController {
         model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
         model.addAttribute("cantidadesExistentes", cantidadesExistentes);
 
-        return "/farmacista/crear_preorden";
+        return "farmacista/crear_preorden";
     }
 
     @GetMapping("/farmacista/cambiar_medicamentos")
@@ -211,7 +211,7 @@ public class FarmacistaController {
         model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
         model.addAttribute("cantidadesExistentes", cantidadesExistentes);
 
-        return "/farmacista/cambiar_medicamentos";
+        return "farmacista/cambiar_medicamentos";
     }
 
 
@@ -226,10 +226,10 @@ public class FarmacistaController {
             Orden ordenComprobada = ordenOptional.get();
             model.addAttribute("orden",ordenComprobada);
             model.addAttribute("contenidoOrden", contenidoOrden);
-            return "/farmacista/ver_orden_venta";
+            return "farmacista/ver_orden_venta";
         } else {
 
-            return "/farmacista/errorPages/no_existe_orden";
+            return "farmacista/errorPages/no_existe_orden";
         }
     }
 
@@ -239,17 +239,17 @@ public class FarmacistaController {
 
         idVerOrdenCreada = Integer.valueOf(idOrdenTabla);
 
-        return "redirect:/farmacista/ver_orden_venta";
+        return "redirect:farmacista/ver_orden_venta";
     }
 
     @GetMapping("/farmacista/ordenes_venta")
     public String tablaOrdenesVenta(Model model) {
         List<Orden> listaOrdenesVenta = ordenRepository.findAllOrdenes();
         model.addAttribute("listaOrdenesVenta", listaOrdenesVenta);
-        return "/farmacista/ordenes_venta";
+        return "farmacista/ordenes_venta";
     }
 
-    @GetMapping("/farmacista/ver_pre_orden")
+    @GetMapping("farmacista/ver_pre_orden")
     public String verPreOrden(Model model) {
 
         Optional<Orden> preOrdenOptional = ordenRepository.findById(idVerOrdenCreada);
@@ -266,10 +266,10 @@ public class FarmacistaController {
             model.addAttribute("contenidoOrden", contenidoOrden);
             model.addAttribute("preOrden",preOrdenComprobada);
             model.addAttribute("contenidoPreOrden", contenidoPreOrden);
-            return "/farmacista/ver_pre_orden";
+            return "farmacista/ver_pre_orden";
         } else {
 
-            return "/farmacista/errorPages/no_existe_orden";
+            return "farmacista/errorPages/no_existe_orden";
         }
     }
 
@@ -278,14 +278,14 @@ public class FarmacistaController {
 
         idVerOrdenCreada = Integer.valueOf(idOrdenTabla);
 
-        return "redirect:/farmacista/ver_pre_orden";
+        return "redirect:farmacista/ver_pre_orden";
     }
 
     @GetMapping("/farmacista/pre_ordenes")
     public String tablaPreOrdenes(Model model) {
         List<Orden> listaPreOrdenes = ordenRepository.findAllPreOrdenes();
         model.addAttribute("listaPreOrdenes", listaPreOrdenes);
-        return "/farmacista/pre_ordenes";
+        return "farmacista/pre_ordenes";
     }
 
 
@@ -304,17 +304,17 @@ public class FarmacistaController {
 
             model.addAttribute("contenidoOrden", contenidoOrdenWeb);
             model.addAttribute("orden",ordenWebComprobada);
-            return "/farmacista/ver_orden_web";
+            return "farmacista/ver_orden_web";
         } else {
 
-            return "/farmacista/errorPages/no_existe_orden";
+            return "farmacista/errorPages/no_existe_orden";
         }
     }
 
     @GetMapping("/farmacista/ver_orden_web_sinstock")
     public String verOrdenWebSinStock(Model model) {
 
-        return "/farmacista/ver_orden_web_sinStock";
+        return "farmacista/ver_orden_web_sinStock";
     }
 
     @PostMapping("/farmacista/ver_orden_web_tabla")
@@ -322,28 +322,28 @@ public class FarmacistaController {
 
         idVerOrdenCreada = Integer.valueOf(idOrdenTabla);
 
-        return "redirect:/farmacista/ver_orden_web";
+        return "redirect:farmacista/ver_orden_web";
     }
 
     @GetMapping("/farmacista/ordenes_web")
     public String tablaOrdenesWeb(Model model) {
         List<Orden> listaOrdenesWeb = ordenRepository.findAllOrdenesWeb();
         model.addAttribute("listaOrdenesWeb", listaOrdenesWeb);
-        return "/farmacista/ordenes_web";
+        return "farmacista/ordenes_web";
     }
 
 
     @GetMapping("/farmacista/perfil")
     public String profile() {
-        return "/farmacista/perfil";
+        return "farmacista/perfil";
     }
     @GetMapping("/farmacista/facturacion")
     public String facturacion() {
-        return "/farmacista/facturacion";
+        return "farmacista/facturacion";
     }
     @GetMapping("/farmacista/cambioContraseña")
     public String cambioContra() {
-        return "/farmacista/cambioContraseña";
+        return "farmacista/cambioContraseña";
     }
 
 
