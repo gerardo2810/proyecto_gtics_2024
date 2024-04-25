@@ -239,7 +239,7 @@ public class FarmacistaController {
 
         idVerOrdenCreada = Integer.valueOf(idOrdenTabla);
 
-        return "redirect://farmacista/ver_orden_venta";
+        return "redirect:/farmacista/ver_orden_venta";
     }
 
     @GetMapping("/farmacista/ordenes_venta")
