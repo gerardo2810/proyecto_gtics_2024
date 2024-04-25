@@ -75,7 +75,7 @@ public class AdminSedeController {
             model.addAttribute("sedeFarmacista", sedeFarmacista);
             return "adminsede/editar_farmacista";
         }else {
-            return "redirect:/adminsede/farmacista";
+            return "redirect://adminsede/farmacista";
 
         }
 
@@ -132,7 +132,7 @@ public class AdminSedeController {
                                    @RequestParam("correo") String correo){
 
         usuarioRepository.editarFarmacista(id,nombre,apellido,dni,distrito,correo);
-        return "redirect: /adminsede/farmacista";
+        return "redirect:/ /adminsede/farmacista";
     }*/
 
     @PostMapping(value = {"/editarFarmacista"})
@@ -146,10 +146,10 @@ public class AdminSedeController {
             sedeFarmacista.setIdUsuario(sedeFarmacistaOld.getIdUsuario());
             sedeFarmacista.setAprobado(sedeFarmacistaOld.getAprobado());
             sedeFarmacistaRepository.save(sedeFarmacista);
-            return "redirect:/adminsede/farmacista";
+            return "redirect://adminsede/farmacista";
 
         }else {
-            return "redirect:/adminsede/farmacista";
+            return "redirect://adminsede/farmacista";
         }
 
 

@@ -30,7 +30,7 @@ final UsuarioRepository usuarioRepository;
   @PostMapping("/save")
    public String guardarNuevoUsuario(Usuario usuario, RedirectAttributes attributes){
        usuarioRepository.save(usuario);
-      return "redirect:/index";
+      return "redirect://index";
   }
 
   @GetMapping("/recuperarContra")

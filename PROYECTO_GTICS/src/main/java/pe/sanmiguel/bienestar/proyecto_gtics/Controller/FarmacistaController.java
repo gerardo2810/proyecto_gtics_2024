@@ -78,7 +78,7 @@ public class FarmacistaController {
             listaCantidades = getCantidadesFromLista(listaSelectedIds);
             return "redirect:/farmacista/formulario_paciente";
         } else {
-            return "redirect:farmacista";
+            return "redirect:/farmacista";
         }
     }
 
@@ -174,7 +174,7 @@ public class FarmacistaController {
             this.cantidadesFaltantes = verificationStock.getCantidadesFaltantes();
             this.cantidadesExistentes = verificationStock.getCantidadesExistentes();
 
-            return "redirect:farmacista/crear_preorden";
+            return "redirect:/farmacista/crear_preorden";
         }
     }
 
@@ -185,7 +185,7 @@ public class FarmacistaController {
 
         idVerOrdenCreada = 6; // Ejemplo fijo, falta realizar comprobaciones y llenado a base de datos para hacerlo dinámico
 
-        return "redirect:farmacista/ver_pre_orden";
+        return "redirect:/farmacista/ver_pre_orden";
 
     }
 
@@ -239,7 +239,7 @@ public class FarmacistaController {
 
         idVerOrdenCreada = Integer.valueOf(idOrdenTabla);
 
-        return "redirect:farmacista/ver_orden_venta";
+        return "redirect://farmacista/ver_orden_venta";
     }
 
     @GetMapping("/farmacista/ordenes_venta")
@@ -278,7 +278,7 @@ public class FarmacistaController {
 
         idVerOrdenCreada = Integer.valueOf(idOrdenTabla);
 
-        return "redirect:farmacista/ver_pre_orden";
+        return "redirect:/farmacista/ver_pre_orden";
     }
 
     @GetMapping("/farmacista/pre_ordenes")
@@ -322,7 +322,7 @@ public class FarmacistaController {
 
         idVerOrdenCreada = Integer.valueOf(idOrdenTabla);
 
-        return "redirect:farmacista/ver_orden_web";
+        return "redirect:/farmacista/ver_orden_web";
     }
 
     @GetMapping("/farmacista/ordenes_web")
