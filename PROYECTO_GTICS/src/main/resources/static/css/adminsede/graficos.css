@@ -1,0 +1,12 @@
+.chart{
+    width: 100%;
+    min-height: 400px;
+}
+
+.container-graph{
+    text-align: center;
+    width: 50%;
+    height: 100%;
+    padding: 25px;
+    margin: 0 10px;
+}

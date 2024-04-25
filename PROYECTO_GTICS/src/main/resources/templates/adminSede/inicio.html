@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
+
+        <!--=============== REMIXICONS ===============-->
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+        <!--=============== CSS ===============-->
+        <link rel="stylesheet" th:href="@{/css/adminsede/indexstyle.css}">
+        <link rel="stylesheet" th:href="@{/css/adminsede/graficos.css}">
+        <link rel="stylesheet" th:href="@{/css/adminsede/tracking.css}">
+        <link rel="stylesheet" th:href="@{/css/styles.css}">
+        <link rel="stylesheet" th:href="@{/css/fonts.css}">
+        <link rel="stylesheet" th:href="@{/css/topbar.css}">
+        <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+        <!--=============== JS ===============-->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js" integrity="sha512-k37wQcV4v2h6jgYf5IUz1MoSKPpDs630XGSmCaCCOXxy2awgAWKHGZWr9nMyGgk3IOxA1NxdkN8r1JHgkUtMoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script th:src="@{/js/graficos.js}"></script>
+        <script th:src="@{/js/tracking.js}"></script>
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+        <title>Bienestar San Miguel | Administrador de Sede</title>
+    </head>
+
+
+    <header class="header-topbar">
+        <nav class="nav-topbar container">
+
+
+            <div class="nav-data">
+                <div>
+                    <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+                </div>
+
+                <!--=============== NAV MENU ===============-->
+
+                <div class="nav-menu" id="nav-menu">
+                    <ul class="nav-list">
+                        <li><a href="/adminsede" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
+
+                        <li><a href="/adminsede/doctores" class="menu-item roboto-regular">Doctores</a></li>
+
+                        <li><a href="/adminsede/farmacista" class="menu-item roboto-regular">Farmacistas</a></li>
+
+                        <li><a href="/adminsede/ordenes" class="menu-item roboto-regular">Pedidos de Reposición</a></li>
+
+                        <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular">Medicamentos</a></li>
+
+                        <!--=============== DROPDOWN ===============-->
+                        <li class="dropdown-item">
+                            <div class="menu-item roboto-regular">
+                                Más opciones <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                            </div>
+
+                            <ul class="dropdown-menu">
+                                <div class="inside-dropdown">
+                                    <li>
+                                        <a href="/adminsede/perfil_adminsede" class="dropdown-link">
+                                            <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="/adminsede/cambiar_contrasena" class="dropdown-link">
+                                            <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#" class="dropdown-link">
+                                            <i class="ri-lock-line menu-item dropdown-item roboto-regular"></i> Cerrar sesión
+                                        </a>
+                                    </li>
+                                </div>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="nav-toggle" id="nav-toggle">
+                    <i class="ri-menu-line nav-burger" id="menu-icon"></i>
+                    <i class="ri-close-line nav-close"></i>
+
+                    <div class="menu-small" id="menu-small">
+                        <div class="inside-menu-small">
+                            <div class="nav-menu-small" id="nav-menu-small">
+                                <ul class="nav-list-small">
+                                    <li><a href="/adminsede" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
+
+                                    <li><a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a></li>
+
+                                    <li><a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a></li>
+
+                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Pedidos de Reposición</a></li>
+
+                                    <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a></li>
+                                </ul>
+
+                                <ul class="nav-list-small-perfil">
+                                    <li><a href="/adminsede/" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+
+                                    <li><a href="/adminsede/" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </nav>
+    </header>
+
+
+    <body>
+
+        <div style="margin-top: 110px"></div>
+
+        <div class = "container">
+            <div class="container">
+
+                <div style="margin-bottom: 50px"></div>
+                <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Tracking órdenes de reposición</strong></h2>
+                <div style="margin-bottom: 10px"></div>
+                <hr style="border-top: 1px solid #262626;">
+                <div style="margin-bottom: 10px"></div>
+
+                <div style="padding-right: 0; padding-left: 0"> </div>
+            </div>
+            <br/>
+            <h2>Orden de reposicion #1</h2>
+            <div class="container-track1">
+                <div class="wrapper">
+                    <h3>Estado de la orden</h3>
+                    <div class="progress-container">
+                        <div class="progress" id="progress"></div>
+                        <div class="progress-step">
+                            <i class="fa-solid fa-list-ul active"></i>Recibido
+                        </div>
+                        <div class="progress-step">
+                            <i class="fa-solid fa-cart-shopping"></i>En proceso
+                        </div>
+                        <div class="progress-step">
+                            <i class="fa-solid fa-box"></i>Empaquetado
+                        </div>
+                        <div class="progress-step">
+                            <i class="fa-solid fa-truck"></i>En ruta
+                        </div>
+                        <div class="progress-step">
+                            <i class="fa-solid fa-check-double"></i>Entregado
+                        </div>
+
+                    </div>
+                    <!--
+                    <div class="btn-container">
+                        <button class="btn" id="prev">Previous</button>
+                        <button class="btn" id="next">Next</button>
+                    </div>
+                    -->
+                </div>
+
+                <div class = "container-orden">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.575971232228!2d-77.07181742216821!3d-12.072669257653358!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91a6f8fbefb%3A0x408ed032eafa9864!2sMultilab%20Pueblo%20Libre!5e0!3m2!1ses!2spe!4v1712592591241!5m2!1ses!2spe" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+            <h2>Orden de reposicion #2</h2>
+            <div class="container-track1">
+                <div class="wrapper">
+                    <h3>Estado de la orden</h3>
+                    <div class="progress-container">
+                        <div class="progress" id="progress"></div>
+                        <div class="progress-step">
+                            <i class="fa-solid fa-list-ul active"></i>Recibido
+                        </div>
+                        <div class="progress-step">
+                            <i class="fa-solid fa-cart-shopping"></i>En proceso
+                        </div>
+                        <div class="progress-step">
+                            <i class="fa-solid fa-box"></i>Empaquetado
+                        </div>
+                        <div class="progress-step">
+                            <i class="fa-solid fa-truck"></i>En ruta
+                        </div>
+                        <div class="progress-step">
+                            <i class="fa-solid fa-check-double"></i>Entregado
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class = "container-orden">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.575971232228!2d-77.07181742216821!3d-12.072669257653358!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91a6f8fbefb%3A0x408ed032eafa9864!2sMultilab%20Pueblo%20Libre!5e0!3m2!1ses!2spe!4v1712592591241!5m2!1ses!2spe" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+            <div class="container-graph-circular">
+                <div class="buttons">
+                    <a href="/adminsede/ordenes" class="btn btn-1">Ver más</a>
+                </div>
+
+            </div>
+            <div class="container">
+
+                <div style="margin-bottom: 50px"></div>
+                <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Estadísticas</strong></h2>
+                <div style="margin-bottom: 20px"></div>
+                <hr style="border-top: 1px solid #262626;">
+                <div style="margin-bottom: 40px"></div>
+
+                <div style="padding-right: 0; padding-left: 0"> </div>
+            </div>
+        </div>
+        <br/>
+
+        <div class="container-track1">
+            <div class = "container-graph">
+                <h2>Medicamentos con poco inventario</h2>
+
+                <div id="chart1" class="chart"></div>
+
+            </div>
+
+            <div class = "container-graph">
+                <h2>Medicamentos más solicitados</h2>
+
+                <div id="chart2" class="chart"></div>
+
+            </div>
+        </div>
+
+        <div class="container-graph-circular">
+
+            <div class = "container-graph">
+                <h2>Cantidad de transacciones de medicamentos por sede</h2>
+
+                <div id="chart4" class="chart"></div>
+
+            </div>
+        </div>
+
+        <!--Footer -->
+        <br/>
+        <div >
+            <footer id="sticky-footer" class="footer-distributed" style="background-color: #04011E">
+                <div class="footer-left">
+                    <img src="" alt="Logo de Ingeniería de las Telecomunicaciones" style="width: 400px; height: auto;">
+                    <p class="footer-links">
+                        <a href="">Usuarios</a> |
+                        <a href="">Actividades</a> |
+                        <a href="">Estadisticas</a> |
+                        <a href="">Donaciones</a> |
+                        <a href="">Perfil</a>
+                    </p>
+                    <p class="footer-company-name">Copyright © 2023 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
+                </div>
+
+                <div class="footer-center">
+                    <div>
+                        <i class="fa fa-map-marker"></i>
+                        <p><span>Av. Universitaria 1801, San Miguel, 15088</span> Lima, Perú</p>
+                    </div>
+
+                    <div>
+                        <i class="fa fa-phone"></i>
+                        <p>+51 982 876 098</p>
+                    </div>
+
+                    <div>
+                        <i class="fa fa-envelope"></i>
+                        <p><a href="mailto:sagar00001.co@gmail.com">Lorem ipsum dolor sit amet.</a></p>
+                    </div>
+                </div>
+
+                <div class="footer-right">
+                    <p class="footer-company-about">
+                        <span>Lorem, ipsum dolor.</span>
+                        La carrera de <strong>Ingeniería de las telecomunicaciones</strong> de la <strong>Pontificia Universidad Catolica del Perú</strong> diseñó una pagina WEB.
+                    </p>
+                    <div class="footer-icons">
+                        <a href="https://www.facebook.com/profile.php?id=100009473024310&mibextid=LQQJ4d"><i class="fa fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/leo.leonar071/?igshid=OGQ5ZDc2ODk2ZA%3D%3Ds"><i class="fa fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@pucp"><i class="fa fa-youtube"></i></a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                var opened = false;
+
+                $('#menu-small').hide();
+
+                $('#nav-toggle').click(function (e) {
+                    e.stopPropagation();
+                    if (opened) {
+                        $('#menu-small').hide();
+                    } else {
+                        $('#menu-small').show();
+                    }
+                    opened = !opened;
+                });
+            });
+        </script>
+
+    </body>
+</html>

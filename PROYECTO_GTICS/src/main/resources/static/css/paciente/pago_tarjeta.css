@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
+
+
+*{
+    font-family: 'Poppins', sans-serif;
+    margin:0; padding:0;
+    box-sizing: border-box;
+    outline: none; border: none;
+    text-decoration: none;
+}
+
+
+.container-pago{
+    width: 1080px;
+    background-color: white;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 12px 12px 15px rgba(0,0,0,.1);
+    display: flex;
+    flex-direction: row;
+    column-gap: 8px;
+    padding: 30px 40px 60px;
+}
+
+
+
+form .inputBox{
+    margin-top: 20px;
+}
+
+form .inputBox span{
+    display: block;
+    color:#999;
+    padding-bottom: 5px;
+}
+
+form .inputBox input,
+form .inputBox select{
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border:1px solid #DFDFDF;
+    color:#444;
+}
+
+.container form .flexbox{
+    display: flex;
+    gap:15px;
+}
+
+.container-pago form .flexbox .inputBox{
+    flex:1 1 150px;
+}
+
+form .submit-btn{
+    width: 100%;
+    background: #0d6efd;
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 20px;
+    color:#fff;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .2s linear;
+}
+
+.container-pago form .submit-btn:hover{
+    letter-spacing: 2px;
+    opacity: .8;
+}
+
+.container-pago .card-container{
+
+    position: relative;
+    height: 250px;
+    width: 400px;
+}
+
+.container-pago .card-container .front{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0; left: 0;
+    background-size: cover;
+    border-radius: 10px;
+    backface-visibility: hidden;
+    box-shadow: 0 15px 25px rgba(0,0,0,.2);
+    padding:20px;
+    transform:perspective(1000px) rotateY(0deg);
+    transition:transform .4s ease-out;
+}
+
+.card-container .front .image{
+    display: flex;
+    align-items:center;
+    justify-content: space-between;
+    padding-top: 10px;
+}
+
+.card-container .front .image img{
+    height: 50px;
+}
+
+.card-container .front .card-number-box{
+    padding:30px 0;
+    font-size: 22px;
+    color:#fff;
+}
+
+.card-container .front .flexbox{
+    display: flex;
+    column-gap: 10px;
+    justify-content: space-between;
+}
+
+
+
+.container-pago .card-container .front .flexbox .box1{
+    font-size: 15px;
+    color:#fff;
+    width: 230px;
+}
+
+.container-pago .card-container .front .flexbox .box2{
+    font-size: 15px;
+    color:#fff;
+}
+
+.card-container .back{
+    position: absolute;
+    top:0; left: 0;
+    height: 100%;
+    width: 100%;
+    background:linear-gradient(45deg, #2CBFE6, #219AB9);
+    border-radius: 10px;
+    padding: 20px 0;
+    text-align: right;
+    backface-visibility: hidden;
+    box-shadow: 0 15px 25px rgba(0,0,0,.2);
+    transform:perspective(1000px) rotateY(180deg);
+    transition:transform .4s ease-out;
+}
+
+
+.card-container .back .stripe{
+    background: #000;
+    width: 100%;
+    margin: 10px 0;
+    height: 50px;
+}
+
+.card-container .back .box{
+    padding: 0 20px;
+}
+
+.container-pago .card-container .back .box span{
+    color:#fff;
+    font-size: 15px;
+}
+
+.card-container .back .box .cvv-box{
+    height: 50px;
+    padding: 10px;
+    margin-top: 5px;
+    color:#333;
+    background: #fff;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.container-pago .card-container .back .box img{
+    margin-top: 30px;
+    height: 30px;
+}

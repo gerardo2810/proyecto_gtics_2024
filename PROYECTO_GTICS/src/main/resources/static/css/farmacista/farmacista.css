@@ -1,0 +1,930 @@
+
+/*=============== HEADER ===============*/
+.header-topbar {
+    width: 100%;
+    background-color: var(--color-blue);
+    box-shadow: 0 2px 16px hsla(220, 32%, 8%, .3);
+    z-index: 100;
+    position: fixed;
+    top: 0;
+}
+
+/*=============== NAV ===============*/
+
+.logo {
+    max-width: 210px;
+    height: auto;
+    padding: 10px 0 10px 0;
+}
+
+.nav-topbar {
+    height: auto;
+}
+
+.nav-logo,
+.nav-burger,
+.nav-close {
+    color: rgb(255,255,255);
+}
+
+.nav-data {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    display: inline-flex;
+    align-items: center;
+    column-gap: .25rem;
+}
+
+.nav-logo i {
+    font-weight: initial;
+    font-size: 1.25rem;
+}
+
+.nav-toggle {
+    position: relative;
+    width: 32px;
+    height: 32px;
+}
+
+.nav-burger,
+.nav-close {
+    position: absolute;
+    width: max-content;
+    height: max-content;
+    inset: 0;
+    margin: auto;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: opacity .1s, transform .4s;
+}
+
+.nav-close {
+    opacity: 0;
+}
+
+.menu-item {
+    text-decoration: none;
+    color: rgb(244 244 245);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.menu-item:hover {
+    color: rgb(10, 45, 136);
+}
+
+.menu-item-small {
+    text-decoration: none;
+    gap: 0.25rem;
+    color: rgb(244 244 245);
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.menu-item-small:hover {
+    color: rgb(10, 45, 136);
+}
+
+@media screen and (max-width: 1000px) {
+    .nav-menu {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: auto;
+        overflow: auto;
+        pointer-events: none;
+        opacity: 0;
+    }
+
+    .inside-menu-small {
+        position: fixed;
+        top: 71px;
+        left: 0;
+        z-index: 50;
+        width: 100%;
+        background-color: rgba(26,115,232,0.7);
+        backdrop-filter: blur(15px);
+    }
+
+    .nav-menu-small {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        height: auto;
+        overflow: auto;
+        width: 50%;
+    }
+
+    .nav-list-small {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        font-size: 1.1rem;
+    }
+
+    .nav-list-small-perfil {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        width: 80%;
+    }
+
+}
+
+/*=============== DROPDOWN ===============*/
+.dropdown-item {
+    cursor: pointer;
+}
+
+.dropdown-arrow {
+    font-size: 1.25rem;
+    font-weight: initial;
+    transition: transform .4s;
+}
+
+.dropdown-item:hover .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.inside-dropdown {
+    margin-top: 25px;
+}
+
+.dropdown-menu {
+    position: fixed;
+    max-height: initial;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    overflow: initial;
+    right: 120px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s, top .3s;
+}
+
+@media(max-width: 1600px) {
+    .dropdown-menu {
+        right: 30px;
+    }
+}
+
+.dropdown-item:hover {
+    transition: max-height .4s ease-in;
+}
+
+.dropdown-link {
+    padding: 1.25rem 1.25rem 1.25rem 2.5rem;
+    color: var(--color-white);
+    background-color: rgba(26,115,232,0.7);
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    column-gap: .5rem;
+    font-weight: var(--font-semi-bold);
+    transition: background-color .3s;
+}
+
+.dropdown-link i {
+    font-size: 1.25rem;
+    font-weight: initial;
+}
+
+.dropdown-link:hover {
+    background-color: var(--color-blue--hover);
+}
+
+
+/*=============== BREAKPOINTS ===============*/
+
+
+/* For large devices */
+@media screen and (min-width: 1000px) {
+
+    .nav {
+        height: calc(var(--header-height) + 2rem);
+        display: flex;
+        justify-content: space-between;
+    }
+    .nav-toggle {
+        display: none;
+    }
+    .nav-list {
+        height: 100%;
+        display: flex;
+        column-gap: 3rem;
+    }
+
+    .nav-list-small {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        column-gap: 1.5rem;
+    }
+
+    .nav-link {
+        height: 100%;
+        padding: 0;
+        justify-content: initial;
+        column-gap: .25rem;
+    }
+    .nav-link:hover {
+        background-color: transparent;
+    }
+
+    .dropdown-item {
+        position: relative;
+    }
+    .dropdown-link {
+        padding-inline: 1rem 3.5rem;
+    }
+    .dropdown-link {
+        padding-inline: 1rem;
+    }
+
+
+    .dropdown-item:hover .dropdown-menu {
+        opacity: 1;
+        pointer-events: initial;
+        transition: top .3s;
+    }
+
+    .dropdown-subitem:hover > .dropdown-submenu {
+        opacity: 1;
+        top: 0;
+        pointer-events: initial;
+        transition: top .3s;
+    }
+}
+
+/*======================= FIN HEADER =====================*/
+
+
+.main-title {
+    font-size: 2.4rem;
+    color: var(--color-gray-2);
+}
+.main-subtitle {
+    font-size: 1.2rem;
+    padding-top: 5px;
+    color: var(--color-gray);
+}
+
+hr.style-one {
+    border: 0;
+    height: 1px;
+    background: #333 linear-gradient(to right, #ccc, #333, #ccc);
+}
+
+/* INTERFAZ TOTAL */
+.interface {
+    padding-top: 10px;
+    display: grid;
+    grid-template-columns: 0.2fr 0.8fr;
+    gap: 15px;
+    justify-content: center;
+}
+/* END INTERFAZ TOTAL */
+
+
+/* FILTROS PANEL */
+
+.filtros {
+    margin-top: 10px;
+    border-radius: 0.25rem;
+    max-height: 500px;
+    color: var(--color-black);
+    background: var(--color-white);
+    border: 1px solid #dedede;
+}
+
+.container-filters {
+    padding: 20px;
+}
+
+.filter-title {
+    font-size: 1.2rem;
+    padding-bottom: 10px;
+    border-bottom: solid 1px #d3d3d3;
+}
+
+.list-categorias{
+    max-height: 300px;
+    overflow: auto;
+}
+
+.categorias-title {
+    font-size: 1.2rem;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.categoria-div {
+    padding-bottom: 10px;
+}
+
+.categoria {
+    cursor: pointer;
+    color: var(--color-text-1) !important;
+    text-decoration: none;
+}
+
+.alert {
+    padding-top: 25px;
+    color: #80868b;
+}
+
+
+/* END FILTROS PANEL */
+
+/* LISTA MEDICAMENTOS */
+
+.hide {
+    display: none;
+}
+
+.items-preview {
+    margin-top: 20px;
+    max-height: 220px;
+    overflow: auto;
+    border-radius: 0.25rem;
+    color: var(--color-black);
+    background: var(--color-white);
+    transition: opacity 0.5s ease;
+}
+
+.container-preview {
+    padding: 20px;
+}
+
+.selected-item {
+    border-bottom: solid 1px #d3d3d3;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+.item-on-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.preview-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: var(--color-text-1);
+    border-bottom: solid 1px #d3d3d3;
+    padding-top: 5px;
+    font-size: 1.2rem;
+    text-align: start;
+    padding-bottom: 15px;
+}
+
+.continue-button {
+    display: block;
+    font-size: 1rem;
+    border: none;
+    background-color: var(--color-blue);
+    color: #fff;
+    padding: 5px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color ease 0.2s;
+}
+
+
+.continue-button:hover{
+    background-color: var(--color-blue--hover);
+}
+
+.item-quantity-clicked {
+    background-color: white;
+    padding: 2px;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #0c0808;
+    border: solid 1px #d3d3d3;
+    border-radius: 10px;
+    width: 55px;
+}
+
+.item-details {
+    text-align: center;
+    display: flex;
+    flex-direction: row-reverse;
+    column-gap: 20px;
+}
+
+.item-price-clicked {
+    padding-top: 5px;
+}
+
+.sumar-cantidad {
+    cursor: pointer;
+}
+
+.restar-cantidad {
+    cursor: pointer;
+}
+
+.btn {
+    display: inline-block;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    cursor: pointer;
+}
+
+
+.med-container{
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    padding-top: 10px;
+    padding-bottom: 50px;
+    gap: 15px;
+    width: 100%;
+    transition: .3s;
+}
+
+.item {
+    padding: 5px 20px 5px 20px;
+    transition: .3s;
+    width: auto;
+    outline: none;
+    border: 1px solid #dedede;
+    border-radius: 5px;
+    color: var(--color-black);
+    background: #ffffff;
+}
+
+
+
+.img-item {
+    width: 100%;
+}
+
+
+.titulo-item {
+    display: block;
+    color: var(--color-text-1);
+    padding-top: 5px;
+    font-size: 1.55rem;
+    text-align: start;
+}
+.subtitulo-item {
+    display: block;
+    color: var(--color-text-2);
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 0.8rem;
+    text-align: start;
+}
+.items-details {
+    padding-top: 5px;
+    font-size: 0.95rem;
+    text-decoration: underline;
+    color: var(--color-blue--hover);
+}
+.item-price {
+    display: block;
+    text-align: start;
+    padding-top: 10px;
+    font-size: 1.15rem;
+}
+.item-symbol {
+    display: block;
+    text-align: start;
+    padding-top: 15px;
+    font-size: 0.9rem;
+}
+.add-item-button {
+    display: block;
+    font-size: 0.95rem;
+    margin: 10px auto;
+    border: 1px none;
+    background-color: #1f73ef;
+    color: #e7e9ee;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color ease 0.2s;
+}
+
+.add-item-button:hover{
+    color: #e7e9ee;
+    background-color: var(--color-blue--hover);
+}
+
+.return-button {
+    display: block;
+    font-size: 1rem;
+    margin-inline: auto;
+    border: none;
+    background-color: var(--color-red);
+    color: #fff;
+    padding: 5px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color ease 0.2s;
+}
+
+.return-button:hover{
+    background-color: #dc3545;
+}
+
+
+
+
+
+.search-bar {
+    width: 100%;
+    max-width: 1540px; /* Puedes ajustar el ancho máximo según tus necesidades */
+    margin: 0 auto; /* Centrar el cuadro de búsqueda */
+    display: flex;
+    justify-content: center; /* Centrar los elementos horizontalmente */
+    align-items: center; /* Centrar los elementos verticalmente */
+}
+
+.search-label {
+    flex: 1; /* Para que el campo de entrada ocupe todo el espacio disponible */
+    margin-right: 10px; /* Separación entre el campo de entrada y el botón */
+}
+
+.search-bar input[type="text"] {
+    width: 100%; /* Ajustar el ancho del campo de entrada */
+    padding: 10px 92px 10px 10px;
+    font-size: 1.1rem;
+    background-color: #ffffff;
+    border: 1px solid #DFDFDF;
+    border-radius: 5px;
+    outline: none;
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 2px solid #f0f0f0;
+    border-radius: 0 5px 5px 0;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.search-bar button:hover {
+    background-color: #e0e0e0;
+    border: 2px solid #e0e0e0;
+}
+
+.search-bar input[type="text"]:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+
+
+
+
+/* END LISTA MEDICAMENTOS */
+
+
+
+/* FILTRO DATATABLES */
+.select-p{
+    border-color: #DFDFDF;
+    border-radius: 6px;
+    padding:8px;
+    outline: none;
+    margin-top: 4px;
+}
+
+
+.btn-p {
+    display: inline-block;
+    padding: 10px 20px;
+    color:white;
+    background-color: dimgrey;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+    font-size: 14px;
+}
+
+.btn-p:hover {
+    background-color: white;
+    color: dimgrey;
+    border:2px solid dimgrey;
+    padding: 8px 18px;
+}
+/* END FILTRO DATATABLES */
+
+
+
+
+/*=======================FORMULARIO PACIENTE=====================*/
+
+.interface-formulario{
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 30px;
+    padding-bottom: 30px;
+}
+
+.container-form{
+    max-width: 1100px;
+}
+
+.column{
+    display: flex;
+    flex-direction: row;
+    row-gap: 28px;
+    column-gap: 40px;
+    padding-top: 20px;
+    padding-bottom: 22px;
+    justify-content: center;
+}
+
+.column-start{
+    display: flex;
+    flex-direction: row;
+    row-gap: 28px;
+    column-gap: 40px;
+    padding-top: 20px;
+    padding-bottom: 30px;
+    justify-content: start;
+}
+
+.input-label-box{
+    display: flex;
+    flex-direction: column;
+}
+
+.input-label-radio{
+    display: flex;
+    flex-direction: row;
+    column-gap: 30px;
+}
+
+
+.select-form {
+    width: 400px;
+    height: 48px;
+    margin-top:4px;
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background-color: transparent;
+    font-size: 15px;
+    outline: none;
+
+}
+.select-form:focus{
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.input-form{
+    width: 30vw;
+    margin-top: 10px;
+    padding-left: 15px;
+    outline: none;
+    height: 42px;
+    border: 1px solid #DFDFDF;
+    border-radius: 5px;
+    font-size: 17px;
+}
+
+.input-form-2 {
+    margin-top: 6px;
+    padding-left: 15px;
+    outline: none;
+    width: 400px;
+    height: 42px;
+    border: 1px solid #DFDFDF;
+    border-radius: 5px;
+    font-size: 17px;
+}
+
+.input-form:focus{
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+
+
+/*Responsive*/
+@media screen and (max-width: 1250px) {
+    .container-form .column {
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .select-form{
+        width: 210px;
+    }
+    .input-form {
+        width: 100%; /* Cambia el ancho a 100% para ocupar todo el ancho disponible */
+    }
+}
+
+
+@media screen and (max-width: 1205px) {
+    .column-start{
+        justify-content: center;
+    }
+
+}
+
+.items-list {
+    margin-top: 20px;
+    border-radius: 0.25rem;
+    color: var(--color-black);
+    background: #ffffff;
+    border: 1px solid #dedede;
+}
+
+.inside-items-list {
+    padding: 20px;
+}
+
+.order-items {
+    min-height: 520px;
+    max-height: 520px;
+    overflow: auto;
+}
+
+
+/*===============FIN FORMULARIO PACIENTE================*/
+
+
+/*=============== PROCESO PRE ORDEN ================*/
+
+.interface-preorden{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding-bottom: 30px;
+}
+
+.preorder-items {
+    min-height: 480px;
+    max-height: 480px;
+    overflow: auto;
+}
+
+
+
+
+
+/*=============== FIN PROCESO PRE ORDEN ================*/
+
+.footer {
+    background-color: var(--color-gray-2);
+    position: relative;
+    min-height: 10vh;
+}
+
+.footer-container {
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-gray);
+}
+
+/*===========COMPRAS===============*/
+.card {
+    box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+}
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid rgba(0,0,0,.125);
+    border-radius: 1rem;
+}
+
+
+/*==================Perfil vista principal================*/
+body{
+
+    background-color:#f2f6fc;
+    color:#69707a;
+}
+.img-account-profile {
+    height: 10rem;
+}
+.rounded-circle {
+    border-radius: 50% !important;
+}
+.card {
+    box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+}
+.card .card-header {
+    font-weight: 500;
+}
+.card-header:first-child {
+    border-radius: 0.35rem 0.35rem 0 0;
+}
+.card-header {
+    padding: 1rem 1.35rem;
+    margin-bottom: 0;
+    background-color: rgba(33, 40, 50, 0.03);
+    border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+}
+.form-control, .dataTable-input {
+    display: block;
+    width: 100%;
+    padding: 0.875rem 1.125rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1;
+    color: #69707a;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #c5ccd6;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.35rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.nav-borders .nav-link.active {
+    color: #0061f2;
+    border-bottom-color: #0061f2;
+}
+.nav-borders .nav-link {
+    color: #69707a;
+    border-bottom-width: 0.125rem;
+    border-bottom-style: solid;
+    border-bottom-color: transparent;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+/*==========Estados botones ============*/
+.btn-green{
+    padding: 8px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 125px;
+}
+.btn-yellow{
+    padding: 8px;
+    background-color: #ECCB44;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 125px;
+}
+.btn-red{
+    padding: 9px;
+    background-color: #CF480D;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 125px;
+
+}

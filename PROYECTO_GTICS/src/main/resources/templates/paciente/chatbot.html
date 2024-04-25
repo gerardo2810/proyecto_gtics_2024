@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Icon</title>
+    <style>
+        #chat-container {
+            position: relative;
+        }
+
+        #chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        #chat-icon img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #007bff;
+            padding: 20px;
+        }
+
+        #chat-window {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            z-index: 9998;
+        }
+
+        #chat-content {
+            padding: 10px;
+        }
+
+        #chat-content h1 {
+            margin: 0;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+        }
+
+        #chat-content .close-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 20px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px;
+            margin-right: 10px;
+            border: none;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .chat-input:focus {
+            outline: none;
+        }
+
+        .chat-messages {
+            height: 200px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+
+        #send-message {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #send-message:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div id="chat-container">
+    <div id="chat-window">
+        <div id="chat-content">
+            <h1>Chatbot</h1>
+            <span class="close-btn" id="close-chat">&#10006;</span>
+            <div class="chat-messages"></div>
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" placeholder="Escribe un mensaje...">
+                <button id="send-message">&#10148;</button>
+            </div>
+        </div>
+    </div>
+    <div id="chat-icon">
+        <a href="#" id="open-chat"><img th:src="@{/img/chatbot.png}" alt="Chat"></a>
+    </div>
+</div>
+
+<script>
+    var chatWindow = document.getElementById('chat-window');
+
+    document.getElementById('open-chat').addEventListener('click', function(event) {
+        event.stopPropagation();
+
+        if (chatWindow.style.display === 'none' || !chatWindow.style.display) {
+            var iconRect = document.getElementById('chat-icon').getBoundingClientRect();
+            chatWindow.style.display = 'block';
+            chatWindow.style.right = window.innerWidth - iconRect.right + 'px';
+            chatWindow.style.bottom = iconRect.height + 20 + 'px';
+        } else {
+            chatWindow.style.display = 'none';
+        }
+    });
+
+    document.getElementById('close-chat').addEventListener('click', function(event) {
+        chatWindow.style.display = 'none';
+        event.stopPropagation();
+    });
+
+
+    document.addEventListener('click', function(event) {
+        var isClickInsideChat = chatWindow.contains(event.target) || document.getElementById('chat-icon').contains(event.target);
+        if (!isClickInsideChat) {
+            chatWindow.style.display = 'none';
+        }
+    });
+</script>
+</body>
+</html>

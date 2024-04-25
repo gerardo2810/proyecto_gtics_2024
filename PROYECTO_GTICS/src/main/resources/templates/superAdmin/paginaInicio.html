@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+
+    <!--=============== CSS ===============-->
+
+    <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+    <link rel="stylesheet" th:href="@{/css/superadmin/superadmin.css}">
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/fonts.css}">
+    <link rel="stylesheet" th:href="@{/css/topbar.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+    <link rel="stylesheet" th:href="@{/css/datatables.css}">
+    <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
+
+    <!--=============== JAVASCRIPT ===============-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
+    <!--  Bootstrap-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
+
+    <!--=============== CSS ===============-->
+
+    <title>Bienestar San Miguel | SuperAdmin</title>
+
+    <style>
+        body {
+            padding-top: 100px;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
+    </style>
+</head>
+
+
+<body>
+<!--=============== HEADER ===============-->
+<header class="header-topbar">
+    <nav class="nav-topbar container">
+
+
+        <div class="nav-data">
+            <div>
+                <a href="/superadmin"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+            </div>
+
+            <!--=============== NAV MENU ===============-->
+
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li><a href="/superadmin" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
+
+                    <li><a href="/superadmin/pedidos" class="menu-item roboto-regular">Pedidos de reposición</a></li>
+
+                    <li><a href="/superadmin/medicamentos" class="menu-item roboto-regular">Inventario</a></li>
+
+                    <li class="dropdown-item">
+                        <div class="menu-item roboto-regular">
+                            Usuarios <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                        </div>
+
+                        <ul class="dropdown-menu">
+                            <div class="inside-dropdown">
+                                <li>
+                                    <a href="/superadmin/administradoresSede" class="dropdown-link">
+                                        <i class="ri-user-line menu-item roboto-regular"></i> Admnistradores de Sede
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a  href="/superadmin/farmacistas"  class="dropdown-link">
+                                        <i class="ri-user-line  menu-item roboto-regular"></i> Farmacistas
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/superadmin/pacientes" class="dropdown-link">
+                                        <i class="ri-user-line  menu-item roboto-regular"></i> Pacientes
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/superadmin/doctores" class="dropdown-link">
+                                        <i class="ri-user-line  menu-item roboto-regular"></i> Doctores
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+
+                    <!--=============== DROPDOWN 2 ===============-->
+                    <li class="dropdown-item">
+                        <div class="menu-item roboto-regular">
+                            <i class="fas fa-user fa-fw"></i>
+                            <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                        </div>
+
+                        <ul class="dropdown-menu">
+                            <div class="inside-dropdown">
+                                <li>
+                                    <a href="/superadmin/cambiarContraseña" class="dropdown-link">
+                                        <i class="ri-user-line menu-item roboto-regular"></i> Cambiar contraseña
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="/" class="dropdown-link">
+                                        <i class="ri-lock-line menu-item roboto-regular"></i> Cerrar sesión
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="nav-toggle" id="nav-toggle">
+                <i class="ri-menu-line nav-burger" id="menu-icon"></i>
+                <i class="ri-close-line nav-close"></i>
+
+                <div class="menu-small" id="menu-small">
+                    <div class="inside-menu-small">
+                        <div class="nav-menu-small" id="nav-menu-small">
+                            <ul class="nav-list-small">
+                                <li><a href="/superadmin" class="menu-item-small roboto-regular">Inicio</a></li>
+                                <li><a href="/superadmin/pedidos" class="menu-item-small roboto-regular">Pedidos de reposición</a></li>
+
+                                <li><a href="/superadmin/medicamentos" class="menu-item-small roboto-regular">Inventario</a></li>
+                            </ul>
+
+                            <ul class="nav-list-small-perfil">
+                                <li><a href="/superadmin/administradoresSede" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Administradores de sede</a></li>
+                                <li><a  href="/superadmin/farmacistas" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Farmacistas</a></li>
+                                <li><a href="/superadmin/pacientes" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Pacientes</a></li>
+                                <li><a href="/superadmin/doctores" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Doctores</a></li>
+                            </ul>
+
+                            <ul class="nav-list-small-perfil">
+                                <li><a href="/superadmin/cambiarContraseña" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+
+                                <li><a href="/" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </nav>
+</header>
+
+<main style="margin-left: 20px; margin-right: 20px">
+    <br><br>
+    <div class="container">
+        <div style="margin-bottom: 20px"></div>
+        <div style="margin-bottom: 30px"></div>
+        <div class="titulo"><b>R E G I S T R O S</b></div>
+        <div style="margin-bottom: 20px"></div>
+        <br><br>
+
+    </div>
+
+    <div class="container">
+        <h2 style="font-family: 'Aptos', Arial; color: #07314d;">
+            <i class="fa-solid fa-user-tie" style="color: #0c3452; "></i>
+            <strong style="padding-left: 10px">Administradores de sedes</strong></h2>
+        <div style="margin-bottom: 10px"></div>
+        <hr style="border-top: 1px solid #262626;">
+        <div style="margin-bottom: 30px"></div>
+
+        <div style="padding-right: 0; padding-left: 0"> </div>
+    </div>
+
+    <div class="container">
+        <table id="miTabla" class="table table-striped" style="padding-top: 10px">
+            <thead>
+            <tr style="background-color: #378fff">
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo electrónico</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Teléfono</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/3135768.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Administrador 1</span>
+                    </div>
+                </td>
+                <td style="text-align: center">administrador1@gmail.com</td>
+                <td style="text-align: center">San Miguel Centro</td>
+                <td style="text-align: center">+51 946335254</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/3135768.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Administrador 1</span>
+                    </div>
+                </td>
+                <td style="text-align: center">administrador2@gmail.com</td>
+                <td style="text-align: center">San Miguel Sur</td>
+                <td style="text-align: center">+51 946335254</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/3135768.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Administrador 1</span>
+                    </div>
+                </td>
+                <td style="text-align: center">administrador3@gmail.com</td>
+                <td style="text-align: center">San Miguel Sur</td>
+                <td style="text-align: center">+51 946335254</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/3135768.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Administrador 1</span>
+                    </div>
+                </td>
+                <td style="text-align: center">administrador4@gmail.com</td>
+                <td style="text-align: center">Pando 5 Etapa</td>
+                <td style="text-align: center">+51 946335254</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/3135768.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Administrador 1</span>
+                    </div>
+                </td>
+                <td style="text-align: center">administrador5@gmail.com</td>
+                <td style="text-align: center">San Miguel Centro</td>
+                <td style="text-align: center">+51 946335254</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/3135768.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Administrador 1</span>
+                    </div>
+                </td>
+                <td style="text-align: center">administrador6@gmail.com</td>
+                <td style="text-align: center">San Miguel Sur</td>
+                <td style="text-align: center">+51 946335254</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <br><br><br><br>
+
+    <div class="container">
+        <h2 style="font-family: 'Aptos', Arial; color: #07314d;">
+            <i class="fa-solid fa-user-md" style="color: #0c3452; "></i>
+            <strong style="padding-left: 10px">Farmacistas</strong></h2>
+        <div style="margin-bottom: 10px"></div>
+        <hr style="border-top: 1px solid #262626;">
+        <div style="margin-bottom: 30px"></div>
+
+        <div style="padding-right: 0; padding-left: 0"> </div>
+    </div>
+
+    <div class="container">
+        <table id="miTabla2" class="table table-striped" style="padding-top: 10px">
+            <thead>
+            <tr style="background-color: #378fff">
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo electrónico</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Administrador</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Teléfono</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Farmacista 1</span>
+                    </div>
+                </td>
+                <td style="text-align: center">farmacista1@gmail.com</td>
+                <td style="text-align: center">San Miguel Centro</td>
+                <td style="text-align: center">Administrador 2</td>
+                <td style="text-align: center">+51 946335254</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Farmacista 2</span>
+                    </div>
+                </td>
+                <td style="text-align: center">farmacista2@gmail.com</td>
+                <td style="text-align: center">San Miguel Sur</td>
+                <td style="text-align: center">Administrador 2</td>
+                <td style="text-align: center">+51 946335254</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Farmacista 3</span>
+                    </div>
+                </td>
+                <td style="text-align: center">farmacista3@gmail.com</td>
+                <td style="text-align: center">San Miguel Sur</td>
+                <td style="text-align: center">Administrador 1</td>
+                <td style="text-align: center">+51 946335254</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Farmacista 4</span>
+                    </div>
+                </td>
+                <td style="text-align: center">farmacista4@gmail.com</td>
+                <td style="text-align: center">Pando 5 Etapa</td>
+                <td style="text-align: center">Administrador 3</td>
+                <td style="text-align: center">+51 946335254</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Farmacista 5</span>
+                    </div>
+                </td>
+                <td style="text-align: center">farmacista5@gmail.com</td>
+                <td style="text-align: center">Pando 5 Etapa</td>
+                <td style="text-align: center">Administrador 3</td>
+                <td style="text-align: center">+51 946335254</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Farmacista 6</span>
+                    </div>
+                </td>
+                <td style="text-align: center">farmacista6@gmail.com</td>
+                <td style="text-align: center">San Miguel Centro</td>
+                <td style="text-align: center">Administrador 5</td>
+                <td style="text-align: center">+51 946335254</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <br><br><br><br>
+    <div class="container">
+        <h2 style="font-family: 'Aptos', Arial; color: #07314d;">
+            <i class="fa-solid fa-user" style="color: #0c3452; "></i>
+            <strong style="padding-left: 10px">Pacientes</strong></h2>
+        <div style="margin-bottom: 10px"></div>
+        <hr style="border-top: 1px solid #262626;">
+        <div style="margin-bottom: 20px"></div>
+
+        <div style="padding-right: 0; padding-left: 0"> </div>
+    </div>
+
+    <div class="container">
+        <table id="miTabla3" class="display" style="padding-top: 10px">
+            <thead>
+            <tr style="background-color: #378fff">
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo electrónico</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Teléfono</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Distrito de residencia</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha de registro</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/paciente.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Paciente 1</span>
+                    </div>
+                </td>
+                <td style="text-align: center">paciente1@gmail.com</td>
+                <td style="text-align: center">+51 946335254</td>
+                <td style="text-align: center">Pueblo Libre</td>
+                <td style="text-align: center">12-12-2023</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/paciente.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Paciente 2</span>
+                    </div>
+                </td>
+                <td style="text-align: center">paciente2@gmail.com</td>
+                <td style="text-align: center">+51 946335254</td>
+                <td style="text-align: center">San Miguel</td>
+                <td style="text-align: center">12-02-2024</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/paciente.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Paciente 3</span>
+                    </div>
+                </td>
+                <td style="text-align: center">paciente3@gmail.com</td>
+                <td style="text-align: center">+51 946335254</td>
+                <td style="text-align: center">Lima</td>
+                <td style="text-align: center">25-11-2023</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/paciente.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Paciente 4</span>
+                    </div>
+                </td>
+                <td style="text-align: center">paciente4@gmail.com</td>
+                <td style="text-align: center">+51 946335254</td>
+                <td style="text-align: center">San Miguel</td>
+                <td style="text-align: center">04-11-2023</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/paciente.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Paciente 5</span>
+                    </div>
+                </td>
+                <td style="text-align: center">paciente5@gmail.com</td>
+                <td style="text-align: center">+51 946335254</td>
+                <td style="text-align: center">Jesus Maria</td>
+                <td style="text-align: center">01-04-2023</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/paciente.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Paciente 6</span>
+                    </div>
+                </td>
+                <td style="text-align: center">paciente6@gmail.com</td>
+                <td style="text-align: center">+51 946335254</td>
+                <td style="text-align: center">Pueblo Libre</td>
+                <td style="text-align: center">12-12-2023</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <br><br><br><br>
+    <div class="container">
+        <h2 style="font-family: 'Aptos', Arial; color: #07314d;">
+            <i class="fa-solid fa-user-md" style="color: #0c3452; "></i>
+            <strong style="padding-left: 10px">Doctores</strong></h2>
+        <div style="margin-bottom: 10px"></div>
+        <hr style="border-top: 1px solid #262626;">
+        <div style="margin-bottom: 30px"></div>
+
+        <div style="padding-right: 0; padding-left: 0"> </div>
+    </div>
+
+    <div class="container">
+        <table id="miTabla4" class="display" style="padding-top: 10px">
+            <thead>
+            <tr style="background-color: #378fff">
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo electrónico</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Especialidad</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Teléfono</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/doctor2.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Doctor 1</span>
+                    </div>
+                </td>
+                <td style="text-align: center">doctor1@gmail.com</td>
+                <td style="text-align: center">Neurocirugía</td>
+                <td style="text-align: center">+51 987485112</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/doctor2.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Doctor 2</span>
+                    </div>
+                </td>
+                <td style="text-align: center">doctor2@gmail.com</td>
+                <td style="text-align: center">Cardiología</td>
+                <td style="text-align: center">+51 987485112</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/doctor2.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Doctor 3</span>
+                    </div>
+                </td>
+                <td style="text-align: center">doctor3@gmail.com</td>
+                <td style="text-align: center">Pediatría</td>
+                <td style="text-align: center">+51 987485112</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/doctor2.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Doctor 4</span>
+                    </div>
+                </td>
+                <td style="text-align: center">doctor4@gmail.com</td>
+                <td style="text-align: center">Cardiología</td>
+                <td style="text-align: center">+51 987485112</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/doctor2.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Doctor 5</span>
+                    </div>
+                </td>
+                <td style="text-align: center">doctor5@gmail.com</td>
+                <td style="text-align: center">Medicina Interna</td>
+                <td style="text-align: center">+51 987485112</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <label>
+                            <img th:src="@{/img/doctor2.png}" alt="" style="width: 45px; height: 45px;">
+                        </label>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <span>   Doctor 6</span>
+                    </div>
+                </td>
+                <td style="text-align: center">doctor6@gmail.com</td>
+                <td style="text-align: center">Pediatría</td>
+                <td style="text-align: center">+51 987485112</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <br><br><br>
+    <br><br>
+</main>
+
+<div >
+    <footer id="sticky-footer" class="footer-distributed">
+        <div class="footer-left">
+            <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
+            <p class="footer-links">
+                <a href="">Usuarios</a> |
+                <a href="">Actividades</a> |
+                <a href="">Estadisticas</a> |
+                <a href="">Donaciones</a> |
+                <a href="">Perfil</a>
+            </p>
+            <p class="footer-company-name">Copyright © 2023 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
+        </div>
+
+        <div class="footer-center">
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p><span>Av. Universitaria 1801, San Miguel, 15088</span> Lima, Perú</p>
+            </div>
+
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+51 982 876 098</p>
+            </div>
+
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="mailto:sagar00001.co@gmail.com">Lorem ipsum dolor sit amet.</a></p>
+            </div>
+        </div>
+
+        <div class="footer-right">
+            <p class="footer-company-about">
+                <span>Lorem, ipsum dolor.</span>
+                La carrera de <strong>Ingeniería de las telecomunicaciones</strong> de la <strong>Pontificia Universidad Catolica del Perú</strong> diseñó una pagina WEB.
+            </p>
+            <div class="footer-icons">
+                <a href="https://www.facebook.com/profile.php?id=100009473024310&mibextid=LQQJ4d"><i class="fa fa-facebook"></i></a>
+                <a href="https://www.instagram.com/leo.leonar071/?igshid=OGQ5ZDc2ODk2ZA%3D%3Ds"><i class="fa fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@pucp"><i class="fa fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+</div>
+    <!-- JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- DataTable -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.3/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.bootstrap5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.print.min.js"></script>
+    <!-- Bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#miTabla, #miTabla2, #miTabla3, #miTabla4').DataTable({
+                "pageLength":5,
+                "lengthChange": false,
+                "language": {
+                    "emptyTable": "No hay registros disponibles",
+                    "zeroRecords": "No se encontraron registros coincidentes",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                    "search" : "Buscar:",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+                },
+
+            });
+
+            $('#filtroEstado').on('change', function() {
+                var estado = $(this).val();
+                table.column(2).search(estado).draw();
+
+            });
+
+            $('#limpiarFiltros').on('click', function() {
+                $('#filtroEstado').val('');
+                table.search('').columns().search('').draw();
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            var opened = false;
+
+            $('#menu-small').hide();
+
+            $('#nav-toggle').click(function (e) {
+                e.stopPropagation();
+                if (opened) {
+                    $('#menu-small').hide();
+                } else {
+                    $('#menu-small').show();
+                }
+                opened = !opened;
+            });
+        });
+    </script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+
+</body>
+
+</html>

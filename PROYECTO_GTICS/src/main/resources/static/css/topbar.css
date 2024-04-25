@@ -1,0 +1,269 @@
+
+/*=============== HEADER ===============*/
+.header-topbar {
+    width: 100%;
+    background-color: #0d6efd;
+    box-shadow: 0 2px 16px hsla(220, 32%, 8%, .3);
+    z-index: 100;
+    position: fixed;
+    top: 0;
+}
+
+/*=============== NAV ===============*/
+
+.logo {
+    max-width: 210px;
+    height: auto;
+    padding: 10px 0 10px 0;
+}
+
+.nav-topbar {
+    height: auto;
+}
+
+.nav-logo,
+.nav-burger,
+.nav-close {
+    color: rgb(255,255,255);
+}
+
+.nav-data {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    display: inline-flex;
+    align-items: center;
+    column-gap: .25rem;
+}
+
+.nav-logo i {
+    font-weight: initial;
+    font-size: 1.25rem;
+}
+
+.nav-toggle {
+    position: relative;
+    width: 32px;
+    height: 32px;
+}
+
+.nav-burger,
+.nav-close {
+    position: absolute;
+    width: max-content;
+    height: max-content;
+    inset: 0;
+    margin: auto;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: opacity .1s, transform .4s;
+}
+
+.nav-close {
+    opacity: 0;
+}
+
+.menu-item {
+    text-decoration: none;
+    color: rgb(244 244 245);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.menu-item:hover {
+    color: rgb(10, 45, 136);
+}
+
+.menu-item-small {
+    text-decoration: none;
+    gap: 0.25rem;
+    color: rgb(244 244 245);
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.menu-item-small:hover {
+    color: rgb(10, 45, 136);
+}
+
+@media screen and (max-width: 1000px) {
+    .nav-menu {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: auto;
+        overflow: auto;
+        pointer-events: none;
+        opacity: 0;
+    }
+
+    .inside-menu-small {
+        position: fixed;
+        top: 71px;
+        left: 0;
+        z-index: 50;
+        width: 100%;
+        background-color: rgba(26,115,232,0.7);
+        backdrop-filter: blur(15px);
+    }
+
+    .nav-menu-small {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        height: auto;
+        overflow: auto;
+        width: 50%;
+    }
+
+    .nav-list-small {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        font-size: 1.1rem;
+    }
+
+    .nav-list-small-perfil {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        width: 80%;
+    }
+
+}
+
+/*=============== DROPDOWN ===============*/
+.dropdown-item {
+    cursor: pointer;
+}
+
+.dropdown-arrow {
+    font-size: 1.25rem;
+    font-weight: initial;
+    transition: transform .4s;
+}
+
+.dropdown-item:hover .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.inside-dropdown {
+    margin-top: 25px;
+}
+
+.dropdown-menu {
+    position: fixed;
+    max-height: initial;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    overflow: initial;
+    right: 120px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s, top .3s;
+}
+
+@media(max-width: 1600px) {
+    .dropdown-menu {
+        right: 30px;
+    }
+}
+
+.dropdown-item:hover {
+    transition: max-height .4s ease-in;
+}
+
+.dropdown-link {
+    padding: 1.25rem 1.25rem 1.25rem 2.5rem;
+    color: var(--color-white);
+    background-color: rgba(26,115,232,0.7);
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    column-gap: .5rem;
+    font-weight: var(--font-semi-bold);
+    transition: background-color .3s;
+}
+
+.dropdown-link i {
+    font-size: 1.25rem;
+    font-weight: initial;
+}
+
+.dropdown-link:hover {
+    background-color: var(--color-blue--hover);
+}
+
+
+/*=============== BREAKPOINTS ===============*/
+
+
+/* For large devices */
+@media screen and (min-width: 1000px) {
+
+    .nav {
+        height: calc(var(--header-height) + 2rem);
+        display: flex;
+        justify-content: space-between;
+    }
+    .nav-toggle {
+        display: none;
+    }
+    .nav-list {
+        height: 100%;
+        display: flex;
+        column-gap: 3rem;
+    }
+
+    .nav-list-small {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        column-gap: 1.5rem;
+    }
+
+    .nav-link {
+        height: 100%;
+        padding: 0;
+        justify-content: initial;
+        column-gap: .25rem;
+    }
+    .nav-link:hover {
+        background-color: transparent;
+    }
+
+    .dropdown-item {
+        position: relative;
+    }
+    .dropdown-link {
+        padding-inline: 1rem 3.5rem;
+    }
+    .dropdown-link {
+        padding-inline: 1rem;
+    }
+
+
+    .dropdown-item:hover .dropdown-menu {
+        opacity: 1;
+        pointer-events: initial;
+        transition: top .3s;
+    }
+
+    .dropdown-subitem:hover > .dropdown-submenu {
+        opacity: 1;
+        top: 0;
+        pointer-events: initial;
+        transition: top .3s;
+    }
+}
+
+/*======================= FIN HEADER =====================*/

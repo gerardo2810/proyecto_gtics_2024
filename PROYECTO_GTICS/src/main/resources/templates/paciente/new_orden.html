@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+    <!--=============== CSS ===============-->
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
+
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
+
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/fonts.css}" >
+    <link rel="stylesheet" th:href="@{/css/topbar.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/upload_img.css}">
+    <link rel="stylesheet" th:href="@{/css/datatables.css}">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <link rel="stylesheet" th:href="@{/css/paciente/lista_medicamentos.css}">
+
+
+    <!--=============== DataTable ===============-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
+    <!--  Bootstrap-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
+    <!--==========================================-->
+
+
+
+
+    <title>Pre Ordenes | Bienestar San Miguel</title>
+
+    <style>
+        body {
+            padding-top: 80px;
+        }
+
+
+    </style>
+</head>
+
+
+<header class="header-topbar">
+    <nav class="nav-topbar container">
+
+
+        <div class="nav-data">
+            <div>
+                <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+            </div>
+
+            <!--=============== NAV MENU ===============-->
+
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li><a href="/paciente" class="menu-item roboto-regular" >Pre Ordenes</a></li>
+
+                    <li><a href="/paciente/ordenes" class="menu-item roboto-regular" style="text-decoration: underline; color: white">Ordenes Web</a></li>
+
+                    <li><a href="/paciente/mensajeria" class="menu-item roboto-regular">Mensajeria</a></li>
+
+
+                    <!--=============== DROPDOWN ===============-->
+                    <li class="dropdown-item">
+                        <div class="menu-item roboto-regular">
+                            <a href="/paciente/perfil" class="menu-item roboto-regular">Perfil</a> <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                        </div>
+
+                        <ul class="dropdown-menu">
+                            <div class="inside-dropdown">
+                                <li>
+                                    <a href="/paciente/cambio_contrasena" class="dropdown-link">
+                                        <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="#" class="dropdown-link">
+                                        <i class="ri-lock-line menu-item dropdown-item roboto-regular"></i> Cerrar sesión
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="nav-toggle" id="nav-toggle">
+                <i class="ri-menu-line nav-burger" id="menu-icon"></i>
+                <i class="ri-close-line nav-close"></i>
+
+                <div class="menu-small" id="menu-small">
+                    <div class="inside-menu-small">
+                        <div class="nav-menu-small" id="nav-menu-small">
+                            <ul class="nav-list-small">
+                                <li><a href="/paciente" class="menu-item roboto-regular">Pre Ordenes</a></li>
+
+                                <li><a href="/paciente/ordenes" class="menu-item roboto-regular">Ordenes Web</a></li>
+
+                                <li><a href="/paciente/mensajeria" class="menu-item roboto-regular">Mensajeria</a></li>
+                            </ul>
+
+                            <ul class="nav-list-small-perfil">
+                                <li><a href="/farmacista/ordenes_web" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+
+                                <li><a href="/farmacista/pre_ordenes" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </nav>
+</header>
+
+
+<body>
+
+
+<div class="container">
+
+    <div style="margin-bottom: 50px"></div>
+    <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Generar nuevo orden:</strong></h2>
+    <div style="margin-bottom: 20px"></div>
+    <hr style="border-top: 1px solid #DFDFDF;">
+    <div style="margin-bottom: 40px"></div>
+
+    <div style="padding-right: 0; padding-left: 0"> </div>
+</div>
+
+
+
+<form id="form"  method="post" th:action="@{'/paciente/guardarOrden'}" enctype="multipart/form-data">
+
+    <div class="container-form">
+
+        <div style="display: flex;flex-direction: row; column-gap: 25px">
+
+            <div>
+                <div class="column">
+
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray">Nombre del paciente:</label>
+                        <input class="input-form" type="text" name="nombres" placeholder="Ingrese sus nombres" required>
+                    </div>
+
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray">Apellidos del paciente:</label>
+                        <input class="input-form" type="text" name="apellidos" placeholder="Ingrese sus apellidos" required>
+                    </div>
+
+                </div>
+
+                <div class="column">
+
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray">DNI:</label>
+                        <input class="input-form" type="text" name="dni" placeholder="Ingrese su DNI" required>
+                    </div>
+
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray">Dirección:</label>
+                        <input class="input-form" type="text" name="direccion" placeholder="Ingrese su edad:" required>
+                    </div>
+
+                </div>
+
+                <div class="column">
+
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray">Doctor:</label>
+                        <select class="select-form" name="doctor" required>
+                            <option selected disabled>Seleccionar Doctor</option>
+                            <option>Doctor 1</option>
+                            <option>Doctor 2</option>
+                            <option>Doctor 3</option>
+                        </select>
+                    </div>
+
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray">Distrito:</label>
+                        <input class="input-form" name="distrito" type="text" placeholder="Ingrese el distrito donde reside" required>
+                    </div>
+
+                </div>
+
+                <div class="column">
+
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray">Hora de Entrega:</label>
+                        <input class="input-form" type="text"  placeholder="Ingrese la hora de entrega" required>
+                    </div>
+
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray">Teléfono:</label>
+                        <input class="input-form" type="text"  placeholder="Ingrese su número de teléfono" required>
+                    </div>
+
+                </div>
+
+                <div class="column-start">
+
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray">Seguro:</label>
+                        <input class="input-form" type="seguro" name="seguro" placeholder="Ingrese su seguro" required>
+                    </div>
+
+                </div>
+
+                <div class="column-start">
+
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray; margin-bottom:8px">Captura de Receta Médica:</label>
+                        <div id="upload" class="modal" data-state="0" data-ready="false">
+
+                            <div class="modal__body">
+                                <div class="modal__col">
+                                    <!-- up -->
+                                    <svg class="modal__icon modal__icon--blue" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
+                                        <g fill="none" stroke="hsl(223,90%,50%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
+                                            <polyline class="modal__icon-sdo14" points="7 12 12 7 17 12" stroke-dasharray="14.2 14.2" />
+                                            <line class="modal__icon-sdo10" x1="12" y1="7" x2="12" y2="17" stroke-dasharray="10 10" />
+                                        </g>
+                                    </svg>
+                                    <!-- error -->
+                                    <svg class="modal__icon modal__icon--red" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true" display="none">
+                                        <g fill="none" stroke="hsl(3,90%,50%)" stroke-width="2" stroke-linecap="round">
+                                            <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
+                                            <line class="modal__icon-sdo14" x1="7" y1="7" x2="17" y2="17" stroke-dasharray="14.2 14.2" />
+                                            <line class="modal__icon-sdo14" x1="17" y1="7" x2="7" y2="17" stroke-dasharray="14.2 14.2" />
+                                        </g>
+                                    </svg>
+                                    <!-- check -->
+                                    <svg class="modal__icon modal__icon--green" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true" display="none">
+                                        <g fill="none" stroke="hsl(138,90%,50%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
+                                            <polyline class="modal__icon-sdo14" points="7 12.5 10 15.5 17 8.5" stroke-dasharray="14.2 14.2" />
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="modal__col">
+                                    <div class="modal__content">
+                                        <h2 class="modal__title" style="font-weight: 600">Sube una imagen de tu receta médica:</h2>
+                                        <p class="modal__message" style="color:dimgray">Selecciona la imagen para subirla desde tu dispositivo</p>
+                                        <div class="modal__actions">
+                                            <button  class="modal__button modal__button--upload" type="button" data-action="file">Seleccionar imagen</button>
+                                            <input id="file" name="imagen" type="file" hidden >
+                                        </div>
+                                        <div class="modal__actions" hidden>
+                                            <svg class="modal__file-icon" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
+                                                <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <polygon points="4 1 12 1 20 8 20 23 4 23" />
+                                                    <polyline points="12 1 12 8 20 8" />
+                                                </g>
+                                            </svg>
+                                            <div class="modal__file" data-file></div>
+                                            <button class="modal__close-button" type="button" data-action="fileReset">
+                                                <svg class="modal__close-icon" viewBox="0 0 16 16" width="16px" height="16px" aria-hidden="true">
+                                                    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                                        <polyline points="4,4 12,12" />
+                                                        <polyline points="12,4 4,12" />
+                                                    </g>
+                                                </svg>
+                                                <span class="modal__sr">Remove</span>
+                                            </button>
+                                            <!--     <button class="btn-p" type="button" data-action="upload">Confirmar</button>     -->
+                                        </div>
+                                    </div>
+                                    <div class="modal__content" hidden>
+                                        <h2 class="modal__title">Subiendo imagen…</h2>
+                                        <p class="modal__message">Solo danos un momento para procesar tu archivo.</p>
+                                        <div class="modal__actions">
+                                            <div class="modal__progress">
+                                                <div class="modal__progress-value" data-progress-value>0%</div>
+                                                <div class="modal__progress-bar">
+                                                    <div class="modal__progress-fill" data-progress-fill></div>
+                                                </div>
+                                            </div>
+                                            <button class="btn-cancel" type="button" data-action="cancel">Cancelar</button>
+                                        </div>
+                                    </div>
+                                    <div class="modal__content" hidden>
+                                        <h2 class="modal__title">Oops!</h2>
+                                        <p class="modal__message">Your file could not be uploaded due to an error. Try uploading it again?</p>
+                                        <div class="modal__actions modal__actions--center">
+                                            <button class="modal__button" type="button" data-action="upload">Retry</button>
+                                            <button class="modal__button" type="button" data-action="cancel">Cancel</button>
+                                        </div>
+                                    </div>
+                                    <div class="modal__content" hidden>
+                                        <h2 class="modal__title">Carga Exitosa!</h2>
+                                        <p class="modal__message">Tu receta médica ha sido subido con éxito.</p>
+                                        <div class="modal__actions modal__actions--center">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div style="width: 900px">
+                <div class="container" style="margin-top: 20px; background-color: #EEEEEE; border-radius: 14px">
+
+                    <div style="padding-top: 20px; padding-bottom: 20px">
+                        <div  style="font-size: 20px;color:dimgray; font-weight: bold;"> Seleccion de medicamentos: </div>
+                    </div>
+
+                    <hr class="style-one">
+
+
+                    <div class="items-preview hide" id="items-preview">
+
+                        <div class="container-preview">
+
+
+                            <div class="preview-title roboto-regular">
+                                Lista de Productos Seleccionados - Nueva Orden de Venta
+
+                                <div class="price-total-div roboto-medium">
+                                    TOTAL <span class="price-total">S/0.00</span>
+                                </div>
+                                <div>
+
+                                    <input id="listaIds" type="text" name="listaIds" value=""  hidden  />
+
+                                </div>
+                            </div>
+
+                            <div class="lista-items-clicked">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+
+                    <div style="padding-bottom: 20px; padding-top: 20px; display: flex; flex-direction: column; row-gap:3px; align-items: start">
+                        <div>
+
+                            <input id="searchInput" type="text" class="input-form" style="outline: none" placeholder="Buscar medicamento" >
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="interface">
+
+
+
+
+
+                        <section class="medicamentos">
+                            <!-- Contenedor de elementos -->
+                            <div class="med-container">
+                                <div class="item" th:each="medicamento : ${listaMedicamentos}">
+                                    <img th:src="${medicamento.imagen}" th:alt="${medicamento.nombre}" class="img-item">
+                                    <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
+                                    <div class="item-title roboto-regular" th:text="${medicamento.nombre}"   th:style="${medicamento.nombre.length()>=21 ? 'font-size:15px' : ''}"  >Medicamento</div>
+                                    <div style="display: flex; flex-direction: row; gap: 5px; align-items: end;">
+                                        <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
+                                    </div>
+
+                                    <button class="add-item-button montserrat-medium" type="button" th:data-item-id="${medicamento.idMedicamento}">Añadir a la Orden</button>
+                                </div>
+                            </div>
+
+                        </section>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <br>
+        <br>
+        <br>
+
+        <div class="column-buttons">
+
+            <button class="btn-cancel" type="button">Cancelar</button>
+            <button class="btn-p" type="submit">Confirmar</button>
+
+        </div>
+
+
+    </div>
+</form>
+
+<br>
+
+
+<!--Footer-->
+<div >
+    <footer id="sticky-footer" class="footer-distributed" >
+        <div class="footer-left">
+            <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
+            <p class="footer-links">
+                <a href="">Usuarios</a> |
+                <a href="">Actividades</a> |
+                <a href="">Estadisticas</a> |
+                <a href="">Donaciones</a> |
+                <a href="">Perfil</a>
+            </p>
+            <p class="footer-company-name">Copyright © 2023 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
+        </div>
+
+        <div class="footer-center">
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p><span>Av. Universitaria 1801, San Miguel, 15088</span> Lima, Perú</p>
+            </div>
+
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+51 982 876 098</p>
+            </div>
+
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="mailto:sagar00001.co@gmail.com">Lorem ipsum dolor sit amet.</a></p>
+            </div>
+        </div>
+
+        <div class="footer-right">
+            <p class="footer-company-about">
+                <span>Lorem, ipsum dolor.</span>
+                La carrera de <strong>Ingeniería de las telecomunicaciones</strong> de la <strong>Pontificia Universidad Catolica del Perú</strong> diseñó una pagina WEB.
+            </p>
+            <div class="footer-icons">
+                <a href="https://www.facebook.com/profile.php?id=100009473024310&mibextid=LQQJ4d"><i class="fa fa-facebook"></i></a>
+                <a href="https://www.instagram.com/leo.leonar071/?igshid=OGQ5ZDc2ODk2ZA%3D%3Ds"><i class="fa fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@pucp"><i class="fa fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+
+
+
+
+
+
+<!---------Pop up---------->
+<script>
+    const showPopup = document.querySelector('.btn-popup');
+    const popupContainer = document.querySelector('.popup-container');
+    const closePopup = document.getElementById('closePopup');
+
+    showPopup.onclick = () =>{
+        popupContainer.classList.add('active');
+    }
+
+    closePopup.onclick = () =>{
+        popupContainer.classList.remove('active');
+    }
+</script>
+
+
+<script th:src="@{/js/upload_img.js}"></script>
+<script th:src="@{/js/topbar.js}"></script>
+
+
+<!---------Datatable---------->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var table = $('#miTabla').DataTable({
+            "pageLength":4,
+            "lengthChange": false,
+            "language": {
+                "emptyTable": "No hay registros disponibles",
+                "zeroRecords": "No se encontraron registros coincidentes",
+                "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                "Search" : "Buscar:",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+
+            },
+
+
+        });
+
+        $('#filtroEstado').on('change', function() {
+            var estado = $(this).val();
+            table.column(2).search(estado).draw();
+
+        });
+
+        $('#limpiarFiltros').on('click', function() {
+            $('#filtroEstado').val('');
+            table.search('').columns().search('').draw();
+        });
+    });
+</script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+
+
+<!---------SweetAlert---------->
+<style>
+    .swal2-title {
+        font-size: 24px; }
+    .swal2-footer {
+        color:#0d6efd;
+    }
+</style>
+
+
+<script>
+
+    const form = document.getElementById("form");
+    var img = document.getElementById("file");
+
+    form.addEventListener("submit", e =>{
+        e.preventDefault();
+
+
+        if(img.files.length === 0){
+            Swal.fire({
+                icon: "error",
+                iconColor: '#DC3545',
+                title: "ERROR",
+                text: "Aún le falta subir la imagen de su receta médica",
+                confirmButtonText: "OK",
+                confirmButtonColor: '#0D6EFD',
+                width: 500,
+            });
+        }
+
+        else{
+            Swal.fire({
+                title: '¿Estás seguro de generar esta nueva orden de compra?',
+                icon: 'warning',
+                iconColor: '#DC3545',
+                showCancelButton: true,
+                cancelButtonColor: '#DC3545',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#0D6EFD',
+                confirmButtonText: 'Confirmar',
+                footer: '<a href="">Volver a ingresar los datos</a>'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+
+    })
+
+</script>
+
+
+
+<!---------Medicamentos---------->
+
+<script>
+
+    listaSelectedIds = [];
+
+    $(document).ready(function() {
+
+        const botonesEliminarItem = document.getElementsByClassName('btn-eliminar');
+        for(var i=0;i<botonesEliminarItem.length; i++){
+            const buttonEliminar = botonesEliminarItem[i];
+            buttonEliminar.addEventListener('click',eliminarItemCarrito);
+        }
+        var botonesSumarCantidad = document.getElementsByClassName('sumar-cantidad');
+        for(var i=0;i<botonesSumarCantidad.length; i++){
+            const buttonSumar = botonesSumarCantidad[i];
+            buttonSumar.addEventListener('click',sumarCantidad);
+        }
+        var botonesRestarCantidad = document.getElementsByClassName('restar-cantidad');
+        for(var i=0;i<botonesRestarCantidad.length; i++){
+            const buttonRestar = botonesRestarCantidad[i];
+            buttonRestar.addEventListener('click',restarCantidad);
+        }
+        var botonesAgregar = document.getElementsByClassName('add-item-button');
+        for(var i=0; i<botonesAgregar.length;i++){
+            const buttonAgregar = botonesAgregar[i];
+            buttonAgregar.addEventListener('click', clickItemAdd);
+        }
+
+        function clickItemAdd(event){
+
+            const button = event.target;
+            const idAdd = button.dataset.itemId;
+            const item = button.parentElement;
+            const titulo = item.getElementsByClassName('item-title')[0].innerText;
+            const precio = item.getElementsByClassName('item-price')[0].innerText;
+            const imagenSrc = item.getElementsByClassName('img-item')[0].src;
+
+
+            if (listaSelectedIds.indexOf(idAdd) === -1) {
+                listaSelectedIds.push(idAdd);
+                listaSelectedIds.push(1);
+            }
+
+            const listaIdsInput = document.getElementById('listaIds');
+            listaIdsInput.value = listaSelectedIds;
+
+            addItemToList(idAdd, titulo, precio, imagenSrc);
+            ShowList();
+        }
+
+        function deleteItem(event){
+
+            const button = event.target;
+            const idDelete = button.dataset.itemId;
+
+            let pos = listaSelectedIds.indexOf(idDelete);
+            listaSelectedIds.splice(pos,1);
+            listaSelectedIds.splice(pos+1,1);
+
+            const listaIdsInput = document.getElementById('listaIds');
+            listaIdsInput.value = listaSelectedIds;
+
+            button.parentElement.parentElement.parentElement.remove();
+            hideorShowList();
+            actualizarMontoTotal();
+        }
+
+
+        function addItemToList(id, titulo, precio, imagenSrc){
+            const Swal = window.Swal;
+
+            const item = document.createElement('div');
+            item.classList.add = ('item-clicked');
+            const itemsList = document.getElementsByClassName('lista-items-clicked')[0];
+
+            if (itemsList.getElementsByClassName('item-title-clicked').length > 0){
+
+                const alreadyOnList = itemsList.getElementsByClassName('item-title-clicked');
+
+                for(let i=0; i < alreadyOnList.length; i++){
+                    if(alreadyOnList[i].innerText===titulo){
+                        Swal.fire({
+                            icon: "warning",
+                            iconColor: '#DC3545',
+                            title: "ADVERTENCIA",
+                            text: "El medicamento ya fue agregado",
+                            confirmButtonText: "OK",
+                            confirmButtonColor: '#0D6EFD',
+                            width: 500,
+                        });
+                        return;
+                    }
+                }
+            }
+
+
+            const itemNewSelected = `
+        <div class="selected-item">
+
+            <img src="${imagenSrc}" width="40px" height="auto" alt="">
+
+            <span class="item-title-clicked">${titulo}</span>
+
+            <div class="item-on-list">
+
+                <div class="item-details">
+                    <div class="selector-cantidad">
+                        <i class="fa-solid fa-minus restar-cantidad" data-item-id="${id}"></i>
+                        <input type="text" value="1" class="item-quantity-clicked" data-item-id="${id}">
+                        <i class="fa-solid fa-plus sumar-cantidad" data-item-id="${id}"></i>
+                    </div>
+
+                    <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                            <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked">${precio}</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-danger btn-eliminar" data-item-id="${id}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+
+        </div>
+    `;
+            item.innerHTML = itemNewSelected;
+            itemsList.append(item);
+
+            item.getElementsByClassName('btn-eliminar')[0].addEventListener('click', deleteItem);
+
+            const botonRestarCantidad = item.getElementsByClassName('restar-cantidad')[0];
+            botonRestarCantidad.addEventListener('click',restarCantidad);
+
+            const botonSumarCantidad = item.getElementsByClassName('sumar-cantidad')[0];
+            botonSumarCantidad.addEventListener('click',sumarCantidad);
+
+            const inputCantidad = item.getElementsByClassName('item-quantity-clicked')[0];
+            inputCantidad.addEventListener('change', setearCantidad);
+            inputCantidad.addEventListener('focus', function(event) {
+                event.target.dataset.previousValue = event.target.value;
+            });
+
+            actualizarMontoTotal();
+            ShowList();
+        }
+
+
+        function sumarCantidad(event){
+            const buttonClicked = event.target;
+            const idAddQuantity = buttonClicked.dataset.itemId;
+            const selector = buttonClicked.parentElement;
+            console.log(selector.getElementsByClassName('item-quantity-clicked')[0].value);
+            let cantidadActual = selector.getElementsByClassName('item-quantity-clicked')[0].value;
+            cantidadActual++;
+            selector.getElementsByClassName('item-quantity-clicked')[0].value = cantidadActual;
+
+            const toPlus = listaSelectedIds.indexOf(idAddQuantity);
+
+            listaSelectedIds[toPlus+1] = cantidadActual;
+
+            actualizarMontoTotal();
+        }
+
+        function restarCantidad(event){
+            const buttonClicked = event.target;
+            const idQuitQuantity = buttonClicked.dataset.itemId;
+            const selector = buttonClicked.parentElement;
+            console.log(selector.getElementsByClassName('item-quantity-clicked')[0].value);
+
+
+            let cantidadActual = selector.getElementsByClassName('item-quantity-clicked')[0].value;
+            cantidadActual--;
+            if(cantidadActual>=1){
+                selector.getElementsByClassName('item-quantity-clicked')[0].value = cantidadActual;
+
+                const toMinus = listaSelectedIds.indexOf(idQuitQuantity);
+
+                listaSelectedIds[toMinus+1] = cantidadActual;
+
+                actualizarMontoTotal();
+            }
+        }
+
+        function setearCantidad(event){
+            const inputFilled = event.target;
+            const idSetQuantity = inputFilled.dataset.itemId;
+            const valor = inputFilled.value;
+            const cantidadActual = parseInt(valor); // Convertir a número entero
+
+            // Verificar si el valor es un número válido
+            if (!isNaN(cantidadActual) && cantidadActual >= 1) {
+                // Actualizar el valor del input y el monto total
+
+                const toSet = listaSelectedIds.indexOf(idSetQuantity);
+
+                listaSelectedIds[toSet+1] = cantidadActual;
+
+                actualizarMontoTotal();
+            } else {
+                // Restaurar el valor anterior si no es válido
+                inputFilled.value = inputFilled.dataset.previousValue;
+            }
+        }
+
+        function actualizarMontoTotal() {
+            const listItems = document.getElementsByClassName('lista-items-clicked')[0];
+            const selectedItems = listItems.getElementsByClassName('selected-item');
+            let totalCentavos = 0;
+
+            for (let i = 0; i < selectedItems.length; i++) {
+                const item = selectedItems[i];
+                const precioItem = Math.round(parseFloat(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/', '').replace(/,/g, '')) * 100);
+                const cantidadItem = item.getElementsByClassName('item-quantity-clicked')[0].value;
+                totalCentavos += precioItem * cantidadItem;
+            }
+            const totalSoles = totalCentavos / 100;
+            document.getElementsByClassName('price-total')[0].innerText = 'S/' + totalSoles.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+            const listaIdsInput = document.getElementById('listaIds');
+            listaIdsInput.value = listaSelectedIds.join(',');
+
+        }
+
+        function hideorShowList(){
+            const someElement = document.getElementsByClassName('selected-item');
+
+            if(someElement.length === 0){
+                listaSelectedIds = [];
+                HideList();
+            }
+        }
+
+        function HideList(){
+            const itemsPreview = document.getElementById('items-preview');
+            itemsPreview.classList.add('hide');
+        }
+
+        function ShowList(){
+            const itemsPreview = document.getElementById('items-preview');
+            itemsPreview.classList.remove('hide');
+        }
+
+    });
+</script>
+
+
+<!-----Top bar ------------->
+<script>
+    $(document).ready(function() {
+        var opened = false;
+
+        $('#menu-small').hide();
+
+        $('#nav-toggle').click(function (e) {
+            e.stopPropagation();
+            if (opened) {
+                $('#menu-small').hide();
+            } else {
+                $('#menu-small').show();
+            }
+            opened = !opened;
+        });
+    });
+</script>
+
+
+
+
+
+
+<script>
+
+        $(document).ready(function() {
+        $('#searchInput').on('input', function() { // Escuchar el evento 'input'
+            var searchTerm = $(this).val().trim().toLowerCase();
+            $('.item').each(function() {
+                var itemName = $(this).find('.item-title').text().trim().toLowerCase();
+                if (itemName.includes(searchTerm)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+
+    });
+
+</script>
+
+</body>
+
+</html>

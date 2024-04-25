@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
+
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+
+    <!--=============== CSS ===============-->
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/fonts.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+    <link rel="stylesheet" th:href="@{/css/farmacista/detalle_ordenes.css}">
+    <link th:href="@{/css/footer.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
+
+    <!--Mapa vista Paciente-->
+    <script scr="/js/map.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAce4klBZuD60aEQidMVIbsoaiitxxQFpo"></script>
+
+    <!--=============== JQUERY ===============-->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <!--=============== SWEETALERT ===============-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <!--=============== FONT AWESOME ===============-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
+
+
+
+    <title>Bienestar San Miguel | Ordenes Web</title>
+
+</head>
+
+
+
+<header class="header-topbar">
+    <nav class="nav-topbar container">
+
+        <div class="nav-data">
+            <div>
+                <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+            </div>
+
+            <!--=============== NAV MENU ===============-->
+
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li><a href="/farmacista" class="menu-item roboto-regular">Inicio</a></li>
+
+                    <li><a href="/farmacista/ordenes_venta" class="menu-item roboto-regular">Ordenes de Venta</a></li>
+
+                    <li><a href="/farmacista/ordenes_web" class="menu-item roboto-regular">Ordenes Web</a></li>
+
+                    <li><a href="/farmacista/pre_ordenes" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Pre Ordenes</a></li>
+
+                    <!--=============== DROPDOWN ===============-->
+                    <li class="dropdown-item">
+                        <div class="menu-item roboto-regular">
+                            Perfil <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                        </div>
+
+                        <ul class="dropdown-menu">
+                            <div class="inside-dropdown">
+                                <li>
+                                    <a href="/farmacista/cambioContraseña" class="dropdown-link">
+                                        <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="#" class="dropdown-link">
+                                        <i class="ri-lock-line menu-item dropdown-item roboto-regular"></i> Cerrar sesión
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="nav-toggle" id="nav-toggle">
+                <i class="ri-menu-line nav-burger" id="menu-icon"></i>
+                <i class="ri-close-line nav-close"></i>
+
+                <div class="menu-small" id="menu-small">
+                    <div class="inside-menu-small">
+                        <div class="nav-menu-small" id="nav-menu-small">
+                            <ul class="nav-list-small">
+                                <li><a href="/farmacista" class="menu-item roboto-regular">Inicio</a></li>
+
+                                <li><a href="/farmacista/ordenes_venta" class="menu-item-small roboto-regular">Ordenes de Venta</a></li>
+
+                                <li><a href="/farmacista/ordenes_web" class="menu-item-small roboto-regular">Ordenes Web</a></li>
+
+                                <li><a href="/farmacista/pre_ordenes" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Pre Ordenes</a></li>
+                            </ul>
+
+                            <ul class="nav-list-small-perfil">
+                                <li><a href="/farmacista/cambioContraseña" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+
+                                <li><a href="/farmacista/pre_ordenes" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </nav>
+</header>
+
+
+<body style="background-color: white;">
+
+
+<div class="container" style="margin-top:90px;">
+
+
+    <div style="padding-top: 20px; padding-bottom: 20px">
+        <div class="main-title open-sans-bold"> Detalle de Orden de Venta - Preorden </div>
+    </div>
+
+    <hr class="style-one">
+
+    <div class="detalle-orden-container">
+
+        <div class="invoice-title">
+
+            <div class="title roboto-medium data-label">Bienestar San Miguel | <span th:text="${orden.getSede().getNombre()}">Sede</span></div>
+
+            <div class="title-info">
+                <div class="roboto-bold title data-label">Orden #<span th:text="${orden.getIdOrden() + 10000}"></span> </div>
+
+                <div th:if="${orden.getEstadoOrden() == 1}" th:text="Pendiente" class="btn-secondary"></div>
+                <div th:if="${orden.getEstadoOrden() == 2}" th:text="Pendiente" class="btn-secondary"></div>
+
+                <div th:if="${orden.getEstadoOrden() == 3}" th:text="Recibido" class="btn-green"></div>
+                <div th:if="${orden.getEstadoOrden() == 4}" th:text="En proceso" class="btn-yellow"></div>
+                <div th:if="${orden.getEstadoOrden() == 5}" th:text="Empaquetado" class="btn-red"></div>
+                <div th:if="${orden.getEstadoOrden() == 6}" th:text="En Ruta" class="btn-yellow"></div>
+                <div th:if="${orden.getEstadoOrden() == 7}" th:text="Entregado" class="badge badge-pagado"></div>
+
+
+                <div th:if="${orden.getEstadoOrden() == 8}" th:text="Pagado" class="badge badge-pagado"></div>
+                <div th:if="${orden.getEstadoOrden() == 9}" th:text="Anulado" class="btn-secondary"></div>
+            </div>
+        </div>
+
+        <div class="invoice-contact">
+
+            <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Dirección:</span><div th:text="${orden.getSede().getDireccion()}">Aldoradin</div></div>
+            <div><span class="data-label roboto-medium">Correo:</span> clinica.bienestar@sanmiguel.pe</div>
+            <div><span class="data-label roboto-medium">Número:</span> +51 998524112</div>
+        </div>
+
+        <hr class="my-4" style="margin-bottom: 20px; margin-top: 20px;">
+
+        <div class="client-info">
+            <div class="data-label roboto-medium">Datos del Cliente:</div>
+            <div class="invoice-data">
+                <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Nombre: </span><div th:text="${orden.getPaciente().getNombres() + ' ' + orden.getPaciente().getApellidos()}"> Leonardo Ernesto Aldoradin Yaranga</div></div>
+                <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Seguro:</span><div th:text="${orden.getPaciente().getSeguro()}">Aldoradin </div></div>
+                <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">DNI:</span><div th:text="${orden.getPaciente().getDni()}"> Aldoradin</div></div>
+                <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Celular:</span><div th:text="${orden.getPaciente().getCelular()}">Aldoradin</div></div>
+            </div>
+        </div>
+
+        <hr class="my-4" style="margin-bottom: 20px; margin-top: 20px;">
+
+        <div class="invoice-info">
+            <div class="data-label roboto-medium">Datos de la Orden:</div>
+
+            <div class="invoice-data">
+                <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Tipo: </span>
+                    <div th:if="${orden.getTipoOrden() == 1}" class="data-label roboto-regular">Orden Física <span></span> </div>
+                    <div th:if="${orden.getTipoOrden() == 2}" class="data-label roboto-regular">Orden Web <span></span> </div>
+                </div>
+                <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Número de Orden: </span><div th:text="${orden.getIdOrden() + 10000}"> Aldoradin</div></div>
+                <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Fecha:</span><div th:text="${orden.getFechaIni()}">Aldoradin </div></div>
+                <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Sede:</span><div th:text="${orden.getSede().getNombre()}"> Aldoradin</div></div>
+                <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Atendido por:</span><div>Leonardo Ernesto Aldoradin Yaranga</div></div>
+            </div>
+        </div>
+
+        <hr class="my-4" style="margin-bottom: 50px; margin-top: 20px;">
+
+        <div class="title roboto-medium data-label" style="padding-bottom: 20px">Lista de Medicamentos Comprados</div>
+
+        <div>
+            <table class="order-table">
+                <thead style="padding-bottom: 10px">
+                <tr>
+                    <th class="text-start" style="max-width: 90px;">No.</th>
+                    <th class="text-start" style="max-width: 200px;">Artículo</th>
+                    <th class="text-center">Precio</th>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-end" style="width: 120px;">Total</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="contenido, iterIndex : ${contenidoOrden}">
+                    <th class="text-start" style="width: 90px;"><span th:text="${iterIndex.index + 1}"></span></th>
+                    <td>
+                        <div class="name-unit-item">
+                            <div class="text-truncate font-size-14 mb-1" th:text="${contenido.getIdMedicamento().getNombre()}">Panadol</div>
+                            <div class="text-muted mb-0" th:text="${contenido.getIdMedicamento().getUnidad()}">TABLETAS 50 U.</div>
+                        </div>
+                    </td>
+                    <td class="text-center" th:text="${'S/. ' + contenido.getIdMedicamento().getPrecioVenta()}">$ 245.50</td>
+                    <td class="text-center" th:text="${contenido.getCantidad()}">1</td>
+                    <td class="text-end" th:text="${'S/. ' + contenido.getCantidad() * contenido.getIdMedicamento().getPrecioVenta()}">$ 245.50</td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="full-total">
+            <div class="roboto-regular data-label" style="padding-top: 20px">Total</div>
+            <div class="title roboto-medium data-label" th:text="${'S/. ' + orden.getPrecioTotal()}">S/. 750.00</div>
+        </div>
+
+
+        <hr class="my-4" style="margin-bottom: 50px; margin-top: 20px;">
+
+        <div class="title roboto-medium data-label" style="padding-bottom: 20px">Lista de Medicamentos Preorden</div>
+
+        <div>
+            <table class="order-table">
+                <thead style="padding-bottom: 10px">
+                <tr>
+                    <th class="text-start" style="max-width: 90px;">No.</th>
+                    <th class="text-start" style="max-width: 200px;">Artículo</th>
+                    <th class="text-center">Precio</th>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-end" style="width: 120px;">Total</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="contenido, iterIndex : ${contenidoPreOrden}">
+                    <th class="text-start" style="width: 90px;"><span th:text="${iterIndex.index + 1}"></span></th>
+                    <td>
+                        <div class="name-unit-item">
+                            <div class="text-truncate font-size-14 mb-1" th:text="${contenido.getIdMedicamento().getNombre()}">Panadol</div>
+                            <div class="text-muted mb-0" th:text="${contenido.getIdMedicamento().getUnidad()}">TABLETAS 50 U.</div>
+                        </div>
+                    </td>
+                    <td class="text-center" th:text="${'S/. ' + contenido.getIdMedicamento().getPrecioVenta()}">$ 245.50</td>
+                    <td class="text-center" th:text="${contenido.getCantidad()}">1</td>
+                    <td class="text-end" th:text="${'S/. ' + contenido.getCantidad() * contenido.getIdMedicamento().getPrecioVenta()}">$ 245.50</td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="full-total">
+            <div class="roboto-regular data-label" style="padding-top: 20px">Total</div>
+            <div class="title roboto-medium data-label" th:text="${'S/. ' + preOrden.getPrecioTotal()}">S/. 750.00</div>
+        </div>
+
+    </div>
+
+    <!--
+     <button class="btn btn-green float-end">
+        <a href="javascript:window.print()" class="btn btn-success me-1"><i class="fa fa-print"></i></a>
+    </button>
+     -->
+
+</div>
+
+
+<div class="container">
+
+    <div style="padding-top: 60px; padding-bottom: 20px">
+        <div class="main-title open-sans-regular"> Estado de la Preorden <span th:text="${'#TRK' + preOrden.getTracking()}"></span></div>
+    </div>
+    <hr style="border-top: 1px solid #262626;">
+    <div style="margin-bottom: 40px"></div>
+
+    <div style="padding-right: 0; padding-left: 0"> </div>
+</div>
+
+
+<div style="max-width: 1536px;margin-inline: auto;padding: 0 30px 0 30px;">
+
+    <div style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+
+
+        <div class="container-progress">
+            <div class="wrapper">
+                <div class="progress-container">
+
+                    <div class="barra" style="width: 50%"></div>
+
+                    <div class="progress-step">
+                        <i class="fa-solid fa-file-text active"></i>Recibido
+                    </div>
+                    <div class="progress-step">
+                        <i class="fa-solid fa fa-refresh active" ></i>En proceso
+                    </div>
+
+                    <div class="progress-step">
+                        <i class="fa-solid fa-archive"></i>Empaquetado
+                    </div>
+                    <div class="progress-step">
+                        <i class="fa-solid fa fa-truck"></i>En ruta
+                    </div>
+                    <div class="progress-step">
+                        <i class="fa-solid fa-check-square"></i>Entregado
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div id="map"></div>
+
+    </div>
+
+
+    <div style="padding-top: 60px; padding-bottom: 20px">
+        <div class="main-title open-sans-regular"> Realizar un Comentario </div>
+    </div>
+    <hr style="border-top: 1px solid #262626;">
+    <div style="margin-bottom: 40px"></div>
+
+    <div class="container">
+
+        <div class="d-flex justify-content-center row">
+            <div class="col-md-8">
+                <div class="bg-light p-2">
+                    <div style="display: flex; flex-direction: row; align-items: start; gap: 30px">
+                        <div style="background-color: #3F71EA; border-radius: 50px; width: 50px; height: 50px; color: white; text-align: center; font-size: 0.8rem; padding-top: 15px">User</div>
+                        <textarea class="form-control ml-1 shadow-none textarea"></textarea>
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: end; gap: 30px; padding-top: 15px">
+                        <button class="continue-button" type="button">Comentar</button>
+                        <button class="btn btn-danger" type="button">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div>
+    <footer id="sticky-footer" class="footer-distributed">
+        <div class="footer-left">
+            <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
+            <p class="footer-links">
+                <a href="/farmacista">Inicio</a> |
+                <a href="/farmacista/ordenes_venta">Ordenes de Venta</a> |
+                <a href="/farmacista/ordenes_web">Ordenes Web</a> |
+                <a href="/farmacista/pre_ordenes">Pre Ordenes</a> |
+                <a href="/farmacista/perfil">Perfil</a>
+            </p>
+            <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
+        </div>
+
+        <div class="footer-center">
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p><span>Av. Universitaria 1801, San Miguel, 15088</span> Lima, Perú</p>
+            </div>
+
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+51 982 876 098</p>
+            </div>
+
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="mailto:sagar00001.co@gmail.com">Lorem ipsum dolor sit amet.</a></p>
+            </div>
+        </div>
+
+        <div class="footer-right">
+            <p class="footer-company-about">
+                <span>Lorem, ipsum dolor.</span>
+                La carrera de <strong>Ingeniería de las telecomunicaciones</strong> de la <strong>Pontificia Universidad Catolica del Perú</strong> diseñó una pagina WEB.
+            </p>
+            <div class="footer-icons">
+                <a href="https://www.facebook.com/profile.php?id=100009473024310&mibextid=LQQJ4d"><i class="fa fa-facebook"></i></a>
+                <a href="https://www.instagram.com/leo.leonar071/?igshid=OGQ5ZDc2ODk2ZA%3D%3Ds"><i class="fa fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@pucp"><i class="fa fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+</body>
+
+<script>
+    $(document).ready(function() {
+        let opened = false;
+
+        $('#menu-small').hide();
+
+        $('#nav-toggle').click(function (e) {
+            e.stopPropagation();
+            if (opened) {
+                $('#menu-small').hide();
+            } else {
+                $('#menu-small').show();
+            }
+            opened = !opened;
+        });
+    });
+</script>
+
+<script>
+    // Puntos del mapa
+
+    const locations = [
+        { lat: -12.067713, lng: -77.067505 },
+        { lat: -12.067739299285414, lng: -77.07048533833166 },
+        { lat: -12.067991537715104, lng: -77.07550755645634 },
+        { lat : -12.068533248724986, lng: -77.07808532986617},
+        { lat: -12.069724275588285, lng: -77.07804924250952}
+    ]
+
+
+    // Inicializar mapa
+    function initMap() {
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 16,
+            center: locations[0],
+        });
+
+        // Crear marcador
+        const marker = new google.maps.Marker({
+            position: locations[0],
+            map: map,
+            icon: {
+                url: "../img/moto_icon.png", // Ruta de la imagen de la moto
+                scaledSize: new google.maps.Size(55, 50) // Tamaño personalizado (ancho, alto)
+            } // Ruta de la imagen de la moto
+        });
+
+        // Mover el marcador a través de los puntos
+
+        let i = 0;
+        const interval = setInterval(() => {
+            i++;
+            if (i >= locations.length) {
+                clearInterval(interval); // Detener el intervalo cuando llega a la tercera posición
+                return;
+            }
+            marker.setPosition(locations[i]);
+        }, 2000); // Cambia de ubicación cada 3 segundos
+
+    }
+
+</script>
+
+</html>

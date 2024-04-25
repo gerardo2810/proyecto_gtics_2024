@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--=============== REMIXICONS ===============-->
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+
+        <!--=============== CSS ===============-->
+        <link th:href="@{/css/styles.css}" rel="stylesheet" />
+        <link th:href="@{/css/fonts.css}" rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+        <link th:href="@{/css/footer.css}" rel="stylesheet" />
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+        <link rel="stylesheet" href="css/bootstrap/bootstrap.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <title>Bienestar San Miguel | Farmacista</title>
+    </head>
+
+    <header class="header-topbar">
+        <nav class="nav-topbar container">
+
+
+            <div class="nav-data">
+                <div>
+                    <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+                </div>
+
+                <!--=============== NAV MENU ===============-->
+
+                <div class="nav-menu" id="nav-menu">
+                    <ul class="nav-list">
+                        <li><a href="/adminsede" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
+
+                        <li><a href="/adminsede/doctores" class="menu-item roboto-regular">Doctores</a></li>
+
+                        <li><a href="/adminsede/farmacista" class="menu-item roboto-regular">Farmacistas</a></li>
+
+                        <li><a href="/adminsede/ordenes" class="menu-item roboto-regular">Pedidos de Reposición</a></li>
+
+                        <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular">Medicamentos</a></li>
+
+                        <!--=============== DROPDOWN ===============-->
+                        <li class="dropdown-item">
+                            <div class="menu-item roboto-regular">
+                                Más opciones <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                            </div>
+
+                            <ul class="dropdown-menu">
+                                <div class="inside-dropdown">
+                                    <li>
+                                        <a href="/adminsede/perfil_adminsede" class="dropdown-link">
+                                            <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="/adminsede/cambiar_contrasena" class="dropdown-link">
+                                            <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#" class="dropdown-link">
+                                            <i class="ri-lock-line menu-item dropdown-item roboto-regular"></i> Cerrar sesión
+                                        </a>
+                                    </li>
+                                </div>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="nav-toggle" id="nav-toggle">
+                    <i class="ri-menu-line nav-burger" id="menu-icon"></i>
+                    <i class="ri-close-line nav-close"></i>
+
+                    <div class="menu-small" id="menu-small">
+                        <div class="inside-menu-small">
+                            <div class="nav-menu-small" id="nav-menu-small">
+                                <ul class="nav-list-small">
+                                    <li><a href="/adminsede" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
+
+                                    <li><a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a></li>
+
+                                    <li><a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a></li>
+
+                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Pedidos de Reposición</a></li>
+
+                                    <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a></li>
+                                </ul>
+
+                                <ul class="nav-list-small-perfil">
+                                    <li><a href="/adminsede/cambiar_contrasena" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+
+                                    <li><a href="/adminsede/" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </nav>
+    </header>
+
+    <body>
+
+        <div class="container" style="margin-top: 90px">
+
+            <div style="padding-top: 20px; padding-bottom: 20px">
+                <div class="main-title montserrat-bold"> Interfaz de perfil </div>
+            </div>
+
+            <hr style="border-top: 1px solid #262626;">
+
+            <div style="margin-bottom: 40px"></div>
+            <div class="container-xl px-4 mt-4">
+
+                <!-- Account page navigation-->
+                <nav class="nav nav-borders">
+                    <a class="nav-link active ms-0" href="/farmacista/perfil" target="__blank">Perfil</a>
+                    <a class="nav-link" href="/farmacista/facturacion" target="__blank">Notificaciones</a>  <!--Es ta vista puede ser usada para paciente así podra ver sus metodos de pago y las compras que ha realizado hasta el momento-->
+
+                </nav>
+                <hr class="mt-0 mb-4">
+                <div class="row">
+                    <div class="col-xl-4">
+                        <!-- Profile picture card-->
+                        <div class="card mb-4 mb-xl-0">
+                            <div class="card-header">Foto de perfil</div>
+                            <div class="card-body text-center">
+                                <!-- Profile picture image-->
+                                <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                                <!-- Profile picture help block-->
+                                <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                                <!-- Profile picture upload button-->
+                                <button class="btn btn-primary" type="button">Subir imágen aquí</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-8">
+                        <!-- Account details card-->
+                        <div class="card mb-4">
+                            <div class="card-header">Detalles de la cuenta</div>
+                            <div class="card-body">
+                                <form>
+                                    <!-- Form Group (username)-->
+                                    <div class="mb-3">
+                                        <label class="small mb-1" for="inputRol">Puesto que ocupa en la clínica</label>
+                                        <input class="form-control" id="inputRol" type="text"  value="Farmacista"  readonly>
+                                    </div>
+                                    <!-- Form Row-->
+                                    <div class="row gx-3 mb-3">
+                                        <!-- Form Group (first name)-->
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputFirstName">Nombres</label>
+                                            <input class="form-control" id="inputFirstName" type="text" value="Sergio Andres" readonly>
+                                        </div>
+                                        <!-- Form Group (last name)-->
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputLastName">Apellido</label>
+                                            <input class="form-control" id="inputLastName" type="text" value="Bustamante Bartra" readonly>
+                                        </div>
+                                    </div>
+                                    <!-- Form Row        -->
+                                    <div class="row gx-3 mb-3">
+                                        <!-- Form Group (organization name)-->
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputOrgName">Direccion</label>
+                                            <input class="form-control" id="inputOrgName" type="text" value="San miguel" readonly>
+                                        </div>
+                                        <!-- Form Group (location)-->
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputLocation">Edad</label>
+                                            <input class="form-control" id="inputLocation" type="number" value="19" readonly>
+                                        </div>
+                                    </div>
+                                    <!-- Form Group (email address)-->
+                                    <div class="mb-3">
+                                        <label class="small mb-1" for="inputEmailAddress">Correo electronico</label>
+                                        <input class="form-control" id="inputEmailAddress" type="email" value="a20206089@pucp.edu.pe" readonly>
+                                    </div>
+                                    <!-- Form Row-->
+                                    <div class="row gx-3 mb-3">
+                                        <!-- Form Group (phone number)-->
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputPhone">Número de telefono</label>
+                                            <input class="form-control" id="inputPhone" type="tel" value="955054066" readonly>
+                                        </div>
+                                        <!-- Form Group (birthday)-->
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="inputBirthday">Fecha de Nacimiento</label>
+                                            <input class="form-control" id="inputBirthday" type="text" name="birthday" value="28/12/2001" readonly >
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <footer id="sticky-footer" class="footer-distributed">
+                <div class="footer-left">
+                    <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
+                    <p class="footer-links">
+                        <a href="/farmacista">Inicio</a> |
+                        <a href="/farmacista/ordenes_venta">Ordenes de Venta</a> |
+                        <a href="/farmacista/ordenes_web">Ordenes Web</a> |
+                        <a href="/farmacista/pre_ordenes">Pre Ordenes</a> |
+                        <a href="/farmacista/perfil">Perfil</a>
+                    </p>
+                    <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
+                </div>
+
+                <div class="footer-center">
+                    <div>
+                        <i class="fa fa-map-marker"></i>
+                        <p><span>Av. Universitaria 1801, San Miguel, 15088</span> Lima, Perú</p>
+                    </div>
+
+                    <div>
+                        <i class="fa fa-phone"></i>
+                        <p>+51 982 876 098</p>
+                    </div>
+
+                    <div>
+                        <i class="fa fa-envelope"></i>
+                        <p><a href="mailto:sagar00001.co@gmail.com">Lorem ipsum dolor sit amet.</a></p>
+                    </div>
+                </div>
+
+                <div class="footer-right">
+                    <p class="footer-company-about">
+                        <span>Lorem, ipsum dolor.</span>
+                        La carrera de <strong>Ingeniería de las telecomunicaciones</strong> de la <strong>Pontificia Universidad Catolica del Perú</strong> diseñó una pagina WEB.
+                    </p>
+                    <div class="footer-icons">
+                        <a href="https://www.facebook.com/profile.php?id=100009473024310&mibextid=LQQJ4d"><i class="fa fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/leo.leonar071/?igshid=OGQ5ZDc2ODk2ZA%3D%3Ds"><i class="fa fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@pucp"><i class="fa fa-youtube"></i></a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+
+
+    </body>
+</html>

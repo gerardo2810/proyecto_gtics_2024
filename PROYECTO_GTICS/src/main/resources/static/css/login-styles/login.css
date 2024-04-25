@@ -1,0 +1,143 @@
+body{
+    max-height: 100vh;
+}
+
+header {
+    background-color: var(--color-blue);
+    position: fixed;
+    z-index: 100;
+    min-width: 100vw;
+}
+
+.login-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 40px 10px 40px;
+}
+
+.logo {
+    max-width: 210px;
+    height: auto;
+    padding: 10px 0 10px 0;
+}
+
+.top-menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+    justify-content: space-between;
+}
+
+.menu-item {
+    text-decoration: none;
+    color: rgb(244 244 245);
+    transition: color 0.2s ease;
+}
+
+.menu-item:hover {
+    color: rgb(10, 45, 136);
+}
+
+.main-container {
+    height: 100%;
+    display: grid;
+}
+
+.login-container{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+    width: 100%;
+}
+
+.wrapper {
+    max-width: 25rem;
+    width: 100%;
+    margin-top: 2rem;
+    padding: 2rem 2.5rem 1rem 2.5rem;
+    outline: none;
+    border-radius: 0.25rem;
+    border: 1px solid #d9d9d9;
+    color: var(--color-black);
+    background: var(--color-white);
+    box-shadow: var(--shadow-large);
+}
+
+.login-form {
+    width: 100%;
+    height: auto;
+    padding-top: 0.5rem;
+
+    .input-control {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.25rem;
+    }
+
+    .input-field {
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: inherit;
+        width: 100%;
+        height: auto;
+        padding: 0.75rem 1.25rem;
+        border: none;
+        outline: none;
+        border-radius: 2rem;
+        color: var(--color-black);
+        background: var(--color-light);
+        text-transform: unset;
+        text-rendering: optimizeLegibility;
+    }
+
+    .input-submit {
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: inherit;
+        cursor: pointer;
+        min-width: 50%;
+        height: auto;
+        padding: 0.65rem 1.25rem;
+        border: none;
+        outline: none;
+        border-radius: 2rem;
+        color: var(--color-white);
+        background: var(--color-blue);
+        box-shadow: var(--shadow-medium);
+        text-transform: capitalize;
+        text-rendering: optimizeLegibility;
+    }
+
+    .input-submit:hover {
+        background: var(--color-blue--hover);
+        transition: background-color 0.2s ease;
+    }
+}
+
+.login-title {
+    font-size: 2rem;
+    color: rgb(4, 16, 61);
+    padding-bottom: 0.5rem;
+}
+
+.footer {
+    background-color: var(--color-gray-2);
+    position: relative;
+    min-height: 10vh;
+}
+
+.footer-container {
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-gray);
+}

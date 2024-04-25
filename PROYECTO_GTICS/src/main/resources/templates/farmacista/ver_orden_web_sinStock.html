@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
+
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+
+    <!--=============== CSS ===============-->
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/fonts.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+    <link rel="stylesheet" th:href="@{/css/farmacista/detalle_ordenes.css}">
+    <link th:href="@{/css/footer.css}" rel="stylesheet" />
+
+    <!--=============== JQUERY ===============-->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <!--=============== SWEETALERT ===============-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <!--=============== FONT AWESOME ===============-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <!--=============== ICONOS ===============-->
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.3.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+
+    <title>Bienestar San Miguel | Orden de Venta</title>
+
+</head>
+
+
+
+<header class="header-topbar">
+    <nav class="nav-topbar container">
+
+        <div class="nav-data">
+            <div>
+                <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+            </div>
+
+            <!--=============== NAV MENU ===============-->
+
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li><a href="/farmacista" class="menu-item roboto-regular">Inicio</a></li>
+
+                    <li><a href="/farmacista/ordenes_venta" class="menu-item roboto-regular" >Ordenes de Venta</a></li>
+
+                    <li><a href="/farmacista/ordenes_web" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Ordenes Web</a></li>
+
+                    <li><a href="/farmacista/pre_ordenes" class="menu-item roboto-regular">Pre Ordenes</a></li>
+
+                    <!--=============== DROPDOWN ===============-->
+                    <li class="dropdown-item">
+                        <div class="menu-item roboto-regular">
+                            Perfil <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                        </div>
+
+                        <ul class="dropdown-menu">
+                            <div class="inside-dropdown">
+                                <li>
+                                    <a href="/farmacista/cambioContraseña" class="dropdown-link">
+                                        <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="#" class="dropdown-link">
+                                        <i class="ri-lock-line menu-item dropdown-item roboto-regular"></i> Cerrar sesión
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="nav-toggle" id="nav-toggle">
+                <i class="ri-menu-line nav-burger" id="menu-icon"></i>
+                <i class="ri-close-line nav-close"></i>
+
+                <div class="menu-small" id="menu-small">
+                    <div class="inside-menu-small">
+                        <div class="nav-menu-small" id="nav-menu-small">
+                            <ul class="nav-list-small">
+                                <li><a href="/farmacista" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
+
+                                <li><a href="/farmacista/ordenes_venta" class="menu-item-small roboto-regular">Ordenes de Venta</a></li>
+
+                                <li><a href="/farmacista/ordenes_web" class="menu-item-small roboto-regular">Ordenes Web</a></li>
+
+                                <li><a href="/farmacista/pre_ordenes" class="menu-item-small roboto-regular">Pre Ordenes</a></li>
+                            </ul>
+
+                            <ul class="nav-list-small-perfil">
+                                <li><a href="/farmacista/cambioContraseña" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+
+                                <li><a href="/farmacista/pre_ordenes" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </nav>
+</header>
+
+
+<body style="background-color: white;">
+
+<div class="container" style="margin-top:90px;">
+
+
+    <div style="padding-top: 20px; padding-bottom: 20px">
+        <div class="main-title montserrat-bold"> Detalle de Orden de Venta </div>
+    </div>
+
+    <hr class="style-one">
+
+    <div class="detalle-orden-container">
+
+        <div class="invoice-title">
+
+            <div class="title roboto-medium data-label">Farmacia Bienestar San Miguel | La Marina</div>
+
+            <div class="title-info">
+                <div class="roboto-bold title data-label">Orden #DS0204 </div>
+                <div class="badge badge-pagado">Pagado</div>
+            </div>
+        </div>
+
+        <div class="invoice-contact">
+            <div><span class="data-label roboto-medium">Dirección:</span> San Miguel La Marina 2001</div>
+            <div><span class="data-label roboto-medium">Correo:</span> clinica.bienestar@sanmiguel.pe</div>
+            <div><span class="data-label roboto-medium">Número:</span> +51 998524112</div>
+        </div>
+
+        <hr class="my-4" style="margin-bottom: 20px; margin-top: 20px;">
+
+        <div class="client-info">
+            <div class="data-label roboto-medium">Datos del Cliente:</div>
+            <div class="invoice-data">
+                <div><span class="data-label roboto-medium">Nombre:</span> Leonardo Ernesto Aldoradin Yaranga</div>
+                <div><span class="data-label roboto-medium">Seguro:</span> La positiva </div>
+                <div><span class="data-label roboto-medium">Correo:</span> aldoradin@armyspy.com</div>
+                <div><span class="data-label roboto-medium">DNI:</span> 71236854</div>
+            </div>
+        </div>
+
+        <hr class="my-4" style="margin-bottom: 20px; margin-top: 20px;">
+
+        <div class="invoice-info">
+            <div class="data-label roboto-medium">Datos de la Orden:</div>
+            <div class="invoice-data">
+                <div><span class="data-label roboto-medium">Número de Orden:</span> #DS0204</div>
+                <div><span class="data-label roboto-medium">Fecha de Pago:</span> 12 Oct, 2029 </div>
+                <div><span class="data-label roboto-medium">Sede:</span> Farmacia Bienestar San Miguel - La Marina 12330</div>
+                <div><span class="data-label roboto-medium">Atendido por:</span> Manuel Yarlequé</div>
+            </div>
+        </div>
+
+        <hr class="my-4" style="margin-bottom: 50px; margin-top: 20px;">
+
+        <div class="title roboto-medium data-label" style="padding-bottom: 20px">Lista de Medicamentos Comprados</div>
+
+        <div>
+            <table class="order-table">
+                <thead style="padding-bottom: 10px">
+                <tr>
+                    <th class="text-start" style="max-width: 90px;">No.</th>
+                    <th class="text-start" style="max-width: 200px;">Artículo</th>
+                    <th class="text-center">Precio</th>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-end" style="width: 120px;">Total</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <th class="text-start" style="width: 90px;">01</th>
+                    <td>
+                        <div class="name-unit-item">
+                            <div class="text-truncate font-size-14 mb-1">Panadol</div>
+                            <div class="text-muted mb-0">TABLETAS 50 U.</div>
+                        </div>
+                    </td>
+                    <td class="text-center">$ 245.50</td>
+                    <td class="text-center">1</td>
+                    <td class="text-end">$ 245.50</td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="full-total">
+            <div class="roboto-regular data-label" style="padding-top: 20px">Total</div>
+            <div class="title roboto-medium data-label">S/. 750.00</div>
+        </div>
+
+    </div>
+
+    </br>
+
+    <div style="display: flex">
+        <div class="detalle-orden-container" style="max-width: 500px; margin: auto;">
+            <h5 class="card-title text-center" style="font-size: 1.2em; font-weight: bold;">Error por falta de Stock</h5>
+            <p class="card-title text-center">No se puede aprobar para el pago vía web porque el / los siguientes medicamentos no cuentan con el stock suficiente para la venta.</p>
+            <div class="text-center">
+                <button class="btn btn-primary btn-lg d-block mx-auto">
+                    <i class="fi fi-rr-comment" style="margin-right: 5px;"></i> Comunicarse con el Cliente
+                </button>
+            </div>
+        </div>
+
+
+        <div class="detalle-orden-container" style="max-width: 1000px; margin: auto;">
+            <div class="title roboto-medium data-label" style="padding-bottom: 20px">Lista de Medicamentos sin Stock</div>
+            <div>
+                <table class="order-table" >
+                    <thead style="padding-bottom: 10px">
+                    <tr>
+                        <th class="text-start" style="max-width: 90px;">No.</th>
+                        <th class="text-start" style="max-width: 200px;">Artículo</th>
+                        <th class="text-center">Precio</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-end" style="width: 120px;">Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th class="text-start" style="width: 90px;">01</th>
+                        <td>
+                            <div class="name-unit-item">
+                                <div class="text-truncate font-size-14 mb-1">Panadol</div>
+                                <div class="text-muted mb-0">TABLETAS 50 U.</div>
+                            </div>
+                        </td>
+                        <td class="text-center">$ 245.50</td>
+                        <td class="text-center">1</td>
+                        <td class="text-end">$ 245.50</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<!--div class="float-end">
+    <a href="javascript:window.print()" class="btn btn-success me-1"><i class="fa fa-print"></i></a>
+    <a href="#" class="btn btn-primary w-md">Enviar</a>
+</div-->
+
+
+<div>
+    <footer id="sticky-footer" class="footer-distributed">
+        <div class="footer-left">
+            <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
+            <p class="footer-links">
+                <a href="/farmacista">Inicio</a> |
+                <a href="/farmacista/ordenes_venta">Ordenes de Venta</a> |
+                <a href="/farmacista/ordenes_web">Ordenes Web</a> |
+                <a href="/farmacista/pre_ordenes">Pre Ordenes</a> |
+                <a href="/farmacista/perfil">Perfil</a>
+            </p>
+            <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
+        </div>
+
+        <div class="footer-center">
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p><span>Av. Universitaria 1801, San Miguel, 15088</span> Lima, Perú</p>
+            </div>
+
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+51 982 876 098</p>
+            </div>
+
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="mailto:sagar00001.co@gmail.com">Lorem ipsum dolor sit amet.</a></p>
+            </div>
+        </div>
+
+        <div class="footer-right">
+            <p class="footer-company-about">
+                <span>Lorem, ipsum dolor.</span>
+                La carrera de <strong>Ingeniería de las telecomunicaciones</strong> de la <strong>Pontificia Universidad Catolica del Perú</strong> diseñó una pagina WEB.
+            </p>
+            <div class="footer-icons">
+                <a href="https://www.facebook.com/profile.php?id=100009473024310&mibextid=LQQJ4d"><i class="fa fa-facebook"></i></a>
+                <a href="https://www.instagram.com/leo.leonar071/?igshid=OGQ5ZDc2ODk2ZA%3D%3Ds"><i class="fa fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@pucp"><i class="fa fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+</body>
+
+<script>
+    $(document).ready(function() {
+        let opened = false;
+
+        $('#menu-small').hide();
+
+        $('#nav-toggle').click(function (e) {
+            e.stopPropagation();
+            if (opened) {
+                $('#menu-small').hide();
+            } else {
+                $('#menu-small').show();
+            }
+            opened = !opened;
+        });
+    });
+</script>
+
+
+</html>

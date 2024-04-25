@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bienestar San Miguel | Login</title>
+
+
+    <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/fonts.css}" rel="stylesheet" />
+    <link th:href="@{/css/login-styles/login.css}" rel="stylesheet" />
+</head>
+
+<header>
+    <div class="login-top">
+        <div>
+            <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+        </div>
+
+        <div class="top-menu">
+            <a class="text menu-item roboto-regular" href="">Preguntas Frecuentes →</a>
+            <a class="text menu-item roboto-regular" href="">Manual de Usuario →</a>
+            <a class="text menu-item roboto-regular" href="https://munisanmiguel.gob.pe/#">Directorio de Servicios →</a>
+        </div>
+    </div>
+
+</header>
+
+<body>
+x
+    <div class="main-container">
+        <div class="login-container">
+
+            <div class="wrapper">
+                <div class="login-title montserrat-bold">Iniciar Sesión</div>
+
+                <p class="text text-normal">¿No tiene cuenta? <span>  &#160 <a th:href="@{login/new}" class="text text-links">Registrarse</a></span></p>
+
+
+                <form name="signin" class="login-form">
+                    <div class="input-control">
+                        <label for="email" class="input-label" hidden>Email Address</label>
+                        <input type="email" name="email" id="email" class="input-field" placeholder="Correo Electrónico">
+                    </div>
+                    <div class="input-control">
+                        <label for="password" class="input-label" hidden>Password</label>
+                        <input type="password" name="password" id="password" class="input-field" placeholder="Contraseña">
+                    </div>
+                    <div class="input-control">
+                        <a th:href="@{login/recuperarContraseña}" class="text text-links">Recuperar Contraseña</a>
+                        <input type="submit" name="submit" class="input-submit" value="Iniciar Sesión" disabled>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

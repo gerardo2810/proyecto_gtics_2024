@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+
+    <!--=============== CSS ===============-->
+
+    <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+    <link rel="stylesheet" th:href="@{/css/superadmin/superadmin.css}">
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/fonts.css}">
+    <link rel="stylesheet" th:href="@{/css/topbar.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+    <link rel="stylesheet" th:href="@{/css/datatables.css}">
+    <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
+
+    <!--=============== JAVASCRIPT ===============-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
+    <!--  Bootstrap-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
+
+    <!--=============== CSS ===============-->
+
+    <title>Bienestar San Miguel | SuperAdmin</title>
+
+    <style>
+        body {
+            padding-top: 100px;
+        }
+        .btn-c {
+            display: inline-block;
+            padding: 12px 20px;
+            color:white;
+            background-color: #771677;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+            font-size: 17px;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
+    </style>
+</head>
+
+
+<body>
+<!--=============== HEADER ===============-->
+<header class="header-topbar">
+    <nav class="nav-topbar container">
+
+
+        <div class="nav-data">
+            <div>
+                <a href="/superadmin"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+            </div>
+
+            <!--=============== NAV MENU ===============-->
+
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li><a href="/superadmin" class="menu-item roboto-regular" >Inicio</a></li>
+
+                    <li><a href="/superadmin/pedidos" class="menu-item roboto-regular">Pedidos de reposición</a></li>
+
+                    <li><a href="/superadmin/medicamentos" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Inventario</a></li>
+
+                    <li class="dropdown-item">
+                        <div class="menu-item roboto-regular">
+                            Usuarios <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                        </div>
+
+                        <ul class="dropdown-menu">
+                            <div class="inside-dropdown">
+                                <li>
+                                    <a href="/superadmin/administradoresSede" class="dropdown-link">
+                                        <i class="ri-user-line menu-item roboto-regular"></i> Admnistradores de Sede
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a  href="/superadmin/farmacistas"  class="dropdown-link">
+                                        <i class="ri-user-line  menu-item roboto-regular"></i> Farmacistas
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/superadmin/pacientes" class="dropdown-link">
+                                        <i class="ri-user-line  menu-item roboto-regular"></i> Pacientes
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/superadmin/doctores" class="dropdown-link">
+                                        <i class="ri-user-line  menu-item roboto-regular"></i> Doctores
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+
+                    <!--=============== DROPDOWN 2 ===============-->
+                    <li class="dropdown-item">
+                        <div class="menu-item roboto-regular">
+                            <i class="fas fa-user fa-fw"></i>
+                            <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                        </div>
+
+                        <ul class="dropdown-menu">
+                            <div class="inside-dropdown">
+                                <li>
+                                    <a href="/superadmin/cambiarContraseña" class="dropdown-link">
+                                        <i class="ri-user-line menu-item roboto-regular"></i> Cambiar contraseña
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="/" class="dropdown-link">
+                                        <i class="ri-lock-line menu-item roboto-regular"></i> Cerrar sesión
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="nav-toggle" id="nav-toggle">
+                <i class="ri-menu-line nav-burger" id="menu-icon"></i>
+                <i class="ri-close-line nav-close"></i>
+
+                <div class="menu-small" id="menu-small">
+                    <div class="inside-menu-small">
+                        <div class="nav-menu-small" id="nav-menu-small">
+                            <ul class="nav-list-small">
+                                <li><a href="/superadmin" class="menu-item-small roboto-regular">Inicio</a></li>
+                                <li><a href="/superadmin/pedidos" class="menu-item-small roboto-regular">Pedidos de reposición</a></li>
+
+                                <li><a href="/superadmin/medicamentos" class="menu-item-small roboto-regular">Inventario</a></li>
+                            </ul>
+
+                            <ul class="nav-list-small-perfil">
+                                <li><a href="/superadmin/administradoresSede" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Administradores de sede</a></li>
+                                <li><a  href="/superadmin/farmacistas" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Farmacistas</a></li>
+                                <li><a href="/superadmin/pacientes" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Pacientes</a></li>
+                                <li><a href="/superadmin/doctores" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Doctores</a></li>
+                            </ul>
+
+                            <ul class="nav-list-small-perfil">
+                                <li><a href="/superadmin/cambiarContraseña" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+
+                                <li><a href="/" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </nav>
+</header>
+
+<main style="margin-left: 80px; margin-right: 80px">
+    <br><br>
+    <div class="container">
+        <div style="margin-bottom: 20px"></div>
+        <div style="margin-bottom: 30px"></div>
+        <div class="titulo"><b>INVENTARIO DE MEDICAMENTOS</b></div>
+        <div style="margin-bottom: 20px"></div>
+        <br><br>
+        <div style="padding-top:1px; display:flex; justify-content: end ; margin-left: 20px" >
+            <a class="btn-c" href="/superadmin/crearMedicamento">Crear nuevo medicamento</a>
+        </div>
+        <br>
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar...">
+            <button type="submit">Buscar</button>
+       </div>
+    </div>
+
+
+    <br><br><br>
+    <section class="medicamentos" style="margin-left: 80px; margin-right: 80px">
+        <!-- Contenedor de elementos -->
+        <div class="med-container">
+            <div class="item">
+                <img th:src="@{/img/nastzol.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
+                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
+                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
+                <span class="item-price roboto-regular">S/1.20</span>
+                <hr>
+                <div class="container" style="display: flex; justify-content: center; align-items: center;">
+                   <a href="/superadmin/editarMedicamento">
+                       <div style="padding-top: 1px; margin: 0 10px;">
+                           <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
+                       </div>
+                   </a>
+
+                    <div style="padding-top: 1px; margin: 0 10px;">
+                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img th:src="@{/img/apronax.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
+                <div class="subtitulo-item roboto-bold">TABLETAS 50 U.</div>
+                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
+                <span class="item-price roboto-regular">S/1.20</span>
+                <hr>
+                <div class="container" style="display: flex; justify-content: center; align-items: center;">
+                    <a href="/superadmin/editarMedicamento">
+                        <div style="padding-top: 1px; margin: 0 10px;">
+                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
+                        </div>
+                    </a>
+
+                    <div style="padding-top: 1px; margin: 0 10px;">
+                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img th:src="@{/img/betarretin.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
+                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
+                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
+                <span class="item-price roboto-regular">S/1.20</span>
+                <hr>
+                <div class="container" style="display: flex; justify-content: center; align-items: center;">
+                    <a href="/superadmin/editarMedicamento">
+                        <div style="padding-top: 1px; margin: 0 10px;">
+                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
+                        </div>
+                    </a>
+
+                    <div style="padding-top: 1px; margin: 0 10px;">
+                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img th:src="@{/img/bismutol.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
+                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
+                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
+                <span class="item-price roboto-regular">S/1.20</span>
+                <hr>
+                <div class="container" style="display: flex; justify-content: center; align-items: center;">
+                    <a href="/superadmin/editarMedicamento">
+                        <div style="padding-top: 1px; margin: 0 10px;">
+                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
+                        </div>
+                    </a>
+
+                    <div style="padding-top: 1px; margin: 0 10px;">
+                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img th:src="@{/img/doloral.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
+                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
+                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
+                <span class="item-price roboto-regular">S/1.20</span>
+                <hr>
+                <div class="container" style="display: flex; justify-content: center; align-items: center;">
+                    <a href="/superadmin/editarMedicamento">
+                        <div style="padding-top: 1px; margin: 0 10px;">
+                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
+                        </div>
+                    </a>
+
+                    <div style="padding-top: 1px; margin: 0 10px;">
+                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img th:src="@{/img/hepobionta.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
+                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
+                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
+                <span class="item-price roboto-regular">S/1.20</span>
+                <hr>
+                <div class="container" style="display: flex; justify-content: center; align-items: center;">
+                    <a href="/superadmin/editarMedicamento">
+                        <div style="padding-top: 1px; margin: 0 10px;">
+                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
+                        </div>
+                    </a>
+
+                    <div style="padding-top: 1px; margin: 0 10px;">
+                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img th:src="@{/img/nastzol.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
+                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
+                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
+                <span class="item-price roboto-regular">S/1.20</span>
+                <hr>
+                <div class="container" style="display: flex; justify-content: center; align-items: center;">
+                    <a href="/superadmin/editarMedicamento">
+                        <div style="padding-top: 1px; margin: 0 10px;">
+                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
+                        </div>
+                    </a>
+
+                    <div style="padding-top: 1px; margin: 0 10px;">
+                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img th:src="@{/img/neurobion.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
+                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
+                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
+                <span class="item-price roboto-regular">S/1.20</span>
+                <hr>
+                <div class="container" style="display: flex; justify-content: center; align-items: center;">
+                    <a href="/superadmin/editarMedicamento">
+                        <div style="padding-top: 1px; margin: 0 10px;">
+                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
+                        </div>
+                    </a>
+
+                    <div style="padding-top: 1px; margin: 0 10px;">
+                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img th:src="@{/img/apronax.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
+                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
+                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
+                <span class="item-price roboto-regular">S/1.20</span>
+                <hr>
+                <div class="container" style="display: flex; justify-content: center; align-items: center;">
+                    <a href="/superadmin/editarMedicamento">
+                        <div style="padding-top: 1px; margin: 0 10px;">
+                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
+                        </div>
+                    </a>
+
+                    <div style="padding-top: 1px; margin: 0 10px;">
+                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img th:src="@{/img/bismutol.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
+                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
+                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
+                <span class="item-price roboto-regular">S/1.20</span>
+                <hr>
+                <div class="container" style="display: flex; justify-content: center; align-items: center;">
+                    <a href="/superadmin/editarMedicamento">
+                        <div style="padding-top: 1px; margin: 0 10px;">
+                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
+                        </div>
+                    </a>
+
+                    <div style="padding-top: 1px; margin: 0 10px;">
+                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img th:src="@{/img/nastzol.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
+                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
+                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
+                <span class="item-price roboto-regular">S/1.20</span>
+                <hr>
+                <div class="container" style="display: flex; justify-content: center; align-items: center;">
+                    <a href="/superadmin/editarMedicamento">
+                        <div style="padding-top: 1px; margin: 0 10px;">
+                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
+                        </div>
+                    </a>
+
+                    <div style="padding-top: 1px; margin: 0 10px;">
+                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img th:src="@{/img/hepobionta.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
+                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
+                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
+                <span class="item-price roboto-regular">S/1.20</span>
+                <hr>
+                <div class="container" style="display: flex; justify-content: center; align-items: center;">
+                    <a href="/superadmin/editarMedicamento">
+                        <div style="padding-top: 1px; margin: 0 10px;">
+                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
+                        </div>
+                    </a>
+
+                    <div style="padding-top: 1px; margin: 0 10px;">
+                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img th:src="@{/img/nastzol.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
+                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
+                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
+                <span class="item-price roboto-regular">S/1.20</span>
+                <hr>
+                <div class="container" style="display: flex; justify-content: center; align-items: center;">
+                    <a href="/superadmin/editarMedicamento">
+                        <div style="padding-top: 1px; margin: 0 10px;">
+                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
+                        </div>
+                    </a>
+
+                    <div style="padding-top: 1px; margin: 0 10px;">
+                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img th:src="@{/img/doloral.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
+                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
+                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
+                <span class="item-price roboto-regular">S/1.20</span>
+                <hr>
+                <div class="container" style="display: flex; justify-content: center; align-items: center;">
+                    <a href="/superadmin/editarMedicamento">
+                        <div style="padding-top: 1px; margin: 0 10px;">
+                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
+                        </div>
+                    </a>
+
+                    <div style="padding-top: 1px; margin: 0 10px;">
+                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <br><br><br><br>
+</main>
+    <div >
+        <footer id="sticky-footer" class="footer-distributed">
+            <div class="footer-left">
+                <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
+                <p class="footer-links">
+                    <a href="">Usuarios</a> |
+                    <a href="">Actividades</a> |
+                    <a href="">Estadisticas</a> |
+                    <a href="">Donaciones</a> |
+                    <a href="">Perfil</a>
+                </p>
+                <p class="footer-company-name">Copyright © 2023 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
+            </div>
+
+            <div class="footer-center">
+                <div>
+                    <i class="fa fa-map-marker"></i>
+                    <p><span>Av. Universitaria 1801, San Miguel, 15088</span> Lima, Perú</p>
+                </div>
+
+                <div>
+                    <i class="fa fa-phone"></i>
+                    <p>+51 982 876 098</p>
+                </div>
+
+                <div>
+                    <i class="fa fa-envelope"></i>
+                    <p><a href="mailto:sagar00001.co@gmail.com">Lorem ipsum dolor sit amet.</a></p>
+                </div>
+            </div>
+
+            <div class="footer-right">
+                <p class="footer-company-about">
+                    <span>Lorem, ipsum dolor.</span>
+                    La carrera de <strong>Ingeniería de las telecomunicaciones</strong> de la <strong>Pontificia Universidad Catolica del Perú</strong> diseñó una pagina WEB.
+                </p>
+                <div class="footer-icons">
+                    <a href="https://www.facebook.com/profile.php?id=100009473024310&mibextid=LQQJ4d"><i class="fa fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/leo.leonar071/?igshid=OGQ5ZDc2ODk2ZA%3D%3Ds"><i class="fa fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@pucp"><i class="fa fa-youtube"></i></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        var opened = false;
+
+        $('#menu-small').hide();
+
+        $('#nav-toggle').click(function (e) {
+            e.stopPropagation();
+            if (opened) {
+                $('#menu-small').hide();
+            } else {
+                $('#menu-small').show();
+            }
+            opened = !opened;
+        });
+    });
+</script>
+
+</body>
+
+
+</html>
