@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(value = {"/adminsede"}, method = RequestMethod.GET)
+@RequestMapping(value = "/adminsede", method = RequestMethod.GET)
 public class AdminSedeController {
 
     /* Repositorios */
@@ -40,29 +40,29 @@ public class AdminSedeController {
         this.sedeFarmacistaRepository = sedeFarmacistaRepository;
     }
 
-    @GetMapping(value = {""})
+    @GetMapping(value = "")
     public String showIndexAdminSede(){
         return "adminsede/inicio";
     }
 
-    @GetMapping(value = {"/doctores"})
+    @GetMapping(value = "/doctores")
     public String showDoctors(){
         return "adminsede/doctores";
     }
 
-    @GetMapping(value = {"/farmacista"})
+    @GetMapping(value = "/farmacista")
     public String showFarmacistas(Model model){
         List<Usuario> listaFarmacistas = usuarioRepository.listarFarmacistas();
         model.addAttribute("listaFarmacistas", listaFarmacistas);
         return "adminsede/farmacistas";
     }
 
-    @GetMapping(value = {"/ordenes"})
+    @GetMapping(value = "/ordenes")
     public String showOrders(){
         return "adminsede/ordenes_reposicion";
     }
 
-    @GetMapping(value = {"/editar_farmacista"})
+    @GetMapping(value = "/editar_farmacista")
     public String editFarmacista(@RequestParam("id") int id,
                                  Model model){
         Usuario usuarioFarmacista = usuarioRepository.encontrarFarmacistaporId(id);
@@ -81,42 +81,42 @@ public class AdminSedeController {
 
     }
 
-    @GetMapping(value = {"/editar_orden_reposicion"})
+    @GetMapping(value = "/editar_orden_reposicion")
     public String editOrden(){
         return "adminsede/editar_orden_reposicion";
     }
 
-    @GetMapping(value = {"/medicamentos"}) //Aquiiiiiiiiiiiiiii
+    @GetMapping(value = "/medicamentos") //Aquiiiiiiiiiiiiiii
     public String showMedicamentos(){
         return "adminsede/medicamentos_sede";
     }
 
-    @GetMapping(value = {"/solicitud_farmacista"})
+    @GetMapping(value = "/solicitud_farmacista")
     public String solicitudFarmacista(){
         return "adminsede/solicitud_agregar_farmacista";
     }
 
-    @GetMapping(value = {"/generar_orden"})
+    @GetMapping(value = "/generar_orden")
     public String generarOrden(){
         return "adminsede/generar_orden";
     }
 
-    @GetMapping(value = {"/ver_ordenes_entregadas"})
+    @GetMapping(value = "/ver_ordenes_entregadas")
     public String verOrdenesEntregadas(){
         return "adminsede/ver_ordenes_entregadas";
     }
 
-    @GetMapping(value = {"/cambiar_contrasena"})
+    @GetMapping(value = "/cambiar_contrasena")
     public String vistaCambiarContra(){
         return "adminsede/cambiar_contrasena_adminsede";
     }
 
-    @GetMapping(value = {"/perfil_adminsede"})
+    @GetMapping(value = "/perfil_adminsede")
     public String vistaPerfil(){
         return "adminsede/perfil_adminsede";
     }
 
-    @GetMapping(value = {"/verDetalles"})
+    @GetMapping(value = "/verDetalles")
     public String verDetalles(){
         return "adminsede/verDetalles";
     }
@@ -135,7 +135,7 @@ public class AdminSedeController {
         return "redirect:/ /adminsede/farmacista";
     }*/
 
-    @PostMapping(value = {"/editarFarmacista"})
+    @PostMapping(value = "/editarFarmacista")
     public String editarFarmacista(Usuario usuario, RedirectAttributes attr,
                                    SedeFarmacista sedeFarmacista){
         usuarioRepository.save(usuario);
