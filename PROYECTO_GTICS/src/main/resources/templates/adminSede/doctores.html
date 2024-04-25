@@ -172,143 +172,17 @@
 
 
                 <tbody>
-                    <tr>
-                        <td>Sergio Andre Bustamante Salcedo</td>
+                    <tr th:each="doctor : ${listaDoctoresD}">
+                        <td th:value="${doctor.getNombres()} + '  ' + ${doctor.apellidos}"></td>
                         <td><img class="medicamento" src="/img/doctor.png"></td>
-                        <td>
-                            Surco
-                        </td>
-                        <td>
-                            Av. El Pinar 677
-                        </td>
-                        <td>
-                            Pediatría
-                        </td>
-                        <td>
-                            999345321
-                        </td>
-                        <td>
-                            doctor1@gmail.com
-                        </td>
+                        <td th:value="${doctor.getDistrito()}"></td>
+                        <td th:value="${doctor.getDireccion()}"></td>
+                        <td th:value="${doctor.getEspecialidad()}"></td>
+                        <td th:value="${doctor.getCelular()}"></td>
+                        <td th:value="${doctor.getCorreo()}"></td>
 
 
                     </tr>
-                    <tr>
-                        <td>Alexander Daniel Abrisqueta Zevallos</td>
-                        <td><img class="medicamento" src="/img/doctor.png"></td>
-                        <td>
-                            San Miguel
-                        </td>
-                        <td>
-                            Av. Los Pinos 454
-                        </td>
-                        <td>
-                            Traumatología
-                        </td>
-                        <td>
-                            999345444
-                        </td>
-                        <td>
-                            doctor2@gmail.com
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Aracelli Milene La Rosa Castro</td>
-                        <td><img class="medicamento" src="/img/doctor.png"></td>
-                        <td>
-                            Pueblo Libre
-                        </td>
-                        <td>
-                            Av. Bolivar 222
-                        </td>
-                        <td>
-                            Anatomía Patológica
-                        </td>
-                        <td>
-                            999345888
-                        </td>
-                        <td>
-                            doctor3@gmail.com
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>David Alonso Escobedo Cerrón</td>
-                        <td><img class="medicamento" src="/img/doctor.png"></td>
-                        <td>
-                            Pueblo Libre
-                        </td>
-                        <td>
-                            Av. Mariano Cornejo 555
-                        </td>
-                        <td>
-                            Cirugía General
-                        </td>
-                        <td>
-                            999345087
-                        </td>
-                        <td>
-                            doctor3@gmail.com
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Gerardo Manuel Aguilar Gutierrez</td>
-                        <td><img class="medicamento" src="/img/doctor.png"></td>
-                        <td>
-                            San Miguel
-                        </td>
-                        <td>
-                            Av. Los Pinos 454
-                        </td>
-                        <td>
-                            Dermatología
-                        </td>
-                        <td>
-                            999345444
-                        </td>
-                        <td>
-                            doctor4@gmail.com
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Piero Enrique Huancas Coripuna</td>
-                        <td><img class="medicamento" src="/img/doctor.png"></td>
-                        <td>
-                            San Miguel
-                        </td>
-                        <td>
-                            Av. Los Pinos 700
-                        </td>
-                        <td>
-                            Gastroenterología
-                        </td>
-                        <td>
-                            957345444
-                        </td>
-                        <td>
-                            doctor5@gmail.com
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Manuel Augusto Yarlequé Medina</td>
-                        <td><img class="medicamento" src="/img/doctor.png"></td>
-                        <td>
-                            San Miguel
-                        </td>
-                        <td>
-                            Av. Los Suyos 777
-                        </td>
-                        <td>
-                            Traumatología
-                        </td>
-                        <td>
-                            999345099
-                        </td>
-                        <td>
-                            doctor6@gmail.com
-                        </td>
-                    </tr>
-
-
                 </tbody>
             </table>
 

@@ -1,254 +1,271 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
+
         <!--=============== REMIXICONS ===============-->
         <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+
         <!--=============== CSS ===============-->
-        <!-- Font Awesome -->
+        <link th:href="@{/css/styles.css}" rel="stylesheet" />
+        <link th:href="@{/css/fonts.css}" rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+        <link th:href="@{/css/footer.css}" rel="stylesheet" />
+        <link th:href="@{/css/preloader.css}" rel="stylesheet" />
 
-        <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+        <!--=============== JQUERY ===============-->
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
+        <!--=============== SWEETALERT ===============-->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
 
-        <link rel="stylesheet" th:href="@{/css/styles.css}">
-        <link rel="stylesheet" th:href="@{/css/fonts.css}">
-        <link rel="stylesheet" th:href="@{/css/topbar.css}">
-        <link rel="stylesheet" th:href="@{/css/footer.css}">
-        <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
-        <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
-        <link rel="stylesheet" th:href="@{/css/datatables.css}">
-        <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
-        <link rel="stylesheet" th:href="@{/css/adminsede/estilos.css}">
+        <!--=============== FONT AWESOME ===============-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
+        <title>Bienestar San Miguel | Inicio</title>
 
-
-
-        <!--=============== DataTable ===============-->
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
-        <!--  Bootstrap-->
-        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
-        <!--==========================================-->
-
-
-        <title>Generar orden de reposición</title>
-
-        <style>
-            body {
-                padding-top: 80px;
-            }
-        </style>
     </head>
 
 
-    <header class="header-topbar">
-        <nav class="nav-topbar container">
+    <body class="loader-hidden">
 
 
-            <div class="nav-data">
-                <div>
-                    <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
-                </div>
+        <div class="container-loader loader-hidden" id="onload">
+            <div class="loader"></div>
+        </div>
 
-                <!--=============== NAV MENU ===============-->
 
-                <div class="nav-menu" id="nav-menu">
-                    <ul class="nav-list">
-                        <li><a href="/adminsede" class="menu-item roboto-regular">Inicio</a></li>
 
-                        <li><a href="/adminsede/doctores" class="menu-item roboto-regular">Doctores</a></li>
+        <header class="header-topbar">
+            <nav class="nav-topbar container">
 
-                        <li><a href="/adminsede/farmacista" class="menu-item roboto-regular">Farmacistas</a></li>
 
-                        <li><a href="/adminsede/ordenes" class="menu-item roboto-regular">Pedidos de Reposición</a></li>
+                <div class="nav-data">
+                    <div>
+                        <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+                    </div>
 
-                        <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Medicamentos</a></li>
+                    <!--=============== NAV MENU ===============-->
 
-                        <!--=============== DROPDOWN ===============-->
-                        <li class="dropdown-item">
-                            <div class="menu-item roboto-regular">
-                                Más opciones <i class="ri-arrow-down-s-line dropdown-arrow"></i>
-                            </div>
+                    <div class="nav-menu" id="nav-menu">
+                        <ul class="nav-list">
+                            <li><a href="/adminsede" class="menu-item roboto-regular">Inicio</a></li>
 
-                            <ul class="dropdown-menu">
-                                <div class="inside-dropdown">
-                                    <li>
-                                        <a href="/adminsede/perfil_adminsede" class="dropdown-link">
-                                            <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil
-                                        </a>
-                                    </li>
+                            <li><a href="/adminsede/doctores" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Doctores</a></li>
 
-                                    <li>
-                                        <a href="/adminsede/cambiar_contrasena" class="dropdown-link">
-                                            <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
-                                        </a>
-                                    </li>
+                            <li><a href="/adminsede/farmacista" class="menu-item roboto-regular">Farmacistas</a></li>
 
-                                    <li>
-                                        <a href="#" class="dropdown-link">
-                                            <i class="ri-lock-line menu-item dropdown-item roboto-regular"></i> Cerrar sesión
-                                        </a>
-                                    </li>
+                            <li><a href="/adminsede/ordenes" class="menu-item roboto-regular">Pedidos de Reposición</a></li>
+
+                            <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular">Medicamentos</a></li>
+
+                            <!--=============== DROPDOWN ===============-->
+                            <li class="dropdown-item">
+                                <div class="menu-item roboto-regular">
+                                    Más opciones <i class="ri-arrow-down-s-line dropdown-arrow"></i>
                                 </div>
-                            </ul>
-                        </li>
 
-                    </ul>
+                                <ul class="dropdown-menu">
+                                    <div class="inside-dropdown">
+                                        <li>
+                                            <a href="/adminsede/perfil_adminsede" class="dropdown-link">
+                                                <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="/adminsede/cambiar_contrasena" class="dropdown-link">
+                                                <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#" class="dropdown-link">
+                                                <i class="ri-lock-line menu-item dropdown-item roboto-regular"></i> Cerrar sesión
+                                            </a>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                    <div class="nav-toggle" id="nav-toggle">
+                        <i class="ri-menu-line nav-burger" id="menu-icon"></i>
+                        <i class="ri-close-line nav-close"></i>
+
+                        <div class="menu-small" id="menu-small">
+                            <div class="inside-menu-small">
+                                <div class="nav-menu-small" id="nav-menu-small">
+                                    <ul class="nav-list-small">
+                                        <li><a href="/adminsede" class="menu-item-small roboto-regular">Inicio</a></li>
+
+                                        <li><a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a></li>
+
+                                        <li><a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a></li>
+
+                                        <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Pedidos de Reposición</a></li>
+
+                                        <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Medicamentos</a></li>
+                                    </ul>
+
+                                    <ul class="nav-list-small-perfil">
+                                        <li><a href="/adminsede/cambiar_contrasena" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+
+                                        <li><a href="/adminsede/" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
                 </div>
 
-                <div class="nav-toggle" id="nav-toggle">
-                    <i class="ri-menu-line nav-burger" id="menu-icon"></i>
-                    <i class="ri-close-line nav-close"></i>
+            </nav>
+        </header>
 
-                    <div class="menu-small" id="menu-small">
-                        <div class="inside-menu-small">
-                            <div class="nav-menu-small" id="nav-menu-small">
-                                <ul class="nav-list-small">
-                                    <li><a href="/adminsede" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
 
-                                    <li><a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a></li>
+        <div class="container" style="margin-top: 90px">
 
-                                    <li><a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a></li>
+            <div style="padding-top: 20px; padding-bottom: 20px">
+                <div class="main-title open-sans-bold"> Medicamentos </div>
+                <div class="main-subtitle helvetica-medium"> Vista de medicamentos de la sede</div>
+            </div>
 
-                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Pedidos de Reposición</a></li>
+            <hr class="style-one">
 
-                                    <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a></li>
-                                </ul>
 
-                                <ul class="nav-list-small-perfil">
-                                    <li><a href="/adminsede/" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+            <div class="items-preview hide" id="items-preview">
 
-                                    <li><a href="/adminsede/" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
-                                </ul>
-                            </div>
+                <div class="container-preview">
+
+                    <div class="preview-title roboto-regular">
+                        Lista de Productos Seleccionados - Nueva solicitud de orden de reposición
+
+                        <div class="price-total-div roboto-medium">
+                            TOTAL <span class="price-total">S/0.00</span>
+                        </div>
+
+                        <div>
+
+                            <form th:action="@{/adminsede/generar_orden}" method="post">
+                                <input id="listaIds" type="hidden" name="listaIds" value=""/>
+                                <button type="submit" class="continue-button montserrat-medium">Continuar</button>
+                            </form>
+
+                        </div>
+                    </div>
+
+                    <div class="lista-items-clicked" style="display: flex; flex-direction: column-reverse">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="interface">
+
+
+                <div class="filtros">
+
+
+                    <div class="container-filters">
+
+                        <div class="filter-title roboto-medium">
+                            Filtros
+                        </div>
+
+                        <div class="categorias-title">
+                            Categorías
+                        </div>
+
+                        <div class="list-categorias">
+
+                            <div class="categoria-div"><a class="categoria" href="">Todas las Categorías</a></div>
+                            <div class="categoria-div"><a class="categoria" href="">Problemas Generales</a></div>
+                            <div class="categoria-div"><a class="categoria" href="">Antibacterianos Sistémicos</a></div>
+                            <div class="categoria-div"><a class="categoria" href="">Antineoplásicos e Inmunomoduladores</a></div>
+                            <div class="categoria-div"><a class="categoria" href="">Cuidado Dermatológico</a></div>
+                            <div class="categoria-div"><a class="categoria" href="">Cuidado Muscular y Articular</a></div>
+                            <div class="categoria-div"><a class="categoria" href="">Cuidado Oftalmológico</a></div>
+                            <div class="categoria-div"><a class="categoria" href="">Cuidado Otológico</a></div>
+                            <div class="categoria-div"><a class="categoria" href="">Cuidado Estomatológico</a></div>
+                            <div class="categoria-div"><a class="categoria" href="">Cuidado de la Mujer</a></div>
+                            <div class="categoria-div"><a class="categoria" href="">Infecciones y Relacionados</a></div>
+
+                        </div>
+
+                        <div class="alert roboto-regular">
+                            Recuerda ofrecerle al cliente nuestras promociones y ofertas.
                         </div>
 
                     </div>
 
                 </div>
+
+
+                <section class="medicamentos">
+
+                    <div style="display: grid; justify-content: space-between; grid-template-columns: 1fr 0.2fr;">
+                        <div>
+                            <input id="searchInput" type="text" class="input-form" style="outline: none" placeholder="Buscar medicamento" >
+                        </div>
+
+                        <a href="/farmacista"><button class="add-item-button open-sans-regular">Borrar Filtros</button></a>
+
+                    </div>
+
+                    <!-- Contenedor de elementos -->
+                    <div class="med-container">
+                        <div class="item" th:each="medicamento : ${listaMedicamentos}">
+                            <img th:src="${medicamento.imagen}" th:alt="${medicamento.nombre}" class="img-item">
+                            <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
+                                <div>
+                                    <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
+                                    <div class="item-title roboto-medium" th:text="${medicamento.nombre}">Medicamento</div>
+                                </div>
+                                <div class="items-details">
+                                    Ver Detalles
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; gap: 3px; align-items: end;">
+                                <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
+                            </div>
+
+                            <button class="add-item-button open-sans-regular" th:data-item-id="${medicamento.idMedicamento}">Añadir Producto</button>
+                        </div>
+                    </div>
+
+                </section>
+
             </div>
 
-        </nav>
-    </header>
-
-    <body>
-
-
-
-
-
-
-        <div class="container">
-
-            <div style="margin-bottom: 50px"></div>
-            <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Medicamentos:</strong></h2>
-            <div style="margin-bottom: 20px"></div>
-            <hr style="border-top: 1px solid #DFDFDF;">
-            <div style="margin-bottom: 40px"></div>
-
-            <div style="padding-right: 0; padding-left: 0"> </div>
         </div>
 
 
-
-
-        <div class="container">
-
-            <table id="miTabla" class="table table-striped">
-                <div style="display: flex">
-                    <button id="limpiarFiltros" class="btn-p">Limpiar Filtros</button>
-                    <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/generar_orden'" style="margin-left: 20px">Generar nueva orden</button>
-                </div>
-
-                <thead>
-                    <tr style="background-color: #378fff">
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Stock</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Estado</th>
-                    </tr>
-                </thead>
-
-
-                <tbody>
-                    <tr>
-                        <td>Paracetamol 100 mg</td>
-                        <td><img id="imagen" class="medicamento" src="/img/paracetamol.jpg"></td>
-                        <td>60</td>
-                        <td><button class="btn-rcb">ACEPTABLE</button></td>
-                    </tr>
-                    <tr>
-                        <td>Neurobion 100 mg</td>
-                        <td><img class="medicamento" src="/img/neurobion.jpg"></td>
-                        <td>0</td>
-                        <td><button class="btn-pend">AGOTADO</button></td>
-                    </tr>
-                    <tr>
-                        <td>Nastzol 100 mg</td>
-                        <td><img class="medicamento" src="/img/nastzol.jpg"></td>
-                        <td>0</td>
-                        <td><button class="btn-pend">AGOTADO</button></td>
-                    </tr>
-                    <tr>
-                        <td>Panadol 100 mg</td>
-                        <td><img class="medicamento"  src="/img/panadol.jpg"></td>
-                        <td>80</td>
-                        <td><button class="btn-rcb">ACEPTABLE</button></td>
-                    </tr>
-                    <tr>
-                        <td>Apronax 100 mg</td>
-                        <td><img class="medicamento"  src="/img/apronax.jpg"></td>
-                        <td>55</td>
-                        <td><button class="btn-rcb">ACEPTABLE</button></td>
-                    </tr>
-                    <tr>
-                        <td>Doloral 100 mg</td>
-                        <td><img class="medicamento"  src="/img/doloral.jpg"></td>
-                        <td>5</td>
-                        <td><button class="btn-listo">POR AGOTAR</button></td>
-                    </tr>
-
-
-                </tbody>
-            </table>
-
-            <br>
-            <br>
-            <br>
-            <br>
-
-        </div>
-
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-
-
-
-        <div >
+        <div>
             <footer id="sticky-footer" class="footer-distributed">
                 <div class="footer-left">
                     <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
                     <p class="footer-links">
-                        <a href="">Usuarios</a> |
-                        <a href="">Actividades</a> |
-                        <a href="">Estadisticas</a> |
-                        <a href="">Donaciones</a> |
-                        <a href="">Perfil</a>
+                        <a href="/farmacista">Inicio</a> |
+                        <a href="/farmacista/ordenes_venta">Ordenes de Venta</a> |
+                        <a href="/farmacista/ordenes_web">Ordenes Web</a> |
+                        <a href="/farmacista/pre_ordenes">Pre Ordenes</a> |
+                        <a href="/farmacista/perfil">Perfil</a>
                     </p>
-                    <p class="footer-company-name">Copyright © 2023 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
+                    <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
                 </div>
 
                 <div class="footer-center">
@@ -283,50 +300,291 @@
         </div>
 
 
-
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-        <script th:src="@{/js/topbar.js}"></script>
         <script>
+
             $(document).ready(function() {
-                var table = $('#miTabla').DataTable({
-                    "pageLength":5,
-                    "lengthChange": false,
-                    "language": {
-                        "emptyTable": "No hay registros disponibles",
-                        "zeroRecords": "No se encontraron registros coincidentes",
-                        "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-                        "search" : "Buscar:",
-                        "paginate": {
-                            "first": "Primero",
-                            "last": "Último",
-                            "next": "Siguiente",
-                            "previous": "Anterior"
-                        },
-                        "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
-                    },
-
+                $('#searchInput').on('input', function() { // Escuchar el evento 'input'
+                    var searchTerm = $(this).val().trim().toLowerCase();
+                    $('.item').each(function() {
+                        var itemName = $(this).find('.item-title').text().trim().toLowerCase();
+                        if (itemName.includes(searchTerm)) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
                 });
 
-                $('#filtroEstado').on('change', function() {
-                    var estado = $(this).val();
-                    table.column(2).search(estado).draw();
-
-                });
-
-                $('#limpiarFiltros').on('click', function() {
-                    $('#filtroEstado').val('');
-                    table.search('').columns().search('').draw();
-                });
             });
 
+        </script>
+
+        <script>
+
+            listaSelectedIds = [];
+
+            $(document).ready(function() {
+
+                const botonesEliminarItem = document.getElementsByClassName('btn-eliminar');
+                for(var i=0;i<botonesEliminarItem.length; i++){
+                    const buttonEliminar = botonesEliminarItem[i];
+                    buttonEliminar.addEventListener('click',eliminarItemCarrito);
+                }
+                var botonesSumarCantidad = document.getElementsByClassName('sumar-cantidad');
+                for(var i=0;i<botonesSumarCantidad.length; i++){
+                    const buttonSumar = botonesSumarCantidad[i];
+                    buttonSumar.addEventListener('click',sumarCantidad);
+                }
+                var botonesRestarCantidad = document.getElementsByClassName('restar-cantidad');
+                for(var i=0;i<botonesRestarCantidad.length; i++){
+                    const buttonRestar = botonesRestarCantidad[i];
+                    buttonRestar.addEventListener('click',restarCantidad);
+                }
+                var botonesAgregar = document.getElementsByClassName('add-item-button');
+                for(var i=0; i<botonesAgregar.length;i++){
+                    const buttonAgregar = botonesAgregar[i];
+                    buttonAgregar.addEventListener('click', clickItemAdd);
+                }
+
+                function clickItemAdd(event){
+
+                    const button = event.target;
+                    const idAdd = button.dataset.itemId;
+                    const item = button.parentElement;
+                    const titulo = item.getElementsByClassName('item-title')[0].innerText;
+                    const precio = item.getElementsByClassName('item-price')[0].innerText;
+                    const imagenSrc = item.getElementsByClassName('img-item')[0].src;
+
+
+                    if (listaSelectedIds.indexOf(idAdd) === -1) {
+                        listaSelectedIds.push(idAdd);
+                        listaSelectedIds.push(1);
+                    }
+
+                    const listaIdsInput = document.getElementById('listaIds');
+                    listaIdsInput.value = listaSelectedIds;
+
+                    addItemToList(idAdd, titulo, precio, imagenSrc);
+                    ShowList();
+                }
+
+                function deleteItem(event){
+
+                    const button = event.target;
+                    const idDelete = button.dataset.itemId;
+
+                    let pos = listaSelectedIds.indexOf(idDelete);
+                    listaSelectedIds.splice(pos,1);
+                    listaSelectedIds.splice(pos+1,1);
+
+                    const listaIdsInput = document.getElementById('listaIds');
+                    listaIdsInput.value = listaSelectedIds;
+
+                    button.parentElement.parentElement.parentElement.remove();
+                    hideorShowList();
+                    actualizarMontoTotal();
+                }
+
+
+                function addItemToList(id, titulo, precio, imagenSrc){
+                    const Swal = window.Swal;
+
+                    const item = document.createElement('div');
+                    item.classList.add = ('item-clicked');
+                    const itemsList = document.getElementsByClassName('lista-items-clicked')[0];
+
+                    if (itemsList.getElementsByClassName('item-title-clicked').length > 0){
+
+                        const alreadyOnList = itemsList.getElementsByClassName('item-title-clicked');
+
+                        for(let i=0; i < alreadyOnList.length; i++){
+                            if(alreadyOnList[i].innerText===titulo){
+                                Swal.fire({
+                                    title: "Ya está en la lista",
+                                    text: "El medicamento ya fue agregado.",
+                                    icon: "info"
+                                });
+                                return;
+                            }
+                        }
+                    }
+
+
+                    const itemNewSelected = `
+        <div class="selected-item">
+
+            <img src="${imagenSrc}" width="40px" height="auto" alt="">
+
+            <span class="item-title-clicked">${titulo}</span>
+
+            <div class="item-on-list">
+
+                <div class="item-details">
+                    <div class="selector-cantidad">
+                        <i class="fa-solid fa-minus restar-cantidad" data-item-id="${id}"></i>
+                        <input type="text" value="1" class="item-quantity-clicked" data-item-id="${id}">
+                        <i class="fa-solid fa-plus sumar-cantidad" data-item-id="${id}"></i>
+                    </div>
+
+                    <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                            <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked">${precio}</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-danger btn-eliminar" data-item-id="${id}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+
+        </div>
+    `;
+                    item.innerHTML = itemNewSelected;
+                    itemsList.append(item);
+
+                    item.getElementsByClassName('btn-eliminar')[0].addEventListener('click', deleteItem);
+
+                    const botonRestarCantidad = item.getElementsByClassName('restar-cantidad')[0];
+                    botonRestarCantidad.addEventListener('click',restarCantidad);
+
+                    const botonSumarCantidad = item.getElementsByClassName('sumar-cantidad')[0];
+                    botonSumarCantidad.addEventListener('click',sumarCantidad);
+
+                    const inputCantidad = item.getElementsByClassName('item-quantity-clicked')[0];
+                    inputCantidad.addEventListener('change', setearCantidad);
+                    inputCantidad.addEventListener('focus', function(event) {
+                        event.target.dataset.previousValue = event.target.value;
+                    });
+
+                    actualizarMontoTotal();
+                    ShowList();
+                }
+
+
+                function sumarCantidad(event){
+                    const buttonClicked = event.target;
+                    const idAddQuantity = buttonClicked.dataset.itemId;
+                    const selector = buttonClicked.parentElement;
+                    console.log(selector.getElementsByClassName('item-quantity-clicked')[0].value);
+                    let cantidadActual = selector.getElementsByClassName('item-quantity-clicked')[0].value;
+                    cantidadActual++;
+                    selector.getElementsByClassName('item-quantity-clicked')[0].value = cantidadActual;
+
+                    const toPlus = listaSelectedIds.indexOf(idAddQuantity);
+
+                    listaSelectedIds[toPlus+1] = cantidadActual;
+
+                    actualizarMontoTotal();
+                }
+
+                function restarCantidad(event){
+                    const buttonClicked = event.target;
+                    const idQuitQuantity = buttonClicked.dataset.itemId;
+                    const selector = buttonClicked.parentElement;
+                    console.log(selector.getElementsByClassName('item-quantity-clicked')[0].value);
+
+
+                    let cantidadActual = selector.getElementsByClassName('item-quantity-clicked')[0].value;
+                    cantidadActual--;
+                    if(cantidadActual>=1){
+                        selector.getElementsByClassName('item-quantity-clicked')[0].value = cantidadActual;
+
+                        const toMinus = listaSelectedIds.indexOf(idQuitQuantity);
+
+                        listaSelectedIds[toMinus+1] = cantidadActual;
+
+                        actualizarMontoTotal();
+                    }
+                }
+
+                function setearCantidad(event){
+                    const inputFilled = event.target;
+                    const idSetQuantity = inputFilled.dataset.itemId;
+                    const valor = inputFilled.value;
+                    const cantidadActual = parseInt(valor); // Convertir a número entero
+
+                    // Verificar si el valor es un número válido
+                    if (!isNaN(cantidadActual) && cantidadActual >= 1) {
+                        // Actualizar el valor del input y el monto total
+
+                        const toSet = listaSelectedIds.indexOf(idSetQuantity);
+
+                        listaSelectedIds[toSet+1] = cantidadActual;
+
+                        actualizarMontoTotal();
+                    } else {
+                        // Restaurar el valor anterior si no es válido
+                        inputFilled.value = inputFilled.dataset.previousValue;
+                    }
+                }
+
+                function actualizarMontoTotal() {
+                    const listItems = document.getElementsByClassName('lista-items-clicked')[0];
+                    const selectedItems = listItems.getElementsByClassName('selected-item');
+                    let totalCentavos = 0;
+
+                    for (let i = 0; i < selectedItems.length; i++) {
+                        const item = selectedItems[i];
+                        const precioItem = Math.round(parseFloat(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/', '').replace(/,/g, '')) * 100);
+                        const cantidadItem = item.getElementsByClassName('item-quantity-clicked')[0].value;
+                        totalCentavos += precioItem * cantidadItem;
+                    }
+                    const totalSoles = totalCentavos / 100;
+                    document.getElementsByClassName('price-total')[0].innerText = 'S/' + totalSoles.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+                    const listaIdsInput = document.getElementById('listaIds');
+                    listaIdsInput.value = listaSelectedIds.join(',');
+
+                }
+
+                function hideorShowList(){
+                    const someElement = document.getElementsByClassName('selected-item');
+
+                    if(someElement.length === 0){
+                        listaSelectedIds = [];
+                        HideList();
+                    }
+                }
+
+                function HideList(){
+                    const itemsPreview = document.getElementById('items-preview');
+                    itemsPreview.classList.add('hide');
+                }
+
+                function ShowList(){
+                    const itemsPreview = document.getElementById('items-preview');
+                    itemsPreview.classList.remove('hide');
+                }
+
+            });
+        </script>
+
+
+        <script>
+            $(document).ready(function() {
+                let opened = false;
+
+                $('#menu-small').hide();
+
+                $('#nav-toggle').click(function (e) {
+                    e.stopPropagation();
+                    if (opened) {
+                        $('#menu-small').hide();
+                    } else {
+                        $('#menu-small').show();
+                    }
+                    opened = !opened;
+                });
+            });
+        </script>
+
+        <script>
+            window.onload = function () {
+                $('#onload').fadeOut();
+                $('body').removeClass('loader-hidden');
+            }
 
         </script>
-        <!-- DataTable -->
-        <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
-        <!------>
+
 
     </body>
 

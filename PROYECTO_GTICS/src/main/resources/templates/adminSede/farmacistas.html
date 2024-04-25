@@ -187,7 +187,7 @@
                         <td th:text="${farmacista.getDni()}"></td>
                         <td>
                             <a th:href="@{'/adminsede/editar_farmacista?id=' + ${farmacista.getIdUsuario()}}" class="edit-icon" style="margin-left: 30px"><i class="fas fa-pencil-alt"></i></a>
-                            <a th:href="@{'/adminsede/editar_farmacista?id=' + ${farmacista.getIdUsuario()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a>
+                            <a th:href="@{'/adminsede/eliminar_farmacista?id=' + ${farmacista.getIdUsuario()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a>
                         </td>
                     </tr>
 
