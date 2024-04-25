@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Sede;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.SedeFarmacista;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.SedeFarmacistaId;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository

@@ -1,20 +1,49 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
+import pe.sanmiguel.bienestar.proyecto_gtics.Repository.DoctorRepository;
+import pe.sanmiguel.bienestar.proyecto_gtics.Repository.SedeFarmacistaRepository;
+import pe.sanmiguel.bienestar.proyecto_gtics.Repository.SedeRepository;
+import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(value = {"/superadmin"}, method = RequestMethod.GET)
 public class SuperAdminController {
+
+    final UsuarioRepository usuarioRepository;
+    final DoctorRepository doctorRepository;
+    final SedeRepository sedeRepository;
+    final SedeFarmacistaRepository sedeFarmacistaRepository;
+
+    public SuperAdminController(UsuarioRepository usuarioRepository, DoctorRepository doctorRepository, SedeRepository sedeRepository, SedeFarmacistaRepository sedeFarmacistaRepository) {
+        this.usuarioRepository = usuarioRepository;
+        this.doctorRepository = doctorRepository;
+        this.sedeRepository = sedeRepository;
+        this.sedeFarmacistaRepository = sedeFarmacistaRepository;
+    }
+
     @GetMapping(value = {""})
-    public String showIndexSuperAdmin(){
+    public String showIndexSuperAdmin(Model model){
+        List<Sede> adminSedelist = sedeRepository.listarAdministroresSede();
+        List<Usuario> pacientelist = usuarioRepository.listarUsuariosSegunRol(3);
+        List<Doctor> doctorList = doctorRepository.findAll();
+        model.addAttribute("adminSedelist", adminSedelist);
+        model.addAttribute("pacientelist", pacientelist);
+        model.addAttribute("doctorList", doctorList);
         return "superAdmin/paginaInicio";
     }
 
     @GetMapping(value = {"/administradoresSede"})
-    public String showAdministradoresSede(){
+    public String showAdministradoresSede(Model model){
+        List<Sede> adminSedelist = sedeRepository.listarAdministroresSede();
+        model.addAttribute("adminSedelist", adminSedelist);
         return "superAdmin/listaAdministSede";
     }
     @GetMapping(value = {"/farmacistas"})
@@ -22,11 +51,15 @@ public class SuperAdminController {
         return "superAdmin/listaFarmacistas";
     }
     @GetMapping(value = {"/pacientes"})
-    public String showPacientes(){
+    public String showPacientes(Model model){
+        List<Usuario> pacientelist = usuarioRepository.listarUsuariosSegunRol(3);
+        model.addAttribute("pacientelist", pacientelist);
         return "superAdmin/listaPacientes";
     }
     @GetMapping(value = {"/doctores"})
-    public String showDoctores(){
+    public String showDoctores(Model model){
+        List<Doctor> doctorList = doctorRepository.findAll();
+        model.addAttribute("doctorList", doctorList);
         return "superAdmin/listaDoctores";
     }
 
