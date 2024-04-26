@@ -165,6 +165,26 @@ public class AdminSedeController {
 
     }
 
+    @GetMapping("/generar_orden_forms")
+    public String generarOrden(Model model){
+
+        List<Integer> stockSeleccionados = new ArrayList<>();
+
+        for (Medicamento med : medicamentosSeleccionados) {
+            if (sedeStockRepository.getSedeStockByIdSedeAndIdMedicamento(sedeSession, med).isPresent()) {
+                stockSeleccionados.add(sedeStockRepository.getSedeStockByIdMedicamentoAndIdSede(med,sedeSession).getCantidad());
+            } else {
+                stockSeleccionados.add(0);
+            }
+        }
+
+        model.addAttribute("stockSeleccionados", stockSeleccionados);
+        model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
+        model.addAttribute("listaCantidades", listaCantidades);
+
+        return "adminsede/generar_orden";
+    }
+
     /*
     @PostMapping(value = {"/editarFarmacista"})
     @ResponseBody
@@ -233,26 +253,15 @@ public class AdminSedeController {
             return "redirect:/adminsede/medicamentos";
         }
     }
+    /*
+    @PostMapping("/detalles_orden")
+    public String detallesOrdenPost(@RequestParam("")){
 
-    @GetMapping("/generar_orden_forms")
-    public String generarOrden(Model model){
 
-        List<Integer> stockSeleccionados = new ArrayList<>();
+        return "redirect: /adminsede/verDetalles";
+    }*/
 
-        for (Medicamento med : medicamentosSeleccionados) {
-            if (sedeStockRepository.getSedeStockByIdSedeAndIdMedicamento(sedeSession, med).isPresent()) {
-                stockSeleccionados.add(sedeStockRepository.getSedeStockByIdMedicamentoAndIdSede(med,sedeSession).getCantidad());
-            } else {
-                stockSeleccionados.add(0);
-            }
-        }
 
-        model.addAttribute("stockSeleccionados", stockSeleccionados);
-        model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
-        model.addAttribute("listaCantidades", listaCantidades);
-
-        return "adminsede/generar_orden";
-    }
 
 
 
