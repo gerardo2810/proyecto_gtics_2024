@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.UsuarioSedeFarmacistaDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
@@ -80,8 +81,12 @@ public class AdminSedeController {
 
     @GetMapping("/farmacista")
     public String showFarmacistas(Model model){
-        List<Usuario> listaFarmacistas = usuarioRepository.listarFarmacistas();
-        model.addAttribute("listaFarmacistas", listaFarmacistas);
+        //List<Usuario> listaFarmacistas = usuarioRepository.listarFarmacistas();
+        //SESSION
+        int idSede = 1;
+        List<UsuarioSedeFarmacistaDto> listaFarmacistasNew = usuarioRepository.listarSedeFarmacista(idSede);
+        model.addAttribute("listaFarmacistasNew", listaFarmacistasNew);
+        //model.addAttribute("listaFarmacistas", listaFarmacistas);
         return "adminsede/farmacistas";
     }
 
@@ -183,7 +188,7 @@ public class AdminSedeController {
         if(optionalSedeFarmacista.isPresent()){
             SedeFarmacista sedeFarmacistaOld = optionalSedeFarmacista.get();
             sedeFarmacista.setId(sedeFarmacistaOld.getId());
-            sedeFarmacista.setIdUsuario(sedeFarmacistaOld.getIdUsuario());
+            sedeFarmacista.setIdFarmacista(sedeFarmacistaOld.getIdFarmacista());
             sedeFarmacista.setAprobado(sedeFarmacistaOld.getAprobado());
             sedeFarmacistaRepository.save(sedeFarmacista);
             return "redirect:/adminsede/farmacista";

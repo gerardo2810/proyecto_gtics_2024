@@ -23,7 +23,7 @@ public class SedeFarmacista {
     @MapsId("idFarmacista")
     @ManyToOne
     @JoinColumn(name="idFarmacista")
-    private Usuario idUsuario;
+    private Usuario idFarmacista;
 
     @Column(name = "codigoMed")
     private String codigoMed;

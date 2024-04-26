@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.UsuarioSedeFarmacistaDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 
 import java.util.List;
@@ -45,6 +46,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Modifying
     @Query(nativeQuery = true, value = "insert into usuario values (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)")
     void crearFarmacista(int id, int idRol, String correo, String contrasena, String nombres, String apellidos, String celular, String dni, String direccion, String distrito, String seguro, int estadoUsuario);
+
+    @Query(nativeQuery = true, value = "SELECT u.id, u.idRol, u.correo, u.contrasena, u.nombres, u.apellidos, u.celular, u.dni, u.direccion, u.distrito, u.seguro, u.estado_usuario, sf.idSede, sf.codigoMed, sf.aprobado FROM proyecto_gtics.usuario u inner join sede_farmacista sf on u.id = sf.idFarmacista where sf.idSede = ?1 and aprobado = 1")
+    List<UsuarioSedeFarmacistaDto> listarSedeFarmacista(int idAdminsede);
 
 
 
