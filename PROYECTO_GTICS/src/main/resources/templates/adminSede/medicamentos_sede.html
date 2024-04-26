@@ -28,7 +28,7 @@
         <!--=============== FONT AWESOME ===============-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
-        <title>Bienestar San Miguel | Inicio</title>
+        <title>Bienestar San Miguel | Sede 1</title>
 
     </head>
 
@@ -177,37 +177,29 @@
             <div class="interface">
 
 
-                <div class="filtros">
-
-
+                <div class="filtros" style="max-height: 390px; overflow-y: auto;">
                     <div class="container-filters">
 
-                        <div class="filter-title roboto-medium">
-                            Filtros
-                        </div>
-
-                        <div class="categorias-title">
+                        <div class="alert roboto-regular">
                             Categorías
                         </div>
+                        <br/>
+                        <hr>
+                        <br/>
 
                         <div class="list-categorias">
 
-                            <div class="categoria-div"><a class="categoria" href="">Todas las Categorías</a></div>
-                            <div class="categoria-div"><a class="categoria" href="">Problemas Generales</a></div>
-                            <div class="categoria-div"><a class="categoria" href="">Antibacterianos Sistémicos</a></div>
-                            <div class="categoria-div"><a class="categoria" href="">Antineoplásicos e Inmunomoduladores</a></div>
-                            <div class="categoria-div"><a class="categoria" href="">Cuidado Dermatológico</a></div>
-                            <div class="categoria-div"><a class="categoria" href="">Cuidado Muscular y Articular</a></div>
-                            <div class="categoria-div"><a class="categoria" href="">Cuidado Oftalmológico</a></div>
-                            <div class="categoria-div"><a class="categoria" href="">Cuidado Otológico</a></div>
-                            <div class="categoria-div"><a class="categoria" href="">Cuidado Estomatológico</a></div>
-                            <div class="categoria-div"><a class="categoria" href="">Cuidado de la Mujer</a></div>
-                            <div class="categoria-div"><a class="categoria" href="">Infecciones y Relacionados</a></div>
+                            <div class="categoria-div"><a class="categoria" href="">Todas las Categorías</a></div><br/>
+                            <div class="categoria-div"><a class="categoria" href="">Stock Disponible</a></div><br/>
+                            <div class="categoria-div"><a class="categoria" href="">Stock Agotado</a></div><br/>
+                            <div class="categoria-div"><a class="categoria" href="">Stock por Agotar</a></div>
 
                         </div>
+                        <br/>
+                        <hr>
 
                         <div class="alert roboto-regular">
-                            Recuerda ofrecerle al cliente nuestras promociones y ofertas.
+                            Administrador de Sede 1
                         </div>
 
                     </div>
@@ -219,7 +211,7 @@
 
                     <div style="display: grid; justify-content: space-between; grid-template-columns: 1fr 0.2fr;">
                         <div>
-                            <input id="searchInput" type="text" class="input-form" style="outline: none" placeholder="Buscar medicamento" >
+                            <input id="searchInput" type="text" class="input-form" style="outline: none" placeholder="Buscar medicamento por nombre" >
                         </div>
 
                         <a href="/farmacista"><button class="add-item-button open-sans-regular">Borrar Filtros</button></a>
@@ -228,22 +220,29 @@
 
                     <!-- Contenedor de elementos -->
                     <div class="med-container">
-                        <div class="item" th:each="medicamento : ${listaMedicamentos}">
-                            <img th:src="${medicamento.imagen}" th:alt="${medicamento.nombre}" class="img-item">
+                        <div class="item" th:each="medicamento : ${listaMedicamentosSedeStock}">
+                            <img th:src="${medicamento.getImagen()}" th:alt="${medicamento.getNombre()}" class="img-item">
                             <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
                                 <div>
-                                    <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
-                                    <div class="item-title roboto-medium" th:text="${medicamento.nombre}">Medicamento</div>
+                                    <div class="subtitulo-item roboto-bold" th:text="${medicamento.getUnidad()}" >Unidad</div>
+                                    <div class="item-title roboto-medium" th:text="${medicamento.getNombre()}">Medicamento</div>
                                 </div>
-                                <div class="items-details">
-                                    Ver Detalles
+                                <div class="items-details" th:text="'Cantidad disponible: ' + ${medicamento.getCantidad()}"></div>
+                                <div class="items-details" th:if="${medicamento.getCantidad() < 25}">
+                                    Por Agotar
+                                </div>
+                                <div class="items-details" th:if="${medicamento.getCantidad() > 25}">
+                                    Stock Disponible
+                                </div>
+                                <div class="items-details" th:if="${medicamento.getCantidad() == 0}">
+                                    Agotado
                                 </div>
                             </div>
                             <div style="display: flex; flex-direction: row; gap: 3px; align-items: end;">
-                                <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
+                                <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.getPrecioCompra()}">Precio</span>
                             </div>
 
-                            <button class="add-item-button open-sans-regular" th:data-item-id="${medicamento.idMedicamento}">Añadir Producto</button>
+                            <button class="add-item-button open-sans-regular" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
                         </div>
                     </div>
 

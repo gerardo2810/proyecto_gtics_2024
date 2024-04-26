@@ -4,8 +4,8 @@ package pe.sanmiguel.bienestar.proyecto_gtics.Dto;
 public interface MedicamentosSedeStockDto {
 
     int getIdMedicamento();
-    String getNombreMedicamento();
-    String getUnidadMedicamento();
+    String getNombre();
+    String getUnidad();
 
     String getDescripcion();
 

@@ -26,7 +26,7 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
 
-        <title>Bienestar San Miguel | Generar Orden de Venta</title>
+        <title>Bienestar San Miguel | Generar Orden de Reposición</title>
     </head>
 
     <header class="header-topbar">
@@ -131,7 +131,7 @@
 
             <hr class="style-one">
 
-            <form id="finalizar" th:action="@{/farmacista/finalizar_compra}" method="post">
+            <form id="finalizar" th:action="@{/adminsede/detalles_orden}" method="post">
 
 
 
@@ -140,13 +140,6 @@
 
                     <section class="formulario">
 
-                        <div class="search-bar" style="padding-bottom: 20px; padding-top: 20px;">
-                            <label class="search-label">
-                                <input type="text" id="search-input" placeholder="Buscar paciente...">
-                            </label>
-                            <button type="submit">Buscar</button>
-                        </div>
-
                         <div class="container-formulario">
 
                             <div class="container-form">
@@ -154,78 +147,54 @@
                                 <div class="column">
 
                                     <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Nombre del paciente:</label>
-                                        <input class="input-form-2" type="text" name="name" placeholder="Ingrese sus nombres" required>
-                                    </div>
-
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Apellidos del paciente:</label>
-                                        <input class="input-form-2" type="text" name="lastname" placeholder="Ingrese sus apellidos" required>
+                                        <label style="font-weight: bold; color:dimgray">Nombre del Administrador:</label>
+                                        <input class="input-form-2" type="text" name="nombres" placeholder="Ingrese sus nombres" required>
                                     </div>
 
                                 </div>
 
                                 <div class="column">
+                                    <div class="input-label-box">
+                                        <label style="font-weight: bold; color:dimgray">Apellidos del Administrador:</label>
+                                        <input class="input-form-2" type="text" name="apellidos" placeholder="Ingrese sus apellidos" required>
+                                    </div>
+                                </div>
 
+                                <div class="column">
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">DNI:</label>
                                         <input class="input-form-2" type="text" name="dni" placeholder="Ingrese su DNI" required>
                                     </div>
+                                </div>
 
+                                <div class="column">
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Dirección:</label>
-                                        <input class="input-form-2" type="text" name="direccion" placeholder="Ingrese su dirección" required>
+                                        <input class="input-form-2" type="text" name="direccionSede" placeholder="Ingrese la dirección de la sede" required>
                                     </div>
-
-                                </div>
-
-
-                                <div class="column">
-
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Doctor:</label>
-                                        <select class="select-form" name="doctor" required>
-                                            <option selected disabled>Seleccionar Doctor</option>
-                                            <option value="sin-doctor">Sin doctor</option>
-                                            <option value="1">Doctor 1</option>
-                                            <option value="2">Doctor 2</option>
-                                            <option value="3">Doctor 3</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Distrito:</label>
-                                        <input class="input-form-2" name="distrito" type="text" placeholder="Ingrese el distrito donde reside" required>
-                                    </div>
-
                                 </div>
 
                                 <div class="column">
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Seguro:</label>
-                                        <input class="input-form-2" type="text" name="seguro" placeholder="Ingrese su seguro" required>
-                                    </div>
-
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Correo:</label>
                                         <input class="input-form-2" type="email" name="correo" placeholder="Ingrese su correo" required>
                                     </div>
-
                                 </div>
 
-                                <div class="column-start">
+                                <div class="column">
                                     <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Teléfono:</label>
-                                        <input class="input-form-2" type="text" name="celular" placeholder="Ingrese su número de celular" required>
+                                        <label style="font-weight: bold; color:dimgray">Sede:</label>
+                                        <input class="input-form-2" name="nombreSede" type="text" placeholder="Nombre de la sede" required>
                                     </div>
                                 </div>
+
 
                             </div>
 
                         </div>
 
 
-                        <a href="/adminsede"><button class="return-button montserrat-medium" id="cancel" >Cancelar</button></a>
+                        <a href="adminsede/medicamentos"><button class="return-button montserrat-medium" id="cancel" >Cancelar</button></a>
 
                     </section>
 
@@ -373,7 +342,7 @@
                 }).then((result) => {
                     // Si el usuario confirma, redirige al usuario
                     if (result.isConfirmed) {
-                        window.location.href = '/adminsede';
+                        window.location.href = '/adminsede/medicamentos';
                     }
                 });
             });

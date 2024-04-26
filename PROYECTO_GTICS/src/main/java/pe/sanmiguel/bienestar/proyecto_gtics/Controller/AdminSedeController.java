@@ -119,13 +119,15 @@ public class AdminSedeController {
 
     @GetMapping("/medicamentos")
     public String showMedicamentos(Model model){
-        List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
+        //List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
+        //model.addAttribute("listaMedicamentos", listaMedicamentos);
         sedeSession = sedeRepository.getSedeByIdSede(1);
         model.addAttribute("sedeSession", sedeSession);
-        model.addAttribute("listaMedicamentos", listaMedicamentos);
 
-        //List<MedicamentosSedeStockDto> listaMedicamentosSedeStock = medicamentoRepository.listarMedicamentosSedeStock(1); //seteamos por default
-        //model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosSedeStock);
+        int idSession = 1; //Sede 1
+
+        List<MedicamentosSedeStockDto> listaMedicamentosSedeStock = medicamentoRepository.listarMedicamentosSedeStock(idSession); //seteamos por default
+        model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosSedeStock);
         return "adminsede/medicamentos_sede";
     }
 
