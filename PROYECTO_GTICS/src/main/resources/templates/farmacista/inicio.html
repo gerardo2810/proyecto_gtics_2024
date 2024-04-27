@@ -575,7 +575,30 @@
 
     </script>
 
+<script>
+    // Ejecutar cuando el contenido de la página se haya cargado completamente
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mostrar una alerta de bienvenida con un botón para redirigir
+        Swal.fire({
+            title: '¡Atención!',
+            text: 'Su inventario de medicamentos se está agotando. Por favor, revise su stock y realice los pedidos necesarios para evitar interrupciones en el servicio.',
+            icon: 'warning',
+            confirmButtonText: 'Entendido',
+            showCancelButton: true,
+            cancelButtonText: 'Ir a revisar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // El usuario hizo clic en 'Entendido'
+                // Aquí puedes agregar cualquier acción adicional que desees
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // El usuario hizo clic en 'Ir a revisar'
+                // Redirigir a otra vista
+                window.location.href = '/farmacista/facturacion'; // Reemplaza 'ruta_de_tu_vista' por la URL de tu vista
+            }
+        });
+    });
+</script>
 
-    </body>
+</body>
 
 </html>
