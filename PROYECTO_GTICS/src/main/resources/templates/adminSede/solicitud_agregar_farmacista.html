@@ -161,7 +161,7 @@
 
 
 
-        <form method="post" action="" enctype="multipart/form-data">
+        <form method="post" action="/adminsede/solicitud_farmacista_post" enctype="multipart/form-data">
 
             <div class="container-form">
 
@@ -169,12 +169,22 @@
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Nombre del farmacista:</label>
-                        <input class="input-form" type="text" placeholder="Ingrese sus nombres" required>
+                        <input class="input-form" name="nombres" type="text" placeholder="Ingrese sus nombres" required>
                     </div>
 
                     <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray">Apellidos del farmacista:</label>
-                        <input class="input-form" type="text" placeholder="Ingrese sus apellidos" required>
+                        <label style="font-weight: bold; color:dimgray; margin-left: 80px">Apellidos del farmacista:</label>
+                        <input class="input-form" style="margin-left: 80px" name = "apellidos" type="text" placeholder="Ingrese sus apellidos" required>
+                    </div>
+
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray; margin-left: 80px">DNI:</label>
+                        <input class="input-form" style="margin-left: 80px" name="dni" type="text" placeholder="Ingrese su DNI" required>
+                    </div>
+
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray; margin-left: 80px">Distrito de residencia:</label>
+                        <input class="input-form" style="margin-left: 80px" name="distrito" type="text" placeholder="Ingrese su distrito" required>
                     </div>
 
                 </div>
@@ -182,28 +192,41 @@
                 <div class="column">
 
                     <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray">DNI:</label>
-                        <input class="input-form" type="text" placeholder="Ingrese su DNI" required>
+                        <label style="font-weight: bold; color:dimgray">Correo:</label>
+                        <input class="input-form" name="correo" type="text" placeholder="Ingrese el correo" required>
                     </div>
 
                     <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray">Distrito de residencia:</label>
-                        <input class="input-form" type="text" placeholder="Ingrese su distrito" required>
+                        <label style="font-weight: bold; color:dimgray; margin-left: 80px">Contraseña:</label>
+                        <input class="input-form" style="margin-left: 80px" name="contrasena" type="text" placeholder="Ingrese la contraseña" required>
                     </div>
+
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray; margin-left: 80px">Celular:</label>
+                        <input class="input-form" style="margin-left: 80px" name="celular" type="text" placeholder="Ingrese el celular" required>
+                    </div>
+
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray; margin-left: 80px">Código (colegio médico):</label>
+                        <input class="input-form" style="margin-left: 80px" name="codigoMed" type="text" placeholder="Ingrese el código" required>
+                    </div>
+
 
                 </div>
 
                 <div class="column">
 
                     <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray">Código (colegio médico):</label>
-                        <input class="input-form" type="text" placeholder="Ingrese su código" required>
+                        <label style="font-weight: bold; color:dimgray">Dirección:</label>
+                        <input class="input-form" name="direccion" type="text" placeholder="Ingrese la dirección" required>
                     </div>
 
                     <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray">Correo electrónico:</label>
-                        <input class="input-form" type="text" placeholder="Ingrese su correo" required>
+                        <label style="font-weight: bold; color:dimgray; margin-left: 80px">Seguro:</label>
+                        <input class="input-form" style="margin-left: 80px" name="seguro" type="text" placeholder="Ingrese el seguro" required>
                     </div>
+
+
 
                 </div>
 
@@ -307,7 +330,7 @@
                 <div class="column">
 
                     <button class="btn-cancel" type="button" onclick="window.location.href = '/adminsede/farmacista'">Cancelar</button>
-                    <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/farmacista'">Confirmar</button>
+                    <button class="btn-p" type="submit">Confirmar</button>
 
                 </div>
 

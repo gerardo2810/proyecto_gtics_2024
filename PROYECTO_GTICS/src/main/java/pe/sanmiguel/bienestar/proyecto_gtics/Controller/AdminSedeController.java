@@ -5,15 +5,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pe.sanmiguel.bienestar.proyecto_gtics.Entity.SedeFarmacista;
-import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.UsuarioSedeFarmacistaDto;
+import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping(value = {"/adminsede"}, method = RequestMethod.GET)
+@RequestMapping(value = "/adminsede", method = RequestMethod.GET)
 public class AdminSedeController {
 
     /* Repositorios */
@@ -41,40 +44,67 @@ public class AdminSedeController {
         this.sedeFarmacistaRepository = sedeFarmacistaRepository;
     }
 
-    @GetMapping(value = {""})
+    public List<String> getCantidadesFromLista(List<String> listaSelectedIds) {
+        List<String> cantidades = new ArrayList<>();
+        for (int i = 0; i + 1 < listaSelectedIds.size(); i += 2) {
+            cantidades.add(listaSelectedIds.get(i + 1));
+        }
+        return cantidades;
+    }
+
+    public List<Medicamento> getMedicamentosFromLista(List<String> listaSelectedIds) {
+        List<Optional<Medicamento>> optionals = new ArrayList<>();
+        List<Medicamento> seleccionados;
+        for (int i = 0; i < listaSelectedIds.size(); i += 2) {
+            optionals.add(medicamentoRepository.findById(Integer.valueOf(listaSelectedIds.get(i))));
+        }
+        seleccionados = optionals.stream().flatMap(Optional::stream).collect(Collectors.toList());
+
+        return seleccionados;
+    }
+
+    Sede sedeSession;
+    List<Medicamento> medicamentosSeleccionados = new ArrayList<>();
+    List<String> listaCantidades = new ArrayList<>();
+
+    @GetMapping("")
     public String showIndexAdminSede(){
-        return "/adminsede/inicio";
+        return "adminsede/inicio";
     }
 
-    @GetMapping(value = {"/doctores"})
-    public String showDoctors(){
-        return "/adminsede/doctores";
+    @GetMapping("/doctores")
+    public String showDoctors(Model model){
+        List<Doctor> listaDoctores = doctorRepository.listarDoctores();
+        model.addAttribute("listaDoctoresD", listaDoctores);
+        return "adminsede/doctores";
     }
 
-    @GetMapping(value = {"/farmacista"})
+    @GetMapping("/farmacista")
     public String showFarmacistas(Model model){
-        List<Usuario> listaFarmacistas = usuarioRepository.listarFarmacistas();
-        model.addAttribute("listaFarmacistas", listaFarmacistas);
-        return "/adminsede/farmacistas";
+        //List<Usuario> listaFarmacistas = usuarioRepository.listarFarmacistas();
+        //SESSION
+        int idSede = 1;
+        List<UsuarioSedeFarmacistaDto> listaFarmacistasNew = usuarioRepository.listarSedeFarmacista(idSede);
+        model.addAttribute("listaFarmacistasNew", listaFarmacistasNew);
+        //model.addAttribute("listaFarmacistas", listaFarmacistas);
+        return "adminsede/farmacistas";
     }
 
-    @GetMapping(value = {"/ordenes"})
+    @GetMapping("/ordenes")
     public String showOrders(){
-        return "/adminsede/ordenes_reposicion";
+        return "adminsede/ordenes_reposicion";
     }
 
-    @GetMapping(value = {"/editar_farmacista"})
+    @GetMapping("/editar_farmacista")
     public String editFarmacista(@RequestParam("id") int id,
                                  Model model){
         Usuario usuarioFarmacista = usuarioRepository.encontrarFarmacistaporId(id);
         Optional<SedeFarmacista> optionalSedeFarmacista = sedeFarmacistaRepository.buscarCodigoFarmacista(id);
         if(optionalSedeFarmacista.isPresent()){
             SedeFarmacista sedeFarmacista = optionalSedeFarmacista.get();
-            //String codigoMed = sedeFarmacista.getCodigoMed();
-            //model.addAttribute("codigoMed", codigoMed);
             model.addAttribute("farmacista", usuarioFarmacista);
             model.addAttribute("sedeFarmacista", sedeFarmacista);
-            return "/adminsede/editar_farmacista";
+            return "adminsede/editar_farmacista";
         }else {
             return "redirect:/adminsede/farmacista";
 
@@ -82,44 +112,77 @@ public class AdminSedeController {
 
     }
 
-    @GetMapping(value = {"/editar_orden_reposicion"})
+    @GetMapping("/editar_orden_reposicion")
     public String editOrden(){
-        return "/adminsede/editar_orden_reposicion";
+        return "adminsede/editar_orden_reposicion";
     }
 
-    @GetMapping(value = {"/medicamentos"}) //Aquiiiiiiiiiiiiiii
-    public String showMedicamentos(){
-        return "/adminsede/medicamentos_sede";
+    @GetMapping("/medicamentos")
+    public String showMedicamentos(Model model){
+        //List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
+        //model.addAttribute("listaMedicamentos", listaMedicamentos);
+        sedeSession = sedeRepository.getSedeByIdSede(1);
+        model.addAttribute("sedeSession", sedeSession);
+
+        int idSession = 1; //Sede 1
+
+        List<MedicamentosSedeStockDto> listaMedicamentosSedeStock = medicamentoRepository.listarMedicamentosSedeStock(idSession); //seteamos por default
+        model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosSedeStock);
+        return "adminsede/medicamentos_sede";
     }
 
-    @GetMapping(value = {"/solicitud_farmacista"})
+    @GetMapping("/solicitud_farmacista")
     public String solicitudFarmacista(){
-        return "/adminsede/solicitud_agregar_farmacista";
+        return "adminsede/solicitud_agregar_farmacista";
     }
 
-    @GetMapping(value = {"/generar_orden"})
-    public String generarOrden(){
-        return "/adminsede/generar_orden";
-    }
-
-    @GetMapping(value = {"/ver_ordenes_entregadas"})
+    @GetMapping("/ver_ordenes_entregadas")
     public String verOrdenesEntregadas(){
-        return "/adminsede/ver_ordenes_entregadas";
+        return "adminsede/ver_ordenes_entregadas";
     }
 
-    @GetMapping(value = {"/cambiar_contrasena"})
+    @GetMapping("/cambiar_contrasena")
     public String vistaCambiarContra(){
-        return "/adminsede/cambiar_contrasena_adminsede";
+        return "adminsede/cambiar_contrasena_adminsede";
     }
 
-    @GetMapping(value = {"/perfil_adminsede"})
+    @GetMapping("/perfil_adminsede")
     public String vistaPerfil(){
-        return "/adminsede/perfil_adminsede";
+        return "adminsede/perfil_adminsede";
     }
 
-    @GetMapping(value = {"/verDetalles"})
+    @GetMapping("/verDetalles")
     public String verDetalles(){
-        return "/adminsede/verDetalles";
+        return "adminsede/verDetalles";
+    }
+
+    @GetMapping("/eliminar_farmacista")
+    public String eliminarFarmacista(@RequestParam("id") int id){
+
+        sedeFarmacistaRepository.eliminarFarmacistadeSedeFarmacista(id);
+        usuarioRepository.eliminarFarmacistadeUsuario(id);
+        return "redirect:/adminsede/farmacista";
+
+    }
+
+    @GetMapping("/generar_orden_forms")
+    public String generarOrden(Model model){
+
+        List<Integer> stockSeleccionados = new ArrayList<>();
+
+        for (Medicamento med : medicamentosSeleccionados) {
+            if (sedeStockRepository.getSedeStockByIdSedeAndIdMedicamento(sedeSession, med).isPresent()) {
+                stockSeleccionados.add(sedeStockRepository.getSedeStockByIdMedicamentoAndIdSede(med,sedeSession).getCantidad());
+            } else {
+                stockSeleccionados.add(0);
+            }
+        }
+
+        model.addAttribute("stockSeleccionados", stockSeleccionados);
+        model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
+        model.addAttribute("listaCantidades", listaCantidades);
+
+        return "adminsede/generar_orden";
     }
 
     /*
@@ -136,7 +199,10 @@ public class AdminSedeController {
         return "redirect: /adminsede/farmacista";
     }*/
 
-    @PostMapping(value = {"/editarFarmacista"})
+
+    /*---------------------------------------------------------POST---------------------------------------------------------*/
+
+    @PostMapping("/editarFarmacista")
     public String editarFarmacista(Usuario usuario, RedirectAttributes attr,
                                    SedeFarmacista sedeFarmacista){
         usuarioRepository.save(usuario);
@@ -144,7 +210,7 @@ public class AdminSedeController {
         if(optionalSedeFarmacista.isPresent()){
             SedeFarmacista sedeFarmacistaOld = optionalSedeFarmacista.get();
             sedeFarmacista.setId(sedeFarmacistaOld.getId());
-            sedeFarmacista.setIdUsuario(sedeFarmacistaOld.getIdUsuario());
+            sedeFarmacista.setIdFarmacista(sedeFarmacistaOld.getIdFarmacista());
             sedeFarmacista.setAprobado(sedeFarmacistaOld.getAprobado());
             sedeFarmacistaRepository.save(sedeFarmacista);
             return "redirect:/adminsede/farmacista";
@@ -155,6 +221,47 @@ public class AdminSedeController {
 
 
     }
+    @PostMapping("/solicitud_farmacista_post")
+    public String solicitudAgregarFarmacista(@RequestParam("nombres") String nombres,
+                                             @RequestParam("apellidos") String apellidos,
+                                             @RequestParam("dni") String dni,
+                                             @RequestParam("distrito") String distrito,
+                                             @RequestParam("correo") String correo,
+                                             @RequestParam("contrasena") String contrasena,
+                                             @RequestParam("celular") String celular,
+                                             @RequestParam("codigoMed") String codigoMed,
+                                             @RequestParam("direccion") String direccion,
+                                             @RequestParam("seguro") String seguro){
+
+        int estadoUsuario = 2;
+        int idRol = 3;
+        int idUsuario = usuarioRepository.findLastUsuarioId() + 1;
+        int aprobado = 2; //El farmacista no está aprobado
+        int idSede = 1; //Cambiar
+        usuarioRepository.crearFarmacista(idUsuario, idRol, correo, contrasena, nombres, apellidos, celular, dni, direccion, distrito, seguro, estadoUsuario);
+        sedeFarmacistaRepository.crearSedeFarmacista(idSede, idUsuario, codigoMed, aprobado);
+        return "redirect:/adminsede/farmacista";
+    }
+
+    @PostMapping("/generar_orden")
+    public String fillContentOrder(@RequestParam("listaIds") List<String> listaSelectedIds){
+        if (!listaSelectedIds.isEmpty()){
+            medicamentosSeleccionados = getMedicamentosFromLista(listaSelectedIds);
+            listaCantidades = getCantidadesFromLista(listaSelectedIds);
+            return "redirect:/adminsede/generar_orden_forms";
+        } else {
+            return "redirect:/adminsede/medicamentos";
+        }
+    }
+    /*
+    @PostMapping("/detalles_orden")
+    public String detallesOrdenPost(@RequestParam("")){
+
+
+        return "redirect: /adminsede/verDetalles";
+    }*/
+
+
 
 
 

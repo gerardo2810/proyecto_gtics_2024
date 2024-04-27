@@ -11,12 +11,14 @@ import lombok.Setter;
 public class Sede {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Getter @Setter @Column(name="id")
     private int idSede;
-    @Column
-    private int idAdmin;
-    @Column
+    @Getter @Setter @Column
     private String direccion;
-    @Column
+    @Getter @Setter @Column
     private String nombre;
+
+    @ManyToOne
+    @Getter @Setter @JoinColumn(name="idAdmin")
+    private Usuario admin;
 }

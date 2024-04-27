@@ -20,7 +20,7 @@ final UsuarioRepository usuarioRepository;
     public Login1(UsuarioRepository usuarioRepository) {this.usuarioRepository = usuarioRepository;}
 
     @GetMapping("")
-    public String inicio() {return "/login/login";}
+    public String inicio() {return "login/login";}
 
    @GetMapping("/new")
    public String nuevoUsuario() {
@@ -30,7 +30,7 @@ final UsuarioRepository usuarioRepository;
   @PostMapping("/save")
    public String guardarNuevoUsuario(Usuario usuario, RedirectAttributes attributes){
        usuarioRepository.save(usuario);
-      return "redirect:/index";
+      return "redirect://index";
   }
 
   @GetMapping("/recuperarContra")

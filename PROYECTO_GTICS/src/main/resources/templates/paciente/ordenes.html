@@ -31,7 +31,6 @@
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
 
 
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!--=============== DataTable ===============-->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
@@ -237,7 +236,7 @@
             <td class="action" th:switch="${orden.getEstadoOrden()}">
 
                 <a th:case="1"  th:href="@{'/paciente/tracking' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-                <a th:case="2" href="/paciente/confirmar_pago"><button  class="btn btn-sm btn-info" style="background-color: #3F71EA;border:none"><i class="fa-regular fa-credit-card"></i></button></a>
+                <a th:case="2"  th:href="@{'/paciente/confirmar_pago' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info" style="background-color: #3F71EA;border:none"><i class="fa-regular fa-credit-card"></i></button></a>
                 <a th:case="*"  th:href="@{'/paciente/tracking' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
 
 
