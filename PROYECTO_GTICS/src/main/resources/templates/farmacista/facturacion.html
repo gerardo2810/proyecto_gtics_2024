@@ -117,7 +117,7 @@
         <!-- Account page navigation-->
         <nav class="nav nav-borders">
             <a class="nav-link ms-0" href="/farmacista/perfil" target="__blank">Perfil</a>
-            <a class="nav-link active" href="/farmacista/facturacion" target="__blank">Notificación</a>
+            <a class="nav-link active" href="/farmacista/facturacion" target="__blank">Notificaciónes</a>
 
         </nav>
         <hr class="mt-0 mb-4">
@@ -172,35 +172,24 @@
                         <thead>
                         <tr>
                             <th class="border-gray-200" scope="col">Medicamento</th>
-                            <th class="border-gray-200" scope="col">Precio</th>
+                            <th class="border-gray-200" scope="col">Precio de compra</th>
                             <th class="border-gray-200" scope="col">Cantidad</th>
                             <th class="border-gray-200" scope="col">Estado</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Aspirina</td>
-                            <td>S/.29.99</td>
-                            <td> 5 cajas</td>
-                            <td><span class="badge bg-light text-dark">Sin Stock</span></td>
-                        </tr>
-                        <tr>
-                            <td>Aspirina</td>
-                            <td>S/.29.99</td>
-                            <td> 5 cajas</td>
-                            <td><span class="badge bg-light text-dark">Próximo acabarse</span></td>
-                        </tr>
-                        <tr>
-                            <td>Aspirina</td>
-                            <td>S/.29.99</td>
-                            <td> 5 cajas</td>
-                            <td><span class="badge bg-light text-dark">Sin Stock</span></td>
-                        </tr>
-                        <tr>
-                            <td>Aspirina</td>
-                            <td>S/.29.99</td>
-                            <td> 5 cajas</td>
-                            <td><span class="badge bg-light text-dark">Próximo acabarse</span></td>
+                        <tr th:each="medicamento : ${medicamentosLowStock}">
+                            <td th:text="${medicamento.nombre}"></td>
+                            <td th:text="${'S/.' + medicamento.precioCompra}"></td>
+                            <td th:text="${medicamento.cantidad}"></td>
+                            <td>
+                                <div th:if="${medicamento.cantidad == 0}">
+                                    <button class="btn-red">Agotado</button>
+                                </div>
+                                <div th:if="${medicamento.cantidad > 0 and medicamento.cantidad <= 5}">
+                                    <button class="btn-red">Por agostarse</button>
+                                </div>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -208,8 +197,8 @@
             </div>
         </div>
     </div>
-
 </div>
+
 
 <div>
     <footer id="sticky-footer" class="footer-distributed">

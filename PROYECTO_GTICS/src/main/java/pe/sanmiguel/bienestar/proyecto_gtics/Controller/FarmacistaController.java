@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pe.sanmiguel.bienestar.proyecto_gtics.CurrentTimeSQL;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
@@ -338,7 +339,9 @@ public class FarmacistaController {
         return "farmacista/perfil";
     }
     @GetMapping("/farmacista/facturacion")
-    public String facturacion() {
+    public String facturacion(Model model) {
+        List<MedicamentosSedeStockDto> medicamentosLowStock = medicamentoRepository.findMedicamentosLowStock();
+        model.addAttribute("medicamentosLowStock", medicamentosLowStock);
         return "farmacista/facturacion";
     }
     @GetMapping("/farmacista/cambioContraseña")
