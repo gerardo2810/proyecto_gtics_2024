@@ -57,13 +57,13 @@
                         <ul class="nav-list">
                             <li><a href="/adminsede" class="menu-item roboto-regular">Inicio</a></li>
 
-                            <li><a href="/adminsede/doctores" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Doctores</a></li>
+                            <li><a href="/adminsede/doctores" class="menu-item roboto-regular">Doctores</a></li>
 
                             <li><a href="/adminsede/farmacista" class="menu-item roboto-regular">Farmacistas</a></li>
 
                             <li><a href="/adminsede/ordenes" class="menu-item roboto-regular">Pedidos de Reposición</a></li>
 
-                            <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular">Medicamentos</a></li>
+                            <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Medicamentos</a></li>
 
                             <!--=============== DROPDOWN ===============-->
                             <li class="dropdown-item">
@@ -225,21 +225,18 @@
                             <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
                                 <div>
                                     <div class="subtitulo-item roboto-bold" th:text="${medicamento.getUnidad()}" >Unidad</div>
-                                    <div class="item-title roboto-medium" th:text="${medicamento.getNombre()}">Medicamento</div>
+                                    <div class="item-title roboto-medium" th:text="${medicamento.getNombre()}" style="margin-top: 5px">Medicamento</div><br/>
                                 </div>
-                                <div class="items-details" th:text="'Cantidad disponible: ' + ${medicamento.getCantidad()}"></div>
-                                <div class="items-details" th:if="${medicamento.getCantidad() < 25}">
-                                    Por Agotar
+                                <div th:text="'Cantidad disponible: ' + ${medicamento.getCantidad()}"></div>
+                                <div style="display: flex; flex-direction: row; gap: 3px; align-items: end; margin-left: 2px">
+                                    <span th:text="'Precio:'"/>
+                                    <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.getPrecioCompra()}">Precio</span>
+                                </div><br/>
+                                <div style="margin-left: 18px">
+                                    <div th:if="${medicamento.getCantidad() > 25}" th:text="'Stock Aceptable'" class="btn-green" style="justify-content: center; text-align: center"></div>
+                                    <div th:if="${medicamento.getCantidad() < 25}" th:text="'Por Agotar'" class="btn-yellow" style="justify-content: center; text-align: center"></div>
+                                    <div th:if="${medicamento.getCantidad() == 0}" th:text="'Agotado'" class="btn-red" style="justify-content: center; text-align: center"></div>
                                 </div>
-                                <div class="items-details" th:if="${medicamento.getCantidad() > 25}">
-                                    Stock Disponible
-                                </div>
-                                <div class="items-details" th:if="${medicamento.getCantidad() == 0}">
-                                    Agotado
-                                </div>
-                            </div>
-                            <div style="display: flex; flex-direction: row; gap: 3px; align-items: end;">
-                                <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.getPrecioCompra()}">Precio</span>
                             </div>
 
                             <button class="add-item-button open-sans-regular" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
