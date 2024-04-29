@@ -160,7 +160,13 @@ public class PacienteController {
     }
 
     @GetMapping(value="/boleta_pago")
-    public String boletaPago(Model model){
+    public String boletaPago(Model model, @RequestParam(value="id") Integer idOrden){
+
+        List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(idOrden));
+
+        model.addAttribute("lista", lista);
+        model.addAttribute("contenidoPreOrden", ordenRepository.getOrdenByIdOrden(idOrden));
+
         return "paciente/boleta";
     }
 
@@ -269,6 +275,6 @@ public class PacienteController {
 
         redirectAttributes.addFlashAttribute("msg2", "Orden Creada");
         model.addAttribute("orden", ordenRepository.getOrdenByIdOrden(idOrden));
-        return "paciente/boleta_pago";
+        return "redirect:/paciente/boleta_pago?id=" + idOrden;
     }
 }
