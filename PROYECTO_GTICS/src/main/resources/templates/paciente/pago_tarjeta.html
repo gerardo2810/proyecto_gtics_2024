@@ -137,7 +137,7 @@
 
 
 
-            <form action="">
+            <form method="post" action="/paciente/procesar_pago">
 
 
 
@@ -166,7 +166,7 @@
                     </div>
 
 
-                    <input type="text" maxlength="16" style="width: 550px;" class="card-number-input">
+                    <input type="text" maxlength="16" style="width: 550px;" class="card-number-input" name="numTarjeta">
 
 
 
@@ -186,7 +186,7 @@
                     <div style="display: flex; flex-direction: row;justify-content: end; align-items: center;">
 
                         <div class="inputBox" style="margin-top: 0;margin-right: 10px;">
-                            <select name=""  class="month-input" style="width: 130px;">
+                            <select class="month-input" style="width: 130px;" name="mes">
                                 <option value="month" selected disabled>MM</option>
                                 <option value="01">Enero</option>
                                 <option value="02">Febrero</option>
@@ -204,7 +204,7 @@
                         </div>
                         <span style="font-size: 20px;margin-top: 8px;margin-right: 10px;">/</span>
                         <div class="inputBox" style="margin-top: 0;">
-                            <select name="" id="" class="year-input" style="width: 130px;">
+                            <select name="anio" id="" class="year-input" style="width: 130px;">
                                 <option value="year" selected disabled>AA</option>
                                 <option value="2024">2024</option>
                                 <option value="2025">2025</option>
@@ -230,7 +230,7 @@
 
                     <div style="display: flex; flex-direction: column; justify-content: end;">
                         <div class="inputBox" style="margin-top: 0;">
-                            <input type="text" id="passwd" maxlength="4" class="cvv-input">
+                            <input type="text" id="passwd" maxlength="4" class="cvv-input" name="cvv">
                         </div>
 
                         <!--
@@ -260,7 +260,8 @@
                     <div style="display: flex; flex-direction: column; justify-content: end;">
                         <div class="inputBox" style="margin-top: 0;">
 
-                            <input type="text" class="card-holder-input" style="width: 330px;">
+                            <input type="text" class="card-holder-input" style="width: 330px;" name="titular">
+                            <input type="hidden" class="card-holder-input" style="width: 330px;" th:value="${orden.getIdOrden()}" name="idOrden">
                         </div>
 
                     </div>

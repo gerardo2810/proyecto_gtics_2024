@@ -48,23 +48,43 @@ public class PacienteController {
     }
 
 
+    Integer idUsuario = 23;
+
 
 
 
     /*----------------- Method: GET -----------------*/
 
     @GetMapping(value="")
-    public String preOrdenes(){return "paciente/pre_ordenes";}
+    public String preOrdenes(){
+
+        return "paciente/pre_ordenes";
+    }
+
+
 
     @GetMapping(value="/ordenes")
     public String ordenes(Model model){
         List<Orden> lista =  ordenRepository.listarOrdenes();
         model.addAttribute("lista",lista);
 
-        return "paciente/ordenes";}
+        return "paciente/ordenes";
+    }
+
+
 
     @GetMapping(value="/pago_tarjeta")
-    public String pago_tarjeta(){return "paciente/pago_tarjeta";}
+    public String pago_tarjeta(Model model, @RequestParam(value="id") Integer id){
+
+        Orden orden = ordenRepository.getOrdenByIdOrden(id);
+
+        model.addAttribute("orden", orden);
+
+        return "paciente/pago_tarjeta";
+    }
+
+
+
 
     @GetMapping(value="/tracking")
     public String tracking(Model model, @RequestParam("id") String idOrden){
@@ -139,6 +159,11 @@ public class PacienteController {
         return "paciente/confirmar_pago";
     }
 
+    @GetMapping(value="/boleta_pago")
+    public String boletaPago(Model model){
+        return "paciente/boleta";
+    }
+
 
 
 
@@ -190,8 +215,6 @@ public class PacienteController {
         orden.setEstadoPreOrden(1);
 
 
-        System.out.println(lista);
-
         ordenRepository.save(orden);
 
         Integer i = new Integer(0);
@@ -214,18 +237,38 @@ public class PacienteController {
             ordenContenido.setCantidad(cantidad);
             ordenContenidoRepository.save(ordenContenido);
 
-
-
-            System.out.println(medicamento.getNombre());
-            System.out.println(cantidad);
-
             i = i + 2;
 
 
         }
 
         redirectAttributes.addFlashAttribute("msg", "Orden Creada");
-        return "redirect://paciente/ordenes";
+        return "redirect:/paciente/ordenes";
 
+    }
+
+
+
+    @PostMapping(value="/procesar_pago")
+    public String pago_recibido(Model model, RedirectAttributes redirectAttributes,  @RequestParam(value="numTarjeta") String tarjeta,
+                                                                        @RequestParam(value="mes") String mes,
+                                                                        @RequestParam(value="anio") String anio,
+                                                                        @RequestParam(value="cvv") String cvv,
+                                                                        @RequestParam(value="titular") String titular,
+                                                                        @RequestParam(value="idOrden") Integer idOrden){
+
+        System.out.printf(tarjeta);
+        System.out.println(mes);
+        System.out.println(anio);
+        System.out.printf(cvv);
+        System.out.println(titular);
+        System.out.println(idOrden);
+        ordenRepository.actualizarEstadoOrden(3,idOrden);
+
+
+
+        redirectAttributes.addFlashAttribute("msg2", "Orden Creada");
+        model.addAttribute("orden", ordenRepository.getOrdenByIdOrden(idOrden));
+        return "paciente/boleta_pago";
     }
 }
