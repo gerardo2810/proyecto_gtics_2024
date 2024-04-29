@@ -271,7 +271,14 @@ public class AdminSedeController {
     }
     /*
     @PostMapping("/detalles_orden")
-    public String detallesOrdenPost(@RequestParam("")){
+    public String detallesOrdenPost(@RequestParam("nombres") String nombres,
+                                    @RequestParam("apellidos") String apellidos,
+                                    @RequestParam("dni") String dni,
+                                    @RequestParam("direccionSede") String direccionSede,
+                                    @RequestParam("correo") String correo,
+                                    @RequestParam("nombreSede") String nombreSede){
+
+
 
 
         return "redirect: /adminsede/verDetalles";
