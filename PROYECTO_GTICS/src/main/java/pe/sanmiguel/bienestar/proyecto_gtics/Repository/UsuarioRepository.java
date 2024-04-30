@@ -50,6 +50,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(nativeQuery = true, value = "SELECT u.id, u.idRol, u.correo, u.contrasena, u.nombres, u.apellidos, u.celular, u.dni, u.direccion, u.distrito, u.seguro, u.estado_usuario, sf.idSede, sf.codigoMed, sf.aprobado FROM proyecto_gtics.usuario u inner join sede_farmacista sf on u.id = sf.idFarmacista where sf.idSede = ?1 and aprobado = 1")
     List<UsuarioSedeFarmacistaDto> listarSedeFarmacista(int idAdminsede);
 
-
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "INSERT INTO usuario VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)")
+    void crearAdministradorSede(int id, int idRol, String correo, String contrasena, String nombres, String apellidos, String celular, String dni, String direccion, String distrito, String seguro, int estadoUsuario);
 
 }

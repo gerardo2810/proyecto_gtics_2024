@@ -35,15 +35,12 @@
     <title>Bienestar San Miguel | SuperAdmin</title>
 
     <style>
-        body {
-            padding-top: 100px;
-        }
         @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
     </style>
 </head>
 
 
-<body>
+<body class="loader-hidden">
 <!--=============== HEADER ===============-->
 <header class="header-topbar">
     <nav class="nav-topbar container">
@@ -160,276 +157,160 @@
     </nav>
 </header>
 
-<main style="margin-left: 20px; margin-right: 20px">
-    <br><br>
-    <div class="container">
-        <div style="margin-bottom: 20px"></div>
-        <div style="margin-bottom: 30px"></div>
-        <div class="titulo"><b>R E G I S T R O S</b></div>
-        <div style="margin-bottom: 20px"></div>
+<div class="container">
+
+    <div class="container" style="margin-top: 90px">
+
+        <div style="padding-top: 20px; padding-bottom: 20px">
+            <div class="main-title open-sans-bold"> Registros </div>
+            <div class="main-subtitle helvetica-medium">  Dashboard con los registros de cada usuario. </div>
+            <br>
+            <hr class="style-one">
+        </div>
+        <div style="margin-bottom: 40px"></div>
+        <div class="container">
+            <div style="margin-bottom: 50px"></div>
+            <h3><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">ADMINISTRADORES DE SEDE</strong></h3>
+        </div>
+        <div class="container">
+            <table id="miTabla" class="table table-striped" style="padding-top: 10px">
+                <thead>
+                <tr style="background-color: #378fff">
+                    <th style="text-align: center"></th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo electrónico</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Teléfono</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="sede, info : ${adminSedelist}">
+                    <td style="text-align: center">
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <label>
+                                <img th:src="@{/img/3135768.png}" alt="" style="width: 45px; height: 45px;">
+                            </label>
+                        </div>
+                    </td>
+                    <td style="text-align: center" th:text="${sede.admin.nombres + ' ' +  sede.admin.apellidos}"></td>
+                    <td style="text-align: center" th:text="${sede.admin.correo}"></td>
+                    <td style="text-align: center" th:text="${sede.nombre}"></td>
+                    <td style="text-align: center" th:text="${sede.admin.celular}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
         <br><br>
+        <div class="container">
+            <div style="margin-bottom: 50px"></div>
+            <h3><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">FARMACISTAS</strong></h3>
+        </div>
+        <div class="container">
+            <table id="miTabla2" class="table table-striped" style="padding-top: 10px">
+                <thead>
+                <tr style="background-color: #378fff">
+                    <th style="text-align: center"></th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo electrónico</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Administrador</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Teléfono</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="farmacista, info : ${farmacistlist}">
+                    <td style="text-align: center">
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <label>
+                                <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
+                            </label>
+                        </div>
+                    </td>
+                    <td style="text-align: center" th:text="${farmacista.idFarmacista.nombres + ' ' +  farmacista.idFarmacista.apellidos}"></td>
+                    <td style="text-align: center" th:text="${farmacista.idFarmacista.correo}"></td>
+                    <td style="text-align: center" th:text="${farmacista.idSede.nombre}"></td>
+                    <td style="text-align: center" th:text="${farmacista.idSede.admin.nombres + ' ' + farmacista.idSede.admin.apellidos}"></td>
+                    <td style="text-align: center" th:text="${farmacista.idFarmacista.celular}"></td>
+                </tr>
+                </tbody>
+            </table>
 
+        </div>
+
+        <br><br>
+        <div class="container">
+            <div style="margin-bottom: 50px"></div>
+            <h3><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">PACIENTES</strong></h3>
+        </div>
+        <div class="container">
+            <table id="miTabla3" class="display" style="padding-top: 10px">
+                <thead>
+                <tr style="background-color: #378fff">
+                    <th style="text-align: center"></th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo electrónico</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Distrito de residencia</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Teléfono</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="paciente, info : ${pacientelist}">
+                    <td style="text-align: center">
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <label>
+                                <img th:src="@{/img/paciente.png}" alt="" style="width: 45px; height: 45px;">
+                            </label>
+                        </div>
+                    </td>
+                    <td style="text-align: center" th:text="${paciente.nombres + ' ' +  paciente.apellidos}" ></td>
+                    <td style="text-align: center" th:text="${paciente.correo}" ></td>
+                    <td style="text-align: center" th:text="${paciente.distrito}" ></td>
+                    <td style="text-align: center" th:text="${paciente.celular}" ></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <br><br>
+        <div class="container">
+            <div style="padding-top: 20px; padding-bottom: 20px"></div>
+            <h3><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">DOCTORES</strong></h3>
+        </div>
+        <div class="container">
+            <table id="miTabla4" class="display" style="padding-top: 10px">
+                <thead>
+                <tr style="background-color: #378fff">
+                    <th style="text-align: center"></th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo electrónico</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Especialidad</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Teléfono</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr  th:each="doctores, info : ${doctorList}">
+                    <td style="text-align: center">
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <label>
+                                <img th:src="@{/img/doctor2.png}" alt="" style="width: 45px; height: 45px;">
+                            </label>
+                        </div>
+                    </td>
+                    <td style="text-align: center" th:text="${doctores.nombres + ' ' +  doctores.apellidos}" ></td>
+                    <td style="text-align: center" th:text="${doctores.correo}"></td>
+                    <td style="text-align: center" th:text="${doctores.especialidad}"></td>
+                    <td style="text-align: center" th:text="${doctores.celular}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <br><br><br>
+        <br><br>
     </div>
-
-    <div class="container">
-        <h2 style="font-family: 'Aptos', Arial; color: #07314d;">
-            <i class="fa-solid fa-user-tie" style="color: #0c3452; "></i>
-            <strong style="padding-left: 10px">Administradores de sedes</strong></h2>
-        <div style="margin-bottom: 10px"></div>
-        <hr style="border-top: 1px solid #262626;">
-        <div style="margin-bottom: 30px"></div>
-
-        <div style="padding-right: 0; padding-left: 0"> </div>
-    </div>
-
-    <div class="container">
-        <table id="miTabla" class="table table-striped" style="padding-top: 10px">
-            <thead>
-            <tr style="background-color: #378fff">
-                <th style="text-align: center"></th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo electrónico</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Teléfono</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="sede, info : ${adminSedelist}">
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/3135768.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                    </div>
-                </td>
-                <td style="text-align: center" th:text="${sede.admin.nombres + ' ' +  sede.admin.apellidos}"></td>
-                <td style="text-align: center" th:text="${sede.admin.correo}"></td>
-                <td style="text-align: center" th:text="${sede.nombre}"></td>
-                <td style="text-align: center" th:text="${sede.admin.celular}"></td>
-            </tr>
-            </tbody>
-        </table>
-
-    </div>
-
-    <br><br><br><br>
-
-    <div class="container">
-        <h2 style="font-family: 'Aptos', Arial; color: #07314d;">
-            <i class="fa-solid fa-user-md" style="color: #0c3452; "></i>
-            <strong style="padding-left: 10px">Farmacistas</strong></h2>
-        <div style="margin-bottom: 10px"></div>
-        <hr style="border-top: 1px solid #262626;">
-        <div style="margin-bottom: 30px"></div>
-
-        <div style="padding-right: 0; padding-left: 0"> </div>
-    </div>
-
-    <div class="container">
-        <table id="miTabla2" class="table table-striped" style="padding-top: 10px">
-            <thead>
-            <tr style="background-color: #378fff">
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo electrónico</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Administrador</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Teléfono</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 1</span>
-                    </div>
-                </td>
-                <td style="text-align: center">farmacista1@gmail.com</td>
-                <td style="text-align: center">San Miguel Centro</td>
-                <td style="text-align: center">Administrador 2</td>
-                <td style="text-align: center">+51 946335254</td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 2</span>
-                    </div>
-                </td>
-                <td style="text-align: center">farmacista2@gmail.com</td>
-                <td style="text-align: center">San Miguel Sur</td>
-                <td style="text-align: center">Administrador 2</td>
-                <td style="text-align: center">+51 946335254</td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 3</span>
-                    </div>
-                </td>
-                <td style="text-align: center">farmacista3@gmail.com</td>
-                <td style="text-align: center">San Miguel Sur</td>
-                <td style="text-align: center">Administrador 1</td>
-                <td style="text-align: center">+51 946335254</td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 4</span>
-                    </div>
-                </td>
-                <td style="text-align: center">farmacista4@gmail.com</td>
-                <td style="text-align: center">Pando 5 Etapa</td>
-                <td style="text-align: center">Administrador 3</td>
-                <td style="text-align: center">+51 946335254</td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 5</span>
-                    </div>
-                </td>
-                <td style="text-align: center">farmacista5@gmail.com</td>
-                <td style="text-align: center">Pando 5 Etapa</td>
-                <td style="text-align: center">Administrador 3</td>
-                <td style="text-align: center">+51 946335254</td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 6</span>
-                    </div>
-                </td>
-                <td style="text-align: center">farmacista6@gmail.com</td>
-                <td style="text-align: center">San Miguel Centro</td>
-                <td style="text-align: center">Administrador 5</td>
-                <td style="text-align: center">+51 946335254</td>
-            </tr>
-            </tbody>
-        </table>
-
-    </div>
-
-    <br><br><br><br>
-    <div class="container">
-        <h2 style="font-family: 'Aptos', Arial; color: #07314d;">
-            <i class="fa-solid fa-user" style="color: #0c3452; "></i>
-            <strong style="padding-left: 10px">Pacientes</strong></h2>
-        <div style="margin-bottom: 10px"></div>
-        <hr style="border-top: 1px solid #262626;">
-        <div style="margin-bottom: 20px"></div>
-
-        <div style="padding-right: 0; padding-left: 0"> </div>
-    </div>
-
-    <div class="container">
-        <table id="miTabla3" class="display" style="padding-top: 10px">
-            <thead>
-            <tr style="background-color: #378fff">
-                <th style="text-align: center"></th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo electrónico</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Distrito de residencia</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Teléfono</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="paciente, info : ${pacientelist}">
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/paciente.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                    </div>
-                </td>
-                <td style="text-align: center" th:text="${paciente.nombres + ' ' +  paciente.apellidos}" ></td>
-                <td style="text-align: center" th:text="${paciente.correo}" ></td>
-                <td style="text-align: center" th:text="${paciente.distrito}" ></td>
-                <td style="text-align: center" th:text="${paciente.celular}" ></td>
-            </tr>
-            </tbody>
-        </table>
-
-    </div>
-
-    <br><br><br><br>
-    <div class="container">
-        <h2 style="font-family: 'Aptos', Arial; color: #07314d;">
-            <i class="fa-solid fa-user-md" style="color: #0c3452; "></i>
-            <strong style="padding-left: 10px">Doctores</strong></h2>
-        <div style="margin-bottom: 10px"></div>
-        <hr style="border-top: 1px solid #262626;">
-        <div style="margin-bottom: 30px"></div>
-
-        <div style="padding-right: 0; padding-left: 0"> </div>
-    </div>
-
-    <div class="container">
-        <table id="miTabla4" class="display" style="padding-top: 10px">
-            <thead>
-            <tr style="background-color: #378fff">
-                <th style="text-align: center"></th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo electrónico</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Especialidad</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Teléfono</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr  th:each="doctores, info : ${doctorList}">
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/doctor2.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                    </div>
-                </td>
-                <td style="text-align: center" th:text="${doctores.nombres + ' ' +  doctores.apellidos}" ></td>
-                <td style="text-align: center" th:text="${doctores.correo}"></td>
-                <td style="text-align: center" th:text="${doctores.especialidad}"></td>
-                <td style="text-align: center" th:text="${doctores.celular}"></td>
-            </tr>
-            </tbody>
-        </table>
-
-    </div>
-    <br><br><br>
-    <br><br>
-</main>
+</div>
 
 <div >
     <footer id="sticky-footer" class="footer-distributed">
