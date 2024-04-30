@@ -11,10 +11,8 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 
 
 @Controller
@@ -119,12 +117,9 @@ public class PacienteController {
     @GetMapping(value="/mensajeria")
     public String mensajeria(){return "paciente/mensajeria";}
 
-    @GetMapping(value = "/chatbot")
-    public String chatbot(){return "paciente/chatbot";}
-
-    @GetMapping(value = "/orden_paciente")
-    public String ordenPaciente(){
-        return "paciente/orden_paciente";
+    @GetMapping(value = "/chat")
+    public String chat(){
+        return "paciente/chat";
     }
 
     @GetMapping(value = "/orden_paciente_stock")
@@ -145,11 +140,6 @@ public class PacienteController {
     @GetMapping(value = "/cambio_contrasena")
     public String cambioContrasena(){
         return "paciente/cambioContraseña";
-    }
-
-    @GetMapping(value = "/chat")
-    public String chat(){
-        return "paciente/chat";
     }
 
 
