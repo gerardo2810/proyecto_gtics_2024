@@ -56,7 +56,9 @@ public class PacienteController {
     /*----------------- Method: GET -----------------*/
 
     @GetMapping(value="")
-    public String preOrdenes(){
+    public String preOrdenes(Model model){
+        List<Orden> lista =  ordenRepository.listarPreOrdenes();
+        model.addAttribute("lista",lista);
 
         return "paciente/pre_ordenes";
     }
@@ -164,8 +166,9 @@ public class PacienteController {
 
         List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(idOrden));
 
-        model.addAttribute("lista", lista);
-        model.addAttribute("contenidoPreOrden", ordenRepository.getOrdenByIdOrden(idOrden));
+
+        model.addAttribute("orden", ordenRepository.getOrdenByIdOrden(idOrden));
+        model.addAttribute("medicamentos", lista);
 
         return "paciente/boleta";
     }
@@ -181,6 +184,7 @@ public class PacienteController {
                                @RequestParam(value = "fecha", required = false) String fecha,
                                @RequestParam(value = "imagen", required = false) MultipartFile archivo,
                                @RequestParam(value = "listaIds", required = false) List<Integer> lista,
+                               @RequestParam(value = "priceTotal", required = false) Float total,
                                Model model, RedirectAttributes redirectAttributes){
 
 
@@ -199,7 +203,6 @@ public class PacienteController {
         tracking= ordenRepository.findLastOrdenId()+1 + "-2024";
         LocalDate fechaIni = LocalDate.now();
         LocalDate fechaFin = LocalDate.now();
-        Float precioTotal = new Float(3.14);
         Integer idFarmacista = new Integer(1);
         Usuario udb = usuarioRepository.getById(1);
         Sede s = sedeRepository.getById(1);
@@ -211,10 +214,10 @@ public class PacienteController {
         orden.setTracking(tracking);
         orden.setFechaIni(fechaIni);
         orden.setFechaFin(fechaFin);
-        orden.setPrecioTotal(precioTotal);
+        orden.setPrecioTotal(total);
         orden.setIdFarmacista(idFarmacista);
         orden.setPaciente(udb);
-        orden.setTipoOrden(1);
+        orden.setTipoOrden(2);
         orden.setEstadoOrden(1);
         orden.setSede(s);
         orden.setDoctor(doc);
@@ -222,6 +225,8 @@ public class PacienteController {
 
 
         ordenRepository.save(orden);
+
+
 
         Integer i = new Integer(0);
         Integer cantidad = new Integer(0);
@@ -255,6 +260,9 @@ public class PacienteController {
 
 
 
+
+
+
     @PostMapping(value="/procesar_pago")
     public String pago_recibido(Model model, RedirectAttributes redirectAttributes,  @RequestParam(value="numTarjeta") String tarjeta,
                                                                         @RequestParam(value="mes") String mes,
@@ -272,9 +280,7 @@ public class PacienteController {
         ordenRepository.actualizarEstadoOrden(3,idOrden);
 
 
-
         redirectAttributes.addFlashAttribute("msg2", "Orden Creada");
-        model.addAttribute("orden", ordenRepository.getOrdenByIdOrden(idOrden));
         return "redirect:/paciente/boleta_pago?id=" + idOrden;
     }
 }

@@ -88,7 +88,7 @@
                             <ul class="nav-list-small">
                                 <li><a href="/paciente" class="menu-item roboto-regular">Pre Ordenes</a></li>
 
-                                <li><a href="/paciente/ordenes" class="menu-item roboto-regular">Ordenes Web</a></li>
+                                <li><a href="/paciente/ordenes" class="menu-item roboto-regular active">Ordenes Web</a></li>
 
                                 <li><a href="/paciente/mensajeria" class="menu-item roboto-regular">Mensajeria</a></li>
                             </ul>
@@ -166,7 +166,7 @@
                     </div>
 
 
-                    <input type="text" maxlength="16" style="width: 550px;" class="card-number-input" name="numTarjeta">
+                    <input type="text" maxlength="16" style="width: 550px;" class="card-number-input" name="numTarjeta" required>
 
 
 
@@ -186,7 +186,7 @@
                     <div style="display: flex; flex-direction: row;justify-content: end; align-items: center;">
 
                         <div class="inputBox" style="margin-top: 0;margin-right: 10px;">
-                            <select class="month-input" style="width: 130px;" name="mes">
+                            <select class="month-input" style="width: 130px;" name="mes" required>
                                 <option value="month" selected disabled>MM</option>
                                 <option value="01">Enero</option>
                                 <option value="02">Febrero</option>
@@ -230,7 +230,7 @@
 
                     <div style="display: flex; flex-direction: column; justify-content: end;">
                         <div class="inputBox" style="margin-top: 0;">
-                            <input type="text" id="passwd" maxlength="4" class="cvv-input" name="cvv">
+                            <input type="text" id="passwd" maxlength="4" class="cvv-input" name="cvv" required>
                         </div>
 
                         <!--
@@ -260,7 +260,7 @@
                     <div style="display: flex; flex-direction: column; justify-content: end;">
                         <div class="inputBox" style="margin-top: 0;">
 
-                            <input type="text" class="card-holder-input" style="width: 330px;" name="titular">
+                            <input type="text" class="card-holder-input" style="width: 330px;" name="titular" required>
                             <input type="hidden" class="card-holder-input" style="width: 330px;" th:value="${orden.getIdOrden()}" name="idOrden">
                         </div>
 
@@ -269,7 +269,7 @@
 
                 </div>
                 <input type="submit" value="VERIFICAR" class="submit-btn" style="margin-top: 30px;">
-                <a href="paciente/confirmar_pago"><input type="button" value="REGRESAR" class="submit-btn" style="margin-top: 15px;background-color: dimgray"></a>
+                <a th:href="@{'/paciente/confirmar_pago?id=' + ${orden.getIdOrden()}}"><input type="button" value="REGRESAR" class="submit-btn" style="margin-top: 15px;background-color: dimgray"></a>
 
             </form>
 

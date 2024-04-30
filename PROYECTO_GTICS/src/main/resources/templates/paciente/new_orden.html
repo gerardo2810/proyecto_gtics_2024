@@ -63,7 +63,7 @@
                 <ul class="nav-list">
                     <li><a href="/paciente" class="menu-item roboto-regular" >Pre Ordenes</a></li>
 
-                    <li><a href="/paciente/ordenes" class="menu-item roboto-regular" style="text-decoration: underline; color: white">Ordenes Web</a></li>
+                    <li><a href="/paciente/ordenes" class="menu-item roboto-regular active" >Ordenes Web</a></li>
 
                     <li><a href="/paciente/mensajeria" class="menu-item roboto-regular">Mensajeria</a></li>
 
@@ -336,6 +336,7 @@
                                 Lista de Productos Seleccionados - Nueva Orden de Venta
 
                                 <div class="price-total-div roboto-medium">
+                                    <input type="hidden" name="priceTotal" id="priceTotal" value="">
                                     TOTAL <span class="price-total">S/0.00</span>
                                 </div>
                                 <div>
@@ -418,7 +419,7 @@
 
         <div class="column-buttons">
 
-            <button class="btn-cancel" type="button">Cancelar</button>
+            <a href="/paciente/ordenes"><button class="btn-cancel" type="button">Cancelar</button></a>
             <button class="btn-p" type="submit">Confirmar</button>
 
         </div>
@@ -813,6 +814,10 @@
 
             const listaIdsInput = document.getElementById('listaIds');
             listaIdsInput.value = listaSelectedIds.join(',');
+
+            precioTotal = document.getElementsByClassName('price-total')[0].innerText.split('/')[1];
+            const precioTotalInput = document.getElementById('priceTotal');
+            precioTotalInput.value = precioTotal;
 
         }
 
