@@ -118,17 +118,33 @@ public class AdminSedeController {
     }
 
     @GetMapping("/medicamentos")
-    public String showMedicamentos(Model model){
-        //List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
-        //model.addAttribute("listaMedicamentos", listaMedicamentos);
-        sedeSession = sedeRepository.getSedeByIdSede(1);
+    public String showMedicamentos(@RequestParam(name = "state", required = false) String state,
+                                   Model model) {
+        int idSession = 1; //Sede 1
+        sedeSession = sedeRepository.getSedeByIdSede(idSession);
         model.addAttribute("sedeSession", sedeSession);
 
-        int idSession = 1; //Sede 1
+        if ("disponible".equals(state)) {
+            List<MedicamentosSedeStockDto> listaMedicamentosStockDisponible = medicamentoRepository.listarMedicamentosStockDisponible(idSession);
+            model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosStockDisponible);
+            return "adminsede/medicamentos_sede";
 
-        List<MedicamentosSedeStockDto> listaMedicamentosSedeStock = medicamentoRepository.listarMedicamentosSedeStock(idSession); //seteamos por default
-        model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosSedeStock);
-        return "adminsede/medicamentos_sede";
+        } else if ("agotado".equals(state)) {
+            List<MedicamentosSedeStockDto> listaMedicamentosStockAgotado = medicamentoRepository.listarMedicamentosStockAgotados(idSession);
+            model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosStockAgotado);
+            return "adminsede/medicamentos_sede";
+
+        } else if ("poragotar".equals(state)) {
+            List<MedicamentosSedeStockDto> listaMedicamentosPorAgotar = medicamentoRepository.listarMedicamentosStockPorAgotar(idSession);
+            model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosPorAgotar);
+            return "adminsede/medicamentos_sede";
+
+        } else {
+            List<MedicamentosSedeStockDto> listaMedicamentosSedeStock = medicamentoRepository.listarMedicamentosSedeStock(idSession); //seteamos por default
+            model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosSedeStock);
+            return "adminsede/medicamentos_sede";
+        }
+
     }
 
     @GetMapping("/solicitud_farmacista")
@@ -255,7 +271,14 @@ public class AdminSedeController {
     }
     /*
     @PostMapping("/detalles_orden")
-    public String detallesOrdenPost(@RequestParam("")){
+    public String detallesOrdenPost(@RequestParam("nombres") String nombres,
+                                    @RequestParam("apellidos") String apellidos,
+                                    @RequestParam("dni") String dni,
+                                    @RequestParam("direccionSede") String direccionSede,
+                                    @RequestParam("correo") String correo,
+                                    @RequestParam("nombreSede") String nombreSede){
+
+
 
 
         return "redirect: /adminsede/verDetalles";
