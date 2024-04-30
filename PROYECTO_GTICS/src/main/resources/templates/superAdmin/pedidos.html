@@ -35,9 +35,6 @@
     <title>SuperAdmin | Pedidos</title>
 
     <style>
-        body {
-            padding-top: 80px;
-        }
         @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
     </style>
 </head>
@@ -160,199 +157,64 @@
     </nav>
 </header>
 
-<main style="margin-left: 20px; margin-right: 20px">
-    <br><br><br>
-    <div class="container">
-        <div style="margin-bottom: 20px"></div>
-        <div style="margin-bottom: 30px"></div>
-        <div class="titulo"><b>SEGUIMIENTO DE PEDIDOS DE REPOSICIÓN</b></div>
-        <div style="margin-bottom: 20px"></div>
-        <br>
+
+<div class="container">
+    <div class="container" style="margin-top: 90px">
+        <div style="padding-top: 20px; padding-bottom: 20px">
+            <div class="main-title open-sans-bold"> Pedidos de reposición de medicamentos </div>
+            <div class="main-subtitle helvetica-medium">  Visualización del estado de envío solicitado por cada sede hacia el proveedor </div>
+        </div>
+        <hr class="style-one">
+        <div style="margin-bottom: 40px"></div>
+        <div>
+            <table id="miTabla" class="table table-striped" style="padding-top: 10px">
+                <thead >
+                <tr style="background-color: #378fff" >
+                    <th style="text-align: center"></th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Número de Tracking</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Administrador</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha de registro</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha de entrega</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Estado</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="reposicion : ${reposicionList}">
+                    <td style="text-align: center">
+                        <div style="text-align: center; display: flex; flex-direction: row; justify-content: center; ">
+                            <label>
+                                <img th:src="@{/img/aplicacion-de-seguimiento.png}" alt="" style="width: 30px; height: 30px;">
+                            </label>
+                        </div>
+                    </td>
+                    <td style="text-align: center" th:text="${'TRK'+ (reposicion.idReposicion + 1000)}"></td>
+                    <td style="text-align: center" th:text="${reposicion.idSede.nombre}"></td>
+                    <td style="text-align: center" th:text="${reposicion.idSede.admin.nombres} + ' ' + ${reposicion.idSede.admin.apellidos}" ></td>
+                    <td style="text-align: center" th:text="${reposicion.fechaIni}"></td>
+                    <td style="text-align: center" th:text="${reposicion.fechaFin}"></td>
+                    <td style="text-align: center">
+                        <div th:if="${reposicion.estado.idEstado== 1}" class="btn-secondary">Recibido</div>
+                        <div th:if="${reposicion.estado.idEstado== 2}" class="btn-warning">En Proceso</div>
+                        <div th:if="${reposicion.estado.idEstado== 3}" class="btn-danger">Empaquetado</div>
+                        <div th:if="${reposicion.estado.idEstado== 4}" class="btn-warning">En Ruta</div>
+                        <div th:if="${reposicion.estado.idEstado== 5}" class="btn-success">Entregado</div>
+                    </td>
+                    <td style="text-align: center; display: flex; flex-direction: row; justify-content: center; gap: 7px;">
+                        <form th:action="@{'/superadmin/verOrdenReposicionId'}" method="post">
+                            <input type="hidden" name="idReposicion" th:value="${reposicion.idReposicion}">
+                            <button type="submit" class="btn btn-sm btn-info" >
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-
-    <div class="container" >
-        <br>
-        <table id="miTabla" class="table table-striped" style="padding-top: 10px">
-            <thead >
-            <tr style="background-color: #378fff" >
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Número de Tracking</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Administrador</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha de registro</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Estado</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Acciones</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/aplicacion-de-seguimiento.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   XXYYZZWW</span>
-                    </div>
-                </td>
-                <td style="text-align: center">San Miguel Centro</td>
-                <td style="text-align: center">Administrador 2</td>
-                <td>MM-DD-AA</td>
-                <td><button class="btn-pend">PENDIENTE</button></td>
-                <td>
-                    <a th:href="@{/superadmin/masdetallesPedidos}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/aplicacion-de-seguimiento.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   XXYYZZWW</span>
-                    </div>
-                </td>
-                <td style="text-align: center">San Miguel Centro</td>
-                <td style="text-align: center">Administrador 4</td>
-                <td>MM-DD-AA</td>
-                <td><button class="btn-listo">ENTREGADO</button></td>
-                <td>
-                    <a th:href="@{/superadmin/masdetallesPedidos}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/aplicacion-de-seguimiento.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   XXYYZZWW</span>
-                    </div>
-                </td>
-                <td style="text-align: center">San Miguel Centro</td>
-                <td style="text-align: center">Administrador 1</td>
-                <td>MM-DD-AA</td>
-                <td><button class="btn-rcb">RECIBIDO</button></td>
-                <td>
-                    <a th:href="@{/superadmin/masdetallesPedidos}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/aplicacion-de-seguimiento.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   XXYYZZWW</span>
-                    </div>
-                </td>
-                <td style="text-align: center">Pando 5 Etapa</td>
-                <td style="text-align: center">Administrador 2</td>
-                <td>MM-DD-AA</td>
-                <td><button class="btn-rcb">RECIBIDO</button></td>
-                <td>
-                    <a th:href="@{/superadmin/masdetallesPedidos}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/aplicacion-de-seguimiento.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   XXYYZZWW</span>
-                    </div>
-                </td>
-                <td style="text-align: center">San Miguel Centro</td>
-                <td style="text-align: center">Administrador 2</td>
-                <td>MM-DD-AA</td>
-                <td><button class="btn-pro">EN PROCESO</button></td>
-                <td>
-                    <a th:href="@{/superadmin/masdetallesPedidos}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/aplicacion-de-seguimiento.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   XXYYZZWW</span>
-                    </div>
-                </td>
-                <td style="text-align: center">Pando 5 Etapa</td>
-                <td style="text-align: center">Administrador 2</td>
-                <td>MM-DD-AA</td>
-                <td><button class="btn-empa">EMPAQUETANDO</button></td>
-                <td>
-                    <a th:href="@{/superadmin/masdetallesPedidos}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/aplicacion-de-seguimiento.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   XXYYZZWW</span>
-                    </div>
-                </td>
-                <td style="text-align: center">San Miguel Sur</td>
-                <td style="text-align: center">Administrador 1</td>
-                <td>MM-DD-AA</td>
-                <td><button class="btn-ruta">EN RUTA</button></td>
-                <td>
-                    <a th:href="@{/superadmin/masdetallesPedidos}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/aplicacion-de-seguimiento.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   XXYYZZWW</span>
-                    </div>
-                </td>
-                <td style="text-align: center">San Miguel Sur</td>
-                <td style="text-align: center">Administrador 3</td>
-                <td>MM-DD-AA</td>
-                <td><button class="btn-listo">ENTREGADO</button></td>
-                <td>
-                    <a th:href="@{/superadmin/masdetallesPedidos}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-                </td>
-            </tr>
-
-            </tbody>
-        </table>
-    </div>
-    <br><br><br>
-
-</main>
+</div>
 <br><br><br>
 <div >
     <footer id="sticky-footer" class="footer-distributed">

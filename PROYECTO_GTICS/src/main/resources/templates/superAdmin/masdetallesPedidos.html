@@ -1,95 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
-  <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+  <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
+
   <!--=============== REMIXICONS ===============-->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
 
   <!--=============== CSS ===============-->
-
+  <link th:href="@{/css/styles.css}" rel="stylesheet" />
+  <link th:href="@{/css/fonts.css}" rel="stylesheet" />
   <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
-  <link rel="stylesheet" th:href="@{/css/superadmin/superadmin.css}">
+  <link rel="stylesheet" th:href="@{/css/farmacista/detalle_ordenes.css}">
+  <link th:href="@{/css/footer.css}" rel="stylesheet" />
+  <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
 
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
-  <link rel="stylesheet" th:href="@{/css/fonts.css}">
-  <link rel="stylesheet" th:href="@{/css/topbar.css}">
-  <link rel="stylesheet" th:href="@{/css/footer.css}">
-  <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
-  <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
-  <link rel="stylesheet" th:href="@{/css/datatables.css}">
-  <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
+  <!--Mapa vista Paciente-->
+  <script scr="/js/map.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAce4klBZuD60aEQidMVIbsoaiitxxQFpo"></script>
 
-  <!--=============== JAVASCRIPT ===============-->
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
-  <!--  Bootstrap-->
-  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!--=============== CSS ===============-->
+  <!--=============== JQUERY ===============-->
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
-  <title>SuperAdmin | Pedidos</title>
+  <!--=============== SWEETALERT ===============-->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
 
-  <style>
-    body {
-      padding-top: 100px;
-      background-color: #f2f6fc;
-    }
+  <!--=============== FONT AWESOME ===============-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
 
-    .avatar-lg {
-      height: 5rem;
-      width: 5rem;
-    }
 
-    .font-size-18 {
-      font-size: 18px!important;
-    }
+  <title>Bienestar San Miguel | SuperAdmin</title>
 
-    .text-truncate {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    a {
-      text-decoration: none!important;
-    }
-
-    .w-xl {
-      min-width: 160px;
-    }
-
-    .card {
-      margin-bottom: 24px;
-      -webkit-box-shadow: 0 2px 3px #e4e8f0;
-      box-shadow: 0 2px 3px #e4e8f0;
-    }
-
-    .card {
-      position: relative;
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-orient: vertical;
-      -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-      flex-direction: column;
-      min-width: 0;
-      word-wrap: break-word;
-      background-color: #fff;
-      background-clip: border-box;
-      border: 1px solid #eff0f2;
-      border-radius: 1rem;
-    @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
-  </style>
 </head>
 
 
-<body>
+<body style="background-color: white;">
 <!--=============== HEADER ===============-->
 <header class="header-topbar">
   <nav class="nav-topbar container">
@@ -207,163 +157,111 @@
 </header>
 
 
-
-<br><br>
-<main style="margin-left: 100px; margin-right: 100px">
-  <div class="container">
-    <div style="margin-bottom: 20px"></div>
-    <div style="margin-bottom: 30px"></div>
-    <div class="titulo"><b>MÁS DETALLES</b></div>
-    <div style="margin-bottom: 20px"></div>
-    <br><br>
-
-  </div>
-
-
-  <div class="container-fluid">
-
-    <div class="container">
-      <!-- Title -->
-      <div class="d-flex justify-content-between align-items-center py-3">
-        <h2 class="h5 mb-0"><a href="#" class="text-muted"></a> Order #16123222</h2>
-      </div>
-
-      <!-- Main content -->
-      <div class="row">
-        <div class="col-lg-8">
-          <!-- Details -->
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="mb-3 d-flex justify-content-between">
-                <div>
-                  <span class="me-3">Fecha de registro: 22-11-2021</span>
-                  <span class="badge rounded-pill bg-info">Envío</span>
-                </div>
-                <div class="d-flex">
-
-                  <div class="dropdown">
-                    <button class="btn btn-link p-0 text-muted" type="button" data-bs-toggle="dropdown">
-                      <i class="bi bi-three-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-pencil"></i> Edit</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-printer"></i> Print</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <table class="table table-borderless">
-                <tbody>
-                <tr>
-                  <td>
-                    <div class="d-flex mb-2">
-                      <div class="flex-shrink-0">
-                        <img src="https://www.bootdey.com/image/280x280/87CEFA/000000" alt="" width="35" class="img-fluid">
-                      </div>
-                      <div class="flex-lg-grow-1 ms-3">
-                        <h6 class="small mb-0"><a href="#" class="text-reset">Paracetamol 500 mg (caja de 100 tabletas)</a></h6>
-                        <span class="small">S/20 x caja</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td>3</td>
-                  <td class="text-end">S/60</td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="d-flex mb-2">
-                      <div class="flex-shrink-0">
-                        <img src="https://www.bootdey.com/image/280x280/87CEFA/000000" alt="" width="35" class="img-fluid">
-                      </div>
-                      <div class="flex-lg-grow-1 ms-3">
-                        <h6 class="small mb-0"><a href="#" class="text-reset">Ibuprofeno 400 mg (frasco de 100 tabletas)</a></h6>
-                        <span class="small">S/25 x caja</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td>5</td>
-                  <td class="text-end">S/125</td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="d-flex mb-2">
-                      <div class="flex-shrink-0">
-                        <img src="https://www.bootdey.com/image/280x280/87CEFA/000000" alt="" width="35" class="img-fluid">
-                      </div>
-                      <div class="flex-lg-grow-1 ms-3">
-                        <h6 class="small mb-0"><a href="#" class="text-reset">Amoxicilina 500 mg (caja de 100 cápsulas)</a></h6>
-                        <span class="small">S/30 x caja</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td>2</td>
-                  <td class="text-end">S/60</td>
-                </tr>
-                </tbody>
-                <tfoot>
-                <tr>
-                  <td colspan="2">Subtotal</td>
-                  <td class="text-end">S/ 245</td>
-                </tr>
-                <tr>
-                  <td colspan="2">Envío</td>
-                  <td class="text-end">S/ 5.00</td>
-                </tr>
-                <tr>
-                  <td colspan="2">Descuento</td>
-                  <td class="text-danger text-end">-S/10.00</td>
-                </tr>
-                <tr class="fw-bold">
-                  <td colspan="2">TOTAL</td>
-                  <td class="text-end">S/ 235</td>
-                </tr>
-                </tfoot>
-              </table>
-            </div>
-          </div>
-          <!-- Payment -->
-
-        </div>
-        <div class="col-lg-4">
-          <!-- Customer Notes -->
-
-          <div class="card mb-4">
-            <!-- Shipping information -->
-            <div class="card-body">
-              <h3 class="h6">Informacion de envío</h3>
-              <h5>Proveedor 1</h5>
-              <strong>FedEx</strong>
-              <span><a href="#" class="text-decoration-underline" target="_blank">FF1234567890</a> <i class="bi bi-box-arrow-up-right"></i> </span>
-              <hr>
-              <h3 class="h6">Dirección</h3>
-              <address>
-                <strong>Administrador 2</strong><br>
-                <strong>Sede San Miguel Centro</strong><br>
-                1355 Market St, Suite 900<br>
-                Lima, Peru 94103<br>
-                <abbr title="Phone">Teléfono:</abbr> +51 985456890
-              </address>
-            </div>
-          </div>
-        </div>
-      </div>
+<div class="container" style="margin-top:90px">
+<br>
+  <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 20px; padding-bottom: 20px;">
+    <div class="main-title" style="font-weight: bold; font-family: 'Open Sans', sans-serif;">Detalles de Orden de Reposición</div>
+    <div>
+      <a class="btn-p" href="/superadmin/pedidos" style="background-color: #378efd; border: none; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 4px;">Regresar a la lista</a>
     </div>
   </div>
 
+  <hr class="style-one">
 
-  <br>
-  <br>
+  <div class="detalle-orden-container">
 
+    <div class="invoice-title">
 
-  <div style="display: flex; justify-content: center">
-    <div id="map"></div>
+      <div class="title roboto-medium data-label">Bienestar San Miguel | <span th:text="${reposicion.idSede.nombre}">Sede</span></div>
+
+      <div class="title-info">
+        <div class="roboto-bold title data-label">Orden #<span th:text="${'TRK'+ (reposicion.idReposicion + 1000)}"></span> </div>
+        <div th:if="${reposicion.estado.idEstado== 1}" class="btn-dark">Recibido</div>
+        <div th:if="${reposicion.estado.idEstado== 2}" class="btn-yellow">En Proceso</div>
+        <div th:if="${reposicion.estado.idEstado== 3}" class="btn-red">Empaquetado</div>
+        <div th:if="${reposicion.estado.idEstado== 4}" class="btn-yellow">En Ruta</div>
+        <div th:if="${reposicion.estado.idEstado== 5}" class="btn-green">Entregado</div>
+      </div>
+    </div>
+
+    <div class="invoice-contact">
+
+      <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Dirección:</span><div th:text="${reposicion.idSede.direccion}"></div></div>
+      <div><span class="data-label roboto-medium">Correo:</span> clinica.bienestar@sanmiguel.pe</div>
+      <div><span class="data-label roboto-medium">Número:</span> +51 998524112</div>
+    </div>
+
+    <hr class="my-4" style="margin-bottom: 20px; margin-top: 20px;">
+
+    <div class="client-info">
+      <div class="data-label roboto-medium">Datos del Administrador:</div>
+      <div class="invoice-data">
+        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Nombre: </span><div th:text="${reposicion.idSede.admin.nombres + ' ' + reposicion.idSede.admin.apellidos}"></div></div>
+        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">DNI:</span><div th:text="${reposicion.idSede.admin.dni}"> </div></div>
+        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Celular:</span><div th:text="${reposicion.idSede.admin.celular}"></div></div>
+      </div>
+    </div>
+
+    <hr class="my-4" style="margin-bottom: 20px; margin-top: 20px;">
+
+    <div class="invoice-info">
+      <div class="data-label roboto-medium">Datos de la Orden:</div>
+
+      <div class="invoice-data">
+        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Número de Orden: </span><div th:text="${(reposicion.idReposicion + 1000)}"></div></div>
+        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Fecha:</span><div th:text="${reposicion.fechaIni}"> </div></div>
+        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Sede:</span><div th:text="${reposicion.idSede.nombre}"> </div></div>
+        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Proveedor:</span><div>CORVAL PHARMACEUTICAL S.A.C.</div></div>
+      </div>
+    </div>
+
+    <hr class="my-4" style="margin-bottom: 50px; margin-top: 20px;">
+
+    <div class="title roboto-medium data-label" style="padding-bottom: 20px">Lista de Medicamentos Comprados</div>
+
+    <div>
+      <table class="order-table">
+        <thead style="padding-bottom: 10px">
+        <tr>
+          <th class="text-start" style="max-width: 90px;">No.</th>
+          <th class="text-start" style="max-width: 200px;">Artículo</th>
+          <th class="text-center">Precio</th>
+          <th class="text-center">Cantidad</th>
+          <th class="text-end" style="width: 120px;">Total</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="contenido, iterIndex : ${contenidoReposicion}">
+          <th class="text-start" style="width: 90px;"><span th:text="${iterIndex.index + 1}"></span></th>
+          <td>
+            <div class="name-unit-item">
+              <div class="text-truncate font-size-14 mb-1" th:text="${contenido.getIdMedicamento().getNombre()}"></div>
+              <div class="text-muted mb-0" th:text="${contenido.getIdMedicamento().getUnidad()}"></div>
+            </div>
+          </td>
+          <td class="text-center" th:text="${'S/. ' + contenido.getIdMedicamento().getPrecioVenta()}"></td>
+          <td class="text-center" th:text="${contenido.getCantidad()}"></td>
+          <td class="text-end" th:text="${'S/. ' + contenido.getCantidad() * contenido.getIdMedicamento().getPrecioVenta()}"></td>
+        </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+    <div class="full-total">
+      <div class="roboto-regular data-label" style="padding-top: 20px">Total</div>
+      <div class="title roboto-medium data-label" th:text="${'S/. ' + reposicion.precioTotal}"></div>
+    </div>
+
   </div>
 
-  <br>
-  <br><br><br><br>
-</main>
+</div>
+
+<br><br>
+
 <div >
-  <footer id="sticky-footer" class="footer-distributed" style="background-color: #04011E">
+  <footer id="sticky-footer" class="footer-distributed">
     <div class="footer-left">
       <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
       <p class="footer-links">
@@ -416,31 +314,42 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
 
-<script>
-  $(document).ready(function() {
+  <script>
+    $(document).ready(function() {
     var table = $('#miTabla, #miTabla2, #miTabla3, #miTabla4').DataTable({
-      "pageLength":5,
-      "lengthChange": false,
-      "language": {
-        "emptyTable": "No hay registros disponibles",
-        "zeroRecords": "No se encontraron registros coincidentes",
-        "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-        "paginate": {
-          "first": "Primero",
-          "last": "Último",
-          "next": "Siguiente",
-          "previous": "Anterior"
-        },
-        "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
-      },
+    "pageLength":5,
+    "lengthChange": false,
+    "language": {
+    "emptyTable": "No hay registros disponibles",
+    "zeroRecords": "No se encontraron registros coincidentes",
+    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+    "search" : "Buscar:",
+    "paginate": {
+    "first": "Primero",
+    "last": "Último",
+    "next": "Siguiente",
+    "previous": "Anterior"
+  },
+    "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+  },
 
-    });
+  });
 
+    $('#filtroEstado').on('change', function() {
+    var estado = $(this).val();
+    table.column(2).search(estado).draw();
+
+  });
+
+    $('#limpiarFiltros').on('click', function() {
+    $('#filtroEstado').val('');
+    table.search('').columns().search('').draw();
+  });
   });
 </script>
 
 <script>
-  $(document).ready(function() {
+  $(document).ready(function () {
     var opened = false;
 
     $('#menu-small').hide();
@@ -460,9 +369,9 @@
   google.maps.event.addDomListener(window, 'load', initMap);
 </script>
 <script>
-  $(document).ready(function() {
+  $(document).ready(function () {
     var table = $('#miTabla').DataTable({
-      "pageLength":5,
+      "pageLength": 5,
       "lengthChange": false,
       "language": {
         "emptyTable": "No hay registros disponibles",
@@ -479,13 +388,13 @@
 
     });
 
-    $('#filtroEstado').on('change', function() {
+    $('#filtroEstado').on('change', function () {
       var estado = $(this).val();
       table.column(2).search(estado).draw();
 
     });
 
-    $('#limpiarFiltros').on('click', function() {
+    $('#limpiarFiltros').on('click', function () {
       $('#filtroEstado').val('');
       table.search('').columns().search('').draw();
     });
