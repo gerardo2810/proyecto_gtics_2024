@@ -505,9 +505,46 @@
 
 
 <script th:inline="javascript">
-    let socket = new WebSocket("ws://localhost:8080/chat");
+
+
+
+    /*
+    // Hacer una solicitud HTTP GET para obtener la dirección IP utilizando fetch
+    fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            // Acceder a la dirección IP desde la respuesta JSON
+            var ip_address = data.ip;
+            console.log('Tu dirección IP es:', ip_address);
+        })
+        .catch(error => {
+            console.error('Ocurrió un error al obtener la dirección IP:', error);
+        });
+    */
+
+
+
+    // Obtener el campo de entrada
+    const messageInput = document.getElementById("messageInput");
+
+    // Agregar un controlador de eventos para la tecla "Enter"
+    messageInput.addEventListener("keyup", function(event) {
+        // Verificar si la tecla presionada es "Enter"
+        if (event.key === "Enter") {
+            // Evitar el comportamiento predeterminado del Enter (submit del formulario)
+            event.preventDefault();
+            // Llamar a la función sendMessage()
+            sendMessage();
+        }
+    });
+
+
+
+    let socket = new WebSocket("ws://10.101.50.61:8080/chat"); //mi direccion ip local, usar ipconfig o netstat -a para saber cual es, de recomendacion poner la red lan del celular en mi laptop en configuracion del adaptador
 
     socket.onmessage = function (event) {
+
+
         let messageArea = document.getElementById("messageArea");
         var fechaActual = new Date();
         var horaActual = fechaActual.getHours();
@@ -533,10 +570,12 @@
         //let username = document.getElementById("username");
         let messageInput = document.getElementById("messageInput");
 
-        //let fullMessage = username.value + ": " + messageInput.value;
-        let fullMessage = messageInput.value;
-        socket.send(fullMessage);
-        messageInput.value = '';
+        if(messageInput.value.trim() != ''){
+            //let fullMessage = username.value + ": " + messageInput.value;
+            let fullMessage = messageInput.value;
+            socket.send(fullMessage);
+            messageInput.value = '';
+        }
 
     }
 
