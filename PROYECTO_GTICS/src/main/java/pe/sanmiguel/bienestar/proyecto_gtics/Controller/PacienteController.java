@@ -147,6 +147,12 @@ public class PacienteController {
         return "paciente/cambioContraseña";
     }
 
+    @GetMapping(value = "/chat")
+    public String chat(){
+        return "paciente/chat";
+    }
+
+
     @GetMapping(value = "/confirmar_pago")
     public String confirmarPago(Model model, @RequestParam("id") String idOrden){
 
