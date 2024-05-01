@@ -21,6 +21,9 @@
         <link th:href="@{/css/footer.css}" rel="stylesheet" />
         <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
 
+        <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+        <link rel="stylesheet" th:href="@{/css/adminsede/indexstyle.css}">
+
         <!--Mapa vista Paciente-->
         <script scr="/js/map.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAce4klBZuD60aEQidMVIbsoaiitxxQFpo"></script>
@@ -231,10 +234,14 @@
                     <div class="title roboto-medium data-label" th:text="${'S/. ' + reposicion.getPrecioTotal()}">S/. 750.00</div>
                 </div>
 
+                <div class="container-graph-circular">
+                    <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/medicamentos'" style="margin-left: 20px">Finalizar</button>
+                </div>
+
             </div>
 
         </div>
-        
+
 
         <div >
             <footer id="sticky-footer" class="footer-distributed">
