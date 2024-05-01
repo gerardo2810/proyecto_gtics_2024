@@ -1,6 +1,5 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +29,9 @@ public class AdminSedeController {
     final EstadoPreOrdenRepository estadoPreOrdenRepository;
     final DoctorRepository doctorRepository;
     final SedeFarmacistaRepository sedeFarmacistaRepository;
+    final ReposicionContenidoRepository reposicionContenidoRepository;
 
-    public AdminSedeController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, SedeStockRepository sedeStockRepository, MedicamentoRepository medicamentoRepository, OrdenRepository ordenRepository, OrdenContenidoRepository ordenContenidoRepository, ReposicionRepository reposicionRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository, SedeFarmacistaRepository sedeFarmacistaRepository) {
+    public AdminSedeController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, SedeStockRepository sedeStockRepository, MedicamentoRepository medicamentoRepository, OrdenRepository ordenRepository, OrdenContenidoRepository ordenContenidoRepository, ReposicionRepository reposicionRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository, SedeFarmacistaRepository sedeFarmacistaRepository, ReposicionContenidoRepository reposicionContenidoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.sedeRepository = sedeRepository;
         this.sedeStockRepository = sedeStockRepository;
@@ -42,6 +42,7 @@ public class AdminSedeController {
         this.estadoPreOrdenRepository = estadoPreOrdenRepository;
         this.doctorRepository = doctorRepository;
         this.sedeFarmacistaRepository = sedeFarmacistaRepository;
+        this.reposicionContenidoRepository = reposicionContenidoRepository;
     }
 
     public List<String> getCantidadesFromLista(List<String> listaSelectedIds) {
@@ -269,20 +270,36 @@ public class AdminSedeController {
             return "redirect:/adminsede/medicamentos";
         }
     }
-    /*
+
     @PostMapping("/detalles_orden")
     public String detallesOrdenPost(@RequestParam("nombres") String nombres,
                                     @RequestParam("apellidos") String apellidos,
                                     @RequestParam("dni") String dni,
                                     @RequestParam("direccionSede") String direccionSede,
                                     @RequestParam("correo") String correo,
-                                    @RequestParam("nombreSede") String nombreSede){
+                                    @RequestParam("nombreSede") String nombreSede,
+                                    @RequestParam("priceTotal") Float priceTotal,
+                                    @RequestParam("listaIds") List<String> listaIds){
 
+        // Crear orden de reposición
+        Integer idReposicion = reposicionRepository.findLastReposicionId() + 1;
+        String tracking = "RECIBIDO"; //Por Default
+        Integer idEstado = 1; //Por Default
+        Integer idSede = 1; // CORREGIR CON SESSION--------------------------------------------------------
+        reposicionRepository.crearOrdenReposicion(idReposicion, tracking, priceTotal, idEstado, idSede);
 
+        // Guardar lista de medicamentos
+        int m = 0;
+        for (int i = 1; i <= (listaIds.size()/2); i++){
 
+            Integer idMedicamento = Integer.parseInt(listaIds.get(m));
+            Integer cantidadMedicamento = Integer.parseInt(listaIds.get(m+1));
+            reposicionContenidoRepository.guardarContenidoReposicion(idMedicamento, idReposicion, cantidadMedicamento);
 
-        return "redirect: /adminsede/verDetalles";
-    }*/
+            m = m + 2;
+        }
+        return "redirect:/adminsede/verDetalles";
+    }
 
 
 
