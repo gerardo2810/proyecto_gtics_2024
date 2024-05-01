@@ -16,6 +16,7 @@
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/chat.css}">
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
 
@@ -133,7 +134,7 @@
 
                     <li><a href="/paciente/ordenes" class="menu-item roboto-regular">Ordenes Web</a></li>
 
-                    <li><a href="/paciente/mensajeria" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Mensajeria</a></li>
+                    <li><a href="/paciente/mensajeria" class="menu-item roboto-regular active">Mensajeria</a></li>
 
 
                     <!--=============== DROPDOWN ===============-->
@@ -217,39 +218,101 @@
 
 <br>
 
-<div class="container" style="display: flex; flex-direction: row">
+<div class="container" style="display: flex; flex-direction: row; column-gap: 10px">
+
+
+    <!--
+
+    <div class="container">
+
+        <div>
+
+            <div id="messageArea" style="width: 300px; height: 300px; border:4px solid red"></div>
+
+            <div>
+                <label>Nombre de usuario:</label>
+                <input type="text" id="username" placeholder="Introduce tu nombre">
+            </div>
+            <br>
+            <div>
+                <label>Mensaje:</label>
+                <input type="text" id="messageInput" placeholder="Introduce tu mensaje">
+            </div>
+            <br>
+            <div>
+                <button onclick="sendMessage()">Enviar</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    -->
+
 
 
     <div class="container">
-        <div class="container2">
-            <img th:src="@{/img/doctor2.png}" alt="Avatar">
-            <p>Buenas tardes, el medicamento X está sin stock de momento, podemos reemplazarlo por el medicamento Y</p>
-            <span class="time-right">11:00</span>
-        </div>
-
-        <div class="container2 darker">
-            <img th:src="@{/img/paciente.png}" alt="Avatar" class="right">
-            <p>Me parece genial, cuanto sería el nuevo precio de ese medicamento</p>
-            <span class="time-left">11:01</span>
-        </div>
-
-        <div class="container2">
-            <img th:src="@{/img/doctor2.png}" alt="Avatar">
-            <p>El precio es el mismo, necesito su confirmación para realizar la orden de compra</p>
-            <span class="time-right">11:02</span>
-        </div>
-
-        <div class="container2 darker">
-            <img th:src="@{/img/paciente.png}" alt="Avatar" class="right">
-            <p>Perfecto, cambie el medicamento X por el Y</p>
-            <span class="time-left">11:05</span>
-        </div>
 
 
-        <div class="container2 darker">
-            <input type="text" placeholder="Escribe tu mensaje aquí...">
-            <button><i class="fa fa-paper-plane"></i>Enviar</button>
-        </div>
+        <section class="Chat">
+            <div class="ChatHead">
+                <li class="group">
+                    <div class="avatar"><img src="/img/farmaceutico.png"></div>
+                    <p class="GroupName">Farmacista Coronado Maxwell</p>
+
+                </li>
+                <div class="callGroup">
+                    <i class="fa-solid fa-phone"></i>
+                    <i class="fa-solid fa-video"></i>
+
+                </div>
+            </div>
+            <div class="MessageContainer">
+
+                <div class="messageSeperator">Today</div>
+
+                <div class="message me">
+                    <p class="messageContent">Send Me the Pics!</p>
+                    <div class="messageDetails">
+                        <div class="messageTime">3:21 PM</div>
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                </div>
+
+                <div class="message you">
+                    <p class="messageContent">Sorry for the Delay!</p>
+                    <div class="messageDetails">
+                        <div class="messageTime">8:09 AM</div>
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                </div>
+
+
+
+
+                <div id="messageArea">
+
+
+                </div>
+
+
+            </div>
+
+            <div style="display: flex; flex-direction: row; column-gap: 10px; padding: 15px">
+
+                <input type="text" id="messageInput" class="inputMensaje" style="width: 300px" placeholder="Ingrese su mensaje">
+                <button onclick="sendMessage()" class="enviar-msg"><i class="fa-solid fa-paper-plane"></i></button>
+
+            </div>
+
+
+
+
+
+        </section>
+
+
+
 
     </div>
 
@@ -439,6 +502,87 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <script th:src="@{/js/topbar.js}"></script>
+
+
+<script th:inline="javascript">
+
+
+
+    /*
+    // Hacer una solicitud HTTP GET para obtener la dirección IP utilizando fetch
+    fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            // Acceder a la dirección IP desde la respuesta JSON
+            var ip_address = data.ip;
+            console.log('Tu dirección IP es:', ip_address);
+        })
+        .catch(error => {
+            console.error('Ocurrió un error al obtener la dirección IP:', error);
+        });
+    */
+
+
+
+    // Obtener el campo de entrada
+    const messageInput = document.getElementById("messageInput");
+
+    // Agregar un controlador de eventos para la tecla "Enter"
+    messageInput.addEventListener("keyup", function(event) {
+        // Verificar si la tecla presionada es "Enter"
+        if (event.key === "Enter") {
+            // Evitar el comportamiento predeterminado del Enter (submit del formulario)
+            event.preventDefault();
+            // Llamar a la función sendMessage()
+            sendMessage();
+        }
+    });
+
+
+
+    let socket = new WebSocket("ws://10.101.50.61:8080/chat"); //mi direccion ip local, usar ipconfig o netstat -a para saber cual es, de recomendacion poner la red lan del celular en mi laptop en configuracion del adaptador
+
+    socket.onmessage = function (event) {
+
+
+        let messageArea = document.getElementById("messageArea");
+        var fechaActual = new Date();
+        var horaActual = fechaActual.getHours();
+        var minutosActuales = fechaActual.getMinutes();
+
+        if (minutosActuales<10){
+            var tiempoActual = horaActual + ':0' + minutosActuales;
+        }else{
+            var tiempoActual = horaActual + ':' + minutosActuales;
+        }
+
+
+        messageArea.innerHTML += ' <div class="message you">\n' +
+            '                    <p class="messageContent" >' + event.data +
+            '                    </p><div class="messageDetails">\n' +
+            '                        <div class="messageTime">' + tiempoActual  +
+            '                        </div><i class="fa-solid fa-check"></i>\n' +
+            '                    </div>\n' +
+            '                </div>'
+    }
+
+    function sendMessage(){
+        //let username = document.getElementById("username");
+        let messageInput = document.getElementById("messageInput");
+
+        if(messageInput.value.trim() != ''){
+            //let fullMessage = username.value + ": " + messageInput.value;
+            let fullMessage = messageInput.value;
+            socket.send(fullMessage);
+            messageInput.value = '';
+        }
+
+    }
+
+
+
+
+</script>
 <script>
     $(document).ready(function() {
         var table = $('#miTabla2').DataTable({

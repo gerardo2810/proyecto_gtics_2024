@@ -11,10 +11,8 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 
 
 @Controller
@@ -48,23 +46,45 @@ public class PacienteController {
     }
 
 
+    Integer idUsuario = 23;
+
 
 
 
     /*----------------- Method: GET -----------------*/
 
     @GetMapping(value="")
-    public String preOrdenes(){return "paciente/pre_ordenes";}
+    public String preOrdenes(Model model){
+        List<Orden> lista =  ordenRepository.listarPreOrdenes();
+        model.addAttribute("lista",lista);
+
+        return "paciente/pre_ordenes";
+    }
+
+
 
     @GetMapping(value="/ordenes")
     public String ordenes(Model model){
         List<Orden> lista =  ordenRepository.listarOrdenes();
         model.addAttribute("lista",lista);
 
-        return "paciente/ordenes";}
+        return "paciente/ordenes";
+    }
+
+
 
     @GetMapping(value="/pago_tarjeta")
-    public String pago_tarjeta(){return "paciente/pago_tarjeta";}
+    public String pago_tarjeta(Model model, @RequestParam(value="id") Integer id){
+
+        Orden orden = ordenRepository.getOrdenByIdOrden(id);
+
+        model.addAttribute("orden", orden);
+
+        return "paciente/pago_tarjeta";
+    }
+
+
+
 
     @GetMapping(value="/tracking")
     public String tracking(Model model, @RequestParam("id") String idOrden){
@@ -97,12 +117,9 @@ public class PacienteController {
     @GetMapping(value="/mensajeria")
     public String mensajeria(){return "paciente/mensajeria";}
 
-    @GetMapping(value = "/chatbot")
-    public String chatbot(){return "paciente/chatbot";}
-
-    @GetMapping(value = "/orden_paciente")
-    public String ordenPaciente(){
-        return "paciente/orden_paciente";
+    @GetMapping(value = "/chat")
+    public String chat(){
+        return "paciente/chat";
     }
 
     @GetMapping(value = "/orden_paciente_stock")
@@ -125,6 +142,7 @@ public class PacienteController {
         return "paciente/cambioContraseña";
     }
 
+
     @GetMapping(value = "/confirmar_pago")
     public String confirmarPago(Model model, @RequestParam("id") String idOrden){
 
@@ -139,6 +157,18 @@ public class PacienteController {
         return "paciente/confirmar_pago";
     }
 
+    @GetMapping(value="/boleta_pago")
+    public String boletaPago(Model model, @RequestParam(value="id") Integer idOrden){
+
+        List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(idOrden));
+
+
+        model.addAttribute("orden", ordenRepository.getOrdenByIdOrden(idOrden));
+        model.addAttribute("medicamentos", lista);
+
+        return "paciente/boleta";
+    }
+
 
 
 
@@ -150,6 +180,7 @@ public class PacienteController {
                                @RequestParam(value = "fecha", required = false) String fecha,
                                @RequestParam(value = "imagen", required = false) MultipartFile archivo,
                                @RequestParam(value = "listaIds", required = false) List<Integer> lista,
+                               @RequestParam(value = "priceTotal", required = false) Float total,
                                Model model, RedirectAttributes redirectAttributes){
 
 
@@ -168,7 +199,6 @@ public class PacienteController {
         tracking= ordenRepository.findLastOrdenId()+1 + "-2024";
         LocalDate fechaIni = LocalDate.now();
         LocalDate fechaFin = LocalDate.now();
-        Float precioTotal = new Float(3.14);
         Integer idFarmacista = new Integer(1);
         Usuario udb = usuarioRepository.getById(1);
         Sede s = sedeRepository.getById(1);
@@ -180,19 +210,19 @@ public class PacienteController {
         orden.setTracking(tracking);
         orden.setFechaIni(fechaIni);
         orden.setFechaFin(fechaFin);
-        orden.setPrecioTotal(precioTotal);
+        orden.setPrecioTotal(total);
         orden.setIdFarmacista(idFarmacista);
         orden.setPaciente(udb);
-        orden.setTipoOrden(1);
+        orden.setTipoOrden(2);
         orden.setEstadoOrden(1);
         orden.setSede(s);
         orden.setDoctor(doc);
         orden.setEstadoPreOrden(1);
 
 
-        System.out.println(lista);
-
         ordenRepository.save(orden);
+
+
 
         Integer i = new Integer(0);
         Integer cantidad = new Integer(0);
@@ -214,18 +244,39 @@ public class PacienteController {
             ordenContenido.setCantidad(cantidad);
             ordenContenidoRepository.save(ordenContenido);
 
-
-
-            System.out.println(medicamento.getNombre());
-            System.out.println(cantidad);
-
             i = i + 2;
 
 
         }
 
         redirectAttributes.addFlashAttribute("msg", "Orden Creada");
-        return "redirect://paciente/ordenes";
+        return "redirect:/paciente/ordenes";
 
+    }
+
+
+
+
+
+
+    @PostMapping(value="/procesar_pago")
+    public String pago_recibido(Model model, RedirectAttributes redirectAttributes,  @RequestParam(value="numTarjeta") String tarjeta,
+                                                                        @RequestParam(value="mes") String mes,
+                                                                        @RequestParam(value="anio") String anio,
+                                                                        @RequestParam(value="cvv") String cvv,
+                                                                        @RequestParam(value="titular") String titular,
+                                                                        @RequestParam(value="idOrden") Integer idOrden){
+
+        System.out.printf(tarjeta);
+        System.out.println(mes);
+        System.out.println(anio);
+        System.out.printf(cvv);
+        System.out.println(titular);
+        System.out.println(idOrden);
+        ordenRepository.actualizarEstadoOrden(3,idOrden);
+
+
+        redirectAttributes.addFlashAttribute("msg2", "Orden Creada");
+        return "redirect:/paciente/boleta_pago?id=" + idOrden;
     }
 }

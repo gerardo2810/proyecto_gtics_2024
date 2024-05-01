@@ -42,6 +42,8 @@ public interface SedeFarmacistaRepository extends JpaRepository<SedeFarmacista, 
     //Seleccionar Sede-Farmacista
 
 
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f INNER JOIN proyecto_gtics.usuario u, proyecto_gtics.sede s WHERE f.idSede = s.id and f.idFarmacista=u.id")
+    List<SedeFarmacista> listarFarmacistasPorSede();
 
 
 

@@ -74,11 +74,23 @@
     justify-content: space-between;
     align-items: center;
     transition: color 0.2s ease;
+    font-weight: 30;
+    transition: border-bottom 3s ease;
 }
 
 .menu-item:hover {
     color: rgb(10, 45, 136);
 }
+
+.menu-item.active:hover {
+    color: rgb(10, 45, 136);
+    border-bottom: 2px solid rgb(10, 45, 136);
+}
+
+.menu-item.active {
+    border-bottom: 2px solid white;
+}
+
 
 .menu-item-small {
     text-decoration: none;
@@ -93,6 +105,9 @@
 .menu-item-small:hover {
     color: rgb(10, 45, 136);
 }
+
+
+
 
 @media screen and (max-width: 1000px) {
     .nav-menu {

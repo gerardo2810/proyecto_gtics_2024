@@ -2,16 +2,13 @@ package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
-import pe.sanmiguel.bienestar.proyecto_gtics.Repository.DoctorRepository;
-import pe.sanmiguel.bienestar.proyecto_gtics.Repository.SedeFarmacistaRepository;
-import pe.sanmiguel.bienestar.proyecto_gtics.Repository.SedeRepository;
-import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
+import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
+import java.sql.SQLOutput;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(value = {"/superadmin"}, method = RequestMethod.GET)
@@ -21,20 +18,29 @@ public class SuperAdminController {
     final DoctorRepository doctorRepository;
     final SedeRepository sedeRepository;
     final SedeFarmacistaRepository sedeFarmacistaRepository;
+    final ReposicionRepository reposicionRepository;
+    final ReposicionContenidoRepository reposicionContenidoRepository;
 
-    public SuperAdminController(UsuarioRepository usuarioRepository, DoctorRepository doctorRepository, SedeRepository sedeRepository, SedeFarmacistaRepository sedeFarmacistaRepository) {
+    public SuperAdminController(UsuarioRepository usuarioRepository, DoctorRepository doctorRepository, SedeRepository sedeRepository, SedeFarmacistaRepository sedeFarmacistaRepository, ReposicionRepository reposicionRepository, ReposicionContenidoRepository reposicionContenidoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.doctorRepository = doctorRepository;
         this.sedeRepository = sedeRepository;
         this.sedeFarmacistaRepository = sedeFarmacistaRepository;
+        this.reposicionRepository = reposicionRepository;
+        this.reposicionContenidoRepository = reposicionContenidoRepository;
     }
+
+    Integer idVerReposicionCreada;
+
 
     @GetMapping(value = {""})
     public String showIndexSuperAdmin(Model model){
         List<Sede> adminSedelist = sedeRepository.listarAdministroresSede();
-        List<Usuario> pacientelist = usuarioRepository.listarUsuariosSegunRol(3);
+        List<SedeFarmacista> farmacistaList = sedeFarmacistaRepository.listarFarmacistasPorSede();
+        List<Usuario> pacientelist = usuarioRepository.listarUsuariosSegunRol(5);
         List<Doctor> doctorList = doctorRepository.findAll();
         model.addAttribute("adminSedelist", adminSedelist);
+        model.addAttribute("farmacistlist", farmacistaList);
         model.addAttribute("pacientelist", pacientelist);
         model.addAttribute("doctorList", doctorList);
         return "superAdmin/paginaInicio";
@@ -43,7 +49,9 @@ public class SuperAdminController {
     @GetMapping(value = {"/administradoresSede"})
     public String showAdministradoresSede(Model model){
         List<Sede> adminSedelist = sedeRepository.listarAdministroresSede();
+        List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("adminSedelist", adminSedelist);
+        model.addAttribute("sedeList", sedeList);
         return "superAdmin/listaAdministSede";
     }
     @GetMapping(value = {"/farmacistas"})
@@ -64,9 +72,35 @@ public class SuperAdminController {
     }
 
     @GetMapping(value = {"/pedidos"})
-    public String showPedidos(){
+    public String showPedidos(Model model){
+        List<Reposicion> reposicionList = reposicionRepository.listarOrdenesReposicion();
+        model.addAttribute("reposicionList", reposicionList);
         return "superAdmin/pedidos";
     }
+
+    @PostMapping("/verOrdenReposicionId")
+    public String verOrdenesReposicionID(@RequestParam(value = "idReposicion") String idReposicionID){
+        idVerReposicionCreada = Integer.valueOf(idReposicionID);
+        return "redirect:/superadmin/masdetallesPedidos";
+    }
+
+    @GetMapping(value = {"/masdetallesPedidos"})
+    public String masDetallesPedidos(Model model){
+
+        Optional<Reposicion> optionalReposicion = reposicionRepository.findById(idVerReposicionCreada);
+        List<ReposicionContenido> contenidoReposicion = reposicionContenidoRepository.buscarMedicamentosByReposicionId(String.valueOf(idVerReposicionCreada));
+
+        if (optionalReposicion.isPresent()){
+            Reposicion reposicionComprobada = optionalReposicion.get();
+            model.addAttribute("reposicion",reposicionComprobada);
+            model.addAttribute("contenidoReposicion", contenidoReposicion);
+            return "superAdmin/masdetallesPedidos";
+        } else {
+            return "superAdmin/pedidos";
+        }
+    }
+
+
     @GetMapping(value = {"/solicitudes"})
     public String showSolicitudes(){
         return "superAdmin/solicitudes";
@@ -82,10 +116,7 @@ public class SuperAdminController {
         return "superAdmin/cambiarcontraseña";
     }
 
-    @GetMapping(value = {"/masdetallesPedidos"})
-    public String masDetallesPedidos(){
-        return "superAdmin/masdetallesPedidos";
-    }
+
     @GetMapping(value = {"/historialSolicitudes"})
     public String verHistorialSolicitudes(){
         return "superAdmin/historialSolicitudes";
@@ -97,9 +128,37 @@ public class SuperAdminController {
     }
 
     @GetMapping(value = {"/crearAdministrador"})
-    public String crearAdminitrador(){
+    public String crearAdminitrador(Model model){
+        List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
+        model.addAttribute("sedeDisponibleList", sedeDisponibleList);
         return "superAdmin/crearAdministrador";
     }
+
+    @PostMapping("/guardarAdministrador")
+    public String agregarNuevoAdministrador(@RequestParam("nombres") String nombres,
+                                             @RequestParam("apellidos") String apellidos,
+                                             @RequestParam("dni") String dni,
+                                            @RequestParam("direccion") String direccion,
+                                             @RequestParam("distrito") String distrito,
+                                            @RequestParam("sedeid") String sedeid,
+                                             @RequestParam("correo") String correo,
+                                             @RequestParam("contrasenia") String contrasenia,
+                                             @RequestParam("telefono") String telefono){
+
+        int estadoUsuario = 1;
+        int idRol = 2;
+        int idUsuario = usuarioRepository.findLastUsuarioId() + 1;
+        int idsede = Integer.parseInt(sedeid);
+        String seguro = "-";
+
+        System.out.println("Hola, " + idUsuario);
+        System.out.println("Valor de idSede: " + sedeid);
+
+        usuarioRepository.crearAdministradorSede(idUsuario, idRol, correo, contrasenia, nombres, apellidos, telefono, dni, direccion, distrito, seguro, estadoUsuario);
+        sedeRepository.asignarAdministradorSede(idUsuario, idsede);
+        return "redirect:/superadmin/administradoresSede";
+    }
+
 
     @GetMapping(value = {"/editarAdministrador"})
     public String editarAdminitrador(){

@@ -12,6 +12,7 @@
     <link th:href="@{/css/fonts.css}" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
     <link th:href="@{/css/footer.css}" rel="stylesheet" />
+    <link th:href="@{/css/topbar.css}" rel="stylesheet" />
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -34,24 +35,23 @@
 
             <div class="nav-menu" id="nav-menu">
                 <ul class="nav-list">
-                    <li><a href="/farmacista" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
+                    <li><a href="/paciente" class="menu-item roboto-regular">Pre Ordenes</a></li>
 
-                    <li><a href="/farmacista/ordenes_venta" class="menu-item roboto-regular">Ordenes de Venta</a></li>
+                    <li><a href="/paciente/ordenes" class="menu-item roboto-regular" >Ordenes Web</a></li>
 
-                    <li><a href="/farmacista/ordenes_web" class="menu-item roboto-regular">Ordenes Web</a></li>
+                    <li><a href="/paciente/mensajeria" class="menu-item roboto-regular">Mensajeria</a></li>
 
-                    <li><a href="/farmacista/pre_ordenes" class="menu-item roboto-regular">Pre Ordenes</a></li>
 
                     <!--=============== DROPDOWN ===============-->
                     <li class="dropdown-item">
-                        <div class="menu-item roboto-regular">
-                            Perfil <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                        <div class="menu-item roboto-regular active">
+                            <a href="/paciente/perfil" class="menu-item roboto-regular">Perfil</a> <i class="ri-arrow-down-s-line dropdown-arrow"></i>
                         </div>
 
                         <ul class="dropdown-menu">
                             <div class="inside-dropdown">
                                 <li>
-                                    <a href="/farmacista/cambioContraseña" class="dropdown-link">
+                                    <a href="/paciente/cambio_contrasena" class="dropdown-link">
                                         <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
                                     </a>
                                 </li>
@@ -76,17 +76,15 @@
                     <div class="inside-menu-small">
                         <div class="nav-menu-small" id="nav-menu-small">
                             <ul class="nav-list-small">
-                                <li><a href="/farmacista" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
+                                <li><a href="/paciente" class="menu-item roboto-regular">Pre Ordenes</a></li>
 
-                                <li><a href="/farmacista/ordenes_venta" class="menu-item-small roboto-regular">Ordenes de Venta</a></li>
+                                <li><a href="/paciente/ordenes" class="menu-item roboto-regular">Ordenes Web</a></li>
 
-                                <li><a href="/farmacista/ordenes_web" class="menu-item-small roboto-regular">Ordenes Web</a></li>
-
-                                <li><a href="/farmacista/pre_ordenes" class="menu-item-small roboto-regular">Pre Ordenes</a></li>
+                                <li><a href="/paciente/mensajeria" class="menu-item roboto-regular">Mensajeria</a></li>
                             </ul>
 
                             <ul class="nav-list-small-perfil">
-                                <li><a href="/farmacista/cambioContraseña" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+                                <li><a href="/farmacista/ordenes_web" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
 
                                 <li><a href="/farmacista/pre_ordenes" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
                             </ul>

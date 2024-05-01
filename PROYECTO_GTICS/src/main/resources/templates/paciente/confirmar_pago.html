@@ -64,7 +64,7 @@
                 <ul class="nav-list">
                     <li><a href="/paciente" class="menu-item roboto-regular">Pre Ordenes</a></li>
 
-                    <li><a href="/paciente/ordenes" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Ordenes Web</a></li>
+                    <li><a href="/paciente/ordenes" class="menu-item roboto-regular active" >Ordenes Web</a></li>
 
                     <li><a href="/paciente/mensajeria" class="menu-item roboto-regular">Mensajeria</a></li>
 
@@ -175,7 +175,9 @@
                     <td><img class="medicamento" th:src="${itemDeLaOrden.getIdMedicamento().imagen}"></td>
                     <td th:text="${itemDeLaOrden.getCantidad()}"></td>
                     <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
+
                     <td class="resultado"></td>
+
                     <script th:inline="javascript">
                         function limitarDigitos(numero) {
                             var numeroStr = numero.toString();
@@ -187,10 +189,10 @@
                         var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
                         var cantidad = [[${itemDeLaOrden.getCantidad()}]];
                         var resultado = precioVenta * cantidad;
-                        console.log(resultado)
                         var resultadoLimitado = limitarDigitos(resultado);
                         document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
                     </script>
+
                 </tr>
 
 
@@ -223,13 +225,13 @@
 
                 <div style="display: flex;flex-direction: row;justify-content: space-between;padding-top: 15px">
                     <p style="font-size: 18px">Cantidad de Productos:</p>
-                    <p style="font-size: 18px">6</p>
+                    <p style="font-size: 18px" th:text="${lista.size()}"></p>
                 </div>
 
 
                 <div style="display: flex;flex-direction: row;justify-content: space-between;padding-top: 15px">
                     <p style="font-size: 18px">Total a pagar:</p>
-                    <p style="font-size: 18px">S/.300</p>
+                    <p style="font-size: 18px" th:text=" 'S/. ' +  ${ordenActual.getPrecioTotal()}"></p>
                 </div>
 
                 <br>
@@ -288,7 +290,7 @@
                             <p style="font-size: 20px;margin-bottom: 10px">YAPE O PLIN:</p>
                         </div>
 
-                        <a style="cursor: pointer" href="#"><img style="border-radius: 10px; border: 4px solid dimgray;max-width: 380px" class="img-pago" src="/img/yape.png"></a>
+                        <a style="cursor: pointer" th:href="@{'/paciente/...?id=' + ${ordenActual.getIdOrden()}}"><img style="border-radius: 10px; border: 4px solid dimgray;max-width: 380px" class="img-pago" src="/img/yape.png"></a>
 
                     </div>
 
@@ -299,7 +301,7 @@
                             <p style="font-size: 20px;margin-bottom: 10px">TARJETA:</p>
                         </div>
 
-                        <a style="cursor: pointer" href="/paciente/pago_tarjeta"><img style="border-radius: 10px; border: 4px solid dimgray;max-width: 380px" class="img-pago" src="/img/cards.png"></a>
+                        <a style="cursor: pointer"  th:href="@{'/paciente/pago_tarjeta?id=' + ${ordenActual.getIdOrden()}}" ><img style="border-radius: 10px; border: 4px solid dimgray;max-width: 380px" class="img-pago" src="/img/cards.png"></a>
 
                     </div>
 
