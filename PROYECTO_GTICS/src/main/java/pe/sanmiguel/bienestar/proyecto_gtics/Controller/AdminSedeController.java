@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.ReposicionContenidoMedicamentoDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.UsuarioSedeFarmacistaDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
@@ -45,12 +46,10 @@ public class AdminSedeController {
         this.reposicionContenidoRepository = reposicionContenidoRepository;
     }
     /*Variables locales*/
-    Sede sedeVistaReposicion;
-    Usuario administradorVistaReposicion;
-    List<Integer> listaCantidadMedicamentosReposicion;
-    List<Medicamento> listaMedicamentosReposicionMostrar;
-    Float precioTotalMostrar;
-    Integer idReposicionMostrar;
+    Sede sedeVistaReposicion = new Sede();
+    Usuario administradorVistaReposicion = new Usuario();
+    Reposicion reposicionMostrar = new Reposicion();
+    List<ReposicionContenidoMedicamentoDto> listaMostrarNuevaCompra;
 
 
     public List<String> getCantidadesFromLista(List<String> listaSelectedIds) {
@@ -181,11 +180,8 @@ public class AdminSedeController {
 
         model.addAttribute("sede", sedeVistaReposicion);
         model.addAttribute("administradorMostrar", administradorVistaReposicion);
-        model.addAttribute("listaCantidadMedicamentosReposicion", listaCantidadMedicamentosReposicion);
-        model.addAttribute("listaMedicamentosReposicionMostrar", listaMedicamentosReposicionMostrar);
-        model.addAttribute("priceTotal", precioTotalMostrar);
-        model.addAttribute("idReposicionMostrar", idReposicionMostrar);
-
+        model.addAttribute("reposicion", reposicionMostrar);
+        model.addAttribute("listaMostrarNuevaCompra", listaMostrarNuevaCompra);
         return "adminsede/verDetalles";
     }
 
@@ -312,11 +308,7 @@ public class AdminSedeController {
             Integer idMedicamento = Integer.parseInt(listaIds.get(m));
             Integer cantidadMedicamento = Integer.parseInt(listaIds.get(m+1));
             reposicionContenidoRepository.guardarContenidoReposicion(idMedicamento, idReposicion, cantidadMedicamento);
-            Optional<Medicamento> optMedicamento = medicamentoRepository.findById(idMedicamento);
-            if(optMedicamento.isPresent()){
-                listaMedicamentosReposicion.add(optMedicamento.get());
-                listaCantidadMedicamentosReposicion.add(cantidadMedicamento);
-            }
+
 
             m = m + 2;
         }
@@ -327,9 +319,8 @@ public class AdminSedeController {
         administradorVistaReposicion.setCorreo(correo);
         administradorVistaReposicion.setNombres(nombres);
         administradorVistaReposicion.setApellidos(apellidos);
-        listaMedicamentosReposicionMostrar = listaMedicamentosReposicion;
-        precioTotalMostrar = priceTotal;
-        idReposicionMostrar = idReposicion;
+        reposicionMostrar = reposicionRepository.encontrarReposicionporId(idReposicion);
+        listaMostrarNuevaCompra = reposicionContenidoRepository.listaMostrarDetalleNuevaCompra(idReposicion); //lista a mostrar
 
         return "redirect:/adminsede/verDetalles";
     }

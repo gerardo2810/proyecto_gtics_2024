@@ -34,4 +34,7 @@ public interface ReposicionRepository extends JpaRepository<Reposicion, Integer>
     @Query(nativeQuery = true, value = "insert into reposicion set id = ?1, tracking = ?2, fechaIni = now(), pagado = 0, precioTotal = ?3, idEstado = ?4, idSede = ?5")
     void crearOrdenReposicion(int idReposicion, String tracking, Float precioTotal, int idEstado, int idSede);
 
+    @Query(nativeQuery = true, value = "select * from reposicion where id = ?1")
+    Reposicion encontrarReposicionporId(int id);
+
 }
