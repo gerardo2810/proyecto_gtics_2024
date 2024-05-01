@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <!--=============== REMIXICONS ===============-->
@@ -160,105 +160,29 @@
                 <thead>
                     <tr style="background-color: #378fff">
                         <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Número de orden</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamentos solicitados</th>
                         <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Autor</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha Inicio</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha Fin</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamentos solicitados</th>
                     </tr>
                 </thead>
 
 
                 <tbody>
-                    <tr>
-                        <td>#1</td>
-                        <td>
-                            Apronax: 50
-                            <br/><br/>
-                            Salbutamol: 90
-                            <br/><br/>
-                            Panadol: 90
-                            <br/><br/>
-                            Doloral: 90
+                    <tr th:each="orden, iterador: ${listaOrdenesEntregadas}">
+                        <td th:text="${orden.getIdReposicion()}"></td>
+                        <td>Administrador de sede 1</td>
+                        <td th:text="${orden.getFechaIni()}"></td>
+                        <td th:text="${orden.getFechaFin()}"></td>
+                        <td style="text-align: center; display: flex; flex-direction: row; justify-content: center; gap: 5px;">
+                            <form th:action="@{'/adminsede/verDetallesOrdenEntregado'}" method="post">
+                                <input type="hidden" name="idOrden" th:value="${orden.getIdReposicion()}">
+                                <button type="submit" class="btn btn-sm btn-info" >
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </form>
                         </td>
-                        <td>Alexander Daniel Abrisqueta Zevallos</td>
                     </tr>
-                    <tr>
-                        <td>#2</td>
-                        <td>
-                            Apronax: 50
-                            <br/><br/>
-                            Salbutamol: 90
-                            <br/><br/>
-                            Paracetamol: 97
-                            <br/><br/>
-                            Doloral: 90
-                        </td>
-                        <td>Sergio Andre Bustamante Salcedo</td>
-                    </tr>
-                    <tr>
-                        <td>#3</td>
-                        <td>
-                            Apronax: 53
-                            <br/><br/>
-                            Salbutamol: 85
-                            <br/><br/>
-                            Ibuprofeno: 100
-                            <br/><br/>
-                            VickVaporub: 130
-                        </td>
-                        <td>Aracelli Milene La Rosa Castro</td>
-                    </tr>
-                    <tr>
-                        <td>#4</td>
-                        <td>
-                            Apronax: 53
-                            <br/><br/>
-                            Salbutamol: 85
-                            <br/><br/>
-                            Ibuprofeno: 100
-                            <br/><br/>
-                            VickVaporub: 130
-                        </td>
-                        <td>David Alonso Escobedo Cerrón</td>
-                    </tr>
-                    <tr>
-                        <td>#5</td>
-                        <td>
-                            Apronax: 53
-                            <br/><br/>
-                            Salbutamol: 85
-                            <br/><br/>
-                            Ibuprofeno: 100
-                            <br/><br/>
-                            VickVaporub: 130
-                        </td>
-                        <td>Gerardo Manuel Aguilar Gutierrez</td>
-                    </tr>
-                    <tr>
-                        <td>#6</td>
-                        <td>
-                            Apronax: 53
-                            <br/><br/>
-                            Salbutamol: 85
-                            <br/><br/>
-                            Ibuprofeno: 100
-                            <br/><br/>
-                            VickVaporub: 130
-                        </td>
-                        <td>Piero Enrique Huancas Coripuna</td>
-                    </tr>
-                    <tr>
-                        <td>#7</td>
-                        <td>
-                            Apronax: 53
-                            <br/><br/>
-                            Salbutamol: 85
-                            <br/><br/>
-                            Ibuprofeno: 100
-                            <br/><br/>
-                            VickVaporub: 130
-                        </td>
-                        <td>Manuel Augusto Yarlequé Medina</td>
-                    </tr>
-
 
                 </tbody>
             </table>

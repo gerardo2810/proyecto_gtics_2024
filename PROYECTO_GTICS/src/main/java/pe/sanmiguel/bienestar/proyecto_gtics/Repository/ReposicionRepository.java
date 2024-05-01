@@ -37,4 +37,8 @@ public interface ReposicionRepository extends JpaRepository<Reposicion, Integer>
     @Query(nativeQuery = true, value = "select * from reposicion where id = ?1")
     Reposicion encontrarReposicionporId(int id);
 
+    //Listar orden de reposicion entregadas CORREGIR CON SESION-------------------------------------
+    @Query(nativeQuery = true, value = "select * from reposicion where idEstado = 5 and idSede = 1")
+    List<Reposicion> listarOrdenesReposicionEntregadas();
+
 }

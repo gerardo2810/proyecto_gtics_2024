@@ -222,7 +222,7 @@
                                             </div>
 
                                             <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
-                                                <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${medicamento.precioVenta}"></span>
+                                                <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${medicamento.precioCompra}"></span>
                                             </div>
                                         </div>
 
@@ -376,8 +376,8 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: hayProblemaConStock ? 'Nueva Preorden' : 'Continuar',
-                    cancelButtonText: hayProblemaConStock ? 'Cambiar Medicinas' : 'Cancelar'
+                    confirmButtonText: hayProblemaConStock ? 'Continuar' : 'Continuar',
+                    cancelButtonText: hayProblemaConStock ? 'Cancelar' : 'Cancelar'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         if (verificarCamposLlenos(form)) {

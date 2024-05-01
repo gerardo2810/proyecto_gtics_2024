@@ -161,7 +161,9 @@ public class AdminSedeController {
     }
 
     @GetMapping("/ver_ordenes_entregadas")
-    public String verOrdenesEntregadas(){
+    public String verOrdenesEntregadas(Model model){
+        List<Reposicion> listaOrdenesEntregadas = reposicionRepository.listarOrdenesReposicionEntregadas();
+        model.addAttribute("listaOrdenesEntregadas", listaOrdenesEntregadas);
         return "adminsede/ver_ordenes_entregadas";
     }
 
@@ -175,7 +177,7 @@ public class AdminSedeController {
         return "adminsede/perfil_adminsede";
     }
 
-    @GetMapping("/verDetalles")
+    @GetMapping("/verDetalles") //VER DETALLES DE NUEVA COMPRA
     public String verDetalles(Model model){
 
         model.addAttribute("sede", sedeVistaReposicion);
@@ -323,6 +325,37 @@ public class AdminSedeController {
         listaMostrarNuevaCompra = reposicionContenidoRepository.listaMostrarDetalleNuevaCompra(idReposicion); //lista a mostrar
 
         return "redirect:/adminsede/verDetalles";
+    }
+
+    @PostMapping("/verDetallesOrdenEntregado")
+    public String verDetallesOrdenEntregado(@RequestParam("idOrden") int idOrden){
+
+        listaMostrarNuevaCompra = reposicionContenidoRepository.listaMostrarDetalleNuevaCompra(idOrden);
+        reposicionMostrar = reposicionRepository.encontrarReposicionporId(idOrden);
+
+        return "redirect:/adminsede/verDetallesOrdenEntregada";
+    }
+
+    @GetMapping("/verDetallesOrdenEntregada")
+    public String verDetallesOrdenEntregado(Model model){
+        model.addAttribute("listaMostrarNuevaCompra", listaMostrarNuevaCompra);
+        model.addAttribute("reposicionMostrar", reposicionMostrar);
+
+        //Datos que se corregirán con sesion para la Sede --------------------------------------------
+        sedeVistaReposicion.setNombre("Administrador 1");
+        sedeVistaReposicion.setDireccion("Av. Los Pinos 656");
+
+        //Datos que se corregirán con sesion para el Administrador --------------------------------------------
+        administradorVistaReposicion.setDni("12345678");
+        administradorVistaReposicion.setCorreo("admin.sede1@gmail.com");
+        administradorVistaReposicion.setNombres("Admin");
+        administradorVistaReposicion.setApellidos("Sede1");
+
+        model.addAttribute("sede", sedeVistaReposicion);
+        model.addAttribute("administradorMostrar", administradorVistaReposicion);
+        model.addAttribute("reposicion", reposicionMostrar);
+        model.addAttribute("listaMostrarNuevaCompra", listaMostrarNuevaCompra);
+        return "adminsede/verDetallesOrdenEntregada";
     }
 
 
