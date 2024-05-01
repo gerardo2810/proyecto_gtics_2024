@@ -6,34 +6,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
-    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
+
     <!--=============== REMIXICONS ===============-->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
-
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
     <!--=============== CSS ===============-->
-
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/fonts.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+    <link rel="stylesheet" th:href="@{/css/farmacista/detalle_ordenes.css}">
+    <link th:href="@{/css/footer.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
     <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
     <link rel="stylesheet" th:href="@{/css/superadmin/superadmin.css}">
 
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" th:href="@{/css/fonts.css}">
     <link rel="stylesheet" th:href="@{/css/topbar.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/upload_img.css}">
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
 
-    <!--=============== JAVASCRIPT ===============-->
+    <!--Mapa vista Paciente-->
+    <script scr="/js/map.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAce4klBZuD60aEQidMVIbsoaiitxxQFpo"></script>
+
+    <!--=============== JQUERY ===============-->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <!--=============== SWEETALERT ===============-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <!--=============== FONT AWESOME ===============-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" th:href="@{/css/paciente/lista_medicamentos.css}">
+
+    <!--=============== DataTable ===============-->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
     <!--  Bootstrap-->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--==========================================-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-    <!--=============== CSS ===============-->
-
-    <title>SuperAdmin | Solicitudes</title>
+    <title>SuperAdmin | Editar Administrador</title>
 
     <style>
         body {
@@ -63,6 +89,30 @@
             cursor: pointer;
             transition: background-color 0.3s, border-color 0.3s;
             font-size: 17px;
+        }
+
+        .detalle-orden-container {
+            padding: 25px 30px 25px 30px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            border: 1px solid #dedede;
+            margin-top: 20px;
+        }
+        .profile-picture-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-picture {
+            width: 200px;
+            height: 200px;
+            background-color: lightgray;
+            background-image: url('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png');
+            background-size: cover;
+            background-position: center;
+            border: 2px solid lightgray;
+            border-radius: 10px;
+            display: inline-block;
         }
 
         .seccion-especifica {
@@ -191,175 +241,232 @@
 </header>
 
 
-
-
-
-<main style="margin-left: 20px; margin-right: 20px">
+<div class="container">
     <br><br>
-    <div class="container seccion-especifica">
-        <div class="container">
-            <div style="margin-bottom: 20px"></div>
-            <div style="margin-bottom: 30px"></div>
-            <div class="titulo"><b>EDITAR ADMINISTRADOR</b></div>
-            <div style="margin-bottom: 20px"></div>
-            <br>
-        </div>
+    <div class="container">
+        <div style="margin-bottom: 20px"></div>
+        <div style="margin-bottom: 30px"></div>
+        <div class="titulo"><b>EDITAR DATOS DE ADMINISTRADOR DE SEDE</b></div>
+        <div style="margin-bottom: 20px"></div>
+        <br>
+    </div>
 
-        <div class="container seccion-especifica">
+    <div class="detalle-orden-container">
 
-            <div class="row flex-lg-nowrap">
+        <div class="invoice-title">
 
-                <div class="col">
-                    <div class="row">
-                        <div class="col mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="e-profile">
-                                        <ul class="nav nav-tabs">
-                                            <li class="nav-item"><a href class="active nav-link">Datos</a></li>
-                                        </ul>
-                                        <div class="tab-content pt-3">
-                                            <div class="tab-pane active">
-                                                <form class="form" novalidate>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Nombres</label>
-                                                                        <input class="form-control" type="text" name="name" placeholder="Juan Josue" value="Juan Josue">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Apellidos</label>
-                                                                        <input class="form-control" type="text" name="username" placeholder="Rojas Lopez" value="Rojas Lopez">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Dirección</label>
-                                                                        <input class="form-control" type="text" name="username" placeholder="Av. Universitaria 2011" value="Av. Universitaria 2011">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Distrito de residencia</label>
-                                                                        <input class="form-control" type="text" name="name" placeholder="San Miguel" value="San Miguel">
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>DNI</label>
-                                                                        <input class="form-control" type="text" name="username" placeholder="71587585" value="71587585">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label for="sede">Sede</label>
-                                                                        <select class="form-select" id="sede" name="sede" required>
-                                                                            <option selected >Seleccionar sede</option>
-                                                                            <option value="San Miguel Centro">San Miguel Centro</option>
-                                                                            <option value="San Miguel Sur">San Miguel Sur</option>
-                                                                            <option value="Pando 5ta etapa">Pando 5ta etapa</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+            <div class="title roboto-medium data-label">
+                <div class="column-start">
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray; margin-bottom:8px; text-align: center" th:text="${'Administrador de ' + sedeAdministrador.nombre}"></label>
+                        <br>
+                        <div class="profile-picture-container">
+                            <div class="profile-picture"></div>
+                            <div id="upload"  data-state="0" data-ready="false">
+                                <div class="modal__body">
+                                    <div class="modal__col">
+                                        <!-- up -->
+                                        <svg class="modal__icon modal__icon--blue" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
+                                            <g fill="none" stroke="hsl(223,90%,50%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
+                                                <polyline class="modal__icon-sdo14" points="7 12 12 7 17 12" stroke-dasharray="14.2 14.2" />
+                                                <line class="modal__icon-sdo10" x1="12" y1="7" x2="12" y2="17" stroke-dasharray="10 10" />
+                                            </g>
+                                        </svg>
+                                        <!-- error -->
+                                        <svg class="modal__icon modal__icon--red" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true" display="none">
+                                            <g fill="none" stroke="hsl(3,90%,50%)" stroke-width="2" stroke-linecap="round">
+                                                <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
+                                                <line class="modal__icon-sdo14" x1="7" y1="7" x2="17" y2="17" stroke-dasharray="14.2 14.2" />
+                                                <line class="modal__icon-sdo14" x1="17" y1="7" x2="7" y2="17" stroke-dasharray="14.2 14.2" />
+                                            </g>
+                                        </svg>
+                                        <!-- check -->
+                                        <svg class="modal__icon modal__icon--green" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true" display="none">
+                                            <g fill="none" stroke="hsl(138,90%,50%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
+                                                <polyline class="modal__icon-sdo14" points="7 12.5 10 15.5 17 8.5" stroke-dasharray="14.2 14.2" />
+                                            </g>
+                                        </svg>
+                                    </div>
+                                    <div class="modal__col">
+                                        <div class="modal__content">
+                                            <h2 class="modal__title" style="font-weight: 600">Subir una nueva foto de perfil:</h2>
+                                            <p class="modal__message" style="color:dimgray">Selecciona la imagen para subirla desde tu dispositivo</p>
+                                            <div class="modal__actions">
+                                                <button  class="modal__button modal__button--upload" type="button" data-action="file">Seleccionar imagen</button>
+                                                <input id="file" name="imagen" type="file" hidden >
+                                            </div>
+                                            <div class="modal__actions" hidden>
+                                                <svg class="modal__file-icon" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
+                                                    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <polygon points="4 1 12 1 20 8 20 23 4 23" />
+                                                        <polyline points="12 1 12 8 20 8" />
+                                                    </g>
+                                                </svg>
+                                                <div class="modal__file" data-file></div>
+                                                <button class="modal__close-button" type="button" data-action="fileReset">
+                                                    <svg class="modal__close-icon" viewBox="0 0 16 16" width="16px" height="16px" aria-hidden="true">
+                                                        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                                            <polyline points="4,4 12,12" />
+                                                            <polyline points="12,4 4,12" />
+                                                        </g>
+                                                    </svg>
+                                                    <span class="modal__sr">Remove</span>
+                                                </button>
+                                                <!--     <button class="btn-p" type="button" data-action="upload">Confirmar</button>     -->
+                                            </div>
+                                        </div>
+                                        <div class="modal__content" hidden>
+                                            <h2 class="modal__title">Subiendo imagen…</h2>
+                                            <p class="modal__message">Solo danos un momento para procesar tu archivo.</p>
+                                            <div class="modal__actions">
+                                                <div class="modal__progress">
+                                                    <div class="modal__progress-value" data-progress-value>0%</div>
+                                                    <div class="modal__progress-bar">
+                                                        <div class="modal__progress-fill" data-progress-fill></div>
                                                     </div>
-
-                                                    <div class="row">
-                                                        <br>
-
-                                                        <div class="col-12 col-sm-5 offset-sm-1 mb-3">
-                                                            <br><br>
-                                                            <div class="mb-2" style="text-align: center"><b>Suba una foto de perfil</b></div>
-                                                            <div class="form-group">
-                                                                <div class="text-center mt-2 mb-3">
-                                                                    <img src="https://dummyimage.com/150x150/dee2e6/6c757d.jpg" class="img-thumbnail"
-                                                                         id="imagePreview" height="150px" width="150px" alt="Foto de perfil"/>
-                                                                </div>
-                                                                <div class="mb-3">
-                                                                    <input class="form-control-file" type="file" id="imageFile" name="perfil"
-                                                                           accept="image/png, image/jpeg" onchange="readURL(this);"/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12 col-sm-6 mb-3">
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label for="estado">Estado</label>
-                                                                        <select class="form-select" id="estado" name="estado" required>
-                                                                            <option selected >Seleccionar estado</option>
-                                                                            <option value="San Miguel Centro">Activo</option>
-                                                                            <option value="San Miguel Sur">Inactivo</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Email</label>
-                                                                        <input class="form-control" type="text" placeholder="juanrojas@gmail.com">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>New Password</label>
-                                                                        <input class="form-control" type="password" placeholder="••••••">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Confirm <span class="d-none d-xl-inline">Password</span></label>
-                                                                        <input class="form-control" type="password" placeholder="••••••"></div>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col d-flex justify-content-end">
-                                                            <a href="/superadmin/administradoresSede">
-                                                                <button class="btn btn-n" type="button" >Guardar</button>
-                                                            </a>
-                                                        </div>
-
-                                                        <a href="/superadmin/administradoresSede">
-                                                            <button  class="btn btn-c" type="button" data-action="cancel">Cancelar</button>
-                                                        </a>
-
-                                                    </div>
-                                                </form>
+                                                </div>
+                                                <button class="btn-cancel" type="button" data-action="cancel">Cancelar</button>
+                                            </div>
+                                        </div>
+                                        <div class="modal__content" hidden>
+                                            <h2 class="modal__title">Oops!</h2>
+                                            <p class="modal__message">Your file could not be uploaded due to an error. Try uploading it again?</p>
+                                            <div class="modal__actions modal__actions--center">
+                                                <button class="modal__button" type="button" data-action="upload">Retry</button>
+                                                <button class="modal__button" type="button" data-action="cancel">Cancel</button>
+                                            </div>
+                                        </div>
+                                        <div class="modal__content" hidden>
+                                            <h2 class="modal__title">Carga Exitosa!</h2>
+                                            <p class="modal__message">Tu foto de perfil ha sido subido con éxito.</p>
+                                            <div class="modal__actions modal__actions--center">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>
+            <form id="form"  method="post" th:action="@{'/superadmin/actualizarDatosFarmacista'}" enctype="multipart/form-data">
+                <div class="container-form">
+
+                    <div style="display: flex;flex-direction: row; column-gap: 25px">
+
+                        <div>
+                            <div class="column">
+                                <input th:value="${farmacista.idUsuario}" name="idUsuario" type="hidden"/>
+                                <input th:value="${farmacista.rol}" name="rol" type="hidden"/>
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Nombre del farmacista:</label>
+                                    <input th:value="${farmacista.nombres}"  class="input-form" type="text" name="nombres" required>
+                                </div>
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Apellidos del farmacista:</label>
+                                    <input th:value="${farmacista.apellidos}" class="input-form" type="text" name="apellidos"  required>
+                                </div>
+
+                            </div>
+
+                            <div class="column">
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">DNI:</label>
+                                    <input th:value="${farmacista.dni}" class="input-form" type="text" name="dni" placeholder="Ingrese su DNI" required>
+                                </div>
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Dirección:</label>
+                                    <input th:value="${farmacista.direccion}" class="input-form" type="text" name="direccion" placeholder="Ingrese su dirección" required>
+                                </div>
+
+                            </div>
+
+                            <div class="column">
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Distrito:</label>
+                                    <input th:value="${farmacista.distrito}" class="input-form" name="distrito" type="text" placeholder="Ingrese el distrito donde reside" required>
+                                </div>
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Estado de Usuario:</label>
+                                    <select class="select-form" name="estadoUsuario" required>
+
+                                        <option th:each="estadoUsuario: ${estadoUsuarioList}"
+                                                th:value="${estadoUsuario.idEstadoUsuario}"
+                                                th:text="${estadoUsuario.nombre}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="column">
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Código (colegio médico):</label>
+                                    <input th:value="${sedeFarmacista.codigoMed}" class="input-form" type="text" name="codigoMed" placeholder="Ingrese su DNI" required>
+                                </div>
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Seguro:</label>
+                                    <input th:value="${farmacista.seguro}" class="input-form" type="text" name="seguro" placeholder="Ingrese su dirección" required>
+                                </div>
+
+                            </div>
+
+                            <div class="column">
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Correo electrónico:</label>
+                                    <input th:value="${farmacista.correo}" class="input-form" type="email" name="correo" placeholder="Ingrese el correo" required>
+                                </div>
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Contraseña:</label>
+                                    <input th:value="${farmacista.contrasena}" class="input-form" type="password" name="contrasena" placeholder="Ingrese la contraseña" required>
+                                </div>
+
+                            </div>
+
+                            <div class="column-start">
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Teléfono:</label>
+                                    <input th:value="${farmacista.celular}" class="input-form" type="text" name="celular" placeholder="Ingrese su teléfono" required>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <br>
+                    <div class="column-buttons">
+
+                        <a href="/superadmin/farmacistas"><button class="btn-cancel" type="button">Cancelar</button></a>
+                        <button class="btn-p" type="submit">Confirmar</button>
+
+                    </div>
+
+
+                </div>
+            </form>
         </div>
+
+
 
     </div>
 
-    <br><br><br>
+</div>
 
-</main>
 <br><br><br>
 <div >
     <footer id="sticky-footer" class="footer-distributed">
@@ -472,6 +579,45 @@
         });
     });
 </script>
+<style>
+    .swal2-title {
+        font-size: 24px; }
+    .swal2-footer {
+        color:#0d6efd;
+    }
+</style>
+
+
+<script>
+
+    const form = document.getElementById("form");
+    var img = document.getElementById("file");
+
+    form.addEventListener("submit", e =>{
+        e.preventDefault();
+
+        Swal.fire({
+            title: '¿Estás seguro que desea editar los datos del administrador?',
+            icon: 'warning',
+            iconColor: '#DC3545',
+            showCancelButton: true,
+            cancelButtonColor: '#DC3545',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#0D6EFD',
+            confirmButtonText: 'Confirmar',
+            footer: '<a href="">Volver a revisar los datos</a>'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    })
+
+</script>
+
+<script th:src="@{/js/upload_img.js}"></script>
+<script th:src="@{/js/topbar.js}"></script>
+
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 
 </body>
