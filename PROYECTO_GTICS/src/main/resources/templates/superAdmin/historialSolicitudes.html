@@ -209,6 +209,7 @@
         <table id="miTabla" class="table table-striped" style="padding-top: 10px">
             <thead >
             <tr style="background-color: #378fff" >
+                <th style="text-align: center"></th>
                 <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Farmacista</th>
                 <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th>
                 <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo electrónico</th>
@@ -216,110 +217,22 @@
             </tr>
             </thead>
             <tbody>
-
-            <tr>
+            <tr th:each="farmacista, info : ${solicitudesAcepRech}">
                 <td style="text-align: center">
                     <div style="display: flex; align-items: center; justify-content: center;">
                         <label>
                             <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
                         </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 1</span>
                     </div>
                 </td>
-                <td style="text-align: center">San Miguel Sur</td>
-                <td style="text-align: center">Administrador 4</td>
-                <td><button class="btn-listo">APROBADO</button></td>
-
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 2</span>
-                    </div>
+                <td style="text-align: center" th:text="${farmacista.idFarmacista.nombres + ' ' +  farmacista.idFarmacista.apellidos}"></td>
+                <td style="text-align: center" th:text="${farmacista.idSede.nombre}"></td>
+                <td style="text-align: center" th:text="${farmacista.idFarmacista.correo}"></td>
+                <td style="text-align: center;">
+                    <div th:if="${farmacista.aprobado == 1}" class="btn-listo" style="margin: auto;">APROBADA</div>
+                    <div th:if="${farmacista.aprobado == 3}" class="btn-rechazo" style="margin: auto;">RECHAZADA</div>
                 </td>
-                <td style="text-align: center">San Miguel Centro</td>
-                <td style="text-align: center">Administrador 3</td>
-                <td><button class="btn-listo">APROBADO</button></td>
-
             </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 3</span>
-                    </div>
-                </td>
-                <td style="text-align: center">Pando 5 Etapa</td>
-                <td style="text-align: center">Administrador 2</td>
-                <td><button class="btn-listo">APROBADO</button></td>
-
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 4</span>
-                    </div>
-                </td>
-                <td style="text-align: center">San Miguel Centro</td>
-                <td style="text-align: center">Administrador 5</td>
-                <td><button class="btn-listo">APROBADO</button></td>
-
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 5</span>
-                    </div>
-                </td>
-                <td style="text-align: center">Pando 5 Etapa</td>
-                <td style="text-align: center">Administrador 2</td>
-                <td><button class="btn-rechazo">RECHAZADO</button></td>
-
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 6</span>
-                    </div>
-                </td>
-                <td style="text-align: center">Pando 5 Etapa</td>
-                <td style="text-align: center">Administrador 5</td>
-                <td><button class="btn-listo">APROBADO</button></td>
-
-            </tr>
-
             </tbody>
         </table>
     </div>

@@ -28,6 +28,8 @@
         <script th:src="@{/js/tracking.js}"></script>
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <!-- Font Awesome -->
+        <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
 
         <title>Órdenes de reposición</title>
     </head>
@@ -59,7 +61,8 @@
                         <!--=============== DROPDOWN ===============-->
                         <li class="dropdown-item">
                             <div class="menu-item roboto-regular">
-                                Más opciones <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                                <i class="fas fa-user fa-fw"></i>
+                                <i class="ri-arrow-down-s-line dropdown-arrow"></i>
                             </div>
 
                             <ul class="dropdown-menu">
@@ -290,17 +293,18 @@
         <!--Footer -->
         <br/>
         <div >
-            <footer id="sticky-footer" class="footer-distributed" style="background-color: #04011E">
+            <footer id="sticky-footer" class="footer-distributed">
                 <div class="footer-left">
-                    <img src="" alt="Logo de Ingeniería de las Telecomunicaciones" style="width: 400px; height: auto;">
+                    <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
                     <p class="footer-links">
-                        <a href="">Usuarios</a> |
-                        <a href="">Actividades</a> |
-                        <a href="">Estadisticas</a> |
-                        <a href="">Donaciones</a> |
-                        <a href="">Perfil</a>
+                        <a href="/adminsede" class="menu-item-small roboto-regular">Inicio</a> |
+                        <a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a> |
+                        <a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a> |
+                        <a href="/adminsede/ordenes" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Pedidos de Reposición</a> |
+                        <a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a> |
+                        <a href="/adminsede/perfil_adminsede" class="menu-item-small roboto-regular">Perfil</a>
                     </p>
-                    <p class="footer-company-name">Copyright © 2023 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
+                    <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
                 </div>
 
                 <div class="footer-center">
