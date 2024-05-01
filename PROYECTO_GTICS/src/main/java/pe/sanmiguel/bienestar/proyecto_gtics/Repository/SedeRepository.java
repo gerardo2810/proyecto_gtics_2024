@@ -7,8 +7,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Sede;
+import pe.sanmiguel.bienestar.proyecto_gtics.Entity.SedeFarmacista;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SedeRepository extends JpaRepository<Sede, Integer> {
@@ -27,4 +29,6 @@ public interface SedeRepository extends JpaRepository<Sede, Integer> {
     @Query(value = "UPDATE proyecto_gtics.sede SET idAdmin=?1 WHERE id=?2", nativeQuery = true)
     void asignarAdministradorSede(Integer idAdmin, Integer idsede);
 
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede WHERE idAdmin = ?1")
+    Optional<Sede> buscarAdminID(Integer idAdmin);
 }

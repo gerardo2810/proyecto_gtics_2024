@@ -36,7 +36,7 @@
 
     <style>
         body {
-            padding-top: 100px;
+            padding-top: 20px;
         }
         .btn-c {
             display: inline-block;
@@ -172,288 +172,103 @@
     </nav>
 </header>
 
-<main style="margin-left: 80px; margin-right: 80px">
-    <br><br>
-    <div class="container">
-        <div style="margin-bottom: 20px"></div>
-        <div style="margin-bottom: 30px"></div>
-        <div class="titulo"><b>INVENTARIO DE MEDICAMENTOS</b></div>
-        <div style="margin-bottom: 20px"></div>
-        <br><br>
-        <div style="padding-top:1px; display:flex; justify-content: end ; margin-left: 20px" >
-            <a class="btn-c" href="/superadmin/crearMedicamento">Crear nuevo medicamento</a>
+<div class="container">
+
+    <div class="container" style="margin-top: 90px">
+
+        <div style="padding-top: 20px; padding-bottom: 20px">
+
+            <div style="display: flex; justify-content: space-between;">
+                <div class="main-title open-sans-bold"> Lista de Medicamentos </div>
+                <a class="btn-c" href="/superadmin/crearMedicamento" style="text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">Agregar medicamento</a>
+            </div>
+            <div class="main-subtitle helvetica-medium">  Interfaz de administracion de medicamentos. </div>
+            <br>
+            <hr class="style-one">
         </div>
-        <br>
-        <div class="search-bar">
-            <input type="text" placeholder="Buscar...">
-            <button type="submit">Buscar</button>
-       </div>
+        <div style="margin-bottom: 10px"></div>
+
+        <div class="interface">
+
+
+            <div class="filtros">
+
+
+                <div class="container-filters">
+
+                    <div class="filter-title roboto-medium">
+                        Filtros
+                    </div>
+
+                    <div class="categorias-title">
+                        Categorías
+                    </div>
+
+                    <div class="list-categorias">
+
+                        <div class="categoria-div"><a class="categoria" href="">Todas las Categorías</a></div>
+                        <div class="categoria-div"><a class="categoria" href="">Problemas Generales</a></div>
+                        <div class="categoria-div"><a class="categoria" href="">Antibacterianos Sistémicos</a></div>
+                        <div class="categoria-div"><a class="categoria" href="">Antineoplásicos e Inmunomoduladores</a></div>
+                        <div class="categoria-div"><a class="categoria" href="">Cuidado Dermatológico</a></div>
+                        <div class="categoria-div"><a class="categoria" href="">Cuidado Muscular y Articular</a></div>
+                        <div class="categoria-div"><a class="categoria" href="">Cuidado Oftalmológico</a></div>
+                        <div class="categoria-div"><a class="categoria" href="">Cuidado Otológico</a></div>
+                        <div class="categoria-div"><a class="categoria" href="">Cuidado Estomatológico</a></div>
+                        <div class="categoria-div"><a class="categoria" href="">Cuidado de la Mujer</a></div>
+                        <div class="categoria-div"><a class="categoria" href="">Infecciones y Relacionados</a></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <section class="medicamentos">
+
+                <div style="display: grid; justify-content: space-between; grid-template-columns: 1fr 0.2fr;">
+                    <div>
+                        <input id="searchInput" type="text" class="input-form" style="outline: none" placeholder="Buscar medicamento" >
+                    </div>
+
+                    <a href="/superadmin/medicamentos"><button class="add-item-button open-sans-regular">Borrar Filtros</button></a>
+
+                </div>
+
+                <!-- Contenedor de elementos -->
+                <div class="med-container">
+                    <div class="item" th:each="medicamento : ${listaMedicamentos}">
+                        <img th:src="${medicamento.imagen}" th:alt="${medicamento.nombre}" class="img-item">
+                        <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
+                            <div>
+                                <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
+                                <div class="item-title roboto-medium" th:text="${medicamento.nombre}">Medicamento</div>
+                            </div>
+
+                        </div>
+                        <div style="display: flex; flex-direction: row; gap: 3px; align-items: end;">
+                            <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
+                        </div>
+                        <div style="display: flex;">
+                            <a th:href="@{'/superadmin/editarMedicamento' + '?id=' + ${medicamento.idMedicamento}}">
+                                <button class="add-item-button open-sans-regular" style="margin-right: 10px">Editar</button>
+                            </a>
+
+                            <button class="add-item-button open-sans-regular" th:data-item-id="${medicamento.idMedicamento}">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
     </div>
+</div>
 
 
-    <br><br><br>
-    <section class="medicamentos" style="margin-left: 80px; margin-right: 80px">
-        <!-- Contenedor de elementos -->
-        <div class="med-container">
-            <div class="item">
-                <img th:src="@{/img/nastzol.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
-                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
-                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
-                <span class="item-price roboto-regular">S/1.20</span>
-                <hr>
-                <div class="container" style="display: flex; justify-content: center; align-items: center;">
-                   <a href="/superadmin/editarMedicamento">
-                       <div style="padding-top: 1px; margin: 0 10px;">
-                           <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
-                       </div>
-                   </a>
 
-                    <div style="padding-top: 1px; margin: 0 10px;">
-                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img th:src="@{/img/apronax.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
-                <div class="subtitulo-item roboto-bold">TABLETAS 50 U.</div>
-                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
-                <span class="item-price roboto-regular">S/1.20</span>
-                <hr>
-                <div class="container" style="display: flex; justify-content: center; align-items: center;">
-                    <a href="/superadmin/editarMedicamento">
-                        <div style="padding-top: 1px; margin: 0 10px;">
-                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
-                        </div>
-                    </a>
 
-                    <div style="padding-top: 1px; margin: 0 10px;">
-                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img th:src="@{/img/betarretin.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
-                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
-                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
-                <span class="item-price roboto-regular">S/1.20</span>
-                <hr>
-                <div class="container" style="display: flex; justify-content: center; align-items: center;">
-                    <a href="/superadmin/editarMedicamento">
-                        <div style="padding-top: 1px; margin: 0 10px;">
-                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
-                        </div>
-                    </a>
-
-                    <div style="padding-top: 1px; margin: 0 10px;">
-                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img th:src="@{/img/bismutol.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
-                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
-                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
-                <span class="item-price roboto-regular">S/1.20</span>
-                <hr>
-                <div class="container" style="display: flex; justify-content: center; align-items: center;">
-                    <a href="/superadmin/editarMedicamento">
-                        <div style="padding-top: 1px; margin: 0 10px;">
-                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
-                        </div>
-                    </a>
-
-                    <div style="padding-top: 1px; margin: 0 10px;">
-                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img th:src="@{/img/doloral.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
-                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
-                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
-                <span class="item-price roboto-regular">S/1.20</span>
-                <hr>
-                <div class="container" style="display: flex; justify-content: center; align-items: center;">
-                    <a href="/superadmin/editarMedicamento">
-                        <div style="padding-top: 1px; margin: 0 10px;">
-                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
-                        </div>
-                    </a>
-
-                    <div style="padding-top: 1px; margin: 0 10px;">
-                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img th:src="@{/img/hepobionta.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
-                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
-                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
-                <span class="item-price roboto-regular">S/1.20</span>
-                <hr>
-                <div class="container" style="display: flex; justify-content: center; align-items: center;">
-                    <a href="/superadmin/editarMedicamento">
-                        <div style="padding-top: 1px; margin: 0 10px;">
-                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
-                        </div>
-                    </a>
-
-                    <div style="padding-top: 1px; margin: 0 10px;">
-                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img th:src="@{/img/nastzol.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
-                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
-                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
-                <span class="item-price roboto-regular">S/1.20</span>
-                <hr>
-                <div class="container" style="display: flex; justify-content: center; align-items: center;">
-                    <a href="/superadmin/editarMedicamento">
-                        <div style="padding-top: 1px; margin: 0 10px;">
-                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
-                        </div>
-                    </a>
-
-                    <div style="padding-top: 1px; margin: 0 10px;">
-                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img th:src="@{/img/neurobion.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
-                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
-                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
-                <span class="item-price roboto-regular">S/1.20</span>
-                <hr>
-                <div class="container" style="display: flex; justify-content: center; align-items: center;">
-                    <a href="/superadmin/editarMedicamento">
-                        <div style="padding-top: 1px; margin: 0 10px;">
-                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
-                        </div>
-                    </a>
-
-                    <div style="padding-top: 1px; margin: 0 10px;">
-                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img th:src="@{/img/apronax.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
-                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
-                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
-                <span class="item-price roboto-regular">S/1.20</span>
-                <hr>
-                <div class="container" style="display: flex; justify-content: center; align-items: center;">
-                    <a href="/superadmin/editarMedicamento">
-                        <div style="padding-top: 1px; margin: 0 10px;">
-                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
-                        </div>
-                    </a>
-
-                    <div style="padding-top: 1px; margin: 0 10px;">
-                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img th:src="@{/img/bismutol.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
-                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
-                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
-                <span class="item-price roboto-regular">S/1.20</span>
-                <hr>
-                <div class="container" style="display: flex; justify-content: center; align-items: center;">
-                    <a href="/superadmin/editarMedicamento">
-                        <div style="padding-top: 1px; margin: 0 10px;">
-                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
-                        </div>
-                    </a>
-
-                    <div style="padding-top: 1px; margin: 0 10px;">
-                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img th:src="@{/img/nastzol.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
-                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
-                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
-                <span class="item-price roboto-regular">S/1.20</span>
-                <hr>
-                <div class="container" style="display: flex; justify-content: center; align-items: center;">
-                    <a href="/superadmin/editarMedicamento">
-                        <div style="padding-top: 1px; margin: 0 10px;">
-                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
-                        </div>
-                    </a>
-
-                    <div style="padding-top: 1px; margin: 0 10px;">
-                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img th:src="@{/img/hepobionta.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
-                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
-                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
-                <span class="item-price roboto-regular">S/1.20</span>
-                <hr>
-                <div class="container" style="display: flex; justify-content: center; align-items: center;">
-                    <a href="/superadmin/editarMedicamento">
-                        <div style="padding-top: 1px; margin: 0 10px;">
-                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
-                        </div>
-                    </a>
-
-                    <div style="padding-top: 1px; margin: 0 10px;">
-                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img th:src="@{/img/nastzol.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
-                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
-                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
-                <span class="item-price roboto-regular">S/1.20</span>
-                <hr>
-                <div class="container" style="display: flex; justify-content: center; align-items: center;">
-                    <a href="/superadmin/editarMedicamento">
-                        <div style="padding-top: 1px; margin: 0 10px;">
-                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
-                        </div>
-                    </a>
-
-                    <div style="padding-top: 1px; margin: 0 10px;">
-                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <img th:src="@{/img/doloral.jpg}" alt="Sal de Andrews Efervesment" class="img-item">
-                <div class="subtitulo-item roboto-bold">SOBRE 20G</div>
-                <div class="item-title roboto-regular">Sal de Andrews Efervesment</div>
-                <span class="item-price roboto-regular">S/1.20</span>
-                <hr>
-                <div class="container" style="display: flex; justify-content: center; align-items: center;">
-                    <a href="/superadmin/editarMedicamento">
-                        <div style="padding-top: 1px; margin: 0 10px;">
-                            <button class="add-item-button montserrat-medium "><i class="fa-solid fa-edit" style="color: #ffffff;"> </i></button>
-                        </div>
-                    </a>
-
-                    <div style="padding-top: 1px; margin: 0 10px;">
-                        <button class="add-item-button montserrat-medium "><i class="fa-solid fa-trash-alt" style="color: #ffffff;"></i></button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </section>
-
-    <br><br><br><br>
-</main>
     <div >
         <footer id="sticky-footer" class="footer-distributed">
             <div class="footer-left">
@@ -520,7 +335,313 @@
     });
 </script>
 
+<script>
+
+    $(document).ready(function() {
+        $('#searchInput').on('input', function() { // Escuchar el evento 'input'
+            var searchTerm = $(this).val().trim().toLowerCase();
+            $('.item').each(function() {
+                var itemName = $(this).find('.item-title').text().trim().toLowerCase();
+                if (itemName.includes(searchTerm)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+
+    });
+
+</script>
+
+<script>
+
+    listaSelectedIds = [];
+
+    $(document).ready(function() {
+
+        const botonesEliminarItem = document.getElementsByClassName('btn-eliminar');
+        for(var i=0;i<botonesEliminarItem.length; i++){
+            const buttonEliminar = botonesEliminarItem[i];
+            buttonEliminar.addEventListener('click',eliminarItemCarrito);
+        }
+        var botonesSumarCantidad = document.getElementsByClassName('sumar-cantidad');
+        for(var i=0;i<botonesSumarCantidad.length; i++){
+            const buttonSumar = botonesSumarCantidad[i];
+            buttonSumar.addEventListener('click',sumarCantidad);
+        }
+        var botonesRestarCantidad = document.getElementsByClassName('restar-cantidad');
+        for(var i=0;i<botonesRestarCantidad.length; i++){
+            const buttonRestar = botonesRestarCantidad[i];
+            buttonRestar.addEventListener('click',restarCantidad);
+        }
+
+
+        function clickItemAdd(event){
+
+            const button = event.target;
+            const idAdd = button.dataset.itemId;
+            const item = button.parentElement;
+            const titulo = item.getElementsByClassName('item-title')[0].innerText;
+            const precio = item.getElementsByClassName('item-price')[0].innerText;
+            const imagenSrc = item.getElementsByClassName('img-item')[0].src;
+
+
+            if (listaSelectedIds.indexOf(idAdd) === -1) {
+                listaSelectedIds.push(idAdd);
+                listaSelectedIds.push(1);
+            }
+
+            const listaIdsInput = document.getElementById('listaIds');
+            listaIdsInput.value = listaSelectedIds;
+
+            addItemToList(idAdd, titulo, precio, imagenSrc);
+            ShowList();
+        }
+
+        function deleteItem(event){
+
+            const button = event.target;
+            const idDelete = button.dataset.itemId;
+
+            let pos = listaSelectedIds.indexOf(idDelete);
+            listaSelectedIds.splice(pos,1);
+            listaSelectedIds.splice(pos+1,1);
+
+            const listaIdsInput = document.getElementById('listaIds');
+            listaIdsInput.value = listaSelectedIds;
+
+            button.parentElement.parentElement.parentElement.remove();
+            hideorShowList();
+            actualizarMontoTotal();
+        }
+
+
+        function addItemToList(id, titulo, precio, imagenSrc){
+            const Swal = window.Swal;
+
+            const item = document.createElement('div');
+            item.classList.add = ('item-clicked');
+            const itemsList = document.getElementsByClassName('lista-items-clicked')[0];
+
+            if (itemsList.getElementsByClassName('item-title-clicked').length > 0){
+
+                const alreadyOnList = itemsList.getElementsByClassName('item-title-clicked');
+
+                for(let i=0; i < alreadyOnList.length; i++){
+                    if(alreadyOnList[i].innerText===titulo){
+                        Swal.fire({
+                            title: "Ya está en la lista",
+                            text: "El medicamento ya fue agregado.",
+                            icon: "info"
+                        });
+                        return;
+                    }
+                }
+            }
+
+
+            const itemNewSelected = `
+        <div class="selected-item">
+
+            <img src="${imagenSrc}" width="40px" height="auto" alt="">
+
+            <span class="item-title-clicked">${titulo}</span>
+
+            <div class="item-on-list">
+
+                <div class="item-details">
+                    <div class="selector-cantidad">
+                        <i class="fa-solid fa-minus restar-cantidad" data-item-id="${id}"></i>
+                        <input type="text" value="1" class="item-quantity-clicked" data-item-id="${id}">
+                        <i class="fa-solid fa-plus sumar-cantidad" data-item-id="${id}"></i>
+                    </div>
+
+                    <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                            <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked">${precio}</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-danger btn-eliminar" data-item-id="${id}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+
+        </div>
+    `;
+            item.innerHTML = itemNewSelected;
+            itemsList.append(item);
+
+            item.getElementsByClassName('btn-eliminar')[0].addEventListener('click', deleteItem);
+
+            const botonRestarCantidad = item.getElementsByClassName('restar-cantidad')[0];
+            botonRestarCantidad.addEventListener('click',restarCantidad);
+
+            const botonSumarCantidad = item.getElementsByClassName('sumar-cantidad')[0];
+            botonSumarCantidad.addEventListener('click',sumarCantidad);
+
+            const inputCantidad = item.getElementsByClassName('item-quantity-clicked')[0];
+            inputCantidad.addEventListener('change', setearCantidad);
+            inputCantidad.addEventListener('focus', function(event) {
+                event.target.dataset.previousValue = event.target.value;
+            });
+
+            actualizarMontoTotal();
+            ShowList();
+        }
+
+
+        function sumarCantidad(event){
+            const buttonClicked = event.target;
+            const idAddQuantity = buttonClicked.dataset.itemId;
+            const selector = buttonClicked.parentElement;
+            console.log(selector.getElementsByClassName('item-quantity-clicked')[0].value);
+            let cantidadActual = selector.getElementsByClassName('item-quantity-clicked')[0].value;
+            cantidadActual++;
+            selector.getElementsByClassName('item-quantity-clicked')[0].value = cantidadActual;
+
+            const toPlus = listaSelectedIds.indexOf(idAddQuantity);
+
+            listaSelectedIds[toPlus+1] = cantidadActual;
+
+            actualizarMontoTotal();
+        }
+
+        function restarCantidad(event){
+            const buttonClicked = event.target;
+            const idQuitQuantity = buttonClicked.dataset.itemId;
+            const selector = buttonClicked.parentElement;
+            console.log(selector.getElementsByClassName('item-quantity-clicked')[0].value);
+
+
+            let cantidadActual = selector.getElementsByClassName('item-quantity-clicked')[0].value;
+            cantidadActual--;
+            if(cantidadActual>=1){
+                selector.getElementsByClassName('item-quantity-clicked')[0].value = cantidadActual;
+
+                const toMinus = listaSelectedIds.indexOf(idQuitQuantity);
+
+                listaSelectedIds[toMinus+1] = cantidadActual;
+
+                actualizarMontoTotal();
+            }
+        }
+
+        function setearCantidad(event){
+            const inputFilled = event.target;
+            const idSetQuantity = inputFilled.dataset.itemId;
+            const valor = inputFilled.value;
+            const cantidadActual = parseInt(valor); // Convertir a número entero
+
+            // Verificar si el valor es un número válido
+            if (!isNaN(cantidadActual) && cantidadActual >= 1) {
+                // Actualizar el valor del input y el monto total
+
+                const toSet = listaSelectedIds.indexOf(idSetQuantity);
+
+                listaSelectedIds[toSet+1] = cantidadActual;
+
+                actualizarMontoTotal();
+            } else {
+                // Restaurar el valor anterior si no es válido
+                inputFilled.value = inputFilled.dataset.previousValue;
+            }
+        }
+
+        function actualizarMontoTotal() {
+            const listItems = document.getElementsByClassName('lista-items-clicked')[0];
+            const selectedItems = listItems.getElementsByClassName('selected-item');
+            let totalCentavos = 0;
+
+            for (let i = 0; i < selectedItems.length; i++) {
+                const item = selectedItems[i];
+                const precioItem = Math.round(parseFloat(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/', '').replace(/,/g, '')) * 100);
+                const cantidadItem = item.getElementsByClassName('item-quantity-clicked')[0].value;
+                totalCentavos += precioItem * cantidadItem;
+            }
+            const totalSoles = totalCentavos / 100;
+            document.getElementsByClassName('price-total')[0].innerText = 'S/' + totalSoles.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+            const listaIdsInput = document.getElementById('listaIds');
+            listaIdsInput.value = listaSelectedIds.join(',');
+
+        }
+
+        function hideorShowList(){
+            const someElement = document.getElementsByClassName('selected-item');
+
+            if(someElement.length === 0){
+                listaSelectedIds = [];
+                HideList();
+            }
+        }
+
+        function HideList(){
+            const itemsPreview = document.getElementById('items-preview');
+            itemsPreview.classList.add('hide');
+        }
+
+        function ShowList(){
+            const itemsPreview = document.getElementById('items-preview');
+            itemsPreview.classList.remove('hide');
+        }
+
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        let opened = false;
+
+        $('#menu-small').hide();
+
+        $('#nav-toggle').click(function (e) {
+            e.stopPropagation();
+            if (opened) {
+                $('#menu-small').hide();
+            } else {
+                $('#menu-small').show();
+            }
+            opened = !opened;
+        });
+    });
+</script>
+
+<script>
+    window.onload = function () {
+        $('#onload').fadeOut();
+        $('body').removeClass('loader-hidden');
+    }
+
+</script>
+
+
+
+<script>
+    // Ejecutar cuando el contenido de la página se haya cargado completamente
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mostrar una alerta de bienvenida con un botón para redirigir
+        Swal.fire({
+            title: '¡Atención!',
+            text: 'Su inventario de medicamentos se está agotando. Por favor, revise su stock y realice los pedidos necesarios para evitar interrupciones en el servicio.',
+            icon: 'warning',
+            confirmButtonText: 'Entendido',
+            showCancelButton: true,
+            cancelButtonText: 'Ir a revisar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // El usuario hizo clic en 'Entendido'
+                // Aquí puedes agregar cualquier acción adicional que desees
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // El usuario hizo clic en 'Ir a revisar'
+                // Redirigir a otra vista
+                window.location.href = '/farmacista/facturacion';
+            }
+        });
+    });
+</script>
+
+
 </body>
-
-
 </html>
