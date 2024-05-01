@@ -44,6 +44,14 @@ public class AdminSedeController {
         this.sedeFarmacistaRepository = sedeFarmacistaRepository;
         this.reposicionContenidoRepository = reposicionContenidoRepository;
     }
+    /*Variables locales*/
+    Sede sedeVistaReposicion;
+    Usuario administradorVistaReposicion;
+    List<Integer> listaCantidadMedicamentosReposicion;
+    List<Medicamento> listaMedicamentosReposicionMostrar;
+    Float precioTotalMostrar;
+    Integer idReposicionMostrar;
+
 
     public List<String> getCantidadesFromLista(List<String> listaSelectedIds) {
         List<String> cantidades = new ArrayList<>();
@@ -169,7 +177,15 @@ public class AdminSedeController {
     }
 
     @GetMapping("/verDetalles")
-    public String verDetalles(){
+    public String verDetalles(Model model){
+
+        model.addAttribute("sede", sedeVistaReposicion);
+        model.addAttribute("administradorMostrar", administradorVistaReposicion);
+        model.addAttribute("listaCantidadMedicamentosReposicion", listaCantidadMedicamentosReposicion);
+        model.addAttribute("listaMedicamentosReposicionMostrar", listaMedicamentosReposicionMostrar);
+        model.addAttribute("priceTotal", precioTotalMostrar);
+        model.addAttribute("idReposicionMostrar", idReposicionMostrar);
+
         return "adminsede/verDetalles";
     }
 
@@ -287,6 +303,7 @@ public class AdminSedeController {
         Integer idEstado = 1; //Por Default
         Integer idSede = 1; // CORREGIR CON SESSION--------------------------------------------------------
         reposicionRepository.crearOrdenReposicion(idReposicion, tracking, priceTotal, idEstado, idSede);
+        List<Medicamento> listaMedicamentosReposicion = new ArrayList<>();
 
         // Guardar lista de medicamentos
         int m = 0;
@@ -295,9 +312,25 @@ public class AdminSedeController {
             Integer idMedicamento = Integer.parseInt(listaIds.get(m));
             Integer cantidadMedicamento = Integer.parseInt(listaIds.get(m+1));
             reposicionContenidoRepository.guardarContenidoReposicion(idMedicamento, idReposicion, cantidadMedicamento);
+            Optional<Medicamento> optMedicamento = medicamentoRepository.findById(idMedicamento);
+            if(optMedicamento.isPresent()){
+                listaMedicamentosReposicion.add(optMedicamento.get());
+                listaCantidadMedicamentosReposicion.add(cantidadMedicamento);
+            }
 
             m = m + 2;
         }
+
+        sedeVistaReposicion.setNombre(nombreSede);
+        sedeVistaReposicion.setDireccion(direccionSede);
+        administradorVistaReposicion.setDni(dni);
+        administradorVistaReposicion.setCorreo(correo);
+        administradorVistaReposicion.setNombres(nombres);
+        administradorVistaReposicion.setApellidos(apellidos);
+        listaMedicamentosReposicionMostrar = listaMedicamentosReposicion;
+        precioTotalMostrar = priceTotal;
+        idReposicionMostrar = idReposicion;
+
         return "redirect:/adminsede/verDetalles";
     }
 

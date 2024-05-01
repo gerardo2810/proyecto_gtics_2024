@@ -1,30 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-        <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
+        <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
 
-        <!-- Bootstrap -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous">
-        <!--Importamos Google Icon Font-->
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <!--Importamos materialize.css-->
-        <link type="text/css" rel="stylesheet" href="./css/materialize.css" media="screen,projection"/>
-        <!--Permitimos que el navegador se optimice para dispositivos móviles-->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <!-- Remixicons -->
-        <!--link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet"-->
+        <!--=============== REMIXICONS ===============-->
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+        <!-- Font Awesome -->
+        <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
 
-        <!-- CSS personalizado -->
+        <!--=============== CSS ===============-->
         <link th:href="@{/css/styles.css}" rel="stylesheet" />
         <link th:href="@{/css/fonts.css}" rel="stylesheet" />
         <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+        <link rel="stylesheet" th:href="@{/css/farmacista/detalle_ordenes.css}">
         <link th:href="@{/css/footer.css}" rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
 
+        <!--Mapa vista Paciente-->
+        <script scr="/js/map.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAce4klBZuD60aEQidMVIbsoaiitxxQFpo"></script>
+
+        <!--=============== JQUERY ===============-->
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+        <!--=============== SWEETALERT ===============-->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
+
+        <!--=============== FONT AWESOME ===============-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
+
+
+
+        <title>Bienestar San Miguel | Orden de reposición</title>
 
     </head>
 
@@ -43,13 +58,13 @@
 
                 <div class="nav-menu" id="nav-menu">
                     <ul class="nav-list">
-                        <li><a href="/adminsede" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
+                        <li><a href="/adminsede" class="menu-item roboto-regular">Inicio</a></li>
 
                         <li><a href="/adminsede/doctores" class="menu-item roboto-regular">Doctores</a></li>
 
                         <li><a href="/adminsede/farmacista" class="menu-item roboto-regular">Farmacistas</a></li>
 
-                        <li><a href="/adminsede/ordenes" class="menu-item roboto-regular">Pedidos de Reposición</a></li>
+                        <li><a href="/adminsede/ordenes" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Pedidos de Reposición</a></li>
 
                         <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular">Medicamentos</a></li>
 
@@ -94,13 +109,13 @@
                         <div class="inside-menu-small">
                             <div class="nav-menu-small" id="nav-menu-small">
                                 <ul class="nav-list-small">
-                                    <li><a href="/adminsede" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
+                                    <li><a href="/adminsede" class="menu-item-small roboto-regular">Inicio</a></li>
 
-                                    <li><a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a></li>
+                                    <li><a href="/adminsede/doctores" class="menu-item-small roboto-regular" >Doctores</a></li>
 
                                     <li><a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a></li>
 
-                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Pedidos de Reposición</a></li>
+                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Pedidos de Reposición</a></li>
 
                                     <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a></li>
                                 </ul>
@@ -124,135 +139,155 @@
 
     <body style="background-color: white;">
 
+
         <div class="container" style="margin-top:90px;">
+
+
             <div style="padding-top: 20px; padding-bottom: 20px">
-                <div class="main-title montserrat-bold">Solicitud de orden de reposición</div>
+                <div class="main-title open-sans-bold"> Detalle de Orden de Venta </div>
+            </div>
+
+            <hr class="style-one">
+
+            <div class="detalle-orden-container">
+
+                <div class="invoice-title">
+
+                    <div class="title roboto-medium data-label">Bienestar San Miguel | <span th:text="${sede.getNombre()}">Sede</span></div>
+
+                    <div class="title-info">
+                        <div class="roboto-bold title data-label">Orden #<span th:text="${idReposicionMostrar + 10000}"></span> </div>
+
+                        <div th:if="${orden.getEstadoOrden() == 1}" th:text="Pendiente" class="btn-secondary"></div>
+                        <div th:if="${orden.getEstadoOrden() == 2}" th:text="Pendiente" class="btn-secondary"></div>
+
+                        <div th:if="${orden.getEstadoOrden() == 3}" th:text="Recibido" class="btn-green"></div>
+                        <div th:if="${orden.getEstadoOrden() == 4}" th:text="En proceso" class="btn-yellow"></div>
+                        <div th:if="${orden.getEstadoOrden() == 5}" th:text="Empaquetado" class="btn-red"></div>
+                        <div th:if="${orden.getEstadoOrden() == 6}" th:text="En Ruta" class="btn-yellow"></div>
+                        <div th:if="${orden.getEstadoOrden() == 7}" th:text="Entregado" class="badge badge-pagado"></div>
+
+
+                        <div th:if="${orden.getEstadoOrden() == 8}" th:text="Pagado" class="badge badge-pagado"></div>
+                        <div th:if="${orden.getEstadoOrden() == 9}" th:text="Anulado" class="btn-secondary"></div>
+                    </div>
+                </div>
+
+                <div class="invoice-contact">
+
+                    <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Dirección:</span><div th:text="${sede.getDireccion()}">Aldoradin</div></div>
+                    <div><span class="data-label roboto-medium">Correo:</span> clinica.bienestar@sanmiguel.pe</div>
+                    <div><span class="data-label roboto-medium">Número:</span> +51 998524112</div>
+                </div>
+
+                <hr class="my-4" style="margin-bottom: 20px; margin-top: 20px;">
+
+                <div class="client-info">
+                    <div class="data-label roboto-medium">Datos del Administrador:</div>
+                    <div class="invoice-data">
+                        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Nombre: </span><div th:text="${administradorMostrar.getNombres() + ' ' + administradorMostrar.getApellidos()}"> Leonardo Ernesto Aldoradin Yaranga</div></div>
+                        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">DNI:</span><div th:text="${administradorMostrar.getDni()}"> Aldoradin</div></div>
+                    </div>
+                </div>
+
+                <hr class="my-4" style="margin-bottom: 20px; margin-top: 20px;">
+
+                <div class="invoice-info">
+                    <div class="data-label roboto-medium">Datos de la Orden de reposición:</div>
+
+                    <div class="invoice-data">
+                        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Número de Orden: </span><div th:text="${idReposicionMostrar + 10000}"> Aldoradin</div></div>
+                        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Fecha:</span><div th:text="${orden.getFechaIni()}">Aldoradin </div></div>
+                        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Sede:</span><div th:text="${orden.getSede().getNombre()}"> Aldoradin</div></div>
+                        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Atendido por:</span><div>Leonardo Ernesto Aldoradin Yaranga</div></div>
+                    </div>
+                </div>
+
+                <hr class="my-4" style="margin-bottom: 50px; margin-top: 20px;">
+
+                <div class="title roboto-medium data-label" style="padding-bottom: 20px">Lista de Medicamentos Comprados</div>
+
+                <div>
+                    <table class="order-table">
+                        <thead style="padding-bottom: 10px">
+                            <tr>
+                                <th class="text-start" style="max-width: 90px;">No.</th>
+                                <th class="text-start" style="max-width: 200px;">Artículo</th>
+                                <th class="text-center">Precio</th>
+                                <th class="text-center">Cantidad</th>
+                                <th class="text-end" style="width: 120px;">Total</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr th:each="contenido, iterIndex : ${contenidoOrden}">
+                                <th class="text-start" style="width: 90px;"><span th:text="${iterIndex.index + 1}"></span></th>
+                                <td>
+                                    <div class="name-unit-item">
+                                        <div class="text-truncate font-size-14 mb-1" th:text="${contenido.getIdMedicamento().getNombre()}">Panadol</div>
+                                        <div class="text-muted mb-0" th:text="${contenido.getIdMedicamento().getUnidad()}">TABLETAS 50 U.</div>
+                                    </div>
+                                </td>
+                                <td class="text-center" th:text="${'S/. ' + contenido.getIdMedicamento().getPrecioVenta()}">$ 245.50</td>
+                                <td class="text-center" th:text="${contenido.getCantidad()}">1</td>
+                                <td class="text-end" th:text="${'S/. ' + contenido.getCantidad() * contenido.getIdMedicamento().getPrecioVenta()}">$ 245.50</td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <div class="full-total">
+                    <div class="roboto-regular data-label" style="padding-top: 20px">Total</div>
+                    <div class="title roboto-medium data-label" th:text="${'S/. ' + orden.getPrecioTotal()}">S/. 750.00</div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+        <div style="max-width: 1536px;margin-inline: auto;padding: 0 30px 0 30px;">
+
+            <div style="padding-top: 60px; padding-bottom: 20px">
+                <div class="main-title open-sans-regular"> Realizar un Comentario </div>
             </div>
             <hr style="border-top: 1px solid #262626;">
             <div style="margin-bottom: 40px"></div>
 
-
-
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="invoice-title">
-                                    <h4 class="float-end font-size-15">Orden #5 <span class="badge bg-success font-size-12 ms-2">Solicitud de Orden</span></h4>
-                                    <div class="mb-4">
-                                        <h2 class="mb-1 text-muted">Farmacia de la Sede A</h2>
-                                    </div>
-                                    <div class="text-muted">
-                                        <p class="mb-1">San Miguel 9981</p>
-                                        <p class="mb-1"><i class="uil uil-envelope-alt me-1"></i>farmaciaSanMiguel@hotmail.com</p>
-                                        <p><i class="uil uil-phone me-1"></i> 24-04-2024</p>
-                                    </div>
-                                </div>
-                                <hr class="my-4">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="text-muted">
-                                            <h5 class="font-size-16 mb-3">Orden generada por:</h5>
-                                            <h5 class="font-size-15 mb-2">Administrador de Sede #1</h5>
-                                            <p class="mb-1">Rimac Seguros </p>
-                                            <p class="mb-1">administrador1@gmail.com</p>
-                                            <p>DNI: 71236854</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="text-muted text-sm-end">
-                                            <div>
-                                                <h5 class="font-size-15 mb-1">Orden de venta:</h5>
-                                                <p>#DZ0112</p>
-                                            </div>
-                                            <div class="mt-4">
-                                                <h5 class="font-size-15 mb-1">Fecha de orden</h5>
-                                                <p>24 Abril, 2024</p>
-                                            </div>
-                                            <div class="mt-4">
-                                                <h5 class="font-size-15 mb-1">Order No:</h5>
-                                                <p>#1123456</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="py-2">
-                                    <h5 class="font-size-15">Resumen de la orden</h5>
-                                    <div class="table-responsive">
-                                        <table class="table align-middle table-nowrap table-centered mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width: 70px;">No.</th>
-                                                    <th>Artículo</th>
-                                                    <th>Precio</th>
-                                                    <th>Cantidad</th>
-                                                    <th class="text-end" style="width: 120px;">Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <th scope="row">01</th>
-                                                    <td>
-                                                        <div>
-                                                            <h5 class="text-truncate font-size-14 mb-1">Panadol</h5>
-                                                            <p class="text-muted mb-0">Watch, Black</p>
-                                                        </div>
-                                                    </td>
-                                                    <td>$ 245.50</td>
-                                                    <td>180</td>
-                                                    <td class="text-end">$ 245.50</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">02</th>
-                                                    <td>
-                                                        <div>
-                                                            <h5 class="text-truncate font-size-14 mb-1">Ibuprofeno</h5>
-                                                            <p class="text-muted mb-0">Watch, Gold</p>
-                                                        </div>
-                                                    </td>
-                                                    <td>$ 245.50</td>
-                                                    <td>50</td>
-                                                    <td class="text-end">$491.00</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row" colspan="4" class="text-end">Subtotal</th>
-                                                    <td class="text-end">$736.50</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row" colspan="4" class="border-0 text-end">Total</th>
-                                                    <td class="border-0 text-end"><h4 class="m-0 fw-semibold">$739.00</h4></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="d-print-none mt-4">
-                                        <div class="float-end">
-                                            <a href="/adminsede/generar_orden" class="btn btn-secondary w-md" style="margin-right: 1160px">Cancelar</a>
-                                            <a href="javascript:window.print()" class="btn btn-success me-1"><i class="fa fa-print"></i></a>
-                                            <a href="/adminsede/ordenes" class="btn btn-primary w-md">Enviar</a>
 
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="d-flex justify-content-center row">
+                    <div class="col-md-8">
+                        <div class="bg-light p-2">
+                            <div style="display: flex; flex-direction: row; align-items: start; gap: 30px">
+                                <div style="background-color: #3F71EA; border-radius: 50px; width: 50px; height: 50px; color: white; text-align: center; font-size: 0.8rem; padding-top: 15px">User</div>
+                                <textarea class="form-control ml-1 shadow-none textarea"></textarea>
+                            </div>
+                            <div style="display: flex; flex-direction: row; justify-content: end; gap: 30px; padding-top: 15px">
+                                <button class="continue-button" type="button">Comentar</button>
+                                <button class="btn btn-danger" type="button">Cancelar</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
-
-        <div>
+        <div >
             <footer id="sticky-footer" class="footer-distributed">
                 <div class="footer-left">
                     <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
                     <p class="footer-links">
-                        <a href="/farmacista">Inicio</a> |
-                        <a href="/farmacista/ordenes_venta">Ordenes de Venta</a> |
-                        <a href="/farmacista/ordenes_web">Ordenes Web</a> |
-                        <a href="/farmacista/pre_ordenes">Pre Ordenes</a> |
-                        <a href="/farmacista/perfil">Perfil</a>
+                        <a href="/adminsede" class="menu-item-small roboto-regular">Inicio</a> |
+                        <a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a> |
+                        <a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a> |
+                        <a href="/adminsede/ordenes" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Pedidos de Reposición</a> |
+                        <a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a> |
+                        <a href="/adminsede/perfil_adminsede" class="menu-item-small roboto-regular">Perfil</a>
                     </p>
                     <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
                 </div>
@@ -308,5 +343,49 @@
         });
     </script>
 
+    <script>
+        // Puntos del mapa
+
+        const locations = [
+            { lat: -12.067713, lng: -77.067505 },
+            { lat: -12.067739299285414, lng: -77.07048533833166 },
+            { lat: -12.067991537715104, lng: -77.07550755645634 },
+            { lat : -12.068533248724986, lng: -77.07808532986617},
+            { lat: -12.069724275588285, lng: -77.07804924250952}
+        ]
+
+
+        // Inicializar mapa
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 16,
+                center: locations[0],
+            });
+
+            // Crear marcador
+            const marker = new google.maps.Marker({
+                position: locations[0],
+                map: map,
+                icon: {
+                    url: "../img/moto_icon.png", // Ruta de la imagen de la moto
+                    scaledSize: new google.maps.Size(55, 50) // Tamaño personalizado (ancho, alto)
+                } // Ruta de la imagen de la moto
+            });
+
+            // Mover el marcador a través de los puntos
+
+            let i = 0;
+            const interval = setInterval(() => {
+                i++;
+                if (i >= locations.length) {
+                    clearInterval(interval); // Detener el intervalo cuando llega a la tercera posición
+                    return;
+                }
+                marker.setPosition(locations[i]);
+            }, 2000); // Cambia de ubicación cada 3 segundos
+
+        }
+
+    </script>
 
 </html>
