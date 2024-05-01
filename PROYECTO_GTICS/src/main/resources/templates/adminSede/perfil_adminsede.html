@@ -7,17 +7,20 @@
         <!--=============== REMIXICONS ===============-->
         <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
 
+        <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
         <!--=============== CSS ===============-->
-        <link th:href="@{/css/styles.css}" rel="stylesheet" />
-        <link th:href="@{/css/fonts.css}" rel="stylesheet" />
-        <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
-        <link th:href="@{/css/footer.css}" rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/styles.css}">
+        <link rel="stylesheet" th:href="@{/css/fonts.css}">
+        <link rel="stylesheet" th:href="@{/css/topbar.css}">
+        <link rel="stylesheet" th:href="@{/css/footer.css}">
+        <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
+        <link rel="stylesheet" th:href="@{/css/perfil.css}">
 
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
         <link rel="stylesheet" href="css/bootstrap/bootstrap.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
         <title>Bienestar San Miguel | Farmacista</title>
     </head>
 
@@ -47,7 +50,8 @@
                         <!--=============== DROPDOWN ===============-->
                         <li class="dropdown-item">
                             <div class="menu-item roboto-regular">
-                                Más opciones <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                                <i class="fas fa-user fa-fw"></i>
+                                <i class="ri-arrow-down-s-line dropdown-arrow"></i>
                             </div>
 
                             <ul class="dropdown-menu">
@@ -128,19 +132,18 @@
                 <nav class="nav nav-borders">
                     <a class="nav-link active ms-0" href="/farmacista/perfil" target="__blank">Perfil</a>
                     <a class="nav-link" href="/farmacista/facturacion" target="__blank">Notificaciones</a>  <!--Es ta vista puede ser usada para paciente así podra ver sus metodos de pago y las compras que ha realizado hasta el momento-->
-
                 </nav>
                 <hr class="mt-0 mb-4">
                 <div class="row">
                     <div class="col-xl-4">
                         <!-- Profile picture card-->
-                        <div class="card mb-4 mb-xl-0">
+                        <div class="card card-perfil mb-4 mb-xl-0">
                             <div class="card-header">Foto de perfil</div>
                             <div class="card-body text-center">
                                 <!-- Profile picture image-->
                                 <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
                                 <!-- Profile picture help block-->
-                                <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                                <div class="small font-italic text-muted mb-4">JPG o PNG no mayor a 5 MB</div>
                                 <!-- Profile picture upload button-->
                                 <button class="btn btn-primary" type="button">Subir imágen aquí</button>
                             </div>
@@ -151,57 +154,77 @@
                         <div class="card mb-4">
                             <div class="card-header">Detalles de la cuenta</div>
                             <div class="card-body">
-                                <form>
-                                    <!-- Form Group (username)-->
-                                    <div class="mb-3">
-                                        <label class="small mb-1" for="inputRol">Puesto que ocupa en la clínica</label>
-                                        <input class="form-control" id="inputRol" type="text"  value="Farmacista"  readonly>
-                                    </div>
-                                    <!-- Form Row-->
-                                    <div class="row gx-3 mb-3">
-                                        <!-- Form Group (first name)-->
-                                        <div class="col-md-6">
-                                            <label class="small mb-1" for="inputFirstName">Nombres</label>
-                                            <input class="form-control" id="inputFirstName" type="text" value="Sergio Andres" readonly>
+                                <div class="interface-formulario">
+
+                                    <section class="formulario">
+
+                                        <div class="container-formulario">
+
+                                            <div class="container-form">
+
+                                                <div class="column">
+
+                                                    <div class="input-label-box">
+                                                        <label style="font-weight: bold; color:dimgray">Puesto que ocupa en la clínica</label>
+                                                        <input class="input-form-2" name="inputRol" type="text"  value="Administrador de sede"  readonly>
+                                                    </div>
+
+                                                    <div class="input-label-box">
+                                                        <label style="font-weight: bold; color:dimgray">Correo electronico:</label>
+                                                        <input class="input-form-2" type="text"  name="inputEmailAddress" value="admin1@pucp.edu.pe" readonly>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="column">
+
+                                                    <div class="input-label-box">
+                                                        <label style="font-weight: bold; color:dimgray">Nombres:</label>
+                                                        <input class="input-form-2" type="text" name="nombres" id="inputFirstName" value="Sergio Andre" readonly>
+                                                    </div>
+
+                                                    <div class="input-label-box">
+                                                        <label style="font-weight: bold; color:dimgray">Apellidos:</label>
+                                                        <input class="input-form-2" type="text" name="apellidos" value="Bustamante Bartra" readonly>
+                                                    </div>
+
+                                                </div>
+
+
+                                                <div class="column">
+                                                    <div class="input-label-box">
+                                                        <label style="font-weight: bold; color:dimgray">Direccion:</label>
+                                                        <input class="input-form-2"  name="direccion"type="text" value="San miguel" readonly>
+                                                    </div>
+
+                                                    <div class="input-label-box">
+                                                        <label style="font-weight: bold; color:dimgray">Edad:</label>
+                                                        <input class="input-form-2"  name="edad" type="text" value="19" readonly>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="column">
+                                                    <div class="input-label-box">
+                                                        <label style="font-weight: bold; color:dimgray">Teléfono:</label>
+                                                        <input class="input-form-2" type="text" name="celular"  value="955054066" readonly>
+                                                    </div>
+
+                                                    <div class="input-label-box">
+                                                        <label style="font-weight: bold; color:dimgray">Fecha de nacimiento:</label>
+                                                        <input class="input-form-2" type="text"  name="birthday" value="28/12/2001" readonly>
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+
                                         </div>
-                                        <!-- Form Group (last name)-->
-                                        <div class="col-md-6">
-                                            <label class="small mb-1" for="inputLastName">Apellido</label>
-                                            <input class="form-control" id="inputLastName" type="text" value="Bustamante Bartra" readonly>
-                                        </div>
-                                    </div>
-                                    <!-- Form Row        -->
-                                    <div class="row gx-3 mb-3">
-                                        <!-- Form Group (organization name)-->
-                                        <div class="col-md-6">
-                                            <label class="small mb-1" for="inputOrgName">Direccion</label>
-                                            <input class="form-control" id="inputOrgName" type="text" value="San miguel" readonly>
-                                        </div>
-                                        <!-- Form Group (location)-->
-                                        <div class="col-md-6">
-                                            <label class="small mb-1" for="inputLocation">Edad</label>
-                                            <input class="form-control" id="inputLocation" type="number" value="19" readonly>
-                                        </div>
-                                    </div>
-                                    <!-- Form Group (email address)-->
-                                    <div class="mb-3">
-                                        <label class="small mb-1" for="inputEmailAddress">Correo electronico</label>
-                                        <input class="form-control" id="inputEmailAddress" type="email" value="a20206089@pucp.edu.pe" readonly>
-                                    </div>
-                                    <!-- Form Row-->
-                                    <div class="row gx-3 mb-3">
-                                        <!-- Form Group (phone number)-->
-                                        <div class="col-md-6">
-                                            <label class="small mb-1" for="inputPhone">Número de telefono</label>
-                                            <input class="form-control" id="inputPhone" type="tel" value="955054066" readonly>
-                                        </div>
-                                        <!-- Form Group (birthday)-->
-                                        <div class="col-md-6">
-                                            <label class="small mb-1" for="inputBirthday">Fecha de Nacimiento</label>
-                                            <input class="form-control" id="inputBirthday" type="text" name="birthday" value="28/12/2001" readonly >
-                                        </div>
-                                    </div>
-                                </form>
+
+
+                                    </section>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -214,11 +237,12 @@
                 <div class="footer-left">
                     <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
                     <p class="footer-links">
-                        <a href="/farmacista">Inicio</a> |
-                        <a href="/farmacista/ordenes_venta">Ordenes de Venta</a> |
-                        <a href="/farmacista/ordenes_web">Ordenes Web</a> |
-                        <a href="/farmacista/pre_ordenes">Pre Ordenes</a> |
-                        <a href="/farmacista/perfil">Perfil</a>
+                        <a href="/adminsede" class="menu-item-small roboto-regular">Inicio</a> |
+                        <a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a> |
+                        <a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a> |
+                        <a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Pedidos de Reposición</a> |
+                        <a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a> |
+                        <a href="/adminsede/perfil_adminsede" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Perfil</a>
                     </p>
                     <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
                 </div>
