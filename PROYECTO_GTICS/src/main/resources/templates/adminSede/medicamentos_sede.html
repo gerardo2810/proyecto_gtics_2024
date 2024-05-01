@@ -218,7 +218,7 @@
                             <input id="searchInput" type="text" class="input-form" style="outline: none" placeholder="Buscar medicamento por nombre" >
                         </div>
 
-                        <a href="/adminsede/medicamentos"><button class="add-item-button open-sans-regular">Borrar Filtros</button></a>
+                        <a href="/adminsede/medicamentos"><button class="add-item-button open-sans-regular" style="color: #ffffff">Borrar Filtros</button></a>
 
                     </div>
 
@@ -243,7 +243,17 @@
                                 </div>
                             </div>
 
-                            <button class="add-item-button open-sans-regular" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
+                            <button class="add-item-button open-sans-regular" style="color: #ffffff" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
+                            <!--
+                            <div th:if="${medicamento.getCantidad() < 25}">
+                                <button class="add-item-button open-sans-regular" style="color: #ffffff" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
+                            </div>
+
+                            <div th:if="${medicamento.getCantidad() > 25}">
+                                <button class="add-item-button open-sans-regular" style="color: #ffffff; background-color: #6c757d" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
+                            </div>
+                            -->
+
                         </div>
                     </div>
 

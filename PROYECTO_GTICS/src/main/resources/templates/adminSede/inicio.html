@@ -19,6 +19,8 @@
         <link rel="stylesheet" th:href="@{/css/topbar.css}">
         <link rel="stylesheet" th:href="@{/css/footer.css}">
 
+        <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+
         <!--=============== JS ===============-->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
@@ -27,7 +29,8 @@
         <script th:src="@{/js/tracking.js}"></script>
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
+        <!-- Font Awesome -->
+        <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
         <title>Bienestar San Miguel | Administrador de Sede</title>
     </head>
 
@@ -206,9 +209,7 @@
                 </div>
             </div>
             <div class="container-graph-circular">
-                <div class="buttons">
-                    <a href="/adminsede/ordenes" class="btn btn-1">Ver más</a>
-                </div>
+                <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/ordenes'" style="margin-left: 20px">Ver más</button>
 
             </div>
             <div class="container">
