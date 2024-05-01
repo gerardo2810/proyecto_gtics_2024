@@ -37,7 +37,7 @@
 
     <style>
         body {
-            padding-top: 100px;
+            padding-top: 50px;
         }
         .btn-c {
             display: inline-block;
@@ -198,13 +198,10 @@
         <br>
     </div>
 
-    <br>
     <div class="container">
-
         <div style="padding-top:1px; display:flex; justify-content: end ; margin-left: 20px">
             <a class="btn-c" href="/superadmin/solicitudes">Solicitudes de nuevos farmacistas</a>
         </div>
-
         <div style="display: flex; flex-direction: row; justify-content: space-between">
 
             <div class="column-start" style="padding-bottom: 1px">
@@ -216,17 +213,14 @@
                         <label style="color:dimgray;font-weight: bold; margin-left: 2px; margin-bottom:4px">Filtrar por Sede:</label>
 
                     </div>
-
                     <div style="display: flex; flex-direction: column; justify-content: start">
-
-
                         <select id="filtroEstado" class="select-p">
                             <option value="">Mostrar sedes</option>
-                            <option value="San Miguel Centro">San Miguel Centro</option>
-                            <option value="San Miguel Sur">San Miguel Sur</option>
-                            <option value="Pando 5 Etapa">Pando 5 Etapa</option>
+                            <option th:each="sede: ${sedeList}"
+                                    th:value="${sede.idSede}"
+                                    th:text="${sede.nombre}">
+                            </option>
                         </select>
-
                     </div>
                 </div>
 
@@ -244,9 +238,11 @@
         <table id="miTabla2" class="display" style="padding-top: 10px">
             <thead>
             <tr style="background-color: #378fff">
+                <th style="text-align: center"></th>
                 <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
                 <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo electrónico</th>
                 <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Administrador</th>
                 <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Estado</th>
                 <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Loguearse</th>
                 <th style="text-align: center; color: #ffffff; font-weight: normal !important;" >Editar</th>
@@ -254,119 +250,29 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
+            <tr th:each="farmacista, info : ${farmacistlist}">
                 <td style="text-align: center">
                     <div style="display: flex; align-items: center; justify-content: center;">
                         <label>
                             <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
                         </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 1 </span>
                     </div>
                 </td>
-                <td style="text-align: center">farmacista1@gmail.com</td>
-                <td style="text-align: center">San Miguel Centro</td>
-                <td style="text-align: center"><button class="disponible"></button></td>
-                <td style="text-align: center"><a href="/farmacista"><img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/></a></td>
-                <td><a href="/superadmin/editarFarmacista"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
-                <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/></a></td>
-            </tr>
-            <tr>
+                <td style="text-align: center" th:text="${farmacista.idFarmacista.nombres + ' ' +  farmacista.idFarmacista.apellidos}"></td>
+                <td style="text-align: center" th:text="${farmacista.idFarmacista.correo}"></td>
+                <td style="text-align: center" th:text="${farmacista.idSede.nombre}"></td>
+                <td style="text-align: center" th:text="${farmacista.idSede.admin.nombres + ' ' + farmacista.idSede.admin.apellidos}"></td>
                 <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 2</span>
-                    </div>
+                    <div th:if="${farmacista.idFarmacista.estadoUsuario== 1}" class="disponible" style="margin-left: 15px"></div>
+                    <div th:if="${farmacista.idFarmacista.estadoUsuario== 2}" class="no_disponible" style="margin-left: 15px"></div>
                 </td>
-                <td style="text-align: center">farmacista2@gmail.com</td>
-                <td style="text-align: center">San Miguel Centro</td>
-                <td style="text-align: center"><button class="disponible"></button></td>
                 <td style="text-align: center"><a href="/farmacista"><img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/></a></td>
-                <td><a href="/superadmin/editarFarmacista"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
-                <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/></a></td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 3</span>
-                    </div>
+                <td><a th:href="@{'/superadmin/editarFarmacista' + '?id=' + ${farmacista.idFarmacista.idUsuario}}"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
+                <td>
+                    <a th:href="@{'/superadmin/eliminarFarmacista' + '?id=' + ${farmacista.idFarmacista.idUsuario}}" onclick="return confirm('¿Estás seguro que desea eliminar a este farmacista?')" class="btn alert-danger">
+                        <img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar" >
+                    </a>
                 </td>
-                <td style="text-align: center">farmacista3@gmail.com</td>
-                <td style="text-align: center">Pando 5 Etapa</td>
-                <td style="text-align: center"><button class="disponible"></button></td>
-                <td style="text-align: center"><a href="/farmacista"><img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/></a></td>
-                <td><a href="/superadmin/editarFarmacista"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
-                <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/></a></td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 4</span>
-                    </div>
-                </td>
-                <td style="text-align: center">farmacista4@gmail.com</td>
-                <td style="text-align: center">San Miguel Sur</td>
-                <td style="text-align: center"><button class="no_disponible"></button></td>
-                <td style="text-align: center"><a href="/farmacista"><img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/></a></td>
-                <td><a href="/superadmin/editarFarmacista"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
-                <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/></a></td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 5</span>
-                    </div>
-                </td>
-                <td style="text-align: center">farmacista5@gmail.com</td>
-                <td style="text-align: center">San Miguel Centro</td>
-                <td style="text-align: center"><button class="disponible"></button></td>
-                <td style="text-align: center"><a href="/farmacista"><img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/></a></td>
-                <td><a href="/superadmin/editarFarmacista"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
-                <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/></a></td>
-            </tr>
-            <tr>
-                <td style="text-align: center">
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <label>
-                            <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
-                        </label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <span>   Farmacista 6</span>
-                    </div>
-                </td>
-                <td style="text-align: center">farmacista6@gmail.com</td>
-                <td style="text-align: center">Pando 5 Etapa</td>
-                <td style="text-align: center"><button class="no_disponible"></button></td>
-                <td style="text-align: center"><a href="/farmacista"><img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/></a></td>
-                <td><a href="/superadmin/editarFarmacista"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
-                <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/></a></td>
             </tr>
             </tbody>
         </table>
@@ -497,13 +403,8 @@
         });
     });
 </script>
-
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
-
-
 </body>
-
-
 </html>
 
 
