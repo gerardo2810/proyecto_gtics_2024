@@ -68,10 +68,11 @@ public class SuperAdminController {
 
     @GetMapping(value = {"/pacientes"})
     public String showPacientes(Model model){
-        List<Usuario> pacientelist = usuarioRepository.listarUsuariosSegunRol(3);
+        List<Usuario> pacientelist = usuarioRepository.listarUsuariosSegunRol(5);
         model.addAttribute("pacientelist", pacientelist);
         return "superAdmin/listaPacientes";
     }
+
     @GetMapping(value = {"/doctores"})
     public String showDoctores(Model model){
         List<Doctor> doctorList = doctorRepository.findAll();
@@ -145,7 +146,9 @@ public class SuperAdminController {
 
 
     @GetMapping(value = {"/historialSolicitudes"})
-    public String verHistorialSolicitudes(){
+    public String verHistorialSolicitudes(Model model){
+        List<SedeFarmacista> solicitudesAcepRech = sedeFarmacistaRepository.listarSolicitudesAceptadasyRechazadas();
+        model.addAttribute("solicitudesAcepRech", solicitudesAcepRech);
         return "superAdmin/historialSolicitudes";
     }
 
