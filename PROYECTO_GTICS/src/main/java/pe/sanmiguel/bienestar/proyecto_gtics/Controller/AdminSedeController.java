@@ -76,7 +76,16 @@ public class AdminSedeController {
     List<String> listaCantidades = new ArrayList<>();
 
     @GetMapping("")
-    public String showIndexAdminSede(){
+    public String showIndexAdminSede(Model model){
+        //SESSION
+        int idSede = 1;
+        int finalIdReposicion = reposicionRepository.findLastReposicionIdNoEntregado();
+        int preFinalIdReposicion = finalIdReposicion - 1;
+        List<Reposicion> listaReposicionNoEntregadasUltimas = reposicionRepository.listarOrdenesReposicionNoEntregadasUltimas(idSede, finalIdReposicion, preFinalIdReposicion);
+        if(listaReposicionNoEntregadasUltimas.size() == 0){
+            return "adminsede/inicio";
+        }
+        model.addAttribute("listaReposicionNoEntregadasUltimas", listaReposicionNoEntregadasUltimas);
         return "adminsede/inicio";
     }
 
@@ -99,7 +108,11 @@ public class AdminSedeController {
     }
 
     @GetMapping("/ordenes")
-    public String showOrders(){
+    public String showOrders(Model model){
+        //SESSION
+        int idSede = 1;
+        List<Reposicion> listaReposicionNoEntregadas = reposicionRepository.listarOrdenesReposicionNoEntregadas(idSede) ;
+        model.addAttribute("listaReposicionNoEntregadas", listaReposicionNoEntregadas);
         return "adminsede/ordenes_reposicion";
     }
 
@@ -162,7 +175,8 @@ public class AdminSedeController {
 
     @GetMapping("/ver_ordenes_entregadas")
     public String verOrdenesEntregadas(Model model){
-        List<Reposicion> listaOrdenesEntregadas = reposicionRepository.listarOrdenesReposicionEntregadas();
+        int idSede = 1; //CORREGIRRRRRRRRRRRR CON SESIONNNNNNNNNNNNNNN
+        List<Reposicion> listaOrdenesEntregadas = reposicionRepository.listarOrdenesReposicionEntregadas(idSede);
         model.addAttribute("listaOrdenesEntregadas", listaOrdenesEntregadas);
         return "adminsede/ver_ordenes_entregadas";
     }
