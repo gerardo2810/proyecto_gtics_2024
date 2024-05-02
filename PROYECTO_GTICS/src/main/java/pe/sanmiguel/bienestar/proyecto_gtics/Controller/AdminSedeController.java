@@ -134,7 +134,13 @@ public class AdminSedeController {
     }
 
     @GetMapping("/editar_orden_reposicion")
-    public String editOrden(){
+    public String editOrden(@RequestParam("id") int id,
+                            Model model){
+
+        int idSede = 1;
+
+        List<MedicamentosSedeStockDto> listaMedicamentosporAgotaroAgotados = medicamentoRepository.listarMedicamentosStockPorAgotaroAgotados(idSede);
+        model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosporAgotaroAgotados);
         return "adminsede/editar_orden_reposicion";
     }
 
@@ -370,6 +376,14 @@ public class AdminSedeController {
         model.addAttribute("reposicion", reposicionMostrar);
         model.addAttribute("listaMostrarNuevaCompra", listaMostrarNuevaCompra);
         return "adminsede/verDetallesOrdenEntregada";
+    }
+
+    @GetMapping("/eliminar_orden_reposicion")
+    public String eliminar_orden_reposicion(@RequestParam("id") int idReposicion){
+
+        reposicionContenidoRepository.eliminarContenidoReposicion(idReposicion);
+        reposicionRepository.eliminarReposicionporId(idReposicion);
+        return "redirect:/adminsede/ordenes";
     }
 
 

@@ -54,4 +54,10 @@ public interface ReposicionRepository extends JpaRepository<Reposicion, Integer>
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.reposicion where idEstado != 5 and idSede = ?1 and (id = ?2 or id = ?3)")
     List<Reposicion> listarOrdenesReposicionNoEntregadasUltimas(int idSede, int finalId, int preFinalId);
 
+    //Eliminar Reposición
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "delete from reposicion where id = ?1")
+    void eliminarReposicionporId(int idReposicion);
+
 }
