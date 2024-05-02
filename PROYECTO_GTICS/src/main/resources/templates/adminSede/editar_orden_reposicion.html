@@ -193,10 +193,9 @@
 
                         <div class="list-categorias">
 
-                            <div class="categoria-div"><a class="categoria" href="/adminsede/medicamentos">Todas las Categorías</a></div><br/>
-                            <div class="categoria-div"><a class="categoria" href="/adminsede/medicamentos?state=disponible">Stock Disponible</a></div><br/>
-                            <div class="categoria-div"><a class="categoria" href="/adminsede/medicamentos?state=agotado">Stock Agotado</a></div><br/>
-                            <div class="categoria-div"><a class="categoria" href="/adminsede/medicamentos?state=poragotar">Stock por Agotar</a></div>
+                            <div class="categoria-div"><a class="categoria" th:href="${'/adminsede/editar_orden_reposicion?id=' + idOrden}">Stock agotado y por agotar</a></div><br/>
+                            <div class="categoria-div"><a class="categoria" th:href="${'/adminsede/editar_orden_reposicion?id=' + idOrden + '&state=agotado'}">Stock Agotado</a></div><br/>
+                            <div class="categoria-div"><a class="categoria" th:href="${'/adminsede/editar_orden_reposicion?id=' + idOrden + '&state=poragotar'}">Stock por Agotar</a></div>
 
                         </div>
                         <br/>

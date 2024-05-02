@@ -134,14 +134,28 @@ public class AdminSedeController {
     }
 
     @GetMapping("/editar_orden_reposicion")
-    public String editOrden(@RequestParam("id") int id,
+    public String editOrden(@RequestParam(name = "state", required = false) String state,
+                            @RequestParam("id") int id,
                             Model model){
 
         int idSede = 1;
 
-        List<MedicamentosSedeStockDto> listaMedicamentosporAgotaroAgotados = medicamentoRepository.listarMedicamentosStockPorAgotaroAgotados(idSede);
-        model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosporAgotaroAgotados);
-        return "adminsede/editar_orden_reposicion";
+        if("agotado".equals(state)){
+            List<MedicamentosSedeStockDto> listaMedicamentosAgotados = medicamentoRepository.listarMedicamentosStockAgotados(idSede);
+            model.addAttribute("idOrden", id);
+            model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosAgotados);
+            return "adminsede/editar_orden_reposicion";
+        } else if ("poragotar".equals(state)) {
+            List<MedicamentosSedeStockDto> listaMedicamentosPorAgotar = medicamentoRepository.listarMedicamentosStockPorAgotar(idSede);
+            model.addAttribute("idOrden", id);
+            model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosPorAgotar);
+            return "adminsede/editar_orden_reposicion";
+        }else {
+            List<MedicamentosSedeStockDto> listaMedicamentosporAgotaroAgotados = medicamentoRepository.listarMedicamentosStockPorAgotaroAgotados(idSede);
+            model.addAttribute("idOrden", id);
+            model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosporAgotaroAgotados);
+            return "adminsede/editar_orden_reposicion";
+        }
     }
 
     @GetMapping("/medicamentos")
