@@ -112,7 +112,7 @@
 
                                     <li><a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a></li>
 
-                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Pedidos de Reposición</a></li>
+                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Órdenes de Reposición</a></li>
 
                                     <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a></li>
                                 </ul>
@@ -156,9 +156,6 @@
             <br/>
             <div th:each="orden : ${listaReposicionNoEntregadasUltimas}">
                 <h2 style="margin-left: 30px" th:text="${'Orden de reposición #' + orden.getIdReposicion()}">Orden de reposicion #1</h2>
-                <a href="/adminsede/editar_orden_reposicion" class="edit-icon" style="margin-left: 30px"><i class="fas fa-pencil-alt"></i></a>
-                <a href="#" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a>
-
                 <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 1}">
                     <div class="wrapper">
                         <h3>Estado de la orden</h3>
@@ -361,7 +358,7 @@
                         <a href="/adminsede" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Inicio</a> |
                         <a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a> |
                         <a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a> |
-                        <a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Pedidos de Reposición</a> |
+                        <a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Órdenes de Reposición</a> |
                         <a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a> |
                         <a href="/adminsede/perfil_adminsede" class="menu-item-small roboto-regular">Perfil</a>
                     </p>

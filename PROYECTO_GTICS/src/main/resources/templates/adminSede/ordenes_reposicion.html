@@ -55,7 +55,7 @@
 
                         <li><a href="/adminsede/farmacista" class="menu-item roboto-regular">Farmacistas</a></li>
 
-                        <li><a href="/adminsede/ordenes" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Pedidos de Reposición</a></li>
+                        <li><a href="/adminsede/ordenes" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Órdenes de Reposición</a></li>
 
                         <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular">Medicamentos</a></li>
 
@@ -106,7 +106,7 @@
 
                                     <li><a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a></li>
 
-                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Pedidos de Reposición</a></li>
+                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Órdenes de Reposición</a></li>
 
                                     <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a></li>
                                 </ul>
@@ -155,8 +155,14 @@
 
             <div th:each="orden : ${listaReposicionNoEntregadas}">
                 <h2 style="margin-left: 30px" th:text="${ 'Orden de reposición #'+ orden.getIdReposicion()}">Orden de reposicion #1</h2>
-                <a href="/adminsede/editar_orden_reposicion" class="edit-icon" style="margin-left: 30px"><i class="fas fa-pencil-alt"></i></a>
-                <a href="#" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a>
+                <div th:if="${orden.getEstado().getIdEstado() == 1}">
+                    <a th:href="@{'/adminsede/editar_orden_reposicion?id=' + ${orden.getIdReposicion()}}" class="edit-icon" style="margin-left: 30px"><i class="fas fa-pencil-alt"></i></a>
+                    <a th:href="@{'/adminsede/eliminar_orden_reposicion?id=' + ${orden.getIdReposicion()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a>
+                </div>
+                <div th:if="${orden.getEstado().getIdEstado() == 2}">
+                    <a th:href="@{'/adminsede/editar_orden_reposicion?id=' + ${orden.getIdReposicion()}}" class="edit-icon" style="margin-left: 30px"><i class="fas fa-pencil-alt"></i></a>
+                    <a th:href="@{'/adminsede/eliminar_orden_reposicion?id=' + ${orden.getIdReposicion()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a>
+                </div>
 
                 <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 1}">
                     <div class="wrapper">
@@ -326,7 +332,7 @@
                         <a href="/adminsede" class="menu-item-small roboto-regular">Inicio</a> |
                         <a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a> |
                         <a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a> |
-                        <a href="/adminsede/ordenes" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Pedidos de Reposición</a> |
+                        <a href="/adminsede/ordenes" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Órdenes de Reposición</a> |
                         <a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a> |
                         <a href="/adminsede/perfil_adminsede" class="menu-item-small roboto-regular">Perfil</a>
                     </p>

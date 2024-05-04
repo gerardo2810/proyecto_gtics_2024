@@ -16,5 +16,7 @@ public interface ReposicionContenidoMedicamentoDto {
 
     Float getPrecioCompra();
 
+    String getImagen();
+
 
 }
