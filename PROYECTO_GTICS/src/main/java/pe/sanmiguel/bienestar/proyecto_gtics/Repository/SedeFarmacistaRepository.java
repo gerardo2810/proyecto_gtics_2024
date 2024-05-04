@@ -64,4 +64,8 @@ public interface SedeFarmacistaRepository extends JpaRepository<SedeFarmacista, 
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f INNER JOIN proyecto_gtics.usuario u WHERE f.idFarmacista=u.id and (f.aprobado=1 or f.aprobado=3);")
     List<SedeFarmacista> listarSolicitudesAceptadasyRechazadas();
 
+
+
+
+
 }

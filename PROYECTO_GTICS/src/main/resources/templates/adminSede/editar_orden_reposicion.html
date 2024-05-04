@@ -182,7 +182,7 @@
                                 <div class="item-details">
                                     <div class="selector-cantidad">
                                         <i class="fa-solid fa-minus restar-cantidad" th:data-item-id="${med.getIdMedicamento()}" ></i>
-                                        <input type="text" value="1" class="item-quantity-clicked" th:data-item-id="${med.getIdMedicamento()}">
+                                        <input type="text" th:value="${med.getCantidad()}" class="item-quantity-clicked" th:data-item-id="${med.getIdMedicamento()}">
                                         <i class="fa-solid fa-plus sumar-cantidad" th:data-item-id="${med.getIdMedicamento()}"></i>
                                     </div>
 
@@ -365,6 +365,8 @@
 
                 actualizarMontoTotal();
                 getFromExistingList();
+                console.log(listaSelectedIds);
+                console.log("hola");
 
                 function getFromExistingList() {
                     const listItems = document.getElementsByClassName('lista-items-clicked')[0];

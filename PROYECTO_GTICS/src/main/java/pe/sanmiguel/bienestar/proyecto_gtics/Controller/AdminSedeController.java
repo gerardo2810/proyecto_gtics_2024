@@ -289,7 +289,7 @@ public class AdminSedeController {
             sedeFarmacista.setId(sedeFarmacistaOld.getId());
             sedeFarmacista.setIdFarmacista(sedeFarmacistaOld.getIdFarmacista());
             sedeFarmacista.setAprobado(sedeFarmacistaOld.getAprobado());
-            sedeFarmacistaRepository.save(sedeFarmacista);
+            //sedeFarmacistaRepository.save(sedeFarmacista);
             return "redirect:/adminsede/farmacista";
 
         }else {

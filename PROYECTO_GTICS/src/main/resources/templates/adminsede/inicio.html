@@ -21,6 +21,7 @@
         <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
         <link th:href="@{/css/preloader.css}" rel="stylesheet" />
         <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+        <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
 
         <!--=============== JS ===============-->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -159,23 +160,24 @@
                 <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 1}">
                     <div class="wrapper">
                         <h3>Estado de la orden</h3>
-                        <div class="progress-container">
+                        <div class="progress-container" style="margin-top: 60px">
                             <div class="progress" id="progress"></div>
-                            <div class="progress-step">
+                            <div class="barra"  style="width: 0%"></div>
+                            <div class="progress-step" style="margin-right: 50px">
                                 <div>
                                     <i class="fa-solid fa-list-ul active"></i>Recibido
                                 </div>
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-cart-shopping"></i>En proceso
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-box"></i>Empaquetado
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-truck"></i>En ruta
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-check-double"></i>Entregado
                             </div>
 
@@ -196,23 +198,24 @@
                 <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 2}">
                     <div class="wrapper">
                         <h3>Estado de la orden</h3>
-                        <div class="progress-container">
+                        <div class="progress-container" style="margin-top: 60px">
                             <div class="progress" id="progress"></div>
-                            <div class="progress-step">
+                            <div class="barra"  style="width: 25%"></div>
+                            <div class="progress-step" style="margin-right: 50px">
                                 <div>
                                     <i class="fa-solid fa-list-ul active"></i>Recibido
                                 </div>
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-cart-shopping active"></i>En proceso
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-box"></i>Empaquetado
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-truck"></i>En ruta
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-check-double"></i>Entregado
                             </div>
 
@@ -234,23 +237,24 @@
                 <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 3}">
                     <div class="wrapper">
                         <h3>Estado de la orden</h3>
-                        <div class="progress-container">
+                        <div class="progress-container" style="margin-top: 60px">
                             <div class="progress" id="progress"></div>
-                            <div class="progress-step">
+                            <div class="barra"  style="width: 50%"></div>
+                            <div class="progress-step" style="margin-right: 50px">
                                 <div>
                                     <i class="fa-solid fa-list-ul active"></i>Recibido
                                 </div>
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-cart-shopping active"></i>En proceso
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-box active"></i>Empaquetado
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-truck"></i>En ruta
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-check-double"></i>Entregado
                             </div>
 
@@ -270,24 +274,25 @@
 
                 <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 4}">
                     <div class="wrapper">
-                        <h3>Estado de la orden</h3>
-                        <div class="progress-container">
+                        <div><h3>Estado de la orden</h3></div>
+                        <div class="progress-container" style="margin-top: 60px">
                             <div class="progress" id="progress"></div>
-                            <div class="progress-step">
+                            <div class="barra"  style="width: 70%"></div>
+                            <div class="progress-step" style="margin-right: 50px">
                                 <div>
                                     <i class="fa-solid fa-list-ul active"></i>Recibido
                                 </div>
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-cart-shopping active"></i>En proceso
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-box active"></i>Empaquetado
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-truck active"></i>En ruta
                             </div>
-                            <div class="progress-step">
+                            <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-check-double"></i>Entregado
                             </div>
 
