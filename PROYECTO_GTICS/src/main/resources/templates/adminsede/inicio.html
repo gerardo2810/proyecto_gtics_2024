@@ -28,10 +28,16 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js" integrity="sha512-k37wQcV4v2h6jgYf5IUz1MoSKPpDs630XGSmCaCCOXxy2awgAWKHGZWr9nMyGgk3IOxA1NxdkN8r1JHgkUtMoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script th:src="@{/js/graficos.js}"></script>
         <script th:src="@{/js/tracking.js}"></script>
+
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
         <!-- Font Awesome -->
         <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
+        <!--=============== SWEETALERT ===============-->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
+
         <title>Bienestar San Miguel | Administrador de Sede</title>
     </head>
 
@@ -404,6 +410,30 @@
                         $('#menu-small').show();
                     }
                     opened = !opened;
+                });
+            });
+        </script>
+
+        <script>
+            // Ejecutar cuando el contenido de la página se haya cargado completamente
+            document.addEventListener('DOMContentLoaded', function() {
+                // Mostrar una alerta de bienvenida con un botón para redirigir
+                Swal.fire({
+                    title: '¡Atención!',
+                    text: 'Su inventario de medicamentos se está agotando. Por favor, revise su stock y realice los pedidos necesarios para evitar interrupciones en el servicio.',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido',
+                    showCancelButton: true,
+                    cancelButtonText: 'Ir a revisar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // El usuario hizo clic en 'Entendido'
+                        // Aquí puedes agregar cualquier acción adicional que desees
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        // El usuario hizo clic en 'Ir a revisar'
+                        // Redirigir a otra vista
+                        window.location.href = '/adminsede/notificaciones_adminsede';
+                    }
                 });
             });
         </script>

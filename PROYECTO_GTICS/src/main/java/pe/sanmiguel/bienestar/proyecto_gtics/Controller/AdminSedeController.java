@@ -215,6 +215,13 @@ public class AdminSedeController {
         return "adminsede/perfil_adminsede";
     }
 
+    @GetMapping("/notificaciones_adminsede")
+    public String vistaNotificaciones(Model model){
+        int idSede=1;  //CORREGIRRRRRRRRRRRR CON SESIONNNNNNNNNNNNNNN
+        model.addAttribute("medicamentosSinStock", medicamentoRepository.listarMedicamentosStockPorAgotaroAgotados(idSede));
+        return "adminsede/notificaciones_adminsede";
+    }
+
     @GetMapping("/verDetalles") //VER DETALLES DE NUEVA COMPRA
     public String verDetalles(Model model){
 
