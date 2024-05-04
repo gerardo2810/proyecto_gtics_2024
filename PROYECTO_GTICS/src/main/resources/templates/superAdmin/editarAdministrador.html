@@ -360,17 +360,17 @@
 
                         <div>
                             <div class="column">
-                                <input th:value="${farmacista.idUsuario}" name="idUsuario" type="hidden"/>
-                                <input th:value="${farmacista.rol}" name="rol" type="hidden"/>
+                                <input th:value="${administrador.idUsuario}" name="idUsuario" type="hidden"/>
+                                <input th:value="${administrador.rol}" name="rol" type="hidden"/>
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Nombre del farmacista:</label>
-                                    <input th:value="${farmacista.nombres}"  class="input-form" type="text" name="nombres" required>
+                                    <input th:value="${administrador.nombres}"  class="input-form" type="text" name="nombres" required>
                                 </div>
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Apellidos del farmacista:</label>
-                                    <input th:value="${farmacista.apellidos}" class="input-form" type="text" name="apellidos"  required>
+                                    <input th:value="${administrador.apellidos}" class="input-form" type="text" name="apellidos"  required>
                                 </div>
 
                             </div>
@@ -379,12 +379,12 @@
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">DNI:</label>
-                                    <input th:value="${farmacista.dni}" class="input-form" type="text" name="dni" placeholder="Ingrese su DNI" required>
+                                    <input th:value="${administrador.dni}" class="input-form" type="text" name="dni" placeholder="Ingrese su DNI" required>
                                 </div>
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Dirección:</label>
-                                    <input th:value="${farmacista.direccion}" class="input-form" type="text" name="direccion" placeholder="Ingrese su dirección" required>
+                                    <input th:value="${administrador.direccion}" class="input-form" type="text" name="direccion" placeholder="Ingrese su dirección" required>
                                 </div>
 
                             </div>
@@ -393,16 +393,17 @@
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Distrito:</label>
-                                    <input th:value="${farmacista.distrito}" class="input-form" name="distrito" type="text" placeholder="Ingrese el distrito donde reside" required>
+                                    <input th:value="${administrador.distrito}" class="input-form" name="distrito" type="text" placeholder="Ingrese el distrito donde reside" required>
                                 </div>
 
                                 <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Estado de Usuario:</label>
-                                    <select class="select-form" name="estadoUsuario" required>
-
-                                        <option th:each="estadoUsuario: ${estadoUsuarioList}"
-                                                th:value="${estadoUsuario.idEstadoUsuario}"
-                                                th:text="${estadoUsuario.nombre}">
+                                    <label style="font-weight: bold; color:dimgray">Sede del Administrador:</label>
+                                    <select class="select-form" name="sedeid" required>
+                                        <option selected disabled>Seleccionar sede</option>
+                                        <option th:each="sede: ${sedeList}"
+                                                th:selected="${sedeAdministrador.idSede != null and (sede.idSede == sedeAdministrador.idSede)}"
+                                                th:value="${sede.idSede}"
+                                                th:text="${sede.nombre}">
                                         </option>
                                     </select>
                                 </div>
@@ -411,13 +412,13 @@
                             <div class="column">
 
                                 <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Código (colegio médico):</label>
-                                    <input th:value="${sedeFarmacista.codigoMed}" class="input-form" type="text" name="codigoMed" placeholder="Ingrese su DNI" required>
+                                    <label style="font-weight: bold; color:dimgray">Correo electrónico:</label>
+                                    <input th:value="${administrador.correo}" class="input-form" type="email" name="correo" placeholder="Ingrese el correo" required>
                                 </div>
 
                                 <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Seguro:</label>
-                                    <input th:value="${farmacista.seguro}" class="input-form" type="text" name="seguro" placeholder="Ingrese su dirección" required>
+                                    <label style="font-weight: bold; color:dimgray">Contraseña:</label>
+                                    <input th:value="${administrador.contrasena}" class="input-form" type="password" name="contrasena" placeholder="Ingrese la contraseña" required>
                                 </div>
 
                             </div>
@@ -425,27 +426,23 @@
                             <div class="column">
 
                                 <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Correo electrónico:</label>
-                                    <input th:value="${farmacista.correo}" class="input-form" type="email" name="correo" placeholder="Ingrese el correo" required>
-                                </div>
-
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Contraseña:</label>
-                                    <input th:value="${farmacista.contrasena}" class="input-form" type="password" name="contrasena" placeholder="Ingrese la contraseña" required>
-                                </div>
-
-                            </div>
-
-                            <div class="column-start">
-
-                                <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Teléfono:</label>
-                                    <input th:value="${farmacista.celular}" class="input-form" type="text" name="celular" placeholder="Ingrese su teléfono" required>
+                                    <input th:value="${administrador.celular}" class="input-form" type="text" name="celular" placeholder="Ingrese su teléfono" required>
+                                </div>
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Estado de Usuario:</label>
+                                    <select class="select-form" name="estadoUsuario" required>
+
+                                        <option th:each="estadoUsuario: ${estadoUsuarioList}"
+                                                th:selected="${administrador.estadoUsuario != null and (estadoUsuario.idEstadoUsuario == administrador.estadoUsuario)}"
+                                                th:value="${estadoUsuario.idEstadoUsuario}"
+                                                th:text="${estadoUsuario.nombre}">
+                                        </option>
+                                    </select>
                                 </div>
 
                             </div>
-
-
                         </div>
                     </div>
                     <br>

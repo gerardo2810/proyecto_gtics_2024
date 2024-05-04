@@ -218,6 +218,9 @@
     <div th:case="1" style="display: flex;justify-content: center">
 
         <p style="font-size: 30px;color:#0d6efd ">!Para empezar con el seguimiento del pedido su orden aún debe ser aprobada!</p>
+        <h2>Imagen de la Orden</h2>
+        <img th:src="'data:image/jpeg;base64,' + ${imagen}"/>
+
     </div>
 
 
