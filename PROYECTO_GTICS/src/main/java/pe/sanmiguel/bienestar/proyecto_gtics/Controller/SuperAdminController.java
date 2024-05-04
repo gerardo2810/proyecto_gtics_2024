@@ -1,5 +1,7 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.Part;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,12 +11,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Controller
+@MultipartConfig
 @RequestMapping(value = {"/superadmin"}, method = RequestMethod.GET)
 public class SuperAdminController {
 
@@ -294,15 +299,13 @@ public class SuperAdminController {
 
 
     @PostMapping("/guardarMedicamento")
-    public String agregarNuevoMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento, BindingResult bindingResult, RedirectAttributes attr, Model model){
-        if(bindingResult.hasErrors()){
-            List<Sede> sedeDisponibleList = sedeRepository.findAll();
-            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
-            return "superAdmin/crearMedicamento";
-        }else{
+    public String agregarNuevoMedicamento(@ModelAttribute("medicamento") Medicamento medicamento, @RequestParam("imagen") Part imagen, RedirectAttributes attr, Model model) throws IOException {
+
+            InputStream inputStream = imagen.getInputStream();
+            byte[] bytes = inputStream.readAllBytes();
+            medicamento.setImagen(bytes);
             medicamentoRepository.save(medicamento);
             return "redirect:/superadmin/medicamentos";
-        }
     }
 
     @GetMapping(value = {"/editarMedicamento"})
