@@ -10,10 +10,8 @@
 
     <!--=============== REMIXICONS ===============-->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
-
-
-
-
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
 
 
     <!--=============== CSS ===============-->
@@ -237,13 +235,13 @@
                                 <div class="item-title roboto-medium" th:text="${medicamento.nombre}">Medicamento</div>
                             </div>
                             <div class="items-details">
-                                Ver Detalles
+                                <a class="categoria" href="/farmacista/ver_detalles">Ver Detalles</a>
                             </div>
+
                         </div>
                         <div style="display: flex; flex-direction: row; gap: 3px; align-items: end;">
                             <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
                         </div>
-
                         <button class="add-item-button open-sans-regular" th:data-item-id="${medicamento.idMedicamento}">Añadir Producto</button>
                     </div>
                 </div>
@@ -253,7 +251,6 @@
         </div>
 
     </div>
-
 
     <div>
         <footer id="sticky-footer" class="footer-distributed">
@@ -586,29 +583,32 @@
 
     </script>
 
+
+
 <script>
-    // Ejecutar cuando el contenido de la página se haya cargado completamente
-    document.addEventListener('DOMContentLoaded', function() {
-        // Mostrar una alerta de bienvenida con un botón para redirigir
-        Swal.fire({
-            title: '¡Atención!',
-            text: 'Su inventario de medicamentos se está agotando. Por favor, revise su stock y realice los pedidos necesarios para evitar interrupciones en el servicio.',
-            icon: 'warning',
-            confirmButtonText: 'Entendido',
-            showCancelButton: true,
-            cancelButtonText: 'Ir a revisar',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // El usuario hizo clic en 'Entendido'
-                // Aquí puedes agregar cualquier acción adicional que desees
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                // El usuario hizo clic en 'Ir a revisar'
-                // Redirigir a otra vista
-                window.location.href = '/farmacista/facturacion'; // Reemplaza 'ruta_de_tu_vista' por la URL de tu vista
-            }
+        // Ejecutar cuando el contenido de la página se haya cargado completamente
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mostrar una alerta de bienvenida con un botón para redirigir
+            Swal.fire({
+                title: '¡Atención!',
+                text: 'Su inventario de medicamentos se está agotando. Por favor, revise su stock y realice los pedidos necesarios para evitar interrupciones en el servicio.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+                showCancelButton: true,
+                cancelButtonText: 'Ir a revisar',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // El usuario hizo clic en 'Entendido'
+                    // Aquí puedes agregar cualquier acción adicional que desees
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // El usuario hizo clic en 'Ir a revisar'
+                    // Redirigir a otra vista
+                    window.location.href = '/farmacista/facturacion';
+                }
+            });
         });
-    });
-</script>
+    </script>
+
 
 </body>
 

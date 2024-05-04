@@ -28,6 +28,9 @@
         <!--=============== FONT AWESOME ===============-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
+        <!-- Font Awesome -->
+        <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
         <title>Bienestar San Miguel | Sede 1</title>
 
     </head>
@@ -61,14 +64,15 @@
 
                             <li><a href="/adminsede/farmacista" class="menu-item roboto-regular">Farmacistas</a></li>
 
-                            <li><a href="/adminsede/ordenes" class="menu-item roboto-regular">Pedidos de Reposición</a></li>
+                            <li><a href="/adminsede/ordenes" class="menu-item roboto-regular">Órdenes de Reposición</a></li>
 
                             <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Medicamentos</a></li>
 
                             <!--=============== DROPDOWN ===============-->
                             <li class="dropdown-item">
                                 <div class="menu-item roboto-regular">
-                                    Más opciones <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                                    <i class="fas fa-user fa-fw"></i>
+                                    <i class="ri-arrow-down-s-line dropdown-arrow"></i>
                                 </div>
 
                                 <ul class="dropdown-menu">
@@ -111,7 +115,7 @@
 
                                         <li><a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a></li>
 
-                                        <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Pedidos de Reposición</a></li>
+                                        <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Órdenes de Reposición</a></li>
 
                                         <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Medicamentos</a></li>
                                     </ul>
@@ -214,7 +218,7 @@
                             <input id="searchInput" type="text" class="input-form" style="outline: none" placeholder="Buscar medicamento por nombre" >
                         </div>
 
-                        <a href="/adminsede/medicamentos"><button class="add-item-button open-sans-regular">Borrar Filtros</button></a>
+                        <a href="/adminsede/medicamentos"><button class="add-item-button open-sans-regular" style="color: #ffffff">Borrar Filtros</button></a>
 
                     </div>
 
@@ -239,7 +243,17 @@
                                 </div>
                             </div>
 
-                            <button class="add-item-button open-sans-regular" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
+                            <button class="add-item-button open-sans-regular" style="color: #ffffff" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
+                            <!--
+                            <div th:if="${medicamento.getCantidad() < 25}">
+                                <button class="add-item-button open-sans-regular" style="color: #ffffff" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
+                            </div>
+
+                            <div th:if="${medicamento.getCantidad() > 25}">
+                                <button class="add-item-button open-sans-regular" style="color: #ffffff; background-color: #6c757d" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
+                            </div>
+                            -->
+
                         </div>
                     </div>
 
@@ -255,11 +269,12 @@
                 <div class="footer-left">
                     <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
                     <p class="footer-links">
-                        <a href="/farmacista">Inicio</a> |
-                        <a href="/farmacista/ordenes_venta">Ordenes de Venta</a> |
-                        <a href="/farmacista/ordenes_web">Ordenes Web</a> |
-                        <a href="/farmacista/pre_ordenes">Pre Ordenes</a> |
-                        <a href="/farmacista/perfil">Perfil</a>
+                        <a href="/adminsede" class="menu-item-small roboto-regular">Inicio</a> |
+                        <a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a> |
+                        <a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a> |
+                        <a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Órdenes de Reposición</a> |
+                        <a href="/adminsede/medicamentos" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Medicamentos</a> |
+                        <a href="/adminsede/perfil_adminsede" class="menu-item-small roboto-regular">Perfil</a>
                     </p>
                     <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
                 </div>

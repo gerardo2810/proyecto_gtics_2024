@@ -42,9 +42,26 @@ public interface SedeFarmacistaRepository extends JpaRepository<SedeFarmacista, 
     //Seleccionar Sede-Farmacista
 
 
-    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f INNER JOIN proyecto_gtics.usuario u, proyecto_gtics.sede s WHERE f.idSede = s.id and f.idFarmacista=u.id")
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f INNER JOIN proyecto_gtics.usuario u, proyecto_gtics.sede s WHERE f.idSede = s.id and f.idFarmacista=u.id and f.aprobado=1;")
     List<SedeFarmacista> listarFarmacistasPorSede();
 
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f, proyecto_gtics.usuario u WHERE f.idFarmacista = u.id and f.idFarmacista = ?1")
+    List<SedeFarmacista> findFarmacistaEnSede(int idFarmacista);
 
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f INNER JOIN proyecto_gtics.usuario u, proyecto_gtics.sede s WHERE f.idSede = s.id and f.idFarmacista=u.id and f.aprobado=2;")
+    List<SedeFarmacista> listarSolicitudesFarmacistas();
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.sede_farmacista SET aprobado = 3 WHERE idFarmacista = ?1")
+    void denegarSolicitud(Integer idFarmacista);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.sede_farmacista SET aprobado = 1 WHERE idFarmacista = ?1")
+    void aprobarSolicitud(Integer idFarmacista);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f INNER JOIN proyecto_gtics.usuario u WHERE f.idFarmacista=u.id and (f.aprobado=1 or f.aprobado=3);")
+    List<SedeFarmacista> listarSolicitudesAceptadasyRechazadas();
 
 }

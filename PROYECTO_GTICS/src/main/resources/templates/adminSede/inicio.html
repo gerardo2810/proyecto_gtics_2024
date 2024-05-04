@@ -18,6 +18,9 @@
         <link rel="stylesheet" th:href="@{/css/fonts.css}">
         <link rel="stylesheet" th:href="@{/css/topbar.css}">
         <link rel="stylesheet" th:href="@{/css/footer.css}">
+        <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+        <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
 
         <!--=============== JS ===============-->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -27,7 +30,8 @@
         <script th:src="@{/js/tracking.js}"></script>
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
+        <!-- Font Awesome -->
+        <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
         <title>Bienestar San Miguel | Administrador de Sede</title>
     </head>
 
@@ -58,7 +62,8 @@
                         <!--=============== DROPDOWN ===============-->
                         <li class="dropdown-item">
                             <div class="menu-item roboto-regular">
-                                Más opciones <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                                <i class="fas fa-user fa-fw"></i>
+                                <i class="ri-arrow-down-s-line dropdown-arrow"></i>
                             </div>
 
                             <ul class="dropdown-menu">
@@ -101,7 +106,7 @@
 
                                     <li><a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a></li>
 
-                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Pedidos de Reposición</a></li>
+                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Órdenes de Reposición</a></li>
 
                                     <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a></li>
                                 </ul>
@@ -127,99 +132,187 @@
 
         <div style="margin-top: 110px"></div>
 
-        <div class = "container">
+        <div class = "container" th:if="${listaReposicionNoEntregadasUltimas.size() != 0}">
             <div class="container">
 
+                <div style="padding-top: 20px; padding-bottom: 20px">
+                    <div class="main-title open-sans-bold"> Inicio </div>
+                    <div class="main-subtitle helvetica-medium"> Vista de Estadísticas y Órdenes de reposición</div>
+                </div>
+                <hr class="style-one">
+
                 <div style="margin-bottom: 50px"></div>
-                <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Tracking órdenes de reposición</strong></h2>
-                <div style="margin-bottom: 10px"></div>
-                <hr style="border-top: 1px solid #262626;">
+                <h2><i class="fa-solid fa-star" style="color: #2a2a2a;"></i><strong style="padding-left: 10px; color: #2a2a2a">Tracking órdenes de reposición</strong></h2>
                 <div style="margin-bottom: 10px"></div>
 
                 <div style="padding-right: 0; padding-left: 0"> </div>
             </div>
             <br/>
-            <h2>Orden de reposicion #1</h2>
-            <div class="container-track1">
-                <div class="wrapper">
-                    <h3>Estado de la orden</h3>
-                    <div class="progress-container">
-                        <div class="progress" id="progress"></div>
-                        <div class="progress-step">
-                            <i class="fa-solid fa-list-ul active"></i>Recibido
-                        </div>
-                        <div class="progress-step">
-                            <i class="fa-solid fa-cart-shopping"></i>En proceso
-                        </div>
-                        <div class="progress-step">
-                            <i class="fa-solid fa-box"></i>Empaquetado
-                        </div>
-                        <div class="progress-step">
-                            <i class="fa-solid fa-truck"></i>En ruta
-                        </div>
-                        <div class="progress-step">
-                            <i class="fa-solid fa-check-double"></i>Entregado
-                        </div>
+            <div th:each="orden : ${listaReposicionNoEntregadasUltimas}">
+                <h2 style="margin-left: 30px" th:text="${'Orden de reposición #' + orden.getIdReposicion()}">Orden de reposicion #1</h2>
+                <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 1}">
+                    <div class="wrapper">
+                        <h3>Estado de la orden</h3>
+                        <div class="progress-container">
+                            <div class="progress" id="progress"></div>
+                            <div class="progress-step">
+                                <div>
+                                    <i class="fa-solid fa-list-ul active"></i>Recibido
+                                </div>
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-cart-shopping"></i>En proceso
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-box"></i>Empaquetado
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-truck"></i>En ruta
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-check-double"></i>Entregado
+                            </div>
 
+                        </div>
+                        <!--
+                        <div class="btn-container">
+                            <button class="btn" id="prev">Previous</button>
+                            <button class="btn" id="next">Next</button>
+                        </div>
+                        -->
                     </div>
-                    <!--
-                    <div class="btn-container">
-                        <button class="btn" id="prev">Previous</button>
-                        <button class="btn" id="next">Next</button>
+
+                    <div class = "container-orden">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.575971232228!2d-77.07181742216821!3d-12.072669257653358!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91a6f8fbefb%3A0x408ed032eafa9864!2sMultilab%20Pueblo%20Libre!5e0!3m2!1ses!2spe!4v1712592591241!5m2!1ses!2spe" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
-                    -->
                 </div>
 
-                <div class = "container-orden">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.575971232228!2d-77.07181742216821!3d-12.072669257653358!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91a6f8fbefb%3A0x408ed032eafa9864!2sMultilab%20Pueblo%20Libre!5e0!3m2!1ses!2spe!4v1712592591241!5m2!1ses!2spe" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 2}">
+                    <div class="wrapper">
+                        <h3>Estado de la orden</h3>
+                        <div class="progress-container">
+                            <div class="progress" id="progress"></div>
+                            <div class="progress-step">
+                                <div>
+                                    <i class="fa-solid fa-list-ul active"></i>Recibido
+                                </div>
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-cart-shopping active"></i>En proceso
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-box"></i>Empaquetado
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-truck"></i>En ruta
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-check-double"></i>Entregado
+                            </div>
+
+                        </div>
+                        <!--
+                        <div class="btn-container">
+                            <button class="btn" id="prev">Previous</button>
+                            <button class="btn" id="next">Next</button>
+                        </div>
+                        -->
+                    </div>
+
+                    <div class = "container-orden">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.575971232228!2d-77.07181742216821!3d-12.072669257653358!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91a6f8fbefb%3A0x408ed032eafa9864!2sMultilab%20Pueblo%20Libre!5e0!3m2!1ses!2spe!4v1712592591241!5m2!1ses!2spe" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+
+
+                <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 3}">
+                    <div class="wrapper">
+                        <h3>Estado de la orden</h3>
+                        <div class="progress-container">
+                            <div class="progress" id="progress"></div>
+                            <div class="progress-step">
+                                <div>
+                                    <i class="fa-solid fa-list-ul active"></i>Recibido
+                                </div>
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-cart-shopping active"></i>En proceso
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-box active"></i>Empaquetado
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-truck"></i>En ruta
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-check-double"></i>Entregado
+                            </div>
+
+                        </div>
+                        <!--
+                        <div class="btn-container">
+                            <button class="btn" id="prev">Previous</button>
+                            <button class="btn" id="next">Next</button>
+                        </div>
+                        -->
+                    </div>
+
+                    <div class = "container-orden">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.575971232228!2d-77.07181742216821!3d-12.072669257653358!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91a6f8fbefb%3A0x408ed032eafa9864!2sMultilab%20Pueblo%20Libre!5e0!3m2!1ses!2spe!4v1712592591241!5m2!1ses!2spe" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+
+                <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 4}">
+                    <div class="wrapper">
+                        <h3>Estado de la orden</h3>
+                        <div class="progress-container">
+                            <div class="progress" id="progress"></div>
+                            <div class="progress-step">
+                                <div>
+                                    <i class="fa-solid fa-list-ul active"></i>Recibido
+                                </div>
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-cart-shopping active"></i>En proceso
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-box active"></i>Empaquetado
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-truck active"></i>En ruta
+                            </div>
+                            <div class="progress-step">
+                                <i class="fa-solid fa-check-double"></i>Entregado
+                            </div>
+
+                        </div>
+                        <!--
+                        <div class="btn-container">
+                            <button class="btn" id="prev">Previous</button>
+                            <button class="btn" id="next">Next</button>
+                        </div>
+                        -->
+                    </div>
+
+                    <div class = "container-orden">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.575971232228!2d-77.07181742216821!3d-12.072669257653358!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91a6f8fbefb%3A0x408ed032eafa9864!2sMultilab%20Pueblo%20Libre!5e0!3m2!1ses!2spe!4v1712592591241!5m2!1ses!2spe" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
                 </div>
             </div>
 
-            <h2>Orden de reposicion #2</h2>
-            <div class="container-track1">
-                <div class="wrapper">
-                    <h3>Estado de la orden</h3>
-                    <div class="progress-container">
-                        <div class="progress" id="progress"></div>
-                        <div class="progress-step">
-                            <i class="fa-solid fa-list-ul active"></i>Recibido
-                        </div>
-                        <div class="progress-step">
-                            <i class="fa-solid fa-cart-shopping"></i>En proceso
-                        </div>
-                        <div class="progress-step">
-                            <i class="fa-solid fa-box"></i>Empaquetado
-                        </div>
-                        <div class="progress-step">
-                            <i class="fa-solid fa-truck"></i>En ruta
-                        </div>
-                        <div class="progress-step">
-                            <i class="fa-solid fa-check-double"></i>Entregado
-                        </div>
 
-                    </div>
-                </div>
-
-                <div class = "container-orden">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.575971232228!2d-77.07181742216821!3d-12.072669257653358!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91a6f8fbefb%3A0x408ed032eafa9864!2sMultilab%20Pueblo%20Libre!5e0!3m2!1ses!2spe!4v1712592591241!5m2!1ses!2spe" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </div>
-            </div>
             <div class="container-graph-circular">
-                <div class="buttons">
-                    <a href="/adminsede/ordenes" class="btn btn-1">Ver más</a>
-                </div>
-
+                <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/ordenes'" style="margin-left: 20px">Ver más</button>
             </div>
-            <div class="container">
 
-                <div style="margin-bottom: 50px"></div>
-                <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Estadísticas</strong></h2>
-                <div style="margin-bottom: 20px"></div>
-                <hr style="border-top: 1px solid #262626;">
-                <div style="margin-bottom: 40px"></div>
+        </div>
+        <div class="container">
 
-                <div style="padding-right: 0; padding-left: 0"> </div>
-            </div>
+            <div style="margin-bottom: 50px"></div>
+            <h2><i class="fa-solid fa-star" style="color: #2a2a2a; margin-left: 33px"></i><strong style="padding-left: 10px; color: #2a2a2a">Estadísticas</strong></h2>
+            <div style="margin-bottom: 40px"></div>
+
+            <div style="padding-right: 0; padding-left: 0"> </div>
         </div>
         <br/>
 
@@ -252,17 +345,18 @@
         <!--Footer -->
         <br/>
         <div >
-            <footer id="sticky-footer" class="footer-distributed" style="background-color: #04011E">
+            <footer id="sticky-footer" class="footer-distributed">
                 <div class="footer-left">
-                    <img src="" alt="Logo de Ingeniería de las Telecomunicaciones" style="width: 400px; height: auto;">
+                    <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
                     <p class="footer-links">
-                        <a href="">Usuarios</a> |
-                        <a href="">Actividades</a> |
-                        <a href="">Estadisticas</a> |
-                        <a href="">Donaciones</a> |
-                        <a href="">Perfil</a>
+                        <a href="/adminsede" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Inicio</a> |
+                        <a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a> |
+                        <a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a> |
+                        <a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Órdenes de Reposición</a> |
+                        <a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a> |
+                        <a href="/adminsede/perfil_adminsede" class="menu-item-small roboto-regular">Perfil</a>
                     </p>
-                    <p class="footer-company-name">Copyright © 2023 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
+                    <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
                 </div>
 
                 <div class="footer-center">

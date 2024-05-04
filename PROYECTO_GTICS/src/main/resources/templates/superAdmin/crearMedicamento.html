@@ -6,38 +6,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
-    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
+
     <!--=============== REMIXICONS ===============-->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
-
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
     <!--=============== CSS ===============-->
-
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/fonts.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+    <link rel="stylesheet" th:href="@{/css/farmacista/detalle_ordenes.css}">
+    <link th:href="@{/css/footer.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
     <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
     <link rel="stylesheet" th:href="@{/css/superadmin/superadmin.css}">
 
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" th:href="@{/css/fonts.css}">
     <link rel="stylesheet" th:href="@{/css/topbar.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/upload_img.css}">
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
-    <!-- Agrega los enlaces a los archivos JS de jQuery y Select2 -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <!--=============== JAVASCRIPT ===============-->
+    <!--Mapa vista Paciente-->
+    <script scr="/js/map.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAce4klBZuD60aEQidMVIbsoaiitxxQFpo"></script>
+
+    <!--=============== JQUERY ===============-->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <!--=============== SWEETALERT ===============-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <!--=============== FONT AWESOME ===============-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" th:href="@{/css/paciente/lista_medicamentos.css}">
+
+    <!--=============== DataTable ===============-->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
     <!--  Bootstrap-->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--==========================================-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-    <!--=============== CSS ===============-->
-
-    <title>SuperAdmin | Crear medicamento</title>
+    <title>SuperAdmin | Solicitudes</title>
 
     <style>
         body {
@@ -54,6 +76,7 @@
             cursor: pointer;
             transition: background-color 0.3s, border-color 0.3s;
             font-size: 17px;
+            margin-right: 20px;
         }
         .btn-n {
             display: inline-block;
@@ -66,6 +89,30 @@
             cursor: pointer;
             transition: background-color 0.3s, border-color 0.3s;
             font-size: 17px;
+        }
+
+        .detalle-orden-container {
+            padding: 25px 30px 25px 30px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            border: 1px solid #dedede;
+            margin-top: 20px;
+        }
+        .profile-picture-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-picture {
+            width: 200px;
+            height: 200px;
+            background-color: lightgray;
+            background-image: url('https://st3.depositphotos.com/1000888/13202/v/450/depositphotos_132020792-stock-illustration-medicines-pills-symbols.jpg');
+            background-size: cover;
+            background-position: center;
+            border: 2px solid lightgray;
+            border-radius: 10px;
+            display: inline-block;
         }
 
         .seccion-especifica {
@@ -91,11 +138,11 @@
 
             <div class="nav-menu" id="nav-menu">
                 <ul class="nav-list">
-                    <li><a href="/superadmin" class="menu-item roboto-regular" >Inicio</a></li>
+                    <li><a href="/superadmin" class="menu-item roboto-regular">Inicio</a></li>
 
                     <li><a href="/superadmin/pedidos" class="menu-item roboto-regular">Pedidos de reposición</a></li>
 
-                    <li><a href="/superadmin/medicamentos" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Inventario</a></li>
+                    <li><a href="/superadmin/medicamentos" class="menu-item roboto-regular">Inventario</a></li>
 
                     <li class="dropdown-item">
                         <div class="menu-item roboto-regular">
@@ -106,7 +153,7 @@
                             <div class="inside-dropdown">
                                 <li>
                                     <a href="/superadmin/administradoresSede" class="dropdown-link">
-                                        <i class="ri-user-line menu-item roboto-regular"></i> Admnistradores de Sede
+                                        <i class="ri-user-line menu-item roboto-regular" style="text-decoration: underline; color: white;"></i> Admnistradores de Sede
                                     </a>
                                 </li>
 
@@ -194,151 +241,221 @@
 </header>
 
 
-
-
-
-<main style="margin-left: 20px; margin-right: 20px">
+<div class="container">
     <br><br>
-    <div class="container seccion-especifica">
-        <div class="container">
-            <div style="margin-bottom: 20px"></div>
-            <div style="margin-bottom: 30px"></div>
-            <div class="titulo"><b>AGREGAR MEDICAMENTO</b></div>
-            <div style="margin-bottom: 20px"></div>
-            <br>
-        </div>
+    <div class="container">
+        <div style="margin-bottom: 20px"></div>
+        <div style="margin-bottom: 30px"></div>
+        <div class="titulo"><b>REGISTRAR MEDICAMENTO</b></div>
+        <div style="margin-bottom: 20px"></div>
+        <br>
+    </div>
 
-        <div class="container seccion-especifica">
+    <div class="detalle-orden-container">
 
-            <div class="row flex-lg-nowrap">
+        <div class="invoice-title">
 
-                <div class="col">
-                    <div class="row">
-                        <div class="col mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="e-profile">
-                                        <div class="row">
-                                            <div class="col-12 col-sm-auto mb-3">
-                                                <div class="mx-auto" style="width: 140px;">
-                                                    <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
-                                                        <span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span>
-                                                    </div>
-                                                </div>
+            <div class="title roboto-medium data-label">
+                <div class="column-start">
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray; margin-bottom:8px; text-align: center">NUEVO MEDICAMENTO</label>
+                        <br>
+                        <div class="profile-picture-container">
+                            <div class="profile-picture"></div>
+                            <div id="upload"  data-state="0" data-ready="false">
+                                <div class="modal__body">
+                                    <div class="modal__col">
+                                        <!-- up -->
+                                        <svg class="modal__icon modal__icon--blue" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
+                                            <g fill="none" stroke="hsl(223,90%,50%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
+                                                <polyline class="modal__icon-sdo14" points="7 12 12 7 17 12" stroke-dasharray="14.2 14.2" />
+                                                <line class="modal__icon-sdo10" x1="12" y1="7" x2="12" y2="17" stroke-dasharray="10 10" />
+                                            </g>
+                                        </svg>
+                                        <!-- error -->
+                                        <svg class="modal__icon modal__icon--red" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true" display="none">
+                                            <g fill="none" stroke="hsl(3,90%,50%)" stroke-width="2" stroke-linecap="round">
+                                                <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
+                                                <line class="modal__icon-sdo14" x1="7" y1="7" x2="17" y2="17" stroke-dasharray="14.2 14.2" />
+                                                <line class="modal__icon-sdo14" x1="17" y1="7" x2="7" y2="17" stroke-dasharray="14.2 14.2" />
+                                            </g>
+                                        </svg>
+                                        <!-- check -->
+                                        <svg class="modal__icon modal__icon--green" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true" display="none">
+                                            <g fill="none" stroke="hsl(138,90%,50%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
+                                                <polyline class="modal__icon-sdo14" points="7 12.5 10 15.5 17 8.5" stroke-dasharray="14.2 14.2" />
+                                            </g>
+                                        </svg>
+                                    </div>
+                                    <div class="modal__col">
+                                        <div class="modal__content">
+                                            <h2 class="modal__title" style="font-weight: 600">Sube una imagen para el medicamento:</h2>
+                                            <p class="modal__message" style="color:dimgray">Selecciona la imagen para subirla desde tu dispositivo</p>
+                                            <div class="modal__actions">
+                                                <button  class="modal__button modal__button--upload" type="button" data-action="file">Seleccionar imagen</button>
+                                                <input id="file" name="imagen" type="file" hidden >
                                             </div>
-                                            <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
-                                                <div class="text-center text-sm-left mb-2 mb-sm-0">
-                                                    <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">Nuevo medicamento</h4>
-                                                    <p class="mb-0">Agregar información del medicamento</p>
-
-                                                    <div class="mt-2">
-                                                        <button class="btn btn-primary" type="button">
-                                                            <i class="fa fa-fw fa-camera"></i>
-                                                            <span>Subir foto</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div class="text-center text-sm-right">
-                                                    <span class="badge badge-secondary">MED</span>
-                                                    <div class="text-muted"><small>Registro 09 Abr 2024</small></div>
-                                                </div>
+                                            <div class="modal__actions" hidden>
+                                                <svg class="modal__file-icon" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
+                                                    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <polygon points="4 1 12 1 20 8 20 23 4 23" />
+                                                        <polyline points="12 1 12 8 20 8" />
+                                                    </g>
+                                                </svg>
+                                                <div class="modal__file" data-file></div>
+                                                <button class="modal__close-button" type="button" data-action="fileReset">
+                                                    <svg class="modal__close-icon" viewBox="0 0 16 16" width="16px" height="16px" aria-hidden="true">
+                                                        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                                            <polyline points="4,4 12,12" />
+                                                            <polyline points="12,4 4,12" />
+                                                        </g>
+                                                    </svg>
+                                                    <span class="modal__sr">Remove</span>
+                                                </button>
+                                                <!--     <button class="btn-p" type="button" data-action="upload">Confirmar</button>     -->
                                             </div>
                                         </div>
-                                        <ul class="nav nav-tabs">
-                                            <li class="nav-item"><a href class="active nav-link">Detalles</a></li>
-                                        </ul>
-                                        <div class="tab-content pt-3">
-                                            <div class="tab-pane active">
-                                                <form class="form" novalidate>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Código</label>
-                                                                        <input class="form-control" type="text" name="name" placeholder="" value="">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Precio compra (S/)</label>
-                                                                        <input class="form-control" type="number" name="username" placeholder="" value="">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Nombre genérico</label>
-                                                                        <input class="form-control" type="text" name="name" placeholder="" value="">
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Precio venta (S/)</label>
-                                                                        <input class="form-control" type="number" name="username" placeholder="" value="">
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-
-                                                            <div class="row">
-                                                                <div class="col mb-3">
-                                                                    <div class="form-group">
-                                                                        <label>Descripción</label>
-                                                                        <textarea class="form-control" rows="5" placeholder=""></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label for="sede">Sede</label>
-                                                                        <select class="form-select" id="sede" name="sede" aria-multiselectable="true">
-                                                                            <option selected >Seleccionar sede</option>
-                                                                            <option value="San Miguel Centro">San Miguel Centro</option>
-                                                                            <option value="San Miguel Sur">San Miguel Sur</option>
-                                                                            <option value="Pando 5ta etapa">Pando 5ta etapa</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
+                                        <div class="modal__content" hidden>
+                                            <h2 class="modal__title">Subiendo imagen…</h2>
+                                            <p class="modal__message">Solo danos un momento para procesar tu archivo.</p>
+                                            <div class="modal__actions">
+                                                <div class="modal__progress">
+                                                    <div class="modal__progress-value" data-progress-value>0%</div>
+                                                    <div class="modal__progress-bar">
+                                                        <div class="modal__progress-fill" data-progress-fill></div>
                                                     </div>
-                                                    <div class="row">
-
-
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col d-flex justify-content-end">
-                                                            <a href="/superadmin/medicamentos">
-                                                                <button class="btn btn-n" type="button" >Guardar</button>
-                                                            </a>
-                                                        </div>
-
-                                                        <a href="/superadmin/medicamentos">
-                                                            <button  class="btn btn-c" type="button" data-action="cancel">Cancelar</button>
-                                                        </a>
-
-                                                    </div>
-                                                </form>
+                                                </div>
+                                                <button class="btn-cancel" type="button" data-action="cancel">Cancelar</button>
+                                            </div>
+                                        </div>
+                                        <div class="modal__content" hidden>
+                                            <h2 class="modal__title">Oops!</h2>
+                                            <p class="modal__message">Your file could not be uploaded due to an error. Try uploading it again?</p>
+                                            <div class="modal__actions modal__actions--center">
+                                                <button class="modal__button" type="button" data-action="upload">Retry</button>
+                                                <button class="modal__button" type="button" data-action="cancel">Cancel</button>
+                                            </div>
+                                        </div>
+                                        <div class="modal__content" hidden>
+                                            <h2 class="modal__title">Carga Exitosa!</h2>
+                                            <p class="modal__message">La foto de medicamento ha sido subido con éxito.</p>
+                                            <div class="modal__actions modal__actions--center">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>
+            <form id="form"  method="post" th:action="@{'/superadmin/guardarAdministrador'}" enctype="multipart/form-data">
+                <div class="container-form">
+
+                    <div style="display: flex;flex-direction: row; column-gap: 25px">
+
+                        <div>
+                            <div class="column">
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Nombre del medicamento:</label>
+                                    <input class="input-form" type="text" name="nombreMedicamento" placeholder="Ingrese nombre" required>
+                                </div>
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Unidad del medicamento:</label>
+                                    <input class="input-form" type="text" name="unidad" placeholder="Ingrese la unidad" required>
+                                </div>
+
+                            </div>
+
+                            <div class="column">
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Descripción:</label>
+                                    <input class="input-form" type="text" name="descripcion" placeholder="Ingrese descripción" required>
+                                </div>
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Categoría del medicamento:</label>
+                                    <input class="input-form" type="text" name="categoria" placeholder="Ingrese su dirección" required>
+                                </div>
+
+                            </div>
+
+                            <div class="column">
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Componente:</label>
+                                    <input class="input-form" name="componente" type="text" placeholder="Ingrese el distrito donde reside" required>
+                                </div>
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Sede:</label>
+                                    <select class="select-form" name="sedeid" multiple>
+                                        <option selected disabled>Seleccionar sede</option>
+                                        <option th:each="sede: ${sedeDisponibleList}"
+                                                th:value="${sede.idSede}"
+                                                th:text="${sede.nombre}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="column">
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Precio compra:</label>
+                                    <input class="input-form" type="number" name="preciocompra" placeholder="Ingrese el correo" required>
+                                </div>
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">Precio Venta:</label>
+                                    <input class="input-form" type="number" name="precioventa" placeholder="Ingrese la contraseña" required>
+                                </div>
+
+                            </div>
+
+                            <div class="column-start">
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">¿Es recetable?:</label>
+                                    <select class="select-form" name="recetable" required>
+                                        <option selected disabled>Seleccionar opcion</option>
+                                        <option value="1">Sí</option>
+                                        <option value="2">No</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <br>
+                    <div class="column-buttons">
+
+                        <a href="/superadmin/medicamentos"><button class="btn-cancel" type="button">Cancelar</button></a>
+                        <button class="btn-p" type="submit">Confirmar</button>
+
+                    </div>
+
+
+                </div>
+            </form>
         </div>
+
+
 
     </div>
 
-    <br><br><br>
-
-</main>
-<br><br><br>
+</div>
+<br>
 <div >
     <footer id="sticky-footer" class="footer-distributed">
         <div class="footer-left">
@@ -450,12 +567,61 @@
         });
     });
 </script>
+<style>
+    .swal2-title {
+        font-size: 24px; }
+    .swal2-footer {
+        color:#0d6efd;
+    }
+</style>
+
+
 <script>
-    $(document).ready(function() {
-        // Inicializa el combobox con Select2
-        $('#sedes').select2();
-    });
+
+    const form = document.getElementById("form");
+    var img = document.getElementById("file");
+
+    form.addEventListener("submit", e =>{
+        e.preventDefault();
+
+
+        if(img.files.length === 0){
+            Swal.fire({
+                icon: "error",
+                iconColor: '#DC3545',
+                title: "ERROR",
+                text: "Aún le falta subir la imagen de su foto de perfil",
+                confirmButtonText: "OK",
+                confirmButtonColor: '#0D6EFD',
+                width: 500,
+            });
+        }
+
+        else{
+            Swal.fire({
+                title: '¿Estás seguro de registrar un nuevo administrador?',
+                icon: 'warning',
+                iconColor: '#DC3545',
+                showCancelButton: true,
+                cancelButtonColor: '#DC3545',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#0D6EFD',
+                confirmButtonText: 'Confirmar',
+                footer: '<a href="">Volver a revisar los datos</a>'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+
+    })
+
 </script>
+
+<script th:src="@{/js/upload_img.js}"></script>
+<script th:src="@{/js/topbar.js}"></script>
+
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 
 </body>

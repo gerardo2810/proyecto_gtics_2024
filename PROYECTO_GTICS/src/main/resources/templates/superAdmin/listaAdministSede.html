@@ -36,7 +36,7 @@
 
     <style>
         body {
-            padding-top: 90px;
+            padding-top: 50px;
         }
         .btn-c {
             display: inline-block;
@@ -268,7 +268,7 @@
                     <div th:if="${sede.admin.estadoUsuario== 2}" class="no_disponible" style="margin-left: 15px"></div>
                 </td>
                 <td style="text-align: center"><a href="/adminsede"><img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/></a></td>
-                <td><a href="/superadmin/editarAdministrador"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
+                <td><a th:href="@{'/superadmin/editarAdministrador' + '?id=' + ${sede.admin.idUsuario}}"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
                 <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=14302&format=png" alt="Banear"/></a></td>
                 <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/></a></td>
             </tr>

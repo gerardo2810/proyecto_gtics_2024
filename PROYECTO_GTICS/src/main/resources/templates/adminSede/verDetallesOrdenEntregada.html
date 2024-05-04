@@ -42,7 +42,7 @@
 
 
 
-        <title>Bienestar San Miguel | Orden de reposición</title>
+        <title>Bienestar San Miguel | Detalles de orden de reposición entregada</title>
 
     </head>
 
@@ -160,7 +160,7 @@
 
                     <div class="title-info">
                         <div class="roboto-bold title data-label">Orden #<span th:text="${reposicion.getIdReposicion() + 10000}"></span> </div>
-                        <div th:text="Recibido" class="btn-green"></div>
+                        <div th:text="Entregado" class="badge badge-pagado"></div>
                     </div>
                 </div>
 
@@ -235,7 +235,7 @@
                 </div>
 
                 <div class="container-graph-circular">
-                    <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/medicamentos'" style="margin-left: 20px">Finalizar</button>
+                    <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/ver_ordenes_entregadas'" style="margin-left: 20px">Regresar</button>
                 </div>
 
             </div>
