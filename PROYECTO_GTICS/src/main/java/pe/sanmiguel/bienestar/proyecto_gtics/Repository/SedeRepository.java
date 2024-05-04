@@ -30,5 +30,5 @@ public interface SedeRepository extends JpaRepository<Sede, Integer> {
     void asignarAdministradorSede(Integer idAdmin, Integer idsede);
 
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede WHERE idAdmin = ?1")
-    Optional<Sede> buscarAdminID(Integer idAdmin);
+    Optional<Sede> buscarAdminID(int idAdmin);
 }

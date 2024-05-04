@@ -143,6 +143,7 @@ public class AdminSedeController {
 
         if("agotado".equals(state)){
             List<MedicamentosSedeStockDto> listaMedicamentosAgotados = medicamentoRepository.listarMedicamentosStockAgotados(idSede);
+            System.out.println(listaMedicamentosAgotados.get(0).getNombre());
             model.addAttribute("idOrden", id);
             model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosAgotados);
             model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
@@ -213,6 +214,13 @@ public class AdminSedeController {
     @GetMapping("/perfil_adminsede")
     public String vistaPerfil(){
         return "adminsede/perfil_adminsede";
+    }
+
+    @GetMapping("/notificaciones_adminsede")
+    public String vistaNotificaciones(Model model){
+        int idSede=1;  //CORREGIRRRRRRRRRRRR CON SESIONNNNNNNNNNNNNNN
+        model.addAttribute("medicamentosSinStock", medicamentoRepository.listarMedicamentosStockPorAgotaroAgotados(idSede));
+        return "adminsede/notificaciones_adminsede";
     }
 
     @GetMapping("/verDetalles") //VER DETALLES DE NUEVA COMPRA

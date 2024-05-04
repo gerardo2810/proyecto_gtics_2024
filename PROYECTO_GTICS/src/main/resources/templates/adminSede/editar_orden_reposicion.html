@@ -169,29 +169,34 @@
                     </div>
 
                     <div class="lista-items-clicked" style="display: flex; flex-direction: column-reverse">
-                        <!--
-                        <div>
-                            <div class="selected-item">
-                                <img src = "http://localhost:8080/img/andrews.png" width="40px" height="auto" alt>
-                                <span class="item-title-clicked">AAAAA</span>
-                                <div class="item-on-list">
-                                    <div class="item-details">
-                                        <div class="selector-cantidad">
-                                            <i class="fa-solid fa-minus restar-cantidad" data-item-id="3" aria-hidden="true"></i>
-                                            <input type="text" value="1" class="item-quantity-clicked" data-item-id="3" fdprocessedid="o56lkl">
-                                            <i class="fa-solid fa-plus sumar-cantidad" data-item-id="3" aria-hidden="true"></i>
-                                        </div>
 
-                                        <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
-                                            <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked">5.9</span>
-                                        </div>
+
+                        <div th:each="med : ${listaMedicamentosSeleccionados}" class="selected-item" th:data-item-id="${med.getIdMedicamento()}">
+
+                            <img th:src="${med.getImagen()}" width="40px" height="auto" alt="">
+
+                            <span class="item-title-clicked" th:text="${med.getNombre()}" ></span>
+
+                            <div class="item-on-list">
+
+                                <div class="item-details">
+                                    <div class="selector-cantidad">
+                                        <i class="fa-solid fa-minus restar-cantidad" th:data-item-id="${med.getIdMedicamento()}" ></i>
+                                        <input type="text" value="1" class="item-quantity-clicked" th:data-item-id="${med.getIdMedicamento()}">
+                                        <i class="fa-solid fa-plus sumar-cantidad" th:data-item-id="${med.getIdMedicamento()}"></i>
                                     </div>
-                                    <button class="btn btn-danger btn-eliminar" data-item-id="3" fdprocessedid="lye2d">
-                                        <i class="fa-solid fa-trash" aria-hidden="true"></i>
-                                    </button>
+
+                                    <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                                        <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${med.getPrecioCompra()}" ></span>
+                                    </div>
                                 </div>
+
+                                <button class="btn btn-danger btn-eliminar" th:data-item-id="${med.getIdMedicamento()}">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
                             </div>
-                        </div> -->
+
+                        </div>
 
                     </div>
 
@@ -357,6 +362,29 @@
             listaSelectedIds = [];
 
             $(document).ready(function() {
+
+                actualizarMontoTotal();
+                getFromExistingList();
+
+                function getFromExistingList() {
+                    const listItems = document.getElementsByClassName('lista-items-clicked')[0];
+                    const selectedItems = listItems.getElementsByClassName('selected-item');
+                    var botonesRestarCantidad = document.getElementsByClassName('restar-cantidad');
+
+                    for (var j =0; j < selectedItems.length; j++){
+                        const selectedItem = selectedItems[i];
+                        const button = botonesRestarCantidad[i];
+                        var eachId = selectedItem.dataset.itemId;
+                        var eachQuantity = button.dataset.itemId;
+
+                        console.log("ID ", eachId);
+                        console.log("Quantity ", eachQuantity);
+
+                        listaSelectedIds.push(eachId);
+                        listaSelectedIds.push(eachQuantity);
+                    }
+                }
+
 
                 const botonesEliminarItem = document.getElementsByClassName('btn-eliminar');
                 for(var i=0;i<botonesEliminarItem.length; i++){

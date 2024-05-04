@@ -29,5 +29,6 @@ public class Medicamento {
     @Column
     private String recetable;
     @Column
-    private String imagen;
+    @Lob
+    private byte[] imagen;
 }
