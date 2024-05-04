@@ -58,8 +58,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
     <!--==========================================-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
-
-    <title>SuperAdmin | Solicitudes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <title>SuperAdmin | Crear Medicamento</title>
 
     <style>
         body {
@@ -114,6 +115,18 @@
             border-radius: 10px;
             display: inline-block;
         }
+        .select-form-sede {
+            width: 300px;
+            height: 100px;
+            margin-top:4px;
+            padding: 10px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background-color: transparent;
+            font-size: 15px;
+            outline: none;
+        }
+
 
         .seccion-especifica {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -353,22 +366,22 @@
                     </div>
                 </div>
             </div>
-            <form id="form"  method="post" th:action="@{'/superadmin/guardarAdministrador'}" enctype="multipart/form-data">
+            <form th:action="@{'/superadmin/guardarMedicamento'}" method="POST" th:object="${medicamento}" enctype="multipart/form-data">
                 <div class="container-form">
 
                     <div style="display: flex;flex-direction: row; column-gap: 25px">
 
                         <div>
                             <div class="column">
-
+                                <input class="input-form"  th:field="*{imagen}" th:value="'/img/aspirina.png'" name="unidad" placeholder="Ingrese la unidad" type="hidden">
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Nombre del medicamento:</label>
-                                    <input class="input-form" type="text" name="nombreMedicamento" placeholder="Ingrese nombre" required>
+                                    <input class="input-form" type="text" th:field="*{nombre}"  name="nombre" placeholder="Ingrese nombre" required>
                                 </div>
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Unidad del medicamento:</label>
-                                    <input class="input-form" type="text" name="unidad" placeholder="Ingrese la unidad" required>
+                                    <input class="input-form" type="text" th:field="*{unidad}"  name="unidad" placeholder="Ingrese la unidad" required>
                                 </div>
 
                             </div>
@@ -377,12 +390,12 @@
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Descripción:</label>
-                                    <input class="input-form" type="text" name="descripcion" placeholder="Ingrese descripción" required>
+                                    <input class="input-form" type="text" th:field="*{descripcion}"  name="descripcion" placeholder="Ingrese descripción" required>
                                 </div>
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Categoría del medicamento:</label>
-                                    <input class="input-form" type="text" name="categoria" placeholder="Ingrese su dirección" required>
+                                    <input class="input-form" type="text" th:field="*{categorias}"  name="categoria" placeholder="Ingrese su dirección" required>
                                 </div>
 
                             </div>
@@ -391,32 +404,35 @@
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Componente:</label>
-                                    <input class="input-form" name="componente" type="text" placeholder="Ingrese el distrito donde reside" required>
+                                    <input class="input-form" name="componente" th:field="*{componente}"  type="text" placeholder="Ingrese los componentes" required>
                                 </div>
 
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Sede:</label>
-                                    <select class="select-form" name="sedeid" multiple>
-                                        <option selected disabled>Seleccionar sede</option>
-                                        <option th:each="sede: ${sedeDisponibleList}"
-                                                th:value="${sede.idSede}"
-                                                th:text="${sede.nombre}">
-                                        </option>
-                                    </select>
-                                </div>
-
+                                <form id="formulario2" th:action="@{superadmin/guardarAdministrador}" method="post" onsubmit="obtenerSeleccion(); enviarFormulario1();">
+                                    <div class="input-label-box">
+                                        <label style="font-weight: bold; color: dimgray">Sede:</label>
+                                        <select id="select-sede" class="select-form-sede" name="sedeid" multiple>
+                                            <option selected disabled>Seleccionar la(s) sede(s):</option>
+                                            <option th:each="sede: ${sedeDisponibleList}"
+                                                    th:value="${sede.idSede}"
+                                                    th:text="${sede.nombre}">
+                                            </option>
+                                        </select>
+                                        <p style="width:300px; margin-top: 10px ">Sedes seleccionadas: <span id="selected-sedes"></span></p>
+                                    </div>
+                                    <button type="submit"></button>
+                                </form>
                             </div>
 
                             <div class="column">
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Precio compra:</label>
-                                    <input class="input-form" type="number" name="preciocompra" placeholder="Ingrese el correo" required>
+                                    <input class="input-form" type="number" th:field="*{precioCompra}"  name="preciocompra" placeholder="Ingrese el correo" required>
                                 </div>
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Precio Venta:</label>
-                                    <input class="input-form" type="number" name="precioventa" placeholder="Ingrese la contraseña" required>
+                                    <input class="input-form" type="number" th:field="*{precioVenta}"  name="precioventa" placeholder="Ingrese la contraseña" required>
                                 </div>
 
                             </div>
@@ -425,8 +441,8 @@
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">¿Es recetable?:</label>
-                                    <select class="select-form" name="recetable" required>
-                                        <option selected disabled>Seleccionar opcion</option>
+                                    <select class="select-form" name="recetable" th:field="*{recetable}"  required>
+                                        <option value="" selected disabled>Seleccionar opcion</option>
                                         <option value="1">Sí</option>
                                         <option value="2">No</option>
                                     </select>
@@ -444,14 +460,9 @@
                         <button class="btn-p" type="submit">Confirmar</button>
 
                     </div>
-
-
                 </div>
             </form>
         </div>
-
-
-
     </div>
 
 </div>
@@ -623,7 +634,59 @@
 <script th:src="@{/js/topbar.js}"></script>
 
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Manejar el cambio en el select
+        $('#select-sede').change(function() {
+            var selectedOptions = $(this).find(':selected');
+            var selectedSedes = [];
+            // Obtener los nombres de las sedes seleccionadas
+            selectedOptions.each(function(index, option) {
+                selectedSedes.push($(option).text());
+            });
+            // Mostrar las sedes seleccionadas
+            $('#selected-sedes').text(selectedSedes.join(', '));
+        });
+    });
+</script>
+<script>
+    function obtenerSeleccion() {
+        var selectedOptions = [];
+        var comboBox = document.getElementById("select-sede");
+        var selectedElements = comboBox.selectedOptions;
+        for (var i = 0; i < selectedElements.length; i++) {
+            selectedOptions.push(selectedElements[i].value);
+        }
+        // Crear un input oculto para cada valor seleccionado
+        selectedOptions.forEach(function(value) {
+            var hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "sedeid";
+            hiddenInput.value = value;
+            document.querySelector("form").appendChild(hiddenInput);
+        });
+
+        // Enviar el formulario
+        document.querySelector("form").submit();
+    }
+</script>
+
+<script>
+    function enviarFormulario1() {
+        var formData = new FormData(document.getElementById("formulario2"));
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "superadmin/guardarAdministrador", true);
+        xhr.onload = function () {
+            // Manejar la respuesta del servidor si es necesario
+            console.log(xhr.responseText);
+        };
+        xhr.send(formData);
+    }
+</script>
+
 
 </body>
-
 </html>

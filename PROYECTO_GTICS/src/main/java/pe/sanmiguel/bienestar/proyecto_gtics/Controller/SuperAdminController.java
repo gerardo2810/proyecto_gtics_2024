@@ -1,7 +1,9 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
@@ -10,6 +12,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping(value = {"/superadmin"}, method = RequestMethod.GET)
@@ -208,13 +211,16 @@ public class SuperAdminController {
 
 
     @GetMapping(value = {"/editarAdministrador"})
-    public String editarAdministrador(Model model, @RequestParam(value = "id") int id){
-        Usuario usuarioAdministrador = usuarioRepository.encontrarAdministradorPorId(id);
-        Optional<Sede> optionalAdministradorSede = sedeRepository.buscarAdminID(id);
+    public String editarAdministrador(Model model, @RequestParam("id") String id){
+        int idAdmin = Integer.parseInt(id);
+        Optional<Sede> optionalAdministradorSede = sedeRepository.buscarAdminID(idAdmin);
         if(optionalAdministradorSede.isPresent()){
+            Usuario usuarioAdministrador = usuarioRepository.encontrarAdministradorPorId(idAdmin);
             Sede sedeAdministrador = optionalAdministradorSede.get();
+            List<Sede> sedeList = sedeRepository.findAll();
             List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.findAll();
             model.addAttribute("sedeAdministrador", sedeAdministrador);
+            model.addAttribute("sedeList", sedeList);
             model.addAttribute("administrador", usuarioAdministrador);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
             return "superAdmin/editarAdministrador";
@@ -280,7 +286,7 @@ public class SuperAdminController {
 
 
     @GetMapping(value = {"/crearMedicamento"})
-    public String crearMedicamento(Model model){
+    public String crearMedicamento(@ModelAttribute("medicamento") Medicamento medicamento, Model model){
         List<Sede> sedeDisponibleList = sedeRepository.findAll();
         model.addAttribute("sedeDisponibleList", sedeDisponibleList);
         return "superAdmin/crearMedicamento";
@@ -288,38 +294,41 @@ public class SuperAdminController {
 
 
     @PostMapping("/guardarMedicamento")
-    public String agregarNuevoMedicamento(@RequestParam("nombreMedicamento") String nombre,
-                                            @RequestParam("unidad") String unidad,
-                                            @RequestParam("descripcion") String descripcion,
-                                            @RequestParam("direccion") String direccion,
-                                            @RequestParam("distrito") String distrito,
-                                            @RequestParam("sedeid") String sedeid,
-                                            @RequestParam("correo") String correo,
-                                            @RequestParam("contrasenia") String contrasenia,
-                                            @RequestParam("telefono") String telefono){
+    public String agregarNuevoMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento, BindingResult bindingResult, @RequestParam(value = "sedeid") List<Integer> idSedesSeleccionadas, RedirectAttributes attr, Model model){
+        if(bindingResult.hasErrors()){
+            List<Sede> sedeDisponibleList = sedeRepository.findAll();
+            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+            return "superAdmin/crearMedicamento";
+        }else{
+            for (Integer idSede : idSedesSeleccionadas) {
+                System.out.println("Valor de idSede: " + idSede);
+                medicamentoRepository.asignarMedicamentoPorSede(idSede,1,0);
+            }
+            medicamentoRepository.save(medicamento);
+            return "redirect:/superadmin/guardarSedes";
+        }
+    }
 
-        int estadoUsuario = 1;
-        int idRol = 2;
-        int idUsuario = usuarioRepository.findLastUsuarioId() + 1;
-        int idsede = Integer.parseInt(sedeid);
-        String seguro = "-";
-
-        System.out.println("Hola, " + idUsuario);
-        System.out.println("Valor de idSede: " + sedeid);
-
-        sedeRepository.asignarAdministradorSede(idUsuario, idsede);
-        return "redirect:/superadmin/administradoresSede";
+    @PostMapping("/guardarSedes")
+    public String guardarSedesSeleccionadas(@ModelAttribute("medicamento") Medicamento medicamento, @RequestParam(value = "sedeid") List<Integer> idSedesSeleccionadas){
+        System.out.println("ID Medicamento, " + medicamento.getIdMedicamento());
+        int idMedicamento = medicamento.getIdMedicamento();
+        for (Integer idSede : idSedesSeleccionadas) {
+            System.out.println("Valor de idSede: " + idSede);
+            medicamentoRepository.asignarMedicamentoPorSede(idSede,idMedicamento,0);
+        }
+        return "redirect:/superadmin/medicamentos";
     }
 
 
 
     @GetMapping(value = {"/editarMedicamento"})
-    public String editarMedicamento(Model model, @RequestParam("id") int id){
+    public String editarMedicamento(@ModelAttribute("product") Medicamento medicamento, Model model, @RequestParam("id") int id){
 
         Optional<Medicamento> optionalMedicamento = medicamentoRepository.findById(id);
 
         if (optionalMedicamento.isPresent()) {
-            Medicamento medicamento = optionalMedicamento.get();
+            medicamento = optionalMedicamento.get();
             model.addAttribute("medicamento", medicamento);
             return "superAdmin/editarMedicamento";
         } else {
