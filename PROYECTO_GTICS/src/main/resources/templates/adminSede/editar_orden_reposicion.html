@@ -171,7 +171,7 @@
                     <div class="lista-items-clicked" style="display: flex; flex-direction: column-reverse">
 
 
-                        <div th:each="med : ${listaMedicamentosSeleccionados}" class="selected-item">
+                        <div th:each="med : ${listaMedicamentosSeleccionados}" class="selected-item" th:data-item-id="${med.getIdMedicamento()}">
 
                             <img th:src="${med.getImagen()}" width="40px" height="auto" alt="">
 
@@ -181,9 +181,9 @@
 
                                 <div class="item-details">
                                     <div class="selector-cantidad">
-                                        <i class="fa-solid fa-minus restar-cantidad" th:data="${med.getIdMedicamento()}" ></i>
-                                        <input type="text" value="1" class="item-quantity-clicked" th:data="${med.getIdMedicamento()}">
-                                        <i class="fa-solid fa-plus sumar-cantidad" th:data="${med.getIdMedicamento()}"></i>
+                                        <i class="fa-solid fa-minus restar-cantidad" th:data-item-id="${med.getIdMedicamento()}" ></i>
+                                        <input type="text" value="1" class="item-quantity-clicked" th:data-item-id="${med.getIdMedicamento()}">
+                                        <i class="fa-solid fa-plus sumar-cantidad" th:data-item-id="${med.getIdMedicamento()}"></i>
                                     </div>
 
                                     <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
@@ -191,7 +191,7 @@
                                     </div>
                                 </div>
 
-                                <button class="btn btn-danger btn-eliminar" th:data="${med.getIdMedicamento()}">
+                                <button class="btn btn-danger btn-eliminar" th:data-item-id="${med.getIdMedicamento()}">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </div>
@@ -362,6 +362,22 @@
             listaSelectedIds = [];
 
             $(document).ready(function() {
+
+                actualizarMontoTotal();
+
+
+                function getFromExistingList() {
+                    const listItems = document.getElementsByClassName('lista-items-clicked')[0];
+                    const selectedItems = listItems.getElementsByClassName('selected-item');
+
+
+
+
+                    const listaIdsInput = document.getElementById('listaIds');
+                    listaIdsInput.value = listaSelectedIds.join(',');
+
+                }
+
 
                 const botonesEliminarItem = document.getElementsByClassName('btn-eliminar');
                 for(var i=0;i<botonesEliminarItem.length; i++){
