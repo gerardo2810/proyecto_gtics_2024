@@ -517,9 +517,11 @@
         }
     });
 
+    var ipLocal = /*[[${iplocal}]]*/ '';
+    console.log(ipLocal)
 
 
-    let socket = new WebSocket("ws://192.168.1.60:8080/chat"); //mi direccion ip local, usar ipconfig o netstat -a para saber cual es, de recomendacion poner la red lan del celular en mi laptop en configuracion del adaptador
+    let socket = new WebSocket("ws://" + ipLocal + ":8080/chat"); //mi direccion ip local, usar ipconfig o netstat -a para saber cual es, de recomendacion poner la red lan del celular en mi laptop en configuracion del adaptador
 
     socket.onmessage = function (event) {
 

@@ -10,6 +10,8 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.List;
@@ -118,7 +120,18 @@ public class PacienteController {
     public String mensajeria(){return "paciente/mensajeria";}
 
     @GetMapping(value = "/chat")
-    public String chat(){
+    public String chat(Model model){
+
+        try {
+            InetAddress localhost = InetAddress.getLocalHost();
+            System.out.println("Mi dirección IP local es: " + localhost.getHostAddress());
+            model.addAttribute("iplocal", localhost.getHostAddress());
+        } catch (UnknownHostException e) {
+            System.out.println("Errooooooooooooooooooooooooor");
+            e.printStackTrace();
+        }
+
+
         return "paciente/chat";
     }
 
