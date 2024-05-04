@@ -221,7 +221,7 @@
         <thead>
         <tr style="background-color: #378fff">
             <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th>
+            <!--th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th-->
             <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio de compra</th>
             <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
             <th style="text-align: center; color: #ffffff; font-weight: normal !important;"></th>
@@ -231,8 +231,8 @@
         <tbody>
         <tr th:each="medicamento : ${medicamentosSinStock}">
             <td th:text="${medicamento.getNombre()}"></td>
-            <td th:text="${medicamento.getIdSede()}"></td>
-            <td th:text="${'S/.' + medicamento.getPrecioCompra()}"></td>
+            <!--td th:text="${medicamento.getIdSede()}"></td-->
+            <td th:text="${ medicamento.getUnidad()}"></td>
             <td th:text="${medicamento.getCantidad()}"></td>
             <td>
                 <div th:if="${medicamento.getCantidad() == 0}">
