@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+    <!--=============== CSS ===============-->
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/fonts.css}">
+    <link rel="stylesheet" th:href="@{/css/topbar.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+    <link rel="stylesheet" th:href="@{/css/datatables.css}">
+    <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
+
+    <!--=============== DataTable ===============-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
+    <!--  Bootstrap-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
+
+    <!--==========================================-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+
+    <title>Pre Ordenes | Bienestar San Miguel</title>
+
+    <style>
+        body {
+            padding-top: 80px;
+        }
+
+        .btn-red{
+            padding: 9px;
+            background-color: #CF480D;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            width: 125px;
+
+        }
+        .mb-4{
+            margin-bottom:1.5rem!important
+        }
+
+    </style>
+</head>
+
+
+<header class="header-topbar">
+    <nav class="nav-topbar container">
+
+
+        <div class="nav-data">
+            <div>
+                <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+            </div>
+
+            <!--=============== NAV MENU ===============-->
+
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li><a href="/adminsede" class="menu-item roboto-regular" >Inicio</a></li>
+
+                    <li><a href="/adminsede/doctores" class="menu-item roboto-regular">Doctores</a></li>
+
+                    <li><a href="/adminsede/farmacista" class="menu-item roboto-regular">Farmacistas</a></li>
+
+                    <li><a href="/adminsede/ordenes" class="menu-item roboto-regular">Pedidos de Reposición</a></li>
+
+                    <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular">Medicamentos</a></li>
+
+                    <!--=============== DROPDOWN ===============-->
+                    <li class="dropdown-item">
+                        <div class="menu-item roboto-regular">
+                            <i class="fas fa-user fa-fw"></i>
+                            <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                        </div>
+
+                        <ul class="dropdown-menu">
+                            <div class="inside-dropdown">
+                                <li>
+                                    <a href="/adminsede/perfil_adminsede" class="dropdown-link">
+                                        <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="/adminsede/cambiar_contrasena" class="dropdown-link">
+                                        <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="#" class="dropdown-link">
+                                        <i class="ri-lock-line menu-item dropdown-item roboto-regular"></i> Cerrar sesión
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="nav-toggle" id="nav-toggle">
+                <i class="ri-menu-line nav-burger" id="menu-icon"></i>
+                <i class="ri-close-line nav-close"></i>
+
+                <div class="menu-small" id="menu-small">
+                    <div class="inside-menu-small">
+                        <div class="nav-menu-small" id="nav-menu-small">
+                            <ul class="nav-list-small">
+                                <li><a href="/adminsede" class="menu-item-small roboto-regular" >Inicio</a></li>
+
+                                <li><a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a></li>
+
+                                <li><a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a></li>
+
+                                <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Órdenes de Reposición</a></li>
+
+                                <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a></li>
+                            </ul>
+
+                            <ul class="nav-list-small-perfil">
+                                <li><a href="/adminsede/" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+
+                                <li><a href="/adminsede/" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </nav>
+</header>
+
+<body>
+
+
+
+
+
+
+<div class="container">
+
+    <div style="margin-bottom: 50px"></div>
+    <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Interfaz de perfil:</strong></h2>
+    <div style="margin-bottom: 20px"></div>
+    <hr style="border-top: 1px solid #DFDFDF;">
+    <div style="margin-bottom: 40px"></div>
+
+    <div style="padding-right: 0; padding-left: 0"> </div>
+
+
+</div>
+
+
+<div class="container">
+    <div class="container-xl px-4 mt-4">
+        <!-- Account page navigation-->
+        <nav class="nav nav-borders">
+            <a class="nav-link active ms-0" href="/adminsede/perfil_adminsede" target="__blank">Perfil</a>
+            <a class="nav-link" href="/adminsede/notificaciones_adminsede" target="__blank">Notificaciones</a>  <!--Es ta vista puede ser usada para paciente así podra ver sus metodos de pago y las compras que ha realizado hasta el momento-->
+        </nav>
+        <hr class="mt-0 mb-4">
+    </div>
+</div>
+
+
+<div class="container">
+
+    <div class="column-start" style="padding-bottom: 1px">
+
+        <div style="display: flex;flex-direction: row;column-gap: 8px">
+
+            <div style="display: flex; flex-direction: column; justify-content: center">
+
+                <label style="color:dimgray;font-weight: bold; margin-left: 2px; margin-bottom:4px">Filtrar por nombre del medicamento:</label>
+
+            </div>
+
+            <div style="display: flex; flex-direction: column; justify-content: start">
+
+
+
+                <!--select class="select-p" id="filtroEstado">
+                    <option value="">Mostrar Todos</option>
+                    <option value="RECIBIDO">Recibido</option>
+                    <option value="EN PROCESO">En proceso</option>
+                    <option value="EMPAQUETANDO">Empaquetando</option>
+                    <option value="EN RUTA">En ruta</option>
+                    <option value="ENTREGADO">Entregado</option>
+                </select-->
+
+            </div>
+        </div>
+
+
+        <div style="display: flex; flex-direction: column; justify-content: start">
+
+            <input id="searchInput" class="input-form" style="margin-top: 4px;width: 300px;height: 40px" placeholder="Buscar por nombre del medicamento">
+
+        </div>
+
+
+
+
+    </div>
+    <br>
+
+    <table id="miTabla" class="table table-striped">
+        <thead>
+        <tr style="background-color: #378fff">
+            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
+            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th>
+            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio de compra</th>
+            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
+            <th style="text-align: center; color: #ffffff; font-weight: normal !important;"></th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="medicamento : ${medicamentosSinStock}">
+            <td th:text="${medicamento.getNombre()}"></td>
+            <td th:text="${medicamento.getIdSede()}"></td>
+            <td th:text="${'S/.' + medicamento.getPrecioCompra()}"></td>
+            <td th:text="${medicamento.getCantidad()}"></td>
+            <td>
+                <div th:if="${medicamento.getCantidad() == 0}">
+                    <button class="btn-red">Agotado</button>
+                </div>
+                <div th:if="${medicamento.getCantidad() > 0 and medicamento.getCantidad() <= 25}">
+                    <button class="btn-red">Por agostarse</button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+<div >
+    <footer id="sticky-footer" class="footer-distributed">
+        <div class="footer-left">
+            <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
+            <p class="footer-links">
+                <a href="/adminsede" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Inicio</a> |
+                <a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a> |
+                <a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a> |
+                <a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Órdenes de Reposición</a> |
+                <a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a> |
+                <a href="/adminsede/perfil_adminsede" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Perfil</a>
+            </p>
+            <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
+        </div>
+
+        <div class="footer-center">
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p><span>Av. Universitaria 1801, San Miguel, 15088</span> Lima, Perú</p>
+            </div>
+
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+51 982 876 098</p>
+            </div>
+
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="mailto:sagar00001.co@gmail.com">Lorem ipsum dolor sit amet.</a></p>
+            </div>
+        </div>
+
+        <div class="footer-right">
+            <p class="footer-company-about">
+                <span>Lorem, ipsum dolor.</span>
+                La carrera de <strong>Ingeniería de las telecomunicaciones</strong> de la <strong>Pontificia Universidad Catolica del Perú</strong> diseñó una pagina WEB.
+            </p>
+            <div class="footer-icons">
+                <a href="https://www.facebook.com/profile.php?id=100009473024310&mibextid=LQQJ4d"><i class="fa fa-facebook"></i></a>
+                <a href="https://www.instagram.com/leo.leonar071/?igshid=OGQ5ZDc2ODk2ZA%3D%3Ds"><i class="fa fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@pucp"><i class="fa fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script th:src="@{/js/topbar.js}"></script>
+
+
+<script>
+    $(document).ready(function() {
+        var table = $('#miTabla').DataTable({
+            "pageLength":5,
+            "lengthChange": false,
+            "language": {
+                "emptyTable": "No hay registros disponibles",
+                "zeroRecords": "No se encontraron registros coincidentes",
+                "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                "search" : "Buscar:",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+            },
+
+        });
+
+        $('#filtroEstado').on('change', function() {
+            var estado = $(this).val();
+            table.column(2).search(estado).draw();
+
+        });
+
+        $('#limpiarFiltros').on('click', function() {
+            $('#filtroEstado').val('');
+            table.search('').columns().search('').draw();
+        });
+    });
+
+
+</script>
+
+<!-- DataTable -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+<!------>
+<style>
+    div.dataTables_wrapper div.dataTables_filter {
+        text-align: right;
+        display: none !important;
+    }
+</style>
+
+
+
+<script>
+    $(document).ready(function() {
+        var table = $('#miTabla').DataTable();
+
+        $('#searchInput').on('input', function() {
+            var searchTerm = $(this).val().trim().toLowerCase();
+            if (searchTerm === "") {
+                table.search("").draw();
+                return;
+            }
+            table.search(searchTerm).draw();
+        });
+    });
+</script>
+</body>
+
+</html>
