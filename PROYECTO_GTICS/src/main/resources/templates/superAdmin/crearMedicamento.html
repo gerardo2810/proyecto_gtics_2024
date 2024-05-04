@@ -309,7 +309,7 @@
                                                 <p class="modal__message" style="color:dimgray">Selecciona la imagen para subirla desde tu dispositivo</p>
                                                 <div class="modal__actions">
                                                     <button  class="modal__button modal__button--upload" type="button" data-action="file">Seleccionar imagen</button>
-                                                    <input id="file" name="imagen" type="file" hidden >
+                                                    <input id="file" th:field="*{imagen}" name="imagen" type="file" hidden >
                                                 </div>
                                                 <div class="modal__actions" hidden>
                                                     <svg class="modal__file-icon" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
@@ -374,7 +374,7 @@
 
                             <div>
                                 <div class="column">
-                                    <input class="input-form"  th:field="*{imagen}" th:value="'/img/aspirina.png'" name="unidad" placeholder="Ingrese la unidad" type="hidden">
+
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Nombre del medicamento:</label>
                                         <input class="input-form" type="text" th:field="*{nombre}"  name="nombre" placeholder="Ingrese nombre" required>
