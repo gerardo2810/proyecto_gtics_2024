@@ -76,7 +76,16 @@ public class AdminSedeController {
     List<String> listaCantidades = new ArrayList<>();
 
     @GetMapping("")
-    public String showIndexAdminSede(){
+    public String showIndexAdminSede(Model model){
+        //SESSION
+        int idSede = 1;
+        int finalIdReposicion = reposicionRepository.findLastReposicionIdNoEntregado();
+        int preFinalIdReposicion = finalIdReposicion - 1;
+        List<Reposicion> listaReposicionNoEntregadasUltimas = reposicionRepository.listarOrdenesReposicionNoEntregadasUltimas(idSede, finalIdReposicion, preFinalIdReposicion);
+        if(listaReposicionNoEntregadasUltimas.size() == 0){
+            return "adminsede/inicio";
+        }
+        model.addAttribute("listaReposicionNoEntregadasUltimas", listaReposicionNoEntregadasUltimas);
         return "adminsede/inicio";
     }
 
@@ -99,7 +108,11 @@ public class AdminSedeController {
     }
 
     @GetMapping("/ordenes")
-    public String showOrders(){
+    public String showOrders(Model model){
+        //SESSION
+        int idSede = 1;
+        List<Reposicion> listaReposicionNoEntregadas = reposicionRepository.listarOrdenesReposicionNoEntregadas(idSede) ;
+        model.addAttribute("listaReposicionNoEntregadas", listaReposicionNoEntregadas);
         return "adminsede/ordenes_reposicion";
     }
 
@@ -121,8 +134,32 @@ public class AdminSedeController {
     }
 
     @GetMapping("/editar_orden_reposicion")
-    public String editOrden(){
-        return "adminsede/editar_orden_reposicion";
+    public String editOrden(@RequestParam(name = "state", required = false) String state,
+                            @RequestParam("id") int id,
+                            Model model){
+
+        int idSede = 1;
+        List<ReposicionContenidoMedicamentoDto> listaMedicamentosSeleccionados = reposicionContenidoRepository.listaMostrarMedicamentosSeleccionados(id);
+
+        if("agotado".equals(state)){
+            List<MedicamentosSedeStockDto> listaMedicamentosAgotados = medicamentoRepository.listarMedicamentosStockAgotados(idSede);
+            model.addAttribute("idOrden", id);
+            model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosAgotados);
+            model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
+            return "adminsede/editar_orden_reposicion";
+        } else if ("poragotar".equals(state)) {
+            List<MedicamentosSedeStockDto> listaMedicamentosPorAgotar = medicamentoRepository.listarMedicamentosStockPorAgotar(idSede);
+            model.addAttribute("idOrden", id);
+            model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosPorAgotar);
+            model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
+            return "adminsede/editar_orden_reposicion";
+        }else {
+            List<MedicamentosSedeStockDto> listaMedicamentosporAgotaroAgotados = medicamentoRepository.listarMedicamentosStockPorAgotaroAgotados(idSede);
+            model.addAttribute("idOrden", id);
+            model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosporAgotaroAgotados);
+            model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
+            return "adminsede/editar_orden_reposicion";
+        }
     }
 
     @GetMapping("/medicamentos")
@@ -161,7 +198,10 @@ public class AdminSedeController {
     }
 
     @GetMapping("/ver_ordenes_entregadas")
-    public String verOrdenesEntregadas(){
+    public String verOrdenesEntregadas(Model model){
+        int idSede = 1; //CORREGIRRRRRRRRRRRR CON SESIONNNNNNNNNNNNNNN
+        List<Reposicion> listaOrdenesEntregadas = reposicionRepository.listarOrdenesReposicionEntregadas(idSede);
+        model.addAttribute("listaOrdenesEntregadas", listaOrdenesEntregadas);
         return "adminsede/ver_ordenes_entregadas";
     }
 
@@ -175,7 +215,14 @@ public class AdminSedeController {
         return "adminsede/perfil_adminsede";
     }
 
-    @GetMapping("/verDetalles")
+    @GetMapping("/notificaciones_adminsede")
+    public String vistaNotificaciones(Model model){
+        int idSede=1;  //CORREGIRRRRRRRRRRRR CON SESIONNNNNNNNNNNNNNN
+        model.addAttribute("medicamentosSinStock", medicamentoRepository.listarMedicamentosStockPorAgotaroAgotados(idSede));
+        return "adminsede/notificaciones_adminsede";
+    }
+
+    @GetMapping("/verDetalles") //VER DETALLES DE NUEVA COMPRA
     public String verDetalles(Model model){
 
         model.addAttribute("sede", sedeVistaReposicion);
@@ -323,6 +370,45 @@ public class AdminSedeController {
         listaMostrarNuevaCompra = reposicionContenidoRepository.listaMostrarDetalleNuevaCompra(idReposicion); //lista a mostrar
 
         return "redirect:/adminsede/verDetalles";
+    }
+
+    @PostMapping("/verDetallesOrdenEntregado")
+    public String verDetallesOrdenEntregado(@RequestParam("idOrden") int idOrden){
+
+        listaMostrarNuevaCompra = reposicionContenidoRepository.listaMostrarDetalleNuevaCompra(idOrden);
+        reposicionMostrar = reposicionRepository.encontrarReposicionporId(idOrden);
+
+        return "redirect:/adminsede/verDetallesOrdenEntregada";
+    }
+
+    @GetMapping("/verDetallesOrdenEntregada")
+    public String verDetallesOrdenEntregado(Model model){
+        model.addAttribute("listaMostrarNuevaCompra", listaMostrarNuevaCompra);
+        model.addAttribute("reposicionMostrar", reposicionMostrar);
+
+        //Datos que se corregirán con sesion para la Sede --------------------------------------------
+        sedeVistaReposicion.setNombre("Administrador 1");
+        sedeVistaReposicion.setDireccion("Av. Los Pinos 656");
+
+        //Datos que se corregirán con sesion para el Administrador --------------------------------------------
+        administradorVistaReposicion.setDni("12345678");
+        administradorVistaReposicion.setCorreo("admin.sede1@gmail.com");
+        administradorVistaReposicion.setNombres("Admin");
+        administradorVistaReposicion.setApellidos("Sede1");
+
+        model.addAttribute("sede", sedeVistaReposicion);
+        model.addAttribute("administradorMostrar", administradorVistaReposicion);
+        model.addAttribute("reposicion", reposicionMostrar);
+        model.addAttribute("listaMostrarNuevaCompra", listaMostrarNuevaCompra);
+        return "adminsede/verDetallesOrdenEntregada";
+    }
+
+    @GetMapping("/eliminar_orden_reposicion")
+    public String eliminar_orden_reposicion(@RequestParam("id") int idReposicion){
+
+        reposicionContenidoRepository.eliminarContenidoReposicion(idReposicion);
+        reposicionRepository.eliminarReposicionporId(idReposicion);
+        return "redirect:/adminsede/ordenes";
     }
 
 

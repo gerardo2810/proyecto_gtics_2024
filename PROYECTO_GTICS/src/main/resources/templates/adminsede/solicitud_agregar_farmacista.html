@@ -25,6 +25,7 @@
         <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
         <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
         <link rel="stylesheet" th:href="@{/css/paciente/upload_img.css}">
+        <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
         <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
         <link rel="stylesheet" th:href="@{/css/datatables.css}">
 
@@ -72,7 +73,7 @@
 
                         <li><a href="/adminsede/farmacista" class="menu-item roboto-regular">Farmacistas</a></li>
 
-                        <li><a href="/adminsede/ordenes" class="menu-item roboto-regular">Pedidos de Reposición</a></li>
+                        <li><a href="/adminsede/ordenes" class="menu-item roboto-regular">Órdenes de Reposición</a></li>
 
                         <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular">Medicamentos</a></li>
 
@@ -123,7 +124,7 @@
 
                                     <li><a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a></li>
 
-                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Pedidos de Reposición</a></li>
+                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Órdenes de Reposición</a></li>
 
                                     <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Medicamentos</a></li>
                                 </ul>
@@ -151,9 +152,11 @@
         <div class="container">
 
             <div style="margin-bottom: 50px"></div>
-            <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Generar solicitud de nuevo farmacista:</strong></h2>
-            <div style="margin-bottom: 20px"></div>
-            <hr style="border-top: 1px solid #DFDFDF;">
+            <div style="padding-top: 20px; padding-bottom: 20px">
+                <div class="main-title open-sans-bold"> Nuevo farmacista </div>
+                <div class="main-subtitle helvetica-medium"> Generar solicitud de nuevo farmacista</div>
+            </div>
+            <hr class="style-one">
             <div style="margin-bottom: 40px"></div>
 
             <div style="padding-right: 0; padding-left: 0"> </div>
@@ -174,20 +177,22 @@
                     </div>
 
                     <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray; margin-left: 80px">Apellidos del farmacista:</label>
-                        <input class="input-form" style="margin-left: 80px" name = "apellidos" type="text" placeholder="Ingrese sus apellidos" required>
+                        <label style="font-weight: bold; color:dimgray">Apellidos del farmacista:</label>
+                        <input class="input-form" name = "apellidos" type="text" placeholder="Ingrese sus apellidos" required>
+                    </div>
+
+                </div>
+
+                <div class="column">
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray">DNI:</label>
+                        <input class="input-form" name="dni" type="text" placeholder="Ingrese su DNI" required>
                     </div>
 
                     <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray; margin-left: 80px">DNI:</label>
-                        <input class="input-form" style="margin-left: 80px" name="dni" type="text" placeholder="Ingrese su DNI" required>
+                        <label style="font-weight: bold; color:dimgray">Distrito de residencia:</label>
+                        <input class="input-form" name="distrito" type="text" placeholder="Ingrese su distrito" required>
                     </div>
-
-                    <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray; margin-left: 80px">Distrito de residencia:</label>
-                        <input class="input-form" style="margin-left: 80px" name="distrito" type="text" placeholder="Ingrese su distrito" required>
-                    </div>
-
                 </div>
 
                 <div class="column">
@@ -198,44 +203,42 @@
                     </div>
 
                     <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray; margin-left: 80px">Contraseña:</label>
-                        <input class="input-form" style="margin-left: 80px" name="contrasena" type="text" placeholder="Ingrese la contraseña" required>
-                    </div>
-
-                    <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray; margin-left: 80px">Celular:</label>
-                        <input class="input-form" style="margin-left: 80px" name="celular" type="text" placeholder="Ingrese el celular" required>
-                    </div>
-
-                    <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray; margin-left: 80px">Código (colegio médico):</label>
-                        <input class="input-form" style="margin-left: 80px" name="codigoMed" type="text" placeholder="Ingrese el código" required>
+                        <label style="font-weight: bold; color:dimgray">Contraseña:</label>
+                        <input class="input-form" name="contrasena" type="text" placeholder="Ingrese la contraseña" required>
                     </div>
 
 
                 </div>
 
                 <div class="column">
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray">Celular:</label>
+                        <input class="input-form" name="celular" type="text" placeholder="Ingrese el celular" required>
+                    </div>
 
+                    <div class="input-label-box">
+                        <label style="font-weight: bold; color:dimgray">Código (colegio médico):</label>
+                        <input class="input-form" name="codigoMed" type="text" placeholder="Ingrese el código" required>
+                    </div>
+                </div>
+
+                <div class="column">
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Dirección:</label>
                         <input class="input-form" name="direccion" type="text" placeholder="Ingrese la dirección" required>
                     </div>
 
                     <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray; margin-left: 80px">Seguro:</label>
-                        <input class="input-form" style="margin-left: 80px" name="seguro" type="text" placeholder="Ingrese el seguro" required>
+                        <label style="font-weight: bold; color:dimgray">Seguro:</label>
+                        <input class="input-form" name="seguro" type="text" placeholder="Ingrese el seguro" required>
                     </div>
-
-
-
                 </div>
 
                 <div class="column-start">
 
                     <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray; margin-bottom:8px">Captura de Foto de perfil:</label>
-                        <div id="upload" class="modal" data-state="0" data-ready="false">
+                        <label style="font-weight: bold; color:dimgray; margin-bottom:8px; margin-left: 250px">Captura de Foto de perfil:</label>
+                        <div id="upload" class="modal" data-state="0" data-ready="false" style="margin-left: 250px">
 
                             <div class="modal__body">
                                 <div class="modal__col">

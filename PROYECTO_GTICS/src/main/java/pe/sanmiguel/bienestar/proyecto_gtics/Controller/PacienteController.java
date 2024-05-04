@@ -1,6 +1,8 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
 
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.Part;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,9 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.List;
@@ -94,6 +99,10 @@ public class PacienteController {
 
         List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
 
+
+        String base64Encoded = Base64.getEncoder().encodeToString(orden.getImagen());
+        model.addAttribute("imagen", base64Encoded);
+
         model.addAttribute("lista", lista);
         model.addAttribute("ordenActual", orden);
 
@@ -118,7 +127,18 @@ public class PacienteController {
     public String mensajeria(){return "paciente/mensajeria";}
 
     @GetMapping(value = "/chat")
-    public String chat(){
+    public String chat(Model model){
+
+        try {
+            InetAddress localhost = InetAddress.getLocalHost();
+            System.out.println("Mi dirección IP local es: " + localhost.getHostAddress());
+            model.addAttribute("iplocal", localhost.getHostAddress());
+        } catch (UnknownHostException e) {
+            System.out.println("Errooooooooooooooooooooooooor");
+            e.printStackTrace();
+        }
+
+
         return "paciente/chat";
     }
 
@@ -178,13 +198,13 @@ public class PacienteController {
     public String guardarOrden(Usuario usuario,
                                @RequestParam(value = "doctor", required = false) String doctor,
                                @RequestParam(value = "fecha", required = false) String fecha,
-                               @RequestParam(value = "imagen", required = false) MultipartFile archivo,
+                               @RequestParam(value = "imagen", required = false) Part imagen,
                                @RequestParam(value = "listaIds", required = false) List<Integer> lista,
                                @RequestParam(value = "priceTotal", required = false) Float total,
-                               Model model, RedirectAttributes redirectAttributes){
+                               Model model, RedirectAttributes redirectAttributes) throws IOException {
 
 
-
+    /*
         try{
             byte[] bytes = archivo.getBytes();
             String base64Encoded = Base64.getEncoder().encodeToString(bytes);
@@ -193,6 +213,16 @@ public class PacienteController {
             e.printStackTrace();
             return "error";
         }
+
+    */
+
+        InputStream inputStream = imagen.getInputStream();
+        byte[] bytes = inputStream.readAllBytes();
+
+        // Crea tu objeto Orden
+
+
+
 
 
         String tracking = new String();
@@ -218,6 +248,8 @@ public class PacienteController {
         orden.setSede(s);
         orden.setDoctor(doc);
         orden.setEstadoPreOrden(1);
+        orden.setImagen(bytes);
+
 
 
         ordenRepository.save(orden);

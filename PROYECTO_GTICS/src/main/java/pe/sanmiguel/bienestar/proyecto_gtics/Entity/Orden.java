@@ -1,5 +1,6 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Entity;
 
+import com.mysql.cj.jdbc.Blob;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,4 +43,9 @@ public class Orden {
     private Integer ordenParent;
     @Column(name = "estado_preorden")
     private Integer estadoPreOrden;
+    @Column(name="imagenReceta")
+    @Lob
+    private byte[] imagen;
+
+
 }

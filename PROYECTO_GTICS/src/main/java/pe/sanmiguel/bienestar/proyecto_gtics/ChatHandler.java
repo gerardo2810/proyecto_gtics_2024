@@ -8,6 +8,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -20,7 +21,9 @@ public class ChatHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+
         sessions.add(session);
+        broadcastUserCount();
     }
 
 
@@ -38,6 +41,13 @@ public class ChatHandler extends TextWebSocketHandler {
     }
 
 
+    private void broadcastUserCount() throws IOException {
+        int userCount = sessions.size();
+        TextMessage message = new TextMessage("USER_COUNT:" + userCount);
 
+        for (WebSocketSession session : sessions) {
+            session.sendMessage(message);
+        }
+    }
 
 }

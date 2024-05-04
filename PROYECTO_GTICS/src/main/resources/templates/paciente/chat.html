@@ -254,6 +254,8 @@
     <div class="container">
 
 
+        <p id="usersCount" style="padding-bottom: 12px; font-family: 'Montserrat', sans-serif; font-weight: bold;font-size: 14px"></p>
+
         <section class="Chat">
             <div class="ChatHead">
                 <li class="group">
@@ -507,63 +509,55 @@
 <script th:inline="javascript">
 
 
-
-    /*
-    // Hacer una solicitud HTTP GET para obtener la dirección IP utilizando fetch
-    fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => {
-            // Acceder a la dirección IP desde la respuesta JSON
-            var ip_address = data.ip;
-            console.log('Tu dirección IP es:', ip_address);
-        })
-        .catch(error => {
-            console.error('Ocurrió un error al obtener la dirección IP:', error);
-        });
-    */
-
-
-
-    // Obtener el campo de entrada
     const messageInput = document.getElementById("messageInput");
-
-    // Agregar un controlador de eventos para la tecla "Enter"
     messageInput.addEventListener("keyup", function(event) {
-        // Verificar si la tecla presionada es "Enter"
         if (event.key === "Enter") {
-            // Evitar el comportamiento predeterminado del Enter (submit del formulario)
             event.preventDefault();
-            // Llamar a la función sendMessage()
             sendMessage();
         }
     });
 
+    var ipLocal = /*[[${iplocal}]]*/ '';
+    console.log(ipLocal)
 
 
-    let socket = new WebSocket("ws://10.101.50.61:8080/chat"); //mi direccion ip local, usar ipconfig o netstat -a para saber cual es, de recomendacion poner la red lan del celular en mi laptop en configuracion del adaptador
+    let socket = new WebSocket("ws://" + ipLocal + ":8080/chat"); //mi direccion ip local, usar ipconfig o netstat -a para saber cual es, de recomendacion poner la red lan del celular en mi laptop en configuracion del adaptador
 
     socket.onmessage = function (event) {
 
+        if (event.data.startsWith("USER_COUNT:")) {
+            // Extrae el número de usuarios del mensaje recibido
+            userCount = parseInt(event.data.substring("USER_COUNT:".length));
 
-        let messageArea = document.getElementById("messageArea");
-        var fechaActual = new Date();
-        var horaActual = fechaActual.getHours();
-        var minutosActuales = fechaActual.getMinutes();
+            // Actualiza el contador de usuarios en la interfaz de usuario
+            updateUsersCount();
 
-        if (minutosActuales<10){
-            var tiempoActual = horaActual + ':0' + minutosActuales;
         }else{
-            var tiempoActual = horaActual + ':' + minutosActuales;
+
+            let messageArea = document.getElementById("messageArea");
+            var fechaActual = new Date();
+            var horaActual = fechaActual.getHours();
+            var minutosActuales = fechaActual.getMinutes();
+
+            if (minutosActuales<10){
+                var tiempoActual = horaActual + ':0' + minutosActuales;
+            }else{
+                var tiempoActual = horaActual + ':' + minutosActuales;
+            }
+
+
+            messageArea.innerHTML += ' <div class="message you">\n' +
+                '                    <p class="messageContent" >' + event.data +
+                '                    </p><div class="messageDetails">\n' +
+                '                        <div class="messageTime">' + tiempoActual  +
+                '                        </div><i class="fa-solid fa-check"></i>\n' +
+                '                    </div>\n' +
+                '                </div>'
+
         }
 
 
-        messageArea.innerHTML += ' <div class="message you">\n' +
-            '                    <p class="messageContent" >' + event.data +
-            '                    </p><div class="messageDetails">\n' +
-            '                        <div class="messageTime">' + tiempoActual  +
-            '                        </div><i class="fa-solid fa-check"></i>\n' +
-            '                    </div>\n' +
-            '                </div>'
+
     }
 
     function sendMessage(){
@@ -577,6 +571,14 @@
             messageInput.value = '';
         }
 
+    }
+
+
+    function updateUsersCount() {
+        let usersCountElement = document.getElementById("usersCount");
+        if (usersCountElement) {
+            usersCountElement.textContent = 'USUARIOS CONECTADOS: ' + userCount;
+        }
     }
 
 

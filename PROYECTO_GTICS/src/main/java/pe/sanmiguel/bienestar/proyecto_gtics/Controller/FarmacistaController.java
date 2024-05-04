@@ -71,6 +71,13 @@ public class FarmacistaController {
         model.addAttribute("listaMedicamentos", listaMedicamentos);
         return "farmacista/inicio";
     }
+    @GetMapping("/farmacista/ver_detalles")
+    public String farmacistaDetalles(Model model) {
+        List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
+        model.addAttribute("sedeSession", sedeSession);
+        model.addAttribute("listaMedicamentos", listaMedicamentos);
+        return "farmacista/ver_detalles";
+    }
 
     @PostMapping("/farmacista/continuar_compra")
     public String fillContentOrder(@RequestParam("listaIds") List<String> listaSelectedIds){
@@ -313,7 +320,7 @@ public class FarmacistaController {
     }
 
     @GetMapping("/farmacista/ver_orden_web_sinstock")
-    public String verOrdenWebSinStock(Model model) {
+    public String verOrdenWebSinStock() {
 
         return "farmacista/ver_orden_web_sinStock";
     }
@@ -338,16 +345,19 @@ public class FarmacistaController {
     public String profile() {
         return "farmacista/perfil";
     }
-    @GetMapping("/farmacista/facturacion")
-    public String facturacion(Model model) {
+
+    //@GetMapping("/farmacista/facturacion")
+    /*public String facturacion(Model model) {
         List<MedicamentosSedeStockDto> medicamentosLowStock = medicamentoRepository.findMedicamentosLowStock();
         model.addAttribute("medicamentosLowStock", medicamentosLowStock);
         return "farmacista/facturacion";
     }
+     */
     @GetMapping("/farmacista/cambioContraseña")
     public String cambioContra() {
         return "farmacista/cambioContraseña";
     }
+
 
 
     public List<Medicamento> getMedicamentosFromLista(List<String> listaSelectedIds) {

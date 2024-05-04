@@ -37,4 +37,27 @@ public interface ReposicionRepository extends JpaRepository<Reposicion, Integer>
     @Query(nativeQuery = true, value = "select * from reposicion where id = ?1")
     Reposicion encontrarReposicionporId(int id);
 
+    //Listar orden de reposicion entregadas CORREGIR CON SESION-------------------------------------
+    @Query(nativeQuery = true, value = "select * from reposicion where idEstado = 5 and idSede = ?1")
+    List<Reposicion> listarOrdenesReposicionEntregadas(int idSede);
+
+    //Listar órdenes de reposición no entregadas CORREGIR CON SESION-------------------------------------
+    @Query(nativeQuery = true, value = "select * from reposicion where idEstado != 5 and idSede = ?1")
+    List<Reposicion> listarOrdenesReposicionNoEntregadas(int idSede);
+
+    // Encontrar los últimos 2 reposiciones que no tengan estado 5
+
+    @Query(nativeQuery = true, value = "SELECT MAX(r.id) FROM reposicion r where r.idEstado != 5")
+    Integer findLastReposicionIdNoEntregado();
+
+    //Listar últimas dos reposiciones
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.reposicion where idEstado != 5 and idSede = ?1 and (id = ?2 or id = ?3)")
+    List<Reposicion> listarOrdenesReposicionNoEntregadasUltimas(int idSede, int finalId, int preFinalId);
+
+    //Eliminar Reposición
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "delete from reposicion where id = ?1")
+    void eliminarReposicionporId(int idReposicion);
+
 }
