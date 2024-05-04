@@ -364,7 +364,7 @@
             $(document).ready(function() {
 
                 actualizarMontoTotal();
-
+                getFromExistingList();
 
                 function getFromExistingList() {
                     const listItems = document.getElementsByClassName('lista-items-clicked')[0];
@@ -383,7 +383,6 @@
                         listaSelectedIds.push(eachId);
                         listaSelectedIds.push(eachQuantity);
                     }
-
                 }
 
 
