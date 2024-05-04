@@ -160,7 +160,6 @@
                 <thead>
                     <tr style="background-color: #378fff">
                         <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Número de orden</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Autor</th>
                         <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha Inicio</th>
                         <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha Fin</th>
                         <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamentos solicitados</th>
@@ -171,7 +170,6 @@
                 <tbody>
                     <tr th:each="orden, iterador: ${listaOrdenesEntregadas}">
                         <td th:text="${orden.getIdReposicion()}"></td>
-                        <td>Administrador de sede 1</td>
                         <td th:text="${orden.getFechaIni()}"></td>
                         <td th:text="${orden.getFechaFin()}"></td>
                         <td style="text-align: center; display: flex; flex-direction: row; justify-content: center; gap: 5px;">

@@ -170,38 +170,33 @@
 
                     <div class="lista-items-clicked" style="display: flex; flex-direction: column-reverse">
 
-                        <div th:each="medicamento : ${listaMedicamentosSeleccionados}">
-                            <div>
-                                <div class="selected-item">
 
-                                    <img th:src="${medicamento.getImagen()}" width="40px" height="auto" alt="">
+                        <div th:each="med : ${listaMedicamentosSeleccionados}" class="selected-item">
 
-                                    <span class="item-title-clicked" th:text="${medicamento.getNombre()}">Gingisona Spray</span>
+                            <img th:src="${med.getImagen()}" width="40px" height="auto" alt="">
 
-                                    <div class="item-on-list">
+                            <span class="item-title-clicked" th:text="${med.getNombre()}" ></span>
 
-                                        <div class="item-details">
-                                            <div class="selector-cantidad">
-                                                <i class="fa-solid fa-minus restar-cantidad" data-item-id="4" aria-hidden="true"></i>
-                                                <input type="text" class="item-quantity-clicked" data-item-id="4" fdprocessedid="r8hj2" th:value="${medicamento.getCantidad()}">
-                                                <i class="fa-solid fa-plus sumar-cantidad" data-item-id="4" aria-hidden="true"></i>
-                                            </div>
+                            <div class="item-on-list">
 
-                                            <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
-                                                <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${medicamento.getPrecioCompra()}">9.9</span>
-                                            </div>
-                                        </div>
-
-                                        <button class="btn btn-danger btn-eliminar" data-item-id="4" fdprocessedid="8yucwr">
-                                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
-                                        </button>
+                                <div class="item-details">
+                                    <div class="selector-cantidad">
+                                        <i class="fa-solid fa-minus restar-cantidad" th:data="${med.getIdMedicamento()}" ></i>
+                                        <input type="text" value="1" class="item-quantity-clicked" th:data="${med.getIdMedicamento()}">
+                                        <i class="fa-solid fa-plus sumar-cantidad" th:data="${med.getIdMedicamento()}"></i>
                                     </div>
 
+                                    <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                                        <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${med.getPrecioCompra()}" ></span>
+                                    </div>
                                 </div>
+
+                                <button class="btn btn-danger btn-eliminar" th:data="${med.getIdMedicamento()}">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
                             </div>
 
                         </div>
-
 
                     </div>
 

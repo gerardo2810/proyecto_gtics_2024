@@ -58,8 +58,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
     <!--==========================================-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
-
-    <title>SuperAdmin | Solicitudes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+    <title>SuperAdmin | Editar Medicamento</title>
 
     <style>
         body {
@@ -397,7 +397,7 @@
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Sede:</label>
                                     <select class="select-form" name="sedeid" multiple>
-                                        <option selected disabled>Seleccionar sede</option>
+                                        <option selected disabled>Seleccionar la(s) sede(s):</option>
                                         <option th:each="sede: ${sedeDisponibleList}"
                                                 th:value="${sede.idSede}"
                                                 th:text="${sede.nombre}">
@@ -422,16 +422,13 @@
                             </div>
 
                             <div class="column-start">
-
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">¿Es recetable?:</label>
                                     <select class="select-form" name="recetable" required>
-                                        <option selected disabled>Seleccionar opcion</option>
-                                        <option value="1">Sí</option>
-                                        <option value="2">No</option>
+                                        <option value="1" th:selected="${medicamento.recetable != null && medicamento.recetable == 1}">Sí</option>
+                                        <option value="2" th:selected="${medicamento.recetable != null && medicamento.recetable == 2}">No</option>
                                     </select>
                                 </div>
-
                             </div>
 
 
@@ -623,7 +620,13 @@
 <script th:src="@{/js/topbar.js}"></script>
 
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+
+
+<script>
+    new MultiSelectTag('sedeid')
+</script>
 
 </body>
-
 </html>
+
