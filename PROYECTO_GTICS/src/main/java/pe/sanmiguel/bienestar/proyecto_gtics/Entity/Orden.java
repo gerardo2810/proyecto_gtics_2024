@@ -42,4 +42,6 @@ public class Orden {
     private Integer ordenParent;
     @Column(name = "estado_preorden")
     private Integer estadoPreOrden;
+    @Column(name="imagen")
+    private 
 }
