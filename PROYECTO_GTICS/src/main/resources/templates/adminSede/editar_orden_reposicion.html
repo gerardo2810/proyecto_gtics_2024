@@ -369,12 +369,20 @@
                 function getFromExistingList() {
                     const listItems = document.getElementsByClassName('lista-items-clicked')[0];
                     const selectedItems = listItems.getElementsByClassName('selected-item');
+                    var botonesRestarCantidad = document.getElementsByClassName('restar-cantidad');
 
+                    for (var j =0; j < selectedItems.length; j++){
+                        const selectedItem = selectedItems[i];
+                        const button = botonesRestarCantidad[i];
+                        var eachId = selectedItem.dataset.itemId;
+                        var eachQuantity = button.dataset.itemId;
 
+                        console.log("ID ", eachId);
+                        console.log("Quantity ", eachQuantity);
 
-
-                    const listaIdsInput = document.getElementById('listaIds');
-                    listaIdsInput.value = listaSelectedIds.join(',');
+                        listaSelectedIds.push(eachId);
+                        listaSelectedIds.push(eachQuantity);
+                    }
 
                 }
 
