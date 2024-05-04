@@ -294,33 +294,16 @@ public class SuperAdminController {
 
 
     @PostMapping("/guardarMedicamento")
-    public String agregarNuevoMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento, BindingResult bindingResult, @RequestParam(value = "sedeid") List<Integer> idSedesSeleccionadas, RedirectAttributes attr, Model model){
+    public String agregarNuevoMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento, BindingResult bindingResult, RedirectAttributes attr, Model model){
         if(bindingResult.hasErrors()){
             List<Sede> sedeDisponibleList = sedeRepository.findAll();
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
             return "superAdmin/crearMedicamento";
         }else{
-            for (Integer idSede : idSedesSeleccionadas) {
-                System.out.println("Valor de idSede: " + idSede);
-                medicamentoRepository.asignarMedicamentoPorSede(idSede,1,0);
-            }
             medicamentoRepository.save(medicamento);
-            return "redirect:/superadmin/guardarSedes";
+            return "redirect:/superadmin/medicamentos";
         }
     }
-
-    @PostMapping("/guardarSedes")
-    public String guardarSedesSeleccionadas(@ModelAttribute("medicamento") Medicamento medicamento, @RequestParam(value = "sedeid") List<Integer> idSedesSeleccionadas){
-        System.out.println("ID Medicamento, " + medicamento.getIdMedicamento());
-        int idMedicamento = medicamento.getIdMedicamento();
-        for (Integer idSede : idSedesSeleccionadas) {
-            System.out.println("Valor de idSede: " + idSede);
-            medicamentoRepository.asignarMedicamentoPorSede(idSede,idMedicamento,0);
-        }
-        return "redirect:/superadmin/medicamentos";
-    }
-
-
 
     @GetMapping(value = {"/editarMedicamento"})
     public String editarMedicamento(@ModelAttribute("product") Medicamento medicamento, Model model, @RequestParam("id") int id){
