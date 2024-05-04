@@ -143,6 +143,7 @@ public class AdminSedeController {
 
         if("agotado".equals(state)){
             List<MedicamentosSedeStockDto> listaMedicamentosAgotados = medicamentoRepository.listarMedicamentosStockAgotados(idSede);
+            System.out.println(listaMedicamentosAgotados.get(0).getNombre());
             model.addAttribute("idOrden", id);
             model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosAgotados);
             model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
