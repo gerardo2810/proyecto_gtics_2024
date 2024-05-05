@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <!--=============== REMIXICONS ===============-->
@@ -153,6 +153,8 @@
             <div style="margin-bottom: 40px"></div>
 
             <div style="padding-right: 0; padding-left: 0"> </div>
+
+            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
         </div>
 
 

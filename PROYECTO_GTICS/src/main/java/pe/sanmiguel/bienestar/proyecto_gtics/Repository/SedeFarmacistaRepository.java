@@ -32,7 +32,7 @@ public interface SedeFarmacistaRepository extends JpaRepository<SedeFarmacista, 
     //Crear Relacion Sede-Farmacista
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "insert into sede_farmacista values (?1, ?2, ?3, ?4)")
+    @Query(nativeQuery = true, value = "insert into sede_farmacista values (?1, ?2, ?3, ?4, null)")
     void crearSedeFarmacista(int id, int idFarmacista, String codigoMed, int aprobado);
 
     //Listar tabla SedeFarmacista
