@@ -102,12 +102,14 @@ public class AdminSedeController {
     }
 
     @GetMapping("/farmacista")
-    public String showFarmacistas(Model model){
+    public String showFarmacistas(Model model,
+                                  @RequestParam(name = "msg", required = false) String msg){
         //List<Usuario> listaFarmacistas = usuarioRepository.listarFarmacistas();
         //SESSION
         int idSede = 1;
         List<UsuarioSedeFarmacistaDto> listaFarmacistasNew = usuarioRepository.listarSedeFarmacista(idSede);
         model.addAttribute("listaFarmacistasNew", listaFarmacistasNew);
+        model.addAttribute("msg", msg);
         //model.addAttribute("listaFarmacistas", listaFarmacistas);
         return "adminsede/farmacistas";
     }
@@ -200,7 +202,9 @@ public class AdminSedeController {
 
     @GetMapping("/solicitud_farmacista")
     public String solicitudFarmacista(@ModelAttribute("usuarioFarmacista") Usuario usuarioFarmacista, //model attribute del farmacista
-                                      Model model){
+                                      Model model,
+                                      @RequestParam(name = "msg", required = false) String msg){
+        model.addAttribute("msg", msg);
         return "adminsede/solicitud_agregar_farmacista";
     }
 
