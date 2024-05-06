@@ -30,7 +30,7 @@
 <body>
 
 <div class="main-container" >
-    <div class="login-container">
+    <div class="login-container2">
 
         <div class="wrapper2" style="margin-top: 130px; margin-bottom: 100px">
             <div class="login-title montserrat-bold">Registro</div>
@@ -38,42 +38,56 @@
                 <form name="signin" class="login-form" method="post" th:action="@{/login/save}">
                     <div class="content">
                         <div class="user-details">
-                            <div class="input-control">
+                            <div class="input-control2">
                                 <span class="details">Nombres <br></span>
                                 <label for="nombres" class="input-label" hidden>Nombres</label>
                                 <input type="text" name="nombre" id="nombres" class="input-field2" placeholder="Ingrese sus nombres">
                             </div>
-                            <div class="input-control">
+                            <div class="input-control2">
                                 <span class="details">Apellido <br></span>
                                 <label for="apellidos" class="input-label"  hidden>Apellido</label>
                                 <input type="text" name="nombre" id="apellidos" class="input-field2" placeholder="Ingrese sus apellidos">
                             </div>
-                            <div class="input-control">
-                                <span class="details">Dirección <br></span>
-                                <label for="direccion" class="input-label" hidden>Dirección</label>
-                                <input type="text" name="nombre" id="direccion" class="input-field2" placeholder="Ingrese su dirección">
+                            <div class="input-control2">
+                                <span class="details">DNI<br></span>
+                                <label for="dni" class="input-label" hidden>Contraseña</label>
+                                <input type="password" name="nombre" id="dni" class="input-field2" placeholder="Ingrese su DNI">
                             </div>
-                            <div class="input-control">
-                                <span class="details">Telefono <br></span>
-                                <label for="celular" class="input-label" hidden>Telefono</label>
-                                <input type="number" name="nombre" id="celular" class="input-field2" placeholder="Ingrese su telefono">
-                            </div>
-                            <div class="input-control">
-                                <span class="details">Fecha de nacimiento <br></span>
-                                <label for="birthdate" class="input-label" hidden>Fecha de nacimiento</label>
-                                <input type="number" name="nombre" id="birthdate" class="input-field2" placeholder="Ingrese su fecha de nacimiento">
-                            </div>
-                            <div class="input-control">
+                            <div class="input-control2">
                                 <span class="details">Correo electronico<br></span>
                                 <label for="correo" class="input-label" hidden>Fecha de nacimiento</label>
                                 <input type="email" name="nombre" id="correo" class="input-field2" placeholder="Ingrese su correo electronico">
                             </div>
-                            <div class="input-control">
+                            <div class="input-control2">
+                                <span class="details">Dirección <br></span>
+                                <label for="direccion" class="input-label" hidden>Dirección</label>
+                                <input type="text" name="nombre" id="direccion" class="input-field2" placeholder="Ingrese su dirección">
+                            </div>
+                            <div class="input-control2">
+                                <span class="details">Distrito<br></span>
+                                <label for="distrito" class="input-label" hidden>Distrito</label>
+                                <input type="password" name="nombre" id="distrito" class="input-field2" placeholder="Seleccione su distrito">
+                            </div>
+                            <div class="input-control2">
+                                <span class="details">Telefono <br></span>
+                                <label for="celular" class="input-label" hidden>Telefono</label>
+                                <input type="number" name="nombre" id="celular" class="input-field2" placeholder="Ingrese su telefono">
+                            </div>
+                            <div class="input-control2">
+                                <span class="details">Fecha de nacimiento <br></span>
+                                <label for="birthdate" class="input-label" hidden>Fecha de nacimiento</label>
+                                <input type="number" name="nombre" id="birthdate" class="input-field2" placeholder="Ingrese su fecha de nacimiento">
+                            </div>
+
+                            <div class="input-control2">
                                 <span class="details">Contraseña<br></span>
                                 <label for="contrasena" class="input-label" hidden>Contraseña</label>
                                 <input type="password" name="nombre" id="contrasena" class="input-field2" placeholder="Ingrese su contraseña">
                             </div>
-                            <div class="input-control">
+
+
+
+                            <div class="input-control2">
                                 <span class="details">Confirmar su contraseña<br></span>
                                 <label class="input-label" hidden>Contraseña</label>
                                 <input type="password" name="nombre" class="input-field2" placeholder="Confirme su contraseña">

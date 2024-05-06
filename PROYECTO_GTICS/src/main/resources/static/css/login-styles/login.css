@@ -53,6 +53,14 @@ header {
     min-height: 90vh;
     width: 100%;
 }
+.login-container2{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+    width: 100%;
+}
 .wrapper2{
 
     justify-content: space-between;
@@ -102,6 +110,13 @@ header {
     padding-top: 0.5rem;
 
     .input-control {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+
+    }
+    .input-control2 {
         flex-direction: column;
         justify-content: start;
         display: flex;

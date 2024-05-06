@@ -76,4 +76,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.usuario where idRol = 2 and estado_usuario = 5")
     List<Usuario> listarAdministradoresSinSede();
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "INSERT INTO usuario VALUES (?1, 3, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, 1)")
+    void crearPaciente(int id, int idRol, String correo, String contrasena, String nombres, String apellidos, String celular, String dni, String direccion, String distrito, String seguro, int estadoUsuario);
+
+
 }
