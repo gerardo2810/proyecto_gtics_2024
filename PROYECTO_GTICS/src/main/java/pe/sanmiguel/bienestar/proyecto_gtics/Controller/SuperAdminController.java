@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
@@ -23,6 +24,7 @@ import java.util.UUID;
 @RequestMapping(value = {"/superadmin"}, method = RequestMethod.GET)
 public class SuperAdminController {
 
+    private int idUsuario;
     final UsuarioRepository usuarioRepository;
     final DoctorRepository doctorRepository;
     final SedeRepository sedeRepository;
@@ -31,8 +33,11 @@ public class SuperAdminController {
     final ReposicionContenidoRepository reposicionContenidoRepository;
     final EstadoUsuarioRepository estadoUsuarioRepository;
     final MedicamentoRepository medicamentoRepository;
+    final SedeStockRepository sedeStockRepository;
+    final SedeDoctorRepository sedeDoctorRepository;
 
-    public SuperAdminController(UsuarioRepository usuarioRepository, DoctorRepository doctorRepository, SedeRepository sedeRepository, SedeFarmacistaRepository sedeFarmacistaRepository, ReposicionRepository reposicionRepository, ReposicionContenidoRepository reposicionContenidoRepository, EstadoUsuarioRepository estadoUsuarioRepository, MedicamentoRepository medicamentoRepository) {
+
+    public SuperAdminController(UsuarioRepository usuarioRepository, DoctorRepository doctorRepository, SedeRepository sedeRepository, SedeFarmacistaRepository sedeFarmacistaRepository, ReposicionRepository reposicionRepository, ReposicionContenidoRepository reposicionContenidoRepository, EstadoUsuarioRepository estadoUsuarioRepository, MedicamentoRepository medicamentoRepository, SedeStockRepository sedeStockRepository, SedeDoctorRepository sedeDoctorRepository) {
         this.usuarioRepository = usuarioRepository;
         this.doctorRepository = doctorRepository;
         this.sedeRepository = sedeRepository;
@@ -41,6 +46,8 @@ public class SuperAdminController {
         this.reposicionContenidoRepository = reposicionContenidoRepository;
         this.estadoUsuarioRepository = estadoUsuarioRepository;
         this.medicamentoRepository = medicamentoRepository;
+        this.sedeStockRepository = sedeStockRepository;
+        this.sedeDoctorRepository = sedeDoctorRepository;
     }
 
     Integer idVerReposicionCreada;
@@ -62,14 +69,18 @@ public class SuperAdminController {
     @GetMapping(value = {"/administradoresSede"})
     public String showAdministradoresSede(Model model){
         List<Sede> adminSedelist = sedeRepository.listarAdministroresSede();
+        List<Usuario> adminSinSede = usuarioRepository.listarAdministradoresSinSede();
+        List<Usuario> adminBaneados = usuarioRepository.listarAdministradoresBaneados();
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("adminSedelist", adminSedelist);
         model.addAttribute("sedeList", sedeList);
+        model.addAttribute("adminSinSede", adminSinSede);
+        model.addAttribute("adminBaneados", adminBaneados);
         return "superAdmin/listaAdministSede";
     }
     @GetMapping(value = {"/farmacistas"})
     public String showFarmacistas(Model model){
-        List<SedeFarmacista> farmacistaList = sedeFarmacistaRepository.listarFarmacistasPorSede();
+        List<SedeFarmacista> farmacistaList = sedeFarmacistaRepository.listarFarmacistasActivosInactivos();
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("farmacistlist", farmacistaList);
         model.addAttribute("sedeList", sedeList);
@@ -146,7 +157,7 @@ public class SuperAdminController {
 
     @GetMapping(value = {"/medicamentos"})
     public String showMedicamentos(Model model){
-        List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
+        List<Medicamento> listaMedicamentos = medicamentoRepository.listarMedicamentosActivos();
         model.addAttribute("listaMedicamentos", listaMedicamentos);
         return "superAdmin/medicamentos";
     }
@@ -183,50 +194,65 @@ public class SuperAdminController {
     }
 
     @GetMapping(value = {"/crearAdministrador"})
-    public String crearAdminitrador(Model model){
+    public String crearAdminitrador(Model model, @ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResul, RedirectAttributes attr){
         List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
         model.addAttribute("sedeDisponibleList", sedeDisponibleList);
         return "superAdmin/crearAdministrador";
     }
 
+    int sedeId;
     @PostMapping("/guardarAdministrador")
-    public String agregarNuevoAdministrador(@RequestParam("nombres") String nombres,
-                                             @RequestParam("apellidos") String apellidos,
-                                             @RequestParam("dni") String dni,
-                                            @RequestParam("direccion") String direccion,
-                                             @RequestParam("distrito") String distrito,
-                                            @RequestParam("sedeid") String sedeid,
-                                             @RequestParam("correo") String correo,
-                                             @RequestParam("contrasenia") String contrasenia,
-                                             @RequestParam("telefono") String telefono){
+    public String agregarNuevoAdministrador(@ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResult, @RequestParam("sedeid") String idSede, RedirectAttributes attr, Model model){
+        if(bindingResult.hasErrors()){
+            System.out.println("HAY ERRORES DE VALIDACIÓN:");
+            for (ObjectError error : bindingResult.getAllErrors()) {
+                System.out.println("- " + error.getDefaultMessage());
+            }
+            List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
+            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+            return "superAdmin/crearAdministrador";
+        }else{
+            int idsede = Integer.parseInt(idSede);
+            administrador.setRol(2);
+            administrador.setEstadoUsuario(1);
+            usuarioRepository.save(administrador);
+            System.out.println("Valor de id administrador: " + administrador.getIdUsuario());
+            System.out.println("Valor de id sede: " + idsede);
+            System.out.println("Valor de rol: " + administrador.getRol());
+            System.out.println("Valor de estado de usuario: " + administrador.getEstadoUsuario());
+            attr.addFlashAttribute("datosAdministrador", administrador);
+            attr.addFlashAttribute("sedeid", sedeId);
+            int idAdminSede = administrador.getIdUsuario();
+            return "redirect:/superadmin/asignarSedeAdministradorSede?datosAdministrador=" + administrador.getIdUsuario() + "&sedeid=" + idsede;
+        }
+    }
 
-        int estadoUsuario = 1;
-        int idRol = 2;
-        int idUsuario = usuarioRepository.findLastUsuarioId() + 1;
-        int idsede = Integer.parseInt(sedeid);
-        String seguro = "-";
-
-        System.out.println("Hola, " + idUsuario);
-        System.out.println("Valor de idSede: " + sedeid);
-
-        usuarioRepository.crearAdministradorSede(idUsuario, idRol, correo, contrasenia, nombres, apellidos, telefono, dni, direccion, distrito, seguro, estadoUsuario);
-        sedeRepository.asignarAdministradorSede(idUsuario, idsede);
+    @GetMapping("/asignarSedeAdministradorSede")
+    public String asignarSedeAdministrador(@ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResult, @RequestParam("datosAdministrador") Integer datosAdministrador, @RequestParam("sedeid") int sedeId, Model model, RedirectAttributes attr) {
+        System.out.println("Valor Admin del administrador: " + administrador.getIdUsuario());
+        System.out.println("Valor Admin final: " + datosAdministrador);
+        System.out.println("Valor Sede final: " + sedeId);
+        sedeRepository.asignarAdministradorSede(datosAdministrador, sedeId);
         return "redirect:/superadmin/administradoresSede";
     }
 
 
+
     @GetMapping(value = {"/editarAdministrador"})
-    public String editarAdministrador(Model model, @RequestParam("id") String id){
+    public String editarAdministrador(Usuario administrador,
+                                      Model model, @RequestParam("id") String id){
         int idAdmin = Integer.parseInt(id);
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(idAdmin);
         Optional<Sede> optionalAdministradorSede = sedeRepository.buscarAdminID(idAdmin);
-        if(optionalAdministradorSede.isPresent()){
-            Usuario usuarioAdministrador = usuarioRepository.encontrarAdministradorPorId(idAdmin);
+        System.out.println("Valor Dentro de editar de optional usuario: " + optionalUsuario.get().getIdUsuario());
+        if(optionalUsuario.isPresent()){
+            administrador = optionalUsuario.get();
             Sede sedeAdministrador = optionalAdministradorSede.get();
             List<Sede> sedeList = sedeRepository.findAll();
-            List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.findAll();
+            List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
             model.addAttribute("sedeAdministrador", sedeAdministrador);
             model.addAttribute("sedeList", sedeList);
-            model.addAttribute("administrador", usuarioAdministrador);
+            model.addAttribute("administrador", administrador);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
             return "superAdmin/editarAdministrador";
         }else {
@@ -234,64 +260,169 @@ public class SuperAdminController {
         }
     }
 
+    @PostMapping("/actualizarAdministrador")
+    public String actualizarAdministrador(@ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResult, @RequestParam("sedeid") Integer idSede, RedirectAttributes attr, Model model){
+        if(bindingResult.hasErrors()){
+            List<Sede> sedeDisponibleList = sedeRepository.findAll();
+            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+            return "superAdmin/editarAdministrador";
+        }else{
+            usuarioRepository.save(administrador);
+            int idAdministradorNuevo = administrador.getIdUsuario();
+            /*Se ubica el administrador de la sede nueva elegida*/
+            Sede sedeTieneAdministrador = sedeRepository.getSedeByIdSede(idSede);
+            /*Se obtiene el id del administrador de la sede nueva elegida*/
+
+            /*Se obtiene el id de la sede actual del admin*/
+            Sede AdministradorTieneSede = sedeRepository.buscarSedeTieneAdministrador(idAdministradorNuevo);
+            int idSedeAntigua = AdministradorTieneSede.getIdSede();
+
+            if (sedeTieneAdministrador.getAdmin()==null){
+                sedeRepository.eliminarAdminAntiguo(idSedeAntigua);
+                sedeRepository.asignarAdministradorSede(idAdministradorNuevo, idSede);
+            }else{
+                int idAdministradorAntiguo = sedeTieneAdministrador.getAdmin().getIdUsuario();
+                usuarioRepository.administradorSinSede(idAdministradorAntiguo);
+                sedeRepository.eliminarAdminAntiguo(idSedeAntigua);
+                sedeRepository.asignarAdministradorSede(idAdministradorNuevo, idSede);
+            }
+            return "redirect:/superadmin/administradoresSede";
+        }
+    }
+
+
     @GetMapping(value = {"/crearDoctor"})
-    public String crearDoctor(Model model){
+    public String crearDoctor(@ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResul, RedirectAttributes attr, Model model){
         List<Sede> sedeDisponibleList = sedeRepository.findAll();
         model.addAttribute("sedeDisponibleList", sedeDisponibleList);
         return "superAdmin/crearDoctor";
     }
+
+    @PostMapping("/guardarDoctor")
+    public String crearNuevoDoctor(@ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResul, RedirectAttributes attr, Model model) {
+        if(bindingResul.hasErrors()){
+            List<Sede> sedeDisponibleList = sedeRepository.findAll();
+            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+            return "superAdmin/crearDoctor";
+        }else{
+            doctorRepository.save(doctor);
+            return "redirect:/superadmin/doctores";
+        }
+    }
+
     @GetMapping(value = {"/editarDoctor"})
-    public String editarDoctor(){
-        return "superAdmin/editarDoctor";
+    public String editarDoctor(@ModelAttribute("doctor") Doctor doctor, Model model, @RequestParam("id") int id){
+
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+
+        if (optionalDoctor.isPresent()) {
+            doctor = optionalDoctor.get();
+            List<Sede> sedeDisponibleList = sedeRepository.findAll();
+            List<SedeDoctor> sedeDoctorList = sedeDoctorRepository.listarSedesDondeEstaDoctor(id);
+            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+            model.addAttribute("doctor", doctor);
+            model.addAttribute("doctoresVisiblesSede", sedeDoctorList);
+            return "superAdmin/editarDoctor";
+        } else {
+            return "redirect:/superadmin/doctores";
+        }
     }
 
 
+    @PostMapping("/actualizarDoctor")
+    public String actualizarMedicamento(@ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult, @RequestParam(value = "sedeid", required = false) List<Integer> idSedesSeleccionadas, RedirectAttributes attr, Model model){
+        if(bindingResult.hasErrors()){
+            List<Sede> sedeDisponibleList = sedeRepository.findAll();
+            List<SedeDoctor> sedeDoctorList = sedeDoctorRepository.listarSedesDondeEstaDoctor(doctor.getIdDoctor());
+            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+            model.addAttribute("doctoresVisiblesSede", sedeDoctorList);
+            return "superAdmin/editarDoctor";
+        }else{
+
+            if (idSedesSeleccionadas == null || idSedesSeleccionadas.isEmpty()) {
+                System.out.println("Estoy en si el parámetros es NULL");
+                doctorRepository.save(doctor);
+                return "redirect:/superadmin/doctores";
+            } else {
+                System.out.println("Estoy en si NO el parámetros es NULL");
+                int idDoctor = doctor.getIdDoctor();
+                List<Integer> sedeDoctorList = sedeDoctorRepository.listarDoctoresEnSedePorId(idDoctor);
+                for (Integer idSede: sedeDoctorList){
+                    System.out.println("Valor de idSede: " + idSede);
+                }
+                if(sedeDoctorList.isEmpty()){
+                    for (Integer idSede : idSedesSeleccionadas) {
+                        sedeDoctorRepository.asignarDoctorPorSede(idDoctor,idSede);
+                    }
+                    doctorRepository.save(doctor);
+                    return "redirect:/superadmin/doctores";
+                }else{
+                    sedeDoctorRepository.borrarSedesAnterioresDoctor(idDoctor);
+                    for (Integer idSede : idSedesSeleccionadas) {
+                        sedeDoctorRepository.asignarDoctorPorSede(idDoctor,idSede);
+                    }
+                    doctorRepository.save(doctor);
+                    return "redirect:/superadmin/doctores";
+                }
+            }
+        }
+    }
+
+    @PostMapping("/eliminarDoctor")
+    public String eliminarDoctor(@RequestParam(value = "idDoctor") String idDoctor){
+        int idDoctorID = Integer.parseInt(idDoctor);
+        sedeDoctorRepository.borrarSedesAnterioresDoctor(idDoctorID);
+        doctorRepository.eliminarDoctor(idDoctorID);
+        return "redirect:/superadmin/doctores";
+    }
+
     @GetMapping(value = {"/editarFarmacista"})
-    public String editarFarmacista(Model model, @RequestParam("id") int id){
-        Usuario usuarioFarmacista = usuarioRepository.encontrarFarmacistaporIdActivosInactivos(id);
-        Optional<SedeFarmacista> optionalSedeFarmacista = sedeFarmacistaRepository.buscarCodigoFarmacista(id);
-        if(optionalSedeFarmacista.isPresent()){
-            SedeFarmacista sedeFarmacista = optionalSedeFarmacista.get();
-            List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.findAll();
-            model.addAttribute("farmacista", usuarioFarmacista);
-            model.addAttribute("sedeFarmacista", sedeFarmacista);
+    public String editarFarmacista(@ModelAttribute("farmacista") @Valid Usuario farmacista, BindingResult bindingResult, Model model, @RequestParam("id") int id){
+
+        Optional<Usuario> optionalFarmacista = usuarioRepository.findById(id);
+
+        if (optionalFarmacista.isPresent()) {
+            farmacista = optionalFarmacista.get();
+            SedeFarmacista datosFarmacistaSede = sedeFarmacistaRepository.buscarFarmacistaSede(id);
+            List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
+            model.addAttribute("farmacista", farmacista);
+            model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
             return "superAdmin/editarFarmacista";
-        }else {
+        } else {
             return "redirect:/superadmin/farmacistas";
         }
     }
 
     @PostMapping("/actualizarDatosFarmacista")
-    public String actualizarDatosFarmacista(Usuario usuario, RedirectAttributes attr,
-                                   SedeFarmacista sedeFarmacista){
-        usuarioRepository.save(usuario);
-        Optional<SedeFarmacista> optionalSedeFarmacista = sedeFarmacistaRepository.buscarCodigoFarmacista(usuario.getIdUsuario());
-        if(optionalSedeFarmacista.isPresent()){
-            SedeFarmacista sedeFarmacistaOld = optionalSedeFarmacista.get();
-            sedeFarmacista.setId(sedeFarmacistaOld.getId());
-            sedeFarmacista.setIdFarmacista(sedeFarmacistaOld.getIdFarmacista());
-            sedeFarmacista.setAprobado(sedeFarmacistaOld.getAprobado());
-            sedeFarmacistaRepository.save(sedeFarmacista);
-            return "redirect:/superadmin/farmacistas";
+    public String actualizarDatosFarmacista(@ModelAttribute("farmacista") @Valid Usuario farmacista, BindingResult bindingResult, RedirectAttributes attr, Model model){
 
-        }else {
+        if(bindingResult.hasErrors()){
+            SedeFarmacista datosFarmacistaSede = sedeFarmacistaRepository.buscarFarmacistaSede(farmacista.getIdUsuario());
+            List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
+            model.addAttribute("farmacista", farmacista);
+            model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
+            model.addAttribute("estadoUsuarioList", estadoUsuarioList);
+            return "superAdmin/editarFarmacista";
+        }else{
+
+            usuarioRepository.save(farmacista);
             return "redirect:/superadmin/farmacistas";
         }
     }
 
-    @GetMapping("/eliminarFarmacista")
-    public String eliminarFarmacista(@RequestParam("id") int id){
-
-        sedeFarmacistaRepository.eliminarFarmacistadeSedeFarmacista(id);
-        usuarioRepository.eliminarFarmacistadeUsuario(id);
+    @PostMapping("/eliminarFarmacista")
+    public String eliminarFarmacista(@RequestParam(value = "idFarmacista") String idFarmacista){
+        int idFarmacistaID = Integer.parseInt(idFarmacista);
+        sedeFarmacistaRepository.eliminarFarmacistadeSedeFarmacista(idFarmacistaID);
+        usuarioRepository.eliminarFarmacista(idFarmacistaID);
         return "redirect:/superadmin/farmacistas";
 
     }
 
 
     @GetMapping(value = {"/crearMedicamento"})
-    public String crearMedicamento(@ModelAttribute("medicamento") Medicamento medicamento, Model model){
+    public String crearMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento, BindingResult bindingResul, Model model){
         List<Sede> sedeDisponibleList = sedeRepository.findAll();
         model.addAttribute("sedeDisponibleList", sedeDisponibleList);
         return "superAdmin/crearMedicamento";
@@ -299,13 +430,23 @@ public class SuperAdminController {
 
 
     @PostMapping("/guardarMedicamento")
-    public String agregarNuevoMedicamento(@ModelAttribute("medicamento") Medicamento medicamento, @RequestParam("imagen") Part imagen, RedirectAttributes attr, Model model) throws IOException {
+    public String agregarNuevoMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento, BindingResult bindingResul, RedirectAttributes attr, Model model) {
 
-            InputStream inputStream = imagen.getInputStream();
-            byte[] bytes = inputStream.readAllBytes();
-            medicamento.setImagen(bytes);
+        if(bindingResul.hasErrors()){
+            System.out.println("HAY ERRORES DE VALIDACIÓN:");
+            for (ObjectError error : bindingResul.getAllErrors()) {
+                System.out.println("- " + error.getDefaultMessage());
+            }
+            List<Sede> sedeDisponibleList = sedeRepository.findAll();
+            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+            return "superAdmin/crearMedicamento";
+        }else{
+            System.out.println("NO HAY ERROR");
+            medicamento.setCategorias("NNUL");
+            medicamento.setEstado(1);
             medicamentoRepository.save(medicamento);
             return "redirect:/superadmin/medicamentos";
+        }
     }
 
     @GetMapping(value = {"/editarMedicamento"})
@@ -315,10 +456,60 @@ public class SuperAdminController {
 
         if (optionalMedicamento.isPresent()) {
             medicamento = optionalMedicamento.get();
+            List<Sede> sedeDisponibleList = sedeRepository.findAll();
+            List<SedeStock> sedeStockList = sedeStockRepository.medicamentoPresenteSedes(id);
+            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
             model.addAttribute("medicamento", medicamento);
+            model.addAttribute("medicamentosVisiblesSede", sedeStockList);
             return "superAdmin/editarMedicamento";
         } else {
             return "redirect:/superadmin/medicamentos";
         }
+    }
+
+    @PostMapping("/actualizarMedicamento")
+    public String actualizarMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento, BindingResult bindingResult, @RequestParam(value = "sedeid", required = false) List<Integer> idSedesSeleccionadas, RedirectAttributes attr, Model model){
+        if(bindingResult.hasErrors()){
+            List<Sede> sedeDisponibleList = sedeRepository.findAll();
+            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+            return "superAdmin/editarMedicamento";
+        }else{
+            medicamento.setCategorias("NNUL");
+            medicamento.setEstado(1);
+            if (idSedesSeleccionadas == null || idSedesSeleccionadas.isEmpty()) {
+                System.out.println("Estoy en si el parámetros es NULL");
+                medicamentoRepository.save(medicamento);
+                return "redirect:/superadmin/medicamentos";
+            } else {
+                System.out.println("Estoy en si NO el parámetros es NULL");
+                int idMedicamento = medicamento.getIdMedicamento();
+                List<Integer> sedeStockList = sedeStockRepository.listarMedicamentosEnSedePorId(idMedicamento);
+                for (Integer idSede: sedeStockList){
+                    System.out.println("Valor de idSede: " + idSede);
+                }
+                if(sedeStockList.isEmpty()){
+                    for (Integer idSede : idSedesSeleccionadas) {
+                        medicamentoRepository.asignarMedicamentoPorSede(idSede,idMedicamento,0);
+                    }
+                    medicamentoRepository.save(medicamento);
+                    return "redirect:/superadmin/medicamentos";
+                }else{
+                    sedeStockRepository.borrarSedesAnteriores(idMedicamento);
+                    for (Integer idSede : idSedesSeleccionadas) {
+                        medicamentoRepository.asignarMedicamentoPorSede(idSede,idMedicamento,0);
+                    }
+                    medicamentoRepository.save(medicamento);
+                    return "redirect:/superadmin/medicamentos";
+                }
+            }
+        }
+    }
+
+    @PostMapping("/eliminarMedicamento")
+    public String eliminarMedicamento(@RequestParam(value = "idMedicamento") String idMedicamento){
+        int idMedicamentoID = Integer.parseInt(idMedicamento);
+        sedeStockRepository.borrarSedesAnteriores(idMedicamentoID);
+        medicamentoRepository.eliminarMedicamento(idMedicamentoID);
+        return "redirect:/superadmin/medicamentos";
     }
 }

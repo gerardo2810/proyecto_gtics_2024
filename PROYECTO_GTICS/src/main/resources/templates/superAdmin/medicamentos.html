@@ -8,6 +8,8 @@
 
     <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
     <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!--=============== REMIXICONS ===============-->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
 
@@ -239,10 +241,10 @@
                 <!-- Contenedor de elementos -->
                 <div class="med-container">
                     <div class="item" th:each="medicamento : ${listaMedicamentos}">
-                        <img th:src="${medicamento.imagen}" th:alt="${medicamento.nombre}" class="img-item">
+                        <img th:src="@{/img/234735.png}" alt="Medicamento" class="img-item">
                         <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
                             <div>
-                                <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
+                                <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad + ' unidades'}">Unidad</div>
                                 <div class="item-title roboto-medium" th:text="${medicamento.nombre}">Medicamento</div>
                             </div>
 
@@ -255,7 +257,10 @@
                                 <button class="add-item-button open-sans-regular" style="margin-right: 10px">Editar</button>
                             </a>
 
-                            <button class="add-item-button open-sans-regular" th:data-item-id="${medicamento.idMedicamento}">Eliminar</button>
+                            <form id="formEstadoMedicamento" th:action="@{'/superadmin/eliminarMedicamento'}" method="post">
+                                <input type="hidden" name="idMedicamento" th:value="${medicamento.idMedicamento}">
+                                <button type="submit" class="add-item-button open-sans-regular" >Eliminar</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -355,242 +360,6 @@
 </script>
 
 <script>
-
-    listaSelectedIds = [];
-
-    $(document).ready(function() {
-
-        const botonesEliminarItem = document.getElementsByClassName('btn-eliminar');
-        for(var i=0;i<botonesEliminarItem.length; i++){
-            const buttonEliminar = botonesEliminarItem[i];
-            buttonEliminar.addEventListener('click',eliminarItemCarrito);
-        }
-        var botonesSumarCantidad = document.getElementsByClassName('sumar-cantidad');
-        for(var i=0;i<botonesSumarCantidad.length; i++){
-            const buttonSumar = botonesSumarCantidad[i];
-            buttonSumar.addEventListener('click',sumarCantidad);
-        }
-        var botonesRestarCantidad = document.getElementsByClassName('restar-cantidad');
-        for(var i=0;i<botonesRestarCantidad.length; i++){
-            const buttonRestar = botonesRestarCantidad[i];
-            buttonRestar.addEventListener('click',restarCantidad);
-        }
-
-
-        function clickItemAdd(event){
-
-            const button = event.target;
-            const idAdd = button.dataset.itemId;
-            const item = button.parentElement;
-            const titulo = item.getElementsByClassName('item-title')[0].innerText;
-            const precio = item.getElementsByClassName('item-price')[0].innerText;
-            const imagenSrc = item.getElementsByClassName('img-item')[0].src;
-
-
-            if (listaSelectedIds.indexOf(idAdd) === -1) {
-                listaSelectedIds.push(idAdd);
-                listaSelectedIds.push(1);
-            }
-
-            const listaIdsInput = document.getElementById('listaIds');
-            listaIdsInput.value = listaSelectedIds;
-
-            addItemToList(idAdd, titulo, precio, imagenSrc);
-            ShowList();
-        }
-
-        function deleteItem(event){
-
-            const button = event.target;
-            const idDelete = button.dataset.itemId;
-
-            let pos = listaSelectedIds.indexOf(idDelete);
-            listaSelectedIds.splice(pos,1);
-            listaSelectedIds.splice(pos+1,1);
-
-            const listaIdsInput = document.getElementById('listaIds');
-            listaIdsInput.value = listaSelectedIds;
-
-            button.parentElement.parentElement.parentElement.remove();
-            hideorShowList();
-            actualizarMontoTotal();
-        }
-
-
-        function addItemToList(id, titulo, precio, imagenSrc){
-            const Swal = window.Swal;
-
-            const item = document.createElement('div');
-            item.classList.add = ('item-clicked');
-            const itemsList = document.getElementsByClassName('lista-items-clicked')[0];
-
-            if (itemsList.getElementsByClassName('item-title-clicked').length > 0){
-
-                const alreadyOnList = itemsList.getElementsByClassName('item-title-clicked');
-
-                for(let i=0; i < alreadyOnList.length; i++){
-                    if(alreadyOnList[i].innerText===titulo){
-                        Swal.fire({
-                            title: "Ya está en la lista",
-                            text: "El medicamento ya fue agregado.",
-                            icon: "info"
-                        });
-                        return;
-                    }
-                }
-            }
-
-
-            const itemNewSelected = `
-        <div class="selected-item">
-
-            <img src="${imagenSrc}" width="40px" height="auto" alt="">
-
-            <span class="item-title-clicked">${titulo}</span>
-
-            <div class="item-on-list">
-
-                <div class="item-details">
-                    <div class="selector-cantidad">
-                        <i class="fa-solid fa-minus restar-cantidad" data-item-id="${id}"></i>
-                        <input type="text" value="1" class="item-quantity-clicked" data-item-id="${id}">
-                        <i class="fa-solid fa-plus sumar-cantidad" data-item-id="${id}"></i>
-                    </div>
-
-                    <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
-                            <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked">${precio}</span>
-                    </div>
-                </div>
-
-                <button class="btn btn-danger btn-eliminar" data-item-id="${id}">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </div>
-
-        </div>
-    `;
-            item.innerHTML = itemNewSelected;
-            itemsList.append(item);
-
-            item.getElementsByClassName('btn-eliminar')[0].addEventListener('click', deleteItem);
-
-            const botonRestarCantidad = item.getElementsByClassName('restar-cantidad')[0];
-            botonRestarCantidad.addEventListener('click',restarCantidad);
-
-            const botonSumarCantidad = item.getElementsByClassName('sumar-cantidad')[0];
-            botonSumarCantidad.addEventListener('click',sumarCantidad);
-
-            const inputCantidad = item.getElementsByClassName('item-quantity-clicked')[0];
-            inputCantidad.addEventListener('change', setearCantidad);
-            inputCantidad.addEventListener('focus', function(event) {
-                event.target.dataset.previousValue = event.target.value;
-            });
-
-            actualizarMontoTotal();
-            ShowList();
-        }
-
-
-        function sumarCantidad(event){
-            const buttonClicked = event.target;
-            const idAddQuantity = buttonClicked.dataset.itemId;
-            const selector = buttonClicked.parentElement;
-            console.log(selector.getElementsByClassName('item-quantity-clicked')[0].value);
-            let cantidadActual = selector.getElementsByClassName('item-quantity-clicked')[0].value;
-            cantidadActual++;
-            selector.getElementsByClassName('item-quantity-clicked')[0].value = cantidadActual;
-
-            const toPlus = listaSelectedIds.indexOf(idAddQuantity);
-
-            listaSelectedIds[toPlus+1] = cantidadActual;
-
-            actualizarMontoTotal();
-        }
-
-        function restarCantidad(event){
-            const buttonClicked = event.target;
-            const idQuitQuantity = buttonClicked.dataset.itemId;
-            const selector = buttonClicked.parentElement;
-            console.log(selector.getElementsByClassName('item-quantity-clicked')[0].value);
-
-
-            let cantidadActual = selector.getElementsByClassName('item-quantity-clicked')[0].value;
-            cantidadActual--;
-            if(cantidadActual>=1){
-                selector.getElementsByClassName('item-quantity-clicked')[0].value = cantidadActual;
-
-                const toMinus = listaSelectedIds.indexOf(idQuitQuantity);
-
-                listaSelectedIds[toMinus+1] = cantidadActual;
-
-                actualizarMontoTotal();
-            }
-        }
-
-        function setearCantidad(event){
-            const inputFilled = event.target;
-            const idSetQuantity = inputFilled.dataset.itemId;
-            const valor = inputFilled.value;
-            const cantidadActual = parseInt(valor); // Convertir a número entero
-
-            // Verificar si el valor es un número válido
-            if (!isNaN(cantidadActual) && cantidadActual >= 1) {
-                // Actualizar el valor del input y el monto total
-
-                const toSet = listaSelectedIds.indexOf(idSetQuantity);
-
-                listaSelectedIds[toSet+1] = cantidadActual;
-
-                actualizarMontoTotal();
-            } else {
-                // Restaurar el valor anterior si no es válido
-                inputFilled.value = inputFilled.dataset.previousValue;
-            }
-        }
-
-        function actualizarMontoTotal() {
-            const listItems = document.getElementsByClassName('lista-items-clicked')[0];
-            const selectedItems = listItems.getElementsByClassName('selected-item');
-            let totalCentavos = 0;
-
-            for (let i = 0; i < selectedItems.length; i++) {
-                const item = selectedItems[i];
-                const precioItem = Math.round(parseFloat(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/', '').replace(/,/g, '')) * 100);
-                const cantidadItem = item.getElementsByClassName('item-quantity-clicked')[0].value;
-                totalCentavos += precioItem * cantidadItem;
-            }
-            const totalSoles = totalCentavos / 100;
-            document.getElementsByClassName('price-total')[0].innerText = 'S/' + totalSoles.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-
-            const listaIdsInput = document.getElementById('listaIds');
-            listaIdsInput.value = listaSelectedIds.join(',');
-
-        }
-
-        function hideorShowList(){
-            const someElement = document.getElementsByClassName('selected-item');
-
-            if(someElement.length === 0){
-                listaSelectedIds = [];
-                HideList();
-            }
-        }
-
-        function HideList(){
-            const itemsPreview = document.getElementById('items-preview');
-            itemsPreview.classList.add('hide');
-        }
-
-        function ShowList(){
-            const itemsPreview = document.getElementById('items-preview');
-            itemsPreview.classList.remove('hide');
-        }
-
-    });
-</script>
-
-
-<script>
     $(document).ready(function() {
         let opened = false;
 
@@ -616,32 +385,27 @@
 
 </script>
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    // Ejecutar cuando el contenido de la página se haya cargado completamente
-    document.addEventListener('DOMContentLoaded', function() {
-        // Mostrar una alerta de bienvenida con un botón para redirigir
+    document.querySelector("#formEstadoMedicamento").addEventListener("submit", function(e){
+        e.preventDefault();
         Swal.fire({
-            title: '¡Atención!',
-            text: 'Su inventario de medicamentos se está agotando. Por favor, revise su stock y realice los pedidos necesarios para evitar interrupciones en el servicio.',
+            title: '¿Estás seguro?',
+            text: "¿Está seguro de que quieres eliminar este medicamento?",
             icon: 'warning',
-            confirmButtonText: 'Entendido',
             showCancelButton: true,
-            cancelButtonText: 'Ir a revisar',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'No, cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                // El usuario hizo clic en 'Entendido'
-                // Aquí puedes agregar cualquier acción adicional que desees
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                // El usuario hizo clic en 'Ir a revisar'
-                // Redirigir a otra vista
-                window.location.href = '/farmacista/facturacion';
+                e.target.submit();
             }
-        });
+        })
     });
 </script>
-
-
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 </body>
 </html>

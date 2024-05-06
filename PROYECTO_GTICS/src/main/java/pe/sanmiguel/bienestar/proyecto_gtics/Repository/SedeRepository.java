@@ -31,4 +31,12 @@ public interface SedeRepository extends JpaRepository<Sede, Integer> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede WHERE idAdmin = ?1")
     Optional<Sede> buscarAdminID(int idAdmin);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede WHERE idAdmin=?")
+    Sede buscarSedeTieneAdministrador(int idAdmin);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE proyecto_gtics.sede SET idAdmin=null WHERE id=?", nativeQuery = true)
+    void eliminarAdminAntiguo(Integer idsede);
 }

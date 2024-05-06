@@ -38,5 +38,12 @@ public interface MedicamentoRepository extends JpaRepository<Medicamento, Intege
     @Query(nativeQuery = true, value = "SELECT m.idMedicamento, m.nombre, m.unidad, m.descripcion, m.categorias, m.componente, m.precioCompra, m.precioVenta, m.recetable, m.imagen, ss.idSede, ss.cantidad FROM proyecto_gtics.medicamento m inner join sede_stock ss on m.idMedicamento = ss.idMedicamento where ss.cantidad < 25 and ss.idSede = ?1")
     List<MedicamentosSedeStockDto> listarMedicamentosStockPorAgotaroAgotados(int sedeId);
 
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.medicamento WHERE estado = 1;")
+    List<Medicamento> listarMedicamentosActivos();
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.medicamento SET estado = 0 WHERE idMedicamento = ?")
+    void eliminarMedicamento(int idMedicamento);
 
 }

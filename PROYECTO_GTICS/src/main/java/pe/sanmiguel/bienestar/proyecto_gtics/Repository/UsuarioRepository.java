@@ -59,6 +59,21 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Usuario encontrarFarmacistaporIdActivosInactivos(int id);
 
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.usuario where idRol = 2 and id = ?1")
-    Usuario encontrarAdministradorPorId(int id);
+    Optional<Usuario> encontrarAdministradorPorId(int id);
 
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE proyecto_gtics.usuario SET estado_usuario=5 WHERE id=?", nativeQuery = true)
+    void administradorSinSede(int idAdmin);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_usuario = 4 WHERE id = ?")
+    void eliminarFarmacista(int idFarmacista);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.usuario where idRol = 2 and estado_usuario = 3")
+    List<Usuario> listarAdministradoresBaneados();
+
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.usuario where idRol = 2 and estado_usuario = 5")
+    List<Usuario> listarAdministradoresSinSede();
 }

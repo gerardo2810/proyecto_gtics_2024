@@ -269,9 +269,12 @@
                 <td style="text-align: center"><a href="/farmacista"><img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/></a></td>
                 <td><a th:href="@{'/superadmin/editarFarmacista' + '?id=' + ${farmacista.idFarmacista.idUsuario}}"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
                 <td>
-                    <a th:href="@{'/superadmin/eliminarFarmacista' + '?id=' + ${farmacista.idFarmacista.idUsuario}}" onclick="return confirm('¿Estás seguro que desea eliminar a este farmacista?')" class="btn alert-danger">
-                        <img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar" >
-                    </a>
+                    <form id="formEstadoSolicitud" th:action="@{'/superadmin/eliminarFarmacista'}" method="post">
+                        <input type="hidden" name="idFarmacista" th:value="${farmacista.idFarmacista.idUsuario}">
+                        <button type="submit" style="background: none; border: none;">
+                            <img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/>
+                        </button>
+                    </form>
                 </td>
             </tr>
             </tbody>
@@ -401,6 +404,29 @@
             }
             opened = !opened;
         });
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    document.querySelector("#formEstadoSolicitud").addEventListener("submit", function(e){
+        e.preventDefault();
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¿Estás seguro de que quieres eliminar a este farmacista?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'No, cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                e.target.submit();
+            }
+        })
     });
 </script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>

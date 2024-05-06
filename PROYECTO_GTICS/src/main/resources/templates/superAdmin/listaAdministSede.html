@@ -275,6 +275,69 @@
             </tbody>
         </table>
 
+        <br><br><br><br><br><br>
+        <div class="container" style="display: flex;">
+            <div class="container" style="flex: 1;">
+                <table id="miTabla3" class="table table-striped">
+                    <h3>ADMINISTRADORES SIN SEDE</h3>
+                    <thead>
+                    <tr style="background-color: #378fff">
+                        <th style="text-align: center"></th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Asignar</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Eliminar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="adminSinSede, info : ${adminSinSede}">
+                        <td style="text-align: center">
+                            <div style="display: flex; align-items: center; justify-content: center;">
+                                <label>
+                                    <img th:src="@{/img/3135768.png}" alt="" style="width: 45px; height: 45px;">
+                                </label>
+                            </div>
+                        </td>
+                        <td style="text-align: center" th:text="${adminSinSede.nombres + ' ' +  adminSinSede.apellidos}"></td>
+                        <td><a th:href="@{'/superadmin/editarAdministrador' + '?id=' + ${adminSinSede.idUsuario}}"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
+                        <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <br>
+            </div>
+
+            <div class="container" style="flex: 1;">
+                <table id="miTabla3" class="table table-striped">
+                    <h3>ADMINISTRADORES BANEADOS</h3>
+                    <thead>
+                    <tr style="background-color: #378fff">
+                        <th style="text-align: center"></th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y Apellido</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Desbanear</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Eliminar</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="adminBaneado, info : ${adminBaneados}">
+                        <td style="text-align: center">
+                            <div style="display: flex; align-items: center; justify-content: center;">
+                                <label>
+                                    <img th:src="@{/img/3135768.png}" alt="" style="width: 45px; height: 45px;">
+                                </label>
+                            </div>
+                        </td>
+                        <td style="text-align: center" th:text="${adminBaneado.nombres + ' ' +  adminBaneado.apellidos}"></td>
+                        <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=K4jLy6sZ7yfc&format=png" alt="Desbanear"/></a></td>
+                        <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/></a></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <br>
+            </div>
+
+        </div>
     </div>
 
     <br><br><br><br>

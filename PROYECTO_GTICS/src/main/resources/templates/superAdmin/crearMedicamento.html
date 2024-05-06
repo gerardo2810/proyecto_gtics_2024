@@ -127,10 +127,6 @@
             outline: none;
         }
 
-
-        .seccion-especifica {
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-        }
         @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
     </style>
 </head>
@@ -309,7 +305,7 @@
                                                 <p class="modal__message" style="color:dimgray">Selecciona la imagen para subirla desde tu dispositivo</p>
                                                 <div class="modal__actions">
                                                     <button  class="modal__button modal__button--upload" type="button" data-action="file">Seleccionar imagen</button>
-                                                    <input id="file" th:field="*{imagen}" name="imagen" type="file" hidden >
+                                                    <input id="file" name="imagen" type="file" hidden >
                                                 </div>
                                                 <div class="modal__actions" hidden>
                                                     <svg class="modal__file-icon" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
@@ -374,53 +370,44 @@
 
                             <div>
                                 <div class="column">
-
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Nombre del medicamento:</label>
-                                        <input class="input-form" type="text" th:field="*{nombre}"  name="nombre" placeholder="Ingrese nombre" required>
+                                        <input class="input-form" type="text" th:field="*{nombre}"  name="nombre" placeholder="Ingrese nombre" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" required>
+                                        <div  class="invalid-feedback"
+                                              th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
+                                            No puede estar vacío
+                                        </div>
                                     </div>
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Unidad del medicamento:</label>
-                                        <input class="input-form" type="text" th:field="*{unidad}"  name="unidad" placeholder="Ingrese la unidad" required>
+                                        <input class="input-form" type="text" th:field="*{unidad}"  name="unidad" placeholder="Ingrese la unidad" th:classappend="${#fields.hasErrors('unidad')?'is-invalid':''}" required>
+                                        <div  class="invalid-feedback"
+                                              th:if="${#fields.hasErrors('unidad')}" th:errors="*{unidad}">
+                                            No puede estar vacío
+                                        </div>
                                     </div>
-
                                 </div>
 
                                 <div class="column">
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Descripción:</label>
-                                        <input class="input-form" type="text" th:field="*{descripcion}"  name="descripcion" placeholder="Ingrese descripción" required>
+                                        <input class="input-form" type="text" th:field="*{descripcion}"  name="descripcion" placeholder="Ingrese descripción" th:classappend="${#fields.hasErrors('descripcion')?'is-invalid':''}" required>
+                                        <div  class="invalid-feedback"
+                                              th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
+                                            No puede estar vacío
+                                        </div>
                                     </div>
-
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Categoría del medicamento:</label>
-                                        <input class="input-form" type="text" th:field="*{categorias}"  name="categoria" placeholder="Ingrese su dirección" required>
-                                    </div>
-
-                                </div>
-
-                                <div class="column">
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Componente:</label>
-                                        <input class="input-form" name="componente" th:field="*{componente}"  type="text" placeholder="Ingrese los componentes" required>
-                                    </div>
-
-
-                                        <div class="input-label-box">
-                                            <label style="font-weight: bold; color: dimgray">Sede:</label>
-                                            <select id="select-sede" class="select-form-sede" name="sedeid" multiple>
-                                                <option selected disabled>Seleccionar la(s) sede(s):</option>
-                                                <option th:each="sede: ${sedeDisponibleList}"
-                                                        th:value="${sede.idSede}"
-                                                        th:text="${sede.nombre}">
-                                                </option>
-                                            </select>
-                                            <p style="width:300px; margin-top: 10px ">Sedes seleccionadas: <span id="selected-sedes"></span></p>
+                                        <input th:field="*{componente}" class="input-form" name="componente" type="text" placeholder="Ingrese componentes" th:classappend="${#fields.hasErrors('componente')?'is-invalid':''}" required>
+                                        <div  class="invalid-feedback"
+                                              th:if="${#fields.hasErrors('componente')}" th:errors="*{componente}">
+                                            No puede estar vacío
                                         </div>
-                                        <button type="submit"></button>
+                                    </div>
 
                                 </div>
 
@@ -428,12 +415,20 @@
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Precio compra:</label>
-                                        <input class="input-form" type="number" th:field="*{precioCompra}"  name="preciocompra" placeholder="Ingrese el correo" required>
+                                        <input class="input-form" type="text" th:field="*{precioCompra}"  name="preciocompra" placeholder="Ingrese precio de compra" th:classappend="${#fields.hasErrors('precioCompra')?'is-invalid':''}" required>
+                                        <div style="width: 300px" class="invalid-feedback"
+                                              th:if="${#fields.hasErrors('precioCompra')}" th:errors="*{precioCompra}">
+                                            No puede estar vacío
+                                        </div>
                                     </div>
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Precio Venta:</label>
-                                        <input class="input-form" type="number" th:field="*{precioVenta}"  name="precioventa" placeholder="Ingrese la contraseña" required>
+                                        <input class="input-form" type="text" th:field="*{precioVenta}"  name="precioventa" placeholder="Ingrese precio de venta" th:classappend="${#fields.hasErrors('precioVenta')?'is-invalid':''}" required>
+                                        <div  style="width: 300px" class="invalid-feedback"
+                                              th:if="${#fields.hasErrors('precioVenta')}" th:errors="*{precioVenta}">
+                                            No puede estar vacío
+                                        </div>
                                     </div>
 
                                 </div>
