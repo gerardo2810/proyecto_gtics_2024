@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bienestar San Miguel | Login</title>
+
+
+    <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/fonts.css}" rel="stylesheet" />
+    <link th:href="@{/css/login-styles/login.css}" rel="stylesheet" />
+</head>
+<header>
+    <div class="login-top">
+        <div>
+            <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+        </div>
+
+        <div class="top-menu">
+            <a class="text menu-item roboto-regular" href="">Preguntas Frecuentes →</a>
+            <a class="text menu-item roboto-regular" href="">Manual de Usuario →</a>
+            <a class="text menu-item roboto-regular" href="https://munisanmiguel.gob.pe/#">Directorio de Servicios →</a>
+        </div>
+    </div>
+
+</header>
+
+<body>
+
+<div class="main-container" >
+    <div class="login-container">
+
+        <div class="wrapper2" style="margin-top: 130px; margin-bottom: 100px">
+            <div class="login-title montserrat-bold">Registro</div>
+
+                <form name="signin" class="login-form" method="post" th:action="@{/login/save}">
+                    <div class="content">
+                        <div class="user-details">
+                            <div class="input-control">
+                                <span class="details">Nombres <br></span>
+                                <label for="nombres" class="input-label" hidden>Nombres</label>
+                                <input type="text" name="nombre" id="nombres" class="input-field2" placeholder="Ingrese sus nombres">
+                            </div>
+                            <div class="input-control">
+                                <span class="details">Apellido <br></span>
+                                <label for="apellidos" class="input-label"  hidden>Apellido</label>
+                                <input type="text" name="nombre" id="apellidos" class="input-field2" placeholder="Ingrese sus apellidos">
+                            </div>
+                            <div class="input-control">
+                                <span class="details">Dirección <br></span>
+                                <label for="direccion" class="input-label" hidden>Dirección</label>
+                                <input type="text" name="nombre" id="direccion" class="input-field2" placeholder="Ingrese su dirección">
+                            </div>
+                            <div class="input-control">
+                                <span class="details">Telefono <br></span>
+                                <label for="celular" class="input-label" hidden>Telefono</label>
+                                <input type="number" name="nombre" id="celular" class="input-field2" placeholder="Ingrese su telefono">
+                            </div>
+                            <div class="input-control">
+                                <span class="details">Fecha de nacimiento <br></span>
+                                <label for="birthdate" class="input-label" hidden>Fecha de nacimiento</label>
+                                <input type="number" name="nombre" id="birthdate" class="input-field2" placeholder="Ingrese su fecha de nacimiento">
+                            </div>
+                            <div class="input-control">
+                                <span class="details">Correo electronico<br></span>
+                                <label for="correo" class="input-label" hidden>Fecha de nacimiento</label>
+                                <input type="email" name="nombre" id="correo" class="input-field2" placeholder="Ingrese su correo electronico">
+                            </div>
+                            <div class="input-control">
+                                <span class="details">Contraseña<br></span>
+                                <label for="contrasena" class="input-label" hidden>Contraseña</label>
+                                <input type="password" name="nombre" id="contrasena" class="input-field2" placeholder="Ingrese su contraseña">
+                            </div>
+                            <div class="input-control">
+                                <span class="details">Confirmar su contraseña<br></span>
+                                <label class="input-label" hidden>Contraseña</label>
+                                <input type="password" name="nombre" class="input-field2" placeholder="Confirme su contraseña">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="input-control">
+                            <input type="submit" name="submit" class="input-submit" value="Registrar" disabled>
+                        </div>
+                    </div>
+                </form>
+
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+
+</html>

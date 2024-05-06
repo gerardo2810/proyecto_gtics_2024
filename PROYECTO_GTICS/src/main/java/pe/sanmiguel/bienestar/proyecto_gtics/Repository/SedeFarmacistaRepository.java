@@ -32,7 +32,7 @@ public interface SedeFarmacistaRepository extends JpaRepository<SedeFarmacista, 
     //Crear Relacion Sede-Farmacista
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "insert into sede_farmacista values (?1, ?2, ?3, ?4)")
+    @Query(nativeQuery = true, value = "insert into sede_farmacista values (?1, ?2, ?3, ?4, null)")
     void crearSedeFarmacista(int id, int idFarmacista, String codigoMed, int aprobado);
 
     //Listar tabla SedeFarmacista
@@ -69,4 +69,5 @@ public interface SedeFarmacistaRepository extends JpaRepository<SedeFarmacista, 
 
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f INNER JOIN proyecto_gtics.usuario u, proyecto_gtics.sede s WHERE f.idSede = s.id and f.idFarmacista=u.id and f.aprobado=1 and (u.estado_usuario =1 or u.estado_usuario =2);")
     List<SedeFarmacista> listarFarmacistasActivosInactivos();
+
 }

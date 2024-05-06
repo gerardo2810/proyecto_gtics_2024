@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <!--=============== REMIXICONS ===============-->
@@ -160,12 +160,13 @@
             <div style="margin-bottom: 40px"></div>
 
             <div style="padding-right: 0; padding-left: 0"> </div>
+            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
         </div>
 
 
 
 
-        <form method="post" action="/adminsede/solicitud_farmacista_post" enctype="multipart/form-data">
+        <form method="post" action="/adminsede/solicitud_farmacista_post" enctype="multipart/form-data" th:object="${usuarioFarmacista}">
 
             <div class="container-form">
 
@@ -173,12 +174,12 @@
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Nombre del farmacista:</label>
-                        <input class="input-form" name="nombres" type="text" placeholder="Ingrese sus nombres" required>
+                        <input class="input-form" th:field="*{nombres}" type="text" placeholder="Ingrese sus nombres" required>
                     </div>
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Apellidos del farmacista:</label>
-                        <input class="input-form" name = "apellidos" type="text" placeholder="Ingrese sus apellidos" required>
+                        <input class="input-form" th:field="*{apellidos}" type="text" placeholder="Ingrese sus apellidos" required>
                     </div>
 
                 </div>
@@ -186,12 +187,12 @@
                 <div class="column">
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">DNI:</label>
-                        <input class="input-form" name="dni" type="text" placeholder="Ingrese su DNI" required>
+                        <input class="input-form" th:field="*{dni}" type="text" placeholder="Ingrese su DNI" required>
                     </div>
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Distrito de residencia:</label>
-                        <input class="input-form" name="distrito" type="text" placeholder="Ingrese su distrito" required>
+                        <input class="input-form" th:field="*{distrito}" type="text" placeholder="Ingrese su distrito" required>
                     </div>
                 </div>
 
@@ -199,12 +200,12 @@
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Correo:</label>
-                        <input class="input-form" name="correo" type="text" placeholder="Ingrese el correo" required>
+                        <input class="input-form" th:field="*{correo}" type="text" placeholder="Ingrese el correo" required>
                     </div>
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Contraseña:</label>
-                        <input class="input-form" name="contrasena" type="text" placeholder="Ingrese la contraseña" required>
+                        <input class="input-form" th:field="*{contrasena}" type="text" placeholder="Ingrese la contraseña" required>
                     </div>
 
 
@@ -213,7 +214,7 @@
                 <div class="column">
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Celular:</label>
-                        <input class="input-form" name="celular" type="text" placeholder="Ingrese el celular" required>
+                        <input class="input-form" th:field="*{celular}" type="text" placeholder="Ingrese el celular" required>
                     </div>
 
                     <div class="input-label-box">
@@ -225,12 +226,12 @@
                 <div class="column">
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Dirección:</label>
-                        <input class="input-form" name="direccion" type="text" placeholder="Ingrese la dirección" required>
+                        <input class="input-form" th:field="*{direccion}" type="text" placeholder="Ingrese la dirección" required>
                     </div>
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Seguro:</label>
-                        <input class="input-form" name="seguro" type="text" placeholder="Ingrese el seguro" required>
+                        <input class="input-form" th:field="*{seguro}" type="text" placeholder="Ingrese el seguro" required>
                     </div>
                 </div>
 

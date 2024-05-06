@@ -24,7 +24,7 @@ final UsuarioRepository usuarioRepository;
 
    @GetMapping("/new")
    public String nuevoUsuario() {
-     return "login/registro";
+     return "login/prueba";
    }
 
   @PostMapping("/save")

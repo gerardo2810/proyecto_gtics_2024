@@ -5,16 +5,18 @@
   box-sizing: border-box;
   font-family: 'Poppins',sans-serif;
 }
-body{
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+
+.wrapper2{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 600px;
+    margin-top: 5%;
 }
+
 .container{
-  max-width: 700px;
+
+  max-width: 600px;
   width: 100%;
   background-color: #fff;
   padding: 25px 30px;
@@ -39,7 +41,7 @@ body{
 .content form .user-details{
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+
   margin: 20px 0 12px 0;
 }
 form .user-details .input-box{

@@ -1,5 +1,7 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +33,9 @@ public class AdminSedeController {
     final DoctorRepository doctorRepository;
     final SedeFarmacistaRepository sedeFarmacistaRepository;
     final ReposicionContenidoRepository reposicionContenidoRepository;
+
+    @Autowired
+    CodigoColegiaturaRepository codigoColegiaturaRepository;
 
     public AdminSedeController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, SedeStockRepository sedeStockRepository, MedicamentoRepository medicamentoRepository, OrdenRepository ordenRepository, OrdenContenidoRepository ordenContenidoRepository, ReposicionRepository reposicionRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository, SedeFarmacistaRepository sedeFarmacistaRepository, ReposicionContenidoRepository reposicionContenidoRepository) {
         this.usuarioRepository = usuarioRepository;
@@ -97,12 +102,14 @@ public class AdminSedeController {
     }
 
     @GetMapping("/farmacista")
-    public String showFarmacistas(Model model){
+    public String showFarmacistas(Model model,
+                                  @RequestParam(name = "msg", required = false) String msg){
         //List<Usuario> listaFarmacistas = usuarioRepository.listarFarmacistas();
         //SESSION
         int idSede = 1;
         List<UsuarioSedeFarmacistaDto> listaFarmacistasNew = usuarioRepository.listarSedeFarmacista(idSede);
         model.addAttribute("listaFarmacistasNew", listaFarmacistasNew);
+        model.addAttribute("msg", msg);
         //model.addAttribute("listaFarmacistas", listaFarmacistas);
         return "adminsede/farmacistas";
     }
@@ -194,7 +201,10 @@ public class AdminSedeController {
     }
 
     @GetMapping("/solicitud_farmacista")
-    public String solicitudFarmacista(){
+    public String solicitudFarmacista(@ModelAttribute("usuarioFarmacista") Usuario usuarioFarmacista, //model attribute del farmacista
+                                      Model model,
+                                      @RequestParam(name = "msg", required = false) String msg){
+        model.addAttribute("msg", msg);
         return "adminsede/solicitud_agregar_farmacista";
     }
 
@@ -289,7 +299,7 @@ public class AdminSedeController {
             sedeFarmacista.setId(sedeFarmacistaOld.getId());
             sedeFarmacista.setIdFarmacista(sedeFarmacistaOld.getIdFarmacista());
             sedeFarmacista.setAprobado(sedeFarmacistaOld.getAprobado());
-            sedeFarmacistaRepository.save(sedeFarmacista);
+            //sedeFarmacistaRepository.save(sedeFarmacista);
             return "redirect:/adminsede/farmacista";
 
         }else {
@@ -299,25 +309,44 @@ public class AdminSedeController {
 
     }
     @PostMapping("/solicitud_farmacista_post")
-    public String solicitudAgregarFarmacista(@RequestParam("nombres") String nombres,
-                                             @RequestParam("apellidos") String apellidos,
-                                             @RequestParam("dni") String dni,
-                                             @RequestParam("distrito") String distrito,
-                                             @RequestParam("correo") String correo,
-                                             @RequestParam("contrasena") String contrasena,
-                                             @RequestParam("celular") String celular,
+    public String solicitudAgregarFarmacista(@ModelAttribute("usuarioFarmacista") Usuario usuarioFarmacista,
                                              @RequestParam("codigoMed") String codigoMed,
-                                             @RequestParam("direccion") String direccion,
-                                             @RequestParam("seguro") String seguro){
+                                             RedirectAttributes attr){
 
         int estadoUsuario = 2;
         int idRol = 3;
         int idUsuario = usuarioRepository.findLastUsuarioId() + 1;
         int aprobado = 2; //El farmacista no está aprobado
         int idSede = 1; //Cambiar
-        usuarioRepository.crearFarmacista(idUsuario, idRol, correo, contrasena, nombres, apellidos, celular, dni, direccion, distrito, seguro, estadoUsuario);
-        sedeFarmacistaRepository.crearSedeFarmacista(idSede, idUsuario, codigoMed, aprobado);
-        return "redirect:/adminsede/farmacista";
+        usuarioFarmacista.setIdUsuario(idUsuario);
+        usuarioFarmacista.setRol(idRol);
+        usuarioFarmacista.setEstadoUsuario(estadoUsuario);
+        //usuarioRepository.crearFarmacista(idUsuario, idRol, correo, contrasena, nombres, apellidos, celular, dni, direccion, distrito, seguro, estadoUsuario);
+
+        //Validacion de codigo de colegiatura
+        int codigoValido = 0;
+        List<CodigoColegiatura> listaCodigosColegiatura = codigoColegiaturaRepository.findAll(); //lista todos los codigos de colegiatura
+
+        for (CodigoColegiatura codigoColegiatura : listaCodigosColegiatura){
+
+            if(codigoMed.equals(codigoColegiatura.getCodigo()) && usuarioFarmacista.getDni().equals(codigoColegiatura.getDni())){
+                codigoValido = 1;
+            }
+
+        }
+
+        if (codigoValido == 1){
+            usuarioRepository.save(usuarioFarmacista);
+            sedeFarmacistaRepository.crearSedeFarmacista(idSede, idUsuario, codigoMed, aprobado);
+            attr.addAttribute("msg", "Solicitud enviada correctamente");
+            return "redirect:/adminsede/farmacista";
+        }else {
+            //no se crea el farmacista debido a que el dni o el codigo no coinciden
+            attr.addAttribute("msg", "Codigo de colegiatura no válido, por favor ingrese nuevamente");
+            return "redirect:/adminsede/solicitud_farmacista";
+        }
+
+
     }
 
     @PostMapping("/generar_orden")
