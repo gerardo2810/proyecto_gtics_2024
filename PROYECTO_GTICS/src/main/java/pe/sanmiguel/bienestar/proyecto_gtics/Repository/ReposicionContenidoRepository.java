@@ -36,4 +36,11 @@ public interface ReposicionContenidoRepository extends JpaRepository<ReposicionC
     @Query(nativeQuery = true, value = "SELECT rc.idMedicamento, rc.idReposicion, rc.cantidad, m.nombre, m.unidad, m.precioCompra, m.imagen FROM proyecto_gtics.reposicion_contenido rc inner join medicamento m on rc.idMedicamento = m.idMedicamento where idReposicion = ?1")
     List<ReposicionContenidoMedicamentoDto> listaMostrarMedicamentosSeleccionados(int idReposicion);
 
+    //Eliminar medicamento de una orden de reposición
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM reposicion_contenido WHERE idMedicamento = ?1 and idReposicion = ?2")
+    void eliminarMedicamentoContenidoReposicion(int idMedicamento, int idReposicion);
+
 }

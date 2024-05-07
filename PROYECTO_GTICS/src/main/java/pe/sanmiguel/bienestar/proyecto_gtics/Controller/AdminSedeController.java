@@ -141,17 +141,12 @@ public class AdminSedeController {
     }
 
     @GetMapping("/editar_orden_reposicion")
-    public String editOrden(@RequestParam(name = "state", required = false) String state,
-                            @RequestParam("id") int id,
+    public String editOrden(@RequestParam("id") int id,
                             Model model){
 
         int idSede = 1;
         List<ReposicionContenidoMedicamentoDto> listaMedicamentosSeleccionados = reposicionContenidoRepository.listaMostrarMedicamentosSeleccionados(id);
-
-
-        List<MedicamentosSedeStockDto> listaMedicamentosporAgotaroAgotados = medicamentoRepository.listarMedicamentosStockPorAgotaroAgotados(idSede);
         model.addAttribute("idOrden", id);
-        model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosporAgotaroAgotados);
         model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
         return "adminsede/editar_orden_reposicion";
 
@@ -272,6 +267,19 @@ public class AdminSedeController {
         usuarioRepository.editarFarmacista(id,nombre,apellido,dni,distrito,correo);
         return "redirect: /adminsede/farmacista";
     }*/
+
+    @GetMapping("/eliminar_medicamento_lista_seleccionada")
+    public String eliminarMedicamentoLista(Model model,
+                                           @RequestParam("idMedicamento") int idMedicamento,
+                                           @RequestParam("idReposicion") int idReposicion){
+
+        reposicionContenidoRepository.eliminarMedicamentoContenidoReposicion(idMedicamento,idReposicion);
+        model.addAttribute("idOrden", idReposicion);
+        List<ReposicionContenidoMedicamentoDto> listaMedicamentosSeleccionados = reposicionContenidoRepository.listaMostrarMedicamentosSeleccionados(idReposicion);
+        model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
+
+        return "adminsede/editar_orden_reposicion";
+    }
 
 
     /*---------------------------------------------------------POST---------------------------------------------------------*/
