@@ -43,4 +43,11 @@ public interface ReposicionContenidoRepository extends JpaRepository<ReposicionC
     @Query(nativeQuery = true, value = "DELETE FROM reposicion_contenido WHERE idMedicamento = ?1 and idReposicion = ?2")
     void eliminarMedicamentoContenidoReposicion(int idMedicamento, int idReposicion);
 
+    // Editar Contenido de la orden
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "update reposicion_contenido set cantidad = ?1 where idMedicamento = ?2 and idReposicion = ?3")
+    void actualizarCantidadMedicamentoOrden (int cantidad, int idMedicamento, int idReposicion);
+
 }

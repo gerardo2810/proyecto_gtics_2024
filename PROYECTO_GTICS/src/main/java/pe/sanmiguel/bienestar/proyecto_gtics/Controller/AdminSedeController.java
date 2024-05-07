@@ -436,6 +436,21 @@ public class AdminSedeController {
         return "redirect:/adminsede/ordenes";
     }
 
+    @PostMapping("/editarReposicion")
+    public String editarReposicion(@RequestParam("listaIds") List<Integer> listaIds,
+                                   @RequestParam("listaCantidades") List<Integer> listaCantidades,
+                                   @RequestParam("idReposicion") int idReposicion){
+
+
+        for(int i = 0; i < listaIds.size(); i++){
+            reposicionContenidoRepository.actualizarCantidadMedicamentoOrden(listaCantidades.get(i),listaIds.get(i),idReposicion);
+        }
+
+
+
+        return "redirect:/adminsede/ordenes";
+    }
+
 
 
 

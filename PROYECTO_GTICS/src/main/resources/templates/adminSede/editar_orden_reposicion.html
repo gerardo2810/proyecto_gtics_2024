@@ -145,89 +145,102 @@
     </header>
 
     <body>
+        <form method="post" th:action="@{/adminsede/editarReposicion}" enctype="multipart/form-data">
+
+            <input name = "idReposicion" th:value="${idOrden}" th:type="hidden">
 
 
-        <div class="container">
+            <div class="container">
 
-            <div style="padding-top: 20px; padding-bottom: 20px">
-                <div class="main-title open-sans-bold"> Editar Orden de reposición </div>
-                <div class="main-subtitle helvetica-medium" th:text="${'Vista de edición de orden de reposición #' + (idOrden + 10000)}"> Vista de edición de orden de reposición #</div>
-            </div>
+                <div style="padding-top: 20px; padding-bottom: 20px">
+                    <div class="main-title open-sans-bold"> Editar Orden de reposición </div>
+                    <div class="main-subtitle helvetica-medium" th:text="${'Vista de edición de orden de reposición #' + (idOrden + 10000)}"> Vista de edición de orden de reposición #</div>
+                </div>
 
-            <hr class="style-one">
+                <hr class="style-one">
 
-            <div class="column-start" style="padding-bottom: 1px">
+                <div class="column-start" style="padding-bottom: 1px">
 
-                <div style="display: flex;flex-direction: row;column-gap: 8px">
+                    <div style="display: flex;flex-direction: row;column-gap: 8px">
 
-                    <div style="display: flex; flex-direction: column; justify-content: center">
+                        <div style="display: flex; flex-direction: column; justify-content: center">
 
-                        <label style="color:dimgray;font-weight: bold; margin-left: 2px; margin-bottom:4px">Filtrar por nombre del medicamento:</label>
+                            <label style="color:dimgray;font-weight: bold; margin-left: 2px; margin-bottom:4px">Filtrar por nombre del medicamento:</label>
 
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; justify-content: start">
+
+
+
+                            <!--select class="select-p" id="filtroEstado">
+                                <option value="">Mostrar Todos</option>
+                                <option value="RECIBIDO">Recibido</option>
+                                <option value="EN PROCESO">En proceso</option>
+                                <option value="EMPAQUETANDO">Empaquetando</option>
+                                <option value="EN RUTA">En ruta</option>
+                                <option value="ENTREGADO">Entregado</option>
+                            </select-->
+
+                        </div>
                     </div>
+
 
                     <div style="display: flex; flex-direction: column; justify-content: start">
 
-
-
-                        <!--select class="select-p" id="filtroEstado">
-                            <option value="">Mostrar Todos</option>
-                            <option value="RECIBIDO">Recibido</option>
-                            <option value="EN PROCESO">En proceso</option>
-                            <option value="EMPAQUETANDO">Empaquetando</option>
-                            <option value="EN RUTA">En ruta</option>
-                            <option value="ENTREGADO">Entregado</option>
-                        </select-->
+                        <input id="searchInput" class="input-form" style="margin-top: 4px;width: 300px;height: 40px" placeholder="Buscar por nombre del medicamento">
 
                     </div>
-                </div>
 
-
-                <div style="display: flex; flex-direction: column; justify-content: start">
-
-                    <input id="searchInput" class="input-form" style="margin-top: 4px;width: 300px;height: 40px" placeholder="Buscar por nombre del medicamento">
-
-                </div>
 
 
 
+                </div>
+                <br>
+
+                <table id="miTabla" class="table table-striped">
+                    <thead>
+                        <tr style="background-color: #378fff">
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
+                            <!--th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th-->
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Unidad</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;"></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="medicamento : ${listaMedicamentosSeleccionados}">
+                            <input name = "listaIds" th:value="${medicamento.getIdMedicamento()}" th:type="hidden">
+
+                            <td th:text="${medicamento.getNombre()}"></td>
+                            <!--td th:text="${medicamento.getIdSede()}"></td-->
+                            <td th:text="${ medicamento.getUnidad()}"></td>
+                            <td>
+                                <div class="selector-cantidad">
+                                    <i class="fa-solid fa-minus restar-cantidad" data-item-id="5" aria-hidden="true"></i>
+                                    <input type="text" name = "listaCantidades" th:value="${medicamento.getCantidad()}" class="item-quantity-clicked" data-item-id="5" fdprocessedid="pefux6">
+                                    <i class="fa-solid fa-plus sumar-cantidad" data-item-id="5" aria-hidden="true"></i>
+                                </div>
+                            </td>
+                            <td>
+                                <a th:href="@{'/adminsede/eliminar_medicamento_lista_seleccionada?idMedicamento=' + ${medicamento.getIdMedicamento()} + '&idReposicion=' + ${medicamento.getIdReposicion()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
             </div>
-            <br>
+            <br/><br/>
 
-            <table id="miTabla" class="table table-striped">
-                <thead>
-                    <tr style="background-color: #378fff">
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
-                        <!--th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th-->
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Unidad</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;"></th>
+            <div class="column" style="margin-left: 550px">
 
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="medicamento : ${listaMedicamentosSeleccionados}">
-                        <td th:text="${medicamento.getNombre()}"></td>
-                        <!--td th:text="${medicamento.getIdSede()}"></td-->
-                        <td th:text="${ medicamento.getUnidad()}"></td>
-                        <td th:text="${medicamento.getCantidad()}"></td>
-                        <td>
-                            <a th:href="@{'/adminsede/eliminar_medicamento_lista_seleccionada?idMedicamento=' + ${medicamento.getIdMedicamento()} + '&idReposicion=' + ${medicamento.getIdReposicion()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                <button class="btn-cancel" type="button" onclick="window.location.href = '/adminsede/ordenes'">Cancelar</button>
+                <button class="btn-p" type="submit" style="font-size: 17px; padding: 12px 20px">Actualizar</button>
 
-        </div>
-        <br/><br/>
+            </div>
 
-        <div class="column" style="margin-left: 550px">
-
-            <button class="btn-cancel" type="button" onclick="window.location.href = '/adminsede/ordenes'">Cancelar</button>
-            <button class="btn-p" type="submit" style="font-size: 17px; padding: 12px 20px">Actualizar</button>
-
-        </div>
+        </form>
 
         <br>
         <br>
