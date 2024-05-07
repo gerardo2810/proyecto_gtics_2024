@@ -148,26 +148,13 @@ public class AdminSedeController {
         int idSede = 1;
         List<ReposicionContenidoMedicamentoDto> listaMedicamentosSeleccionados = reposicionContenidoRepository.listaMostrarMedicamentosSeleccionados(id);
 
-        if("agotado".equals(state)){
-            List<MedicamentosSedeStockDto> listaMedicamentosAgotados = medicamentoRepository.listarMedicamentosStockAgotados(idSede);
-            System.out.println(listaMedicamentosAgotados.get(0).getNombre());
-            model.addAttribute("idOrden", id);
-            model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosAgotados);
-            model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
-            return "adminsede/editar_orden_reposicion";
-        } else if ("poragotar".equals(state)) {
-            List<MedicamentosSedeStockDto> listaMedicamentosPorAgotar = medicamentoRepository.listarMedicamentosStockPorAgotar(idSede);
-            model.addAttribute("idOrden", id);
-            model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosPorAgotar);
-            model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
-            return "adminsede/editar_orden_reposicion";
-        }else {
-            List<MedicamentosSedeStockDto> listaMedicamentosporAgotaroAgotados = medicamentoRepository.listarMedicamentosStockPorAgotaroAgotados(idSede);
-            model.addAttribute("idOrden", id);
-            model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosporAgotaroAgotados);
-            model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
-            return "adminsede/editar_orden_reposicion";
-        }
+
+        List<MedicamentosSedeStockDto> listaMedicamentosporAgotaroAgotados = medicamentoRepository.listarMedicamentosStockPorAgotaroAgotados(idSede);
+        model.addAttribute("idOrden", id);
+        model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosporAgotaroAgotados);
+        model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
+        return "adminsede/editar_orden_reposicion";
+
     }
 
     @GetMapping("/medicamentos")
