@@ -27,7 +27,7 @@ final UsuarioRepository usuarioRepository;
   @PostMapping("/save")
    public String guardarNuevoUsuario(@ModelAttribute Usuario usuario, RedirectAttributes attributes){
        usuario.setRol(3);
-       usuario.setEstadoUsuario(1);
+       usuario.setEstadoUsuario(2);
 
         usuarioRepository.save(usuario);
       return "redirect:/";
