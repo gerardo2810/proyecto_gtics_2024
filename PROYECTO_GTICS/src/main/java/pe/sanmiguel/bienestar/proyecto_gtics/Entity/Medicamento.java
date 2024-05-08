@@ -46,4 +46,7 @@ public class Medicamento {
 
     @Column(name = "estado")
     private Integer estado;
+
+    @Column
+    private String imagen;
 }

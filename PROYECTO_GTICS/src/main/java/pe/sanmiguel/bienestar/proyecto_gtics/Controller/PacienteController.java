@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.List;
 
@@ -71,6 +72,7 @@ public class PacienteController {
     @GetMapping(value="/ordenes")
     public String ordenes(Model model){
         List<Orden> lista =  ordenRepository.listarOrdenes();
+
         model.addAttribute("lista",lista);
 
         return "paciente/ordenes";
@@ -207,10 +209,10 @@ public class PacienteController {
         InputStream inputStream = imagen.getInputStream();
         byte[] bytes = inputStream.readAllBytes();
 
-        // Crea tu objeto Orden
 
 
 
+        /*
 
 
         String tracking = new String();
@@ -223,8 +225,10 @@ public class PacienteController {
         Doctor doc = doctorRepository.getById(1); //el id del doctor
 
 
+
+
         Orden orden = new Orden();
-        orden.setIdOrden(ordenRepository.findLastOrdenId() + 1);
+        orden.setIdOrden(ordenRepository.findLastOrdenId()+1);
         orden.setTracking(tracking);
         orden.setFechaIni(fechaIni);
         orden.setFechaFin(fechaFin);
@@ -242,7 +246,7 @@ public class PacienteController {
 
 
 
-        ordenRepository.save(orden);
+        //ordenRepository.save(orden);
 
 
 
@@ -270,8 +274,10 @@ public class PacienteController {
 
 
         }
-
+        */
         redirectAttributes.addFlashAttribute("msg", "Orden Creada");
+
+
         return "redirect:/paciente/ordenes";
 
     }

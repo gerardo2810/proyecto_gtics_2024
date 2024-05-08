@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Getter
@@ -49,6 +50,5 @@ public class Orden {
     //@Column(name="imagenReceta")
     //@Lob
     //private byte[] imagen;
-
 
 }
