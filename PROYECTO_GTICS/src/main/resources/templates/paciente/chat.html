@@ -113,6 +113,69 @@
         .container2:last-child button i {
             margin-right: 5px; /* Espacio entre el icono y el texto */
         }
+
+    </style>
+
+
+    <style>
+
+
+        .kapsayici{
+            display:flex;
+            padding:5px;
+            text-align:center;
+            max-width:500px;
+            min-width:0px;
+            height:auto;
+            margin:200px auto;
+            flex-direction: row;
+            align-items: center;
+
+        }
+
+
+        .emoji{
+            max-width:30px;
+            border-radius:50%;
+            cursor:pointer;
+        }
+        .bar{
+            width:200px;
+            height:170px;
+            border-radius:10px;
+            background:#fff;
+            position:absolute;
+            right:10px;
+            top:40px;
+            box-shadow:0px 0px 20px 0px #272727;
+            visibility:hidden;
+            opacity:0;
+            display:flex;
+
+            font-size:35px;
+            transition:all 0.3s;
+        }
+        .emoji:focus + .bar{
+            top:60px;
+            visibility:visible;
+            opacity:1;
+        }
+        .bar:focus{
+            top:60px;
+            visibility:visible;
+            opacity:1;
+        }
+        .emoticon{
+            padding:10px;
+            border-radius:50%;
+            cursor:pointer;
+            transition:all 0.3s;
+        }
+        .emoticon:hover{
+            background:mediumslateblue;
+            color:white;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -273,18 +336,18 @@
 
                 <div class="messageSeperator">Today</div>
 
-                <div class="message me">
-                    <p class="messageContent">Send Me the Pics!</p>
+                <div class="message you">
+                    <p class="messageContent">Buenas noches</p>
                     <div class="messageDetails">
-                        <div class="messageTime">3:21 PM</div>
+                        <div class="messageTime">6:21 PM</div>
                         <i class="fa-solid fa-check"></i>
                     </div>
                 </div>
 
-                <div class="message you">
-                    <p class="messageContent">Sorry for the Delay!</p>
+                <div class="message me">
+                    <p class="messageContent">Buenas noches</p>
                     <div class="messageDetails">
-                        <div class="messageTime">8:09 AM</div>
+                        <div class="messageTime">6:25 PM</div>
                         <i class="fa-solid fa-check"></i>
                     </div>
                 </div>
@@ -303,6 +366,20 @@
             <div style="display: flex; flex-direction: row; column-gap: 10px; padding: 15px">
 
                 <input type="text" id="messageInput" class="inputMensaje" style="width: 300px" placeholder="Ingrese su mensaje">
+
+                <div>
+                    <img  class="emoji" tabindex="1" draggable="false" src="https://cdn0.iconfinder.com/data/icons/buma-emojis/36/smiling-256.png">
+                    <div tabindex="1" class="bar">
+                        <p clas="emoticon">😎</p>
+                        <p clas="emoticon">😄</p>
+                        <p clas="emoticon">🎉</p>
+                        <p clas="emoticon">🤡</p>
+                    </div>
+
+                </div>
+
+
+
                 <button onclick="sendMessage()" class="enviar-msg"><i class="fa-solid fa-paper-plane"></i></button>
 
             </div>
@@ -546,7 +623,7 @@
             }
 
 
-            messageArea.innerHTML += ' <div class="message you">\n' +
+            messageArea.innerHTML += ' <div class="message me">\n' +
                 '                    <p class="messageContent" >' + event.data +
                 '                    </p><div class="messageDetails">\n' +
                 '                        <div class="messageTime">' + tiempoActual  +
@@ -641,6 +718,20 @@
 <!-- DataTable -->
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <!------>
+
+
+<script>
+    // Seleccionar todos los elementos p dentro de la clase bar
+    var emojis = document.querySelectorAll(".bar p");
+
+    // Iterar sobre cada emoji y agregar un event listener
+    emojis.forEach(function(emoji) {
+        emoji.onclick = function() {
+            var p = emoji.innerHTML;
+            document.querySelector("input").value += p;
+        };
+    });
+</script>
 
 </body>
 
