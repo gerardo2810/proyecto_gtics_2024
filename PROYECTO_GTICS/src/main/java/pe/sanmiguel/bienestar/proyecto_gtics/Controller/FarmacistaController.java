@@ -67,8 +67,10 @@ public class FarmacistaController {
     public String farmacistaInicio(Model model) {
         List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
         sedeSession = sedeRepository.getSedeByIdSede(1);
+        int numeroOrdenesPendientes = 0;
         model.addAttribute("sedeSession", sedeSession);
         model.addAttribute("listaMedicamentos", listaMedicamentos);
+        model.addAttribute("numeroOrdenesPendientes", numeroOrdenesPendientes);
         return "farmacista/inicio";
     }
     @GetMapping("/farmacista/ver_detalles")

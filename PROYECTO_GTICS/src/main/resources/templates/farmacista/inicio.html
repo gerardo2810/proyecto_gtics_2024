@@ -34,6 +34,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
 
+    <!--=============== TOASTIFY ===============-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
     <!--=============== FONT AWESOME ===============-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
@@ -48,8 +52,6 @@
 <div class="container-loader loader-hidden" id="onload">
     <div class="loader"></div>
 </div>
-
-
 
 <header class="header-topbar">
     <nav class="nav-topbar container">
@@ -302,6 +304,33 @@
             </div>
         </footer>
     </div>
+
+
+<script>
+
+    var numeroOrdenesPendientes = [[${numeroOrdenesPendientes}]]; // Obtener el valor desde el modelo
+
+    if (numeroOrdenesPendientes > 0) {
+        Toastify({
+            text: "Tiene " + numeroOrdenesPendientes + " ordenes pendientes \n Presione aquí para verlas",
+            duration: 3000,
+            destination: "/farmacista/ordenes_web",
+            newWindow: true,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            offset: {
+                x: 0, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
+                y: 65 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+            },
+            style: {
+                background: "#3a8bee",
+            },
+            onClick: function(){} // Callback after click
+        }).showToast();
+    }
+</script>
 
 
     <script>
@@ -587,32 +616,6 @@
             $('body').removeClass('loader-hidden');
         }
 
-    </script>
-
-
-
-<script>
-        // Ejecutar cuando el contenido de la página se haya cargado completamente
-        document.addEventListener('DOMContentLoaded', function() {
-            // Mostrar una alerta de bienvenida con un botón para redirigir
-            Swal.fire({
-                title: '¡Atención!',
-                text: 'Su inventario de medicamentos se está agotando. Por favor, revise su stock y realice los pedidos necesarios para evitar interrupciones en el servicio.',
-                icon: 'warning',
-                confirmButtonText: 'Entendido',
-                showCancelButton: true,
-                cancelButtonText: 'Ir a revisar',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // El usuario hizo clic en 'Entendido'
-                    // Aquí puedes agregar cualquier acción adicional que desees
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    // El usuario hizo clic en 'Ir a revisar'
-                    // Redirigir a otra vista
-                    window.location.href = '/farmacista/facturacion';
-                }
-            });
-        });
     </script>
 
 
