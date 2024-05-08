@@ -278,6 +278,11 @@ public class AdminSedeController {
         List<ReposicionContenidoMedicamentoDto> listaMedicamentosSeleccionados = reposicionContenidoRepository.listaMostrarMedicamentosSeleccionados(idReposicion);
         model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
 
+        // Si la orden de reposicion ya no tiene medicamentos entonces se elimina la orden:
+        if(listaMedicamentosSeleccionados.size() == 0){
+            reposicionRepository.eliminarReposicionporId(idReposicion);
+        }
+
         return "adminsede/editar_orden_reposicion";
     }
 
@@ -437,18 +442,20 @@ public class AdminSedeController {
     }
 
     @PostMapping("/editarReposicion")
-    public String editarReposicion(@RequestParam("listaIds") List<Integer> listaIds,
-                                   @RequestParam("listaCantidades") List<Integer> listaCantidades,
+    public String editarReposicion(@RequestParam(name = "listaIds", required = false) List<Integer> listaIds,
+                                   @RequestParam(name = "listaCantidades", required = false) List<Integer> listaCantidades,
                                    @RequestParam("idReposicion") int idReposicion){
 
 
-        for(int i = 0; i < listaIds.size(); i++){
-            reposicionContenidoRepository.actualizarCantidadMedicamentoOrden(listaCantidades.get(i),listaIds.get(i),idReposicion);
+        if(listaIds == null){
+            return "redirect:/adminsede/ordenes";
+        }else {
+            for(int i = 0; i < listaIds.size(); i++){
+                reposicionContenidoRepository.actualizarCantidadMedicamentoOrden(listaCantidades.get(i),listaIds.get(i),idReposicion);
+            }
+            return "redirect:/adminsede/ordenes";
+
         }
-
-
-
-        return "redirect:/adminsede/ordenes";
     }
 
 
