@@ -39,18 +39,18 @@ x
                 <p class="text text-normal">¿No tiene cuenta? <span>  &#160 <a th:href="@{login/new}" class="text text-links">Registrarse</a></span></p>
 
 
-                <form name="signin" class="login-form">
+                <form name="signin" class="login-form" method="post" th:action="@{/login/loguearse}">
                     <div class="input-control">
-                        <label for="email" class="input-label" hidden>Email Address</label>
-                        <input type="email" name="email" id="email" class="input-field" placeholder="Correo Electrónico">
+                        <label for="correo" class="input-label" hidden>Email Address</label>
+                        <input type="email" name="correo" id="correo" class="input-field" placeholder="Correo Electrónico">
                     </div>
                     <div class="input-control">
-                        <label for="password" class="input-label" hidden>Password</label>
-                        <input type="password" name="password" id="password" class="input-field" placeholder="Contraseña">
+                        <label for="contrasena" class="input-label" hidden>Password</label>
+                        <input type="password" name="contrasena" id="contrasena" class="input-field" placeholder="Contraseña">
                     </div>
                     <div class="input-control">
                         <a th:href="@{login/recuperarContraseña}" class="text text-links">Recuperar Contraseña</a>
-                        <input type="submit" name="submit" class="input-submit" value="Iniciar Sesión" disabled>
+                        <input type="submit" name="submit" class="input-submit" value="Iniciar Sesión">
                     </div>
                 </form>
             </div>
