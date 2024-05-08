@@ -1,11 +1,8 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
@@ -28,9 +25,12 @@ final UsuarioRepository usuarioRepository;
    }
 
   @PostMapping("/save")
-   public String guardarNuevoUsuario(Usuario usuario, RedirectAttributes attributes){
-       usuarioRepository.save(usuario);
-      return "redirect://index";
+   public String guardarNuevoUsuario(@ModelAttribute Usuario usuario, RedirectAttributes attributes){
+       usuario.setRol(3);
+       usuario.setEstadoUsuario(1);
+
+        usuarioRepository.save(usuario);
+      return "redirect:/";
   }
 
   @GetMapping("/recuperarContra")
