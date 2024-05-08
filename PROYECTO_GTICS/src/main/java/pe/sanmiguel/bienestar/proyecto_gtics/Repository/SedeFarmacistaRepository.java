@@ -42,13 +42,13 @@ public interface SedeFarmacistaRepository extends JpaRepository<SedeFarmacista, 
     //Seleccionar Sede-Farmacista
 
 
-    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f INNER JOIN proyecto_gtics.usuario u, proyecto_gtics.sede s WHERE f.idSede = s.id and f.idFarmacista=u.id and f.aprobado=1 and u.estado_usuario =1;")
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f INNER JOIN proyecto_gtics.usuario u, proyecto_gtics.sede s WHERE f.idSede = s.id and f.idFarmacista=u.id and f.aprobado=1 and u.estado_usuario =1 and s.idAdmin is not null;")
     List<SedeFarmacista> listarFarmacistasPorSede();
 
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f, proyecto_gtics.usuario u WHERE f.idFarmacista = u.id and f.idFarmacista = ?1")
     List<SedeFarmacista> findFarmacistaEnSede(int idFarmacista);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f INNER JOIN proyecto_gtics.usuario u, proyecto_gtics.sede s WHERE f.idSede = s.id and f.idFarmacista=u.id and f.aprobado=2;")
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f INNER JOIN proyecto_gtics.usuario u, proyecto_gtics.sede s WHERE f.idSede = s.id and f.idFarmacista=u.id and f.aprobado=2 and s.idAdmin is not null;")
     List<SedeFarmacista> listarSolicitudesFarmacistas();
 
     @Transactional
@@ -67,7 +67,7 @@ public interface SedeFarmacistaRepository extends JpaRepository<SedeFarmacista, 
     @Query(nativeQuery = true, value = "SELECT * FROM sede_farmacista where idFarmacista = ?1")
     SedeFarmacista buscarFarmacistaSede(int id);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f INNER JOIN proyecto_gtics.usuario u, proyecto_gtics.sede s WHERE f.idSede = s.id and f.idFarmacista=u.id and f.aprobado=1 and (u.estado_usuario =1 or u.estado_usuario =2);")
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede_farmacista f INNER JOIN proyecto_gtics.usuario u, proyecto_gtics.sede s WHERE f.idSede = s.id and f.idFarmacista=u.id and f.aprobado=1 and s.idAdmin is not null and (u.estado_usuario =1 or u.estado_usuario =2);")
     List<SedeFarmacista> listarFarmacistasActivosInactivos();
 
 }
