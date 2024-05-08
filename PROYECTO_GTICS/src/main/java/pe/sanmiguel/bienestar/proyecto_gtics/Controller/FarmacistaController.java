@@ -346,13 +346,13 @@ public class FarmacistaController {
         return "farmacista/perfil";
     }
 
-    //@GetMapping("/farmacista/facturacion")
-    /*public String facturacion(Model model) {
-        List<MedicamentosSedeStockDto> medicamentosLowStock = medicamentoRepository.findMedicamentosLowStock();
+    @GetMapping("/farmacista/facturacion")
+    public String facturacion(Model model) {
+        List<MedicamentosSedeStockDto> medicamentosLowStock = medicamentoRepository.findMedicamentosLowStock(1);
         model.addAttribute("medicamentosLowStock", medicamentosLowStock);
         return "farmacista/facturacion";
     }
-     */
+
     @GetMapping("/farmacista/cambioContraseña")
     public String cambioContra() {
         return "farmacista/cambioContraseña";
