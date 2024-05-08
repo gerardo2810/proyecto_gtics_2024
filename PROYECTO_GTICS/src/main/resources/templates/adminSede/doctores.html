@@ -174,7 +174,7 @@
 
                 <tbody>
                     <tr th:each="doctor : ${listaDoctoresD}">
-                        <td th:value="${doctor.getNombres()} + '  ' + ${doctor.apellidos}"></td>
+                        <td th:value="${doctor.nombres} + '  ' + ${doctor.apellidos}"></td>
                         <td><img class="medicamento" src="/img/doctor.png"></td>
                         <td th:value="${doctor.getDistrito()}"></td>
                         <td th:value="${doctor.getDireccion()}"></td>
