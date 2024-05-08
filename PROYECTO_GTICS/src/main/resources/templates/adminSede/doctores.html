@@ -174,14 +174,13 @@
 
                 <tbody>
                     <tr th:each="doctor : ${listaDoctoresD}">
-                        <td th:value="${doctor.nombres} + '  ' + ${doctor.apellidos}"></td>
+                        <td th:text="${doctor.nombres} + '  ' + ${doctor.apellidos}"></td>
                         <td><img class="medicamento" src="/img/doctor.png"></td>
-                        <td th:value="${doctor.getDistrito()}"></td>
-                        <td th:value="${doctor.getDireccion()}"></td>
-                        <td th:value="${doctor.getEspecialidad()}"></td>
-                        <td th:value="${doctor.getCelular()}"></td>
-                        <td th:value="${doctor.getCorreo()}"></td>
-
+                        <td th:text="${doctor.getDistrito()}"></td>
+                        <td th:text="${doctor.getDireccion()}"></td>
+                        <td th:text="${doctor.getEspecialidad()}"></td>
+                        <td th:text="${doctor.getCelular()}"></td>
+                        <td th:text="${doctor.getCorreo()}"></td>
 
                     </tr>
                 </tbody>
