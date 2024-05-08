@@ -212,7 +212,7 @@ public class PacienteController {
 
 
 
-        /*
+
 
 
         String tracking = new String();
@@ -246,7 +246,7 @@ public class PacienteController {
 
 
 
-        //ordenRepository.save(orden);
+        ordenRepository.save(orden);
 
 
 
@@ -274,7 +274,7 @@ public class PacienteController {
 
 
         }
-        */
+
         redirectAttributes.addFlashAttribute("msg", "Orden Creada");
 
 

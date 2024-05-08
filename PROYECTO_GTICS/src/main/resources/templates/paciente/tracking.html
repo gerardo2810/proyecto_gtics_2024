@@ -78,7 +78,7 @@
        
         // Inicializar mapa
         function initMap() {
-            var ubicacion = {lat: -12.069964, lng: -77.076211}; // Coordenadas de Buenos Aires, Argentina
+            var ubicacion = {lat: -12.069964, lng: -77.076211};
             var map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 16,
                 center: ubicacion
@@ -416,7 +416,7 @@
 
 
 
-        <a th:if="${ordenActual.getTipoOrden() != 1} " th:href="@{'/paciente/boleta_pago?id=' + ${ordenActual.getIdOrden()}}" ><button class="btn-back">Ver Boleta de Pago</button></a>
+        <a th:if="${ordenActual.getEstadoOrden() != 1} " th:href="@{'/paciente/boleta_pago?id=' + ${ordenActual.getIdOrden()}}" ><button class="btn-back">Ver Boleta de Pago</button></a>
 
     </div>
 

@@ -305,7 +305,7 @@
                                                 <p class="modal__message" style="color:dimgray">Selecciona la imagen para subirla desde tu dispositivo</p>
                                                 <div class="modal__actions">
                                                     <button  class="modal__button modal__button--upload" type="button" data-action="file">Seleccionar imagen</button>
-                                                    <input id="file" name="imagen" type="file" hidden >
+                                                    <input id="file" name="imagen" type="text" hidden >
                                                 </div>
                                                 <div class="modal__actions" hidden>
                                                     <svg class="modal__file-icon" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
@@ -593,35 +593,21 @@
         e.preventDefault();
 
 
-        if(img.files.length === 0){
-            Swal.fire({
-                icon: "error",
-                iconColor: '#DC3545',
-                title: "ERROR",
-                text: "Aún le falta subir la imagen de su foto de perfil",
-                confirmButtonText: "OK",
-                confirmButtonColor: '#0D6EFD',
-                width: 500,
-            });
-        }
-
-        else{
-            Swal.fire({
-                title: '¿Estás seguro de registrar un nuevo administrador?',
-                icon: 'warning',
-                iconColor: '#DC3545',
-                showCancelButton: true,
-                cancelButtonColor: '#DC3545',
-                cancelButtonText: 'Cancelar',
-                confirmButtonColor: '#0D6EFD',
-                confirmButtonText: 'Confirmar',
-                footer: '<a href="">Volver a revisar los datos</a>'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        }
+        Swal.fire({
+            title: '¿Estás seguro de registrar un nuevo medicamentos?',
+            icon: 'warning',
+            iconColor: '#DC3545',
+            showCancelButton: true,
+            cancelButtonColor: '#DC3545',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#0D6EFD',
+            confirmButtonText: 'Confirmar',
+            footer: '<a href="">Volver a revisar los datos</a>'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
 
     })
 

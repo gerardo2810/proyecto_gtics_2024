@@ -66,7 +66,7 @@
 
                             <li><a href="/adminsede/ordenes" class="menu-item roboto-regular">Órdenes de Reposición</a></li>
 
-                            <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Medicamentos</a></li>
+                            <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Inventario</a></li>
 
                             <!--=============== DROPDOWN ===============-->
                             <li class="dropdown-item">
@@ -117,7 +117,7 @@
 
                                         <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Órdenes de Reposición</a></li>
 
-                                        <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Medicamentos</a></li>
+                                        <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Inventario</a></li>
                                     </ul>
 
                                     <ul class="nav-list-small-perfil">
@@ -243,7 +243,7 @@
                                 </div>
                             </div>
 
-                            <button class="add-item-button open-sans-regular" style="color: #ffffff" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
+                            <button class="add-item-button open-sans-regular" style="color: #ffffff" th:if="${medicamento.getCantidad() < 25}" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
                             <!--
                             <div th:if="${medicamento.getCantidad() < 25}">
                                 <button class="add-item-button open-sans-regular" style="color: #ffffff" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
@@ -273,7 +273,7 @@
                         <a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a> |
                         <a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a> |
                         <a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Órdenes de Reposición</a> |
-                        <a href="/adminsede/medicamentos" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Medicamentos</a> |
+                        <a href="/adminsede/medicamentos" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Inventario</a> |
                         <a href="/adminsede/perfil_adminsede" class="menu-item-small roboto-regular">Perfil</a>
                     </p>
                     <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>

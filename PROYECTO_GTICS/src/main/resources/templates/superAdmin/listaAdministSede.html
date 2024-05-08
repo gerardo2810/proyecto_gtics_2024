@@ -269,8 +269,24 @@
                 </td>
                 <td style="text-align: center"><a href="/adminsede"><img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/></a></td>
                 <td><a th:href="@{'/superadmin/editarAdministrador' + '?id=' + ${sede.admin.idUsuario}}"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
-                <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=14302&format=png" alt="Banear"/></a></td>
-                <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/></a></td>
+                <td>
+                    <form id="formBanear" th:action="@{'/superadmin/banearAdministrador'}" method="post">
+                        <input type="hidden" name="idAdministrador" th:value="${sede.admin.idUsuario}">
+                        <input type="hidden" name="idSede" th:value="${sede.idSede}">
+                        <button type="submit" style="background: none; border: none;">
+                            <img width="24" height="24" src="https://img.icons8.com/?size=256&id=14302&format=png" alt="Banear"/>
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <form id="formEstadoSolicitud" th:action="@{'/superadmin/eliminarAdministrador'}" method="post">
+                        <input type="hidden" name="idAdministrador" th:value="${sede.admin.idUsuario}">
+                        <input type="hidden" name="idSede" th:value="${sede.idSede}">
+                        <button type="submit" style="background: none; border: none;">
+                            <img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/>
+                        </button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -298,8 +314,15 @@
                             </div>
                         </td>
                         <td style="text-align: center" th:text="${adminSinSede.nombres + ' ' +  adminSinSede.apellidos}"></td>
-                        <td><a th:href="@{'/superadmin/editarAdministrador' + '?id=' + ${adminSinSede.idUsuario}}"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
-                        <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/></a></td>
+                        <td><a th:href="@{'/superadmin/editarAsignarAdministrador' + '?id=' + ${adminSinSede.idUsuario}}"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
+                        <td>
+                            <form id="formeliminarNoSede" th:action="@{'/superadmin/eliminarAdministradorSinSede'}" method="post">
+                                <input type="hidden" name="idAdministrador" th:value="${adminSinSede.idUsuario}">
+                                <button type="submit" style="background: none; border: none;">
+                                    <img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/>
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -328,8 +351,22 @@
                             </div>
                         </td>
                         <td style="text-align: center" th:text="${adminBaneado.nombres + ' ' +  adminBaneado.apellidos}"></td>
-                        <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=K4jLy6sZ7yfc&format=png" alt="Desbanear"/></a></td>
-                        <td><a href=""><img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/></a></td>
+                        <td>
+                            <form id="formDesbanear" th:action="@{'/superadmin/desbanearAdministrador'}" method="post">
+                                <input type="hidden" name="idAdministrador" th:value="${adminBaneado.idUsuario}">
+                                <button type="submit" style="background: none; border: none;">
+                                    <img width="24" height="24" src="https://img.icons8.com/?size=256&id=K4jLy6sZ7yfc&format=png" alt="Desbanear"/>
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form id="formEliminarSinSede" th:action="@{'/superadmin/eliminarAdministradorSinSede'}" method="post">
+                                <input type="hidden" name="idAdministrador" th:value="${adminBaneado.idUsuario}">
+                                <button type="submit" style="background: none; border: none;">
+                                    <img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/>
+                                </button>
+                            </form>
+                        </td>
                     </tr>
 
                     </tbody>
@@ -467,6 +504,115 @@
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 
 
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    document.querySelector("#formEstadoSolicitud").addEventListener("submit", function(e){
+        e.preventDefault();
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¿Estás seguro de que quieres eliminar a este administrador?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'No, cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                e.target.submit();
+            }
+        })
+    });
+</script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+
+
+<script>
+
+    document.querySelector("#formBanear").addEventListener("submit", function(e){
+        e.preventDefault();
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¿Estás seguro de que quieres banear a este administrador?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, banear',
+            cancelButtonText: 'No, cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                e.target.submit();
+            }
+        })
+    });
+</script>
+
+<script>
+
+    document.querySelector("#formEliminarSinSede").addEventListener("submit", function(e){
+        e.preventDefault();
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¿Estás seguro de que quieres eliminar a este administrador?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'No, cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                e.target.submit();
+            }
+        })
+    });
+</script>
+
+<script>
+
+    document.querySelector("#formDesbanear").addEventListener("submit", function(e){
+        e.preventDefault();
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¿Estás seguro de que quieres desbanear a este administrador?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, desbanear',
+            cancelButtonText: 'No, cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                e.target.submit();
+            }
+        })
+    });
+</script>
+
+<script>
+
+    document.querySelector("#formeliminarNoSede").addEventListener("submit", function(e){
+        e.preventDefault();
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¿Estás seguro de que quieres eliminar a este administrador?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'No, cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                e.target.submit();
+            }
+        })
+    });
+</script>
 </body>
 
 
