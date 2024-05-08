@@ -99,9 +99,9 @@ public class PacienteController {
 
         List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
 
-
-        String base64Encoded = Base64.getEncoder().encodeToString(orden.getImagen());
-        model.addAttribute("imagen", base64Encoded);
+        //Como mandar una imagen a una vista:
+        //String base64Encoded = Base64.getEncoder().encodeToString(orden.getImagen());
+        //model.addAttribute("imagen", base64Encoded);
 
         model.addAttribute("lista", lista);
         model.addAttribute("ordenActual", orden);
@@ -204,18 +204,6 @@ public class PacienteController {
                                Model model, RedirectAttributes redirectAttributes) throws IOException {
 
 
-    /*
-        try{
-            byte[] bytes = archivo.getBytes();
-            String base64Encoded = Base64.getEncoder().encodeToString(bytes);
-            model.addAttribute("imagen", base64Encoded);
-        } catch (IOException e){
-            e.printStackTrace();
-            return "error";
-        }
-
-    */
-
         InputStream inputStream = imagen.getInputStream();
         byte[] bytes = inputStream.readAllBytes();
 
@@ -229,10 +217,10 @@ public class PacienteController {
         tracking= ordenRepository.findLastOrdenId()+1 + "-2024";
         LocalDate fechaIni = LocalDate.now();
         LocalDate fechaFin = LocalDate.now();
-        Integer idFarmacista = new Integer(1);
-        Usuario udb = usuarioRepository.getById(1);
-        Sede s = sedeRepository.getById(1);
-        Doctor doc = doctorRepository.getById(1);
+        Integer idFarmacista = new Integer(1); //el id del Farmacista
+        Usuario udb = usuarioRepository.getById(1); // el id del usuario Paciente que realiza la orden
+        Sede s = sedeRepository.getById(1); //el id de la Sede
+        Doctor doc = doctorRepository.getById(1); //el id del doctor
 
 
         Orden orden = new Orden();
@@ -248,7 +236,9 @@ public class PacienteController {
         orden.setSede(s);
         orden.setDoctor(doc);
         orden.setEstadoPreOrden(1);
-        orden.setImagen(bytes);
+
+        //Imagen de receta proxima a usar
+        //orden.setImagen(bytes);
 
 
 

@@ -43,9 +43,12 @@ public class Orden {
     private Integer ordenParent;
     @Column(name = "estado_preorden")
     private Integer estadoPreOrden;
-    @Column(name="imagenReceta")
-    @Lob
-    private byte[] imagen;
+
+
+    //Columna proxima a usar
+    //@Column(name="imagenReceta")
+    //@Lob
+    //private byte[] imagen;
 
 
 }
