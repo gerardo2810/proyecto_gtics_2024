@@ -336,7 +336,7 @@ public class AdminSedeController {
         }
 
         if (codigoValido == 1){
-            usuarioRepository.save(usuarioFarmacista);
+            usuarioRepository.crearFarmacistaSinAprobar(idUsuario, idRol, usuarioFarmacista.getCorreo(), usuarioFarmacista.getContrasena(), usuarioFarmacista.getNombres(), usuarioFarmacista.getApellidos(), usuarioFarmacista.getCelular(), usuarioFarmacista.getDni(), usuarioFarmacista.getDireccion(), usuarioFarmacista.getDistrito(), usuarioFarmacista.getSeguro(), estadoUsuario);
             sedeFarmacistaRepository.crearSedeFarmacista(idSede, idUsuario, codigoMed, aprobado);
             attr.addAttribute("msg", "Solicitud enviada correctamente");
             return "redirect:/adminsede/farmacista";
