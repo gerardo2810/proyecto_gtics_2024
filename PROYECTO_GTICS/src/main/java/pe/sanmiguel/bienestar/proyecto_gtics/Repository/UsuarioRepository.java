@@ -85,4 +85,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Usuario findByCorreo(String correo);
 
     Usuario findByContrasena(String contrasena);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_usuario = 3 WHERE id = ?")
+    void banearAdministrador(int idAdministrador);
 }
