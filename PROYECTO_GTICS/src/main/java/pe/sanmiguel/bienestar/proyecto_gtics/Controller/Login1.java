@@ -1,6 +1,9 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -19,18 +22,26 @@ final UsuarioRepository usuarioRepository;
     //@GetMapping("")
     //public String inicio() {return "login/login";}
 
-   @GetMapping("/new")
-   public String nuevoUsuario() {
-     return "login/prueba";
-   }
+    @GetMapping("/new")
+    public String nuevoUsuario(Model model) {
+        model.addAttribute("usuario", new Usuario());
+        return "login/prueba";
+    }
 
   @PostMapping("/save")
-   public String guardarNuevoUsuario(@ModelAttribute Usuario usuario, RedirectAttributes attributes){
-       usuario.setRol(4);
-       usuario.setEstadoUsuario(2);
+   public String guardarNuevoUsuario(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, RedirectAttributes attributes, Model model){
 
-        usuarioRepository.save(usuario);
-      return "redirect:/";
+       if (!bindingResult.hasErrors()) {
+           usuario.setRol(4);
+           usuario.setEstadoUsuario(2);
+
+           usuarioRepository.save(usuario);
+           return "redirect:/";
+       } else {
+           model.addAttribute("usuario", usuario);
+
+           return "login/prueba";
+       }
   }
 
   @GetMapping("/recuperarContra")
