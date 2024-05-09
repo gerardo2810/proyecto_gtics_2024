@@ -1,5 +1,5 @@
 .chart{
-    width: 100%;
+    width: 100%; /*No tiene efecto*/
     min-height: 400px;
 }
 
@@ -9,4 +9,9 @@
     height: 100%;
     padding: 25px;
     margin: 0 10px;
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
 }
