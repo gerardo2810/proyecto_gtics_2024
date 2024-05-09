@@ -35,57 +35,57 @@
         <div class="wrapper2" style="margin-top: 130px; margin-bottom: 100px">
             <div class="login-title montserrat-bold">
                 Registro
-                <span>  &#160 <a th:href="@{/}" class="text text-links">Regresar al Inicio de Sesión</a></span>
+                <span>&#160;<a th:href="@{/}" class="text text-links">Regresar al Inicio de Sesión</a></span>
             </div>
 
-                <form name="signin" class="login-form" method="post" th:action="@{/login/save}" onsubmit="return validatePassword()">
+            <form name="signin" class="login-form" method="post" th:action="@{/login/save}" onsubmit="return validatePassword()" th:object="${usuario}">
                     <div class="content">
                         <div class="user-details">
                             <div class="input-control2">
                                 <span class="details" style="margin-left: 10px"> Nombres </span>
-                                <label for="nombres" class="input-label" hidden>Nombres</label>
-                                <input type="text" name="nombres" id="nombres" class="input-field2" placeholder="Ingrese sus nombres">
+                                <input type="text" th:field="*{nombres}" class="input-field2" placeholder="Ingrese sus nombres">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}" style="margin-left: 10px ; color: red"></div>
                             </div>
                             <div class="input-control2">
                                 <span class="details" style="margin-left: 10px">Apellidos </span>
-                                <label for="apellidos" class="input-label"  hidden>Apellido</label>
-                                <input type="text" name="apellidos" id="apellidos" class="input-field2" placeholder="Ingrese sus apellidos">
+                                <input type="text" th:field="*{apellidos}" class="input-field2" placeholder="Ingrese sus apellidos">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}" style="margin-left: 10px ; color: red"></div>
                             </div>
                             <div class="input-control2">
                                 <span class="details" style="margin-left: 10px">DNI</span>
-                                <label for="dni" class="input-label" hidden>Contraseña</label>
-                                <input type="number" name="dni" id="dni" class="input-field2" placeholder="Ingrese su DNI">
+                                <input type="number" th:field="*{dni}" class="input-field2" placeholder="Ingrese su DNI">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" style="margin-left: 10px ; color: red"></div>
                             </div>
                             <div class="input-control2">
                                 <span class="details" style="margin-left: 10px">Correo electrónico</span>
-                                <label for="correo" class="input-label" hidden>Fecha de nacimiento</label>
-                                <input type="email" name="correo" id="correo" class="input-field2" placeholder="Ingrese su correo electronico">
+                                <input type="email" th:field="*{correo}" class="input-field2" placeholder="Ingrese su correo electronico">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" style="margin-left: 10px ; color: red"></div>
                             </div>
                             <div class="input-control2">
                                 <span class="details" style="margin-left: 10px">Dirección</span>
-                                <label for="direccion" class="input-label" hidden>Dirección</label>
-                                <input type="text" name="direccion" id="direccion" class="input-field2" placeholder="Ingrese su dirección">
+                                <input type="text" th:field="*{direccion}" class="input-field2" placeholder="Ingrese su dirección">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}" style="margin-left: 10px ; color: red"></div>
                             </div>
                             <div class="input-control2">
                                 <span class="details" style="margin-left: 10px">Distrito</span>
-                                <label for="distrito" class="input-label" hidden>Distrito</label>
-                                <input type="text" name="distrito" id="distrito" class="input-field2" placeholder="Seleccione su distrito">
+                                <input type="text" th:field="*{distrito}" class="input-field2" placeholder="Seleccione su distrito">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}" style="margin-left: 10px ; color: red"></div>
                             </div>
                             <div class="input-control2">
                                 <span class="details" style="margin-left: 10px">Teléfono</span>
-                                <label for="celular" class="input-label" hidden>Telefono</label>
-                                <input type="number" name="celular" id="celular" class="input-field2" placeholder="Ingrese su telefono">
+                                <input type="number" th:field="*{celular}" class="input-field2" placeholder="Ingrese su telefono">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}" style="margin-left: 10px ; color: red"></div>
                             </div>
                             <div class="input-control2">
                                 <span class="details" style="margin-left: 10px">Seguro </span>
-                                <label for="seguro" class="input-label" hidden>Seguro</label>
-                                <input type="number" name="seguro" id="seguro" class="input-field2" placeholder="Ingrese el número de su seguro">
+                                <input type="text" th:field="*{seguro}" class="input-field2" placeholder="Ingrese el número de su seguro">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}" style="margin-left: 10px ; color: red"></div>
                             </div>
 
                             <div class="input-control2">
                                 <span class="details" style="margin-left: 10px">Contraseña</span>
-                                <label for="contrasena" class="input-label" hidden>Contraseña</label>
-                                <input type="password" name="contrasena" id="contrasena" class="input-field2" placeholder="Ingrese su contraseña">
+                                <input type="password" th:field="*{contrasena}" class="input-field2" placeholder="Ingrese su contraseña">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}" style="margin-left: 10px ; color: red"></div>
                             </div>
                             <div class="input-control2">
                                 <span class="details" style="margin-left: 10px">Confirmar su contraseña</span>
