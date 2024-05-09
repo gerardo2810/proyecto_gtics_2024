@@ -158,7 +158,7 @@
             <table id="miTabla" class="table table-striped">
                 <div style="display: flex">
                     <button id="limpiarFiltros" class="btn-p" style="font-size: 17px; padding: 12px 20px">Limpiar Filtros</button>
-                    <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/solicitud_farmacista'" style="margin-left: 20px; font-size: 17px; padding: 12px 20px">Solicitud de nuevo farmacista</button>
+                    <button class="btn-p" type="button" th:if="${listaFarmacistasNew.size() <= 2}" onclick="window.location.href = '/adminsede/solicitud_farmacista'" style="margin-left: 20px; font-size: 17px; padding: 12px 20px">Solicitud de nuevo farmacista</button>
                 </div>
 
 
