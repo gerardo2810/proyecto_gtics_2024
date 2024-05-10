@@ -144,10 +144,9 @@ public class FarmacistaController {
 
 
         if (bindingResult.hasErrors()) {
-            // Aquí gestionas los errores. Podrías, por ejemplo, volver al formulario y mostrar los errores.
             model .addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
             model.addAttribute("listaCantidades", listaCantidades);
-
+            model.addAttribute("doctores", doctorRepository.findAll());
             return "farmacista/formulario_paciente"; // Asegúrate de que esta vista pueda mostrar los errores
         }
         else{
@@ -428,7 +427,7 @@ public class FarmacistaController {
 
                 newUser.setRol(4);
                 newUser.setCorreo(correo);
-                newUser.setContrasena("12345678");
+                newUser.setContrasena("00000000");
                 newUser.setNombres(name);
                 newUser.setApellidos(lastname);
                 newUser.setCelular(celular);
