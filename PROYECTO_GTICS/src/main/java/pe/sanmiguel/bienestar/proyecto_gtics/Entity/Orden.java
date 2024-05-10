@@ -18,15 +18,18 @@ public class Orden {
     @Id
     @Column(name="id")
     private Integer idOrden;
-    @Column
+    @Column(name="tracking")
     private String tracking;
-    @Column
+    @Column(name="imagenReceta")
+    @Lob
+    private byte[] imagen;
+    @Column(name = "fechaIni")
     private LocalDate fechaIni;
-    @Column
+    @Column(name = "fechaFin")
     private LocalDate fechaFin;
-    @Column
+    @Column(name = "precioTotal")
     private float precioTotal;
-    @Column
+    @Column(name = "idFarmacista")
     private Integer idFarmacista;
     @ManyToOne
     @JoinColumn(name="idPaciente")
@@ -43,13 +46,7 @@ public class Orden {
     private Doctor doctor;
     @Column(name="idOrden")
     private Integer ordenParent;
-    @Column(name = "estado_preorden")
+    @Column(name = "estadoPreorden")
     private Integer estadoPreOrden;
-
-
-    //Columna proxima a usar
-    //@Column(name="imagenReceta")
-    //@Lob
-    //private byte[] imagen;
 
 }
