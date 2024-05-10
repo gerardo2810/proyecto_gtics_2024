@@ -1,9 +1,12 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import jakarta.validation.Valid;
 import lombok.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pe.sanmiguel.bienestar.proyecto_gtics.CurrentTimeSQL;
@@ -93,7 +96,7 @@ public class FarmacistaController {
     }
 
     @GetMapping("/farmacista/formulario_paciente")
-    public String formPacienteData(Model model) {
+    public String formPacienteData(Model model, @ModelAttribute("usuario") Usuario usuario) {
 
         List<Integer> stockSeleccionados = new ArrayList<>();
 
@@ -105,6 +108,7 @@ public class FarmacistaController {
             }
         }
 
+        model.addAttribute("doctores", doctorRepository.findAll());
         model.addAttribute("stockSeleccionados", stockSeleccionados);
         model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
         model.addAttribute("listaCantidades", listaCantidades);
@@ -112,8 +116,11 @@ public class FarmacistaController {
     }
 
     @PostMapping("/farmacista/finalizar_compra")
-    public String createOrdenVenta(@RequestParam(value = "name") String name,
-                                   @RequestParam(value = "lastname") String lastname,
+    public String createOrdenVenta(@ModelAttribute("usuario") @Valid  Usuario usuario,
+                                   BindingResult bindingResult,
+                                   Model model,
+                                   @RequestParam(value = "nombres") String name,
+                                   @RequestParam(value = "apellidos") String lastname,
                                    @RequestParam(value = "dni") String dni,
                                    @RequestParam(value = "distrito") String distrito,
                                    @RequestParam(value = "direccion") String direccion,
@@ -121,7 +128,6 @@ public class FarmacistaController {
                                    @RequestParam(value = "seguro") String seguro,
                                    @RequestParam(value = "correo") String correo,
                                    @RequestParam(value = "celular") String celular,
-
                                    @RequestParam(value = "listaIds") List<String> listaSelectedIds,
                                    @RequestParam(value = "priceTotal") String priceTotal) {
 
@@ -135,57 +141,69 @@ public class FarmacistaController {
 
         this.pacienteOnStore = verificationUser.getUser();
 
-        if (verificationStock.getMedicamentosSinStock().isEmpty()){
-
-            Orden newOrden = new Orden();
-
-            Integer lastOrderId = ordenRepository.findLastOrdenId();
-            int newOrderId = (lastOrderId != null) ? lastOrderId + 1 : 1;
-            newOrden.setIdOrden(newOrderId);
-            newOrden.setFechaIni(CurrentTimeSQL.getCurrentDate());
-            newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
-            //Id conocido porque no hay session
-            newOrden.setIdFarmacista(7);
-            newOrden.setTipoOrden(1);
-            newOrden.setEstadoOrden(8);
-            newOrden.setSede(sedeSession);
-
-            if (!doctor.equals("sin-doctor")) {
-                newOrden.setDoctor(doctorRepository.getByIdDoctor(Integer.valueOf(doctor)));
-            }
-
-            newOrden.setPaciente(verificationUser.getUser());
-
-            ordenRepository.save(newOrden);
-
-            int i = 0;
-            for (Medicamento med : medicamentosSeleccionados){
-
-                OrdenContenidoId contenidoId = new OrdenContenidoId();
-                contenidoId.setIdOrden(newOrderId);
-                contenidoId.setIdMedicamento(med.getIdMedicamento());
-
-                OrdenContenido contenido = new OrdenContenido();
-                contenido.setId(contenidoId);
-                contenido.setIdOrden(newOrden);
-                contenido.setIdMedicamento(med);
-                contenido.setCantidad(Integer.parseInt(listaCantidades.get(i)));
-                ordenContenidoRepository.save(contenido);
-                i++;
-            }
-
-            idVerOrdenCreada = newOrderId;
-            return "redirect:/farmacista/ver_orden_venta";
-        } else {
 
 
-            this.medicamentosSinStock = verificationStock.getMedicamentosSinStock();
-            this.medicamentosConStock = verificationStock.getMedicamentosConStock();
-            this.cantidadesFaltantes = verificationStock.getCantidadesFaltantes();
-            this.cantidadesExistentes = verificationStock.getCantidadesExistentes();
-
-            return "redirect:/farmacista/crear_preorden";
+        if (bindingResult.hasErrors()) {
+            model .addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
+            model.addAttribute("listaCantidades", listaCantidades);
+            model.addAttribute("doctores", doctorRepository.findAll());
+            return "farmacista/formulario_paciente"; // Asegúrate de que esta vista pueda mostrar los errores
         }
+        else{
+            if (verificationStock.getMedicamentosSinStock().isEmpty()){
+
+                Orden newOrden = new Orden();
+
+                Integer lastOrderId = ordenRepository.findLastOrdenId();
+                int newOrderId = (lastOrderId != null) ? lastOrderId + 1 : 1;
+                newOrden.setIdOrden(newOrderId);
+                newOrden.setFechaIni(CurrentTimeSQL.getCurrentDate());
+                newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
+                //Id conocido porque no hay session
+                newOrden.setIdFarmacista(7);
+                newOrden.setTipoOrden(1);
+                newOrden.setEstadoOrden(8);
+                newOrden.setSede(sedeSession);
+
+                if (!doctor.equals("sin-doctor")) {
+                    newOrden.setDoctor(doctorRepository.getByIdDoctor(Integer.valueOf(doctor)));
+                }
+
+                newOrden.setPaciente(verificationUser.getUser());
+
+                ordenRepository.save(newOrden);
+
+                int i = 0;
+                for (Medicamento med : medicamentosSeleccionados){
+
+                    OrdenContenidoId contenidoId = new OrdenContenidoId();
+                    contenidoId.setIdOrden(newOrderId);
+                    contenidoId.setIdMedicamento(med.getIdMedicamento());
+
+                    OrdenContenido contenido = new OrdenContenido();
+                    contenido.setId(contenidoId);
+                    contenido.setIdOrden(newOrden);
+                    contenido.setIdMedicamento(med);
+                    contenido.setCantidad(Integer.parseInt(listaCantidades.get(i)));
+
+                    ordenContenidoRepository.save(contenido);
+                    i++;
+                }
+
+                idVerOrdenCreada = newOrderId;
+                return "redirect:/farmacista/ver_orden_venta";
+            } else {
+
+
+                this.medicamentosSinStock = verificationStock.getMedicamentosSinStock();
+                this.medicamentosConStock = verificationStock.getMedicamentosConStock();
+                this.cantidadesFaltantes = verificationStock.getCantidadesFaltantes();
+                this.cantidadesExistentes = verificationStock.getCantidadesExistentes();
+
+                return "redirect:/farmacista/crear_preorden";
+            }
+        }
+
     }
 
 
@@ -407,9 +425,9 @@ public class FarmacistaController {
                 int newUserId = (lastUserId != null) ? lastUserId + 1 : 1;
                 newUser.setIdUsuario(newUserId);
 
-                newUser.setRol(5);
+                newUser.setRol(4);
                 newUser.setCorreo(correo);
-                newUser.setContrasena("");
+                newUser.setContrasena("00000000");
                 newUser.setNombres(name);
                 newUser.setApellidos(lastname);
                 newUser.setCelular(celular);

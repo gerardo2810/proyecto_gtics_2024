@@ -927,3 +927,17 @@ body{
     width: 125px;
 
 }
+
+/* Estilos para campos de formulario con errores */
+.is-invalid {
+    border-color: #dc3545; /* Rojo */
+    background-color: #fff5f5; /* Fondo rojo claro */
+}
+
+/* Estilos para los mensajes de error */
+.invalid-feedback {
+    color: #dc3545; /* Rojo */
+    font-size: 0.875em; /* Tamaño de fuente más pequeño */
+    margin-top: 0.25rem; /* Espacio arriba del mensaje */
+    display: block; /* Asegura que el div se muestre como bloque */
+}
