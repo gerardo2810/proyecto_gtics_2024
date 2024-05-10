@@ -102,14 +102,12 @@ public class AdminSedeController {
     }
 
     @GetMapping("/farmacista")
-    public String showFarmacistas(Model model,
-                                  @RequestParam(name = "msg", required = false) String msg){
+    public String showFarmacistas(Model model){
         //List<Usuario> listaFarmacistas = usuarioRepository.listarFarmacistas();
         //SESSION
         int idSede = 1;
         List<UsuarioSedeFarmacistaDto> listaFarmacistasNew = usuarioRepository.listarSedeFarmacista(idSede);
         model.addAttribute("listaFarmacistasNew", listaFarmacistasNew);
-        model.addAttribute("msg", msg);
         //model.addAttribute("listaFarmacistas", listaFarmacistas);
         return "adminsede/farmacistas";
     }
@@ -184,9 +182,7 @@ public class AdminSedeController {
 
     @GetMapping("/solicitud_farmacista")
     public String solicitudFarmacista(@ModelAttribute("usuarioFarmacista") Usuario usuarioFarmacista, //model attribute del farmacista
-                                      Model model,
-                                      @RequestParam(name = "msg", required = false) String msg){
-        model.addAttribute("msg", msg);
+                                      Model model){
         return "adminsede/solicitud_agregar_farmacista";
     }
 
@@ -338,11 +334,11 @@ public class AdminSedeController {
         if (codigoValido == 1){
             usuarioRepository.crearFarmacistaSinAprobar(idUsuario, idRol, usuarioFarmacista.getCorreo(), usuarioFarmacista.getContrasena(), usuarioFarmacista.getNombres(), usuarioFarmacista.getApellidos(), usuarioFarmacista.getCelular(), usuarioFarmacista.getDni(), usuarioFarmacista.getDireccion(), usuarioFarmacista.getDistrito(), usuarioFarmacista.getSeguro(), estadoUsuario);
             sedeFarmacistaRepository.crearSedeFarmacista(idSede, idUsuario, codigoMed, aprobado);
-            attr.addAttribute("msg", "Solicitud enviada correctamente");
+            attr.addFlashAttribute("msg", "Solicitud de farmacista " + usuarioFarmacista.getNombres() + " " + usuarioFarmacista.getApellidos() + " enviada correctamente");
             return "redirect:/adminsede/farmacista";
         }else {
             //no se crea el farmacista debido a que el dni o el codigo no coinciden
-            attr.addAttribute("msg", "Codigo de colegiatura no válido, por favor ingrese nuevamente");
+            attr.addFlashAttribute("msg", "Codigo de colegiatura no válido, por favor ingrese nuevamente");
             return "redirect:/adminsede/solicitud_farmacista";
         }
 
@@ -368,7 +364,8 @@ public class AdminSedeController {
                                     @RequestParam("correo") String correo,
                                     @RequestParam("nombreSede") String nombreSede,
                                     @RequestParam("priceTotal") Float priceTotal,
-                                    @RequestParam("listaIds") List<String> listaIds){
+                                    @RequestParam("listaIds") List<String> listaIds,
+                                    RedirectAttributes attr){
 
         // Crear orden de reposición
         Integer idReposicion = reposicionRepository.findLastReposicionId() + 1;
@@ -398,6 +395,7 @@ public class AdminSedeController {
         administradorVistaReposicion.setApellidos(apellidos);
         reposicionMostrar = reposicionRepository.encontrarReposicionporId(idReposicion);
         listaMostrarNuevaCompra = reposicionContenidoRepository.listaMostrarDetalleNuevaCompra(idReposicion); //lista a mostrar
+        attr.addFlashAttribute("msg", "Orden de reposición generada correctamente");
 
         return "redirect:/adminsede/verDetalles";
     }
