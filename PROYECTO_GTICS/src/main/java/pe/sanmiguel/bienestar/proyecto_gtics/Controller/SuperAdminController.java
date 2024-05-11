@@ -15,10 +15,14 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @MultipartConfig
@@ -118,14 +122,16 @@ public class SuperAdminController {
 
     @PostMapping("/estadoSolicitudFarmacista")
     public String verEstadoSolicitud(@RequestParam(value = "estadoSolicitud") int idEstadoSolicitud,
-                                     @RequestParam(value = "idUsuario") int idUsuario){
+                                     @RequestParam(value = "idUsuario") int idUsuario, RedirectAttributes attr){
         System.out.println("Valor de Estado solicitud: " + idEstadoSolicitud);
         System.out.println("Valor de id farmacista: " + idUsuario);
         if(idEstadoSolicitud==1){
             sedeFarmacistaRepository.aprobarSolicitud(idUsuario);
+            attr.addFlashAttribute("msg", "Solicitud aceptada exitosamente");
             return "redirect:/superadmin/solicitudes";
         }else {
             sedeFarmacistaRepository.denegarSolicitud(idUsuario);
+            attr.addFlashAttribute("msg", "Solicitud rechazada exitosamente");
             return "redirect:/superadmin/solicitudes";
         }
     }
@@ -195,7 +201,7 @@ public class SuperAdminController {
     }
 
     @GetMapping(value = {"/crearAdministrador"})
-    public String crearAdminitrador(Model model, @ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResul, RedirectAttributes attr){
+    public String crearAdminitrador(@ModelAttribute("administrador") Usuario administrador, Model model){
         List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
         model.addAttribute("sedeDisponibleList", sedeDisponibleList);
         return "superAdmin/crearAdministrador";
@@ -215,23 +221,71 @@ public class SuperAdminController {
         }else{
 
             if(idSede == null || idSede.isEmpty()){
+                System.out.println("ID ADMIN: " + administrador.getIdUsuario());
+
+                String password = administrador.getContrasena();
+                if (!isValidPassword(password)) {
+                    bindingResult.rejectValue("contrasena", "error.contrasena", "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un caracter especial.");
+                    return "superAdmin/crearAdministrador";
+                }
+
+                String hashedPassword = hashPasswordSHA256(password);
+                administrador.setContrasena(hashedPassword);
                 administrador.setRol(2);
                 administrador.setEstadoUsuario(5);
                 usuarioRepository.save(administrador);
+                attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
                 return "redirect:/superadmin/administradoresSede";
             }else{
-                int idsede = Integer.parseInt(idSede);
-                administrador.setRol(2);
-                administrador.setEstadoUsuario(1);
-                usuarioRepository.save(administrador);
-                System.out.println("Valor de id administrador: " + administrador.getIdUsuario());
-                System.out.println("Valor de id sede: " + idsede);
-                System.out.println("Valor de rol: " + administrador.getRol());
-                System.out.println("Valor de estado de usuario: " + administrador.getEstadoUsuario());
-                attr.addFlashAttribute("datosAdministrador", administrador);
-                attr.addFlashAttribute("sedeid", sedeId);
-                return "redirect:/superadmin/asignarSedeAdministradorSede?datosAdministrador=" + administrador.getIdUsuario() + "&sedeid=" + idsede;
+                if(administrador.getIdUsuario() != 0){
+                    System.out.println("ID ADMIN si no es vacio: " + administrador.getIdUsuario());
+                    int idsede = Integer.parseInt(idSede);
+                    String password = administrador.getContrasena();
+                    String hashedPassword = hashPasswordSHA256(password);
+                    administrador.setContrasena(hashedPassword);
+                    administrador.setRol(2);
+                    administrador.setEstadoUsuario(1);
+                    usuarioRepository.save(administrador);
+                    sedeRepository.asignarAdministradorSede(administrador.getIdUsuario(), idsede);
+                    attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
+                    return "redirect:/superadmin/administradoresSede";
+                }else{
+                    System.out.println("ID ADMIN si es vacio: " + administrador.getIdUsuario());
+                    String password = administrador.getContrasena();
+                    String hashedPassword = hashPasswordSHA256(password);
+                    administrador.setContrasena(hashedPassword);
+                    administrador.setRol(2);
+                    administrador.setEstadoUsuario(5);
+                    usuarioRepository.save(administrador);
+                    attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
+                    return "redirect:/superadmin/administradoresSede";
+                }
             }
+        }
+    }
+
+    private boolean isValidPassword(String password) {
+        // Al menos una mayúscula, una minúscula, un caracter especial y mínimo 8 caracteres
+        String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
+    private String hashPasswordSHA256(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -257,10 +311,15 @@ public class SuperAdminController {
             administrador = optionalUsuario.get();
             Sede sedeAdministrador = optionalAdministradorSede.get();
             List<Sede> sedeList = sedeRepository.findAll();
+
+            String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+            String passwordDots = hashToDots(passwordHash);
+
             List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
             model.addAttribute("sedeAdministrador", sedeAdministrador);
             model.addAttribute("sedeList", sedeList);
             model.addAttribute("administrador", administrador);
+            model.addAttribute("contrasenia", passwordDots);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
             return "superAdmin/editarAdministrador";
         }else {
@@ -271,78 +330,117 @@ public class SuperAdminController {
     @PostMapping("/actualizarAdministrador")
     public String actualizarAdministrador(@ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResult, @RequestParam("sedeid") Integer idSede, RedirectAttributes attr, Model model){
         if(bindingResult.hasErrors()){
-            List<Sede> sedeDisponibleList = sedeRepository.findAll();
-            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+            Sede sedeListAdminID = sedeRepository.sedeAdminID(administrador.getIdUsuario());
+            List<Sede> sedeList = sedeRepository.findAll();
+            List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
+            model.addAttribute("sedeAdministrador", sedeListAdminID);
+            model.addAttribute("sedeList", sedeList);
+            model.addAttribute("estadoUsuarioList", estadoUsuarioList);
+
             return "superAdmin/editarAdministrador";
         }else{
-            usuarioRepository.save(administrador);
+
+            System.out.println("Imprimir Sede ID: " + idSede);
             int idAdministradorNuevo = administrador.getIdUsuario();
+
+            Sede AdministradorTieneSede = sedeRepository.buscarSedeTieneAdministrador(idAdministradorNuevo);
+
             /*Se ubica el administrador de la sede nueva elegida*/
             Sede sedeTieneAdministrador = sedeRepository.getSedeByIdSede(idSede);
             /*Se obtiene el id del administrador de la sede nueva elegida*/
 
-            /*Se obtiene el id de la sede actual del admin*/
-            Sede AdministradorTieneSede = sedeRepository.buscarSedeTieneAdministrador(idAdministradorNuevo);
-            int idSedeAntigua = AdministradorTieneSede.getIdSede();
+            if(idSede == AdministradorTieneSede.getIdSede()){
+                String password = administrador.getContrasena();
 
-            if (sedeTieneAdministrador.getAdmin()==null){
-                sedeRepository.eliminarAdminAntiguo(idSedeAntigua);
-                sedeRepository.asignarAdministradorSede(idAdministradorNuevo, idSede);
-            }else{
-                int idAdministradorAntiguo = sedeTieneAdministrador.getAdmin().getIdUsuario();
-                usuarioRepository.administradorSinSede(idAdministradorAntiguo);
-                sedeRepository.eliminarAdminAntiguo(idSedeAntigua);
-                sedeRepository.asignarAdministradorSede(idAdministradorNuevo, idSede);
+                String hashedPassword = hashPasswordSHA256(password);
+                administrador.setContrasena(hashedPassword);
+
+                System.out.println("Sedes iguales: " );
+                usuarioRepository.save(administrador);
+                attr.addFlashAttribute("msg", "Datos del administrador actualizados exitosamente");
+                return "redirect:/superadmin/administradoresSede";
             }
-            return "redirect:/superadmin/administradoresSede";
+            else{
+                /*Se obtiene el id de la sede actual del admin*/
+                int idSedeAntigua = AdministradorTieneSede.getIdSede();
+
+                String password = administrador.getContrasena();
+                System.out.println("Contraseña admin: " + password);
+
+                String hashedPassword = hashPasswordSHA256(password);
+                administrador.setContrasena(hashedPassword);
+
+                if (sedeTieneAdministrador.getAdmin()==null){
+                    sedeRepository.eliminarAdminAntiguo(idSedeAntigua);
+                    sedeRepository.asignarAdministradorSede(idAdministradorNuevo, idSede);
+                    usuarioRepository.save(administrador);
+                }else{
+                    int idAdministradorAntiguo = sedeTieneAdministrador.getAdmin().getIdUsuario();
+                    usuarioRepository.administradorSinSede(idAdministradorAntiguo);
+                    sedeRepository.eliminarAdminAntiguo(idSedeAntigua);
+                    sedeRepository.asignarAdministradorSede(idAdministradorNuevo, idSede);
+                    usuarioRepository.save(administrador);
+                }
+                attr.addFlashAttribute("msg", "Datos del administrador actualizados exitosamente");
+                return "redirect:/superadmin/administradoresSede";
+            }
         }
     }
 
 
     @PostMapping("/eliminarAdministrador")
-    public String eliminarAdministrador(@RequestParam(value = "idAdministrador") String idAdministrador, @RequestParam(value = "idSede") int idSede){
+    public String eliminarAdministrador(@RequestParam(value = "idAdministrador") String idAdministrador, @RequestParam(value = "idSede") int idSede, RedirectAttributes attr){
         int idAdministradorID = Integer.parseInt(idAdministrador);
         sedeRepository.eliminarAdminAntiguo(idSede);
         usuarioRepository.eliminarFarmacista(idAdministradorID);
+        attr.addFlashAttribute("msg", "Administrador eliminado exitosamente");
         return "redirect:/superadmin/administradoresSede";
 
     }
 
     @PostMapping("/banearAdministrador")
-    public String banearAdministrador(@RequestParam(value = "idAdministrador") String idAdministrador, @RequestParam(value = "idSede") int idSede){
+    public String banearAdministrador(@RequestParam(value = "idAdministrador") String idAdministrador, @RequestParam(value = "idSede") int idSede, RedirectAttributes attr){
         int idAdministradorID = Integer.parseInt(idAdministrador);
         sedeRepository.eliminarAdminAntiguo(idSede);
         usuarioRepository.banearAdministrador(idAdministradorID);
+        attr.addFlashAttribute("msg", "Administrador baneado exitosamente");
         return "redirect:/superadmin/administradoresSede";
 
     }
 
     @PostMapping("/eliminarAdministradorSinSede")
-    public String eliminarAdminSinSede(@RequestParam(value = "idAdministrador") String idAdministrador){
+    public String eliminarAdminSinSede(@RequestParam(value = "idAdministrador") String idAdministrador, RedirectAttributes attr){
         int idAdministradorID = Integer.parseInt(idAdministrador);
         usuarioRepository.eliminarFarmacista(idAdministradorID);
+        attr.addFlashAttribute("msg", "Administrador eliminado exitosamente");
         return "redirect:/superadmin/administradoresSede";
 
     }
 
     @PostMapping("/desbanearAdministrador")
-    public String desbanearAdministrador(@RequestParam(value = "idAdministrador") String idAdministrador){
+    public String desbanearAdministrador(@RequestParam(value = "idAdministrador") String idAdministrador, RedirectAttributes attr){
         int idAdministradorID = Integer.parseInt(idAdministrador);
         usuarioRepository.administradorSinSede(idAdministradorID);
+        attr.addFlashAttribute("msg", "Administrador desbaneado exitosamente");
         return "redirect:/superadmin/administradoresSede";
 
     }
 
     @GetMapping(value = {"/editarAsignarAdministrador"})
     public String asignarNuevaSedeAdministrador(Usuario administrador,
-                                      Model model, @RequestParam("id") String id){
+                                      Model model, @RequestParam("id") String id, RedirectAttributes attr ){
         int idAdmin = Integer.parseInt(id);
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(idAdmin);
         System.out.println("Valor Dentro de editar de optional usuario: " + optionalUsuario.get().getIdUsuario());
         if(optionalUsuario.isPresent()){
             administrador = optionalUsuario.get();
             List<Sede> sedeList = sedeRepository.listarSedesDisponibles();
+
+            String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+            String passwordDots = hashToDots(passwordHash);
+
             model.addAttribute("sedeList", sedeList);
+            model.addAttribute("contrasenia", passwordDots);
             model.addAttribute("administrador", administrador);
             return "superAdmin/asignarAdministrador";
         }else {
@@ -350,9 +448,39 @@ public class SuperAdminController {
         }
     }
 
+    private String hashToDots(String passwordHash) {
+        return "*".repeat(passwordHash.length()); // Repite el carácter '*' según la longitud del hash
+    }
+
+
+    @PostMapping("/asignandoAdministrador")
+    public String asignaraNuevoAdministrador(@ModelAttribute("administrador") Usuario administrador, @RequestParam(value = "sedeid", required = false) String idSede, RedirectAttributes attr, Model model) throws IOException {
+
+        if(idSede == null || idSede.isEmpty()){
+            System.out.println("ID ADMIN: " + administrador.getIdUsuario());
+            usuarioRepository.administradorSinSede(administrador.getIdUsuario());
+            attr.addFlashAttribute("msg", "El administrador no fue asignado a ninguna sede");
+            return "redirect:/superadmin/administradoresSede";
+        }else{
+            if(administrador.getIdUsuario() != 0){
+                System.out.println("ID ADMIN si no es vacio: " + administrador.getIdUsuario());
+                int idsede = Integer.parseInt(idSede);
+                usuarioRepository.activarAdministrador(administrador.getIdUsuario());
+                sedeRepository.asignarAdministradorSede(administrador.getIdUsuario(), idsede);
+                attr.addFlashAttribute("msg", "El administrador fue asignado a una sede correctamente");
+                return "redirect:/superadmin/administradoresSede";
+            }else{
+                System.out.println("ID ADMIN si es vacio: " + administrador.getIdUsuario());
+                attr.addFlashAttribute("msg", "El administrador no fue asignado a ninguna sede");
+                return "redirect:/superadmin/administradoresSede";
+            }
+        }
+
+    }
+
 
     @GetMapping(value = {"/crearDoctor"})
-    public String crearDoctor(@ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResul, RedirectAttributes attr, Model model){
+    public String crearDoctor(@ModelAttribute("doctor") Doctor doctor, RedirectAttributes attr, Model model){
         List<Sede> sedeDisponibleList = sedeRepository.findAll();
         model.addAttribute("sedeDisponibleList", sedeDisponibleList);
         return "superAdmin/crearDoctor";
@@ -366,6 +494,7 @@ public class SuperAdminController {
             return "superAdmin/crearDoctor";
         }else{
             doctorRepository.save(doctor);
+            attr.addFlashAttribute("msg", "Nuevo doctor creado exitosamente");
             return "redirect:/superadmin/doctores";
         }
     }
@@ -379,6 +508,8 @@ public class SuperAdminController {
             doctor = optionalDoctor.get();
             List<Sede> sedeDisponibleList = sedeRepository.findAll();
             List<SedeDoctor> sedeDoctorList = sedeDoctorRepository.listarSedesDondeEstaDoctor(id);
+            List<Integer> idsSedes = sedeDoctorRepository.listarSedesPorIdDoctor(id);
+            model.addAttribute("idsSede", idsSedes);
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
             model.addAttribute("doctor", doctor);
             model.addAttribute("doctoresVisiblesSede", sedeDoctorList);
@@ -390,18 +521,23 @@ public class SuperAdminController {
 
 
     @PostMapping("/actualizarDoctor")
-    public String actualizarMedicamento(@ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult, @RequestParam(value = "sedeid", required = false) List<Integer> idSedesSeleccionadas, RedirectAttributes attr, Model model){
+    public String actualizarDoctor(@ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult, @RequestParam(value = "sedeid", required = false) List<Integer> idSedesSeleccionadas, RedirectAttributes attr, Model model){
         if(bindingResult.hasErrors()){
             List<Sede> sedeDisponibleList = sedeRepository.findAll();
             List<SedeDoctor> sedeDoctorList = sedeDoctorRepository.listarSedesDondeEstaDoctor(doctor.getIdDoctor());
+            List<Integer> idsSedes = sedeDoctorRepository.listarSedesPorIdDoctor(doctor.getIdDoctor());
+            model.addAttribute("idsSede", idsSedes);
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
             model.addAttribute("doctoresVisiblesSede", sedeDoctorList);
             return "superAdmin/editarDoctor";
         }else{
 
             if (idSedesSeleccionadas == null || idSedesSeleccionadas.isEmpty()) {
+                int idDoctor = doctor.getIdDoctor();
                 System.out.println("Estoy en si el parámetros es NULL");
+                sedeDoctorRepository.borrarSedesAnterioresDoctor(idDoctor);
                 doctorRepository.save(doctor);
+                attr.addFlashAttribute("msg", "Datos del doctor actualizados exitosamente");
                 return "redirect:/superadmin/doctores";
             } else {
                 System.out.println("Estoy en si NO el parámetros es NULL");
@@ -415,6 +551,7 @@ public class SuperAdminController {
                         sedeDoctorRepository.asignarDoctorPorSede(idDoctor,idSede);
                     }
                     doctorRepository.save(doctor);
+                    attr.addFlashAttribute("msg", "Datos del doctor actualizados exitosamente");
                     return "redirect:/superadmin/doctores";
                 }else{
                     sedeDoctorRepository.borrarSedesAnterioresDoctor(idDoctor);
@@ -422,6 +559,7 @@ public class SuperAdminController {
                         sedeDoctorRepository.asignarDoctorPorSede(idDoctor,idSede);
                     }
                     doctorRepository.save(doctor);
+                    attr.addFlashAttribute("msg", "Datos del doctor actualizados exitosamente");
                     return "redirect:/superadmin/doctores";
                 }
             }
@@ -429,10 +567,11 @@ public class SuperAdminController {
     }
 
     @PostMapping("/eliminarDoctor")
-    public String eliminarDoctor(@RequestParam(value = "idDoctor") String idDoctor){
+    public String eliminarDoctor(@RequestParam(value = "idDoctor") String idDoctor, RedirectAttributes attr){
         int idDoctorID = Integer.parseInt(idDoctor);
         sedeDoctorRepository.borrarSedesAnterioresDoctor(idDoctorID);
         doctorRepository.eliminarDoctor(idDoctorID);
+        attr.addFlashAttribute("msg", "Doctor eliminado exitosamente");
         return "redirect:/superadmin/doctores";
     }
 
@@ -445,8 +584,13 @@ public class SuperAdminController {
             farmacista = optionalFarmacista.get();
             SedeFarmacista datosFarmacistaSede = sedeFarmacistaRepository.buscarFarmacistaSede(id);
             List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
+
+            String passwordHash = farmacista.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+            String passwordDots = hashToDots(passwordHash);
+
             model.addAttribute("farmacista", farmacista);
             model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
+            model.addAttribute("contrasenia", passwordDots);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
             return "superAdmin/editarFarmacista";
         } else {
@@ -465,24 +609,25 @@ public class SuperAdminController {
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
             return "superAdmin/editarFarmacista";
         }else{
-
+            attr.addFlashAttribute("msg", "Datos del farmacista actualizados exitosamente");
             usuarioRepository.save(farmacista);
             return "redirect:/superadmin/farmacistas";
         }
     }
 
     @PostMapping("/eliminarFarmacista")
-    public String eliminarFarmacista(@RequestParam(value = "idFarmacista") String idFarmacista){
+    public String eliminarFarmacista(@RequestParam(value = "idFarmacista") String idFarmacista, RedirectAttributes attr){
         int idFarmacistaID = Integer.parseInt(idFarmacista);
         sedeFarmacistaRepository.eliminarFarmacistadeSedeFarmacista(idFarmacistaID);
         usuarioRepository.eliminarFarmacista(idFarmacistaID);
+        attr.addFlashAttribute("msg", "Farmacista eliminado exitosamente");
         return "redirect:/superadmin/farmacistas";
 
     }
 
 
     @GetMapping(value = {"/crearMedicamento"})
-    public String crearMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento, BindingResult bindingResul, Model model){
+    public String crearMedicamento(@ModelAttribute("medicamento") Medicamento medicamento, Model model){
         List<Sede> sedeDisponibleList = sedeRepository.findAll();
         model.addAttribute("sedeDisponibleList", sedeDisponibleList);
         return "superAdmin/crearMedicamento";
@@ -506,6 +651,7 @@ public class SuperAdminController {
             medicamento.setEstado(1);
             medicamento.setImagen("-");
             medicamentoRepository.save(medicamento);
+            attr.addFlashAttribute("msg", "Medicamento creado exitosamente");
             return "redirect:/superadmin/medicamentos";
         }
     }
@@ -515,10 +661,13 @@ public class SuperAdminController {
 
         Optional<Medicamento> optionalMedicamento = medicamentoRepository.findById(id);
 
+
         if (optionalMedicamento.isPresent()) {
             medicamento = optionalMedicamento.get();
             List<Sede> sedeDisponibleList = sedeRepository.findAll();
             List<SedeStock> sedeStockList = sedeStockRepository.medicamentoPresenteSedes(id);
+            List<Integer> idsSede = sedeStockRepository.listarMedicamentosEnSedePorId(id);
+            model.addAttribute("idsSede", idsSede);
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
             model.addAttribute("medicamento", medicamento);
             model.addAttribute("medicamentosVisiblesSede", sedeStockList);
@@ -531,16 +680,27 @@ public class SuperAdminController {
     @PostMapping("/actualizarMedicamento")
     public String actualizarMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento, BindingResult bindingResult, @RequestParam(value = "sedeid", required = false) List<Integer> idSedesSeleccionadas, RedirectAttributes attr, Model model){
         if(bindingResult.hasErrors()){
+            System.out.println("HAY ERRORES DE VALIDACIÓN:");
+            for (ObjectError error : bindingResult.getAllErrors()) {
+                System.out.println("- " + error.getDefaultMessage());
+            }
+            List<SedeStock> sedeStockList = sedeStockRepository.medicamentoPresenteSedes(medicamento.getIdMedicamento());
             List<Sede> sedeDisponibleList = sedeRepository.findAll();
+            List<Integer> idsSede = sedeStockRepository.listarMedicamentosEnSedePorId(medicamento.getIdMedicamento());
+            model.addAttribute("idsSede", idsSede);
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+            model.addAttribute("medicamentosVisiblesSede", sedeStockList);
             return "superAdmin/editarMedicamento";
         }else{
             medicamento.setCategorias("NNUL");
             medicamento.setEstado(1);
             if (idSedesSeleccionadas == null || idSedesSeleccionadas.isEmpty()) {
+                int idMedicamento = medicamento.getIdMedicamento();
                 System.out.println("Estoy en si el parámetros es NULL");
                 medicamento.setImagen(null);
+                sedeStockRepository.borrarSedesAnteriores(idMedicamento);
                 medicamentoRepository.save(medicamento);
+                attr.addFlashAttribute("msg", "Medicamento actualizado exitosamente");
                 return "redirect:/superadmin/medicamentos";
             } else {
                 System.out.println("Estoy en si NO el parámetros es NULL");
@@ -555,6 +715,7 @@ public class SuperAdminController {
                     }
                     medicamento.setImagen(null);
                     medicamentoRepository.save(medicamento);
+                    attr.addFlashAttribute("msg", "Medicamento actualizado exitosamente");
                     return "redirect:/superadmin/medicamentos";
                 }else{
                     sedeStockRepository.borrarSedesAnteriores(idMedicamento);
@@ -563,6 +724,7 @@ public class SuperAdminController {
                     }
                     medicamento.setImagen(null);
                     medicamentoRepository.save(medicamento);
+                    attr.addFlashAttribute("msg", "Medicamento actualizado exitosamente");
                     return "redirect:/superadmin/medicamentos";
                 }
             }
@@ -570,10 +732,11 @@ public class SuperAdminController {
     }
 
     @PostMapping("/eliminarMedicamento")
-    public String eliminarMedicamento(@RequestParam(value = "idMedicamento") String idMedicamento){
+    public String eliminarMedicamento(@RequestParam(value = "idMedicamento") String idMedicamento, RedirectAttributes attr){
         int idMedicamentoID = Integer.parseInt(idMedicamento);
         sedeStockRepository.borrarSedesAnteriores(idMedicamentoID);
         medicamentoRepository.eliminarMedicamento(idMedicamentoID);
+        attr.addFlashAttribute("msg", "Medicamento borrado exitosamente");
         return "redirect:/superadmin/medicamentos";
     }
 }

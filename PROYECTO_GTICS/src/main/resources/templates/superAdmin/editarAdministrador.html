@@ -433,7 +433,7 @@
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Correo electrónico:</label>
-                                    <input th:field="*{correo}" class="input-form" type="email" name="correo" placeholder="Ingrese el correo" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}" required>
+                                    <input th:field="*{correo}" class="input-form" type="text" name="correo" placeholder="Ingrese el correo" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}" >
                                     <div  class="invalid-feedback"
                                           th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
                                         No puede estar vacío
@@ -442,8 +442,8 @@
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Contraseña:</label>
-                                    <input type="password" th:field="*{contrasena}" class="input-form"  name="contrasena" placeholder="Ingrese la contraseña" th:classappend="${#fields.hasErrors('contrasena')?'is-invalid':''}" required>
-                                    <div  class="invalid-feedback"
+                                    <input  type="text"  th:value="${contrasenia}" class="input-form"  name="contrasena" placeholder="Ingrese la contraseña" th:classappend="${#fields.hasErrors('contrasena')?'is-invalid':''}" >
+                                    <div style="width: 300px" class="invalid-feedback"
                                           th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}">
                                         No puede estar vacío
                                     </div>
@@ -455,7 +455,7 @@
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Teléfono:</label>
-                                    <input th:field="*{celular}" class="input-form" type="text" name="celular" placeholder="Ingrese su teléfono" th:classappend="${#fields.hasErrors('celular')?'is-invalid':''}" required>
+                                    <input th:field="*{celular}" class="input-form" type="text" name="celular" placeholder="Ingrese su teléfono" th:classappend="${#fields.hasErrors('celular')?'is-invalid':''}" >
                                     <div  class="invalid-feedback"
                                           th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}">
                                         No puede estar vacío
@@ -478,7 +478,7 @@
                             <div class="column">
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Seguro:</label>
-                                    <input th:field="*{seguro}" class="input-form" type="text" name="seguro" th:classappend="${#fields.hasErrors('seguro')?'is-invalid':''}" placeholder="Ingrese el seguro" required>
+                                    <input th:field="*{seguro}" class="input-form" type="text" name="seguro" th:classappend="${#fields.hasErrors('seguro')?'is-invalid':''}" placeholder="Ingrese el seguro" >
                                     <div  class="invalid-feedback"
                                           th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}">
                                         No puede estar vacío
