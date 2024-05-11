@@ -209,19 +209,20 @@
                 <tbody>
                 <tr th:each="orden : ${listaPreOrdenes}">
                     <td style="text-align: center" th:text="${orden.getIdOrden() + 10000}"></td>
-                    <td style="text-align: center" th:text="${orden.getFechaIni()}"></td>
+                    <td style="text-align: center" th:text="${#temporals.format(orden.getFechaIni(), 'dd/MM/yyyy   -   HH:mm')}"></td>
                     <td style="text-align: center" th:text="${orden.getPaciente().getNombres()} + ' ' + ${orden.getPaciente().getApellidos()}" ></td>
                     <td th:switch="${orden.getEstadoOrden()}">
-                        <button class="btn-pend"          th:case="1">PENDIENTE</button>
-                        <button class="btn-pend"          th:case="2">PENDIENTE</button>
-                        <button class="btn-rcb"           th:case="3">RECIBIDO</button>
-                        <button class="btn-pro"           th:case="4">EN PROCESO</button>
-                        <button class="btn-empa"          th:case="5">EMPAQUETANDO</button>
-                        <button class="btn-ruta"          th:case="6">EN RUTA</button>
-                        <button class="btn-listo"         th:case="7">ENTREGADO</button>
-                        <button class="btn-pagado"        th:case="8">PAGADO</button>
-                        <button class="btn-anulado"       th:case="9">ANULADO</button>
+                        <button class="btn-pend montserrat-medium"          th:case="1">PENDIENTE</button>
+                        <button class="btn-pend montserrat-medium"          th:case="2">PENDIENTE</button>
+                        <button class="btn-rcb montserrat-medium"           th:case="3">RECIBIDO</button>
+                        <button class="btn-pro montserrat-medium"           th:case="4">EN PROCESO</button>
+                        <button class="btn-empa montserrat-medium"          th:case="5">EMPAQUETANDO</button>
+                        <button class="btn-ruta montserrat-medium"          th:case="6">EN RUTA</button>
+                        <button class="btn-listo montserrat-medium"         th:case="7">ENTREGADO</button>
+                        <button class="btn-pagado montserrat-medium"        th:case="8">PAGADO</button>
+                        <button class="btn-anulado montserrat-medium"       th:case="9">ANULADO</button>
                     </td>
+
                     <td style="text-align: center; display: flex; flex-direction: row; justify-content: center; gap: 5px;">
 
                         <form th:action="@{'/farmacista/ver_orden_venta_tabla'}" method="post">
