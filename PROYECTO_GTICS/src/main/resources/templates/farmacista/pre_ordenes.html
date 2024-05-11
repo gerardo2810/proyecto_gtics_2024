@@ -223,15 +223,8 @@
                         <button class="btn-anulado montserrat-medium"       th:case="9">ANULADO</button>
                     </td>
 
-                    <td style="text-align: center; display: flex; flex-direction: row; justify-content: center; gap: 5px;">
-
-                        <form th:action="@{'/farmacista/ver_orden_venta_tabla'}" method="post">
-                            <input type="hidden" name="idOrden" th:value="${orden.getIdOrden()}">
-                            <button type="submit" class="btn btn-sm btn-info" >
-                                <i class="fa-regular fa-eye"></i>
-                            </button>
-                        </form>
-
+                    <td class="action" th:switch="${orden.getTipoOrden()}">
+                        <a th:case="3"  th:href="@{'/farmacista/ver_pre_orden' + '?id=' + ${orden.getIdOrden()}}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
                     </td>
                 </tr>
                 </tbody>
