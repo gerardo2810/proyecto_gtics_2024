@@ -1,14 +1,10 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Entity;
 
-import com.mysql.cj.jdbc.Blob;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-
 
 @Getter
 @Setter
@@ -16,6 +12,7 @@ import java.util.Date;
 @Table(name = "orden")
 public class Orden {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Integer idOrden;
     @Column(name="tracking")

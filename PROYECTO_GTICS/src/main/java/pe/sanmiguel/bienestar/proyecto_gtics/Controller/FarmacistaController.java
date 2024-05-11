@@ -4,7 +4,9 @@ import jakarta.validation.Valid;
 import lombok.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -96,27 +98,35 @@ public class FarmacistaController {
     }
 
     @GetMapping("/farmacista/formulario_paciente")
-    public String formPacienteData(Model model, @ModelAttribute("usuario") Usuario usuario) {
+    public String formPacienteData(@ModelAttribute("usuario") Usuario usuario, Model model) {
 
-        List<Integer> stockSeleccionados = new ArrayList<>();
+        if(medicamentosSeleccionados.isEmpty()){
+            return "redirect:/farmacista";
+        } else {
+            List<Integer> stockSeleccionados = new ArrayList<>();
 
-        for (Medicamento med : medicamentosSeleccionados) {
-            if (sedeStockRepository.getSedeStockByIdSedeAndIdMedicamento(sedeSession, med).isPresent()) {
-                stockSeleccionados.add(sedeStockRepository.getSedeStockByIdMedicamentoAndIdSede(med,sedeSession).getCantidad());
-            } else {
-                stockSeleccionados.add(0);
+            for (Medicamento med : medicamentosSeleccionados) {
+                if (sedeStockRepository.getSedeStockByIdSedeAndIdMedicamento(sedeSession, med).isPresent()) {
+                    stockSeleccionados.add(sedeStockRepository.getSedeStockByIdMedicamentoAndIdSede(med,sedeSession).getCantidad());
+                } else {
+                    stockSeleccionados.add(0);
+                }
             }
-        }
 
-        model.addAttribute("doctores", doctorRepository.findAll());
-        model.addAttribute("stockSeleccionados", stockSeleccionados);
-        model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
-        model.addAttribute("listaCantidades", listaCantidades);
-        return "farmacista/formulario_paciente";
+            ArrayList<Usuario> listaUsuarios = (ArrayList<Usuario>) usuarioRepository.listarUsuariosSegunRol(4);
+            ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) doctorRepository.findAll();
+
+            model.addAttribute("listaUsuarios", listaUsuarios);
+            model.addAttribute("listaDoctores", listaDoctores);
+            model.addAttribute("stockSeleccionados", stockSeleccionados);
+            model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
+            model.addAttribute("listaCantidades", listaCantidades);
+            return "farmacista/formulario_paciente";
+        }
     }
 
     @PostMapping("/farmacista/finalizar_compra")
-    public String createOrdenVenta(@ModelAttribute("usuario") @Valid  Usuario usuario,
+    public String createOrdenVenta(@ModelAttribute("usuario") @Valid Usuario usuario,
                                    BindingResult bindingResult,
                                    Model model,
                                    @RequestParam(value = "nombres") String name,
@@ -131,32 +141,46 @@ public class FarmacistaController {
                                    @RequestParam(value = "listaIds") List<String> listaSelectedIds,
                                    @RequestParam(value = "priceTotal") String priceTotal) {
 
-        idVerOrdenCreada = 0;
+        bindingResult = new BeanPropertyBindingResult(usuario, "usuario");
 
-        medicamentosSeleccionados = getMedicamentosFromLista(listaSelectedIds);
-        listaCantidades = getCantidadesFromLista(listaSelectedIds);
+        if (bindingResult.hasErrors()){
 
-        verificationStock verificationStock = new verificationStock(medicamentosSeleccionados, listaCantidades);
-        verificationUser verificationUser = new verificationUser(name,lastname,dni,distrito,direccion,seguro,correo,celular);
+            List<Integer> stockSeleccionados = new ArrayList<>();
 
-        this.pacienteOnStore = verificationUser.getUser();
+            for (Medicamento med : medicamentosSeleccionados) {
+                if (sedeStockRepository.getSedeStockByIdSedeAndIdMedicamento(sedeSession, med).isPresent()) {
+                    stockSeleccionados.add(sedeStockRepository.getSedeStockByIdMedicamentoAndIdSede(med,sedeSession).getCantidad());
+                } else {
+                    stockSeleccionados.add(0);
+                }
+            }
 
+            ArrayList<Usuario> listaUsuarios = (ArrayList<Usuario>) usuarioRepository.listarUsuariosSegunRol(4);
+            ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) doctorRepository.findAll();
 
-
-        if (bindingResult.hasErrors()) {
-            model .addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
+            model.addAttribute("listaUsuarios", listaUsuarios);
+            model.addAttribute("listaDoctores", listaDoctores);
+            model.addAttribute("stockSeleccionados", stockSeleccionados);
+            model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
             model.addAttribute("listaCantidades", listaCantidades);
-            model.addAttribute("doctores", doctorRepository.findAll());
-            return "farmacista/formulario_paciente"; // Asegúrate de que esta vista pueda mostrar los errores
-        }
-        else{
-            if (verificationStock.getMedicamentosSinStock().isEmpty()){
+
+            return "farmacista/formulario_paciente";
+
+        } else {
+
+            idVerOrdenCreada = 0;
+
+            medicamentosSeleccionados = getMedicamentosFromLista(listaSelectedIds);
+            listaCantidades = getCantidadesFromLista(listaSelectedIds);
+
+            verificationStock verificationStock = new verificationStock(medicamentosSeleccionados, listaCantidades);
+            verificationUser verificationUser = new verificationUser(name,lastname,dni,distrito,direccion,seguro,correo,celular);
+
+            this.pacienteOnStore = verificationUser.getUser();
+
+            if (verificationStock.getMedicamentosSinStock().isEmpty()) {
 
                 Orden newOrden = new Orden();
-
-                Integer lastOrderId = ordenRepository.findLastOrdenId();
-                int newOrderId = (lastOrderId != null) ? lastOrderId + 1 : 1;
-                newOrden.setIdOrden(newOrderId);
                 newOrden.setFechaIni(CurrentTimeSQL.getCurrentDate());
                 newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
                 //Id conocido porque no hay session
@@ -169,7 +193,7 @@ public class FarmacistaController {
                     newOrden.setDoctor(doctorRepository.getByIdDoctor(Integer.valueOf(doctor)));
                 }
 
-                newOrden.setPaciente(verificationUser.getUser());
+                newOrden.setPaciente(this.pacienteOnStore);
 
                 ordenRepository.save(newOrden);
 
@@ -177,7 +201,7 @@ public class FarmacistaController {
                 for (Medicamento med : medicamentosSeleccionados){
 
                     OrdenContenidoId contenidoId = new OrdenContenidoId();
-                    contenidoId.setIdOrden(newOrderId);
+                    contenidoId.setIdOrden(newOrden.getIdOrden());
                     contenidoId.setIdMedicamento(med.getIdMedicamento());
 
                     OrdenContenido contenido = new OrdenContenido();
@@ -190,10 +214,10 @@ public class FarmacistaController {
                     i++;
                 }
 
-                idVerOrdenCreada = newOrderId;
+                idVerOrdenCreada = newOrden.getIdOrden();
                 return "redirect:/farmacista/ver_orden_venta";
-            } else {
 
+            } else {
 
                 this.medicamentosSinStock = verificationStock.getMedicamentosSinStock();
                 this.medicamentosConStock = verificationStock.getMedicamentosConStock();
@@ -203,7 +227,6 @@ public class FarmacistaController {
                 return "redirect:/farmacista/crear_preorden";
             }
         }
-
     }
 
 
@@ -420,11 +443,6 @@ public class FarmacistaController {
 
             } else {
                 Usuario newUser = new Usuario();
-
-                Integer lastUserId = usuarioRepository.findLastUsuarioId();
-                int newUserId = (lastUserId != null) ? lastUserId + 1 : 1;
-                newUser.setIdUsuario(newUserId);
-
                 newUser.setRol(4);
                 newUser.setCorreo(correo);
                 newUser.setContrasena("00000000");
