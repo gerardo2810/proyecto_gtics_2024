@@ -171,6 +171,12 @@
 
                         <select class="select-p" id="filtroEstado" >
                             <option value="">Mostrar Todos</option>
+                            <option value="PENDIENTE">Pendiente</option>
+                            <option value="RECIBIDO">Recibido</option>
+                            <option value="EN PROCESO">En proceso</option>
+                            <option value="EMPAQUETANDO">Empaquetando</option>
+                            <option value="EN RUTA">En ruta</option>
+                            <option value="ENTREGADO">Entregado</option>
                             <option value="PAGADO">Pagado</option>
                             <option value="ANULADO">Anulado</option>
                         </select>
@@ -213,8 +219,8 @@
                         <button class="btn-empa"          th:case="5">EMPAQUETANDO</button>
                         <button class="btn-ruta"          th:case="6">EN RUTA</button>
                         <button class="btn-listo"         th:case="7">ENTREGADO</button>
-                        <button class="btn-pagado"          th:case="8">PAGADO</button>
-                        <button class="btn-anulado"         th:case="9">ANULADO</button>
+                        <button class="btn-pagado"        th:case="8">PAGADO</button>
+                        <button class="btn-anulado"       th:case="9">ANULADO</button>
                     </td>
                     <td style="text-align: center; display: flex; flex-direction: row; justify-content: center; gap: 5px;">
 

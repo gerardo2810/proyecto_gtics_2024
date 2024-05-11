@@ -20,13 +20,14 @@
     <link rel="stylesheet" th:href="@{/css/farmacista/detalle_ordenes.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
     <link th:href="@{/css/footer.css}" rel="stylesheet" />
+    <link th:href="@{/css/preloader.css}" rel="stylesheet" />
 
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
     <link rel="stylesheet" th:href="@{/css/fonts.css}">
     <link rel="stylesheet" th:href="@{/css/topbar.css}">
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/perfil.css}">
-
 
     <!--=============== JAVASCRIPT ===============-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -42,11 +43,17 @@
     <!--=============== FONT AWESOME ===============-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
-    <title>Bienestar San Miguel | Pre Ordenes</title>
+    <title>Bienestar San Miguel | Ordenes de Venta</title>
 
 </head>
 
 
+
+<body class="loader-hidden">
+
+<div class="container-loader loader-hidden" id="onload">
+    <div class="loader"></div>
+</div>
 
 <header class="header-topbar">
     <nav class="nav-topbar container">
@@ -90,7 +97,7 @@
                                 </li>
 
                                 <li>
-                                    <a href="#" class="dropdown-link">
+                                    <a href="/index" class="dropdown-link">
                                         <i class="ri-lock-line menu-item dropdown-item roboto-regular"></i> Cerrar sesión
                                     </a>
                                 </li>
@@ -111,11 +118,11 @@
                             <ul class="nav-list-small">
                                 <li><a href="/farmacista" class="menu-item-small roboto-regular">Inicio</a></li>
 
-                                <li><a href="/farmacista/ordenes_venta" class="menu-item-small roboto-regular">Ordenes de Venta</a></li>
+                                <li><a href="/farmacista/ordenes_venta" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Ordenes de Venta</a></li>
 
                                 <li><a href="/farmacista/ordenes_web" class="menu-item-small roboto-regular">Ordenes Web</a></li>
 
-                                <li><a href="/farmacista/pre_ordenes" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Pre Ordenes</a></li>
+                                <li><a href="/farmacista/pre_ordenes" class="menu-item-small roboto-regular">Pre Ordenes</a></li>
                             </ul>
 
                             <ul class="nav-list-small-perfil">
@@ -135,39 +142,57 @@
 </header>
 
 
-<body style="background-color: white;">
-
 
 <div class="container">
 
     <div class="container" style="margin-top: 90px">
 
         <div style="padding-top: 20px; padding-bottom: 20px">
-            <div class="main-title open-sans-bold"> Pre Ordenes </div>
-            <div class="main-subtitle helvetica-medium"> Interfaz de Administración de Pre Ordenes </div>
+            <div class="main-title open-sans-bold"> Ordenes de Venta </div>
+            <div class="main-subtitle helvetica-medium">  Interfaz de Administración de Ventas </div>
         </div>
 
         <hr class="style-one">
 
-        <div style="margin-bottom: 40px"></div>
+        <div style="margin-bottom: 10px"></div>
 
         <div>
 
+            <div class="column-start" style="padding-bottom: 1px">
 
-            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 30px;">
-                <div style="display: flex; flex-direction: column">
-                    <label style="font-weight: 550; margin-left: 2px">Filtrar por Estado:</label>
-                    <select id="filtroEstado" class="select-p" >
-                        <option value="">Mostrar Todos</option>
-                        <option value="RECIBIDO">Recibido</option>
-                        <option value="EN PROCESO">En proceso</option>
-                        <option value="EMPAQUETADO">Empaquetado</option>
-                        <option value="EN RUTA">En ruta</option>
-                        <option value="ENTREGADO">Entregado</option>
-                    </select>
+                <div style="display: flex;flex-direction: row;column-gap: 8px;">
+
+                    <div style="display: flex; flex-direction: column; justify-content: start; padding-top: 10px;">
+                        <label style="color:dimgray;font-weight: bold; margin-left: 2px; margin-bottom:4px">Filtrar por Estado:</label>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; justify-content: start">
+
+
+                        <select class="select-p" id="filtroEstado" >
+                            <option value="">Mostrar Todos</option>
+                            <option value="PENDIENTE">Pendiente</option>
+                            <option value="RECIBIDO">Recibido</option>
+                            <option value="EN PROCESO">En proceso</option>
+                            <option value="EMPAQUETANDO">Empaquetando</option>
+                            <option value="EN RUTA">En ruta</option>
+                            <option value="ENTREGADO">Entregado</option>
+                            <option value="PAGADO">Pagado</option>
+                            <option value="ANULADO">Anulado</option>
+                        </select>
+
+                    </div>
                 </div>
-                <button id="limpiarFiltros" class="btn-p">Limpiar Filtros</button>
+
+                <div class="search-container" style="display: flex; flex-direction: column; gap: 15px; align-items: start">
+                    <input type="search" id="search" class="form-control" placeholder="Buscar...">
+                </div>
+
             </div>
+
+
+
+
 
 
 
@@ -175,30 +200,32 @@
                 <thead>
                 <tr style="background-color: #378fff">
                     <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Número de Orden</th>
-                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Número de Tracking</th>
-                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Paciente </th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha de Registro</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Paciente</th>
                     <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Estado</th>
                     <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="preOrden : ${listaPreOrdenes}">
-                    <td style="text-align: center" th:text="${preOrden.getOrdenParent() + 10000}"></td>
-                    <td style="text-align: center" th:text="${'#TRK' + preOrden.getTracking()}"></td>
-                    <td style="text-align: center" th:text="${preOrden.getPaciente().getNombres()} + ' ' + ${preOrden.getPaciente().getApellidos()}"></td>
-                    <td style="text-align: center">
-                        <div th:if="${preOrden.getEstadoPreOrden()== 1}" th:text="Recibido" class="btn-secondary"></div>
-                        <div th:if="${preOrden.getEstadoPreOrden() == 2}" th:text="En proceso" class="btn-secondary"></div>
-
-                        <div th:if="${preOrden.getEstadoPreOrden() == 3}" th:text="Empaquetado" class="table-badge badge-pagado"></div>
-                        <div th:if="${preOrden.getEstadoPreOrden() == 4}" th:text="En Ruta" class="btn-yellow"></div>
-                        <div th:if="${preOrden.getEstadoPreOrden() == 5}" th:text="Entregado" class="btn-red"></div>
-                        <div th:if="${preOrden.getEstadoPreOrden() == 6}" th:text="Pendiente" class="btn-yellow"></div>
-
+                <tr th:each="orden : ${listaPreOrdenes}">
+                    <td style="text-align: center" th:text="${orden.getIdOrden() + 10000}"></td>
+                    <td style="text-align: center" th:text="${orden.getFechaIni()}"></td>
+                    <td style="text-align: center" th:text="${orden.getPaciente().getNombres()} + ' ' + ${orden.getPaciente().getApellidos()}" ></td>
+                    <td th:switch="${orden.getEstadoOrden()}">
+                        <button class="btn-pend"          th:case="1">PENDIENTE</button>
+                        <button class="animationButton22" th:case="2">PAGO DISPONIBLE</button>
+                        <button class="btn-rcb"           th:case="3">RECIBIDO</button>
+                        <button class="btn-pro"           th:case="4">EN PROCESO</button>
+                        <button class="btn-empa"          th:case="5">EMPAQUETANDO</button>
+                        <button class="btn-ruta"          th:case="6">EN RUTA</button>
+                        <button class="btn-listo"         th:case="7">ENTREGADO</button>
+                        <button class="btn-pagado"        th:case="8">PAGADO</button>
+                        <button class="btn-anulado"       th:case="9">ANULADO</button>
                     </td>
                     <td style="text-align: center; display: flex; flex-direction: row; justify-content: center; gap: 5px;">
-                        <form th:action="@{'/farmacista/ver_pre_orden_tabla'}" method="post">
-                            <input type="hidden" name="idOrden" th:value="${preOrden.getIdOrden()}">
+
+                        <form th:action="@{'/farmacista/ver_orden_venta_tabla'}" method="post">
+                            <input type="hidden" name="idOrden" th:value="${orden.getIdOrden()}">
                             <button type="submit" class="btn btn-sm btn-info" >
                                 <i class="fa-regular fa-eye"></i>
                             </button>
@@ -213,6 +240,51 @@
 
 
     </div>
+</div>
+
+<div>
+    <footer id="sticky-footer" class="footer-distributed">
+        <div class="footer-left">
+            <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
+            <p class="footer-links">
+                <a href="/farmacista">Inicio</a> |
+                <a href="/farmacista/ordenes_venta" style="text-decoration: underline; color: white;">Ordenes de Venta</a> |
+                <a href="/farmacista/ordenes_web">Ordenes Web</a> |
+                <a href="/farmacista/pre_ordenes">Pre Ordenes</a> |
+                <a href="/farmacista/perfil">Perfil</a>
+            </p>
+            <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
+        </div>
+
+        <div class="footer-center">
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p><span>Av. Universitaria 1801, San Miguel, 15088</span> Lima, Perú</p>
+            </div>
+
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+51 982 876 098</p>
+            </div>
+
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="mailto:sagar00001.co@gmail.com">Lorem ipsum dolor sit amet.</a></p>
+            </div>
+        </div>
+
+        <div class="footer-right">
+            <p class="footer-company-about">
+                <span>Lorem, ipsum dolor.</span>
+                La carrera de <strong>Ingeniería de las telecomunicaciones</strong> de la <strong>Pontificia Universidad Catolica del Perú</strong> diseñó una pagina WEB.
+            </p>
+            <div class="footer-icons">
+                <a href="https://www.facebook.com/profile.php?id=100009473024310&mibextid=LQQJ4d"><i class="fa fa-facebook"></i></a>
+                <a href="https://www.instagram.com/leo.leonar071/?igshid=OGQ5ZDc2ODk2ZA%3D%3Ds"><i class="fa fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@pucp"><i class="fa fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
 </div>
 
 
@@ -237,24 +309,7 @@
         var table = $('#preOrders, #ordersWeb, #Orders').DataTable({
             dom: 'Bfrtilp',
             buttons: [
-                {
-                    extend: 'excelHtml5',
-                    text: '<i class="fas fa-file-excel"></i> ',
-                    titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success',
-                },
-                {
-                    extend: 'pdfHtml5',
-                    text: '<i class="fas fa-file-pdf"></i> ',
-                    titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger',
-                },
-                {
-                    extend: 'print',
-                    text: '<i class="fa fa-print"></i> ',
-                    titleAttr: 'Imprimir',
-                    className: 'btn btn-info',
-                },
+
             ],
             columnDefs: [
                 { className: 'centered', targets: [0, 1, 2, 3, 4] },
@@ -262,6 +317,10 @@
             ],
             "pageLength":5,
             "lengthChange": false,
+            "searching": true,
+            "order": [
+                [3, "desc"] // Ordenar por la segunda columna de forma descendente
+            ],
             "language": {
                 "emptyTable": "No hay registros disponibles",
                 "zeroRecords": "No se encontraron registros coincidentes",
@@ -272,10 +331,15 @@
                     "next": "Siguiente",
                     "previous": "Anterior"
                 },
-                search: 'Buscar:',
                 "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
             },
 
+        });
+
+        $('#search').keypress(function(event) {
+            if (event.keyCode === 13) {
+                $('#preOrders, #ordersWeb, #Orders').DataTable().search($(this).val()).draw();
+            }
         });
 
         $('#filtroEstado').on('change', function() {
@@ -312,51 +376,14 @@
     });
 </script>
 
+<script>
+    window.onload = function () {
+        $('#onload').fadeOut();
+        $('body').removeClass('loader-hidden');
+    }
 
-<div>
-    <footer id="sticky-footer" class="footer-distributed">
-        <div class="footer-left">
-            <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
-            <p class="footer-links">
-                <a href="/farmacista">Inicio</a> |
-                <a href="/farmacista/ordenes_venta">Ordenes de Venta</a> |
-                <a href="/farmacista/ordenes_web">Ordenes Web</a> |
-                <a href="/farmacista/pre_ordenes" style="text-decoration: underline; color: white;">Pre Ordenes</a> |
-                <a href="/farmacista/perfil" >Perfil</a>
-            </p>
-            <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
-        </div>
+</script>
 
-        <div class="footer-center">
-            <div>
-                <i class="fa fa-map-marker"></i>
-                <p><span>Av. Universitaria 1801, San Miguel, 15088</span> Lima, Perú</p>
-            </div>
-
-            <div>
-                <i class="fa fa-phone"></i>
-                <p>+51 982 876 098</p>
-            </div>
-
-            <div>
-                <i class="fa fa-envelope"></i>
-                <p><a href="mailto:sagar00001.co@gmail.com">Lorem ipsum dolor sit amet.</a></p>
-            </div>
-        </div>
-
-        <div class="footer-right">
-            <p class="footer-company-about">
-                <span>Lorem, ipsum dolor.</span>
-                La carrera de <strong>Ingeniería de las telecomunicaciones</strong> de la <strong>Pontificia Universidad Catolica del Perú</strong> diseñó una pagina WEB.
-            </p>
-            <div class="footer-icons">
-                <a href="https://www.facebook.com/profile.php?id=100009473024310&mibextid=LQQJ4d"><i class="fa fa-facebook"></i></a>
-                <a href="https://www.instagram.com/leo.leonar071/?igshid=OGQ5ZDc2ODk2ZA%3D%3Ds"><i class="fa fa-instagram"></i></a>
-                <a href="https://www.youtube.com/@pucp"><i class="fa fa-youtube"></i></a>
-            </div>
-        </div>
-    </footer>
-</div>
 
 </body>
 
