@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.List;
@@ -217,8 +218,8 @@ public class PacienteController {
 
         String tracking = new String();
         tracking= ordenRepository.findLastOrdenId()+1 + "-2024";
-        LocalDate fechaIni = LocalDate.now();
-        LocalDate fechaFin = LocalDate.now();
+        LocalDateTime fechaIni = LocalDateTime.now();
+        LocalDateTime fechaFin = LocalDateTime.now();
         Integer idFarmacista = new Integer(1); //el id del Farmacista
         Usuario udb = usuarioRepository.getById(1); // el id del usuario Paciente que realiza la orden
         Sede s = sedeRepository.getById(1); //el id de la Sede

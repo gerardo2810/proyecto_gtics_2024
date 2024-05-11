@@ -644,7 +644,7 @@ hr.style-one {
     border-radius: 6px;
     padding:8px;
     outline: none;
-    margin-top: 4px;
+    margin-top: 0 !important;
 }
 
 

@@ -16,6 +16,10 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -180,8 +184,10 @@ public class FarmacistaController {
 
             if (verificationStock.getMedicamentosSinStock().isEmpty()) {
 
+                LocalDateTime now = LocalDateTime.now();
+
                 Orden newOrden = new Orden();
-                newOrden.setFechaIni(CurrentTimeSQL.getCurrentDate());
+                newOrden.setFechaIni(now);
                 newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
                 //Id conocido porque no hay session
                 newOrden.setIdFarmacista(7);

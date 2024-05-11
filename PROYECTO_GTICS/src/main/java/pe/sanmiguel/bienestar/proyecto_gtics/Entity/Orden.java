@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,9 +22,9 @@ public class Orden {
     @Lob
     private byte[] imagen;
     @Column(name = "fechaIni")
-    private LocalDate fechaIni;
+    private LocalDateTime fechaIni;
     @Column(name = "fechaFin")
-    private LocalDate fechaFin;
+    private LocalDateTime fechaFin;
     @Column(name = "precioTotal")
     private float precioTotal;
     @Column(name = "idFarmacista")

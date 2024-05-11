@@ -7,6 +7,10 @@
     margin-top: 20px;
 }
 
+.dataTables_filter {
+    display: none !important;
+}
+
 .data-label {
     color: var(--color-text-1);
 }
@@ -50,10 +54,142 @@
     font-size: 1.2rem;
 }
 
+
+
+.btn-pend{
+    padding: 9px;
+    background-color: rgb(234 179 8);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 125px;
+}
+
+.btn-rcb{
+    padding: 8px;
+    background-color: rgb(100 116 139);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 125px;
+}
+
+.btn-pro{
+    padding: 8px;
+    background-color: rgb(100 116 139);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 125px;
+}
+
+.btn-empa{
+    padding: 8px;
+    background-color: rgb(100 116 139);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 125px;
+
+}
+
+.btn-ruta{
+    padding: 8px;
+    background-color: rgb(100 116 139);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 125px;
+}
+
+.btn-listo{
+    padding: 8px;
+    background-color: rgb(34, 136, 60);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 125px;
+}
+
+.btn-pagado{
+    padding: 8px;
+    background-color: rgb(37 99 235);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 125px;
+}
+
+.btn-anulado{
+    padding: 8px;
+    background-color: rgb(31 41 55);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 125px;
+}
+
+
+
+
+
+
+
+/* Pendiente ID = 1 */
+.badge-pendiente {
+    background-color: rgb(250 204 21);
+    color: white;
+}
+
+/* Pago Disponible ID = 2 */
+.badge-pago-disponible {
+    background-color: rgb(132 204 22);
+    color: white;
+}
+
+/* Recibido ID = 3 */
+.badge-recibido {
+    background-color:  rgb(217 119 6);
+    color: white;
+}
+
+/* En Proceso ID = 4 */
+.badge-proceso {
+    background-color: rgb(146 64 14);
+    color: white;
+}
+
+/* Empaquetando ID = 5 */
+.badge-empaquetado {
+    background-color: rgb(56 189 248);
+    color: white;
+}
+
+/* En Ruta ID = 6 */
+.badge-ruta {
+    background-color: rgb(96 165 250);
+    color: white;
+}
+
+/* Entregado ID = 7 */
+.badge-entregado {
+    background-color: rgb(37 99 235);
+    color: white;
+}
+
+/* ID = 8 */
 .badge-pagado {
     background-color: #28a745;
     color: white;
 }
+
+/* ID = 9 */
+.badge-anulado {
+    background-color: rgb(100 116 139);
+    color: white;
+}
+
+
 
 .invoice-data {
     display: flex;
