@@ -213,7 +213,7 @@
           <td style="text-align: center" th:text="${orden.getPaciente().getNombres()} + ' ' + ${orden.getPaciente().getApellidos()}" ></td>
           <td th:switch="${orden.getEstadoOrden()}">
             <button class="btn-pend"          th:case="1">PENDIENTE</button>
-            <button class="animationButton22" th:case="2">PAGO DISPONIBLE</button>
+            <button class="btn-pend"          th:case="2">PENDIENTE</button>
             <button class="btn-rcb"           th:case="3">RECIBIDO</button>
             <button class="btn-pro"           th:case="4">EN PROCESO</button>
             <button class="btn-empa"          th:case="5">EMPAQUETANDO</button>
