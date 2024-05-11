@@ -32,6 +32,9 @@
     <script scr="/js/map.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAce4klBZuD60aEQidMVIbsoaiitxxQFpo"></script>
 
+    <!--=============== HTML 2 PDF ===============-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+
     <!--=============== JQUERY ===============-->
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
@@ -230,7 +233,7 @@
         </div>
     </div>
 
-    <div class="detalle-orden-container">
+    <div class="detalle-orden-container" id="boleta">
 
         <div class="invoice-title">
 
@@ -344,7 +347,7 @@
 
         <hr class="my-4" style="margin-bottom: 50px; margin-top: 20px;">
 
-        <div class="title roboto-medium data-label" style="padding-bottom: 20px">Lista de Medicamentos Comprados</div>
+        <div class="title roboto-medium data-label" style="padding-bottom: 20px; font-size: 22px" >Lista de Medicamentos Comprados</div>
 
         <div>
             <table class="order-table">
@@ -359,17 +362,32 @@
                 </thead>
 
                 <tbody>
-                <tr th:each="contenido, iterIndex : ${contenidoOrden}">
+                <tr th:each="m, iterIndex : ${contenidoOrden}">
                     <th class="text-start" style="width: 90px;"><span th:text="${iterIndex.index + 1}"></span></th>
                     <td>
                         <div class="name-unit-item">
-                            <div class="text-truncate font-size-14 mb-1" th:text="${contenido.getIdMedicamento().getNombre()}">Panadol</div>
-                            <div class="text-muted mb-0" th:text="${contenido.getIdMedicamento().getUnidad()}">TABLETAS 50 U.</div>
+                            <div class="text-truncate font-size-14 mb-1" th:text="${m.getIdMedicamento().getNombre()}">Panadol</div>
+                            <div class="text-muted mb-0" th:text="${m.getIdMedicamento().getUnidad()}">asdasd</div>
                         </div>
                     </td>
-                    <td class="text-center" th:text="${'S/. ' + contenido.getIdMedicamento().getPrecioVenta()}">$ 245.50</td>
-                    <td class="text-center" th:text="${contenido.getCantidad()}">1</td>
-                    <td class="text-end" th:text="${'S/. ' + contenido.getCantidad() * contenido.getIdMedicamento().getPrecioVenta()}">$ 245.50</td>
+                    <td class="text-center" th:text="${'S/. ' + m.getIdMedicamento().getPrecioVenta()}"></td>
+                    <td class="text-center" th:text="${m.getCantidad()}">1</td>
+                    <td class="text-end" th:text="${'S/. ' + m.getCantidad() * m.getIdMedicamento().getPrecioVenta()}"></td>
+
+                    <script th:inline="javascript">
+                        function limitarDigitos(numero) {
+                            var numeroStr = numero.toString();
+                            // Obtener los primeros 4 dígitos
+                            var primerosCuatroDigitos = numeroStr.substring(0, 4);
+                            var numeroLimitado = parseFloat(primerosCuatroDigitos);
+                            return numeroLimitado;
+                        }
+                        var precioVenta = [[${m.getIdMedicamento().precioVenta}]];
+                        var cantidad = [[${m.getCantidad()}]];
+                        var resultado = precioVenta * cantidad;
+                        var resultadoLimitado = limitarDigitos(resultado);
+                        document.currentScript.parentElement.querySelector(".text-end").textContent = resultadoLimitado;
+                    </script>
                 </tr>
                 </tbody>
 
@@ -378,8 +396,12 @@
 
         <div class="full-total">
             <div class="roboto-regular data-label" style="padding-top: 20px">Total</div>
-            <div class="title roboto-medium data-label" th:text="${'S/. ' + orden.getPrecioTotal()}">S/. 750.00</div>
+            <div class="title roboto-medium data-label" th:text="${'S/. ' + orden.getPrecioTotal()}"></div>
         </div>
+
+
+        <hr class="my-4" style="margin-bottom: 50px; margin-top: 20px;">
+
 
     </div>
 
@@ -461,7 +483,38 @@
     </footer>
 </div>
 
-</body>
+
+<script>
+
+
+    function imprimir() {
+        var contenido = document.getElementById('boleta').innerHTML;
+        var originalBody = document.body.innerHTML;
+        document.body.innerHTML = contenido;
+        window.print();
+        document.body.innerHTML = originalBody;
+    }
+
+    window.onload = function () {
+        document.getElementById("download").addEventListener("click", () => {
+            const invoice = this.document.getElementById("boleta");
+            var opt = {
+                margin: 0.2,
+                filename: 'boleta_orden_web.pdf',
+                html2canvas: {
+                    scale: 2,
+                },
+                jsPDF: {
+                    unit: 'in',
+                    format: [20, 15],
+                    orientation: 'landscape',
+                }
+            };
+            html2pdf().from(invoice).set(opt).save();
+        });
+    }
+
+</script>
 
 <script>
     $(document).ready(function() {
@@ -491,7 +544,6 @@
         { lat : -12.068533248724986, lng: -77.07808532986617},
         { lat: -12.069724275588285, lng: -77.07804924250952}
     ]
-
 
     // Inicializar mapa
     function initMap() {
@@ -525,5 +577,7 @@
     }
 
 </script>
+
+</body>
 
 </html>
