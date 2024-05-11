@@ -108,7 +108,6 @@ public class AdminSedeController {
         int idSede = 1;
         List<UsuarioSedeFarmacistaDto> listaFarmacistasNew = usuarioRepository.listarSedeFarmacista(idSede);
         model.addAttribute("listaFarmacistasNew", listaFarmacistasNew);
-        //model.addAttribute("listaFarmacistas", listaFarmacistas);
         return "adminsede/farmacistas";
     }
 
@@ -222,10 +221,12 @@ public class AdminSedeController {
     }
 
     @GetMapping("/eliminar_farmacista")
-    public String eliminarFarmacista(@RequestParam("id") int id){
+    public String eliminarFarmacista(@RequestParam("id") int id,
+                                     RedirectAttributes attr){
 
         sedeFarmacistaRepository.eliminarFarmacistadeSedeFarmacista(id);
         usuarioRepository.eliminarFarmacistadeUsuario(id);
+        attr.addFlashAttribute("msg", "El usuario farmacista " + usuarioRepository.encontrarFarmacistaporId(id).getNombres() + usuarioRepository.encontrarFarmacistaporId(id).getApellidos() + " fue eliminado correctamente");
         return "redirect:/adminsede/farmacista";
 
     }
@@ -296,6 +297,7 @@ public class AdminSedeController {
             sedeFarmacista.setIdFarmacista(sedeFarmacistaOld.getIdFarmacista());
             sedeFarmacista.setAprobado(sedeFarmacistaOld.getAprobado());
             //sedeFarmacistaRepository.save(sedeFarmacista);
+            attr.addFlashAttribute("msg", "Farmacista: " + usuario.getNombres() + " " + usuario.getApellidos() + " actualizado correctamente");
             return "redirect:/adminsede/farmacista";
 
         }else {
@@ -432,17 +434,19 @@ public class AdminSedeController {
     }
 
     @GetMapping("/eliminar_orden_reposicion")
-    public String eliminar_orden_reposicion(@RequestParam("id") int idReposicion){
+    public String eliminar_orden_reposicion(@RequestParam("id") int idReposicion, RedirectAttributes attr){
 
         reposicionContenidoRepository.eliminarContenidoReposicion(idReposicion);
         reposicionRepository.eliminarReposicionporId(idReposicion);
+        attr.addFlashAttribute("msg", "La orden de reposición fue eliminada correctamente");
         return "redirect:/adminsede/ordenes";
     }
 
     @PostMapping("/editarReposicion")
     public String editarReposicion(@RequestParam(name = "listaIds", required = false) List<Integer> listaIds,
                                    @RequestParam(name = "listaCantidades", required = false) List<Integer> listaCantidades,
-                                   @RequestParam("idReposicion") int idReposicion){
+                                   @RequestParam("idReposicion") int idReposicion,
+                                   RedirectAttributes attr){
 
 
         if(listaIds == null){
@@ -451,6 +455,7 @@ public class AdminSedeController {
             for(int i = 0; i < listaIds.size(); i++){
                 reposicionContenidoRepository.actualizarCantidadMedicamentoOrden(listaCantidades.get(i),listaIds.get(i),idReposicion);
             }
+            attr.addFlashAttribute("msg", "Orden de reposición actualizada correctamente");
             return "redirect:/adminsede/ordenes";
 
         }
