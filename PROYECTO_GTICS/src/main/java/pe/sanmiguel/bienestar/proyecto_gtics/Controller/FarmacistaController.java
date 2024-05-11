@@ -138,7 +138,7 @@ public class FarmacistaController {
                                    @RequestParam(value = "dni") String dni,
                                    @RequestParam(value = "distrito") String distrito,
                                    @RequestParam(value = "direccion") String direccion,
-                                   @RequestParam(value = "doctor") String doctor,
+                                   @RequestParam(value = "doctor", required = false) String doctor,
                                    @RequestParam(value = "seguro") String seguro,
                                    @RequestParam(value = "correo") String correo,
                                    @RequestParam(value = "celular") String celular,
@@ -195,8 +195,11 @@ public class FarmacistaController {
                 newOrden.setEstadoOrden(8);
                 newOrden.setSede(sedeSession);
 
-                if (!doctor.equals("sin-doctor")) {
-                    newOrden.setDoctor(doctorRepository.getByIdDoctor(Integer.valueOf(doctor)));
+
+                if (!(doctor == null)) {
+                    if (!doctor.isEmpty() && !doctor.equals("no-doctor")) {
+                        newOrden.setDoctor(doctorRepository.getByIdDoctor(Integer.valueOf(doctor)));
+                    }
                 }
 
                 newOrden.setPaciente(this.pacienteOnStore);

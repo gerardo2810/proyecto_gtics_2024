@@ -189,8 +189,9 @@
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Doctor:</label>
-                                <select class="select-form" name="doctor">
+                                <select class="select-form" name="doctor" required>
                                     <option selected disabled>Seleccionar Doctor</option>
+                                    <option value="no-doctor" >Sin Rececta Médica</option>
                                     <option th:each="doctor : ${listaDoctores}" th:value="${doctor.getIdDoctor()}" th:text="${doctor.getNombres()} + ' ' +  ${doctor.getApellidos()}"></option>
                                 </select>
                             </div>
