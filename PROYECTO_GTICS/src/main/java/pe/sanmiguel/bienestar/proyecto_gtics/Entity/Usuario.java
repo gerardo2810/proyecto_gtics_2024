@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.OptionalValidationsGroup;
 
 @Getter
 @Setter
@@ -24,8 +25,8 @@ public class Usuario {
     private String correo;
 
     @Column
-    @NotBlank(message = "Debe ingresar una contraseña ")
-    @Size(min = 8, message = "Debe ingresar al menos 8 caracteres")
+    @NotBlank(message = "Debe ingresar una contraseña", groups = OptionalValidationsGroup.class)
+    @Size(min = 8, message = "Debe ingresar al menos 8 caracteres", groups = OptionalValidationsGroup.class)
     private String contrasena;
 
     @Column
@@ -46,6 +47,7 @@ public class Usuario {
     @Column
     @Pattern(regexp="\\d+", message="El DNI debe contener solo números")
     @Size(max=8, message = "Debe tener un máximo de 8 carácteres")
+    @Size(min=8, message = "Debe tener un mínimo de 8 carácteres")
     @NotBlank(message = "Debe ingresar el número de su dni")
     @Positive
     private String dni;

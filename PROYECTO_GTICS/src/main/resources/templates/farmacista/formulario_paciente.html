@@ -138,183 +138,153 @@
 
         <hr class="style-one">
 
-        <form id="finalizar" th:action="@{/farmacista/finalizar_compra}" th:object="${usuario}" method="post">
+
+        <form id="finalizar" method="post" th:action="@{/farmacista/finalizar_compra}" th:object="${usuario}">
+
+            <div class="container-form">
+                <div style="display: flex;flex-direction: row; column-gap: 25px">
 
 
 
-        <div class="interface-formulario">
+                    <div>
 
-
-            <section class="formulario">
-
-                <div class="search-bar" style="padding-bottom: 20px; padding-top: 20px;">
-                    <label class="search-label">
-                        <input type="text" id="search-input" placeholder="Buscar paciente...">
-                    </label>
-                    <button type="submit">Buscar</button>
-                </div>
-
-                <div class="container-formulario">
-
-                        <div class="container-form">
-
-                            <div class="column">
-
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Nombre del paciente:</label>
-                                    <input class="input-form-2" type="text" th:field="*{nombres}"  th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}"/>
-                                    <div th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"
-                                         class="invalid-feedback" >
-                                    </div>
-                                </div>
-
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Apellidos del paciente:</label>
-                                    <input class="input-form-2" type="text"  th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}">
-                                    <div th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"
-                                         class="invalid-feedback" >
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="column">
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">DNI:</label>
-                                    <input class="input-form-2" type="text"  th:field="*{dni}" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
-                                    <div th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"
-                                         class="invalid-feedback" >
-
-                                    </div>
-                                </div>
-
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Dirección:</label>
-                                    <input class="input-form-2" type="text"  th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion') ? 'is-invalid' : ''}">
-                                    <div th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"
-                                         class="invalid-feedback" >
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                            <div class="column">
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Doctor:</label>
-                                    <select class="select-form" name="doctor" required>
-                                        <option selected disabled>Seleccionar Doctor</option>
-                                        <option value="sin-doctor">Sin doctor</option>
-                                        <option value="1">Doctor 1</option>
-                                        <option value="2">Doctor 2</option>
-                                        <option value="3">Doctor 3</option>
-                                    </select>
-                                </div>
-
-
-
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Distrito:</label>
-                                    <input class="input-form-2" type="text"  th:field="*{distrito}" th:classappend="${#fields.hasErrors('distrito') ? 'is-invalid' : ''}">
-                                    <div th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}"
-                                         class="invalid-feedback" >
-                                    </div>
-                                </div>
-
-
-                            </div>
-
-                            <div class="column">
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Seguro:</label>
-                                    <input class="input-form-2" type="text"  th:field="*{seguro}" th:classappend="${#fields.hasErrors('seguro') ? 'is-invalid' : ''}">
-                                    <div class="invalid-feedback"
-                                            th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}" >
-                                    </div>
-                                </div>
-
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Correo:</label>
-                                    <input class="input-form-2" type="email"  th:field="*{correo}" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid' : ''}">
-                                    <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"
-                                         class="invalid-feedback" >
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="column-start">
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Teléfono:</label>
-                                    <input class="input-form-2" type="text"  th:field="*{celular}" th:classappend="${#fields.hasErrors('celular') ? 'is-invalid' : ''}">
-                                    <div th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}"
-                                         class="invalid-feedback" >
-                                    </div>
-                                </div>
-
-                            </div>
+                        <div class="search-bar" style="padding-bottom: 20px; padding-top: 20px; display: flex; flex-direction: row; justify-content: space-between;">
 
 
                         </div>
 
+                        <div class="column">
 
-                </div>
+                            <div class="input-label-box">
+                                <label style="font-weight: bold; color:dimgray">Nombre del paciente:</label>
+                                <input class="input-form-2" type="text" th:field="*{nombres}"  th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}"/>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
+                            </div>
+
+                            <div class="input-label-box">
+                                <label style="font-weight: bold; color:dimgray">Apellidos del paciente:</label>
+                                <input class="input-form-2" type="text"  th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="column">
+
+                            <div class="input-label-box">
+                                <label style="font-weight: bold; color:dimgray">DNI:</label>
+                                <input class="input-form-2" type="text"  th:field="*{dni}" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
+                                <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+                            </div>
+
+                            <div class="input-label-box">
+                                <label style="font-weight: bold; color:dimgray">Dirección:</label>
+                                <input class="input-form-2" type="text"  th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion') ? 'is-invalid' : ''}">
+                                <div  class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="column">
+
+                            <div class="input-label-box">
+                                <label style="font-weight: bold; color:dimgray">Doctor:</label>
+                                <select class="select-form" name="doctor">
+                                    <option selected disabled>Seleccionar Doctor</option>
+                                    <option th:each="doctor : ${listaDoctores}" th:value="${doctor.getIdDoctor()}" th:text="${doctor.getNombres()} + ' ' +  ${doctor.getApellidos()}"></option>
+                                </select>
+                            </div>
+
+                            <div class="input-label-box">
+                                <label style="font-weight: bold; color:dimgray">Distrito:</label>
+                                <input class="input-form-2" type="text"  th:field="*{distrito}" placeholder="Ingrese el distrito donde reside" th:classappend="${#fields.hasErrors('distrito') ? 'is-invalid' : ''}">
+                                <div  class="invalid-feedback" th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="column">
+
+                            <div class="input-label-box">
+                                <label style="font-weight: bold; color:dimgray">Correo:</label>
+                                <input class="input-form-2" type="email"  th:field="*{correo}" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid' : ''}">
+                                <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" class="invalid-feedback" ></div>
+                            </div>
+
+                            <div class="input-label-box">
+                                <label style="font-weight: bold; color:dimgray">Teléfono:</label>
+                                <input class="input-form-2" type="text" th:field="*{celular}" th:classappend="${#fields.hasErrors('celular') ? 'is-invalid' : ''}">
+                                <div th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}" class="invalid-feedback"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="column-start">
+
+                            <div class="input-label-box">
+                                <label style="font-weight: bold; color:dimgray">Seguro:</label>
+                                <input class="input-form-2" type="text"  th:field="*{seguro}" th:classappend="${#fields.hasErrors('seguro') ? 'is-invalid' : ''}">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}"></div>
+                            </div>
+
+                        </div>
+
+                        <a href="/farmacista"><button class="return-button montserrat-medium" id="cancel">Cancelar</button></a>
 
 
-                <a href="/farmacista"><button class="return-button montserrat-medium" id="cancel" >Cancelar</button></a>
-
-            </section>
-
-
-
-            <section class="items-list">
-
-                <div class="inside-items-list">
-                    <div class="preview-title roboto-regular">
-                        Lista de Productos Seleccionados
                     </div>
 
-                    <div class="order-items">
-                        <div class="selected-item" th:each="medicamento, iterIndex : ${medicamentosSeleccionados}" th:data-item-id="${medicamento.idMedicamento}">
+                    <div style="width: 100%;">
+                        <section class="items-list">
 
-                                <img th:src="${medicamento.imagen}" width="40px" height="auto" th:alt="${medicamento.nombre}">
-                                <span class="item-title-clicked" th:text="${medicamento.nombre}">Medicamento</span>
-                                <div class="item-on-list">
-                                    <div class="item-details">
-                                        <div class="selector-cantidad">
-                                            <i class="fa-solid fa-minus restar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
-                                            <input type="text" th:value="${listaCantidades.get(iterIndex.index)}" class="item-quantity-clicked" th:data-item-id="${medicamento.idMedicamento}">
-                                            <i class="fa-solid fa-plus sumar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
-                                        </div>
+                            <div class="inside-items-list">
+                                <div class="preview-title roboto-regular">
+                                    Lista de Productos Seleccionados
+                                </div>
 
-                                        <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
-                                            <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${medicamento.precioVenta}"></span>
+                                <div class="order-items">
+                                    <div class="selected-item" th:each="medicamento, iterIndex : ${medicamentosSeleccionados}" th:data-item-id="${medicamento.idMedicamento}">
+
+                                        <img th:src="${medicamento.imagen}" width="40px" height="auto" th:alt="${medicamento.nombre}">
+                                        <span class="item-title-clicked" th:text="${medicamento.nombre}">Medicamento</span>
+                                        <div class="item-on-list">
+                                            <div class="item-details">
+                                                <div class="selector-cantidad">
+                                                    <i class="fa-solid fa-minus restar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
+                                                    <input type="text" th:value="${listaCantidades.get(iterIndex.index)}" class="item-quantity-clicked" th:data-item-id="${medicamento.idMedicamento}">
+                                                    <i class="fa-solid fa-plus sumar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
+                                                </div>
+
+                                                <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                                                    <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${medicamento.precioVenta}"></span>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="preview-title roboto-regular" style="padding-top: 20px">
+
+
+
+                                    <div class="price-total-div roboto-medium">
+                                        <input type="hidden" name="priceTotal" id="priceTotal" value="">
+                                        TOTAL <span class="price-total">S/0.00</span>
+                                    </div>
+
+                                    <input type="hidden" name="listaIds" id="listaIds"  value=""/>
+                                    <button type="submit" id="continue" class="continue-button montserrat-medium">Generar Boleta</button>
+                                </div>
                             </div>
-                        </div>
+
+                        </section>
                     </div>
 
-                    <div class="preview-title roboto-regular" style="padding-top: 20px">
 
-
-
-                        <div class="price-total-div roboto-medium">
-                            <input type="hidden" name="priceTotal" id="priceTotal" value="">
-                            TOTAL <span class="price-total">S/0.00</span>
-                        </div>
-
-                        <input type="hidden" name="listaIds" id="listaIds"  value=""/>
-                        <button type="submit" id="continue" class="continue-button montserrat-medium">Generar Boleta</button>
-                    </div>
 
                 </div>
-
-            </section>
-
-        </div>
+            </div>
 
         </form>
 
@@ -370,18 +340,52 @@
 </body>
 
 <script>
-    // Obtener el formulario por su ID
-    var form = document.getElementById('finalizar');
+    const frameworks = [
+        { value: "sveltekit", label: "SvelteKit" },
+        { value: "next.js", label: "Next.js" },
+        { value: "nuxt.js", label: "Nuxt.js" },
+        { value: "remix", label: "Remix" },
+        { value: "astro", label: "Astro" }
+    ];
 
-    // Agregar un event listener para el evento 'keypress'
-    form.addEventListener('keypress', function(event) {
-        // Verificar si la tecla presionada es 'Enter' (keycode 'Enter' es 'Enter')
-        if (event.key === 'Enter') {
-            // Prevenir el comportamiento por defecto del 'Enter'
-            event.preventDefault();
-            return false;
+    let open = false;
+    let value = "";
+
+    $(document).ready(function() {
+        document.getElementById("trigger").addEventListener("click", () => {
+            open = !open;
+            document.getElementById("content").style.display = open ? "block" : "none";
+        });
+
+        document.getElementById("search-input").addEventListener("input", () => {
+            const searchValue = document.getElementById("search-input").value.toLowerCase();
+            const filteredFrameworks = frameworks.filter(framework => framework.label.toLowerCase().includes(searchValue));
+            const frameworksContainer = document.getElementById("frameworks");
+            frameworksContainer.innerHTML = "";
+            if (filteredFrameworks.length > 0) {
+                filteredFrameworks.forEach(framework => {
+                    const item = document.createElement("div");
+                    item.textContent = framework.label;
+                    item.addEventListener("click", () => {
+                        value = framework.value;
+                        document.getElementById("trigger").textContent = framework.label;
+                        closePopover();
+                    });
+                    frameworksContainer.appendChild(item);
+                });
+            } else {
+                const emptyMessage = document.createElement("div");
+                emptyMessage.textContent = "No framework found.";
+                frameworksContainer.appendChild(emptyMessage);
+            }
+        });
+
+        function closePopover() {
+            open = false;
+            document.getElementById("content").style.display = "none";
         }
     });
+
 </script>
 
 <script th:inline="javascript">

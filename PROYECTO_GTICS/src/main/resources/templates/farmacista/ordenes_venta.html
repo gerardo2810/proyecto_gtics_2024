@@ -23,6 +23,7 @@
     <link th:href="@{/css/preloader.css}" rel="stylesheet" />
 
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
     <link rel="stylesheet" th:href="@{/css/fonts.css}">
     <link rel="stylesheet" th:href="@{/css/topbar.css}">
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
@@ -153,23 +154,45 @@
 
         <hr class="style-one">
 
-        <div style="margin-bottom: 40px"></div>
+        <div style="margin-bottom: 10px"></div>
 
         <div>
 
+            <div class="column-start" style="padding-bottom: 1px">
 
-            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 30px;">
-                <div style="display: flex; flex-direction: column">
-                    <label style="font-weight: 550; margin-left: 2px">Filtrar por Estado:</label>
-                    <select id="filtroEstado" class="select-p" >
-                        <option value="">Mostrar Todos</option>
-                        <option value="PAGADO">Pagado</option>
-                        <option value="ANULADO">Anulado</option>
-                    </select>
+                <div style="display: flex;flex-direction: row;column-gap: 8px;">
+
+                    <div style="display: flex; flex-direction: column; justify-content: start; padding-top: 10px;">
+                        <label style="color:dimgray;font-weight: bold; margin-left: 2px; margin-bottom:4px">Filtrar por Estado:</label>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; justify-content: start">
+
+
+                        <select class="select-p" id="filtroEstado" >
+                            <option value="">Mostrar Todos</option>
+                            <option value="PENDIENTE">Pendiente</option>
+                            <option value="RECIBIDO">Recibido</option>
+                            <option value="EN PROCESO">En proceso</option>
+                            <option value="EMPAQUETANDO">Empaquetando</option>
+                            <option value="EN RUTA">En ruta</option>
+                            <option value="ENTREGADO">Entregado</option>
+                            <option value="PAGADO">Pagado</option>
+                            <option value="ANULADO">Anulado</option>
+                        </select>
+
+                    </div>
                 </div>
 
-                <button id="limpiarFiltros" class="btn-p">Limpiar Filtros</button>
+                <div class="search-container" style="display: flex; flex-direction: column; gap: 15px; align-items: start">
+                    <input type="search" id="search" class="form-control" placeholder="Buscar...">
+                </div>
+
             </div>
+
+
+
+
 
 
 
@@ -186,32 +209,27 @@
                 <tbody>
                 <tr th:each="orden : ${listaOrdenesVenta}">
                     <td style="text-align: center" th:text="${orden.getIdOrden() + 10000}"></td>
-                    <td style="text-align: center" th:text="${orden.getFechaIni()}"></td>
+                    <td style="text-align: center" th:text="${#temporals.format(orden.getFechaIni(), 'dd/MM/yyyy   -   HH:mm')}"></td>
                     <td style="text-align: center" th:text="${orden.getPaciente().getNombres()} + ' ' + ${orden.getPaciente().getApellidos()}" ></td>
-                    <td style="text-align: center">
-                        <div th:if="${orden.getEstadoOrden() == 1}" th:text="Pendiente" class="btn-secondary"></div>
-                        <div th:if="${orden.getEstadoOrden() == 2}" th:text="Pendiente" class="btn-secondary"></div>
-
-                        <div th:if="${orden.getEstadoOrden() == 3}" th:text="Recibido" class="btn-green"></div>
-                        <div th:if="${orden.getEstadoOrden() == 4}" th:text="En proceso" class="btn-yellow"></div>
-                        <div th:if="${orden.getEstadoOrden() == 5}" th:text="Empaquetando" class="btn-red"></div>
-                        <div th:if="${orden.getEstadoOrden() == 6}" th:text="En Ruta" class="btn-yellow"></div>
-                        <div th:if="${orden.getEstadoOrden() == 7}" th:text="Entregado" class="table-badge badge-pagado"></div>
-
-
-                        <div th:if="${orden.getEstadoOrden() == 8}" th:text="Pagado" class="table-badge badge-pagado"></div>
-                        <div th:if="${orden.getEstadoOrden() == 9}" th:text="Anulado" class="btn-secondary"></div>
+                    <td th:switch="${orden.getEstadoOrden()}">
+                        <button class="btn-pend montserrat-medium"          th:case="1">PENDIENTE</button>
+                        <button class="btn-pend montserrat-medium"          th:case="2">PENDIENTE</button>
+                        <button class="btn-rcb montserrat-medium"           th:case="3">RECIBIDO</button>
+                        <button class="btn-pro montserrat-medium"           th:case="4">EN PROCESO</button>
+                        <button class="btn-empa montserrat-medium"          th:case="5">EMPAQUETANDO</button>
+                        <button class="btn-ruta montserrat-medium"          th:case="6">EN RUTA</button>
+                        <button class="btn-listo montserrat-medium"         th:case="7">ENTREGADO</button>
+                        <button class="btn-pagado montserrat-medium"        th:case="8">PAGADO</button>
+                        <button class="btn-anulado montserrat-medium"       th:case="9">ANULADO</button>
                     </td>
-                    <td style="text-align: center; display: flex; flex-direction: row; justify-content: center; gap: 5px;">
 
-                        <form th:action="@{'/farmacista/ver_orden_venta_tabla'}" method="post">
-                            <input type="hidden" name="idOrden" th:value="${orden.getIdOrden()}">
-                            <button type="submit" class="btn btn-sm btn-info" >
-                                <i class="fa-regular fa-eye"></i>
-                            </button>
-                        </form>
 
+                    <td class="action" th:switch="${orden.getTipoOrden()}">
+                    <a th:case="1"  th:href="@{'/farmacista/ver_orden_venta' + '?id=' + ${orden.getIdOrden()}}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
+                    <a th:case="2"  th:href="@{'/farmacista/ver_orden_web' + '?id=' + ${orden.getIdOrden()}}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
+                    <a th:case="3"  th:href="@{'/farmacista/ver_pre_orden' + '?id=' + ${orden.getIdOrden()}}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
                     </td>
+
                 </tr>
                 </tbody>
             </table>
@@ -289,24 +307,7 @@
         var table = $('#preOrders, #ordersWeb, #Orders').DataTable({
             dom: 'Bfrtilp',
             buttons: [
-                {
-                    extend: 'excelHtml5',
-                    text: '<i class="fas fa-file-excel"></i> ',
-                    titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success',
-                },
-                {
-                    extend: 'pdfHtml5',
-                    text: '<i class="fas fa-file-pdf"></i> ',
-                    titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger',
-                },
-                {
-                    extend: 'print',
-                    text: '<i class="fa fa-print"></i> ',
-                    titleAttr: 'Imprimir',
-                    className: 'btn btn-info',
-                },
+
             ],
             columnDefs: [
                 { className: 'centered', targets: [0, 1, 2, 3, 4] },
@@ -314,6 +315,10 @@
             ],
             "pageLength":5,
             "lengthChange": false,
+            "searching": true,
+            "order": [
+                [3, "desc"] // Ordenar por la segunda columna de forma descendente
+            ],
             "language": {
                 "emptyTable": "No hay registros disponibles",
                 "zeroRecords": "No se encontraron registros coincidentes",
@@ -324,10 +329,15 @@
                     "next": "Siguiente",
                     "previous": "Anterior"
                 },
-                search: 'Buscar:',
                 "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
             },
 
+        });
+
+        $('#search').keypress(function(event) {
+            if (event.keyCode === 13) {
+                $('#preOrders, #ordersWeb, #Orders').DataTable().search($(this).val()).draw();
+            }
         });
 
         $('#filtroEstado').on('change', function() {

@@ -530,6 +530,25 @@ hr.style-one {
     padding-top: 15px;
     font-size: 0.9rem;
 }
+
+.filter-button {
+    display: block;
+    font-size: 0.95rem;
+    margin: 10px auto;
+    border: 1px none;
+    background-color: #1f73ef;
+    color: #e7e9ee;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color ease 0.2s;
+}
+
+.filter-button:hover{
+    color: #e7e9ee;
+    background-color: var(--color-blue--hover);
+}
+
 .add-item-button {
     display: block;
     font-size: 0.95rem;
@@ -625,7 +644,7 @@ hr.style-one {
     border-radius: 6px;
     padding:8px;
     outline: none;
-    margin-top: 4px;
+    margin-top: 0 !important;
 }
 
 
@@ -652,54 +671,54 @@ hr.style-one {
 
 
 
-
 /*=======================FORMULARIO PACIENTE=====================*/
 
-.interface-formulario{
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 30px;
-    padding-bottom: 30px;
-}
-
 .container-form{
-    max-width: 1100px;
+    max-width: 1540px;
+    margin-inline: auto;
+    padding: 10px 0 10px 0;
 }
 
-.column{
+.hide {
+    display: none;
+}
+
+.items-preview {
+    margin-top: 20px;
+    max-height: 276px;
+    overflow: auto;
+    border-radius: 0.25rem;
+    color: var(--color-black);
+    background: var(--color-white);
+}
+
+.container-preview {
+    padding: 20px;
+}
+
+.selected-item {
+    border-bottom: solid 1px #d3d3d3;
     display: flex;
     flex-direction: row;
-    row-gap: 28px;
-    column-gap: 40px;
-    padding-top: 20px;
-    padding-bottom: 22px;
-    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
 }
 
-.column-start{
-    display: flex;
-    flex-direction: row;
-    row-gap: 28px;
-    column-gap: 40px;
-    padding-top: 20px;
-    padding-bottom: 30px;
-    justify-content: start;
-}
 
-.input-label-box{
-    display: flex;
-    flex-direction: column;
+.input-form-2 {
+    margin-top: 6px;
+    padding-left: 15px;
+    outline: none;
+    width: 300px !important;
+    height: 42px;
+    border: 1px solid #DFDFDF;
+    border-radius: 5px;
+    font-size: 17px;
 }
-
-.input-label-radio{
-    display: flex;
-    flex-direction: row;
-    column-gap: 30px;
-}
-
 
 .select-form {
-    width: 400px;
+    width: 315px !important;
     height: 48px;
     margin-top:4px;
     padding: 10px 12px;
@@ -710,36 +729,157 @@ hr.style-one {
     outline: none;
 
 }
-.select-form:focus{
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.input-form{
-    width: 30vw;
-    margin-top: 10px;
-    padding-left: 15px;
-    outline: none;
-    height: 42px;
-    border: 1px solid #DFDFDF;
-    border-radius: 5px;
-    font-size: 17px;
-}
-
-.input-form-2 {
-    margin-top: 6px;
-    padding-left: 15px;
-    outline: none;
-    width: 400px;
-    height: 42px;
-    border: 1px solid #DFDFDF;
-    border-radius: 5px;
-    font-size: 17px;
-}
 
 .input-form:focus{
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
+.item-on-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.preview-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: var(--color-text-1);
+    border-bottom: solid 1px #d3d3d3;
+    padding-top: 5px;
+    font-size: 1.2rem;
+    text-align: start;
+    padding-bottom: 15px;
+}
+
+.continue-button {
+    display: block;
+    font-size: 1rem;
+    border: none;
+    background-color: var(--color-blue);
+    color: #fff;
+    padding: 5px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color ease 0.2s;
+}
+
+.continue-button:hover{
+    background-color: var(--color-blue--hover);
+}
+
+.item-quantity-clicked {
+    background-color: white;
+    padding: 2px;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #0c0808;
+    border: solid 1px #d3d3d3;
+    border-radius: 10px;
+}
+
+.item-details {
+    text-align: center;
+    display: flex;
+    flex-direction: row-reverse;
+    column-gap: 20px;
+}
+
+.item-price-clicked {
+    padding-top: 5px;
+}
+
+.sumar-cantidad {
+    cursor: pointer;
+}
+
+.restar-cantidad {
+    cursor: pointer;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    cursor: pointer;
+}
+
+
+.med-container{
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    padding-top: 10px;
+    padding-bottom: 50px;
+    gap: 15px;
+    width: 100%;
+    transition: .3s;
+}
+
+.item {
+    padding: 20px;
+    transition: .3s;
+    width: auto;
+    outline: none;
+    border-radius: 5px;
+    color: var(--color-black);
+    background: var(--color-white);
+}
+
+
+.img-item {
+    width: 100%;
+}
+
+.titulo-item {
+    display: block;
+    color: var(--color-text-1);
+    padding-top: 5px;
+    font-size: 1rem;
+    text-align: start;
+}
+.subtitulo-item {
+    display: block;
+    color: var(--color-text-2);
+    padding-top: 5px;
+    font-size: 0.8rem;
+    text-align: start;
+}
+.item-price {
+    display: block;
+    text-align: start;
+    padding-top: 15px;
+    font-size: 1.15rem;
+}
+.item-symbol {
+    display: block;
+    text-align: start;
+    font-size: 0.9rem;
+}
+
+
+.search-bar {
+    width: 100%;
+    max-width: 1540px; /* Puedes ajustar el ancho máximo según tus necesidades */
+    margin: 0 auto; /* Centrar el cuadro de búsqueda */
+    display: flex;
+    justify-content: center; /* Centrar los elementos horizontalmente */
+    align-items: center; /* Centrar los elementos verticalmente */
+}
+
+.search-label {
+    flex: 1; /* Para que el campo de entrada ocupe todo el espacio disponible */
+    margin-right: 10px; /* Separación entre el campo de entrada y el botón */
+}
+
+
+/* END LISTA MEDICAMENTOS */
 
 
 /*Responsive*/
@@ -754,6 +894,10 @@ hr.style-one {
         width: 210px;
     }
     .input-form {
+        width: 100%; /* Cambia el ancho a 100% para ocupar todo el ancho disponible */
+    }
+
+    .input-form-2 {
         width: 100%; /* Cambia el ancho a 100% para ocupar todo el ancho disponible */
     }
 }
@@ -940,4 +1084,60 @@ body{
     font-size: 0.875em; /* Tamaño de fuente más pequeño */
     margin-top: 0.25rem; /* Espacio arriba del mensaje */
     display: block; /* Asegura que el div se muestre como bloque */
+}
+
+
+/*========== FILTRO PACIENTE EN FORMULARIO ============*/
+
+.popover {
+    position: relative;
+    display: inline-block;
+}
+
+.button {
+    width: 200px;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chevron {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 5px 0 5px;
+    border-color: #333 transparent transparent transparent;
+    margin-left: 0.5rem;
+}
+
+.content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 200px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    display: none;
+}
+
+.search-input {
+    width: calc(100% - 2rem);
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    margin: 0.5rem 1rem;
+}
+
+.frameworks {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.empty {
+    padding: 0.5rem 1rem;
 }

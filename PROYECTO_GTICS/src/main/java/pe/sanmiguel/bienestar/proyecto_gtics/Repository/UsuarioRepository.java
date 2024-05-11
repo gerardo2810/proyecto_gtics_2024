@@ -16,7 +16,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     Optional<Usuario> findByCorreoAndDni(String correo, String dni);
 
-    @Query("SELECT MAX(u.idUsuario) FROM Usuario u")
+
+    @Query(nativeQuery = true, value="SELECT * FROM proyecto_gtics.usuario u WHERE u.correo = ?1 AND u.dni = ?2")
+    Optional<Usuario> findPacienteByCorreoAndDni(String correo, String dni);
+
+    @Query(nativeQuery = true, value="SELECT MAX(u.idUsuario) FROM proyecto_gtics.usuario u")
     Integer findLastUsuarioId();
 
 

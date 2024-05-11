@@ -1,14 +1,11 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Entity;
 
-import com.mysql.cj.jdbc.Blob;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,17 +13,21 @@ import java.util.Date;
 @Table(name = "orden")
 public class Orden {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Integer idOrden;
-    @Column
+    @Column(name="tracking")
     private String tracking;
-    @Column
-    private LocalDate fechaIni;
-    @Column
-    private LocalDate fechaFin;
-    @Column
+    @Column(name="imagenReceta")
+    @Lob
+    private byte[] imagen;
+    @Column(name = "fechaIni")
+    private LocalDateTime fechaIni;
+    @Column(name = "fechaFin")
+    private LocalDateTime fechaFin;
+    @Column(name = "precioTotal")
     private float precioTotal;
-    @Column
+    @Column(name = "idFarmacista")
     private Integer idFarmacista;
     @ManyToOne
     @JoinColumn(name="idPaciente")
@@ -43,13 +44,7 @@ public class Orden {
     private Doctor doctor;
     @Column(name="idOrden")
     private Integer ordenParent;
-    @Column(name = "estado_preorden")
+    @Column(name = "estadoPreorden")
     private Integer estadoPreOrden;
-
-
-    //Columna proxima a usar
-    //@Column(name="imagenReceta")
-    //@Lob
-    //private byte[] imagen;
 
 }

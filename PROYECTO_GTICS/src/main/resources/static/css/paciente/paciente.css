@@ -139,48 +139,48 @@ td{
 
 .btn-pend{
     padding: 9px;
-    background-color: #ECCB44;
+    background-color: rgb(234 179 8);
     color: white;
     border: none;
     border-radius: 5px;
-    width: 125px;
+    width: 155px;
 }
 
 .btn-rcb{
     padding: 8px;
-    background-color: dimgray;
+    background-color: rgb(100 116 139);
     color: white;
     border: none;
     border-radius: 5px;
-    width: 125px;
+    width: 155px;
 }
 
 .btn-pro{
     padding: 8px;
-    background-color: dimgray;
+    background-color: rgb(100 116 139);
     color: white;
     border: none;
     border-radius: 5px;
-    width: 125px;
+    width: 155px;
 }
 
 .btn-empa{
     padding: 8px;
-    background-color: dimgray;
+    background-color: rgb(100 116 139);
     color: white;
     border: none;
     border-radius: 5px;
-    width: 125px;
+    width: 155px;
 
 }
 
 .btn-ruta{
     padding: 8px;
-    background-color: dimgray;
+    background-color: rgb(100 116 139);
     color: white;
     border: none;
     border-radius: 5px;
-    width: 125px;
+    width: 155px;
 }
 
 .btn-listo{
@@ -189,11 +189,26 @@ td{
     color: white;
     border: none;
     border-radius: 5px;
-    width: 125px;
+    width: 155px;
 }
 
+.btn-pagado{
+    padding: 8px;
+    background-color: rgb(37 99 235);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 155px;
+}
 
-
+.btn-anulado{
+    padding: 8px;
+    background-color: rgb(31 41 55);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 155px;
+}
 
 
 

@@ -24,7 +24,7 @@ hr.style-one {
 }
 /* END INTERFAZ TOTAL */
 
-body{margin-top:20px;
+body{
     background-color:#f2f6fc;
     color:#69707a;
 }
@@ -127,7 +127,7 @@ img,svg{vertical-align:middle}
 }
 
 .container-form{
-    max-width: 1100px;
+    max-width: 1540px;
 }
 
 .column{
