@@ -30,11 +30,13 @@ public class Usuario {
     private String contrasena;
 
     @Column
-    @NotBlank(message = "Debe ingresar un nombre")
+    @NotBlank(message = "Debe ingresar su nombre")
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "El nombre solo puede contener letras y espacios")
     private String nombres;
 
     @Column
-    @NotBlank(message = "Debe ingresar un apellido")
+    @NotBlank(message = "Debe ingresar su apellido")
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "El nombre solo puede contener letras y espacios")
     private String apellidos;
 
     @Column
@@ -46,10 +48,9 @@ public class Usuario {
 
     @Column
     @Pattern(regexp="\\d+", message="El DNI debe contener solo números")
-    @Size(max=8, message = "Debe tener un máximo de 8 carácteres")
-    @Size(min=8, message = "Debe tener un mínimo de 8 carácteres")
+    @Size(min = 8, max = 8, message = "Debe tener 8 dígitos")
     @NotBlank(message = "Debe ingresar el número de su dni")
-    @Positive
+    @Positive(message= "Deben ser un número positivo")
     private String dni;
 
     @Column
@@ -57,10 +58,11 @@ public class Usuario {
     private String direccion;
 
     @Column
-    @NotBlank(message = "Debe seleccionar el distrito de residencia")
+    @NotBlank(message = "Debe colocar su distrito de residencia")
     private String distrito;
 
     @Column
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "No debe incluir números")
     @NotBlank(message = "Debe ingresar su seguro")
     private String seguro;
 

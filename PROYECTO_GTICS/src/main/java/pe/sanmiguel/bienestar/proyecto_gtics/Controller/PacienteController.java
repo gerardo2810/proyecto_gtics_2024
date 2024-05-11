@@ -3,8 +3,10 @@ package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.Part;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -119,10 +121,11 @@ public class PacienteController {
     public String tracking_end(){ return "paciente/tracking_finalizado";}
 
     @GetMapping(value="/new_orden")
-    public String new_orden(Model model){
+    public String new_orden(Model model, @ModelAttribute("usuario") Usuario usuario){
 
         List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
         model.addAttribute("listaMedicamentos", listaMedicamentos);
+
 
         return "paciente/new_orden";}
 
@@ -198,7 +201,7 @@ public class PacienteController {
     /*----------------- Method: POST -----------------*/
 
     @PostMapping(value = "/guardarOrden")
-    public String guardarOrden(Usuario usuario,
+    public String guardarOrden(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                                @RequestParam(value = "doctor", required = false) String doctor,
                                @RequestParam(value = "fecha", required = false) String fecha,
                                @RequestParam(value = "imagen", required = false) Part imagen,
@@ -207,79 +210,95 @@ public class PacienteController {
                                Model model, RedirectAttributes redirectAttributes) throws IOException {
 
 
-        InputStream inputStream = imagen.getInputStream();
-        byte[] bytes = inputStream.readAllBytes();
+        if(bindingResult.hasErrors()){
+            System.out.println(bindingResult.getAllErrors());
+
+            List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
+            model.addAttribute("listaMedicamentos", listaMedicamentos);
+
+            if(!lista.isEmpty()){
+                System.out.println(lista);
+                model.addAttribute("listaReciente",lista);
+
+            }
+
+            return "paciente/new_orden";
+
+        }else{
+            InputStream inputStream = imagen.getInputStream();
+            byte[] bytes = inputStream.readAllBytes();
 
 
 
 
-
-
-
-        String tracking = new String();
-        tracking= ordenRepository.findLastOrdenId()+1 + "-2024";
-        LocalDateTime fechaIni = LocalDateTime.now();
-        LocalDateTime fechaFin = LocalDateTime.now();
-        Integer idFarmacista = new Integer(1); //el id del Farmacista
-        Usuario udb = usuarioRepository.getById(1); // el id del usuario Paciente que realiza la orden
-        Sede s = sedeRepository.getById(1); //el id de la Sede
-        Doctor doc = doctorRepository.getById(1); //el id del doctor
+            String tracking = new String();
+            tracking= ordenRepository.findLastOrdenId()+1 + "-2024";
+            LocalDateTime fechaIni = LocalDateTime.now();
+            LocalDateTime fechaFin = LocalDateTime.now();
+            Integer idFarmacista = new Integer(1); //el id del Farmacista
+            Usuario udb = usuarioRepository.getById(1); // el id del usuario Paciente que realiza la orden
+            Sede s = sedeRepository.getById(1); //el id de la Sede
+            Doctor doc = doctorRepository.getById(1); //el id del doctor
 
 
 
 
-        Orden orden = new Orden();
-        orden.setIdOrden(ordenRepository.findLastOrdenId()+1);
-        orden.setTracking(tracking);
-        orden.setFechaIni(fechaIni);
-        orden.setFechaFin(fechaFin);
-        orden.setPrecioTotal(total);
-        orden.setIdFarmacista(idFarmacista);
-        orden.setPaciente(udb);
-        orden.setTipoOrden(2);
-        orden.setEstadoOrden(1);
-        orden.setSede(s);
-        orden.setDoctor(doc);
-        orden.setEstadoPreOrden(1);
+            Orden orden = new Orden();
+            orden.setIdOrden(ordenRepository.findLastOrdenId()+1);
+            orden.setTracking(tracking);
+            orden.setFechaIni(fechaIni);
+            orden.setFechaFin(fechaFin);
+            orden.setPrecioTotal(total);
+            orden.setIdFarmacista(idFarmacista);
+            orden.setPaciente(udb);
+            orden.setTipoOrden(2);
+            orden.setEstadoOrden(1);
+            orden.setSede(s);
+            orden.setDoctor(doc);
+            orden.setEstadoPreOrden(1);
 
-        //Imagen de receta proxima a usar
-        //orden.setImagen(bytes);
-
-
-
-        ordenRepository.save(orden);
+            //Imagen de receta proxima a usar
+            //orden.setImagen(bytes);
 
 
 
-        Integer i = new Integer(0);
-        Integer cantidad = new Integer(0);
+            ordenRepository.save(orden);
 
-        OrdenContenido ordenContenido = new OrdenContenido();
-        OrdenContenidoId oid = new OrdenContenidoId();
 
-        ordenContenido.setIdOrden(orden);
-        oid.setIdOrden(orden.getIdOrden());
 
-        while(i < lista.size()){
+            Integer i = new Integer(0);
+            Integer cantidad = new Integer(0);
 
-            Medicamento medicamento = medicamentoRepository.getById(lista.get(i));
-            cantidad = lista.get(i+1);
+            OrdenContenido ordenContenido = new OrdenContenido();
+            OrdenContenidoId oid = new OrdenContenidoId();
 
-            oid.setIdMedicamento(medicamento.getIdMedicamento());
-            ordenContenido.setId(oid);
-            ordenContenido.setIdMedicamento(medicamento);
-            ordenContenido.setCantidad(cantidad);
-            ordenContenidoRepository.save(ordenContenido);
+            ordenContenido.setIdOrden(orden);
+            oid.setIdOrden(orden.getIdOrden());
 
-            i = i + 2;
+            while(i < lista.size()){
+
+                Medicamento medicamento = medicamentoRepository.getById(lista.get(i));
+                cantidad = lista.get(i+1);
+
+                oid.setIdMedicamento(medicamento.getIdMedicamento());
+                ordenContenido.setId(oid);
+                ordenContenido.setIdMedicamento(medicamento);
+                ordenContenido.setCantidad(cantidad);
+                ordenContenidoRepository.save(ordenContenido);
+
+                i = i + 2;
+
+
+            }
+
+            redirectAttributes.addFlashAttribute("msg", "Orden Creada");
+
+
+            return "redirect:/paciente/ordenes";
 
 
         }
 
-        redirectAttributes.addFlashAttribute("msg", "Orden Creada");
-
-
-        return "redirect:/paciente/ordenes";
 
     }
 
