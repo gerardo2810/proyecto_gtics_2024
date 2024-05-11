@@ -68,7 +68,7 @@ public class FarmacistaController {
 
 
 
-    @GetMapping("/farmacista")
+    @GetMapping(value = {"/farmacista", "/farmacista/"})
     public String farmacistaInicio(Model model) {
         List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
         sedeSession = sedeRepository.getSedeByIdSede(1);
@@ -142,6 +142,8 @@ public class FarmacistaController {
                                    @RequestParam(value = "priceTotal") String priceTotal) {
 
         if (bindingResult.hasErrors()){
+
+            System.out.println(bindingResult.getAllErrors());
 
             List<Integer> stockSeleccionados = new ArrayList<>();
 

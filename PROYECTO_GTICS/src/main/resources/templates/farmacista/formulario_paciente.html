@@ -235,7 +235,7 @@
                             <div class="column-start">
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Teléfono:</label>
-                                    <input class="input-form-2" type="text"  th:field="*{celular}" th:classappend="${#fields.hasErrors('celular') ? 'is-invalid' : ''}">
+                                    <input class="input-form-2" type="text" th:field="*{celular}" th:classappend="${#fields.hasErrors('celular') ? 'is-invalid' : ''}">
                                     <div th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}"
                                          class="invalid-feedback" >
                                     </div>
