@@ -141,8 +141,6 @@ public class FarmacistaController {
                                    @RequestParam(value = "listaIds") List<String> listaSelectedIds,
                                    @RequestParam(value = "priceTotal") String priceTotal) {
 
-        bindingResult = new BeanPropertyBindingResult(usuario, "usuario");
-
         if (bindingResult.hasErrors()){
 
             List<Integer> stockSeleccionados = new ArrayList<>();
@@ -435,7 +433,7 @@ public class FarmacistaController {
             boolean userExist = false;
             Usuario user = new Usuario();
 
-            Optional<Usuario> userOptional = usuarioRepository.findByCorreoAndDni(correo, dni);
+            Optional<Usuario> userOptional = usuarioRepository.findPacienteByCorreoAndDni(correo, dni);
 
             if (userOptional.isPresent()) {
                 userExist = true;
