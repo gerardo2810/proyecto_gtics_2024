@@ -782,6 +782,69 @@
 </div>
 
 
+
+
+<div th:if="${orden.getEstadoOrden() == 9}">
+    <div style="max-width: 1536px; margin-inline: auto;padding: 0 30px 0 30px;">
+
+        <div style="margin-bottom: 65px"></div>
+        <div style="padding-bottom: 20px">
+            <div class="main-title open-sans" style="font-size: 1.9rem"> Sección de Comentarios </div>
+            <div class="main-subtitle helvetica-medium"> Esta orden fue anulada, ya no puede enviar comentarios. </div>
+        </div>
+
+        <div class="d-flex justify-content-center row">
+            <div class="col-md-8">
+                <div class="bg-light p-2">
+                    <div style="display: flex; flex-direction: row; align-items: start; gap: 30px">
+                        <img class="img-account-profile" style="height: 65px; border-radius: 50px; width: auto" src="https://via.placeholder.com/150" alt="">
+                        <textarea class="form-control shadow-none textarea" disabled></textarea>
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: end; gap: 30px; padding-top: 15px">
+                        <button class="cancel">Cancelar</button>
+                        <button class="comentar">Comentar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div th:if="${orden.getEstadoOrden() == 1 || orden.getEstadoOrden() == 2 || orden.getEstadoOrden() == 8}">
+    <div style="max-width: 1536px; margin-inline: auto;padding: 0 30px 0 30px;">
+
+        <div style="margin-bottom: 65px"></div>
+        <div style="padding-bottom: 20px">
+            <div class="main-title open-sans" style="font-size: 1.9rem"> Sección de Comentarios </div>
+            <div class="main-subtitle helvetica-medium"> Realice un comentario al administrador para anular la orden de venta. </div>
+        </div>
+
+        <div class="d-flex justify-content-center row">
+            <div class="col-md-8">
+                <div class="bg-light p-2">
+                    <div style="display: flex; flex-direction: row; align-items: start; gap: 30px">
+                        <img class="img-account-profile" style="height: 65px; border-radius: 50px; width: auto" src="https://via.placeholder.com/150" alt="">
+                        <textarea class="form-control shadow-none textarea"></textarea>
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: end; gap: 30px; padding-top: 15px">
+                        <button class="cancel">Cancelar</button>
+                        <button class="comentar">Comentar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
 <div >
     <footer id="sticky-footer" class="footer-distributed" >
         <div class="footer-left">

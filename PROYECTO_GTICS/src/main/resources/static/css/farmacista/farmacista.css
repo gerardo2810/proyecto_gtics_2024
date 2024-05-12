@@ -1143,6 +1143,52 @@ body{
 }
 
 
+.cancel{
+    padding: 9px;
+    width: 190px;
+    border: none;
+    border-radius: 6px;
+    background-color: #dc3545;
+    color:white;
+    transition: background-color 0.3s, border-color 0.3s;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+
+
+.cancel:hover{
+    padding: 7px;
+    width: 190px;
+    border: 2px solid #dc3545;
+    border-radius: 6px;
+    background-color: white;
+    color:#dc3545;
+}
+
+.comentar{
+    padding: 9px;
+    width: 190px;
+    border: none;
+    border-radius: 6px;
+    background-color: #3a8bee;
+    color:white;
+    transition: background-color 0.3s, border-color 0.3s;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+
+
+.comentar:hover{
+    padding: 7px;
+    width: 190px;
+    border: 2px solid #3a8bee;
+    border-radius: 6px;
+    background-color: white;
+    color: #3a8bee;
+}
+
 /*========== FILTRO PACIENTE EN FORMULARIO ============*/
 
 .popover {
