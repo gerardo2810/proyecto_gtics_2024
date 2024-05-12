@@ -11,6 +11,7 @@
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
     <link th:href="@{/css/fonts.css}" rel="stylesheet" />
     <link th:href="@{/css/login-styles/login.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 </head>
 
 <header>
@@ -29,7 +30,6 @@
 </header>
 
 <body>
-x
     <div class="main-container">
         <div class="login-container">
 
@@ -38,7 +38,7 @@ x
 
                 <p class="text text-normal">¿No tiene cuenta? <span>  &#160 <a th:href="@{login/new}" class="text text-links">Registrarse</a></span></p>
 
-
+                <div class="alert alert-success-custom" role="alert" th:if="${mensaje != null}" th:text="${mensaje}" ></div>
                 <form name="signin" class="login-form" method="post" th:action="@{/login/loguearse}">
                     <div class="input-control">
                         <label for="correo" class="input-label" hidden>Email Address</label>

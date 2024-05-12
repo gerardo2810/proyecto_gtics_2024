@@ -4,12 +4,17 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
+import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.OptionalValidationsGroup;
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.RegisterValidationsGroup;
 
+import javax.imageio.spi.RegisterableService;
 
 
 @Controller
@@ -29,13 +34,15 @@ final UsuarioRepository usuarioRepository;
     }
 
   @PostMapping("/save")
-   public String guardarNuevoUsuario(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, RedirectAttributes attributes, Model model){
+   public String guardarNuevoUsuario(@ModelAttribute("usuario") @Validated(RegisterValidationsGroup.class) Usuario usuario, BindingResult bindingResult, RedirectAttributes attributes, Model model){
 
        if (!bindingResult.hasErrors()) {
            usuario.setRol(4);
            usuario.setEstadoUsuario(2);
 
            usuarioRepository.save(usuario);
+           usuario.setContrasena(SHA256.cipherPassword(usuario.getContrasena()));
+           attributes.addFlashAttribute("mensaje", "Usuario creado correctamente");
            return "redirect:/";
        } else {
            model.addAttribute("usuario", usuario);

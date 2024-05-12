@@ -1,9 +1,11 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
@@ -122,12 +124,13 @@ public class AdminSedeController {
 
     @GetMapping("/editar_farmacista")
     public String editFarmacista(@RequestParam("id") int id,
-                                 Model model){
-        Usuario usuarioFarmacista = usuarioRepository.encontrarFarmacistaporId(id);
+                                 Model model,
+                                 @ModelAttribute("usuario") Usuario usuario){
+        usuario = usuarioRepository.encontrarFarmacistaporId(id);
         Optional<SedeFarmacista> optionalSedeFarmacista = sedeFarmacistaRepository.buscarCodigoFarmacista(id);
         if(optionalSedeFarmacista.isPresent()){
             SedeFarmacista sedeFarmacista = optionalSedeFarmacista.get();
-            model.addAttribute("farmacista", usuarioFarmacista);
+            model.addAttribute("usuario", usuario);
             model.addAttribute("sedeFarmacista", sedeFarmacista);
             return "adminsede/editar_farmacista";
         }else {
@@ -226,7 +229,7 @@ public class AdminSedeController {
 
         sedeFarmacistaRepository.eliminarFarmacistadeSedeFarmacista(id);
         usuarioRepository.eliminarFarmacistadeUsuario(id);
-        attr.addFlashAttribute("msg", "El usuario farmacista " + usuarioRepository.encontrarFarmacistaporId(id).getNombres() + usuarioRepository.encontrarFarmacistaporId(id).getApellidos() + " fue eliminado correctamente");
+        attr.addFlashAttribute("msg", "El farmacista fue eliminado correctamente");
         return "redirect:/adminsede/farmacista";
 
     }
@@ -287,62 +290,79 @@ public class AdminSedeController {
     /*---------------------------------------------------------POST---------------------------------------------------------*/
 
     @PostMapping("/editarFarmacista")
-    public String editarFarmacista(Usuario usuario, RedirectAttributes attr,
-                                   SedeFarmacista sedeFarmacista){
-        usuarioRepository.save(usuario);
-        Optional<SedeFarmacista> optionalSedeFarmacista = sedeFarmacistaRepository.buscarCodigoFarmacista(usuario.getIdUsuario());
-        if(optionalSedeFarmacista.isPresent()){
-            SedeFarmacista sedeFarmacistaOld = optionalSedeFarmacista.get();
-            sedeFarmacista.setId(sedeFarmacistaOld.getId());
-            sedeFarmacista.setIdFarmacista(sedeFarmacistaOld.getIdFarmacista());
-            sedeFarmacista.setAprobado(sedeFarmacistaOld.getAprobado());
-            //sedeFarmacistaRepository.save(sedeFarmacista);
-            attr.addFlashAttribute("msg", "Farmacista: " + usuario.getNombres() + " " + usuario.getApellidos() + " actualizado correctamente");
-            return "redirect:/adminsede/farmacista";
+    public String editarFarmacista(RedirectAttributes attr,
+                                   SedeFarmacista sedeFarmacista,
+                                   @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+                                   Model model){
 
-        }else {
-            return "redirect:/adminsede/farmacista";
+        if(!bindingResult.hasErrors()){
+            usuarioRepository.save(usuario);
+            Optional<SedeFarmacista> optionalSedeFarmacista = sedeFarmacistaRepository.buscarCodigoFarmacista(usuario.getIdUsuario());
+            if(optionalSedeFarmacista.isPresent()){
+                SedeFarmacista sedeFarmacistaOld = optionalSedeFarmacista.get();
+                sedeFarmacista.setId(sedeFarmacistaOld.getId());
+                sedeFarmacista.setIdFarmacista(sedeFarmacistaOld.getIdFarmacista());
+                sedeFarmacista.setAprobado(sedeFarmacistaOld.getAprobado());
+                //sedeFarmacistaRepository.save(sedeFarmacista);
+                attr.addFlashAttribute("msg", "Farmacista: " + usuario.getNombres() + " " + usuario.getApellidos() + " actualizado correctamente");
+                return "redirect:/adminsede/farmacista";
+
+            }else {
+                return "redirect:/adminsede/farmacista";
+            }
+        }else { //Si hay 1 o más errores:
+            model.addAttribute("id", usuario.getIdUsuario());
+            return "adminsede/editar_farmacista";
         }
 
 
     }
     @PostMapping("/solicitud_farmacista_post")
-    public String solicitudAgregarFarmacista(@ModelAttribute("usuarioFarmacista") Usuario usuarioFarmacista,
+    public String solicitudAgregarFarmacista(@ModelAttribute("usuarioFarmacista") @Valid Usuario usuarioFarmacista, BindingResult bindingResult,
                                              @RequestParam("codigoMed") String codigoMed,
                                              RedirectAttributes attr){
 
-        int estadoUsuario = 2;
-        int idRol = 3;
-        int idUsuario = usuarioRepository.findLastUsuarioId() + 1;
-        int aprobado = 2; //El farmacista no está aprobado
-        int idSede = 1; //Cambiar
-        usuarioFarmacista.setIdUsuario(idUsuario);
-        usuarioFarmacista.setRol(idRol);
-        usuarioFarmacista.setEstadoUsuario(estadoUsuario);
-        //usuarioRepository.crearFarmacista(idUsuario, idRol, correo, contrasena, nombres, apellidos, celular, dni, direccion, distrito, seguro, estadoUsuario);
+        if(!bindingResult.hasErrors()){
+            int estadoUsuario = 2;
+            int idRol = 3;
+            int idUsuario = usuarioRepository.findLastUsuarioId() + 1;
+            int aprobado = 2; //El farmacista no está aprobado
+            int idSede = 1; //Cambiar
+            usuarioFarmacista.setIdUsuario(idUsuario);
+            usuarioFarmacista.setRol(idRol);
+            usuarioFarmacista.setEstadoUsuario(estadoUsuario);
+            //usuarioRepository.crearFarmacista(idUsuario, idRol, correo, contrasena, nombres, apellidos, celular, dni, direccion, distrito, seguro, estadoUsuario);
 
-        //Validacion de codigo de colegiatura
-        int codigoValido = 0;
-        List<CodigoColegiatura> listaCodigosColegiatura = codigoColegiaturaRepository.findAll(); //lista todos los codigos de colegiatura
+            //Validacion de codigo de colegiatura
+            int codigoValido = 0;
+            List<CodigoColegiatura> listaCodigosColegiatura = codigoColegiaturaRepository.findAll(); //lista todos los codigos de colegiatura
 
-        for (CodigoColegiatura codigoColegiatura : listaCodigosColegiatura){
+            for (CodigoColegiatura codigoColegiatura : listaCodigosColegiatura){
 
-            if(codigoMed.equals(codigoColegiatura.getCodigo()) && usuarioFarmacista.getDni().equals(codigoColegiatura.getDni())){
-                codigoValido = 1;
+                if(codigoMed.equals(codigoColegiatura.getCodigo()) && usuarioFarmacista.getDni().equals(codigoColegiatura.getDni())){
+                    codigoValido = 1;
+                }
+
             }
 
+            if (codigoValido == 1){
+                usuarioRepository.crearFarmacistaSinAprobar(idUsuario, idRol, usuarioFarmacista.getCorreo(), usuarioFarmacista.getContrasena(), usuarioFarmacista.getNombres(), usuarioFarmacista.getApellidos(), usuarioFarmacista.getCelular(), usuarioFarmacista.getDni(), usuarioFarmacista.getDireccion(), usuarioFarmacista.getDistrito(), usuarioFarmacista.getSeguro(), estadoUsuario);
+                sedeFarmacistaRepository.crearSedeFarmacista(idSede, idUsuario, codigoMed, aprobado);
+                attr.addFlashAttribute("msg", "Solicitud de farmacista " + usuarioFarmacista.getNombres() + " " + usuarioFarmacista.getApellidos() + " enviada correctamente");
+                return "redirect:/adminsede/farmacista";
+            }else {
+                //no se crea el farmacista debido a que el dni o el codigo no coinciden
+                attr.addFlashAttribute("msg", "Codigo de colegiatura no válido, por favor ingrese nuevamente");
+                return "redirect:/adminsede/solicitud_farmacista";
+            }
+
+        }else { //Existen al menos un error y vamos de frente a la vista
+            System.out.println(bindingResult.getAllErrors());
+            return "adminsede/solicitud_agregar_farmacista";
+
+
         }
 
-        if (codigoValido == 1){
-            usuarioRepository.crearFarmacistaSinAprobar(idUsuario, idRol, usuarioFarmacista.getCorreo(), usuarioFarmacista.getContrasena(), usuarioFarmacista.getNombres(), usuarioFarmacista.getApellidos(), usuarioFarmacista.getCelular(), usuarioFarmacista.getDni(), usuarioFarmacista.getDireccion(), usuarioFarmacista.getDistrito(), usuarioFarmacista.getSeguro(), estadoUsuario);
-            sedeFarmacistaRepository.crearSedeFarmacista(idSede, idUsuario, codigoMed, aprobado);
-            attr.addFlashAttribute("msg", "Solicitud de farmacista " + usuarioFarmacista.getNombres() + " " + usuarioFarmacista.getApellidos() + " enviada correctamente");
-            return "redirect:/adminsede/farmacista";
-        }else {
-            //no se crea el farmacista debido a que el dni o el codigo no coinciden
-            attr.addFlashAttribute("msg", "Codigo de colegiatura no válido, por favor ingrese nuevamente");
-            return "redirect:/adminsede/solicitud_farmacista";
-        }
 
 
     }
@@ -455,7 +475,7 @@ public class AdminSedeController {
             for(int i = 0; i < listaIds.size(); i++){
                 reposicionContenidoRepository.actualizarCantidadMedicamentoOrden(listaCantidades.get(i),listaIds.get(i),idReposicion);
             }
-            attr.addFlashAttribute("msg", "Orden de reposición actualizada correctamente");
+            attr.addFlashAttribute("msg", "Orden de reposición #" + idReposicion + " actualizada correctamente");
             return "redirect:/adminsede/ordenes";
 
         }

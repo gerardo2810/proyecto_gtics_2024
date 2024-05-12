@@ -66,7 +66,7 @@
         justify-content: space-between;
         margin-bottom: 100px;
         max-width: 1000px;
-        width: 750px;
+        width: 800px;
         margin-top: 2rem;
         padding: 2rem 2.5rem 1rem 2.5rem;
         outline: none;
@@ -148,7 +148,25 @@
             font-size: 1rem;
             font-weight: 400;
             line-height: inherit;
-            width: 300px;
+            width: 330px;
+            text-align: left;
+            height: auto;
+            padding: 0.75rem 1.25rem;
+            border: none;
+            outline: none;
+            border-radius: 2rem;
+            color: var(--color-black);
+            background: var(--color-light);
+            text-transform: unset;
+            text-rendering: optimizeLegibility;
+        }
+        .input-field3 {
+            margin-top: 5px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: inherit;
+            width: 370px;
             text-align: left;
             height: auto;
             padding: 0.75rem 1.25rem;
@@ -216,4 +234,26 @@
         justify-content: center;
         align-items: center;
         color: var(--color-gray);
+    }
+
+    /* Estilo para el alert de éxito */
+    .alert-success-custom {
+        color: #155724;  /* Color del texto */
+        background-color: #d4edda;  /* Color de fondo */
+        border-color: #c3e6cb;  /* Color del borde */
+        border-radius: 0.25rem;  /* Radio del borde */
+        padding: 1rem;  /* Espaciado interno */
+    }
+
+    /* Estilo para el enlace dentro del alert */
+    .alert-success-custom a {
+        color: #0c652f;  /* Color del enlace */
+        font-weight: bold;  /* Peso de la fuente */
+    }
+
+    /* Estilo para el borde superior del alert */
+    .alert-success-custom .alert-heading {
+        border-bottom: 1px solid #badbcc;  /* Color del borde superior */
+        padding-bottom: 0.5rem;  /* Espaciado inferior */
+        margin-bottom: 0.5rem;  /* Margen inferior */
     }

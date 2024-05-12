@@ -32,7 +32,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     List<Usuario> listarFarmacistas();
 
     //Encontrar Farmacista por ID
-    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.usuario where idRol = 3 and estado_usuario = 1 and id = ?1")
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.usuario where idRol = 3 and id = ?1")
     Usuario encontrarFarmacistaporId(int id);
 
     //Editar Farmacista

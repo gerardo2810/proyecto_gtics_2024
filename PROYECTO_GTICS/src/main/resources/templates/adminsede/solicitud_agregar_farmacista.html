@@ -175,12 +175,18 @@
 
                         <div class="input-label-box">
                             <label style="font-weight: bold; color:dimgray">Nombre del farmacista:</label>
-                            <input class="input-form" th:field="*{nombres}" type="text" placeholder="Ingrese sus nombres" required>
+                            <input class="input-form" th:field="*{nombres}" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid': ''}" type="text" placeholder="Ingrese sus nombres" required/>
+                            <div th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}" id="validationServer03Feedback" class="invalid-feedback">
+                                Mensaje de error de nombres
+                            </div>
                         </div>
 
                         <div class="input-label-box">
                             <label style="font-weight: bold; color:dimgray">Apellidos del farmacista:</label>
-                            <input class="input-form" th:field="*{apellidos}" type="text" placeholder="Ingrese sus apellidos" required>
+                            <input class="input-form" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid': ''}" type="text" placeholder="Ingrese sus apellidos" required>
+                            <div th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}" id="validationServer03Feedback" class="invalid-feedback">
+                                Mensaje de error de nombres
+                            </div>
                         </div>
 
                     </div>
@@ -188,12 +194,18 @@
                     <div class="column" style="justify-content: center">
                         <div class="input-label-box">
                             <label style="font-weight: bold; color:dimgray">DNI:</label>
-                            <input class="input-form" th:field="*{dni}" type="text" placeholder="Ingrese su DNI" required>
+                            <input class="input-form" th:field="*{dni}" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid': ''}" type="text" placeholder="Ingrese su DNI" required>
+                            <div th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" id="validationServer03Feedback" class="invalid-feedback">
+                                Mensaje de error de nombres
+                            </div>
                         </div>
 
                         <div class="input-label-box">
                             <label style="font-weight: bold; color:dimgray">Distrito de residencia:</label>
-                            <input class="input-form" th:field="*{distrito}" type="text" placeholder="Ingrese su distrito" required>
+                            <input class="input-form" th:field="*{distrito}" th:classappend="${#fields.hasErrors('distrito') ? 'is-invalid': ''}" type="text" placeholder="Ingrese su distrito" required>
+                            <div th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}" id="validationServer03Feedback" class="invalid-feedback">
+                                Mensaje de error de nombres
+                            </div>
                         </div>
                     </div>
 
@@ -201,12 +213,18 @@
 
                         <div class="input-label-box">
                             <label style="font-weight: bold; color:dimgray">Correo:</label>
-                            <input class="input-form" th:field="*{correo}" type="text" placeholder="Ingrese el correo" required>
+                            <input class="input-form" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid': ''}" type="text" placeholder="Ingrese el correo" required>
+                            <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" id="validationServer03Feedback" class="invalid-feedback">
+                                Mensaje de error de nombres
+                            </div>
                         </div>
 
                         <div class="input-label-box">
                             <label style="font-weight: bold; color:dimgray">Contraseña:</label>
-                            <input class="input-form" th:field="*{contrasena}" type="text" placeholder="Ingrese la contraseña" required>
+                            <input class="input-form" th:field="*{contrasena}" th:classappend="${#fields.hasErrors('contrasena') ? 'is-invalid': ''}" type="text" placeholder="Ingrese la contraseña" required>
+                            <div th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}" id="validationServer03Feedback" class="invalid-feedback">
+                                Mensaje de error de nombres
+                            </div>
                         </div>
 
 
@@ -215,7 +233,10 @@
                     <div class="column" style="justify-content: center">
                         <div class="input-label-box">
                             <label style="font-weight: bold; color:dimgray">Celular:</label>
-                            <input class="input-form" th:field="*{celular}" type="text" placeholder="Ingrese el celular" required>
+                            <input class="input-form" th:field="*{celular}" th:classappend="${#fields.hasErrors('celular') ? 'is-invalid': ''}" type="text" placeholder="Ingrese el celular" required>
+                            <div th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}" id="validationServer03Feedback" class="invalid-feedback">
+                                Mensaje de error de nombres
+                            </div>
                         </div>
 
                         <div class="input-label-box">
@@ -227,12 +248,18 @@
                     <div class="column" style="justify-content: center">
                         <div class="input-label-box">
                             <label style="font-weight: bold; color:dimgray">Dirección:</label>
-                            <input class="input-form" th:field="*{direccion}" type="text" placeholder="Ingrese la dirección" required>
+                            <input class="input-form" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion') ? 'is-invalid': ''}" type="text" placeholder="Ingrese la dirección" required>
+                            <div th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}" id="validationServer03Feedback" class="invalid-feedback">
+                                Mensaje de error de nombres
+                            </div>
                         </div>
 
                         <div class="input-label-box">
                             <label style="font-weight: bold; color:dimgray">Seguro:</label>
-                            <input class="input-form" th:field="*{seguro}" type="text" placeholder="Ingrese el seguro" required>
+                            <input class="input-form" th:field="*{seguro}" th:classappend="${#fields.hasErrors('seguro') ? 'is-invalid': ''}" type="text" placeholder="Ingrese el seguro" required>
+                            <div th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}" id="validationServer03Feedback" class="invalid-feedback">
+                                Mensaje de error de apellidos
+                            </div>
                         </div>
                     </div>
 

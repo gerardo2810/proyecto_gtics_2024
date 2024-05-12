@@ -224,7 +224,7 @@ public class FarmacistaController {
                 }
 
                 idVerOrdenCreada = newOrden.getIdOrden();
-                return "redirect:/farmacista/ver_orden_venta?id=" + idVerOrdenCreada;
+                return "redirect:/farmacista/ver_boleta?id=" + idVerOrdenCreada;
 
             } else {
 
@@ -295,10 +295,71 @@ public class FarmacistaController {
     }
 
 
+    @GetMapping("farmacista/aprobar_orden_web")
+    public String aprobarOrdenWeb(Model model, @RequestParam("id") String idOrden){
 
+        Optional<Orden> ordenWebOptional = ordenRepository.findById(Integer.valueOf(idOrden));
+        List<OrdenContenido> contenidoOrdenWeb = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
 
-    @GetMapping("/farmacista/ver_orden_venta")
-    public String verOrdenVenta(Model model, @RequestParam("id") String idOrden) {
+        if (ordenWebOptional.isPresent()){
+            Orden ordenWebComprobada = ordenWebOptional.get();
+
+            ordenWebComprobada.setEstadoOrden(2);
+
+            ordenRepository.save(ordenWebComprobada);
+
+            model.addAttribute("idOrden", idOrden);
+            model.addAttribute("contenidoOrden", contenidoOrdenWeb);
+            model.addAttribute("orden",ordenWebComprobada);
+            return "farmacista/tracking";
+        } else {
+            return "farmacista/errorPages/no_existe_orden";
+        }
+    }
+
+    @GetMapping("farmacista/ver_preorden_tracking")
+    public String verPreOrdenTracking(@RequestParam("id") String idPreOrden){
+
+        Orden preOrden = ordenRepository.findPreordenByOrdenId(Integer.valueOf(idPreOrden));
+        String idOrdenParent = String.valueOf(preOrden.getOrdenParent());
+
+        return "redirect:/farmacista/ver_orden_tracking?id=" + idOrdenParent;
+    }
+
+    @GetMapping("farmacista/ver_orden_tracking")
+    public String verOrdenTracking(Model model, @RequestParam("id") String idOrden){
+
+        Optional<Orden> ordenOptional = ordenRepository.findById(Integer.valueOf(idOrden));
+        List<OrdenContenido> contenidoOrden = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+
+        boolean containsPreOrden = false;
+        Orden preOrdenChild = ordenRepository.findPreordenByOrdenId(Integer.valueOf(idOrden));
+
+        if (ordenOptional.isPresent()) {
+            Orden ordenWebComprobada = ordenOptional.get();
+            ArrayList<OrdenContenido> contenidoPreOrden = new ArrayList<>();
+
+            if (preOrdenChild != null) {
+                containsPreOrden = true;
+                contenidoPreOrden = (ArrayList<OrdenContenido>) ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(preOrdenChild.getIdOrden()));
+            }
+
+            model.addAttribute("containsPreOrden", containsPreOrden);
+
+            model.addAttribute("preOrden", preOrdenChild);
+            model.addAttribute("contenidoPreOrden", contenidoPreOrden);
+
+            model.addAttribute("idOrden", idOrden);
+            model.addAttribute("contenidoOrden", contenidoOrden);
+            model.addAttribute("orden", ordenWebComprobada);
+            return "farmacista/tracking";
+        } else {
+            return "farmacista/errorPages/no_existe_orden";
+        }
+    }
+
+    @GetMapping("/farmacista/ver_boleta")
+    public String verBoleta(Model model, @RequestParam("id") String idOrden) {
 
         Optional<Orden> ordenOptional = ordenRepository.findById(Integer.valueOf(idOrden));
         List<OrdenContenido> contenidoOrden = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
@@ -308,79 +369,11 @@ public class FarmacistaController {
 
             model.addAttribute("orden",ordenComprobada);
             model.addAttribute("contenidoOrden", contenidoOrden);
-            return "farmacista/ver_orden_venta";
+            return "farmacista/boleta";
         } else {
             return "farmacista/errorPages/no_existe_orden";
         }
     }
-
-    @GetMapping("/farmacista/ver_orden_web")
-    public String verOrdenWeb(Model model, @RequestParam("id") String idOrden) {
-
-        Optional<Orden> ordenWebOptional = ordenRepository.findById(Integer.valueOf(idOrden));
-        List<OrdenContenido> contenidoOrdenWeb = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
-
-
-        if (ordenWebOptional.isPresent()){
-            Orden ordenWebComprobada = ordenWebOptional.get();
-
-            model.addAttribute("contenidoOrden", contenidoOrdenWeb);
-            model.addAttribute("orden",ordenWebComprobada);
-            return "farmacista/ver_orden_web";
-        } else {
-
-            return "farmacista/errorPages/no_existe_orden";
-        }
-    }
-
-    @GetMapping("farmacista/ver_pre_orden")
-    public String verPreOrden(Model model, @RequestParam("id") String idOrden) {
-
-        Optional<Orden> preOrdenOptional = ordenRepository.findById(Integer.valueOf(idOrden));
-        List<OrdenContenido> contenidoPreOrden = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
-
-        if (preOrdenOptional.isPresent()){
-            Orden preOrdenComprobada = preOrdenOptional.get();
-            Orden ordenParent = ordenRepository.getOrdenByIdOrden(preOrdenComprobada.getOrdenParent());
-
-            List<OrdenContenido> contenidoOrden = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(ordenParent.getIdOrden()));
-            int tipoOrden = ordenParent.getTipoOrden();
-
-            switch (tipoOrden){
-                case 1:
-                    model.addAttribute("tipo", tipoOrden);
-                    model.addAttribute("orden",ordenParent);
-                    model.addAttribute("contenidoOrden", contenidoOrden);
-                    model.addAttribute("preOrden",preOrdenComprobada);
-                    model.addAttribute("contenidoPreOrden", contenidoPreOrden);
-                    return "farmacista/ver_orden_venta";
-                case 2:
-                    model.addAttribute("tipo", tipoOrden);
-                    model.addAttribute("orden",ordenParent);
-                    model.addAttribute("contenidoOrden", contenidoOrden);
-                    model.addAttribute("preOrden",preOrdenComprobada);
-                    model.addAttribute("contenidoPreOrden", contenidoPreOrden);
-                    return "farmacista/ver_orden_web";
-                default:
-                    return "farmacista/errorPages/no_existe_orden";
-            }
-
-        } else {
-            return "farmacista/errorPages/no_existe_orden";
-        }
-    }
-
-
-
-
-    @GetMapping("/farmacista/ver_orden_web_sinstock")
-    public String verOrdenWebSinStock() {
-
-        return "farmacista/ver_orden_web_sinStock";
-    }
-
-
-
 
     @GetMapping("/farmacista/perfil")
     public String profile() {

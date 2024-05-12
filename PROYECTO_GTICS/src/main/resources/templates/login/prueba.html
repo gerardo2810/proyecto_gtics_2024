@@ -68,7 +68,52 @@
                             </div>
                             <div class="input-control2">
                                 <span class="details" style="margin-left: 10px">Distrito</span>
-                                <input type="text" th:field="*{distrito}" class="input-field2" placeholder="Seleccione su distrito">
+                                <select th:field="*{distrito}" class="input-field3">
+                                    <option value="">Seleccione su distrito</option>
+                                    <option value="Ancón">Ancón</option>
+                                    <option value="Ate">Ate</option>
+                                    <option value="Barranco">Barranco</option>
+                                    <option value="Breña">Breña</option>
+                                    <option value="Carabayllo">Carabayllo</option>
+                                    <option value="Cercado de Lima">Cercado de Lima</option>
+                                    <option value="Chaclacayo">Chaclacayo</option>
+                                    <option value="Chorrillos">Chorrillos</option>
+                                    <option value="Cieneguilla">Cieneguilla</option>
+                                    <option value="Comas">Comas</option>
+                                    <option value="El Agustino">El Agustino</option>
+                                    <option value="Independencia">Independencia</option>
+                                    <option value="Jesús María">Jesús María</option>
+                                    <option value="La Molina">La Molina</option>
+                                    <option value="La Victoria">La Victoria</option>
+                                    <option value="Lince">Lince</option>
+                                    <option value="Los Olivos">Los Olivos</option>
+                                    <option value="Lurigancho">Lurigancho</option>
+                                    <option value="Lurín">Lurín</option>
+                                    <option value="Magdalena del Mar">Magdalena del Mar</option>
+                                    <option value="Miraflores">Miraflores</option>
+                                    <option value="Pachacamac">Pachacamac</option>
+                                    <option value="Pucusana">Pucusana</option>
+                                    <option value="Pueblo Libre">Pueblo Libre</option>
+                                    <option value="Puente Piedra">Puente Piedra</option>
+                                    <option value="Punta Hermosa">Punta Hermosa</option>
+                                    <option value="Punta Negra">Punta Negra</option>
+                                    <option value="Rímac">Rímac</option>
+                                    <option value="San Bartolo">San Bartolo</option>
+                                    <option value="San Borja">San Borja</option>
+                                    <option value="San Isidro">San Isidro</option>
+                                    <option value="San Juan de Lurigancho">San Juan de Lurigancho</option>
+                                    <option value="San Juan de Miraflores">San Juan de Miraflores</option>
+                                    <option value="San Luis">San Luis</option>
+                                    <option value="San Martín de Porres">San Martín de Porres</option>
+                                    <option value="San Miguel">San Miguel</option>
+                                    <option value="Santa Anita">Santa Anita</option>
+                                    <option value="Santa María del Mar">Santa María del Mar</option>
+                                    <option value="Santa Rosa">Santa Rosa</option>
+                                    <option value="Santiago de Surco">Santiago de Surco</option>
+                                    <option value="Surquillo">Surquillo</option>
+                                    <option value="Villa El Salvador">Villa El Salvador</option>
+                                    <option value="Villa María del Triunfo">Villa María del Triunfo</option>
+                                </select>
                                 <div class="invalid-feedback" th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}" style="margin-left: 10px ; color: red"></div>
                             </div>
                             <div class="input-control2">
@@ -78,7 +123,14 @@
                             </div>
                             <div class="input-control2">
                                 <span class="details" style="margin-left: 10px">Seguro </span>
-                                <input type="text" th:field="*{seguro}" class="input-field2" placeholder="Ingrese el número de su seguro">
+                                <select th:field="*{seguro}" class="input-field3">
+                                    <option value="">Seleccione su seguro</option>
+                                    <option value="La Positiva">La Positiva</option>
+                                    <option value="Rimac">Rimac</option>
+                                    <option value="Pacífico">Pacífico</option>
+                                    <option value="Mapfre">MAPFRE</option>
+                                    <option value="Oncosalud">Oncosalud</option>
+                                </select>
                                 <div class="invalid-feedback" th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}" style="margin-left: 10px ; color: red"></div>
                             </div>
 

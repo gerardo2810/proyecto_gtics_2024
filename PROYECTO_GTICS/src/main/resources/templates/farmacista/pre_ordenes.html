@@ -156,7 +156,7 @@
 
         <div style="margin-bottom: 10px"></div>
 
-        <div>
+        <div style="min-height: 350px">
 
             <div class="column-start" style="padding-bottom: 1px">
 
@@ -223,9 +223,13 @@
                         <button class="btn-anulado montserrat-medium"       th:case="9">ANULADO</button>
                     </td>
 
-                    <td class="action" th:switch="${orden.getTipoOrden()}">
-                        <a th:case="3"  th:href="@{'/farmacista/ver_pre_orden' + '?id=' + ${orden.getIdOrden()}}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
+                    <td class="action">
+                        <a th:href="@{'/farmacista/ver_preorden_tracking' + '?id=' + ${orden.getIdOrden()}}">
+                            <button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i>
+                            </button>
+                        </a>
                     </td>
+
                 </tr>
                 </tbody>
             </table>

@@ -240,13 +240,22 @@
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Hora de Entrega:</label>
-                        <input class="input-form" type="time"  placeholder="Ingrese la hora de entrega" required>
+
+                        <div style="position: relative;">
+
+                            <input th:if="${horaError==null}" class="input-form" type="time" id="hora"  placeholder="Ingrese la hora de entrega" >
+                            <input th:if="${horaError!=null}" class="input-form error" type="time" id="hora"  placeholder="Ingrese la hora de entrega" >
+
+                        </div>
+
+                        <div class="error-message"  th:if="${horaError!=null}">Debe seleccionar la hora de entrega</div>
+
+
+
                     </div>
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Teléfono:</label>
-
-
 
 
                         <div style="position: relative;">
@@ -400,7 +409,7 @@
                                 </div>
                                 <div>
 
-                                    <input id="listaIds" type="text" name="listaIds" th:value="${listaReciente}"  hidden  />
+                                    <input id="listaIds" type="text" name="listaIds"   hidden  />
 
                                 </div>
                             </div>
@@ -461,7 +470,8 @@
 
 
 
-
+        <input type="hidden" id="reporte" name="reporte">
+        <input type="hidden" id="reporte" name="reporte2">
 
 
 
@@ -611,11 +621,44 @@
     }
 </style>
 
+<script th:inline="javascript">
 
-<script>
+
+    var horaError = /*[[${horaError}]]*/ '';
+
+    if(horaError != null){
+        console.log(horaError);
+    }
+
+
 
     const form = document.getElementById("form");
     var img = document.getElementById("file");
+    const hora = document.getElementById("hora");
+    var reporte = document.getElementById("reporte");
+    var reporte = document.getElementById("reporte");
+
+
+
+    function checkInputs() {
+        function setErrorFor(input, message) {
+            const formControl = input.parentElement;
+            const small = formControl.querySelector("small");
+            formControl.className = "input-form error";
+            small.innerText = message;
+            hasErrors = true;
+        }
+
+        let hasErrors = false;
+        // trim to remove the whitespaces
+        const horaValue = hora.value.trim();
+
+        if (horaValue === "") {
+            setErrorFor(hora, "No puedes dejar en blanco este campo");
+        }
+
+        return hasErrors;
+    }
 
     form.addEventListener("submit", e =>{
         e.preventDefault();
@@ -634,6 +677,10 @@
         }
 
         else{
+            if(reporte.value === ''){
+                reporte.value = "error"
+            }
+
             Swal.fire({
                 title: '¿Estás seguro de generar esta nueva orden de compra?',
                 icon: 'warning',
@@ -659,17 +706,45 @@
 
 <!---------Medicamentos---------->
 
-<script>
 
-    listaSelectedIds = [];
 
+<script th:inline="javascript">
+
+
+    var cantidades = /*[[${currentCant}]]*/ [];
+    var medicamentos = /*[[${currentMed}]]*/ [];
+
+
+
+    if (cantidades && cantidades.length > 0) {
+
+        var iteraciones = medicamentos.length;
+
+        var nombresMedicamentos = medicamentos.map(function(medicamento) {
+            return medicamento.nombre;
+        });
+        var idsMedicamentos = medicamentos.map(function(medicamento) {
+            return medicamento.idMedicamento;
+        });
+        var preciosVenta = medicamentos.map(function(medicamento) {
+            return medicamento.precioVenta;
+        });
+
+        console.log(idsMedicamentos);
+        console.log(nombresMedicamentos);
+        console.log(preciosVenta);
+        console.log(cantidades);
+
+    }
+
+
+
+
+
+    listaSelectedIds = []
 
     $(document).ready(function() {
 
-
-        window.addEventListener('load', function() {
-            addItemToList(1, 'Aspirina Caja', 13, 'URL_DE_LA_IMAGEN');
-            ShowList();        });
 
         const botonesEliminarItem = document.getElementsByClassName('btn-eliminar');
         for(var i=0;i<botonesEliminarItem.length; i++){
@@ -695,6 +770,40 @@
 
 
 
+
+        if (cantidades && cantidades.length > 0) {
+
+
+            for (var i = 0; i < iteraciones; i++) {
+                const id = idsMedicamentos[i];
+                const title = nombresMedicamentos[i] + '';
+                const price = preciosVenta[i];
+                const imagenSrc = 'aaa';
+                const cant = parseInt(cantidades[i]);
+
+                listaSelectedIds.push(id.toString()); //idMedicamento
+                listaSelectedIds.push(cant); //cantidad
+
+                console.log(id)
+                console.log(title)
+                console.log(price)
+                console.log(cant)
+
+                addItemToList(id, title.toString(), price.toString(), imagenSrc);
+                ShowList();
+
+            }
+
+            const listaIdsInput = document.getElementById('listaIds');
+            listaIdsInput.value = listaSelectedIds;
+
+            console.log(listaSelectedIds)
+
+
+
+        }
+
+
         function clickItemAdd(event){
 
             const button = event.target;
@@ -715,7 +824,6 @@
             listaIdsInput.value = listaSelectedIds;
 
             addItemToList(idAdd, titulo, precio, imagenSrc);
-            addItemToList(1, 'Aspirina Caja', 13, imagenSrc);
             ShowList();
         }
 
@@ -823,6 +931,8 @@
             const toPlus = listaSelectedIds.indexOf(idAddQuantity);
 
             listaSelectedIds[toPlus+1] = cantidadActual;
+
+            console.log(listaSelectedIds)
 
             actualizarMontoTotal();
         }
