@@ -198,10 +198,10 @@
                     <div class="column" style="justify-content: center">
 
                         <div class="input-label-box">
-                            <label style="font-weight: bold; color:dimgray">DNI:</label>
-                            <input th:field="*{dni}" name="dni" class="input-form" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid': ''}" type="text" placeholder="Ingrese su DNI" required>
-                            <div th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" id="validationServer03Feedback" class="invalid-feedback">
-                                Mensaje de error de dni
+                            <label style="font-weight: bold; color:dimgray">Correo electrónico:</label>
+                            <input th:field="*{correo}" name="correo" class="input-form" th:classappend="${#fields.hasErrors('distrito') ? 'is-invalid': ''}" type="text" placeholder="Ingrese su correo" required>
+                            <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" id="validationServer03Feedback" class="invalid-feedback">
+                                Mensaje de error de correo
                             </div>
                         </div>
 
@@ -218,15 +218,13 @@
                     <div class="column" style="justify-content: center">
 
                         <div class="input-label-box">
-                            <label style="font-weight: bold; color:dimgray">Código (colegio médico):</label>
-                            <input th:value="${sedeFarmacista.getCodigoMed()}" name="codigoMed" class="input-form" type="text" placeholder="Ingrese su código" readonly>
+                            <input th:value="${sedeFarmacista.getCodigoMed()}" name="codigoMed" class="input-form" type="hidden" placeholder="Ingrese su código">
                         </div>
 
                         <div class="input-label-box">
-                            <label style="font-weight: bold; color:dimgray">Correo electrónico:</label>
-                            <input th:field="*{correo}" name="correo" class="input-form" th:classappend="${#fields.hasErrors('distrito') ? 'is-invalid': ''}" type="text" placeholder="Ingrese su correo" required>
-                            <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" id="validationServer03Feedback" class="invalid-feedback">
-                                Mensaje de error de correo
+                            <input th:field="*{dni}" name="dni" class="input-form" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid': ''}" type="hidden" placeholder="Ingrese su DNI">
+                            <div th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" id="validationServer03Feedback" class="invalid-feedback">
+                                Mensaje de error de dni
                             </div>
                         </div>
 
