@@ -36,12 +36,14 @@ final UsuarioRepository usuarioRepository;
   @PostMapping("/save")
    public String guardarNuevoUsuario(@ModelAttribute("usuario") @Validated(RegisterValidationsGroup.class) Usuario usuario, BindingResult bindingResult, RedirectAttributes attributes, Model model){
 
+
        if (!bindingResult.hasErrors()) {
+           String contrasenaSinCifrar = usuario.getContrasena();
+           String contrasenaHasheada = SHA256.cipherPassword(contrasenaSinCifrar);
+           usuario.setContrasena(contrasenaHasheada);
            usuario.setRol(4);
            usuario.setEstadoUsuario(2);
-
            usuarioRepository.save(usuario);
-           usuario.setContrasena(SHA256.cipherPassword(usuario.getContrasena()));
            attributes.addFlashAttribute("mensaje", "Usuario creado correctamente");
            return "redirect:/";
        } else {
