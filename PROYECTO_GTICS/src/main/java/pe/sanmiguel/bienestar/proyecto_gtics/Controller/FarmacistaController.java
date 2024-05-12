@@ -114,6 +114,7 @@ public class FarmacistaController {
         if(medicamentosSeleccionados.isEmpty()){
             return "redirect:/farmacista";
         } else {
+
             List<Integer> stockSeleccionados = new ArrayList<>();
 
             for (Medicamento med : medicamentosSeleccionados) {

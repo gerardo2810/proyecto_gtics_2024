@@ -149,6 +149,22 @@
                         <div class="column">
 
                             <div class="input-label-box">
+                                <label style="font-weight: bold; color:dimgray">DNI:</label>
+                                <input class="input-form-2" type="text"  th:field="*{dni}" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
+                                <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+                            </div>
+
+                            <div class="input-label-box">
+                                <label style="font-weight: bold; color:dimgray">Correo:</label>
+                                <input class="input-form-2" type="email"  th:field="*{correo}" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid' : ''}">
+                                <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" class="invalid-feedback" ></div>
+                            </div>
+
+                        </div>
+
+                        <div class="column">
+
+                            <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Nombre del paciente:</label>
                                 <input class="input-form-2" type="text" th:field="*{nombres}"  th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}"/>
                                 <div class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
@@ -165,20 +181,20 @@
                         <div class="column">
 
                             <div class="input-label-box">
-                                <label style="font-weight: bold; color:dimgray">DNI:</label>
-                                <input class="input-form-2" type="text"  th:field="*{dni}" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
-                                <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+                                <label style="font-weight: bold; color:dimgray">Seguro:</label>
+
+                                <select class="select-form" name="doctor" required>
+                                    <option selected disabled>Seleccione un Seguro</option>
+                                    <option th:value="${'Ninguno'}" >Ninguno</option>
+                                    <option th:value="${'Estatal (SIS)'}" >Estatal (SIS)</option>
+                                    <option th:value="${'Pacífico Seguros'}" >Pacífico Seguros</option>
+                                    <option th:value="${'Mapfre'}" >Mapfre</option>
+                                    <option th:value="${'Rimac Seguros'}" >Rimac Seguros</option>
+                                    <option th:value="${'La Positiva'}" >La Positiva</option>
+                                    <option th:value="${'Sanitas'}" >Sanitas</option>
+                                    <option th:value="${'Seguro EsSalud'}" >Seguro EsSalud</option>
+                                </select>
                             </div>
-
-                            <div class="input-label-box">
-                                <label style="font-weight: bold; color:dimgray">Dirección:</label>
-                                <input class="input-form-2" type="text"  th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion') ? 'is-invalid' : ''}">
-                                <div  class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></div>
-                            </div>
-
-                        </div>
-
-                        <div class="column">
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Doctor:</label>
@@ -189,26 +205,20 @@
                                 </select>
                             </div>
 
+                        </div>
+
+                        <div class="column">
+
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Distrito:</label>
                                 <input class="input-form-2" type="text"  th:field="*{distrito}" placeholder="Ingrese el distrito donde reside" th:classappend="${#fields.hasErrors('distrito') ? 'is-invalid' : ''}">
                                 <div  class="invalid-feedback" th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}"></div>
                             </div>
 
-                        </div>
-
-                        <div class="column">
-
                             <div class="input-label-box">
-                                <label style="font-weight: bold; color:dimgray">Correo:</label>
-                                <input class="input-form-2" type="email"  th:field="*{correo}" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid' : ''}">
-                                <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" class="invalid-feedback" ></div>
-                            </div>
-
-                            <div class="input-label-box">
-                                <label style="font-weight: bold; color:dimgray">Teléfono:</label>
-                                <input class="input-form-2" type="text" th:field="*{celular}" th:classappend="${#fields.hasErrors('celular') ? 'is-invalid' : ''}">
-                                <div th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}" class="invalid-feedback"></div>
+                                <label style="font-weight: bold; color:dimgray">Dirección:</label>
+                                <input class="input-form-2" type="text"  th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion') ? 'is-invalid' : ''}">
+                                <div  class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></div>
                             </div>
 
                         </div>
@@ -216,10 +226,11 @@
                         <div class="column-start">
 
                             <div class="input-label-box">
-                                <label style="font-weight: bold; color:dimgray">Seguro:</label>
-                                <input class="input-form-2" type="text"  th:field="*{seguro}" th:classappend="${#fields.hasErrors('seguro') ? 'is-invalid' : ''}">
-                                <div class="invalid-feedback" th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}"></div>
+                                <label style="font-weight: bold; color:dimgray">Teléfono:</label>
+                                <input class="input-form-2" type="text" th:field="*{celular}" th:classappend="${#fields.hasErrors('celular') ? 'is-invalid' : ''}">
+                                <div th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}" class="invalid-feedback"></div>
                             </div>
+
 
                         </div>
 
