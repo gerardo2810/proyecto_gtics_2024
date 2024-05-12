@@ -67,6 +67,7 @@ public class Usuario {
     @Column
     @Size(max = 30, message = "No debe exceder de 30 caracteres")
     @NotBlank(message = "Debe colocar su distrito de residencia")
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "El nombre solo puede contener letras y espacios")
     private String distrito;
 
     @Column
