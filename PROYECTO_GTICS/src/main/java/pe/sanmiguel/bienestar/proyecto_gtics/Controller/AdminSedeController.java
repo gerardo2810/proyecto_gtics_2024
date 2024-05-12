@@ -510,8 +510,8 @@ public class AdminSedeController {
         return "adminsede/verDetallesOrdenEntregada";
     }
 
-    @GetMapping("/eliminar_orden_reposicion")
-    public String eliminar_orden_reposicion(@RequestParam("id") int idReposicion, RedirectAttributes attr){
+    @PostMapping("/eliminar_orden_reposicion")
+    public String eliminar_orden_reposicion(@RequestParam("getIdReposicion") int idReposicion, RedirectAttributes attr){
 
         reposicionContenidoRepository.eliminarContenidoReposicion(idReposicion);
         reposicionRepository.eliminarReposicionporId(idReposicion);
