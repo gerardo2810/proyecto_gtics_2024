@@ -4,12 +4,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
-
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.OptionalValidationsGroup;
 
 
 @Controller
@@ -29,7 +30,7 @@ final UsuarioRepository usuarioRepository;
     }
 
   @PostMapping("/save")
-   public String guardarNuevoUsuario(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, RedirectAttributes attributes, Model model){
+   public String guardarNuevoUsuario(@ModelAttribute("usuario") @Validated(OptionalValidationsGroup.class) Usuario usuario, BindingResult bindingResult, RedirectAttributes attributes, Model model){
 
        if (!bindingResult.hasErrors()) {
            usuario.setRol(4);
