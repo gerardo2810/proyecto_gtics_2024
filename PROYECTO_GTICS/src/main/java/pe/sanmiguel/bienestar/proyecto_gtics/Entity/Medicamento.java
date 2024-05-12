@@ -48,5 +48,6 @@ public class Medicamento {
     private Integer estado;
 
     @Column
-    private String imagen;
+    @Lob
+    private byte[] imagen;
 }

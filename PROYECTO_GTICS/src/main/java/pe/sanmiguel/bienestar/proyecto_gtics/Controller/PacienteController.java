@@ -200,6 +200,40 @@ public class PacienteController {
         return "paciente/boleta";
     }
 
+    /*----------------- Foto de medicamentos-----------------*/
+
+
+    @GetMapping(value="/foto_medicamento")
+    public String fotoMedicamento(){
+        return "farmacista/deprecated/subir_foto_medicamento";
+    }
+
+    @PostMapping(value="/guardarFotoMedicamento")
+    public String subirFotoMedicamento(@RequestParam(value="idMedicamento", required = false) Integer id,
+                                       @RequestParam(value="file", required = false) Part file,
+                                       RedirectAttributes attr) throws IOException {
+
+        InputStream inputStream = file.getInputStream();
+        byte[] bytes = inputStream.readAllBytes();
+
+        Optional <Medicamento> med = medicamentoRepository.findById(id);
+
+        if (med.isPresent()){
+            System.out.println(bytes.length);
+            System.out.println(id);
+
+            medicamentoRepository.imagenMedicamento(bytes, id);
+
+        }
+
+
+
+        return"redirect:/paciente/foto_medicamento";
+
+    }
+
+
+
 
 
 
