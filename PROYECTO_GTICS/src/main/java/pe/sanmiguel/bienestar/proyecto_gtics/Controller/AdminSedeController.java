@@ -344,8 +344,41 @@ public class AdminSedeController {
                 }
 
             }
+            // validamos que no sea repetido el codigo medico
+            boolean codigoMedicoUnico = true;
 
-            if (codigoValido == 1){
+            List<SedeFarmacista> listasedeFarmacistas = sedeFarmacistaRepository.findAll();
+
+            for (SedeFarmacista sedeFarmacista : listasedeFarmacistas){
+                if(codigoMed.equals(sedeFarmacista.getCodigoMed())){
+                    //no se crea el farmacista debido a que es repetido el codigo medico
+                    attr.addFlashAttribute("msg", "Codigo de colegiatura ya existente en el sistema, por favor ingrese uno nuevamente");
+                    codigoMedicoUnico  = false;
+                    return "redirect:/adminsede/solicitud_farmacista";
+
+                }
+
+            }
+
+            //validamos que no sea un dni existente
+            boolean dniNoExistente = true;
+
+            List<Usuario> listaUsuarios = usuarioRepository.findAll();
+
+            for (Usuario usuario : listaUsuarios){
+                if(usuarioFarmacista.getDni().equals(usuario.getDni())){
+                    //no se crea el farmacista debido a que es repetido el codigo medico
+                    attr.addFlashAttribute("msg", "DNI ya existente en el sistema, por favor ingrese uno nuevamente");
+                    dniNoExistente  = false;
+                    return "redirect:/adminsede/solicitud_farmacista";
+
+                }
+
+            }
+
+            //Pasados los filtros:
+
+            if (codigoValido == 1 && codigoMedicoUnico && dniNoExistente){
                 usuarioRepository.crearFarmacistaSinAprobar(idUsuario, idRol, usuarioFarmacista.getCorreo(), usuarioFarmacista.getContrasena(), usuarioFarmacista.getNombres(), usuarioFarmacista.getApellidos(), usuarioFarmacista.getCelular(), usuarioFarmacista.getDni(), usuarioFarmacista.getDireccion(), usuarioFarmacista.getDistrito(), usuarioFarmacista.getSeguro(), estadoUsuario);
                 sedeFarmacistaRepository.crearSedeFarmacista(idSede, idUsuario, codigoMed, aprobado);
                 attr.addFlashAttribute("msg", "Solicitud de farmacista " + usuarioFarmacista.getNombres() + " " + usuarioFarmacista.getApellidos() + " enviada correctamente");
@@ -355,6 +388,7 @@ public class AdminSedeController {
                 attr.addFlashAttribute("msg", "Codigo de colegiatura no válido, por favor ingrese nuevamente");
                 return "redirect:/adminsede/solicitud_farmacista";
             }
+
 
         }else { //Existen al menos un error y vamos de frente a la vista
             System.out.println(bindingResult.getAllErrors());
