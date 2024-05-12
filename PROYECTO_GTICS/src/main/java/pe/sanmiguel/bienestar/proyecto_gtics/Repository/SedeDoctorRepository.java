@@ -29,4 +29,7 @@ public interface SedeDoctorRepository extends JpaRepository<SedeDoctor, SedeDoct
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO proyecto_gtics.sede_doctor VALUES (?1,?2)")
     void asignarDoctorPorSede(int idDoctor, int idSede);
+
+    @Query(nativeQuery = true, value = "SELECT d.idSede FROM proyecto_gtics.sede_doctor d WHERE idDoctor = ?")
+    List<Integer> listarSedesPorIdDoctor(int idDoctor);
 }

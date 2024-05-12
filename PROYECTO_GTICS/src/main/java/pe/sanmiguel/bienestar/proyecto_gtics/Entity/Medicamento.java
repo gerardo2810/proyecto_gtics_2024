@@ -16,30 +16,30 @@ public class Medicamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMedicamento;
     @Column
-    @NotBlank(message = " ")
+    @NotBlank(message = "Debe ingresar un nombre")
     private String nombre;
     @Column
-    @Pattern(regexp="\\d+", message="La unidad debe contener solo números")
+    @Pattern(regexp="\\d+", message="La unidad debe contener solo número")
     @Positive(message = "Debe ser positivo")
-    @NotBlank(message = " ")
+    @NotBlank(message = "Debe ingresar una unidad")
     private String unidad;
     @Column
-    @NotBlank(message = " ")
+    @NotBlank(message = "Debe ingresar una descripción")
     private String descripcion;
     @Column
     private String categorias;
     @Column
-    @NotBlank(message = " ")
+    @NotBlank(message = "Ingrese por lo menos un componente")
     private String componente;
     @Column
     @DecimalMin(value = "0.00", inclusive = false, message = "El precio de compra debe ser mayor que 0")
     @DecimalMax(value = "9999.99", message = "El precio de compra debe tener como máximo dos decimales")
-    @NotNull(message = " ")
+    @NotNull(message = "Ingrese el precio de venta")
     private BigDecimal precioCompra;
     @Column
     @DecimalMin(value = "0.00", inclusive = false, message = "El precio de venta debe ser mayor que 0")
     @DecimalMax(value = "9999.99", message = "El precio de compra debe tener como máximo dos decimales")
-    @NotNull(message = " ")
+    @NotNull(message = "Ingrese el precio de compra")
     private BigDecimal precioVenta;
     @Column
     private String recetable;
