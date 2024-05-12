@@ -459,20 +459,22 @@
                                 </div>
                             </div>
 
+
                             <div class="column">
                                 <div class="input-label-box">
-                                    <label style="font-weight: bold; color: dimgray">Sede:</label>
-                                    <select id="select-sede" class="select-form-sede" name="sedeid" multiple>
-                                        <option selected disabled>Seleccionar la(s) sede(s):</option>
-                                        <option th:each="sede: ${sedeDisponibleList}"
-                                                th:value="${sede.idSede}"
-                                                th:text="${sede.nombre}">
-                                        </option>
-                                    </select>
-                                    <p style="width:300px; margin-top: 10px ">Sedes seleccionadas: <span id="selected-sedes"></span></p>
+                                    <label style="font-weight: bold; color: dimgray">Seleccionar sedes:</label>
+                                    <div id="checkbox-container">
+                                        <!-- Generar los checkboxes -->
+                                        <th:block th:each="sede : ${sedeDisponibleList}">
+                                            <input type="checkbox" id="sede-${sede.idSede}" name="sedeid" th:value="${sede.idSede}"
+                                                   th:checked="${#lists.contains(idsSede, sede.idSede)}"/>
+                                            <label for="sede-${sede.idSede}" th:text="${sede.nombre}"></label><br/>
+                                        </th:block>
+                                    </div>
+                                    <p style="width:300px; margin-top: 10px "></p>
                                 </div>
                                 <div class="input-label-box">
-                                    <p style="font-weight: bold; color: dimgray; width:300px; margin-top: 10px; padding-left: 10px">Este doctor está presente en las siguientes sedes:</p>
+                                    <p style="font-weight: bold; color: #0772ce; width:300px; margin-top: 10px; padding-left: 10px">Este medicamento está visible en las siguientes sedes:</p>
                                     <ul>
                                         <li style="padding-left: 10px" th:each="sede : ${doctoresVisiblesSede}" th:text="${sede.idSede.nombre}"></li>
                                     </ul>
@@ -665,6 +667,25 @@
     });
 </script>
 <script>
+    $(document).ready(function() {
+        // Manejar el cambio en los checkboxes
+        $('input[type="checkbox"]').change(function() {
+            var selectedSedes = [];
+            // Obtener las sedes seleccionadas
+            $('input[type="checkbox"]:checked').each(function() {
+                selectedSedes.push($(this).siblings('label').text());
+            });
+            // Mostrar las sedes seleccionadas
+            $('#selected-sedes').text(selectedSedes.join(', '));
+        });
+
+        // Al cargar la página, seleccionar las sedes previamente seleccionadas
+        var selectedSedes = [];
+        $('input[type="checkbox"]:checked').each(function() {
+            selectedSedes.push($(this).siblings('label').text());
+        });
+        $('#selected-sedes').text(selectedSedes.join(', '));
+    });
     function obtenerSeleccion() {
         var selectedOptions = [];
         var comboBox = document.getElementById("select-sede");

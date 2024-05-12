@@ -52,6 +52,18 @@
             transition: background-color 0.3s, border-color 0.3s;
             font-size: 17px;
         }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
         @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
     </style>
 </head>
@@ -228,7 +240,7 @@
 
 
             <section class="medicamentos">
-
+                <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
                 <div style="display: grid; justify-content: space-between; grid-template-columns: 1fr 0.2fr;">
                     <div>
                         <input id="searchInput" type="text" class="input-form" style="outline: none" placeholder="Buscar medicamento" >
