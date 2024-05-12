@@ -221,9 +221,16 @@
             <button onclick="imprimir()" class="print">IMPRIMIR</button>
         </div>
 
-        <div  style="display: flex; flex-direction: row; column-gap: 10px">
-            <a href="/farmacista/ordenes_venta"><button class="print">REGRESAR</button></a>
+        <div style="display: flex; flex-direction: row; column-gap: 10px">
+            <button class="print" onclick="goBack()">REGRESAR</button>
         </div>
+
+        <script>
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+
     </div>
 
     <div class="detalle-orden-container" id="boleta">

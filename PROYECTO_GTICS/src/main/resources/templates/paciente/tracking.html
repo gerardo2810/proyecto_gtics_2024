@@ -414,8 +414,6 @@
 
         <input id="searchInput" type="text" class="input-form" style="margin-top: 4px;width: 370px;height: 40px;font-size: 15px" placeholder="Buscar por nombre del medicamente">
 
-
-
         <a th:if="${ordenActual.getEstadoOrden() != 1} " th:href="@{'/paciente/boleta_pago?id=' + ${ordenActual.getIdOrden()}}" ><button class="btn-back">Ver Boleta de Pago</button></a>
 
     </div>
@@ -438,7 +436,7 @@
         <tbody>
         <tr th:each="itemDeLaOrden: ${lista}">
             <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
-            <td><img class="medicamento" th:src="${itemDeLaOrden.getIdMedicamento().imagen}"></td>
+            <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" class="medicamento"/></td>
             <td th:text="${itemDeLaOrden.getCantidad()}"></td>
             <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
             <td class="resultado"></td>
