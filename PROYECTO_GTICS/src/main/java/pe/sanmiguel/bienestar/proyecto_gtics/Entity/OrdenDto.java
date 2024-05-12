@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,16 +27,19 @@ public class OrdenDto {
 
     @NotBlank(message = "Debe seleccionar al menos un medicamento")
     private String listaIds;
-    
-    @NotEmpty(message = "Debe seleccionar una imagen")
+
+    @NotBlank(message = "Debe seleccionar al menos un medicamento")
+    private String priceTotal;
+
+    @NotEmpty(message = "Debe seleccionar la imagen de su receta")
     @Lob
-    private byte[] imagen;
+    @Size(max = 1048576, message = "El tamaño máximo de la imagen debe ser de 1 MB")
+    private byte[] file;
 
-    // Constructor, getters y setters
 
-    public void setImagen(MultipartFile file) {
+    public void setFile(MultipartFile file) {
         try {
-            this.imagen = file.getBytes();
+            this.file = file.getBytes();
         } catch (IOException e) {
             throw new RuntimeException("Error al convertir la imagen a bytes", e);
         }

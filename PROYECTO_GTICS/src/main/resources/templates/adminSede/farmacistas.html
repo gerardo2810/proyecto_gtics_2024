@@ -22,7 +22,9 @@
         <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
 
 
-
+        <!--=============== SWEETALERT ===============-->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
 
         <!--=============== DataTable ===============-->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
@@ -227,10 +229,23 @@
                         <td th:text="${farmacista.getCodigoMed()}"></td>
                         <td th:text="${farmacista.getCorreo()}"></td>
                         <td th:text="${farmacista.getDni()}"></td>
+
                         <td>
                             <a th:href="@{'/adminsede/editar_farmacista?id=' + ${farmacista.getId()}}" class="edit-icon" style="margin-left: 30px"><i class="fas fa-pencil-alt"></i></a>
-                            <a th:href="@{'/adminsede/eliminar_farmacista?id=' + ${farmacista.getId()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a>
+                            <!--a th:href="@{'/adminsede/eliminar_farmacista?id=' + ${farmacista.getId()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a-->
                         </td>
+                        <td>
+                        <td>
+                            <form class="formEstadoSolicitud" th:action="@{'/adminsede/eliminar_farmacista'}" method="post">
+                                <input type="hidden" name="idFarmacista" th:value="${farmacista.getId()}">
+                                <button type="submit" style="background: none; border: none;">
+                                    <img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/>
+                                </button>
+                            </form>
+                        </td>
+
+                        </td>
+
                     </tr>
 
 
@@ -355,6 +370,29 @@
         <!-- DataTable -->
         <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
         <!------>
+        <script>
+
+            document.querySelectorAll(".formEstadoSolicitud").forEach(form => {
+                form.addEventListener("submit", function(e){
+                    e.preventDefault();
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: "¿Estás seguro de que quieres eliminar a este farmacista?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'No, cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            e.target.submit();
+                        }
+                    })
+                });
+            });
+
+        </script>
 
     </body>
 

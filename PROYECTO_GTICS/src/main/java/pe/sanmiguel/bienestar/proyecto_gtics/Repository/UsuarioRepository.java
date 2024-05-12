@@ -118,4 +118,16 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Usuario administradorSede(int idAdmin);
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.usuario WHERE idRol = 3 and id=?;")
     Usuario farmacista(int idFarmacista);
+
+    @Query(nativeQuery = true, value = "SELECT u.dni FROM proyecto_gtics.usuario u")
+    List<String> listarDNIsUsados();
+
+    @Query(nativeQuery = true, value = "SELECT u.correo FROM proyecto_gtics.usuario u")
+    List<String> listarCorreosUsados();
+
+    @Query(nativeQuery = true, value = "SELECT u.dni FROM proyecto_gtics.usuario u WHERE u.id <> ?")
+    List<String> listarDNIsUsadosMenosUserID(int id);
+
+    @Query(nativeQuery = true, value = "SELECT u.correo FROM proyecto_gtics.usuario u WHERE u.id <> ?")
+    List<String> listarCorreosUsadosMenosUserID(int id);
 }

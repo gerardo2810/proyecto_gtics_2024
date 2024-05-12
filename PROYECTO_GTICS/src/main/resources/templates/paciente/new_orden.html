@@ -185,7 +185,7 @@
                         <label style="font-weight: bold; color:dimgray">DNI:</label>
 
                         <div style="position: relative;">
-                            <input class="input-form" type="number" th:field="*{dni}" placeholder="Ingrese su DNI" th:classappend="${#fields.hasErrors('dni') ? 'error' : ''}">
+                            <input class="input-form" type="text" th:field="*{dni}" placeholder="Ingrese su DNI" th:classappend="${#fields.hasErrors('dni') ? 'error' : ''}">
                             <i th:if="${#fields.hasErrors('dni')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
                         </div>
 
@@ -293,8 +293,17 @@
 
                 <div class="column-start">
 
-                    <div class="input-label-box">
+                    <div class="input-label-box" th:object="${ordenDto}">
                         <label style="font-weight: bold; color:dimgray; margin-bottom:8px">Captura de Receta Médica:</label>
+
+                        <div style="display: flex;flex-direction: row; column-gap: 4px">
+                            <i th:if="${#fields.hasErrors('file')}" style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                            <div class="error-message"  th:if="${#fields.hasErrors('file')}" th:errors="*{file}" style="margin-bottom: 9px"></div>
+
+                        </div>
+
+
+
                         <div id="upload" class="modal" data-state="0" data-ready="false">
 
                             <div class="modal__body">
@@ -324,14 +333,13 @@
                                     </svg>
                                 </div>
                                 <div class="modal__col">
-                                    <div class="modal__content" th:object="${ordenDto}">
-                                        <h2 class="modal__title" style="font-weight: 600">Sube una imagen de tu receta médica:</h2>
-                                        <div class="error-message"  th:if="${#fields.hasErrors('imagen')}" th:errors="*{imagen}"></div>
+                                    <div class="modal__content" >
 
+                                        <h2 class="modal__title" style="font-weight: 600">Sube una imagen de tu receta médica:</h2>
                                         <p class="modal__message" style="color:dimgray">Selecciona la imagen para subirla desde tu dispositivo</p>
                                         <div class="modal__actions">
                                             <button  class="modal__button modal__button--upload" type="button" data-action="file">Seleccionar imagen</button>
-                                            <input th:field="*{imagen}" id="file" type="file"  hidden >
+                                            <input th:field="*{file}" type="file"  hidden >
                                         </div>
                                         <div class="modal__actions" hidden>
                                             <svg class="modal__file-icon" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
@@ -390,13 +398,16 @@
 
             </div>
 
-
             <div style="width: 900px">
                 <div class="container" style="margin-top: 20px; background-color: #EEEEEE; border-radius: 14px" th:object="${ordenDto}">
 
-                    <div style="padding-top: 20px; padding-bottom: 20px">
+                    <div style="padding-top: 20px; padding-bottom: 10px">
                         <div  style="font-size: 20px;color:dimgray; font-weight: bold;"> Seleccion de medicamentos: </div>
-                        <div class="error-message"  th:if="${#fields.hasErrors('listaIds')}" th:errors="*{listaIds}"></div>
+                        <div style="display: flex;flex-direction: row; column-gap: 4px">
+                            <i th:if="${#fields.hasErrors('listaIds')}" style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                            <div class="error-message"  th:if="${#fields.hasErrors('listaIds')}" th:errors="*{listaIds}"></div>
+
+                        </div>
                     </div>
 
                     <hr class="style-one">
@@ -411,7 +422,7 @@
                                 Lista de Productos Seleccionados - Nueva Orden de Venta
 
                                 <div class="price-total-div roboto-medium">
-                                    <input type="hidden" name="priceTotal" id="priceTotal" value="">
+                                    <input type="text" th:field="*{priceTotal}" value="" hidden>
                                     TOTAL <span class="price-total">S/0.00</span>
                                 </div>
                                 <div >
@@ -621,9 +632,16 @@
     .swal2-footer {
         color:#0d6efd;
     }
+
 </style>
 
 <script >
+
+    // Obtener el elemento input de tipo file
+    const img = document.getElementById("file");
+    console.log(img.files.length);
+
+
 
     const form = document.getElementById("form");
 
@@ -658,6 +676,8 @@
 
 
 <script th:inline="javascript">
+
+
 
 
     var cantidades = /*[[${currentCant}]]*/ [];

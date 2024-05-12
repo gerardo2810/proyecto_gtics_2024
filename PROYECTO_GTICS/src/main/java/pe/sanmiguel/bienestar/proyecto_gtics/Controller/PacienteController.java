@@ -208,15 +208,17 @@ public class PacienteController {
     @PostMapping(value = "/guardarOrden")
     public String guardarOrden(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                                @ModelAttribute("ordenDto") @Valid OrdenDto ordenDto, BindingResult bin2,
-                               @RequestParam(value = "imagen", required = false) Part imagen,
+                               @RequestParam(value = "file", required = false) Part file,
                                @RequestParam(value = "listaIds", required = false) List<Integer> lista,
                                @RequestParam(value = "priceTotal", required = false) Float total,
                                Model model, RedirectAttributes redirectAttributes) throws IOException {
 
 
-        if(bindingResult.hasErrors()){
+        System.out.println(total);
+
+        if(bindingResult.hasErrors() || bin2.hasErrors()){
             System.out.println(bindingResult.getAllErrors());
-            System.out.printf(String.valueOf(imagen));
+            System.out.printf(String.valueOf(file));
 
             List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
             List<Doctor> listaDoctores = doctorRepository.findAll();
@@ -235,10 +237,12 @@ public class PacienteController {
 
             }
 
+
+
             return "paciente/new_orden";
 
         }else{
-            InputStream inputStream = imagen.getInputStream();
+            InputStream inputStream = file.getInputStream();
             byte[] bytes = inputStream.readAllBytes();
 
 
@@ -271,7 +275,7 @@ public class PacienteController {
             orden.setEstadoPreOrden(1);
 
             //Imagen de receta proxima a usar
-            //orden.setImagen(bytes);
+            orden.setImagen(bytes);
 
 
 
