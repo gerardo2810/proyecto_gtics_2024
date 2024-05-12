@@ -52,13 +52,11 @@ public class Medicamento {
     @Lob
     private byte[] imagen;
 
-
-
     public void setImagen(byte[] imagen) {
         this.imagen = imagen;
     }
 
-    // Nuevo método para obtener la imagen en formato Base64
+    //Método para obtener la imagen 4
     public String getImagenBase64() {
         return (imagen != null) ? Base64.getEncoder().encodeToString(imagen) : null;
     }
