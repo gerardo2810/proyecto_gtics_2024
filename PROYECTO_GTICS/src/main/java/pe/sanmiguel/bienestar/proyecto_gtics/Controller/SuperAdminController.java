@@ -204,7 +204,11 @@ public class SuperAdminController {
                 attr.addFlashAttribute("msg", "Se mantiene la misma contraseña");
                 return "redirect:/superadmin/cambiarContrasena";
             } else {
-                if (!isValidPassword(contrasenia)) {
+                if(contrasenia.length()>30){
+                    usuarioRepository.actualizarContrasena(contrasenia);
+                    attr.addFlashAttribute("msg", "La contraseña no se actualizó, no se realizaron cambios.");
+                    return "redirect:/superadmin/cambiarContrasena";
+                } else if (!isValidPassword(contrasenia)) {
                     System.out.println("O AQUII:");
                     String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
                     bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
@@ -213,6 +217,7 @@ public class SuperAdminController {
                     model.addAttribute("error", errorMsg); // Añade el error al modelo
                     return "superAdmin/cambiarcontrasenia";
                 }
+
                 System.out.println("MEJOR AQUI:");
                 String hashedPassword = hashPasswordSHA256(contrasenia);
                 usuarioRepository.actualizarContrasena(hashedPassword);
@@ -253,7 +258,11 @@ public class SuperAdminController {
 
     int sedeId;
     @PostMapping("/guardarAdministrador")
-    public String agregarNuevoAdministrador(@ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResult, @RequestParam(value = "sedeid", required = false) String idSede, RedirectAttributes attr, Model model) throws IOException {
+    public String agregarNuevoAdministrador(@ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResult,
+                                            @RequestParam(value = "sedeid", required = false) String idSede,
+                                            @RequestParam(value = "dni", required = false) String dni,
+                                            @RequestParam(value = "correo", required = false) String correo,
+                                            RedirectAttributes attr, Model model) throws IOException {
         if(bindingResult.hasErrors()){
             System.out.println("HAY ERRORES DE VALIDACIÓN:");
             for (ObjectError error : bindingResult.getAllErrors()) {
@@ -263,6 +272,19 @@ public class SuperAdminController {
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
             return "superAdmin/crearAdministrador";
         }else{
+            List<String> dnisUsados = usuarioRepository.listarDNIsUsados();
+            List<String> correosUsados = usuarioRepository.listarCorreosUsados();
+            System.out.println("DNI usado " + dni);
+            if (dnisUsados.contains(dni)) {
+                System.out.println("El DNI está en la lista.");
+                bindingResult.rejectValue("dni", "error.dni", "El DNI ya se encuentra registrado.");
+                return "superAdmin/crearAdministrador";
+            }
+            if (correosUsados.contains(correo)) {
+                System.out.println("El correo está en la lista.");
+                bindingResult.rejectValue("correo", "error.correo", "El correo ya se encuentra registrado.");
+                return "superAdmin/crearAdministrador";
+            }
 
             if(idSede == null || idSede.isEmpty()){
                 System.out.println("ID ADMIN: " + administrador.getIdUsuario());
@@ -376,7 +398,10 @@ public class SuperAdminController {
 
     @PostMapping("/actualizarAdministrador")
     public String actualizarAdministrador(@ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResult, @RequestParam("sedeid") Integer idSede,
-                                          @RequestParam(value = "contrasena", required = false) String contrasenia, RedirectAttributes attr, Model model){
+                                          @RequestParam(value = "contrasena", required = false) String contrasenia,
+                                          @RequestParam(value = "dni", required = false) String dni,
+                                          @RequestParam(value = "correo", required = false) String correo,
+                                          RedirectAttributes attr, Model model){
         if(bindingResult.hasErrors()){
             Sede sedeListAdminID = sedeRepository.sedeAdminID(administrador.getIdUsuario());
             List<Sede> sedeList = sedeRepository.findAll();
@@ -392,9 +417,47 @@ public class SuperAdminController {
             return "superAdmin/editarAdministrador";
         }else{
 
+            System.out.println("Contra antigua: " + administrador.getContrasena());
+            System.out.println("Contra nueva: " + contrasenia);
+
             System.out.println("Imprimir Sede ID: " + idSede);
             int idAdministradorNuevo = administrador.getIdUsuario();
 
+            List<String> correosUsados = usuarioRepository.listarCorreosUsadosMenosUserID(administrador.getIdUsuario());
+            if (correosUsados.contains(correo)) {
+                System.out.println("El correo está en la lista.");
+                Sede sedeListAdminID = sedeRepository.sedeAdminID(administrador.getIdUsuario());
+                List<Sede> sedeList = sedeRepository.findAll();
+
+                String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+                String passwordDots = hashToDots(passwordHash);
+
+                List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
+                model.addAttribute("sedeAdministrador", sedeListAdminID);
+                model.addAttribute("sedeList", sedeList);
+                model.addAttribute("estadoUsuarioList", estadoUsuarioList);
+                model.addAttribute("contrasenia", passwordDots);
+                bindingResult.rejectValue("correo", "error.correo", "El correo ya se encuentra registrado.");
+                return "superAdmin/editarAdministrador";
+            }
+
+            List<String> dnisUsados = usuarioRepository.listarDNIsUsadosMenosUserID(administrador.getIdUsuario());
+            if (dnisUsados.contains(dni)) {
+                System.out.println("El DNi está en la lista.");
+                Sede sedeListAdminID = sedeRepository.sedeAdminID(administrador.getIdUsuario());
+                List<Sede> sedeList = sedeRepository.findAll();
+
+                String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+                String passwordDots = hashToDots(passwordHash);
+
+                List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
+                model.addAttribute("sedeAdministrador", sedeListAdminID);
+                model.addAttribute("sedeList", sedeList);
+                model.addAttribute("estadoUsuarioList", estadoUsuarioList);
+                model.addAttribute("contrasenia", passwordDots);
+                bindingResult.rejectValue("dni", "error.dni", "El DNI ya se encuentra registrado.");
+                return "superAdmin/editarAdministrador";
+            }
 
             Usuario adminDatos = usuarioRepository.administradorSede(idAdministradorNuevo);
             String passwordOld = adminDatos.getContrasena();
@@ -404,7 +467,9 @@ public class SuperAdminController {
             System.out.println("Contra antigua: " + passwordOld);
             System.out.println("Contra nueva: " + passwordNew);
 
-            if (!isValidPassword(contrasenia)) {
+            if(contrasenia.length()>30){
+                administrador.setContrasena(contrasenia);
+            } else if (!isValidPassword(contrasenia)) {
                 System.out.println("O AQUII:");
                 String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
                 bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
@@ -567,12 +632,34 @@ public class SuperAdminController {
     }
 
     @PostMapping("/guardarDoctor")
-    public String crearNuevoDoctor(@ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResul, RedirectAttributes attr, Model model) {
+    public String crearNuevoDoctor(@ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResul,
+                                   @RequestParam(value = "dni", required = false) String dni,
+                                   @RequestParam(value = "correo", required = false) String correo,
+                                   RedirectAttributes attr, Model model) {
         if(bindingResul.hasErrors()){
             List<Sede> sedeDisponibleList = sedeRepository.findAll();
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
             return "superAdmin/crearDoctor";
         }else{
+
+            List<String> dnisUsados = usuarioRepository.listarDNIsUsados();
+            List<String> correosUsados = usuarioRepository.listarCorreosUsados();
+
+            if (dnisUsados.contains(dni)) {
+                System.out.println("El DNI está en la lista.");
+                List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                bindingResul.rejectValue("dni", "error.dni", "El DNI ya se encuentra registrado.");
+                return "superAdmin/crearDoctor";
+            }
+            if (correosUsados.contains(correo)) {
+                System.out.println("El correo está en la lista.");
+                List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                bindingResul.rejectValue("correo", "error.correo", "El correo ya se encuentra registrado.");
+                return "superAdmin/crearDoctor";
+            }
+
             doctorRepository.save(doctor);
             attr.addFlashAttribute("msg", "Nuevo doctor creado exitosamente");
             return "redirect:/superadmin/doctores";
@@ -601,7 +688,10 @@ public class SuperAdminController {
 
 
     @PostMapping("/actualizarDoctor")
-    public String actualizarDoctor(@ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult, @RequestParam(value = "sedeid", required = false) List<Integer> idSedesSeleccionadas, RedirectAttributes attr, Model model){
+    public String actualizarDoctor(@ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult,
+                                   @RequestParam(value = "sedeid", required = false) List<Integer> idSedesSeleccionadas, RedirectAttributes attr,
+                                   @RequestParam(value = "dni", required = false) String dni,
+                                   @RequestParam(value = "correo", required = false) String correo,Model model){
         if(bindingResult.hasErrors()){
             List<Sede> sedeDisponibleList = sedeRepository.findAll();
             List<SedeDoctor> sedeDoctorList = sedeDoctorRepository.listarSedesDondeEstaDoctor(doctor.getIdDoctor());
@@ -611,6 +701,36 @@ public class SuperAdminController {
             model.addAttribute("doctoresVisiblesSede", sedeDoctorList);
             return "superAdmin/editarDoctor";
         }else{
+
+            List<String> correosUsados = usuarioRepository.listarCorreosUsadosMenosUserID(doctor.getIdDoctor());
+            List<String> dnisUsados = usuarioRepository.listarDNIsUsadosMenosUserID(doctor.getIdDoctor());
+
+            if (correosUsados.contains(correo)) {
+                System.out.println("El correo está en la lista.");
+                List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                List<SedeDoctor> sedeDoctorList = sedeDoctorRepository.listarSedesDondeEstaDoctor(doctor.getIdDoctor());
+                List<Integer> idsSedes = sedeDoctorRepository.listarSedesPorIdDoctor(doctor.getIdDoctor());
+                model.addAttribute("idsSede", idsSedes);
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                model.addAttribute("doctor", doctor);
+                model.addAttribute("doctoresVisiblesSede", sedeDoctorList);
+                bindingResult.rejectValue("correo", "error.correo", "El correo ya se encuentra registrado.");
+                return "superAdmin/editarDoctor";
+            }
+
+            if (dnisUsados.contains(dni)) {
+                System.out.println("El DNi está en la lista.");
+
+                List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                List<SedeDoctor> sedeDoctorList = sedeDoctorRepository.listarSedesDondeEstaDoctor(doctor.getIdDoctor());
+                List<Integer> idsSedes = sedeDoctorRepository.listarSedesPorIdDoctor(doctor.getIdDoctor());
+                model.addAttribute("idsSede", idsSedes);
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                model.addAttribute("doctor", doctor);
+                model.addAttribute("doctoresVisiblesSede", sedeDoctorList);
+                bindingResult.rejectValue("dni", "error.dni", "El DNI ya se encuentra registrado.");
+                return "superAdmin/editarDoctor";
+            }
 
             if (idSedesSeleccionadas == null || idSedesSeleccionadas.isEmpty()) {
                 int idDoctor = doctor.getIdDoctor();
@@ -680,9 +800,16 @@ public class SuperAdminController {
 
     @PostMapping("/actualizarDatosFarmacista")
     public String actualizarDatosFarmacista(@ModelAttribute("farmacista") @Valid Usuario farmacista, BindingResult bindingResult,
-                                            @RequestParam(value = "contrasena", required = false) String contrasenia, RedirectAttributes attr, Model model){
+                                            @RequestParam(value = "contrasena", required = false) String contrasenia,
+                                            @RequestParam(value = "correo", required = false) String correo,
+                                            RedirectAttributes attr, Model model){
 
         if(bindingResult.hasErrors()){
+            System.out.println("Hay error: " );
+            System.out.println("HAY ERRORES DE VALIDACIÓN:");
+            for (ObjectError error : bindingResult.getAllErrors()) {
+                System.out.println("- " + error.getDefaultMessage());
+            }
             SedeFarmacista datosFarmacistaSede = sedeFarmacistaRepository.buscarFarmacistaSede(farmacista.getIdUsuario());
             List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
             String passwordHash = farmacista.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
@@ -693,6 +820,20 @@ public class SuperAdminController {
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
             return "superAdmin/editarFarmacista";
         }else{
+
+            List<String> correosUsados = usuarioRepository.listarCorreosUsadosMenosUserID(farmacista.getIdUsuario());
+            if (correosUsados.contains(correo)) {
+                SedeFarmacista datosFarmacistaSede = sedeFarmacistaRepository.buscarFarmacistaSede(farmacista.getIdUsuario());
+                List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
+                String passwordHash = farmacista.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+                String passwordDots = hashToDots(passwordHash);
+                model.addAttribute("farmacista", farmacista);
+                model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
+                model.addAttribute("contrasenia", passwordDots);
+                model.addAttribute("estadoUsuarioList", estadoUsuarioList);
+                bindingResult.rejectValue("correo", "error.correo", "El correo ya se encuentra registrado.");
+                return "superAdmin/editarFarmacista";
+            }
             int idFarmacistaNuevo = farmacista.getIdUsuario();
             Usuario adminDatos = usuarioRepository.farmacista(idFarmacistaNuevo);
             String passwordOld = adminDatos.getContrasena();
@@ -702,7 +843,9 @@ public class SuperAdminController {
             System.out.println("Contra antigua: " + passwordOld);
             System.out.println("Contra nueva: " + passwordNew);
 
-            if (!isValidPassword(contrasenia)) {
+            if(passwordNew.length()>30){
+                farmacista.setContrasena(passwordNew);
+            } else if (!isValidPassword(contrasenia)) {
                 System.out.println("O AQUII:");
                 String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
                 bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
