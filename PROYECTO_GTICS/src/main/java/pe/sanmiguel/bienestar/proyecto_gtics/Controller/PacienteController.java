@@ -275,7 +275,7 @@ public class PacienteController {
             orden.setEstadoPreOrden(1);
 
             //Imagen de receta proxima a usar
-            //orden.setImagen(bytes);
+            orden.setImagen(bytes);
 
 
 
