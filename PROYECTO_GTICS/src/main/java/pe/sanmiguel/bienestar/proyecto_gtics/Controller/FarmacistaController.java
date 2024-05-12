@@ -380,11 +380,6 @@ public class FarmacistaController {
         }
     }
 
-    @GetMapping("/farmacista/perfil")
-    public String profile() {
-        return "farmacista/perfil";
-    }
-
     @GetMapping("/farmacista/facturacion")
     public String facturacion(Model model) {
         List<MedicamentosSedeStockDto> medicamentosLowStock = medicamentoRepository.findMedicamentosLowStock(1);
@@ -393,7 +388,7 @@ public class FarmacistaController {
     }
 
     private String hashToDots(String passwordHash) {
-        return "*".repeat(passwordHash.length()); // Repite el carácter '*' según la longitud del hash
+        return "*************"; // Repite el carácter '*' según la longitud del hash
     }
 
     private boolean isValidPassword(String password) {
@@ -407,7 +402,7 @@ public class FarmacistaController {
         return matcher.matches();
     }
 
-    @GetMapping(value = {"/perfil"})
+    @GetMapping("farmacista/perfil")
     public String cambiarContrasena(Model model){
 
         Optional<Usuario> farmacistaSessionOpt = usuarioRepository.findById(115);
@@ -425,7 +420,7 @@ public class FarmacistaController {
         return "farmacista/perfil";
     }
 
-    @PostMapping("/actualizar_contrasena")
+    @PostMapping("/farmacista/actualizar_contrasena")
     public String actualizarContrasena(Usuario farmacistaSession, BindingResult bindingResult,
                                      @RequestParam(value = "contrasena", required = false) String contrasena,
                                      RedirectAttributes attr, Model model) throws IOException {
