@@ -408,40 +408,39 @@
 </div>
 
 
-<div class="container">
+<div style="display: flex;flex-direction: row;column-gap: 20px;justify-content: center">
 
-    <div style="display: flex; flex-direction: row; justify-content: space-between">
+    <div style="width: 1000px">
+        <div style="display: flex; flex-direction: column; justify-content: start">
 
-        <input id="searchInput" type="text" class="input-form" style="margin-top: 4px;width: 370px;height: 40px;font-size: 15px" placeholder="Buscar por nombre del medicamente">
+            <input id="searchInput" type="text" class="input-form" style="margin-top: 4px;width: 370px;height: 40px;font-size: 15px" placeholder="Buscar por nombre del medicamente">
 
+        </div>
 
+        <br>
 
-        <a th:if="${ordenActual.getEstadoOrden() != 1} " th:href="@{'/paciente/boleta_pago?id=' + ${ordenActual.getIdOrden()}}" ><button class="btn-back">Ver Boleta de Pago</button></a>
+        <table id="miTabla" class="table table-striped">
 
-    </div>
-
-    <br>
-
-    <table id="miTabla" class="table table-striped">
-
-        <thead>
-        <tr style="background-color: #378fff">
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio unitario</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio total</th>
-        </tr>
-        </thead>
+            <thead>
+            <tr style="background-color: #378fff">
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio unitario</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio total</th>
+            </tr>
+            </thead>
 
 
-        <tbody>
-        <tr th:each="itemDeLaOrden: ${lista}">
-            <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
-            <td><img class="medicamento" th:src="${itemDeLaOrden.getIdMedicamento().imagen}"></td>
-            <td th:text="${itemDeLaOrden.getCantidad()}"></td>
-            <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
-            <td class="resultado"></td>
+            <tbody>
+            <tr th:each="itemDeLaOrden: ${lista}">
+                <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
+                <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" class="medicamento"/></td>
+                <td th:text="${itemDeLaOrden.getCantidad()}"></td>
+                <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
+
+                <td class="resultado"></td>
+
                 <script th:inline="javascript">
                     function limitarDigitos(numero) {
                         var numeroStr = numero.toString();
@@ -453,19 +452,68 @@
                     var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
                     var cantidad = [[${itemDeLaOrden.getCantidad()}]];
                     var resultado = precioVenta * cantidad;
-                    console.log(resultado)
                     var resultadoLimitado = limitarDigitos(resultado);
                     document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
                 </script>
-        </tr>
+
+            </tr>
+
+
+            </tbody>
+        </table>
+
+        <br>
+        <br>
+        <br>
+        <br>
 
 
 
 
-        </tbody>
-    </table>
+    </div>
+
+
+    <div>
+
+        <div style="display: flex; flex-direction: row; justify-content: end">
+            <a th:if="${ordenActual.getEstadoOrden() != 1} " th:href="@{'/paciente/boleta_pago?id=' + ${ordenActual.getIdOrden()}}" ><button class="btn-back">Ver Boleta de Pago</button></a>
+        </div>
+
+
+        <div th:style="${ordenActual.getEstadoOrden()!=1? 'margin-top: 30px;background-color: white;border-radius: 10px;padding:20px 20px 0 20px; width: 400px;height: 180px' : 'margin-top: 72px;background-color: white;border-radius: 10px;padding:20px 20px 0 20px; width: 400px;height: 180px' }">
+
+
+
+            <div style="display: flex;flex-direction: row;justify-content: start">
+                <p style="font-size: 26px;font-weight: 500">Resumen:</p>
+            </div>
+
+
+            <div style="display: flex;flex-direction: row;justify-content: space-between;padding-top: 15px">
+                <p style="font-size: 18px">Cantidad de Productos:</p>
+                <p style="font-size: 18px" th:text="${lista.size()}"></p>
+            </div>
+
+
+            <div style="display: flex;flex-direction: row;justify-content: space-between;padding-top: 15px">
+                <p style="font-size: 18px">Total a pagar:</p>
+                <p style="font-size: 18px" th:text=" 'S/. ' +  ${ordenActual.getPrecioTotal()}"></p>
+            </div>
+
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+
 
 </div>
+
 
 
 

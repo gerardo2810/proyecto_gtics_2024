@@ -234,10 +234,10 @@
 
            <div class="invoice-title">
 
-               <div class="title roboto-medium data-label">Bienestar San Miguel | <span  >Sede -----</span></div>
+               <div class="title roboto-medium data-label">Bienestar San Miguel | <span  th:text="${orden.getSede().nombre}"></span></div>
 
                <div class="title-info">
-                   <div class="roboto-bold title data-label">Orden #----<span  ></span> </div>
+                   <div class="roboto-bold title data-label">Orden #<span  th:text="${orden.getIdOrden() + 1000}"></span> </div>
                </div>
            </div>
 
@@ -245,7 +245,7 @@
 
                <div style="display: flex;flex-direction: row; column-gap: 6px">
                    <p style="color:black">Dirección: </p>
-                   <p style="color:#69707A">----</p>
+                   <p style="color:#69707A" th:text="${orden.getSede().getDireccion()}"></p>
                </div>
                <div style="display: flex;flex-direction: row; column-gap: 6px">
                    <p style="color:black">Correo: </p>
