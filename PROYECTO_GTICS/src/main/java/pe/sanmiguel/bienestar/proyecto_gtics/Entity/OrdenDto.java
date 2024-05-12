@@ -22,6 +22,7 @@ public class OrdenDto {
     @NotBlank(message = "Debe seleccionar un doctor")
     private String idDoctor;
 
+    @Pattern(regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$", message = "Formato de hora incorrecto")
     @NotBlank(message = "Debe seleccionar la hora de entrega")
     private String horaEntrega;
 
