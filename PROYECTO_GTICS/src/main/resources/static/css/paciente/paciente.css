@@ -287,6 +287,13 @@ td{
 .select-form:focus{
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
+.select-form.error{
+    border: 2px solid rgb(231, 44, 44);
+}
+
+.select-form.error:focus{
+    box-shadow: 0 0 0 0.2rem rgba(236, 27, 8, 0.09);
+}
 
 
 
@@ -315,6 +322,9 @@ td{
 .input-form.error:focus{
     box-shadow: 0 0 0 0.2rem rgba(236, 27, 8, 0.09);
 }
+
+
+
 
 .error-message{
     color: #E72C2C;
