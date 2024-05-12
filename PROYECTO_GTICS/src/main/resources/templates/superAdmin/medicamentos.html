@@ -253,10 +253,10 @@
                 <!-- Contenedor de elementos -->
                 <div class="med-container">
                     <div class="item" th:each="medicamento : ${listaMedicamentos}">
-                        <img th:src="@{/img/234735.png}" alt="Medicamento" class="img-item">
+                        <img th:src="${medicamento.imagen}"  th:alt="${medicamento.nombre}" alt="Medicamento" class="img-item">
                         <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
                             <div>
-                                <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad + ' unidades'}">Unidad</div>
+                                <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}">Unidad</div>
                                 <div class="item-title roboto-medium" th:text="${medicamento.nombre}">Medicamento</div>
                             </div>
 

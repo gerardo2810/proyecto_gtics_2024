@@ -888,7 +888,12 @@ public class SuperAdminController {
 
 
     @PostMapping("/guardarMedicamento")
-    public String agregarNuevoMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento, BindingResult bindingResul, RedirectAttributes attr, Model model) {
+    public String agregarNuevoMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento, BindingResult bindingResul,
+                                          @RequestParam(value = "presentacion", required = false)  String presentacion,
+                                          @RequestParam(value = "tipounidad", required = false) String tipounidad,
+                                          @RequestParam(value = "numunidad", required = false) String numunidad,
+                                          @RequestParam(value = "nombre", required = false) String nombre,
+                                          RedirectAttributes attr, Model model) {
 
         if(bindingResul.hasErrors()){
             System.out.println("HAY ERRORES DE VALIDACIÓN:");
@@ -899,10 +904,24 @@ public class SuperAdminController {
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
             return "superAdmin/crearMedicamento";
         }else{
+
+            List<String> nombresUsados = medicamentoRepository.listarNombresMedicamento();
+
+            if (nombresUsados.contains(nombre)) {
+                System.out.println("El nombre está en la lista.");
+                List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                bindingResul.rejectValue("nombre", "error.nombre", "El nombre del medicamento ya se encuentra registrado.");
+                return "superAdmin/crearMedicamento";
+            }
+
             System.out.println("NO HAY ERROR");
             medicamento.setCategorias("NNUL");
             medicamento.setEstado(1);
             //medicamento.setImagen("-");
+            String unidad = presentacion + ' ' + numunidad + ' ' + tipounidad;
+            medicamento.setUnidad(unidad);
+            System.out.println("- Unidad final " + unidad);
             medicamentoRepository.save(medicamento);
             attr.addFlashAttribute("msg", "Medicamento creado exitosamente");
             return "redirect:/superadmin/medicamentos";
@@ -920,6 +939,7 @@ public class SuperAdminController {
             List<Sede> sedeDisponibleList = sedeRepository.findAll();
             List<SedeStock> sedeStockList = sedeStockRepository.medicamentoPresenteSedes(id);
             List<Integer> idsSede = sedeStockRepository.listarMedicamentosEnSedePorId(id);
+
             model.addAttribute("idsSede", idsSede);
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
             model.addAttribute("medicamento", medicamento);
@@ -931,7 +951,9 @@ public class SuperAdminController {
     }
 
     @PostMapping("/actualizarMedicamento")
-    public String actualizarMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento, BindingResult bindingResult, @RequestParam(value = "sedeid", required = false) List<Integer> idSedesSeleccionadas, RedirectAttributes attr, Model model){
+    public String actualizarMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento,
+                                        @RequestParam(value = "nombre", required = false) String nombre,
+                                        BindingResult bindingResult, @RequestParam(value = "sedeid", required = false) List<Integer> idSedesSeleccionadas, RedirectAttributes attr, Model model){
         if(bindingResult.hasErrors()){
             System.out.println("HAY ERRORES DE VALIDACIÓN:");
             for (ObjectError error : bindingResult.getAllErrors()) {
@@ -945,6 +967,22 @@ public class SuperAdminController {
             model.addAttribute("medicamentosVisiblesSede", sedeStockList);
             return "superAdmin/editarMedicamento";
         }else{
+
+            List<String> nombresUsados = medicamentoRepository.listarNombresMedicamentoID(medicamento.getIdMedicamento());
+
+            if (nombresUsados.contains(nombre)) {
+                System.out.println("El nombre está en la lista.");
+                List<SedeStock> sedeStockList = sedeStockRepository.medicamentoPresenteSedes(medicamento.getIdMedicamento());
+                List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                List<Integer> idsSede = sedeStockRepository.listarMedicamentosEnSedePorId(medicamento.getIdMedicamento());
+                model.addAttribute("idsSede", idsSede);
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                model.addAttribute("medicamentosVisiblesSede", sedeStockList);
+
+                bindingResult.rejectValue("nombre", "error.nombre", "El nombre del medicamento ya se encuentra registrado.");
+                return "superAdmin/editarMedicamento";
+            }
+
             medicamento.setCategorias("NNUL");
             medicamento.setEstado(1);
             if (idSedesSeleccionadas == null || idSedesSeleccionadas.isEmpty()) {

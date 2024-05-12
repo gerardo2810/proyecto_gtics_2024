@@ -247,7 +247,7 @@
                             <!--th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th-->
                             <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Unidad</th>
                             <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
-                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;"></th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Eliminar</th>
 
                         </tr>
                     </thead>
@@ -273,8 +273,8 @@
                                     <input type="hidden" name="idMedicamento" th:value="${medicamento.getIdMedicamento()}">
                                     <!-- Campo oculto para idReposicion -->
                                     <input type="hidden" name="idReposicion" th:value="${medicamento.getIdReposicion()}">
-                                    <button type="submit" style="background: none; border: none;">
-                                        <img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/>
+                                    <button type="submit" class="delete-icon" style="background: none; border: none; text-decoration: underline; color: blue;">
+                                        <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
                             </td>

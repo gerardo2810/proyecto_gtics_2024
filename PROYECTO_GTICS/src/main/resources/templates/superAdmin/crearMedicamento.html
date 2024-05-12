@@ -127,6 +127,7 @@
             outline: none;
         }
 
+
         @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
     </style>
 </head>
@@ -268,7 +269,7 @@
                 <div class="title roboto-medium data-label">
                     <div class="column-start">
                         <div class="input-label-box">
-                            <label style="font-weight: bold; color:dimgray; margin-bottom:8px; text-align: center">NUEVO MEDICAMENTO</label>
+                            <label style="font-weight: bold; color:dimgray; margin-bottom:8px; margin-left: 200px">NUEVO MEDICAMENTO</label>
                             <br>
                             <div class="profile-picture-container">
                                 <div class="profile-picture"></div>
@@ -373,21 +374,55 @@
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Nombre del medicamento:</label>
                                         <input class="input-form" type="text" th:field="*{nombre}"  name="nombre" placeholder="Ingrese nombre" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" >
-                                        <div  class="invalid-feedback"
+                                        <div style="width: 300px" class="invalid-feedback"
                                               th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
                                             No puede estar vacío
                                         </div>
                                     </div>
 
                                     <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Unidad del medicamento:</label>
-                                        <input class="input-form" type="text" th:field="*{unidad}"  name="unidad" placeholder="Ingrese la unidad" th:classappend="${#fields.hasErrors('unidad')?'is-invalid':''}" >
+                                        <label style="font-weight: bold; color:dimgray">Componente:</label>
+                                        <input th:field="*{componente}" class="input-form" name="componente" type="text" placeholder="Ingrese componentes" th:classappend="${#fields.hasErrors('componente')?'is-invalid':''}" >
                                         <div  class="invalid-feedback"
-                                              th:if="${#fields.hasErrors('unidad')}" th:errors="*{unidad}">
+                                              th:if="${#fields.hasErrors('componente')}" th:errors="*{componente}">
                                             No puede estar vacío
                                         </div>
                                     </div>
+
                                 </div>
+
+                                <div class="column">
+                                    <div class="input-label-box">
+                                        <label style="font-weight: bold; color:dimgray; width: 200px">Tipo de Presentación:</label>
+                                        <select style="width: 200px" class="input-form" name="presentacion">
+                                            <option value="Tableta">Tableta</option>
+                                            <option value="Spray">Spray</option>
+                                            <option value="Comprimido">Comprimido</option>
+                                            <option value="Cápsulas">Cápsulas</option>
+                                            <option value="Sobre">Sobre</option>
+                                            <option value="Jarabe">Jarabe</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="input-label-box">
+                                        <label style="font-weight: bold; color:dimgray; width: 200px">Cantidad:</label>
+                                        <input style="width: 200px"  class="input-form" type="text" th:field="*{numunidad}"  name="numunidad" placeholder="Ingrese la unidad" th:classappend="${#fields.hasErrors('numunidad')?'is-invalid':''}" >
+                                        <div  style="width: 200px" class="invalid-feedback" th:if="${#fields.hasErrors('numunidad')}" th:errors="*{numunidad}">
+                                            No puede estar vacío
+                                        </div>
+                                    </div>
+
+                                    <div class="input-label-box">
+                                        <label style="font-weight: bold; color:dimgray; width: 200px">Contenido:</label>
+                                        <select style="width: 200px"  class="input-form" name="tipounidad">
+                                            <option value="mg">mg</option>
+                                            <option value="g">g</option>
+                                            <option value="ml">ml</option>
+                                            <option value="ud">ud</option>
+                                        </select>
+                                    </div>
+                                </div>
+
 
                                 <div class="column">
 
@@ -401,12 +436,12 @@
                                     </div>
 
                                     <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Componente:</label>
-                                        <input th:field="*{componente}" class="input-form" name="componente" type="text" placeholder="Ingrese componentes" th:classappend="${#fields.hasErrors('componente')?'is-invalid':''}" >
-                                        <div  class="invalid-feedback"
-                                              th:if="${#fields.hasErrors('componente')}" th:errors="*{componente}">
-                                            No puede estar vacío
-                                        </div>
+                                        <label style="font-weight: bold; color:dimgray">¿Es recetable?:</label>
+                                        <select class="select-form" name="recetable" th:field="*{recetable}"  >
+                                            <option value="" selected disabled>Seleccionar opcion</option>
+                                            <option value="1">Sí</option>
+                                            <option value="2">No</option>
+                                        </select>
                                     </div>
 
                                 </div>
@@ -429,19 +464,6 @@
                                               th:if="${#fields.hasErrors('precioVenta')}" th:errors="*{precioVenta}">
                                             No puede estar vacío
                                         </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="column-start">
-
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">¿Es recetable?:</label>
-                                        <select class="select-form" name="recetable" th:field="*{recetable}"  >
-                                            <option value="" selected disabled>Seleccionar opcion</option>
-                                            <option value="1">Sí</option>
-                                            <option value="2">No</option>
-                                        </select>
                                     </div>
 
                                 </div>
