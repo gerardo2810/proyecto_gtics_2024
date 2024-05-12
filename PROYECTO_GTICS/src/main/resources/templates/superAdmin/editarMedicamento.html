@@ -371,6 +371,7 @@
                                 <input th:field="*{idMedicamento}" name="idMedicamento" type="hidden"/>
                                 <input th:field="*{unidad}" name="unidad" type="hidden"/>
                                 <input th:field="*{numunidad}" name="numunidad" type="hidden"/>
+                                <input th:field="*{imagen}" name="imagen" type="hidden"/>
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Nombre del medicamento:</label>
                                     <input class="input-form" type="text" th:field="*{nombre}"  name="nombre" placeholder="Ingrese nombre" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" required>

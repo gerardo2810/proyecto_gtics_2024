@@ -934,7 +934,8 @@ public class SuperAdminController {
     }
 
     @GetMapping(value = {"/editarMedicamento"})
-    public String editarMedicamento(@ModelAttribute("product") Medicamento medicamento, Model model, @RequestParam("id") int id){
+    public String editarMedicamento(@ModelAttribute("product") Medicamento medicamento,
+                                    Model model, @RequestParam("id") int id){
 
         Optional<Medicamento> optionalMedicamento = medicamentoRepository.findById(id);
 
