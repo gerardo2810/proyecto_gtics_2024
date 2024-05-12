@@ -63,6 +63,18 @@
             transition: background-color 0.3s, border-color 0.3s;
             font-size: 17px;
         }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
         @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
     </style>
 </head>
@@ -202,6 +214,8 @@
         <div style="padding-top:1px; display:flex; justify-content: end ; margin-left: 20px">
             <a class="btn-c" href="/superadmin/crearDoctor">Agregar doctor</a>
         </div>
+        <br>
+        <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
         <div style="display: flex; flex-direction: row; justify-content: space-between">
 
             <div class="column-start" style="padding-bottom: 1px">

@@ -63,6 +63,18 @@
             transition: background-color 0.3s, border-color 0.3s;
             font-size: 17px;
         }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
         @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
     </style>
 </head>
@@ -202,6 +214,8 @@
         <div style="padding-top:1px; display:flex; justify-content: end ; margin-left: 20px">
             <a class="btn-c" href="/superadmin/solicitudes">Solicitudes de nuevos farmacistas</a>
         </div>
+        <br>
+        <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
         <div style="display: flex; flex-direction: row; justify-content: space-between">
 
             <div class="column-start" style="padding-bottom: 1px">
@@ -263,8 +277,8 @@
                 <td style="text-align: center" th:text="${farmacista.idSede.nombre}"></td>
                 <td style="text-align: center" th:text="${farmacista.idSede.admin.nombres + ' ' + farmacista.idSede.admin.apellidos}"></td>
                 <td style="text-align: center">
-                    <div th:if="${farmacista.idFarmacista.estadoUsuario== 1}" class="disponible" style="margin-left: 15px"></div>
-                    <div th:if="${farmacista.idFarmacista.estadoUsuario== 2}" class="no_disponible" style="margin-left: 15px"></div>
+                    <div th:if="${farmacista.idFarmacista.estadoUsuario== 1}" class="disponible" style="margin-left: 35px"></div>
+                    <div th:if="${farmacista.idFarmacista.estadoUsuario== 2}" class="no_disponible" style="margin-left: 35px"></div>
                 </td>
                 <td style="text-align: center"><a href="/farmacista"><img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/></a></td>
                 <td><a th:href="@{'/superadmin/editarFarmacista' + '?id=' + ${farmacista.idFarmacista.idUsuario}}"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>

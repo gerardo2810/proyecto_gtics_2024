@@ -20,8 +20,8 @@ public class Usuario {
     private Integer rol;
 
     @Column
-    @NotBlank(message = "Debe ingresar un correo")
-    @Email(regexp = ".+@.+\\..+", message = "Debe ingresar un correo válido")
+    @NotBlank(message = "Debe ingresar un correo", groups = OptionalValidationsGroup.class)
+    @Email(regexp = ".+@.+\\..+", message = "Debe ingresar un correo válido", groups = OptionalValidationsGroup.class)
     private String correo;
 
     @Column
@@ -31,11 +31,17 @@ public class Usuario {
 
     @Column
     @NotBlank(message = "Debe ingresar un nombre")
+    @Size(max = 45, message = "No debe exceder de 45 caracteres")
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "El nombre solo puede contener letras y espacios")
     private String nombres;
 
     @Column
     @NotBlank(message = "Debe ingresar un apellido")
+    @Size(max = 45, message = "No debe exceder de 45 caracteres")
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "El nombre solo puede contener letras y espacios")
     private String apellidos;
+
+    
 
     @Column
     @Pattern(regexp="\\d+", message="El teléfono debe contener solo números")
@@ -46,22 +52,25 @@ public class Usuario {
 
     @Column
     @Pattern(regexp="\\d+", message="El DNI debe contener solo números")
-    @Size(max=8, message = "Debe tener un máximo de 8 carácteres")
-    @Size(min=8, message = "Debe tener un mínimo de 8 carácteres")
+    @Size(min = 8, max = 8, message = "Debe tener 8 dígitos")
     @NotBlank(message = "Debe ingresar el número de su dni")
-    @Positive
+    @Positive(message= "Deben ser un número positivo")
     private String dni;
 
     @Column
     @NotBlank(message = "Debe ingresar su dirección")
+    @Size(max = 60, message = "Debe contener como máximo 60 caracteres")
     private String direccion;
 
     @Column
-    @NotBlank(message = "Debe seleccionar el distrito de residencia")
+    @Size(max = 30, message = "No debe exceder de 30 caracteres")
+    @NotBlank(message = "Debe colocar su distrito de residencia")
     private String distrito;
 
     @Column
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "No debe incluir números")
     @NotBlank(message = "Debe ingresar su seguro")
+    @Size(max = 30, message = "No debe exceder de 30 caracteres")
     private String seguro;
 
     @Column(name = "estado_usuario")

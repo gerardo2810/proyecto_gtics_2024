@@ -23,7 +23,8 @@
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" th:href="@{/css/paciente/lista_medicamentos.css}">
 
 
@@ -36,7 +37,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
 
-    <title>Pre Ordenes | Bienestar San Miguel</title>
+    <title>Nueva Orden Web | Bienestar San Miguel</title>
 
     <style>
         body {
@@ -142,7 +143,7 @@
 
 
 
-<form id="form"  method="post" th:action="@{'/paciente/guardarOrden'}" enctype="multipart/form-data">
+<form id="form"  method="post" th:action="@{'/paciente/guardarOrden'}"  th:object="${usuario}"  enctype="multipart/form-data">
 
     <div class="container-form">
 
@@ -152,13 +153,28 @@
                 <div class="column">
 
                     <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray">Nombre del paciente:</label>
-                        <input class="input-form" type="text" name="nombres" placeholder="Ingrese sus nombres" required>
+                        <label style="font-weight: bold; color: dimgray">Nombre del paciente:</label>
+
+                        <div style="position: relative;">
+                            <input class="input-form" type="text" th:field="*{nombres}" placeholder="Ingrese su nombre" th:classappend="${#fields.hasErrors('nombres') ? 'error' : ''}"  >
+                            <i th:if="${#fields.hasErrors('nombres')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                        </div>
+
+                        <div class="error-message"  th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
+
                     </div>
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Apellidos del paciente:</label>
-                        <input class="input-form" type="text" name="apellidos" placeholder="Ingrese sus apellidos" required>
+
+                        <div style="position: relative;">
+                            <input class="input-form" type="text" th:field="*{apellidos}" placeholder="Ingrese su apellido" th:classappend="${#fields.hasErrors('apellidos') ? 'error' : ''}" >
+                            <i th:if="${#fields.hasErrors('apellidos')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                        </div>
+
+                        <div class="error-message"  th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
+
+
                     </div>
 
                 </div>
@@ -167,12 +183,28 @@
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">DNI:</label>
-                        <input class="input-form" type="text" name="dni" placeholder="Ingrese su DNI" required>
+
+                        <div style="position: relative;">
+                            <input class="input-form" type="number" th:field="*{dni}" placeholder="Ingrese su DNI" th:classappend="${#fields.hasErrors('dni') ? 'error' : ''}">
+                            <i th:if="${#fields.hasErrors('dni')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                        </div>
+
+                        <div class="error-message"  th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+
                     </div>
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Dirección:</label>
-                        <input class="input-form" type="text" name="direccion" placeholder="Ingrese su edad:" required>
+
+
+                        <div style="position: relative;">
+                            <input class="input-form" type="text" th:field="*{direccion}" placeholder="Ingrese su dirección:" th:classappend="${#fields.hasErrors('direccion') ? 'error' : ''}">
+                            <i th:if="${#fields.hasErrors('direccion')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                        </div>
+
+                        <div class="error-message"  th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></div>
+
+
                     </div>
 
                 </div>
@@ -181,7 +213,7 @@
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Doctor:</label>
-                        <select class="select-form" name="doctor" required>
+                        <select class="select-form" name="doctor" >
                             <option selected disabled>Seleccionar Doctor</option>
                             <option>Doctor 1</option>
                             <option>Doctor 2</option>
@@ -191,7 +223,15 @@
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Distrito:</label>
-                        <input class="input-form" name="distrito" type="text" placeholder="Ingrese el distrito donde reside" required>
+
+                        <div style="position: relative;">
+                            <input class="input-form" th:field="*{distrito}" type="text" placeholder="Ingrese el distrito donde reside" th:classappend="${#fields.hasErrors('distrito') ? 'error' : ''}">
+                            <i th:if="${#fields.hasErrors('distrito')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                        </div>
+
+                        <div class="error-message"  th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}"></div>
+
+
                     </div>
 
                 </div>
@@ -200,12 +240,22 @@
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Hora de Entrega:</label>
-                        <input class="input-form" type="text"  placeholder="Ingrese la hora de entrega" required>
+                        <input class="input-form" type="time"  placeholder="Ingrese la hora de entrega" required>
                     </div>
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Teléfono:</label>
-                        <input class="input-form" type="text"  placeholder="Ingrese su número de teléfono" required>
+
+
+
+
+                        <div style="position: relative;">
+                            <input class="input-form" type="text" th:field="*{celular}"  placeholder="Ingrese su número de teléfono" th:classappend="${#fields.hasErrors('celular') ? 'error' : ''}" >
+                            <i th:if="${#fields.hasErrors('celular')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                        </div>
+
+                        <div class="error-message"  th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}"></div>
+
                     </div>
 
                 </div>
@@ -214,7 +264,17 @@
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Seguro:</label>
-                        <input class="input-form" type="seguro" name="seguro" placeholder="Ingrese su seguro" required>
+
+                        <div style="position: relative;">
+                            <input class="input-form" th:field="*{seguro}" placeholder="Ingrese su seguro" th:classappend="${#fields.hasErrors('seguro') ? 'error' : ''}" >
+                            <i th:if="${#fields.hasErrors('seguro')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                        </div>
+
+                        <div class="error-message"  th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}"></div>
+
+                        <input  th:field="*{correo}"  value="aaa@hotmail.com" type="hidden">
+
+
                     </div>
 
                 </div>
@@ -341,7 +401,7 @@
                                 </div>
                                 <div>
 
-                                    <input id="listaIds" type="text" name="listaIds" value=""  hidden  />
+                                    <input id="listaIds" type="text" name="listaIds"   hidden  />
 
                                 </div>
                             </div>
@@ -600,11 +660,45 @@
 
 <!---------Medicamentos---------->
 
-<script>
 
-    listaSelectedIds = [];
+
+<script th:inline="javascript">
+
+
+    var cantidades = /*[[${currentCant}]]*/ [];
+    var medicamentos = /*[[${currentMed}]]*/ [];
+
+
+
+    if (cantidades && cantidades.length > 0) {
+
+        var iteraciones = medicamentos.length;
+
+        var nombresMedicamentos = medicamentos.map(function(medicamento) {
+            return medicamento.nombre;
+        });
+        var idsMedicamentos = medicamentos.map(function(medicamento) {
+            return medicamento.idMedicamento;
+        });
+        var preciosVenta = medicamentos.map(function(medicamento) {
+            return medicamento.precioVenta;
+        });
+
+        console.log(idsMedicamentos);
+        console.log(nombresMedicamentos);
+        console.log(preciosVenta);
+        console.log(cantidades);
+
+    }
+
+
+
+
+
+    listaSelectedIds = []
 
     $(document).ready(function() {
+
 
         const botonesEliminarItem = document.getElementsByClassName('btn-eliminar');
         for(var i=0;i<botonesEliminarItem.length; i++){
@@ -627,6 +721,43 @@
             buttonAgregar.addEventListener('click', clickItemAdd);
         }
 
+
+
+
+
+        if (cantidades && cantidades.length > 0) {
+
+
+            for (var i = 0; i < iteraciones; i++) {
+                const id = idsMedicamentos[i];
+                const title = nombresMedicamentos[i] + '';
+                const price = preciosVenta[i];
+                const imagenSrc = 'aaa';
+                const cant = parseInt(cantidades[i]);
+
+                listaSelectedIds.push(id.toString()); //idMedicamento
+                listaSelectedIds.push(cant); //cantidad
+
+                console.log(id)
+                console.log(title)
+                console.log(price)
+                console.log(cant)
+
+                addItemToList(id, title.toString(), price.toString(), imagenSrc);
+                ShowList();
+
+            }
+
+            const listaIdsInput = document.getElementById('listaIds');
+            listaIdsInput.value = listaSelectedIds;
+
+            console.log(listaSelectedIds)
+
+
+
+        }
+
+
         function clickItemAdd(event){
 
             const button = event.target;
@@ -635,6 +766,7 @@
             const titulo = item.getElementsByClassName('item-title')[0].innerText;
             const precio = item.getElementsByClassName('item-price')[0].innerText;
             const imagenSrc = item.getElementsByClassName('img-item')[0].src;
+
 
 
             if (listaSelectedIds.indexOf(idAdd) === -1) {
@@ -754,6 +886,8 @@
 
             listaSelectedIds[toPlus+1] = cantidadActual;
 
+            console.log(listaSelectedIds)
+
             actualizarMontoTotal();
         }
 
@@ -840,13 +974,20 @@
             itemsPreview.classList.remove('hide');
         }
 
+
+
     });
+
+
+
 </script>
 
 
 <!-----Top bar ------------->
 <script>
     $(document).ready(function() {
+
+
         var opened = false;
 
         $('#menu-small').hide();

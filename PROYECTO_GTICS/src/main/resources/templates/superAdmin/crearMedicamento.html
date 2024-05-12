@@ -372,7 +372,7 @@
                                 <div class="column">
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Nombre del medicamento:</label>
-                                        <input class="input-form" type="text" th:field="*{nombre}"  name="nombre" placeholder="Ingrese nombre" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" required>
+                                        <input class="input-form" type="text" th:field="*{nombre}"  name="nombre" placeholder="Ingrese nombre" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" >
                                         <div  class="invalid-feedback"
                                               th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
                                             No puede estar vacío
@@ -381,7 +381,7 @@
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Unidad del medicamento:</label>
-                                        <input class="input-form" type="text" th:field="*{unidad}"  name="unidad" placeholder="Ingrese la unidad" th:classappend="${#fields.hasErrors('unidad')?'is-invalid':''}" required>
+                                        <input class="input-form" type="text" th:field="*{unidad}"  name="unidad" placeholder="Ingrese la unidad" th:classappend="${#fields.hasErrors('unidad')?'is-invalid':''}" >
                                         <div  class="invalid-feedback"
                                               th:if="${#fields.hasErrors('unidad')}" th:errors="*{unidad}">
                                             No puede estar vacío
@@ -393,7 +393,7 @@
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Descripción:</label>
-                                        <input class="input-form" type="text" th:field="*{descripcion}"  name="descripcion" placeholder="Ingrese descripción" th:classappend="${#fields.hasErrors('descripcion')?'is-invalid':''}" required>
+                                        <input class="input-form" type="text" th:field="*{descripcion}"  name="descripcion" placeholder="Ingrese descripción" th:classappend="${#fields.hasErrors('descripcion')?'is-invalid':''}" >
                                         <div  class="invalid-feedback"
                                               th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
                                             No puede estar vacío
@@ -402,7 +402,7 @@
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Componente:</label>
-                                        <input th:field="*{componente}" class="input-form" name="componente" type="text" placeholder="Ingrese componentes" th:classappend="${#fields.hasErrors('componente')?'is-invalid':''}" required>
+                                        <input th:field="*{componente}" class="input-form" name="componente" type="text" placeholder="Ingrese componentes" th:classappend="${#fields.hasErrors('componente')?'is-invalid':''}" >
                                         <div  class="invalid-feedback"
                                               th:if="${#fields.hasErrors('componente')}" th:errors="*{componente}">
                                             No puede estar vacío
@@ -415,7 +415,7 @@
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Precio compra:</label>
-                                        <input class="input-form" type="text" th:field="*{precioCompra}"  name="preciocompra" placeholder="Ingrese precio de compra" th:classappend="${#fields.hasErrors('precioCompra')?'is-invalid':''}" required>
+                                        <input class="input-form" type="text" th:field="*{precioCompra}"  name="preciocompra" placeholder="Ingrese precio de compra" th:classappend="${#fields.hasErrors('precioCompra')?'is-invalid':''}" >
                                         <div style="width: 300px" class="invalid-feedback"
                                               th:if="${#fields.hasErrors('precioCompra')}" th:errors="*{precioCompra}">
                                             No puede estar vacío
@@ -424,7 +424,7 @@
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Precio Venta:</label>
-                                        <input class="input-form" type="text" th:field="*{precioVenta}"  name="precioventa" placeholder="Ingrese precio de venta" th:classappend="${#fields.hasErrors('precioVenta')?'is-invalid':''}" required>
+                                        <input class="input-form" type="text" th:field="*{precioVenta}"  name="precioventa" placeholder="Ingrese precio de venta" th:classappend="${#fields.hasErrors('precioVenta')?'is-invalid':''}" >
                                         <div  style="width: 300px" class="invalid-feedback"
                                               th:if="${#fields.hasErrors('precioVenta')}" th:errors="*{precioVenta}">
                                             No puede estar vacío
@@ -437,7 +437,7 @@
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">¿Es recetable?:</label>
-                                        <select class="select-form" name="recetable" th:field="*{recetable}"  required>
+                                        <select class="select-form" name="recetable" th:field="*{recetable}"  >
                                             <option value="" selected disabled>Seleccionar opcion</option>
                                             <option value="1">Sí</option>
                                             <option value="2">No</option>
