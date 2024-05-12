@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Base64;
 
 @Getter
 @Setter
@@ -50,4 +51,15 @@ public class Medicamento {
     @Column
     @Lob
     private byte[] imagen;
+
+
+
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
+    }
+
+    // Nuevo método para obtener la imagen en formato Base64
+    public String getImagenBase64() {
+        return (imagen != null) ? Base64.getEncoder().encodeToString(imagen) : null;
+    }
 }

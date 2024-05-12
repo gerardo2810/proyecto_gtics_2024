@@ -223,8 +223,8 @@
                         <div class="error-message"  th:if="${#fields.hasErrors('idDoctor')}" th:errors="*{idDoctor}"></div>
 
 
-
                     </div>
+
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Distrito:</label>
@@ -278,12 +278,23 @@
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Seguro:</label>
 
-                        <div style="position: relative;">
-                            <input class="input-form" th:field="*{seguro}" placeholder="Ingrese su seguro" th:classappend="${#fields.hasErrors('seguro') ? 'error' : ''}" >
-                            <i th:if="${#fields.hasErrors('seguro')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
-                        </div>
+
+
+                        <select class="select-form" th:field="*{seguro}" th:classappend="${#fields.hasErrors('seguro') ? 'error' : ''}">
+                            <option value=""  selected>Seleccionar seguro</option>
+                            <option value="false" >Ninguno</option>
+                            <option value="Estatal (SIS)" >Estatal (SIS)</option>
+                            <option value="Pacífico Seguros" >Pacífico Seguros</option>
+                            <option value="Mapfre" >Mapfre</option>
+                            <option value="Rimac Seguros" >Rimac Seguros</option>
+                            <option value="La Positiva" >La Positiva</option>
+                            <option value="Sanitas" >Sanitas</option>
+                            <option value="Seguro EsSalud" >Seguro EsSalud</option>
+                        </select>
 
                         <div class="error-message"  th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}"></div>
+
+
 
 
 
@@ -463,7 +474,7 @@
                             <!-- Contenedor de elementos -->
                             <div class="med-container">
                                 <div class="item" th:each="medicamento : ${listaMedicamentos}">
-                                    <img th:src="${medicamento.imagen}" th:alt="${medicamento.nombre}" class="img-item">
+                                    <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" class="img-item"/>
                                     <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
                                     <div class="item-title roboto-regular" th:text="${medicamento.nombre}"   th:style="${medicamento.nombre.length()>=21 ? 'font-size:15px' : ''}"  >Medicamento</div>
                                     <div style="display: flex; flex-direction: row; gap: 5px; align-items: end;">
