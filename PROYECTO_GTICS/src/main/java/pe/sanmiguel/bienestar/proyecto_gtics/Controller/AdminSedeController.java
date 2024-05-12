@@ -229,7 +229,7 @@ public class AdminSedeController {
 
         sedeFarmacistaRepository.eliminarFarmacistadeSedeFarmacista(id);
         usuarioRepository.eliminarFarmacistadeUsuario(id);
-        attr.addFlashAttribute("msg", "El usuario farmacista " + usuarioRepository.encontrarFarmacistaporId(id).getNombres() + usuarioRepository.encontrarFarmacistaporId(id).getApellidos() + " fue eliminado correctamente");
+        attr.addFlashAttribute("msg", "El usuario farmacista fue eliminado correctamente");
         return "redirect:/adminsede/farmacista";
 
     }
@@ -475,7 +475,7 @@ public class AdminSedeController {
             for(int i = 0; i < listaIds.size(); i++){
                 reposicionContenidoRepository.actualizarCantidadMedicamentoOrden(listaCantidades.get(i),listaIds.get(i),idReposicion);
             }
-            attr.addFlashAttribute("msg", "Orden de reposición actualizada correctamente");
+            attr.addFlashAttribute("msg", "Orden de reposición #" + idReposicion + " actualizada correctamente");
             return "redirect:/adminsede/ordenes";
 
         }

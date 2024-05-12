@@ -224,7 +224,7 @@ public class FarmacistaController {
                 }
 
                 idVerOrdenCreada = newOrden.getIdOrden();
-                return "redirect:/farmacista/ver_orden_venta?id=" + idVerOrdenCreada;
+                return "redirect:/farmacista/ver_boleta?id=" + idVerOrdenCreada;
 
             } else {
 

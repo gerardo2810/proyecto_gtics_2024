@@ -242,18 +242,18 @@
             <div class="title-info">
                 <div class="roboto-bold title data-label">Orden #<span th:text="${orden.getIdOrden() + 10000}"></span> </div>
 
-                <div th:if="${orden.getEstadoOrden() == 1}" th:text="Pendiente" class="btn-secondary"></div>
-                <div th:if="${orden.getEstadoOrden() == 2}" th:text="Por Pagar" class="btn-secondary"></div>
+                <div th:switch="${orden.getEstadoOrden()}">
+                    <button class="btn-pend montserrat-medium"          th:case="1">PENDIENTE</button>
+                    <button class="btn-pend montserrat-medium"          th:case="2">POR PAGAR</button>
+                    <button class="btn-rcb montserrat-medium"           th:case="3">RECIBIDO</button>
+                    <button class="btn-pro montserrat-medium"           th:case="4">EN PROCESO</button>
+                    <button class="btn-empa montserrat-medium"          th:case="5">EMPAQUETANDO</button>
+                    <button class="btn-ruta montserrat-medium"          th:case="6">EN RUTA</button>
+                    <button class="btn-listo montserrat-medium"         th:case="7">ENTREGADO</button>
+                    <button class="btn-pagado montserrat-medium"        th:case="8">PAGADO</button>
+                    <button class="btn-anulado montserrat-medium"       th:case="9">ANULADO</button>
+                </div>
 
-                <div th:if="${orden.getEstadoOrden() == 3}" th:text="Recibido" class="btn-green"></div>
-                <div th:if="${orden.getEstadoOrden() == 4}" th:text="En proceso" class="btn-yellow"></div>
-                <div th:if="${orden.getEstadoOrden() == 5}" th:text="Empaquetado" class="btn-red"></div>
-                <div th:if="${orden.getEstadoOrden() == 6}" th:text="En Ruta" class="btn-yellow"></div>
-                <div th:if="${orden.getEstadoOrden() == 7}" th:text="Entregado" class="badge badge-pagado"></div>
-
-
-                <div th:if="${orden.getEstadoOrden() == 8}" th:text="Pagado" class="badge badge-pagado"></div>
-                <div th:if="${orden.getEstadoOrden() == 9}" th:text="Anulado" class="btn-secondary"></div>
             </div>
         </div>
 
