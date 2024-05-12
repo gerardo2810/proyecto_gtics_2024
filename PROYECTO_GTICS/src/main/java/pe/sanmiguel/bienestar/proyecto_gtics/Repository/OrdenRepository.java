@@ -14,6 +14,7 @@ import java.util.List;
 
 @Repository
 public interface OrdenRepository extends JpaRepository<Orden, Integer> {
+
     @Query(value = "SELECT o.* FROM orden o JOIN tipo_orden t ON o.idTipo = t.id WHERE t.nombre = 'WEB'", nativeQuery = true)
     List<Orden> findAllOrdenesWeb();
     @Query(value = "SELECT o.* FROM orden o JOIN tipo_orden t ON o.idTipo = t.id WHERE t.nombre != 'PREORDEN'", nativeQuery = true)
@@ -31,6 +32,9 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
 
     Orden getOrdenByIdOrden(Integer idOrden);
 
+
+    @Query(nativeQuery = true, value = "SELECT o2.* FROM Orden o1 LEFT JOIN Orden o2 ON o1.id = o2.idOrden WHERE o1.id = :idOrden")
+    Orden findPreordenByOrdenId(@Param("idOrden") Integer idOrden);
 
 
     Orden findByIdOrdenAndTipoOrden(Integer idOrden, Integer tipoOrden);
