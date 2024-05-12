@@ -243,7 +243,7 @@
                 <div class="roboto-bold title data-label">Orden #<span th:text="${orden.getIdOrden() + 10000}"></span> </div>
 
                 <div th:if="${orden.getEstadoOrden() == 1}" th:text="Pendiente" class="btn-secondary"></div>
-                <div th:if="${orden.getEstadoOrden() == 2}" th:text="Pendiente" class="btn-secondary"></div>
+                <div th:if="${orden.getEstadoOrden() == 2}" th:text="Por Pagar" class="btn-secondary"></div>
 
                 <div th:if="${orden.getEstadoOrden() == 3}" th:text="Recibido" class="btn-green"></div>
                 <div th:if="${orden.getEstadoOrden() == 4}" th:text="En proceso" class="btn-yellow"></div>

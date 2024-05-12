@@ -230,23 +230,11 @@
                     </td>
 
 
-                    <td class="action" th:switch="${orden.getEstadoOrden()}">
-                        <a th:case="8"  th:href="@{'/farmacista/ver_orden_tracking' + '?id=' + ${orden.getIdOrden()}}">
+                    <td class="action">
+                        <a th:href="@{'/farmacista/ver_orden_tracking' + '?id=' + ${orden.getIdOrden()}}">
                             <button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i>
                             </button>
                         </a>
-
-
-                        <a th:case="1"  th:href="@{'/farmacista/ver_orden_tracking' + '?id=' + ${orden.getIdOrden()}}">
-                            <button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i>
-                            </button>
-                        </a>
-
-                        <a th:case="2"  th:href="@{'/farmacista/ver_orden_tracking' + '?id=' + ${orden.getIdOrden()}}">
-                            <button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i>
-                            </button>
-                        </a>
-
                     </td>
 
                 </tr>
