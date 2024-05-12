@@ -431,7 +431,19 @@
                         document.getElementById('distritoInput').value = distrito;
                         document.getElementById('direccionInput').value = direccion;
                         document.getElementById('celularInput').value = celular;
+                    } else {
+
                     }
+                });
+            } else {
+                const Swal = window.Swal;
+                // Mostrar la alerta con SweetAlert
+                Swal.fire({
+                    title: 'Paciente no Encontrado',
+                    text: 'El DNI no está registrado en el sistema, proceda con el llenado de datos',
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Aceptar',
                 });
             }
 
