@@ -212,8 +212,8 @@
 
                         <form id="form"  method="post" th:action="@{'/farmacista/actualizar_contrasena'}" th:object="${superadmin}"  enctype="multipart/form-data">
 
-                        <div class="interface-formulario">
-                            <div>
+                        <div class="interface-formulario" style="width: 100%">
+                            <div style="padding-left: 40px">
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray; width: 110px">Contraseña</label>
                                     <input class="input-form-3 form-control" th:value="${contrasena}" type="password" name="contrasena">
