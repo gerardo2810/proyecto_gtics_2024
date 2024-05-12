@@ -229,7 +229,7 @@ public class AdminSedeController {
 
         sedeFarmacistaRepository.eliminarFarmacistadeSedeFarmacista(id);
         usuarioRepository.eliminarFarmacistadeUsuario(id);
-        attr.addFlashAttribute("msg", "El usuario farmacista fue eliminado correctamente");
+        attr.addFlashAttribute("msg", "El farmacista fue eliminado correctamente");
         return "redirect:/adminsede/farmacista";
 
     }
