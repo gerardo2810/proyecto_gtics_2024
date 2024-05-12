@@ -202,7 +202,7 @@ public class FarmacistaController {
                 newOrden.setTipoOrden(1);
                 newOrden.setEstadoOrden(8);
                 newOrden.setSede(sedeSession);
-                newOrden.setSeguroUsado(seguro);
+                newOrden.setSeguroUsado(Objects.requireNonNullElse(seguro, "false"));
 
 
                 if (!(doctor == null)) {
