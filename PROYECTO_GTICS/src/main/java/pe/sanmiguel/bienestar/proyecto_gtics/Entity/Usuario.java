@@ -31,10 +31,12 @@ public class Usuario {
 
     @Column
     @NotBlank(message = "Debe ingresar un nombre")
+    @Size(max = 45, message = "No debe exceder de 45 caracteres")
     private String nombres;
 
     @Column
     @NotBlank(message = "Debe ingresar un apellido")
+    @Size(max = 45, message = "No debe exceder de 45 caracteres")
     private String apellidos;
 
     @Column
@@ -54,14 +56,17 @@ public class Usuario {
 
     @Column
     @NotBlank(message = "Debe ingresar su dirección")
+    @Size(max = 60, message = "Debe contener como máximo 60 caracteres")
     private String direccion;
 
     @Column
     @NotBlank(message = "Debe seleccionar el distrito de residencia")
+    @Size(max = 30, message = "No debe exceder de 30 caracteres")
     private String distrito;
 
     @Column
     @NotBlank(message = "Debe ingresar su seguro")
+    @Size(max = 30, message = "No debe exceder de 30 caracteres")
     private String seguro;
 
     @Column(name = "estado_usuario")
