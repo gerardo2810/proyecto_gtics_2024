@@ -210,6 +210,7 @@ public class PacienteController {
                                @RequestParam(value = "imagen", required = false) Part imagen,
                                @RequestParam(value = "listaIds", required = false) List<Integer> lista,
                                @RequestParam(value = "priceTotal", required = false) Float total,
+                               @RequestParam(value = "reporte", required = false) String reporte,
                                Model model, RedirectAttributes redirectAttributes) throws IOException {
 
 
@@ -218,6 +219,8 @@ public class PacienteController {
 
             List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
             model.addAttribute("listaMedicamentos", listaMedicamentos);
+
+            System.out.println(reporte);
 
             if(!lista.isEmpty()){
                 List<Medicamento> medicamentosSeleccionados = getMedicamentosFromLista(lista);
@@ -229,6 +232,11 @@ public class PacienteController {
                 System.out.println(medicamentosSeleccionados);
                 System.out.println(listaCantidades);
 
+            }
+
+            if(reporte.equals("error")){
+                Integer horaError = new Integer(1);
+                model.addAttribute("horaError", horaError);
             }
 
             return "paciente/new_orden";

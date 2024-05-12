@@ -79,4 +79,5 @@ public class Usuario {
     @Column(name = "estado_usuario")
     private Integer estadoUsuario;
 
+
 }
