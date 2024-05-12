@@ -184,6 +184,30 @@
                     </div>
                 </div>
 
+                <div style="display: flex;flex-direction: row;column-gap: 8px;">
+
+                    <div style="display: flex; flex-direction: column; justify-content: start; padding-top: 10px;">
+                        <label style="color:dimgray;font-weight: bold; margin-left: 2px; margin-bottom:4px">Filtrar por Estado:</label>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; justify-content: start">
+
+
+                        <select class="select-p" id="filtroEstado" >
+                            <option value="">Mostrar Todos</option>
+                            <option value="PENDIENTE">Pendiente</option>
+                            <option value="RECIBIDO">Recibido</option>
+                            <option value="EN PROCESO">En proceso</option>
+                            <option value="EMPAQUETANDO">Empaquetando</option>
+                            <option value="EN RUTA">En ruta</option>
+                            <option value="ENTREGADO">Entregado</option>
+                            <option value="PAGADO">Pagado</option>
+                            <option value="ANULADO">Anulado</option>
+                        </select>
+
+                    </div>
+                </div>
+
                 <div class="search-container" style="display: flex; flex-direction: column; gap: 15px; align-items: start">
                     <input type="search" id="search" class="form-control" placeholder="Buscar...">
                 </div>
