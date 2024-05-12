@@ -793,6 +793,23 @@ hr.style-one {
     padding-bottom: 15px;
 }
 
+.input-label-box{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+    padding-bottom: 15px;
+}
+
+.column{
+    display: flex;
+    flex-direction: row;
+    row-gap: 11px;
+    column-gap: 20px;
+    justify-content: center;
+    padding-bottom: 15px;
+}
+
 .continue-button {
     display: block;
     font-size: 1rem;
