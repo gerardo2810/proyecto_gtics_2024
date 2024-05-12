@@ -137,7 +137,7 @@
                 <ul class="nav-list">
                     <li><a href="/farmacista" class="menu-item roboto-regular">Inicio</a></li>
 
-                    <li><a href="/farmacista/ordenes_venta" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Ordenes de Venta</a></li>
+                    <li><a href="/farmacista/ordenes_venta" class="menu-item roboto-regular">Ordenes de Venta</a></li>
 
                     <li><a href="/farmacista/ordenes_web" class="menu-item roboto-regular">Ordenes Web</a></li>
 
@@ -158,7 +158,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/farmacista/cambioContraseña" class="dropdown-link">
+                                    <a href="/farmacista/cambio_contraseña" class="dropdown-link">
                                         <i class="ri-key-fill  menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
                                     </a>
                                 </li>
@@ -194,7 +194,7 @@
 
                             <ul class="nav-list-small-perfil">
                                 <li><a href="/farmacista/perfil" class="menu-item-small roboto-regular"><i class="ri-user-line menu-item roboto-regular"></i>Perfil</a></li>
-                                <li><a href="/farmacista/cambioContraseña" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+                                <li><a href="/farmacista/cambio_contraseña" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
                                 <li><a href="/index" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
                             </ul>
                         </div>
@@ -242,18 +242,18 @@
             <div class="title-info">
                 <div class="roboto-bold title data-label">Orden #<span th:text="${orden.getIdOrden() + 10000}"></span> </div>
 
-                <div th:if="${orden.getEstadoOrden() == 1}" th:text="Pendiente" class="btn-secondary"></div>
-                <div th:if="${orden.getEstadoOrden() == 2}" th:text="Por Pagar" class="btn-secondary"></div>
+                <div th:switch="${orden.getEstadoOrden()}">
+                    <button class="btn-pend montserrat-medium"          th:case="1">PENDIENTE</button>
+                    <button class="btn-pend montserrat-medium"          th:case="2">POR PAGAR</button>
+                    <button class="btn-rcb montserrat-medium"           th:case="3">RECIBIDO</button>
+                    <button class="btn-pro montserrat-medium"           th:case="4">EN PROCESO</button>
+                    <button class="btn-empa montserrat-medium"          th:case="5">EMPAQUETANDO</button>
+                    <button class="btn-ruta montserrat-medium"          th:case="6">EN RUTA</button>
+                    <button class="btn-listo montserrat-medium"         th:case="7">ENTREGADO</button>
+                    <button class="btn-pagado montserrat-medium"        th:case="8">PAGADO</button>
+                    <button class="btn-anulado montserrat-medium"       th:case="9">ANULADO</button>
+                </div>
 
-                <div th:if="${orden.getEstadoOrden() == 3}" th:text="Recibido" class="btn-green"></div>
-                <div th:if="${orden.getEstadoOrden() == 4}" th:text="En proceso" class="btn-yellow"></div>
-                <div th:if="${orden.getEstadoOrden() == 5}" th:text="Empaquetado" class="btn-red"></div>
-                <div th:if="${orden.getEstadoOrden() == 6}" th:text="En Ruta" class="btn-yellow"></div>
-                <div th:if="${orden.getEstadoOrden() == 7}" th:text="Entregado" class="badge badge-pagado"></div>
-
-
-                <div th:if="${orden.getEstadoOrden() == 8}" th:text="Pagado" class="badge badge-pagado"></div>
-                <div th:if="${orden.getEstadoOrden() == 9}" th:text="Anulado" class="btn-secondary"></div>
             </div>
         </div>
 

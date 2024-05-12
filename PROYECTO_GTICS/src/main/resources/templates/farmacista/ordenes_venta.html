@@ -91,7 +91,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/farmacista/cambioContraseña" class="dropdown-link">
+                                    <a href="/farmacista/cambio_contraseña" class="dropdown-link">
                                         <i class="ri-key-fill  menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
                                     </a>
                                 </li>
@@ -127,7 +127,7 @@
 
                             <ul class="nav-list-small-perfil">
                                 <li><a href="/farmacista/perfil" class="menu-item-small roboto-regular"><i class="ri-user-line menu-item roboto-regular"></i>Perfil</a></li>
-                                <li><a href="/farmacista/cambioContraseña" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+                                <li><a href="/farmacista/cambio_contraseña" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
                                 <li><a href="/index" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
                             </ul>
                         </div>
@@ -156,9 +156,27 @@
 
         <div style="margin-bottom: 10px"></div>
 
-        <div>
+        <div style="min-height: 350px">
 
             <div class="column-start" style="padding-bottom: 1px">
+
+                <div style="display: flex;flex-direction: row;column-gap: 8px;">
+
+                    <div style="display: flex; flex-direction: column; justify-content: start; padding-top: 10px;">
+                        <label style="color:dimgray;font-weight: bold; margin-left: 2px; margin-bottom:4px">Filtrar por Tipo:</label>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; justify-content: start">
+
+
+                        <select class="select-p" id="filtroTipo" >
+                            <option value="">Mostrar Todos</option>
+                            <option value="TIENDA">Tienda</option>
+                            <option value="WEB">Web</option>
+                        </select>
+
+                    </div>
+                </div>
 
                 <div style="display: flex;flex-direction: row;column-gap: 8px;">
 
@@ -350,6 +368,12 @@
         $('#filtroEstado').on('change', function() {
             var estado = $(this).val();
             table.column(4).search(estado).draw();
+
+        });
+
+        $('#filtroTipo').on('change', function() {
+            var estado = $(this).val();
+            table.column(1).search(estado).draw();
 
         });
 

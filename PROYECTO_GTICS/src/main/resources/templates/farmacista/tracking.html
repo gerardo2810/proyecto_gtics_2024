@@ -113,7 +113,7 @@
 
             <div class="nav-menu" id="nav-menu">
                 <ul class="nav-list">
-                    <li><a href="/farmacista" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
+                    <li><a href="/farmacista" class="menu-item roboto-regular">Inicio</a></li>
 
                     <li><a href="/farmacista/ordenes_venta" class="menu-item roboto-regular">Ordenes de Venta</a></li>
 
@@ -136,7 +136,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/farmacista/cambioContraseña" class="dropdown-link">
+                                    <a href="/farmacista/cambio_contraseña" class="dropdown-link">
                                         <i class="ri-key-fill  menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
                                     </a>
                                 </li>
@@ -171,7 +171,7 @@
                             </ul>
 
                             <ul class="nav-list-small-perfil">
-                                <li><a href="/farmacista/cambioContraseña" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+                                <li><a href="/farmacista/cambio_contraseña" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
 
                                 <li><a href="/farmacista/pre_ordenes" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
                             </ul>
@@ -634,83 +634,160 @@
 </div>
 
 
-<div class="container">
+<div>
+    <div class="container">
 
-    <div style="margin-bottom: 65px"></div>
-    <div style="padding-top: 20px; padding-bottom: 20px">
-        <div class="main-title open-sans-bold" style="font-size: 2.2rem" th:if="${orden.getEstadoOrden() != 9}"> Contenido de la Orden </div>
-        <div class="main-title open-sans-bold" style="font-size: 2.2rem" th:if="${orden.getEstadoOrden() == 9}"> Contenido de la Orden Anulada </div>
+        <div style="margin-bottom: 65px"></div>
+        <div style="padding-top: 20px; padding-bottom: 20px">
+            <div class="main-title open-sans-bold" style="font-size: 2.2rem" th:if="${orden.getEstadoOrden() != 9}"> Contenido de la Orden </div>
+            <div class="main-title open-sans-bold" style="font-size: 2.2rem" th:if="${orden.getEstadoOrden() == 9}"> Contenido de la Orden Anulada </div>
+        </div>
+
+        <hr class="style-one">
+
+        <div style="margin-bottom: 30px"></div>
+
+        <div style="padding-right: 0; padding-left: 0"> </div>
     </div>
 
-    <hr class="style-one">
 
-    <div style="margin-bottom: 30px"></div>
+    <div class="container">
 
-    <div style="padding-right: 0; padding-left: 0"> </div>
+        <div style="display: flex; flex-direction: row; justify-content: space-between">
+
+            <input id="searchInput" type="text" class="input-form" style="margin-top: 4px;width: 370px;height: 40px;font-size: 15px" placeholder="Buscar por nombre del medicamente">
+
+
+
+            <a th:if="${orden.getEstadoOrden() != 1 && orden.getEstadoOrden() != 2} " th:href="@{'/farmacista/ver_boleta?id=' + ${orden.getIdOrden()}}" >
+                <button class="print">VER BOLETA</button>
+            </a>
+
+        </div>
+
+        <br>
+
+        <table id="miTabla" class="table table-striped">
+
+            <thead>
+            <tr style="background-color: #378fff">
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio unitario</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio total</th>
+            </tr>
+            </thead>
+
+
+            <tbody>
+            <tr th:each="itemDeLaOrden: ${contenidoOrden}">
+                <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
+                <td><img class="medicamento" th:src="${itemDeLaOrden.getIdMedicamento().imagen}"></td>
+                <td th:text="${itemDeLaOrden.getCantidad()}"></td>
+                <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
+                <td class="resultado"></td>
+                <script th:inline="javascript">
+                    function limitarDigitos(numero) {
+                        var numeroStr = numero.toString();
+                        // Obtener los primeros 4 dígitos
+                        var primerosCuatroDigitos = numeroStr.substring(0, 4);
+                        var numeroLimitado = parseFloat(primerosCuatroDigitos);
+                        return numeroLimitado;
+                    }
+                    var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
+                    var cantidad = [[${itemDeLaOrden.getCantidad()}]];
+                    var resultado = precioVenta * cantidad;
+                    console.log(resultado)
+                    var resultadoLimitado = limitarDigitos(resultado);
+                    document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
+                </script>
+            </tr>
+
+
+
+
+            </tbody>
+        </table>
+
+        <div style="padding-bottom: 20px"></div>
+
+    </div>
 </div>
 
 
-<div class="container">
+<div th:if="${containsPreOrden}">
+    <div class="container">
 
-    <div style="display: flex; flex-direction: row; justify-content: space-between">
+        <div style="margin-bottom: 65px"></div>
+        <div style="padding-top: 20px; padding-bottom: 20px">
+            <div class="main-title open-sans-bold" style="font-size: 2.2rem"> Contenido de la Pre Orden </div>
+        </div>
 
-        <input id="searchInput" type="text" class="input-form" style="margin-top: 4px;width: 370px;height: 40px;font-size: 15px" placeholder="Buscar por nombre del medicamente">
+        <hr class="style-one">
 
+        <div style="margin-bottom: 30px"></div>
 
-
-        <a th:if="${orden.getEstadoOrden() != 1 && orden.getEstadoOrden() != 2} " th:href="@{'/farmacista/ver_boleta?id=' + ${orden.getIdOrden()}}" >
-            <button class="print">VER BOLETA</button>
-        </a>
-
+        <div style="padding-right: 0; padding-left: 0"> </div>
     </div>
 
-    <br>
 
-    <table id="miTabla" class="table table-striped">
+    <div class="container">
 
-        <thead>
-        <tr style="background-color: #378fff">
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio unitario</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio total</th>
-        </tr>
-        </thead>
+        <div style="display: flex; flex-direction: row; justify-content: space-between">
+
+            <input id="searchInput2" type="text" class="input-form" style="margin-top: 4px;width: 370px;height: 40px;font-size: 15px" placeholder="Buscar por nombre del medicamente">
 
 
-        <tbody>
-        <tr th:each="itemDeLaOrden: ${contenidoOrden}">
-            <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
-            <td><img class="medicamento" th:src="${itemDeLaOrden.getIdMedicamento().imagen}"></td>
-            <td th:text="${itemDeLaOrden.getCantidad()}"></td>
-            <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
-            <td class="resultado"></td>
-            <script th:inline="javascript">
-                function limitarDigitos(numero) {
-                    var numeroStr = numero.toString();
-                    // Obtener los primeros 4 dígitos
-                    var primerosCuatroDigitos = numeroStr.substring(0, 4);
-                    var numeroLimitado = parseFloat(primerosCuatroDigitos);
-                    return numeroLimitado;
-                }
-                var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
-                var cantidad = [[${itemDeLaOrden.getCantidad()}]];
-                var resultado = precioVenta * cantidad;
-                console.log(resultado)
-                var resultadoLimitado = limitarDigitos(resultado);
-                document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
-            </script>
-        </tr>
+        </div>
+
+        <br>
+
+        <table id="miTabla2" class="table table-striped">
+
+            <thead>
+            <tr style="background-color: #378fff">
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio unitario</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio total</th>
+            </tr>
+            </thead>
+
+
+            <tbody>
+            <tr th:each="itemDeLaOrden: ${contenidoPreOrden}">
+                <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
+                <td><img class="medicamento" th:src="${itemDeLaOrden.getIdMedicamento().imagen}"></td>
+                <td th:text="${itemDeLaOrden.getCantidad()}"></td>
+                <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
+                <td class="resultado"></td>
+                <script th:inline="javascript">
+                    function limitarDigitos(numero) {
+                        var numeroStr = numero.toString();
+                        // Obtener los primeros 4 dígitos
+                        var primerosCuatroDigitos = numeroStr.substring(0, 4);
+                        var numeroLimitado = parseFloat(primerosCuatroDigitos);
+                        return numeroLimitado;
+                    }
+                    var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
+                    var cantidad = [[${itemDeLaOrden.getCantidad()}]];
+                    var resultado = precioVenta * cantidad;
+                    console.log(resultado)
+                    var resultadoLimitado = limitarDigitos(resultado);
+                    document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
+                </script>
+            </tr>
 
 
 
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
+    </div>
 </div>
-
 
 
 <div >
@@ -803,6 +880,39 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function() {
+        var table = $('#miTabla2').DataTable({
+            "pageLength":5,
+            "lengthChange": false,
+            "language": {
+                "emptyTable": "No hay registros disponibles",
+                "zeroRecords": "No se encontraron registros coincidentes",
+                "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                "Search" : "Buscar:",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+            },
+
+        });
+
+        $('#filtroEstado').on('change', function() {
+            var estado = $(this).val();
+            table.column(2).search(estado).draw();
+
+        });
+
+        $('#limpiarFiltros').on('click', function() {
+            $('#filtroEstado').val('');
+            table.search('').columns().search('').draw();
+        });
+    });
+</script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -818,7 +928,20 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function() {
+        var table = $('#miTabla2').DataTable();
 
+        $('#searchInput2').on('input', function() {
+            var searchTerm = $(this).val().trim().toLowerCase();
+            if (searchTerm === "") {
+                table.search("").draw();
+                return;
+            }
+            table.search(searchTerm).draw();
+        });
+    });
+</script>
 
 </body>
 

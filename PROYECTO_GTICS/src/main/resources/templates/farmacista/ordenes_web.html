@@ -91,7 +91,7 @@
                   </a>
                 </li>
                 <li>
-                  <a href="/farmacista/cambioContraseña" class="dropdown-link">
+                  <a href="/farmacista/cambio_contraseña" class="dropdown-link">
                     <i class="ri-key-fill  menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
                   </a>
                 </li>
@@ -127,7 +127,7 @@
 
               <ul class="nav-list-small-perfil">
                 <li><a href="/farmacista/perfil" class="menu-item-small roboto-regular"><i class="ri-user-line menu-item roboto-regular"></i>Perfil</a></li>
-                <li><a href="/farmacista/cambioContraseña" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+                <li><a href="/farmacista/cambio_contraseña" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
                 <li><a href="/index" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
               </ul>
             </div>
@@ -156,7 +156,7 @@
 
     <div style="margin-bottom: 10px"></div>
 
-    <div>
+    <div style="min-height: 350px">
 
       <div class="column-start" style="padding-bottom: 1px">
 
@@ -222,8 +222,13 @@
             <button class="btn-pagado montserrat-medium"        th:case="8">PAGADO</button>
             <button class="btn-anulado montserrat-medium"       th:case="9">ANULADO</button>
           </td>
-          <td class="action" th:switch="${orden.getTipoOrden()}">
-            <a th:case="2"  th:href="@{'/farmacista/ver_orden_web' + '?id=' + ${orden.getIdOrden()}}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
+
+
+          <td class="action">
+            <a th:href="@{'/farmacista/ver_orden_tracking' + '?id=' + ${orden.getIdOrden()}}">
+              <button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i>
+              </button>
+            </a>
           </td>
         </tr>
         </tbody>

@@ -20,6 +20,7 @@
         <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
         <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
         <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
+        <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
 
         <!--=============== JS ===============-->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -31,6 +32,49 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
         <!-- Font Awesome -->
         <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
+        <style>
+            body {
+                padding-top: 80px;
+            }
+            .btn-c {
+                display: inline-block;
+                padding: 12px 20px;
+                color:white;
+                background-color: #d525ad;
+                text-decoration: none;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s, border-color 0.3s;
+                font-size: 17px;
+            }
+            .btn-n {
+                display: inline-block;
+                padding: 12px 20px;
+                color:white;
+                background-color: #1a72e7;
+                text-decoration: none;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s, border-color 0.3s;
+                font-size: 17px;
+            }
+            .alert {
+                padding: 15px;
+                margin-bottom: 20px;
+                border: 1px solid transparent;
+                border-radius: 4px;
+            }
+
+            .alert-success {
+                color: #155724;
+                background-color: #d4edda;
+                border-color: #c3e6cb;
+            }
+            @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
+        </style>
 
         <title>Órdenes de reposición</title>
     </head>
@@ -129,13 +173,8 @@
 
 
     <body>
-
-        <div style="margin-top: 110px"></div>
-
         <div class = "container">
             <div class="container">
-
-                <div style="margin-bottom: 50px"></div>
                 <div style="padding-top: 20px; padding-bottom: 20px">
                     <div class="main-title open-sans-bold"> Órdenes de reposición </div>
                     <div class="main-subtitle helvetica-medium"> Tracking de las órdenes de reposición de la sede</div>
