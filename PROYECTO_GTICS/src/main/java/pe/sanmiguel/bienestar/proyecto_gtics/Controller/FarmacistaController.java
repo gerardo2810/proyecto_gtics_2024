@@ -317,6 +317,15 @@ public class FarmacistaController {
         }
     }
 
+    @GetMapping("farmacista/ver_preorden_tracking")
+    public String verPreOrdenTracking(@RequestParam("id") String idPreOrden){
+
+        Orden preOrden = ordenRepository.findPreordenByOrdenId(Integer.valueOf(idPreOrden));
+        String idOrdenParent = String.valueOf(preOrden.getOrdenParent());
+
+        return "redirect:/farmacista/ver_orden_tracking?id=" + idOrdenParent;
+    }
+
     @GetMapping("farmacista/ver_orden_tracking")
     public String verOrdenTracking(Model model, @RequestParam("id") String idOrden){
 
@@ -378,9 +387,9 @@ public class FarmacistaController {
         return "farmacista/facturacion";
     }
 
-    @GetMapping("/farmacista/cambioContraseña")
+    @GetMapping("/farmacista/cambio_contraseña")
     public String cambioContra() {
-        return "farmacista/cambioContraseña";
+        return "farmacista/cambio_contraseña";
     }
 
 
