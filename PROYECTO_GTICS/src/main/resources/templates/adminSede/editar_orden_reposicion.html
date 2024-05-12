@@ -266,7 +266,17 @@
                                 </div>
                             </td>
                             <td>
-                                <a th:href="@{'/adminsede/eliminar_medicamento_lista_seleccionada?idMedicamento=' + ${medicamento.getIdMedicamento()} + '&idReposicion=' + ${medicamento.getIdReposicion()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a>
+                                <!--a th:href="@{'/adminsede/eliminar_medicamento_lista_seleccionada?idMedicamento=' + ${medicamento.getIdMedicamento()} + '&idReposicion=' + ${medicamento.getIdReposicion()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a-->
+                                <form class="formEstadoSolicitud" th:action="@{'/adminsede/eliminar_medicamento_lista_seleccionada'}" method="post">
+                                    <!--input type="hidden" name="getIdReposicion" th:value="${medicamento.getIdMedicamento() + '&idReposicion=' + medicamento.getIdReposicion()}"-->
+                                    <!-- Campo oculto para idMedicamento -->
+                                    <input type="hidden" name="idMedicamento" th:value="${medicamento.getIdMedicamento()}">
+                                    <!-- Campo oculto para idReposicion -->
+                                    <input type="hidden" name="idReposicion" th:value="${medicamento.getIdReposicion()}">
+                                    <button type="submit" style="background: none; border: none;">
+                                        <img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     </tbody>
@@ -277,7 +287,9 @@
 
             <div class="column" style="margin-left: 550px">
 
-                <button class="btn-cancel" type="button" onclick="window.location.href = '/adminsede/ordenes'">Cancelar</button>
+                <!--button class="btn-cancel" type="button" onclick="window.location.href = '/adminsede/ordenes'">Cancelar</button-->
+                <button class="btn-cancel" type="button" onclick="confirmCancel()">Cancelar</button>
+
                 <button class="btn-p" type="submit" style="font-size: 17px; padding: 12px 20px">Actualizar</button>
 
             </div>
@@ -399,7 +411,79 @@
                 display: none !important;
             }
         </style>
+        <script>
+            function confirmCancel() {
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: 'Si cancelas, se perderán todos los cambios editados. ¿Estás seguro de cancelar?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, cancelar',
+                    cancelButtonText: 'No, seguir editando'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redireccionar a la página de órdenes
+                        window.location.href = '/adminsede/ordenes';
+                    }
+                });
+            }
+        </script>
 
+
+        <script>
+            // Agregar el evento 'submit' al formulario
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.querySelector('form');
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Evitar el envío del formulario por defecto
+
+                    // Mostrar la alerta SweetAlert2
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: '¿Estás seguro de que deseas actualizar la orden de reposición?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, actualizar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit(); // Enviar el formulario después de que el usuario confirma
+                        }
+                    });
+                });
+            });
+        </script>
+
+
+
+
+        <script>
+            document.querySelectorAll(".formEstadoSolicitud").forEach(form => {
+                form.addEventListener("submit", function(e){
+                    e.preventDefault();
+                    console.log("Formulario enviado");
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: "¿Estás seguro de que quieres eliminar a este medicamento?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'No, cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            e.target.submit();
+                        }
+                    })
+                });
+            });
+
+        </script>
 
 
         <script>
@@ -416,6 +500,7 @@
                 });
             });
         </script>
+
 
         <script>
 
@@ -730,31 +815,6 @@
         </script>
 
 
-
-
-        <script>
-
-            document.querySelectorAll(".formEstadoSolicitud").forEach(form => {
-                form.addEventListener("submit", function(e){
-                    e.preventDefault();
-                    Swal.fire({
-                        title: '¿Estás seguro?',
-                        text: "¿Estás seguro de que quieres eliminar a este medicamento?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Sí, eliminar',
-                        cancelButtonText: 'No, cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            e.target.submit();
-                        }
-                    })
-                });
-            });
-
-        </script>
     </body>
 
 </html>
