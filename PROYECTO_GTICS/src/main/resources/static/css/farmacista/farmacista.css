@@ -636,7 +636,46 @@ hr.style-one {
 
 /* END LISTA MEDICAMENTOS */
 
+.print{
+    padding: 9px;
+    width: 190px;
+    border: none;
+    border-radius: 6px;
+    background-color: #918989;
+    color:white;
+    transition: background-color 0.3s, border-color 0.3s;
+    cursor: pointer;
+}
 
+.print:hover{
+    padding: 7px;
+    width: 190px;
+    border: 2px solid #918989;
+    border-radius: 6px;
+    background-color: white;
+    color: #918989;
+}
+
+
+.aprobar{
+    padding: 9px;
+    width: 190px;
+    border: none;
+    border-radius: 6px;
+    background-color: #1f73ef;
+    color:white;
+    transition: background-color 0.3s, border-color 0.3s;
+    cursor: pointer;
+}
+
+.aprobar:hover{
+    padding: 7px;
+    width: 190px;
+    border: 2px solid #1f73ef;
+    border-radius: 6px;
+    background-color: white;
+    color: #1f73ef;
+}
 
 /* FILTRO DATATABLES */
 .select-p{

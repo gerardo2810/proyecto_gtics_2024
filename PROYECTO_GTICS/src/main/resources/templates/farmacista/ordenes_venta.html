@@ -200,6 +200,7 @@
                 <thead>
                 <tr style="background-color: #378fff">
                     <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Número de Orden</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Tipo de Orden</th>
                     <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha de Registro</th>
                     <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Paciente</th>
                     <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Estado</th>
@@ -209,11 +210,16 @@
                 <tbody>
                 <tr th:each="orden : ${listaOrdenesVenta}">
                     <td style="text-align: center" th:text="${orden.getIdOrden() + 10000}"></td>
+
+                    <td style="text-align: center" th:if="${orden.getTipoOrden() == 1}" th:text="${'TIENDA'}"></td>
+
+                    <td style="text-align: center" th:if="${orden.getTipoOrden() == 2}" th:text="${'WEB'}"></td>
+
                     <td style="text-align: center" th:text="${#temporals.format(orden.getFechaIni(), 'dd/MM/yyyy   -   HH:mm')}"></td>
                     <td style="text-align: center" th:text="${orden.getPaciente().getNombres()} + ' ' + ${orden.getPaciente().getApellidos()}" ></td>
                     <td th:switch="${orden.getEstadoOrden()}">
                         <button class="btn-pend montserrat-medium"          th:case="1">PENDIENTE</button>
-                        <button class="btn-pend montserrat-medium"          th:case="2">PENDIENTE</button>
+                        <button class="btn-pend montserrat-medium"          th:case="2">POR PAGAR</button>
                         <button class="btn-rcb montserrat-medium"           th:case="3">RECIBIDO</button>
                         <button class="btn-pro montserrat-medium"           th:case="4">EN PROCESO</button>
                         <button class="btn-empa montserrat-medium"          th:case="5">EMPAQUETANDO</button>
@@ -224,10 +230,23 @@
                     </td>
 
 
-                    <td class="action" th:switch="${orden.getTipoOrden()}">
-                    <a th:case="1"  th:href="@{'/farmacista/ver_orden_venta' + '?id=' + ${orden.getIdOrden()}}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-                    <a th:case="2"  th:href="@{'/farmacista/ver_orden_web' + '?id=' + ${orden.getIdOrden()}}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-                    <a th:case="3"  th:href="@{'/farmacista/ver_pre_orden' + '?id=' + ${orden.getIdOrden()}}"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
+                    <td class="action" th:switch="${orden.getEstadoOrden()}">
+                        <a th:case="8"  th:href="@{'/farmacista/ver_orden_tracking' + '?id=' + ${orden.getIdOrden()}}">
+                            <button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i>
+                            </button>
+                        </a>
+
+
+                        <a th:case="1"  th:href="@{'/farmacista/ver_orden_tracking' + '?id=' + ${orden.getIdOrden()}}">
+                            <button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i>
+                            </button>
+                        </a>
+
+                        <a th:case="2"  th:href="@{'/farmacista/ver_orden_tracking' + '?id=' + ${orden.getIdOrden()}}">
+                            <button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i>
+                            </button>
+                        </a>
+
                     </td>
 
                 </tr>
@@ -311,13 +330,13 @@
             ],
             columnDefs: [
                 { className: 'centered', targets: [0, 1, 2, 3, 4] },
-                { orderable: false, targets: [4] },
+                { orderable: false, targets: [5] },
             ],
             "pageLength":5,
             "lengthChange": false,
             "searching": true,
             "order": [
-                [3, "desc"] // Ordenar por la segunda columna de forma descendente
+                [4, "desc"] // Ordenar por la segunda columna de forma descendente
             ],
             "language": {
                 "emptyTable": "No hay registros disponibles",
@@ -342,7 +361,7 @@
 
         $('#filtroEstado').on('change', function() {
             var estado = $(this).val();
-            table.column(3).search(estado).draw();
+            table.column(4).search(estado).draw();
 
         });
 
