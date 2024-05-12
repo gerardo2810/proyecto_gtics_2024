@@ -34,19 +34,19 @@ public class Usuario {
     @Column
     @NotBlank(message = "Debe ingresar un nombre", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class})
     @Size(max = 45, message = "No debe exceder de 45 caracteres", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class})
-    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "Los nombres solo puede contener letras y espacios", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class})
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "Solo puede contener letras y espacios", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class})
     @NotBlank(message = "Debe ingresar un nombre")
     @Size(max = 45, message = "No debe exceder de 45 caracteres")
-    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "Los nombres solo puede contener letras y espacios")
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "Solo puede contener letras y espacios")
     private String nombres;
 
     @Column
     @NotBlank(message = "Debe ingresar un apellido", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class})
     @Size(max = 45, message = "No debe exceder de 45 caracteres", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class})
-    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "Los apellidos solo puede contener letras y espacios", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class})
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "Solo puede contener letras y espacios", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class})
     @NotBlank(message = "Debe ingresar un apellido")
     @Size(max = 45, message = "No debe exceder de 45 caracteres")
-    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "Los apellidos solo puede contener letras y espacios")
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "Solo puede contener letras y espacios")
     private String apellidos;
 
     
