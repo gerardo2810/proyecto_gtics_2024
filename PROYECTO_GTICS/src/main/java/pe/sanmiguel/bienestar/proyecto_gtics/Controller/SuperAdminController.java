@@ -206,7 +206,7 @@ public class SuperAdminController {
             } else {
                 if (!isValidPassword(contrasenia)) {
                     System.out.println("O AQUII:");
-                    String errorMsg = "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un caracter especial.";
+                    String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
                     bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
                     superadmin = usuarioRepository.superAdmin();
                     model.addAttribute("superadmin", superadmin);
@@ -269,7 +269,7 @@ public class SuperAdminController {
 
                 String password = administrador.getContrasena();
                 if (!isValidPassword(password)) {
-                    bindingResult.rejectValue("contrasena", "error.contrasena", "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un caracter especial.");
+                    bindingResult.rejectValue("contrasena", "error.contrasena", "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.");
                     return "superAdmin/crearAdministrador";
                 }
 
@@ -309,6 +309,9 @@ public class SuperAdminController {
     }
 
     private boolean isValidPassword(String password) {
+        if (password == null || password.trim().isEmpty()) {
+            return false; // Contraseña es nula o está en blanco
+        }
         // Al menos una mayúscula, una minúscula, un caracter especial y mínimo 8 caracteres
         String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
         Pattern pattern = Pattern.compile(regex);
@@ -372,13 +375,18 @@ public class SuperAdminController {
     }
 
     @PostMapping("/actualizarAdministrador")
-    public String actualizarAdministrador(@ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResult, @RequestParam("sedeid") Integer idSede, RedirectAttributes attr, Model model){
+    public String actualizarAdministrador(@ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResult, @RequestParam("sedeid") Integer idSede,
+                                          @RequestParam(value = "contrasena", required = false) String contrasenia, RedirectAttributes attr, Model model){
         if(bindingResult.hasErrors()){
             Sede sedeListAdminID = sedeRepository.sedeAdminID(administrador.getIdUsuario());
             List<Sede> sedeList = sedeRepository.findAll();
+            String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+            String passwordDots = hashToDots(passwordHash);
+
             List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
             model.addAttribute("sedeAdministrador", sedeListAdminID);
             model.addAttribute("sedeList", sedeList);
+            model.addAttribute("contrasenia", passwordDots);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
 
             return "superAdmin/editarAdministrador";
@@ -386,6 +394,34 @@ public class SuperAdminController {
 
             System.out.println("Imprimir Sede ID: " + idSede);
             int idAdministradorNuevo = administrador.getIdUsuario();
+
+
+            Usuario adminDatos = usuarioRepository.administradorSede(idAdministradorNuevo);
+            String passwordOld = adminDatos.getContrasena();
+
+            String passwordNew = hashPasswordSHA256(contrasenia);
+
+            System.out.println("Contra antigua: " + passwordOld);
+            System.out.println("Contra nueva: " + passwordNew);
+
+            if (!isValidPassword(contrasenia)) {
+                System.out.println("O AQUII:");
+                String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
+                bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
+                Sede sedeListAdminID = sedeRepository.sedeAdminID(administrador.getIdUsuario());
+                List<Sede> sedeList = sedeRepository.findAll();
+
+                String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+                String passwordDots = hashToDots(passwordHash);
+
+                List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
+                model.addAttribute("sedeAdministrador", sedeListAdminID);
+                model.addAttribute("sedeList", sedeList);
+                model.addAttribute("estadoUsuarioList", estadoUsuarioList);
+                model.addAttribute("contrasenia", passwordDots);
+                model.addAttribute("error", errorMsg); // Añade el error al modelo
+                return "superAdmin/editarAdministrador";
+            }
 
             Sede AdministradorTieneSede = sedeRepository.buscarSedeTieneAdministrador(idAdministradorNuevo);
 
@@ -643,16 +679,46 @@ public class SuperAdminController {
     }
 
     @PostMapping("/actualizarDatosFarmacista")
-    public String actualizarDatosFarmacista(@ModelAttribute("farmacista") @Valid Usuario farmacista, BindingResult bindingResult, RedirectAttributes attr, Model model){
+    public String actualizarDatosFarmacista(@ModelAttribute("farmacista") @Valid Usuario farmacista, BindingResult bindingResult,
+                                            @RequestParam(value = "contrasena", required = false) String contrasenia, RedirectAttributes attr, Model model){
 
         if(bindingResult.hasErrors()){
             SedeFarmacista datosFarmacistaSede = sedeFarmacistaRepository.buscarFarmacistaSede(farmacista.getIdUsuario());
             List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
+            String passwordHash = farmacista.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+            String passwordDots = hashToDots(passwordHash);
             model.addAttribute("farmacista", farmacista);
             model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
+            model.addAttribute("contrasenia", passwordDots);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
             return "superAdmin/editarFarmacista";
         }else{
+            int idFarmacistaNuevo = farmacista.getIdUsuario();
+            Usuario adminDatos = usuarioRepository.farmacista(idFarmacistaNuevo);
+            String passwordOld = adminDatos.getContrasena();
+
+            String passwordNew = hashPasswordSHA256(contrasenia);
+
+            System.out.println("Contra antigua: " + passwordOld);
+            System.out.println("Contra nueva: " + passwordNew);
+
+            if (!isValidPassword(contrasenia)) {
+                System.out.println("O AQUII:");
+                String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
+                bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
+                SedeFarmacista datosFarmacistaSede = sedeFarmacistaRepository.buscarFarmacistaSede(farmacista.getIdUsuario());
+                List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
+                String passwordHash = farmacista.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+                String passwordDots = hashToDots(passwordHash);
+                model.addAttribute("farmacista", farmacista);
+                model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
+                model.addAttribute("contrasenia", passwordDots);
+                model.addAttribute("estadoUsuarioList", estadoUsuarioList);
+                model.addAttribute("contrasenia", passwordDots);
+                model.addAttribute("error", errorMsg); // Añade el error al modelo
+                return "superAdmin/editarFarmacista";
+            }
+
             attr.addFlashAttribute("msg", "Datos del farmacista actualizados exitosamente");
             usuarioRepository.save(farmacista);
             return "redirect:/superadmin/farmacistas";
