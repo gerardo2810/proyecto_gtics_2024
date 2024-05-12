@@ -240,13 +240,22 @@
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Hora de Entrega:</label>
-                        <input class="input-form" type="time"  placeholder="Ingrese la hora de entrega" required>
+
+                        <div style="position: relative;">
+
+                            <input th:if="${horaError==null}" class="input-form" type="time" id="hora"  placeholder="Ingrese la hora de entrega" >
+                            <input th:if="${horaError!=null}" class="input-form error" type="time" id="hora"  placeholder="Ingrese la hora de entrega" >
+
+                        </div>
+
+                        <div class="error-message"  th:if="${horaError!=null}">Debe seleccionar la hora de entrega</div>
+
+
+
                     </div>
 
                     <div class="input-label-box">
                         <label style="font-weight: bold; color:dimgray">Teléfono:</label>
-
-
 
 
                         <div style="position: relative;">
@@ -272,7 +281,6 @@
 
                         <div class="error-message"  th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}"></div>
 
-                        <input  th:field="*{correo}"  value="aaa@hotmail.com" type="hidden">
 
 
                     </div>
@@ -462,7 +470,8 @@
 
 
 
-
+        <input type="hidden" id="reporte" name="reporte">
+        <input type="hidden" id="reporte" name="reporte2">
 
 
 
@@ -612,11 +621,44 @@
     }
 </style>
 
+<script th:inline="javascript">
 
-<script>
+
+    var horaError = /*[[${horaError}]]*/ '';
+
+    if(horaError != null){
+        console.log(horaError);
+    }
+
+
 
     const form = document.getElementById("form");
     var img = document.getElementById("file");
+    const hora = document.getElementById("hora");
+    var reporte = document.getElementById("reporte");
+    var reporte = document.getElementById("reporte");
+
+
+
+    function checkInputs() {
+        function setErrorFor(input, message) {
+            const formControl = input.parentElement;
+            const small = formControl.querySelector("small");
+            formControl.className = "input-form error";
+            small.innerText = message;
+            hasErrors = true;
+        }
+
+        let hasErrors = false;
+        // trim to remove the whitespaces
+        const horaValue = hora.value.trim();
+
+        if (horaValue === "") {
+            setErrorFor(hora, "No puedes dejar en blanco este campo");
+        }
+
+        return hasErrors;
+    }
 
     form.addEventListener("submit", e =>{
         e.preventDefault();
@@ -635,6 +677,10 @@
         }
 
         else{
+            if(reporte.value === ''){
+                reporte.value = "error"
+            }
+
             Swal.fire({
                 title: '¿Estás seguro de generar esta nueva orden de compra?',
                 icon: 'warning',
