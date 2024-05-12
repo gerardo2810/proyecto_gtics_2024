@@ -267,7 +267,7 @@ public class AdminSedeController {
         return "redirect: /adminsede/farmacista";
     }*/
 
-    @GetMapping("/eliminar_medicamento_lista_seleccionada")
+    @PostMapping("/eliminar_medicamento_lista_seleccionada")
     public String eliminarMedicamentoLista(Model model,
                                            @RequestParam("idMedicamento") int idMedicamento,
                                            @RequestParam("idReposicion") int idReposicion){
