@@ -17,6 +17,8 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.FarmacistaValidationsGroup;
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.RegisterValidationsGroup;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -135,7 +137,7 @@ public class FarmacistaController {
     }
 
     @PostMapping("/farmacista/finalizar_compra")
-    public String createOrdenVenta(@ModelAttribute("usuario") @Valid Usuario usuario,
+    public String createOrdenVenta(@ModelAttribute("usuario") @Validated(FarmacistaValidationsGroup.class) Usuario usuario,
                                    BindingResult bindingResult,
                                    Model model,
                                    @RequestParam(value = "nombres") String name,
@@ -195,7 +197,7 @@ public class FarmacistaController {
                 newOrden.setFechaIni(now);
                 newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
                 //Id conocido porque no hay session
-                newOrden.setIdFarmacista(7);
+                newOrden.setIdFarmacista(115);
                 newOrden.setTipoOrden(1);
                 newOrden.setEstadoOrden(8);
                 newOrden.setSede(sedeSession);
@@ -229,7 +231,7 @@ public class FarmacistaController {
                 }
 
                 idVerOrdenCreada = newOrden.getIdOrden();
-                return "redirect:/farmacista/ver_boleta?id=" + idVerOrdenCreada;
+                return "redirect:/farmacista/ver_orden_tracking?id=" + idVerOrdenCreada;
 
             } else {
 
