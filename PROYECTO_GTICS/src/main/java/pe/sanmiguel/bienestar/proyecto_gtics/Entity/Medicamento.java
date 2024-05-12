@@ -60,7 +60,7 @@ public class Medicamento {
         this.imagen = imagen;
     }
 
-    //Método para obtener la imagen 4
+    //Método para obtener la imagen
     public String getImagenBase64() {
         return (imagen != null) ? Base64.getEncoder().encodeToString(imagen) : null;
     }
