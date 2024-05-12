@@ -268,21 +268,12 @@
                                 </div><br/>
                                 <div style="align-items: center; background-color: #ffffff" class="add-item-button-ad open-sans-regular-ad">
                                     <div th:if="${medicamento.getCantidad() > 25}" th:text="'Stock Aceptable'" class="btn-green" style="justify-content: center; text-align: center; align-content: center; align-items: center"></div>
-                                    <div th:if="${medicamento.getCantidad() <= 25}" th:text="'Por Agotar'" class="btn-yellow" style="justify-content: center; text-align: center; align-content: center; align-items: center"></div>
+                                    <div th:if="${medicamento.getCantidad() <= 25 && medicamento.getCantidad() != 0}" th:text="'Por Agotar'" class="btn-yellow" style="justify-content: center; text-align: center; align-content: center; align-items: center"></div>
                                     <div th:if="${medicamento.getCantidad() == 0}" th:text="'Agotado'" class="btn-red" style="justify-content: center; text-align: center; align-content: center; align-items: center"></div>
                                 </div>
                             </div>
 
                             <button class="add-item-button open-sans-regular" style="color: #ffffff" th:if="${medicamento.getCantidad() <= 25}" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
-                            <!--
-                            <div th:if="${medicamento.getCantidad() < 25}">
-                                <button class="add-item-button open-sans-regular" style="color: #ffffff" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
-                            </div>
-
-                            <div th:if="${medicamento.getCantidad() > 25}">
-                                <button class="add-item-button open-sans-regular" style="color: #ffffff; background-color: #6c757d" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>
-                            </div>
-                            -->
 
                         </div>
                     </div>
