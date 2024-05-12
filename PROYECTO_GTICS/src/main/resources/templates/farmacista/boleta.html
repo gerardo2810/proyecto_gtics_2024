@@ -283,7 +283,8 @@
 
                 <div style="display: flex;flex-direction: row; column-gap: 6px">
                     <p style="color:black">Seguro: </p>
-                    <p style="color:#69707A" th:text="${orden.getPaciente().getSeguro()}"></p>
+                    <p style="color:#69707A" th:if="${orden.getSeguroUsado() != 'false'}" th:text="${orden.getPaciente().getSeguro()}"></p>
+                    <p style="color:#69707A" th:if="${orden.getSeguroUsado() == 'false'}" th:text="${'Ninguno'}"></p>
                 </div>
 
                 <div style="display: flex;flex-direction: row; column-gap: 6px">

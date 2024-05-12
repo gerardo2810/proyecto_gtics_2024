@@ -147,7 +147,7 @@ public class FarmacistaController {
                                    @RequestParam(value = "distrito") String distrito,
                                    @RequestParam(value = "direccion") String direccion,
                                    @RequestParam(value = "doctor", required = false) String doctor,
-                                   @RequestParam(value = "seguro") String seguro,
+                                   @RequestParam(value = "seguro", required = false) String seguro,
                                    @RequestParam(value = "correo") String correo,
                                    @RequestParam(value = "celular") String celular,
                                    @RequestParam(value = "listaIds") List<String> listaSelectedIds,
@@ -202,6 +202,7 @@ public class FarmacistaController {
                 newOrden.setTipoOrden(1);
                 newOrden.setEstadoOrden(8);
                 newOrden.setSede(sedeSession);
+                newOrden.setSeguroUsado(seguro);
 
 
                 if (!(doctor == null)) {
@@ -504,6 +505,14 @@ public class FarmacistaController {
                 userExist = true;
                 user = userOptional.get();
 
+                user.setNombres(name);
+                user.setApellidos(lastname);
+                user.setCelular(celular);
+                user.setDireccion(direccion);
+                user.setDistrito(distrito);
+                user.setSeguro(Objects.requireNonNullElse(seguro, "false"));
+                usuarioRepository.save(user);
+
             } else {
                 Usuario newUser = new Usuario();
                 newUser.setRol(4);
@@ -515,8 +524,7 @@ public class FarmacistaController {
                 newUser.setDni(dni);
                 newUser.setDireccion(direccion);
                 newUser.setDistrito(distrito);
-                newUser.setSeguro(seguro);
-
+                newUser.setSeguro(Objects.requireNonNullElse(seguro, "false"));
                 newUser.setEstadoUsuario(2);
 
                 user = newUser;
