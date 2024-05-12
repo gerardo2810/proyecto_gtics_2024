@@ -266,7 +266,7 @@
             <div class="title roboto-medium data-label">
                 <div class="column-start">
                     <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray; margin-bottom:8px; text-align: center">EDITAR MEDICAMENTO</label>
+                        <label style="font-weight: bold; color:dimgray; margin-bottom:8px; margin-left: 200px">EDITAR MEDICAMENTO</label>
                         <br>
                         <div class="profile-picture-container">
                             <div class="profile-picture"></div>
@@ -369,20 +369,22 @@
                         <div>
                             <div class="column">
                                 <input th:field="*{idMedicamento}" name="idMedicamento" type="hidden"/>
+                                <input th:field="*{unidad}" name="unidad" type="hidden"/>
+                                <input th:field="*{numunidad}" name="numunidad" type="hidden"/>
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Nombre del medicamento:</label>
                                     <input class="input-form" type="text" th:field="*{nombre}"  name="nombre" placeholder="Ingrese nombre" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" required>
-                                    <div  class="invalid-feedback"
+                                    <div style="width: 300px" class="invalid-feedback"
                                           th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
                                         No puede estar vacío
                                     </div>
                                 </div>
 
                                 <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Unidad del medicamento:</label>
-                                    <input class="input-form" type="text" th:field="*{unidad}"  name="unidad" placeholder="Ingrese la unidad" th:classappend="${#fields.hasErrors('unidad')?'is-invalid':''}" required>
+                                    <label style="font-weight: bold; color:dimgray">Componente:</label>
+                                    <input th:field="*{componente}" class="input-form" name="componente" type="text" placeholder="Ingrese componentes" th:classappend="${#fields.hasErrors('componente')?'is-invalid':''}" required>
                                     <div  class="invalid-feedback"
-                                          th:if="${#fields.hasErrors('unidad')}" th:errors="*{unidad}">
+                                          th:if="${#fields.hasErrors('componente')}" th:errors="*{componente}">
                                         No puede estar vacío
                                     </div>
                                 </div>
@@ -400,12 +402,11 @@
                                 </div>
 
                                 <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Componente:</label>
-                                    <input th:field="*{componente}" class="input-form" name="componente" type="text" placeholder="Ingrese componentes" th:classappend="${#fields.hasErrors('componente')?'is-invalid':''}" required>
-                                    <div  class="invalid-feedback"
-                                          th:if="${#fields.hasErrors('componente')}" th:errors="*{componente}">
-                                        No puede estar vacío
-                                    </div>
+                                    <label style="font-weight: bold; color:dimgray">¿Es recetable?:</label>
+                                    <select class="select-form" name="recetable" required>
+                                        <option value="1" th:selected="${medicamento.recetable != null && medicamento.recetable == 1}">Sí</option>
+                                        <option value="2" th:selected="${medicamento.recetable != null && medicamento.recetable == 2}">No</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -451,17 +452,6 @@
                                 </div>
 
                             </div>
-
-                            <div class="column">
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">¿Es recetable?:</label>
-                                    <select class="select-form" name="recetable" required>
-                                        <option value="1" th:selected="${medicamento.recetable != null && medicamento.recetable == 1}">Sí</option>
-                                        <option value="2" th:selected="${medicamento.recetable != null && medicamento.recetable == 2}">No</option>
-                                    </select>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                     <br>
