@@ -210,8 +210,8 @@
                         <div class="interface-formulario">
                             <div>
                                 <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray; width: 100px">Contraseña Actual</label>
-                                    <input class="input-form-3 form-control" th:value="${contrasena}" name="contrasena" th:classappend="${#fields.hasErrors('contrasena')?'is-invalid':''}">
+                                    <label style="font-weight: bold; color:dimgray; width: 110px">Contraseña</label>
+                                    <input class="input-form-3 form-control" th:value="${contrasena}" name="contrasena">
                                     <div style="width: 300px" class="invalid-feedback">
                                         <p th:text="${error}"></p>
                                     </div>
