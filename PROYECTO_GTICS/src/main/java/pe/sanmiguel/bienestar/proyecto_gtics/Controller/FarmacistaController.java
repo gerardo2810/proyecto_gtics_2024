@@ -387,9 +387,9 @@ public class FarmacistaController {
         return "farmacista/facturacion";
     }
 
-    @GetMapping("/farmacista/cambioContraseña")
+    @GetMapping("/farmacista/cambio_contraseña")
     public String cambioContra() {
-        return "farmacista/cambioContraseña";
+        return "farmacista/cambio_contraseña";
     }
 
 

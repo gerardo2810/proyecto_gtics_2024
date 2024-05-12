@@ -124,9 +124,11 @@ public class PacienteController {
     public String tracking_end(){ return "paciente/tracking_finalizado";}
 
     @GetMapping(value="/new_orden")
-    public String new_orden(Model model, @ModelAttribute("usuario") Usuario usuario){
+    public String new_orden(Model model, @ModelAttribute("usuario") Usuario usuario, @ModelAttribute("ordenDto") OrdenDto ordenDto){
 
         List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
+        List<Doctor> listaDoctores = doctorRepository.findAll();
+        model.addAttribute("listaDoctores", listaDoctores);
         model.addAttribute("listaMedicamentos", listaMedicamentos);
 
 
@@ -205,22 +207,23 @@ public class PacienteController {
 
     @PostMapping(value = "/guardarOrden")
     public String guardarOrden(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
-                               @RequestParam(value = "doctor", required = false) String doctor,
-                               @RequestParam(value = "fecha", required = false) String fecha,
-                               @RequestParam(value = "imagen", required = false) Part imagen,
+                               @ModelAttribute("ordenDto") @Valid OrdenDto ordenDto, BindingResult bin2,
+                               @RequestParam(value = "file", required = false) Part file,
                                @RequestParam(value = "listaIds", required = false) List<Integer> lista,
                                @RequestParam(value = "priceTotal", required = false) Float total,
-                               @RequestParam(value = "reporte", required = false) String reporte,
                                Model model, RedirectAttributes redirectAttributes) throws IOException {
 
 
-        if(bindingResult.hasErrors()){
+        System.out.println(total);
+
+        if(bindingResult.hasErrors() || bin2.hasErrors()){
             System.out.println(bindingResult.getAllErrors());
+            System.out.printf(String.valueOf(file));
 
             List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
+            List<Doctor> listaDoctores = doctorRepository.findAll();
+            model.addAttribute("listaDoctores", listaDoctores);
             model.addAttribute("listaMedicamentos", listaMedicamentos);
-
-            System.out.println(reporte);
 
             if(!lista.isEmpty()){
                 List<Medicamento> medicamentosSeleccionados = getMedicamentosFromLista(lista);
@@ -234,15 +237,12 @@ public class PacienteController {
 
             }
 
-            if(reporte.equals("error")){
-                Integer horaError = new Integer(1);
-                model.addAttribute("horaError", horaError);
-            }
+
 
             return "paciente/new_orden";
 
         }else{
-            InputStream inputStream = imagen.getInputStream();
+            InputStream inputStream = file.getInputStream();
             byte[] bytes = inputStream.readAllBytes();
 
 
@@ -275,7 +275,7 @@ public class PacienteController {
             orden.setEstadoPreOrden(1);
 
             //Imagen de receta proxima a usar
-            //orden.setImagen(bytes);
+            orden.setImagen(bytes);
 
 
 
