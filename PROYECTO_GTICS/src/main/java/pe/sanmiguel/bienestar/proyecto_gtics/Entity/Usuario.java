@@ -20,8 +20,8 @@ public class Usuario {
     private Integer rol;
 
     @Column
-    @NotBlank(message = "Debe ingresar un correo")
-    @Email(regexp = ".+@.+\\..+", message = "Debe ingresar un correo válido")
+    @NotBlank(message = "Debe ingresar un correo", groups = OptionalValidationsGroup.class)
+    @Email(regexp = ".+@.+\\..+", message = "Debe ingresar un correo válido", groups = OptionalValidationsGroup.class)
     private String correo;
 
     @Column
