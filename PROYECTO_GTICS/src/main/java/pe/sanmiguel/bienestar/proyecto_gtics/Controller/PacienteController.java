@@ -301,6 +301,7 @@ public class PacienteController {
             orden.setSede(s);
             orden.setDoctor(doc);
             orden.setEstadoPreOrden(1);
+            orden.setSeguroUsado(usuario.getSeguro());
 
             //Imagen de receta proxima a usar
             orden.setImagen(bytes);
