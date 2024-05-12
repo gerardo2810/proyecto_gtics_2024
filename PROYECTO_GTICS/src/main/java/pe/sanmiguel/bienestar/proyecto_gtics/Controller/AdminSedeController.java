@@ -292,7 +292,21 @@ public class AdminSedeController {
     public String editarFarmacista(RedirectAttributes attr,
                                    SedeFarmacista sedeFarmacista,
                                    @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
-                                   Model model){
+                                   Model model, @RequestParam("correo") String correo){
+
+        List<String> correosUsados = usuarioRepository.listarCorreosUsadosMenosUserID(usuario.getIdUsuario());
+        if (correosUsados.contains(correo)) {
+            SedeFarmacista datosFarmacistaSede = sedeFarmacistaRepository.buscarFarmacistaSede(usuario.getIdUsuario());
+            String passwordHash = usuario.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+            //String passwordDots = hashToDots(passwordHash);
+            model.addAttribute("usuario", usuario);
+            model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
+            //model.addAttribute("contrasenia", passwordDots);
+            bindingResult.rejectValue("correo", "error.correo", "El correo ya se encuentra registrado.");
+            return "adminsede/editar_farmacista";
+        }
+
+
 
         if(!bindingResult.hasErrors()){
             usuarioRepository.save(usuario);
@@ -305,7 +319,6 @@ public class AdminSedeController {
                 //sedeFarmacistaRepository.save(sedeFarmacista);
                 attr.addFlashAttribute("msg", "Farmacista: " + usuario.getNombres() + " " + usuario.getApellidos() + " actualizado correctamente");
                 return "redirect:/adminsede/farmacista";
-
             }else {
                 return "redirect:/adminsede/farmacista";
             }
