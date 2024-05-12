@@ -276,6 +276,7 @@
                 <td style="text-align: center" th:text="${farmacista.idFarmacista.correo}"></td>
                 <td style="text-align: center" th:text="${farmacista.idSede.nombre}"></td>
                 <td style="text-align: center" th:text="${farmacista.idSede.admin.nombres + ' ' + farmacista.idSede.admin.apellidos}"></td>
+
                 <td style="text-align: center">
                     <div th:if="${farmacista.idFarmacista.estadoUsuario== 1}" class="disponible" style="margin-left: 35px"></div>
                     <div th:if="${farmacista.idFarmacista.estadoUsuario== 2}" class="no_disponible" style="margin-left: 35px"></div>

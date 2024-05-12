@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping(value = "/adminsede", method = RequestMethod.GET)
+@RequestMapping(value = "/adminsede")
 public class AdminSedeController {
 
     /* Repositorios */
@@ -223,16 +223,15 @@ public class AdminSedeController {
         return "adminsede/verDetalles";
     }
 
-    @GetMapping("/eliminar_farmacista")
-    public String eliminarFarmacista(@RequestParam("id") int id,
-                                     RedirectAttributes attr){
-
+    /*@PostMapping("/eliminar_farmacista")
+    public String eliminarFarmacista(@RequestParam("id") int id, RedirectAttributes attr){
         sedeFarmacistaRepository.eliminarFarmacistadeSedeFarmacista(id);
         usuarioRepository.eliminarFarmacistadeUsuario(id);
         attr.addFlashAttribute("msg", "El farmacista fue eliminado correctamente");
         return "redirect:/adminsede/farmacista";
+    }*/
 
-    }
+
 
     @GetMapping("/generar_orden_forms")
     public String generarOrden(Model model){
@@ -430,6 +429,16 @@ public class AdminSedeController {
 
         return "redirect:/adminsede/verDetallesOrdenEntregada";
     }
+    @PostMapping("/eliminar_farmacista")
+    public String eliminarFarmacista(@RequestParam(value = "idFarmacista") String idFarmacista, RedirectAttributes attr){
+        int idFarmacistaID = Integer.parseInt(idFarmacista);
+
+        sedeFarmacistaRepository.eliminarFarmacistadeSedeFarmacista(idFarmacistaID);
+        usuarioRepository.eliminarFarmacista(idFarmacistaID);
+        attr.addFlashAttribute("msg", "Farmacista eliminado exitosamente");
+        return "redirect:/adminsede/farmacista";
+    }
+
 
     @GetMapping("/verDetallesOrdenEntregada")
     public String verDetallesOrdenEntregado(Model model){
