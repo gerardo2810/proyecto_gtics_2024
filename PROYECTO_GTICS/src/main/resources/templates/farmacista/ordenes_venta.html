@@ -169,16 +169,10 @@
                     <div style="display: flex; flex-direction: column; justify-content: start">
 
 
-                        <select class="select-p" id="filtroEstado" >
+                        <select class="select-p" id="filtroTipo" >
                             <option value="">Mostrar Todos</option>
-                            <option value="PENDIENTE">Pendiente</option>
-                            <option value="RECIBIDO">Recibido</option>
-                            <option value="EN PROCESO">En proceso</option>
-                            <option value="EMPAQUETANDO">Empaquetando</option>
-                            <option value="EN RUTA">En ruta</option>
-                            <option value="ENTREGADO">Entregado</option>
-                            <option value="PAGADO">Pagado</option>
-                            <option value="ANULADO">Anulado</option>
+                            <option value="TIENDA">Tienda</option>
+                            <option value="WEB">Web</option>
                         </select>
 
                     </div>
@@ -374,6 +368,12 @@
         $('#filtroEstado').on('change', function() {
             var estado = $(this).val();
             table.column(4).search(estado).draw();
+
+        });
+
+        $('#filtroTipo').on('change', function() {
+            var estado = $(this).val();
+            table.column(1).search(estado).draw();
 
         });
 
