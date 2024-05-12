@@ -46,5 +46,7 @@ public class Orden {
     private Integer ordenParent;
     @Column(name = "estadoPreorden")
     private Integer estadoPreOrden;
+    @Column(name = "seguroUsado")
+    private String seguroUsado;
 
 }
