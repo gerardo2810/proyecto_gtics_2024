@@ -28,7 +28,7 @@
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
-
+    <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
 
 
@@ -191,7 +191,7 @@
 
 <div>
 
-    <div class="container" th:if="${orden.getTipoOrden() == 2}" style="padding-top: 40px">
+    <div class="container" th:if="${orden.getTipoOrden() == 2 && orden.getEstadoOrden() != 9}" style="padding-top: 40px">
 
         <div style="padding-top: 20px; padding-bottom: 20px">
             <div class="main-title open-sans-bold" style="font-size: 2.2rem" th:text="${'Estado de la Orden #' + (orden.getIdOrden() + 10000)}"> Estado de la Orden </div>
@@ -636,9 +636,10 @@
 
 <div class="container">
 
-    <div style="margin-bottom: 50px"></div>
+    <div style="margin-bottom: 65px"></div>
     <div style="padding-top: 20px; padding-bottom: 20px">
-        <div class="main-title open-sans-bold" style="font-size: 2.2rem"> Contenido de la Orden </div>
+        <div class="main-title open-sans-bold" style="font-size: 2.2rem" th:if="${orden.getEstadoOrden() != 9}"> Contenido de la Orden </div>
+        <div class="main-title open-sans-bold" style="font-size: 2.2rem" th:if="${orden.getEstadoOrden() == 9}"> Contenido de la Orden Anulada </div>
     </div>
 
     <hr class="style-one">
@@ -657,7 +658,7 @@
 
 
 
-        <a th:if="${orden.getEstadoOrden() != 1} " th:href="@{'/farmacista/ver_boleta?id=' + ${orden.getIdOrden()}}" >
+        <a th:if="${orden.getEstadoOrden() != 1 && orden.getEstadoOrden() != 2} " th:href="@{'/farmacista/ver_boleta?id=' + ${orden.getIdOrden()}}" >
             <button class="print">VER BOLETA</button>
         </a>
 
