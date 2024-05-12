@@ -148,6 +148,7 @@
                 <div class="card" style="max-height: 320px; max-width: 1150px; width: 100%;">
                     <div class="card-header">Detalles de la cuenta</div>
                     <div class="card-body">
+
                         <div class="interface-formulario">
 
                             <div>
@@ -207,11 +208,15 @@
                 <div class="card" style="max-height: 130px; max-width: 1150px; width: 100%;">
                     <div class="card-header">Cambiar Contraseña</div>
                     <div class="card-body">
-                        <div class="interface-formulario">
-                            <div>
+
+
+                        <form id="form"  method="post" th:action="@{'/farmacista/actualizar_contrasena'}" th:object="${superadmin}"  enctype="multipart/form-data">
+
+                        <div class="interface-formulario" style="width: 100%">
+                            <div style="padding-left: 40px">
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray; width: 110px">Contraseña</label>
-                                    <input class="input-form-3 form-control" th:value="${contrasena}" name="contrasena">
+                                    <input class="input-form-3 form-control" th:value="${contrasena}" type="password" name="contrasena">
                                     <div style="width: 300px" class="invalid-feedback">
                                         <p th:text="${error}"></p>
                                     </div>
@@ -221,13 +226,15 @@
                             <div>
                                 <div style="display: flex; justify-content: flex-end;">
                                     <div style="padding-top: 10px;">
-                                        <button class="btn btn-primary" type="button">Cambiar Contraseña</button>
+                                        <button class="btn btn-primary" type="submit">Cambiar Contraseña</button>
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
+
+                        </form>
+
+
                     </div>
                 </div>
             </div>
