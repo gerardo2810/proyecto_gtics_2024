@@ -63,7 +63,7 @@ public class Usuario {
     @NotBlank(message = "Debe ingresar un número de celular", groups = RegisterValidationsGroup.class)
     @Positive(groups = RegisterValidationsGroup.class)
     @Pattern(regexp="\\d+", message="El teléfono debe contener solo números")
-    @Size(min=9 , message = "El celular debe tener al menos 9 dígitos")
+    @Size(min=9, max = 9, message = "El celular debe tener al menos 9 dígitos")
     @NotBlank(message = "Debe ingresar un número de celular")
     @Positive
     private String celular;

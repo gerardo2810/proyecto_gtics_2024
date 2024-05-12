@@ -156,9 +156,27 @@
 
         <div style="margin-bottom: 10px"></div>
 
-        <div>
+        <div style="min-height: 350px">
 
             <div class="column-start" style="padding-bottom: 1px">
+
+                <div style="display: flex;flex-direction: row;column-gap: 8px;">
+
+                    <div style="display: flex; flex-direction: column; justify-content: start; padding-top: 10px;">
+                        <label style="color:dimgray;font-weight: bold; margin-left: 2px; margin-bottom:4px">Filtrar por Tipo:</label>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; justify-content: start">
+
+
+                        <select class="select-p" id="filtroTipo" >
+                            <option value="">Mostrar Todos</option>
+                            <option value="TIENDA">Tienda</option>
+                            <option value="WEB">Web</option>
+                        </select>
+
+                    </div>
+                </div>
 
                 <div style="display: flex;flex-direction: row;column-gap: 8px;">
 
@@ -350,6 +368,12 @@
         $('#filtroEstado').on('change', function() {
             var estado = $(this).val();
             table.column(4).search(estado).draw();
+
+        });
+
+        $('#filtroTipo').on('change', function() {
+            var estado = $(this).val();
+            table.column(1).search(estado).draw();
 
         });
 
