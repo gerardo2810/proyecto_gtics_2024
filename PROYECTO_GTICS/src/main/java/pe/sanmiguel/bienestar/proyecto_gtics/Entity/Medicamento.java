@@ -19,11 +19,15 @@ public class Medicamento {
     @Column
     @NotBlank(message = "Debe ingresar un nombre")
     private String nombre;
-    @Column
+
     @Pattern(regexp="\\d+", message="La unidad debe contener solo número")
     @Positive(message = "Debe ser positivo")
     @NotBlank(message = "Debe ingresar una unidad")
+    private String numunidad;
+
+    @Column
     private String unidad;
+
     @Column
     @NotBlank(message = "Debe ingresar una descripción")
     private String descripcion;
