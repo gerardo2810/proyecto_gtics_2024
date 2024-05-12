@@ -237,3 +237,16 @@ img,svg{vertical-align:middle}
 .img-fluid{max-width:100%;height:auto}.img-thumbnail{padding:.25rem;background-color:#fff;border:1px solid #dee2e6;border-radius:.25rem;max-width:100%;height:auto}.figure{display:inline-block}.figure-img{margin-bottom:.5rem;line-height:1}
 .btn .badge{position:relative;top:-1px}.alert{position:relative;padding:1rem 1rem;margin-bottom:1rem;border:1px solid transparent;border-radius:.25rem}.alert-heading{color:inherit}.alert-link{font-weight:700}.alert-dismissible{padding-right:3rem}.alert-dismissible .btn-close{position:absolute;top:0;right:0;z-index:2;padding:1.25rem 1rem}
 
+/* Estilos para campos de formulario con errores */
+.is-invalid {
+    border-color: #dc3545; /* Rojo */
+    background-color: #fff5f5; /* Fondo rojo claro */
+}
+
+/* Estilos para los mensajes de error */
+.invalid-feedback {
+    color: #dc3545; /* Rojo */
+    font-size: 0.875em; /* Tamaño de fuente más pequeño */
+    margin-top: 0.25rem; /* Espacio arriba del mensaje */
+    display: block; /* Asegura que el div se muestre como bloque */
+}
