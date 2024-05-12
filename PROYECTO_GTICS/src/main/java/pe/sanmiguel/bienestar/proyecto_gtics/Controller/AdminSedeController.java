@@ -376,6 +376,20 @@ public class AdminSedeController {
 
             }
 
+            //validamos correo
+            for (Usuario usuario : listaUsuarios){
+                if(usuarioFarmacista.getCorreo().equals(usuario.getCorreo())){
+                    //no se crea el farmacista debido a que es repetido el codigo medico
+                    attr.addFlashAttribute("msg", "Correo ya existente en el sistema, por favor ingrese uno nuevamente");
+                    dniNoExistente  = false;
+                    return "redirect:/adminsede/solicitud_farmacista";
+
+                }
+
+            }
+
+
+
             //Pasados los filtros:
 
             if (codigoValido == 1 && codigoMedicoUnico && dniNoExistente){
