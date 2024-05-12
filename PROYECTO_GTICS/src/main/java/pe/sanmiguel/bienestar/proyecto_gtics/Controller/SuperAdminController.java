@@ -19,6 +19,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLOutput;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -171,11 +172,54 @@ public class SuperAdminController {
 
 
 
-    @GetMapping(value = {"/cambiarContraseña"})
-    public String cambiarContraseña(){
-        return "superAdmin/cambiarcontraseña";
+    @GetMapping(value = {"/cambiarContrasena"})
+    public String cambiarContraseña(Model model){
+        Usuario superadmin = usuarioRepository.superAdmin();
+
+        String passwordHash = superadmin.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+        String passwordDots = hashToDots(passwordHash);
+
+        model.addAttribute("superadmin", superadmin);
+        model.addAttribute("contrasenia", passwordDots);
+        return "superAdmin/cambiarcontrasenia";
     }
 
+    @PostMapping("/actualizarContrasena")
+    public String cambiarContrasenia( Usuario superadmin, BindingResult bindingResult,
+                                      @RequestParam(value = "contrasena", required = false) String contrasenia,
+                                      RedirectAttributes attr, Model model) throws IOException {
+
+        superadmin = usuarioRepository.superAdmin();
+        String passwordOld = superadmin.getContrasena();
+
+        String passwordNew = hashPasswordSHA256(contrasenia);
+
+        System.out.println("Contra antigua: " + passwordOld);
+        System.out.println("Contra nueva: " + passwordNew);
+
+            System.out.println("NO HAY ERRORES DE VALIDACIÓN:");
+            if (Objects.equals(passwordNew, passwordOld)) {
+                System.out.println("ESTOY AQUI:");
+                usuarioRepository.actualizarContrasena(passwordOld);
+                attr.addFlashAttribute("msg", "Se mantiene la misma contraseña");
+                return "redirect:/superadmin/cambiarContrasena";
+            } else {
+                if (!isValidPassword(contrasenia)) {
+                    System.out.println("O AQUII:");
+                    String errorMsg = "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un caracter especial.";
+                    bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
+                    superadmin = usuarioRepository.superAdmin();
+                    model.addAttribute("superadmin", superadmin);
+                    model.addAttribute("error", errorMsg); // Añade el error al modelo
+                    return "superAdmin/cambiarcontrasenia";
+                }
+                System.out.println("MEJOR AQUI:");
+                String hashedPassword = hashPasswordSHA256(contrasenia);
+                usuarioRepository.actualizarContrasena(hashedPassword);
+                attr.addFlashAttribute("msg", "Contraseña actualizada correctamente");
+                return "redirect:/superadmin/cambiarContrasena";
+            }
+    }
 
     @GetMapping(value = {"/historialSolicitudes"})
     public String verHistorialSolicitudes(Model model){
