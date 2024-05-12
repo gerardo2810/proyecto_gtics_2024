@@ -20,8 +20,8 @@ public class Usuario {
     private Integer rol;
 
     @Column
-    @NotBlank(message = "Debe ingresar un correo")
-    @Email(regexp = ".+@.+\\..+", message = "Debe ingresar un correo válido")
+    @NotBlank(message = "Debe ingresar un correo", groups = OptionalValidationsGroup.class)
+    @Email(regexp = ".+@.+\\..+", message = "Debe ingresar un correo válido", groups = OptionalValidationsGroup.class)
     private String correo;
 
     @Column
@@ -31,12 +31,12 @@ public class Usuario {
 
     @Column
     @NotBlank(message = "Debe ingresar su nombre")
-    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "El nombre solo puede contener letras y espacios")
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "El nombre solo puede contener letras")
     private String nombres;
 
     @Column
     @NotBlank(message = "Debe ingresar su apellido")
-    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "El nombre solo puede contener letras y espacios")
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "El nombre solo puede contener letras")
     private String apellidos;
 
     @Column

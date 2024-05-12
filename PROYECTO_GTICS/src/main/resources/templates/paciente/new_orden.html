@@ -272,6 +272,7 @@
 
                         <div class="error-message"  th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}"></div>
 
+                        <input  th:field="*{correo}"  value="aaa@hotmail.com" type="hidden">
 
 
                     </div>
@@ -400,7 +401,7 @@
                                 </div>
                                 <div>
 
-                                    <input id="listaIds" type="text" name="listaIds" th:value="${listaReciente}"  hidden  />
+                                    <input id="listaIds" type="text" name="listaIds"   hidden  />
 
                                 </div>
                             </div>
@@ -659,17 +660,45 @@
 
 <!---------Medicamentos---------->
 
-<script>
 
-    listaSelectedIds = [];
 
+<script th:inline="javascript">
+
+
+    var cantidades = /*[[${currentCant}]]*/ [];
+    var medicamentos = /*[[${currentMed}]]*/ [];
+
+
+
+    if (cantidades && cantidades.length > 0) {
+
+        var iteraciones = medicamentos.length;
+
+        var nombresMedicamentos = medicamentos.map(function(medicamento) {
+            return medicamento.nombre;
+        });
+        var idsMedicamentos = medicamentos.map(function(medicamento) {
+            return medicamento.idMedicamento;
+        });
+        var preciosVenta = medicamentos.map(function(medicamento) {
+            return medicamento.precioVenta;
+        });
+
+        console.log(idsMedicamentos);
+        console.log(nombresMedicamentos);
+        console.log(preciosVenta);
+        console.log(cantidades);
+
+    }
+
+
+
+
+
+    listaSelectedIds = []
 
     $(document).ready(function() {
 
-
-        window.addEventListener('load', function() {
-            addItemToList(1, 'Aspirina Caja', 13, 'URL_DE_LA_IMAGEN');
-            ShowList();        });
 
         const botonesEliminarItem = document.getElementsByClassName('btn-eliminar');
         for(var i=0;i<botonesEliminarItem.length; i++){
@@ -695,6 +724,40 @@
 
 
 
+
+        if (cantidades && cantidades.length > 0) {
+
+
+            for (var i = 0; i < iteraciones; i++) {
+                const id = idsMedicamentos[i];
+                const title = nombresMedicamentos[i] + '';
+                const price = preciosVenta[i];
+                const imagenSrc = 'aaa';
+                const cant = parseInt(cantidades[i]);
+
+                listaSelectedIds.push(id.toString()); //idMedicamento
+                listaSelectedIds.push(cant); //cantidad
+
+                console.log(id)
+                console.log(title)
+                console.log(price)
+                console.log(cant)
+
+                addItemToList(id, title.toString(), price.toString(), imagenSrc);
+                ShowList();
+
+            }
+
+            const listaIdsInput = document.getElementById('listaIds');
+            listaIdsInput.value = listaSelectedIds;
+
+            console.log(listaSelectedIds)
+
+
+
+        }
+
+
         function clickItemAdd(event){
 
             const button = event.target;
@@ -715,7 +778,6 @@
             listaIdsInput.value = listaSelectedIds;
 
             addItemToList(idAdd, titulo, precio, imagenSrc);
-            addItemToList(1, 'Aspirina Caja', 13, imagenSrc);
             ShowList();
         }
 
@@ -823,6 +885,8 @@
             const toPlus = listaSelectedIds.indexOf(idAddQuantity);
 
             listaSelectedIds[toPlus+1] = cantidadActual;
+
+            console.log(listaSelectedIds)
 
             actualizarMontoTotal();
         }

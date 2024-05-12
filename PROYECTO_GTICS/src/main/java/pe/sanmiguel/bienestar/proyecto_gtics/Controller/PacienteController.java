@@ -20,8 +20,11 @@ import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -217,8 +220,14 @@ public class PacienteController {
             model.addAttribute("listaMedicamentos", listaMedicamentos);
 
             if(!lista.isEmpty()){
-                System.out.println(lista);
-                model.addAttribute("listaReciente",lista);
+                List<Medicamento> medicamentosSeleccionados = getMedicamentosFromLista(lista);
+                List<String> listaCantidades = getCantidadesFromLista(lista);
+
+                model.addAttribute("currentMed", medicamentosSeleccionados);
+                model.addAttribute("currentCant", listaCantidades);
+
+                System.out.println(medicamentosSeleccionados);
+                System.out.println(listaCantidades);
 
             }
 
@@ -326,5 +335,26 @@ public class PacienteController {
 
         redirectAttributes.addFlashAttribute("msg2", "Orden Creada");
         return "redirect:/paciente/boleta_pago?id=" + idOrden;
+    }
+
+
+
+    public List<Medicamento> getMedicamentosFromLista(List<Integer> listaSelectedIds) {
+        List<Optional<Medicamento>> optionals = new ArrayList<>();
+        List<Medicamento> seleccionados;
+        for (int i = 0; i < listaSelectedIds.size(); i += 2) {
+            optionals.add(medicamentoRepository.findById(Integer.valueOf(listaSelectedIds.get(i))));
+        }
+        seleccionados = optionals.stream().flatMap(Optional::stream).collect(Collectors.toList());
+
+        return seleccionados;
+    }
+
+    public List<String> getCantidadesFromLista(List<Integer> listaSelectedIds) {
+        List<String> cantidades = new ArrayList<>();
+        for (int i = 0; i + 1 < listaSelectedIds.size(); i += 2) {
+            cantidades.add(String.valueOf(listaSelectedIds.get(i + 1)));
+        }
+        return cantidades;
     }
 }
