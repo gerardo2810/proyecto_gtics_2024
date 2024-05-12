@@ -20,6 +20,11 @@
         <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
         <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
 
+
+        <!--=============== SWEETALERT ===============-->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
+
         <!--=============== DataTable ===============-->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
         <!--  Bootstrap-->
@@ -373,6 +378,318 @@
                     table.search(searchTerm).draw();
                 });
             });
+        </script>
+
+        <script>
+
+            var numeroOrdenesPendientes = [[${numeroOrdenesPendientes}]]; // Obtener el valor desde el modelo
+
+            if (numeroOrdenesPendientes > 0) {
+                Toastify({
+                    text: "Tiene " + numeroOrdenesPendientes + " ordenes pendientes \n Presione aquí para verlas",
+                    duration: 3000,
+                    destination: "/farmacista/ordenes_web",
+                    newWindow: true,
+                    close: true,
+                    gravity: "top", // `top` or `bottom`
+                    position: "right", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    offset: {
+                        x: 0, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
+                        y: 65 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+                    },
+                    style: {
+                        background: "#3a8bee",
+                    },
+                    onClick: function(){} // Callback after click
+                }).showToast();
+            }
+        </script>
+
+
+        <script>
+
+            $(document).ready(function() {
+                $('#searchInput').on('input', function() { // Escuchar el evento 'input'
+                    var searchTerm = $(this).val().trim().toLowerCase();
+                    $('.item').each(function() {
+                        var itemName = $(this).find('.item-title').text().trim().toLowerCase();
+                        if (itemName.includes(searchTerm)) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+
+            });
+
+        </script>
+
+        <script>
+
+            listaSelectedIds = [];
+
+            $(document).ready(function() {
+
+                const botonesEliminarItem = document.getElementsByClassName('btn-eliminar');
+                for(var i=0;i<botonesEliminarItem.length; i++){
+                    const buttonEliminar = botonesEliminarItem[i];
+                    buttonEliminar.addEventListener('click',eliminarItemCarrito);
+                }
+                var botonesSumarCantidad = document.getElementsByClassName('sumar-cantidad');
+                for(var i=0;i<botonesSumarCantidad.length; i++){
+                    const buttonSumar = botonesSumarCantidad[i];
+                    buttonSumar.addEventListener('click',sumarCantidad);
+                }
+                var botonesRestarCantidad = document.getElementsByClassName('restar-cantidad');
+                for(var i=0;i<botonesRestarCantidad.length; i++){
+                    const buttonRestar = botonesRestarCantidad[i];
+                    buttonRestar.addEventListener('click',restarCantidad);
+                }
+                var botonesAgregar = document.getElementsByClassName('add-item-button');
+                for(var i=0; i<botonesAgregar.length;i++){
+                    const buttonAgregar = botonesAgregar[i];
+                    buttonAgregar.addEventListener('click', clickItemAdd);
+                }
+
+                function clickItemAdd(event){
+
+                    const button = event.target;
+                    const idAdd = button.dataset.itemId;
+                    const item = button.parentElement;
+                    const titulo = item.getElementsByClassName('item-title')[0].innerText;
+                    const precio = item.getElementsByClassName('item-price')[0].innerText;
+                    const imagenSrc = item.getElementsByClassName('img-item')[0].src;
+
+
+                    if (listaSelectedIds.indexOf(idAdd) === -1) {
+                        listaSelectedIds.push(idAdd);
+                        listaSelectedIds.push(1);
+                    }
+
+                    const listaIdsInput = document.getElementById('listaIds');
+                    listaIdsInput.value = listaSelectedIds;
+
+                    addItemToList(idAdd, titulo, precio, imagenSrc);
+                    ShowList();
+                }
+
+                function deleteItem(event){
+
+                    const button = event.target;
+                    const idDelete = button.dataset.itemId;
+
+                    let pos = listaSelectedIds.indexOf(idDelete);
+                    listaSelectedIds.splice(pos,1);
+                    listaSelectedIds.splice(pos+1,1);
+
+                    const listaIdsInput = document.getElementById('listaIds');
+                    listaIdsInput.value = listaSelectedIds;
+
+                    button.parentElement.parentElement.parentElement.remove();
+                    hideorShowList();
+                    actualizarMontoTotal();
+                }
+
+
+                function addItemToList(id, titulo, precio, imagenSrc){
+                    const Swal = window.Swal;
+
+                    const item = document.createElement('div');
+                    item.classList.add = ('item-clicked');
+                    const itemsList = document.getElementsByClassName('lista-items-clicked')[0];
+
+                    if (itemsList.getElementsByClassName('item-title-clicked').length > 0){
+
+                        const alreadyOnList = itemsList.getElementsByClassName('item-title-clicked');
+
+                        for(let i=0; i < alreadyOnList.length; i++){
+                            if(alreadyOnList[i].innerText===titulo){
+                                Swal.fire({
+                                    title: "Ya está en la lista",
+                                    text: "El medicamento ya fue agregado.",
+                                    icon: "info"
+                                });
+                                return;
+                            }
+                        }
+                    }
+
+
+                    const itemNewSelected = `
+        <div class="selected-item">
+
+            <img src="${imagenSrc}" width="40px" height="auto" alt="">
+
+            <span class="item-title-clicked">${titulo}</span>
+
+            <div class="item-on-list">
+
+                <div class="item-details">
+                    <div class="selector-cantidad">
+                        <i class="fa-solid fa-minus restar-cantidad" data-item-id="${id}"></i>
+                        <input type="text" value="1" class="item-quantity-clicked" data-item-id="${id}">
+                        <i class="fa-solid fa-plus sumar-cantidad" data-item-id="${id}"></i>
+                    </div>
+
+                    <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                            <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked">${precio}</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-danger btn-eliminar" data-item-id="${id}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+
+        </div>
+    `;
+                    item.innerHTML = itemNewSelected;
+                    itemsList.append(item);
+
+                    item.getElementsByClassName('btn-eliminar')[0].addEventListener('click', deleteItem);
+
+                    const botonRestarCantidad = item.getElementsByClassName('restar-cantidad')[0];
+                    botonRestarCantidad.addEventListener('click',restarCantidad);
+
+                    const botonSumarCantidad = item.getElementsByClassName('sumar-cantidad')[0];
+                    botonSumarCantidad.addEventListener('click',sumarCantidad);
+
+                    const inputCantidad = item.getElementsByClassName('item-quantity-clicked')[0];
+                    inputCantidad.addEventListener('change', setearCantidad);
+                    inputCantidad.addEventListener('focus', function(event) {
+                        event.target.dataset.previousValue = event.target.value;
+                    });
+
+                    actualizarMontoTotal();
+                    ShowList();
+                }
+
+
+                function sumarCantidad(event){
+                    const buttonClicked = event.target;
+                    const idAddQuantity = buttonClicked.dataset.itemId;
+                    const selector = buttonClicked.parentElement;
+                    console.log(selector.getElementsByClassName('item-quantity-clicked')[0].value);
+                    let cantidadActual = selector.getElementsByClassName('item-quantity-clicked')[0].value;
+                    cantidadActual++;
+                    selector.getElementsByClassName('item-quantity-clicked')[0].value = cantidadActual;
+
+                    const toPlus = listaSelectedIds.indexOf(idAddQuantity);
+
+                    listaSelectedIds[toPlus+1] = cantidadActual;
+
+                    actualizarMontoTotal();
+                }
+
+                function restarCantidad(event){
+                    const buttonClicked = event.target;
+                    const idQuitQuantity = buttonClicked.dataset.itemId;
+                    const selector = buttonClicked.parentElement;
+                    console.log(selector.getElementsByClassName('item-quantity-clicked')[0].value);
+
+
+                    let cantidadActual = selector.getElementsByClassName('item-quantity-clicked')[0].value;
+                    cantidadActual--;
+                    if(cantidadActual>=1){
+                        selector.getElementsByClassName('item-quantity-clicked')[0].value = cantidadActual;
+
+                        const toMinus = listaSelectedIds.indexOf(idQuitQuantity);
+
+                        listaSelectedIds[toMinus+1] = cantidadActual;
+
+                        actualizarMontoTotal();
+                    }
+                }
+
+                function setearCantidad(event){
+                    const inputFilled = event.target;
+                    const idSetQuantity = inputFilled.dataset.itemId;
+                    const valor = inputFilled.value;
+                    const cantidadActual = parseInt(valor); // Convertir a número entero
+
+                    // Verificar si el valor es un número válido
+                    if (!isNaN(cantidadActual) && cantidadActual >= 1) {
+                        // Actualizar el valor del input y el monto total
+
+                        const toSet = listaSelectedIds.indexOf(idSetQuantity);
+
+                        listaSelectedIds[toSet+1] = cantidadActual;
+
+                        actualizarMontoTotal();
+                    } else {
+                        // Restaurar el valor anterior si no es válido
+                        inputFilled.value = inputFilled.dataset.previousValue;
+                    }
+                }
+
+                function actualizarMontoTotal() {
+                    const listItems = document.getElementsByClassName('lista-items-clicked')[0];
+                    const selectedItems = listItems.getElementsByClassName('selected-item');
+                    let totalCentavos = 0;
+
+                    for (let i = 0; i < selectedItems.length; i++) {
+                        const item = selectedItems[i];
+                        const precioItem = Math.round(parseFloat(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/', '').replace(/,/g, '')) * 100);
+                        const cantidadItem = item.getElementsByClassName('item-quantity-clicked')[0].value;
+                        totalCentavos += precioItem * cantidadItem;
+                    }
+                    const totalSoles = totalCentavos / 100;
+                    document.getElementsByClassName('price-total')[0].innerText = 'S/' + totalSoles.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+                    const listaIdsInput = document.getElementById('listaIds');
+                    listaIdsInput.value = listaSelectedIds.join(',');
+
+                }
+
+                function hideorShowList(){
+                    const someElement = document.getElementsByClassName('selected-item');
+
+                    if(someElement.length === 0){
+                        listaSelectedIds = [];
+                        HideList();
+                    }
+                }
+
+                function HideList(){
+                    const itemsPreview = document.getElementById('items-preview');
+                    itemsPreview.classList.add('hide');
+                }
+
+                function ShowList(){
+                    const itemsPreview = document.getElementById('items-preview');
+                    itemsPreview.classList.remove('hide');
+                }
+
+            });
+        </script>
+
+
+        <script>
+            $(document).ready(function() {
+                let opened = false;
+
+                $('#menu-small').hide();
+
+                $('#nav-toggle').click(function (e) {
+                    e.stopPropagation();
+                    if (opened) {
+                        $('#menu-small').hide();
+                    } else {
+                        $('#menu-small').show();
+                    }
+                    opened = !opened;
+                });
+            });
+        </script>
+
+        <script>
+            window.onload = function () {
+                $('#onload').fadeOut();
+                $('body').removeClass('loader-hidden');
+            }
+
         </script>
     </body>
 
