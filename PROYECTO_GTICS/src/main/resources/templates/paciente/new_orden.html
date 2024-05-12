@@ -463,7 +463,7 @@
                             <!-- Contenedor de elementos -->
                             <div class="med-container">
                                 <div class="item" th:each="medicamento : ${listaMedicamentos}">
-                                    <img th:src="${medicamento.imagen}" th:alt="${medicamento.nombre}" class="img-item">
+                                    <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" class="img-item"/>
                                     <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
                                     <div class="item-title roboto-regular" th:text="${medicamento.nombre}"   th:style="${medicamento.nombre.length()>=21 ? 'font-size:15px' : ''}"  >Medicamento</div>
                                     <div style="display: flex; flex-direction: row; gap: 5px; align-items: end;">

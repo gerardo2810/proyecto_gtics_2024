@@ -20,10 +20,7 @@ import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -117,16 +114,13 @@ public class PacienteController {
         return "paciente/tracking";
     }
 
-    @GetMapping(value="/tracking_wait")
-    public String tracking_wait(){ return "paciente/tracking_pendiente";}
 
-    @GetMapping(value="/tracking_end")
-    public String tracking_end(){ return "paciente/tracking_finalizado";}
 
     @GetMapping(value="/new_orden")
     public String new_orden(Model model, @ModelAttribute("usuario") Usuario usuario, @ModelAttribute("ordenDto") OrdenDto ordenDto){
 
         List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
+
         List<Doctor> listaDoctores = doctorRepository.findAll();
         model.addAttribute("listaDoctores", listaDoctores);
         model.addAttribute("listaMedicamentos", listaMedicamentos);
