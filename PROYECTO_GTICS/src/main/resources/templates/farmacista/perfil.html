@@ -204,34 +204,29 @@
 
                 </div>
 
-                <div class="card" style="max-height: 220px; max-width: 1150px; width: 100%;">
+                <div class="card" style="max-height: 130px; max-width: 1150px; width: 100%;">
                     <div class="card-header">Cambiar Contraseña</div>
                     <div class="card-body">
                         <div class="interface-formulario">
                             <div>
                                 <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray; width: 100px">Contraseña Actual</label>
-                                    <input class="input-form-3 form-control" id="actual-pw" type="password" name="actual">
-                                    <span toggle="#actual-pw" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-                                </div>
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray; width: 100px">Nueva Contraseña</label>
-                                    <input class="input-form-3 form-control" id="new-pw" type="password" name="new">
-                                    <span toggle="#new-pw" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                                    <label style="font-weight: bold; color:dimgray; width: 110px">Contraseña</label>
+                                    <input class="input-form-3 form-control" th:value="${contrasena}" name="contrasena">
+                                    <div style="width: 300px" class="invalid-feedback">
+                                        <p th:text="${error}"></p>
+                                    </div>
                                 </div>
                             </div>
+
                             <div>
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray; width: 100px">Confirmar Contraseña</label>
-                                    <input class="input-form-3 form-control" id="confirm-pw" type="password" name="confirm">
-                                    <span toggle="#confirm-pw" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-                                </div>
                                 <div style="display: flex; justify-content: flex-end;">
-                                    <div style="padding-top: 20px;">
+                                    <div style="padding-top: 10px;">
                                         <button class="btn btn-primary" type="button">Cambiar Contraseña</button>
                                     </div>
                                 </div>
                             </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -286,18 +281,6 @@
         </div>
     </footer>
 </div>
-
-    <script>
-        $(".toggle-password").click(function() {
-            $(this).toggleClass("fa-eye fa-eye-slash");
-            var input = $($(this).attr("toggle"));
-            if (input.attr("type") == "password") {
-                input.attr("type", "text");
-            } else {
-                input.attr("type", "password");
-            }
-        });
-    </script>
 
 
     <script>

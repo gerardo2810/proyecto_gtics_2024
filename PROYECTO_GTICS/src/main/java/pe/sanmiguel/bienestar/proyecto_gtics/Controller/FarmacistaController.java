@@ -11,16 +11,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.CurrentTimeSQL;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
+import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Controller
@@ -387,9 +392,78 @@ public class FarmacistaController {
         return "farmacista/facturacion";
     }
 
-    @GetMapping("/farmacista/cambio_contraseña")
-    public String cambioContra() {
-        return "farmacista/cambio_contraseña";
+    private String hashToDots(String passwordHash) {
+        return "*".repeat(passwordHash.length()); // Repite el carácter '*' según la longitud del hash
+    }
+
+    private boolean isValidPassword(String password) {
+        if (password == null || password.trim().isEmpty()) {
+            return false; // Contraseña es nula o está en blanco
+        }
+        // Al menos una mayúscula, una minúscula, un caracter especial y mínimo 8 caracteres
+        String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
+    @GetMapping(value = {"/perfil"})
+    public String cambiarContrasena(Model model){
+
+        Optional<Usuario> farmacistaSessionOpt = usuarioRepository.findById(115);
+        Usuario farmacistaSession = new Usuario();
+
+        if (farmacistaSessionOpt.isPresent()){
+            farmacistaSession = farmacistaSessionOpt.get();
+        }
+
+        String passwordHash = farmacistaSession.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+        String passwordDots = hashToDots(passwordHash);
+
+        model.addAttribute("farmacista", farmacistaSession);
+        model.addAttribute("contrasena", passwordDots);
+        return "farmacista/perfil";
+    }
+
+    @PostMapping("/actualizar_contrasena")
+    public String actualizarContrasena(Usuario farmacistaSession, BindingResult bindingResult,
+                                     @RequestParam(value = "contrasena", required = false) String contrasena,
+                                     RedirectAttributes attr, Model model) throws IOException {
+
+        Optional<Usuario> farmacistaSessionOpt = usuarioRepository.findById(115);
+        farmacistaSession = farmacistaSessionOpt.get();
+
+        String passwordOld = farmacistaSession.getContrasena();
+        String passwordNew = SHA256.cipherPassword(contrasena);
+
+
+        String passwordHash = farmacistaSession.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+        String passwordDots = hashToDots(passwordHash);
+
+        System.out.println("Contra antigua: " + passwordOld);
+        System.out.println("Contra nueva: " + passwordNew);
+
+        System.out.println("NO HAY ERRORES DE VALIDACIÓN:");
+        if (Objects.equals(passwordNew, passwordOld)) {
+            System.out.println("ESTOY AQUI:");
+            usuarioRepository.actualizarContrasena(passwordOld);
+            attr.addFlashAttribute("msg", "Se mantiene la misma contraseña");
+            return "redirect:/farmacista/perfil";
+        } else {
+            if (!isValidPassword(contrasena)) {
+                System.out.println("O AQUII:");
+                String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
+                bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
+                model.addAttribute("superadmin", farmacistaSession);
+                model.addAttribute("error", errorMsg); // Añade el error al modelo
+                return "farmacista/perfil";
+            }
+            System.out.println("MEJOR AQUI:");
+            String hashedPassword = SHA256.cipherPassword(contrasena);
+            usuarioRepository.actualizarContrasena(hashedPassword);
+            attr.addFlashAttribute("msg", "Contraseña actualizada correctamente");
+            return "redirect:/farmacista/perfil";
+        }
     }
 
 
