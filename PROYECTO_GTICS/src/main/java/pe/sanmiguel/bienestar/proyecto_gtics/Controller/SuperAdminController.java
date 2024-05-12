@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
@@ -26,7 +27,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Controller
-@MultipartConfig
 @RequestMapping(value = {"/superadmin"}, method = RequestMethod.GET)
 public class SuperAdminController {
 
@@ -880,7 +880,7 @@ public class SuperAdminController {
 
 
     @GetMapping(value = {"/crearMedicamento"})
-    public String crearMedicamento(@ModelAttribute("medicamento") Medicamento medicamento, Model model){
+    public String crearMedicamento(@ModelAttribute("medicamento") Medicamento medicamento, @ModelAttribute("validateImage") ValidateImage validateImage, Model model){
         List<Sede> sedeDisponibleList = sedeRepository.findAll();
         model.addAttribute("sedeDisponibleList", sedeDisponibleList);
         return "superAdmin/crearMedicamento";
@@ -889,13 +889,15 @@ public class SuperAdminController {
 
     @PostMapping("/guardarMedicamento")
     public String agregarNuevoMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento, BindingResult bindingResul,
+                                          @ModelAttribute("validateImage") @Valid ValidateImage validateImage, BindingResult binding2,
                                           @RequestParam(value = "presentacion", required = false)  String presentacion,
                                           @RequestParam(value = "tipounidad", required = false) String tipounidad,
                                           @RequestParam(value = "numunidad", required = false) String numunidad,
                                           @RequestParam(value = "nombre", required = false) String nombre,
-                                          RedirectAttributes attr, Model model) {
+                                          @RequestParam(value = "file", required = false) Part file,
+                                          RedirectAttributes attr, Model model) throws IOException {
 
-        if(bindingResul.hasErrors()){
+        if(bindingResul.hasErrors() || binding2.hasErrors()){
             System.out.println("HAY ERRORES DE VALIDACIÓN:");
             for (ObjectError error : bindingResul.getAllErrors()) {
                 System.out.println("- " + error.getDefaultMessage());
@@ -915,10 +917,13 @@ public class SuperAdminController {
                 return "superAdmin/crearMedicamento";
             }
 
+            InputStream inputStream = file.getInputStream();
+            byte[] bytes = inputStream.readAllBytes();
+
             System.out.println("NO HAY ERROR");
             medicamento.setCategorias("NNUL");
             medicamento.setEstado(1);
-            //medicamento.setImagen("-");
+            medicamento.setImagen(bytes);
             String unidad = presentacion + ' ' + numunidad + ' ' + tipounidad;
             medicamento.setUnidad(unidad);
             System.out.println("- Unidad final " + unidad);
