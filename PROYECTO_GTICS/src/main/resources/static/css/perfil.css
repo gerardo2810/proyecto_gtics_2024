@@ -29,18 +29,17 @@ body{
     color:#69707a;
 }
 .img-account-profile {
-    height: 10rem;
+    height: 13rem;
 }
 .rounded-circle {
     border-radius: 50% !important;
 }
 .text-center{text-align:center!important}
 .card {
-    box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+    box-shadow: 0 0.15rem 0.5rem 0 rgb(33 40 50 / 10%);
 }
 .card-perfil { /* Asume que has añadido esta clase a tu tarjeta de perfil */
-    width: 450px; /* Ajusta este valor según necesites */
-    margin: auto; /* Centra la tarjeta si es más pequeña que el contenedor */
+    width: 500px; /* Ajusta este valor según necesites */
 }
 
 .card .card-header {
@@ -95,7 +94,20 @@ body{
     margin-left:calc(var(--bs-gutter-x)/ -2)
 }
 
-.card{position:relative;display:flex;flex-direction:column;min-width:0;word-wrap:break-word;background-color:#fff;background-clip:border-box;border:1px solid rgba(0,0,0,.125);border-radius:.25rem}.card>hr{margin-right:0;margin-left:0}
+.card{
+    position:relative;
+    display:flex;
+    flex-direction: column;
+    min-width:0;
+    word-wrap:break-word;
+    background-color:#fff;
+    background-clip:border-box;
+    border:1px solid rgba(0,0,0,.125);
+    border-radius:.25rem}
+.card>hr{
+    margin-right:0;margin-left:0
+}
+
 .col-xl-8{flex:0 0 auto;width:66.6666666667%}
 .card-header{padding:.5rem 1rem;margin-bottom:0;background-color:rgba(0,0,0,.03);border-bottom:1px solid rgba(0,0,0,.125)}
 .card-body{flex:1 1 auto;padding:1rem 1rem}.card-title{margin-bottom:.5rem}
@@ -121,9 +133,10 @@ img,svg{vertical-align:middle}
 
 .interface-formulario{
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 30px;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
     padding-bottom: 30px;
+    justify-items: center;
 }
 
 .container-form{
@@ -152,13 +165,24 @@ img,svg{vertical-align:middle}
 
 .input-label-box{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 15px;
 }
 
 .input-label-radio{
     display: flex;
     flex-direction: row;
     column-gap: 30px;
+}
+
+.field-icon {
+    float: right;
+    margin-left: -40px;
+    margin-top: -10px;
+    position: relative;
+    z-index: 2;
 }
 
 
@@ -189,11 +213,11 @@ img,svg{vertical-align:middle}
     font-size: 17px;
 }
 
-.input-form-2 {
+.input-form-3 {
     margin-top: 6px;
     padding-left: 15px;
     outline: none;
-    width: 400px;
+    width: 300px;
     height: 42px;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
