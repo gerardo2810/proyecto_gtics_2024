@@ -18,8 +18,10 @@
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/perfil.css}">
 
-    <link rel="stylesheet" href="css/bootstrap/bootstrap.css">
     <title>Bienestar San Miguel | Cambio Contraseña</title>
+
+    <!--=============== JQUERY ===============-->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
     <!--==========================================-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -112,7 +114,7 @@
     </nav>
 </header>
 <body>
-<div class="container" style="">margin-top: 90px
+<div class="container" style="margin-top: 90px">
 
     <div style="padding-top: 20px; padding-bottom: 20px">
         <div class="main-title montserrat-bold"> Cambio de Contraseña </div>
@@ -216,5 +218,25 @@
         </div>
     </footer>
 </div>
+
+<script>
+    $(document).ready(function() {
+        let opened = false;
+
+        $('#menu-small').hide();
+
+        $('#nav-toggle').click(function (e) {
+            e.stopPropagation();
+            if (opened) {
+                $('#menu-small').hide();
+            } else {
+                $('#menu-small').show();
+            }
+            opened = !opened;
+        });
+    });
+</script>
+
+
 </body>
 </html>
