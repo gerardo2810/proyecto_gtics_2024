@@ -324,12 +324,14 @@
                                     </svg>
                                 </div>
                                 <div class="modal__col">
-                                    <div class="modal__content">
+                                    <div class="modal__content" th:object="${ordenDto}">
                                         <h2 class="modal__title" style="font-weight: 600">Sube una imagen de tu receta médica:</h2>
+                                        <div class="error-message"  th:if="${#fields.hasErrors('imagen')}" th:errors="*{imagen}"></div>
+
                                         <p class="modal__message" style="color:dimgray">Selecciona la imagen para subirla desde tu dispositivo</p>
                                         <div class="modal__actions">
                                             <button  class="modal__button modal__button--upload" type="button" data-action="file">Seleccionar imagen</button>
-                                            <input id="file" name="imagen" type="file" hidden >
+                                            <input th:field="*{imagen}" id="file" type="file"  hidden >
                                         </div>
                                         <div class="modal__actions" hidden>
                                             <svg class="modal__file-icon" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
@@ -624,39 +626,26 @@
 <script >
 
     const form = document.getElementById("form");
-    var img = document.getElementById("file");
-
-
-
-
 
     form.addEventListener("submit", e =>{
         e.preventDefault();
 
+        Swal.fire({
+            title: '¿Estás seguro de generar esta nueva orden de compra?',
+            icon: 'warning',
+            iconColor: '#DC3545',
+            showCancelButton: true,
+            cancelButtonColor: '#DC3545',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#0D6EFD',
+            confirmButtonText: 'Confirmar',
+            footer: '<a href="">Volver a ingresar los datos</a>'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
 
-        if(img.files.length === 0){
-
-        }
-
-        else{
-
-
-            Swal.fire({
-                title: '¿Estás seguro de generar esta nueva orden de compra?',
-                icon: 'warning',
-                iconColor: '#DC3545',
-                showCancelButton: true,
-                cancelButtonColor: '#DC3545',
-                cancelButtonText: 'Cancelar',
-                confirmButtonColor: '#0D6EFD',
-                confirmButtonText: 'Confirmar',
-                footer: '<a href="">Volver a ingresar los datos</a>'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        }
 
     })
 

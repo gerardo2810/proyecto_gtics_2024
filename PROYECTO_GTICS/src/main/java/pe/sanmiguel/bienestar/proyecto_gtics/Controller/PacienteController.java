@@ -208,7 +208,6 @@ public class PacienteController {
     @PostMapping(value = "/guardarOrden")
     public String guardarOrden(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                                @ModelAttribute("ordenDto") @Valid OrdenDto ordenDto, BindingResult bin2,
-                               @RequestParam(value = "fecha", required = false) String fecha,
                                @RequestParam(value = "imagen", required = false) Part imagen,
                                @RequestParam(value = "listaIds", required = false) List<Integer> lista,
                                @RequestParam(value = "priceTotal", required = false) Float total,
@@ -217,6 +216,7 @@ public class PacienteController {
 
         if(bindingResult.hasErrors()){
             System.out.println(bindingResult.getAllErrors());
+            System.out.printf(String.valueOf(imagen));
 
             List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
             List<Doctor> listaDoctores = doctorRepository.findAll();
