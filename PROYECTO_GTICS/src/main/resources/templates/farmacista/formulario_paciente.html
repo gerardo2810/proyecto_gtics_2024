@@ -150,13 +150,13 @@
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">DNI:</label>
-                                <input class="input-form-2" type="text"  th:field="*{dni}" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
+                                <input class="input-form-2" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del paciente"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
                                 <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
                             </div>
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Correo:</label>
-                                <input class="input-form-2" type="email"  th:field="*{correo}" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid' : ''}">
+                                <input class="input-form-2" type="email"  th:field="*{correo}" placeholder="Ingrese el correo del paciente" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid' : ''}">
                                 <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" class="invalid-feedback" ></div>
                             </div>
 
@@ -166,13 +166,13 @@
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Nombre del paciente:</label>
-                                <input class="input-form-2" type="text" th:field="*{nombres}"  th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}"/>
+                                <input class="input-form-2" type="text" th:field="*{nombres}" placeholder="Ingrese los nombres del paciente"  th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}"/>
                                 <div class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
                             </div>
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Apellidos del paciente:</label>
-                                <input class="input-form-2" type="text"  th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}">
+                                <input class="input-form-2" type="text"  th:field="*{apellidos}" placeholder="Ingrese los apellidos del paciente" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}">
                                 <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
                             </div>
 
@@ -211,13 +211,13 @@
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Distrito:</label>
-                                <input class="input-form-2" type="text"  th:field="*{distrito}" placeholder="Ingrese el distrito donde reside" th:classappend="${#fields.hasErrors('distrito') ? 'is-invalid' : ''}">
+                                <input class="input-form-2" type="text"  th:field="*{distrito}" placeholder="Ingrese el distrito del paciente" th:classappend="${#fields.hasErrors('distrito') ? 'is-invalid' : ''}">
                                 <div  class="invalid-feedback" th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}"></div>
                             </div>
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Dirección:</label>
-                                <input class="input-form-2" type="text"  th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion') ? 'is-invalid' : ''}">
+                                <input class="input-form-2" type="text"  th:field="*{direccion}" placeholder="Ingrese la dirección del paciente" th:classappend="${#fields.hasErrors('direccion') ? 'is-invalid' : ''}">
                                 <div  class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></div>
                             </div>
 
@@ -227,7 +227,7 @@
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Teléfono:</label>
-                                <input class="input-form-2" type="text" th:field="*{celular}" th:classappend="${#fields.hasErrors('celular') ? 'is-invalid' : ''}">
+                                <input class="input-form-2" type="text" th:field="*{celular}" placeholder="Ingrese el teléfono del paciente" th:classappend="${#fields.hasErrors('celular') ? 'is-invalid' : ''}">
                                 <div th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}" class="invalid-feedback"></div>
                             </div>
 
