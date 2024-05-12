@@ -206,19 +206,19 @@
                     <!--a th:href="@{'/adminsede/eliminar_orden_reposicion?id=' + ${orden.getIdReposicion()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a-->
                     <form class="formEstadoSolicitud" th:action="@{'/adminsede/eliminar_orden_reposicion'}" method="post">
                         <input type="hidden" name="getIdReposicion" th:value="${orden.getIdReposicion()}">
-                        <button type="submit" style="background: none; border: none;">
-                            <img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/>
+                        <button type="submit" class="delete-icon" style="background: none; border: none; text-decoration: underline; color: blue;">
+                            <i class="fas fa-trash-alt" style="margin-left: 10px;"></i>
                         </button>
                     </form>
                 </div>
-                <div th:if="${orden.getEstado().getIdEstado() == 2}">
+                <div th:if="${orden.getEstado().getIdEstado() == 2}" style="display: flex; align-items: center;">
                     <a th:href="@{'/adminsede/editar_orden_reposicion?id=' + ${orden.getIdReposicion()}}" class="edit-icon" style="margin-left: 30px"><i class="fas fa-pencil-alt"></i></a>
 
                     <!--a th:href="@{'/adminsede/eliminar_orden_reposicion?id=' + ${orden.getIdReposicion()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a-->
                     <form class="formEstadoSolicitud" th:action="@{'/adminsede/eliminar_orden_reposicion'}" method="post">
                         <input type="hidden" name="getIdReposicion" th:value="${orden.getIdReposicion()}">
-                        <button type="submit" style="background: none; border: none;">
-                            <img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/>
+                        <button type="submit" class="delete-icon" style="background: none; border: none; text-decoration: underline; color: blue;">
+                            <i class="fas fa-trash-alt" style="margin-left: 10px;"></i>
                         </button>
                     </form>
                 </div>
