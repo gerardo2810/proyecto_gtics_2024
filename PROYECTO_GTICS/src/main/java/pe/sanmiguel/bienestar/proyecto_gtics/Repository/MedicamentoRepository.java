@@ -48,4 +48,10 @@ public interface MedicamentoRepository extends JpaRepository<Medicamento, Intege
     @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.medicamento SET estado = 0 WHERE idMedicamento = ?")
     void eliminarMedicamento(int idMedicamento);
 
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.medicamento SET imagen = ? WHERE idMedicamento = ?")
+    void imagenMedicamento(byte[] foto, int idMedicamento);
+
 }

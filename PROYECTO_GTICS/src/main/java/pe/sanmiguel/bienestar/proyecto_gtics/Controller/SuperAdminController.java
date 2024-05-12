@@ -902,7 +902,7 @@ public class SuperAdminController {
             System.out.println("NO HAY ERROR");
             medicamento.setCategorias("NNUL");
             medicamento.setEstado(1);
-            medicamento.setImagen("-");
+            //medicamento.setImagen("-");
             medicamentoRepository.save(medicamento);
             attr.addFlashAttribute("msg", "Medicamento creado exitosamente");
             return "redirect:/superadmin/medicamentos";

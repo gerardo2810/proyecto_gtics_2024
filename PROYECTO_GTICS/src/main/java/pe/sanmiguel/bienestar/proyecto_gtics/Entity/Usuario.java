@@ -59,7 +59,7 @@ public class Usuario {
     @Pattern(regexp="\\d+", message="El teléfono debe contener solo números")
     @Size(min=9, max = 9, message = "El celular debe tener al menos 9 dígitos")
     @NotBlank(message = "Debe ingresar un número de celular")
-    @Positive
+    @Positive(message = "El número debe ser mayor a cero")
     private String celular;
 
     @Column
