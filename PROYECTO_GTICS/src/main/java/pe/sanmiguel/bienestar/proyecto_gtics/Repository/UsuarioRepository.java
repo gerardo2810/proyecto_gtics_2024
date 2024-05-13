@@ -114,6 +114,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET contrasena = ? WHERE idRol = 1")
     void actualizarContrasena(String contrasena);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET contrasena = ?1 WHERE id = ?2")
+    void actualizarContrasenaUsuario(String contrasena, int idUsuario);
+
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.usuario WHERE idRol = 2 and id=?;")
     Usuario administradorSede(int idAdmin);
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.usuario WHERE idRol = 3 and id=?;")

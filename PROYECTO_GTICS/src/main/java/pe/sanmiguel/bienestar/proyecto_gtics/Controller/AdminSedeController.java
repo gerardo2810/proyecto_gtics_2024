@@ -13,11 +13,12 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Dto.ReposicionContenidoMedicamentoD
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.UsuarioSedeFarmacistaDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
+import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Controller
@@ -263,9 +264,8 @@ public class AdminSedeController {
         return "adminsede/cambiar_contrasena_adminsede";
     }
 
-    @GetMapping("/perfil_adminsede")
-    public String vistaPerfil(){
-        return "adminsede/perfil_adminsede";
+    private String hashToDots(String passwordHash) {
+        return "*************"; // Repite el carácter '*' según la longitud del hash
     }
 
     @GetMapping("/notificaciones_adminsede")
@@ -612,6 +612,80 @@ public class AdminSedeController {
 
         }
     }
+
+    @GetMapping("/perfil_adminsede")
+    public String vistaPerfil(Model model){
+        int idSession = 102;
+        Optional<Usuario> adminsessionOpt = usuarioRepository.findById(idSession);
+        Usuario adminSession = new Usuario();
+
+        if (adminsessionOpt.isPresent()){
+            adminSession = adminsessionOpt.get();
+        }
+
+        String passwordHash = adminSession.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+        String passwordDots = hashToDots(passwordHash);
+
+        model.addAttribute("admin", adminSession);
+        model.addAttribute("contrasena", passwordDots);
+
+        return "adminsede/perfil_adminsede";
+    }
+
+    @PostMapping("/actualizar_contrasena")
+    public String actualizarContrasena(Usuario adminsedeSession, BindingResult bindingResult,
+                                       @RequestParam(value = "contrasena", required = false) String contrasena,
+                                       RedirectAttributes attr, Model model) throws IOException {
+
+        int idSession = 102;
+        Optional<Usuario> adminsessionOpt = usuarioRepository.findById(idSession);
+        adminsedeSession = adminsessionOpt.get();
+
+        String passwordOld = adminsedeSession.getContrasena();
+        String passwordNew = SHA256.cipherPassword(contrasena);
+
+
+        String passwordHash = adminsedeSession.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+        String passwordDots = hashToDots(passwordHash);
+
+        System.out.println("Contra antigua: " + passwordOld);
+        System.out.println("Contra nueva: " + passwordNew);
+
+        System.out.println("NO HAY ERRORES DE VALIDACIÓN:");
+        if (Objects.equals(passwordNew, passwordOld)) {
+            System.out.println("ESTOY AQUI:");
+            usuarioRepository.actualizarContrasenaUsuario(passwordOld, idSession);
+            attr.addFlashAttribute("msg", "Se mantiene la misma contraseña");
+            return "redirect:/adminsede/perfil_adminsede";
+        } else {
+            if (!isValidPassword(contrasena)) {
+                System.out.println("O AQUII:");
+                String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
+                bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
+                model.addAttribute("admin", adminsedeSession);
+                model.addAttribute("error", errorMsg); // Añade el error al modelo
+                return "adminsede/perfil_adminsede";
+            }
+            System.out.println("MEJOR AQUI:");
+            String hashedPassword = SHA256.cipherPassword(contrasena);
+            usuarioRepository.actualizarContrasenaUsuario(hashedPassword, idSession);
+            attr.addFlashAttribute("msg", "Contraseña actualizada correctamente");
+            return "redirect:/adminsede/perfil_adminsede";
+        }
+    }
+
+    private boolean isValidPassword(String password) {
+        if (password == null || password.trim().isEmpty()) {
+            return false; // Contraseña es nula o está en blanco
+        }
+        // Al menos una mayúscula, una minúscula, un caracter especial y mínimo 8 caracteres
+        String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
+
 
 
 
