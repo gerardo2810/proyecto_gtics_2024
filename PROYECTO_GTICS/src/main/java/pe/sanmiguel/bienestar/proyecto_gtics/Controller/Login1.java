@@ -29,7 +29,7 @@ final UsuarioRepository usuarioRepository;
     //public String inicio() {return "login/login";}
 
     @GetMapping("/new")
-    public String nuevoUsuario(Model model) {
+    public String nuevoUsuario(Model model,@ModelAttribute("usuario")  Usuario usuario) {
         model.addAttribute("usuario", new Usuario());
         return "login/prueba";
     }
