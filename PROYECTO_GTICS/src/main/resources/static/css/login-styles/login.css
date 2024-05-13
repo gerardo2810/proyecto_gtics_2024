@@ -236,6 +236,26 @@
         color: var(--color-gray);
     }
 
+    .alert-danger-custom {
+        color: #721c24;  /* Color del texto */
+        background-color: #f8d7da;  /* Color de fondo */
+        border-color: #f5c6cb;  /* Color del borde */
+        border-radius: 0.25rem;  /* Radio del borde */
+        padding: 1rem;  /* Espaciado interno */
+    }
+
+    /* Estilo para el enlace dentro del alert */
+    .alert-danger-custom a {
+        color: #721c24;  /* Color del enlace */
+        font-weight: bold;  /* Peso de la fuente */
+    }
+
+    /* Estilo para el borde superior del alert */
+    .alert-danger-custom .alert-heading {
+        border-bottom: 1px solid #f1c2c7;  /* Color del borde superior */
+        padding-bottom: 0.5rem;  /* Espaciado inferior */
+        margin-bottom: 0.5rem;  /* Margen inferior */
+    }
     /* Estilo para el alert de éxito */
     .alert-success-custom {
         color: #155724;  /* Color del texto */

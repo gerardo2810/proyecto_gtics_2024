@@ -39,14 +39,17 @@
                 <p class="text text-normal">¿No tiene cuenta? <span>  &#160 <a th:href="@{login/new}" class="text text-links">Registrarse</a></span></p>
 
                 <div class="alert alert-success-custom" role="alert" th:if="${mensaje != null}" th:text="${mensaje}" ></div>
-                <form name="signin" class="login-form" method="post" th:action="@{/login/loguearse}">
+                <div class="alert alert-danger-custom" role="alert" th:if="${error != null}" th:text="${error}"></div>
+                <form name="signin" class="login-form" method="post" th:action="@{/login/loguearse}" th:object="${usuario}">
                     <div class="input-control">
                         <label for="correo" class="input-label" hidden>Email Address</label>
                         <input type="email" name="correo" id="correo" class="input-field" placeholder="Correo Electrónico">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" style="margin-left: 10px ; color: red"></div>
                     </div>
                     <div class="input-control">
                         <label for="contrasena" class="input-label" hidden>Password</label>
                         <input type="password" name="contrasena" id="contrasena" class="input-field" placeholder="Contraseña">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}" style="margin-left: 10px ; color: red"></div>
                     </div>
                     <div class="input-control">
                         <a th:href="@{login/recuperarContraseña}" class="text text-links">Recuperar Contraseña</a>

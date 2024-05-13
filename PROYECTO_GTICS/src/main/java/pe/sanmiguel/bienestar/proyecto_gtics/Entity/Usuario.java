@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.FarmacistaValidationsGroup;
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.LoginValidationsGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.OptionalValidationsGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.RegisterValidationsGroup;
 
@@ -22,13 +23,13 @@ public class Usuario {
     private Integer rol;
 
     @Column
-    @NotBlank(message = "Debe ingresar un correo", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, OptionalValidationsGroup.class})
-    @Email(regexp = ".+@.+\\..+", message = "Debe ingresar un correo válido", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, OptionalValidationsGroup.class})
+    @NotBlank(message = "Debe ingresar un correo", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, OptionalValidationsGroup.class, LoginValidationsGroup.class})
+    @Email(regexp = ".+@.+\\..+", message = "Debe ingresar un correo válido", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, OptionalValidationsGroup.class })
     private String correo;
 
     @Column
-    @NotBlank(message = "Debe ingresar una contraseña", groups = {RegisterValidationsGroup.class, OptionalValidationsGroup.class})
-    @Size(min = 8, message = "Debe ingresar al menos 8 caracteres", groups = {RegisterValidationsGroup.class, OptionalValidationsGroup.class})
+    @NotBlank(message = "Debe ingresar una contraseña", groups = {RegisterValidationsGroup.class, OptionalValidationsGroup.class , LoginValidationsGroup.class})
+    @Size(min = 8, message = "Debe ingresar al menos 8 caracteres", groups = {RegisterValidationsGroup.class, OptionalValidationsGroup.class })
     private String contrasena;
 
     @Column

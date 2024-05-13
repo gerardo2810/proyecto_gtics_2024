@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.LoginValidationsGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.OptionalValidationsGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.RegisterValidationsGroup;
 
@@ -58,21 +59,18 @@ final UsuarioRepository usuarioRepository;
 
 
     @PostMapping("/loguearse")
-    public String login(@RequestParam("correo") String correo,
-                        @RequestParam("contrasena") String contrasena,
+    public String login(@ModelAttribute("usuario") @Validated(RegisterValidationsGroup.class) Usuario usuario,
+                        BindingResult bindingResult,
                         RedirectAttributes attributes) {
 
-        // Buscar el usuario por correo electrónico en la base de datos
-        Usuario usuario = usuarioRepository.findByCorreo(correo);
-
         // Verificar si se encontró un usuario y si la contraseña coincide
-        if (usuario != null && usuario.getContrasena().equals(contrasena)) {
+        if (usuarioRepository.findByCorreo(usuario.getCorreo()) != null && SHA256.cipherPassword(usuario.getContrasena()).equals(usuario.getContrasena())) {
             // Si las credenciales son correctas, redirige a la página de inicio o al panel de control
             return "redirect:/paciente";
         } else {
             // Si las credenciales son incorrectas, redirige de vuelta al formulario de inicio de sesión con un mensaje de error
             attributes.addFlashAttribute("error", "Credenciales incorrectas");
-            return "redirect:/login";
+            return "redirect:/";
         }
     }
 }
