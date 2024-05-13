@@ -262,13 +262,13 @@
                             <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
                                 <div>
                                     <div class="subtitulo-item roboto-bold" th:text="${medicamento.getUnidad()}" >Unidad</div>
-                                    <div class="item-title roboto-medium" th:text="${medicamento.getNombre()}" style="margin-top: 5px">Medicamento</div><br/>
+                                    <div class="item-title roboto-medium" th:text="${medicamento.getNombre()}" style="margin-top: 5px; width: 181px; height: 36px; ">Medicamento</div><br/>
                                 </div>
-                                <div th:text="'Cantidad disponible: ' + ${medicamento.getCantidad()}"></div>
+                                <div th:text="'Cantidad disponible: ' + ${medicamento.getCantidad()}" style="font-size: 18px"></div>
                                 <div style="display: flex; flex-direction: row; gap: 3px; align-items: end; margin-left: 2px">
-                                    <span th:text="'Precio:'"/>
-                                    <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.getPrecioCompra()}">Precio</span>
-                                </div><br/>
+                                    <span class="item-price roboto-regular" th:text="'Precio:'"/>
+                                    <span class="item-symbol" style="font-size: 18.4px">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.getPrecioCompra()}">Precio</span>
+                                </div>
                                 <div style="align-items: center; background-color: #ffffff" class="add-item-button-ad open-sans-regular-ad">
                                     <div th:if="${medicamento.getCantidad() > 25}" th:text="'Stock Aceptable'" class="btn-green" style="justify-content: center; text-align: center; align-content: center; align-items: center"></div>
                                     <div th:if="${medicamento.getCantidad() <= 25 && medicamento.getCantidad() != 0}" th:text="'Por Agotar'" class="btn-yellow" style="justify-content: center; text-align: center; align-content: center; align-items: center"></div>
