@@ -618,7 +618,7 @@ public class AdminSedeController {
                 for(int i = 0; i < listaIds.size(); i++){
                     reposicionContenidoRepository.actualizarCantidadMedicamentoOrden(listaCantidades.get(i),listaIds.get(i),idReposicion);
                 }
-                attr.addFlashAttribute("msg", "Orden de reposición #" + idReposicion + " actualizada correctamente");
+                attr.addFlashAttribute("msg", "Orden de reposición #" + (idReposicion + 10000) + " actualizada correctamente");
                 return "redirect:/adminsede/ordenes";
 
             }else {
