@@ -622,9 +622,8 @@ public class AdminSedeController {
                 return "redirect:/adminsede/ordenes";
 
             }else {
-                attr.addFlashAttribute("msg", "No se puede ingresar cantidades iguales a cero o negativas, por favor ingrese una cantidad nuevamente");
-
-                return "adminsede/editar_orden_reposicion";
+                attr.addFlashAttribute("msg", "Error en la actualización de cantidad de medicamento en la orden #" + (idReposicion + 10000) + ", solo está permitido colocar cantidades positivas");
+                return "redirect:/adminsede/ordenes";
             }
 
         }
