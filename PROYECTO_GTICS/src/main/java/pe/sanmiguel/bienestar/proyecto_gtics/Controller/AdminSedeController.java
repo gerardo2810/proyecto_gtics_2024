@@ -163,16 +163,61 @@ public class AdminSedeController {
         if ("disponible".equals(state)) {
             List<MedicamentosSedeStockDto> listaMedicamentosStockDisponible = medicamentoRepository.listarMedicamentosStockDisponible(idSession);
             model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosStockDisponible);
+            //hacer lista de fotos de medicamentos
+            ArrayList<String> listaFotosMedicamentos = new ArrayList<>();
+            List<Medicamento> listaMedicamento = medicamentoRepository.findAll();
+
+            for(MedicamentosSedeStockDto medicamentosSedeStockDto : listaMedicamentosStockDisponible){
+                for(Medicamento medicamento : listaMedicamento){
+                    if(medicamento.getIdMedicamento() == medicamentosSedeStockDto.getIdMedicamento()){
+                        listaFotosMedicamentos.add(medicamento.getImagenBase64());
+
+                    }
+
+                }
+
+            }
+            model.addAttribute("listaFotosMedicamentos", listaFotosMedicamentos);
             return "adminsede/medicamentos_sede";
 
         } else if ("agotado".equals(state)) {
             List<MedicamentosSedeStockDto> listaMedicamentosStockAgotado = medicamentoRepository.listarMedicamentosStockAgotados(idSession);
             model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosStockAgotado);
+            //hacer lista de fotos de medicamentos
+            ArrayList<String> listaFotosMedicamentos = new ArrayList<>();
+            List<Medicamento> listaMedicamento = medicamentoRepository.findAll();
+
+            for(MedicamentosSedeStockDto medicamentosSedeStockDto : listaMedicamentosStockAgotado){
+                for(Medicamento medicamento : listaMedicamento){
+                    if(medicamento.getIdMedicamento() == medicamentosSedeStockDto.getIdMedicamento()){
+                        listaFotosMedicamentos.add(medicamento.getImagenBase64());
+
+                    }
+
+                }
+
+            }
+            model.addAttribute("listaFotosMedicamentos", listaFotosMedicamentos);
             return "adminsede/medicamentos_sede";
 
         } else if ("poragotar".equals(state)) {
             List<MedicamentosSedeStockDto> listaMedicamentosPorAgotar = medicamentoRepository.listarMedicamentosStockPorAgotar(idSession);
             model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosPorAgotar);
+            //hacer lista de fotos de medicamentos
+            ArrayList<String> listaFotosMedicamentos = new ArrayList<>();
+            List<Medicamento> listaMedicamento = medicamentoRepository.findAll();
+
+            for(MedicamentosSedeStockDto medicamentosSedeStockDto : listaMedicamentosPorAgotar){
+                for(Medicamento medicamento : listaMedicamento){
+                    if(medicamento.getIdMedicamento() == medicamentosSedeStockDto.getIdMedicamento()){
+                        listaFotosMedicamentos.add(medicamento.getImagenBase64());
+
+                    }
+
+                }
+
+            }
+            model.addAttribute("listaFotosMedicamentos", listaFotosMedicamentos);
             return "adminsede/medicamentos_sede";
 
         } else {
@@ -181,15 +226,17 @@ public class AdminSedeController {
             //hacer lista de fotos de medicamentos
             ArrayList<String> listaFotosMedicamentos = new ArrayList<>();
             List<Medicamento> listaMedicamento = medicamentoRepository.findAll();
-            int i = 0;
-            for(Medicamento medicamento: listaMedicamento){
 
-                if(medicamento.getIdMedicamento() == listaMedicamentosSedeStock.get(i).getIdMedicamento()){
-                    listaFotosMedicamentos.add(medicamento.getImagenBase64());
+            for(MedicamentosSedeStockDto medicamentosSedeStockDto : listaMedicamentosSedeStock){
+                for(Medicamento medicamento : listaMedicamento){
+                    if(medicamento.getIdMedicamento() == medicamentosSedeStockDto.getIdMedicamento()){
+                        listaFotosMedicamentos.add(medicamento.getImagenBase64());
+
+                    }
+
                 }
-                i++;
-            }
 
+            }
             model.addAttribute("listaFotosMedicamentos", listaFotosMedicamentos);
 
             return "adminsede/medicamentos_sede";
