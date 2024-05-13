@@ -24,7 +24,7 @@ public class Usuario {
 
     @Column
     @NotBlank(message = "Debe ingresar un correo", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, OptionalValidationsGroup.class, LoginValidationsGroup.class})
-    @Email(regexp = ".+@.+\\..+", message = "Debe ingresar un correo válido", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, OptionalValidationsGroup.class })
+    @Email(regexp = ".+@.+\\..+", message = "Debe ingresar un correo válido", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, OptionalValidationsGroup.class,LoginValidationsGroup.class })
     private String correo;
 
     @Column
