@@ -19,11 +19,15 @@ public class Medicamento {
     @Column
     @NotBlank(message = "Debe ingresar un nombre")
     private String nombre;
-    @Column
+
     @Pattern(regexp="\\d+", message="La unidad debe contener solo número")
     @Positive(message = "Debe ser positivo")
     @NotBlank(message = "Debe ingresar una unidad")
+    private String numunidad;
+
+    @Column
     private String unidad;
+
     @Column
     @NotBlank(message = "Debe ingresar una descripción")
     private String descripcion;
@@ -52,13 +56,11 @@ public class Medicamento {
     @Lob
     private byte[] imagen;
 
-
-
     public void setImagen(byte[] imagen) {
         this.imagen = imagen;
     }
 
-    // Nuevo método para obtener la imagen en formato Base64
+    //Método para obtener la imagen
     public String getImagenBase64() {
         return (imagen != null) ? Base64.getEncoder().encodeToString(imagen) : null;
     }

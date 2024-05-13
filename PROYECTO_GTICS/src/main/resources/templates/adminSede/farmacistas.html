@@ -215,7 +215,8 @@
                         <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Código (colegio médico)</th>
                         <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo</th>
                         <th style="text-align: center; color: #ffffff; font-weight: normal !important;">DNI</th>
-                        <th></th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Editar</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Eliminar</th>
                     </tr>
                 </thead>
 
@@ -234,17 +235,16 @@
                             <a th:href="@{'/adminsede/editar_farmacista?id=' + ${farmacista.getId()}}" class="edit-icon" style="margin-left: 30px"><i class="fas fa-pencil-alt"></i></a>
                             <!--a th:href="@{'/adminsede/eliminar_farmacista?id=' + ${farmacista.getId()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a-->
                         </td>
-                        <td>
+
                         <td>
                             <form class="formEstadoSolicitud" th:action="@{'/adminsede/eliminar_farmacista'}" method="post">
                                 <input type="hidden" name="idFarmacista" th:value="${farmacista.getId()}">
-                                <button type="submit" style="background: none; border: none;">
-                                    <img width="24" height="24" src="https://img.icons8.com/?size=256&id=KPhFC2OwpbWV&format=png" alt="Eliminar"/>
+                                <button type="submit" class="delete-icon" style="background: none; border: none; text-decoration: underline; color: blue;">
+                                    <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>
                         </td>
 
-                        </td>
 
                     </tr>
 

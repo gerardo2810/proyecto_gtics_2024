@@ -721,7 +721,10 @@
 
 
 
+
     listaSelectedIds = []
+
+
 
     $(document).ready(function() {
 
@@ -779,9 +782,33 @@
 
             console.log(listaSelectedIds)
 
-
-
         }
+
+        $(document).ready(function() {
+            // Tu código existente para el manejo de eventos y funciones
+
+            // Función para actualizar las cantidades y el monto total
+            function actualizarCantidadesYTotal() {
+                const listItems = document.getElementsByClassName('lista-items-clicked')[0];
+                const selectedItems = listItems.getElementsByClassName('selected-item');
+
+                // Recorrer cada elemento seleccionado
+                for (let i = 0; i < selectedItems.length; i++) {
+                    const item = selectedItems[i];
+                    const idMedicamento = listaSelectedIds[i * 2]; // ID del medicamento en la posición par
+                    const cantidad = listaSelectedIds[i * 2 + 1]; // Cantidad del medicamento en la posición impar
+
+                    // Actualizar la cantidad en el elemento HTML correspondiente
+                    item.getElementsByClassName('item-quantity-clicked')[0].value = cantidad;
+                }
+
+                // Actualizar el monto total
+                actualizarMontoTotal();
+            }
+
+            // Llamar a la función al cargar la página
+            actualizarCantidadesYTotal();
+        });
 
 
         function clickItemAdd(event){
@@ -822,6 +849,7 @@
             button.parentElement.parentElement.parentElement.remove();
             hideorShowList();
             actualizarMontoTotal();
+
         }
 
 
@@ -1053,6 +1081,9 @@
     });
 
 </script>
+
+
+
 
 </body>
 
