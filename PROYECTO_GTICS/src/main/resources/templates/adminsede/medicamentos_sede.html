@@ -258,7 +258,7 @@
                     <!-- Contenedor de elementos -->
                     <div class="med-container">
                         <div class="item" th:each="medicamento, info: ${listaMedicamentosSedeStock}">
-                            <img th:src="'data:image/jpeg;base64,' + ${listaFotosMedicamentos[info.index]}" class="medicamento"/>
+                            <img th:src="'data:image/jpeg;base64,' + ${listaFotosMedicamentos[info.index]}" class="img-item" style="width: 200px; height: 200px;"/>
                             <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
                                 <div>
                                     <div class="subtitulo-item roboto-bold" th:text="${medicamento.getUnidad()}" >Unidad</div>
