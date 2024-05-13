@@ -201,7 +201,7 @@ public class SuperAdminController {
             if (Objects.equals(passwordNew, passwordOld)) {
                 System.out.println("ESTOY AQUI:");
                 usuarioRepository.actualizarContrasena(passwordOld);
-                attr.addFlashAttribute("msg", "Se mantiene la misma contraseña");
+                attr.addFlashAttribute("msg", "Se ingresó la misma contraseña");
                 return "redirect:/superadmin/cambiarContrasena";
             } else {
                 if(contrasenia.length()>30){

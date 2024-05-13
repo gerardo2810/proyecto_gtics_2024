@@ -101,13 +101,11 @@ public class PacienteController {
 
         Integer idInteger = Integer.parseInt(idOrden);
         Orden orden = ordenRepository.getById(idInteger);
+        Integer cantProductos = ordenContenidoRepository.cantProductos(idOrden);
 
         List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
 
-        //Como mandar una imagen a una vista:
-        //String base64Encoded = Base64.getEncoder().encodeToString(orden.getImagen());
-        //model.addAttribute("imagen", base64Encoded);
-
+        model.addAttribute("cantProductos", cantProductos);
         model.addAttribute("lista", lista);
         model.addAttribute("ordenActual", orden);
 
@@ -171,12 +169,15 @@ public class PacienteController {
     @GetMapping(value = "/confirmar_pago")
     public String confirmarPago(Model model, @RequestParam("id") String idOrden){
 
+        Integer cantProductos = ordenContenidoRepository.cantProductos(idOrden);
+
         Integer idInteger = Integer.parseInt(idOrden);
         Orden orden = ordenRepository.getById(idInteger);
 
         List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
 
         model.addAttribute("lista", lista);
+        model.addAttribute("cantProductos", cantProductos);
         model.addAttribute("ordenActual", orden);
 
         return "paciente/confirmar_pago";
@@ -245,6 +246,8 @@ public class PacienteController {
         System.out.println(total);
 
         if(bindingResult.hasErrors() || bin2.hasErrors()){
+
+
             System.out.println(bindingResult.getAllErrors());
             System.out.printf(String.valueOf(file));
 
@@ -259,11 +262,10 @@ public class PacienteController {
 
                 model.addAttribute("currentMed", medicamentosSeleccionados);
                 model.addAttribute("currentCant", listaCantidades);
-
-                System.out.println(medicamentosSeleccionados);
-                System.out.println(listaCantidades);
-
             }
+
+
+
 
 
 

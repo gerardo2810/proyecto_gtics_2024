@@ -258,7 +258,7 @@
             <div class="title roboto-medium data-label">
                 <div class="column-start">
                     <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray; margin-bottom:8px; text-align: center" th:text="${'Administrador de ' + sedeAdministrador.nombre}"></label>
+                        <label style="font-weight: bold; color:dimgray; margin-bottom:8px; margin-left: 150px" th:text="${'Administrador de ' + sedeAdministrador.nombre}"></label>
                         <br>
                         <div class="profile-picture-container">
                             <div class="profile-picture"></div>
@@ -442,7 +442,7 @@
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Contraseña:</label>
-                                    <input  type="text"  th:value="${contrasenia}" class="input-form"  name="contrasena" placeholder="Ingrese la contraseña" th:classappend="${#fields.hasErrors('contrasena')?'is-invalid':''}" >
+                                    <input  type="password"  th:value="${contrasenia}" class="input-form"  name="contrasena" placeholder="Ingrese la contraseña" th:classappend="${#fields.hasErrors('contrasena')?'is-invalid':''}" >
                                     <div style="width: 300px" class="invalid-feedback"
                                           th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}">
                                         No puede estar vacío
