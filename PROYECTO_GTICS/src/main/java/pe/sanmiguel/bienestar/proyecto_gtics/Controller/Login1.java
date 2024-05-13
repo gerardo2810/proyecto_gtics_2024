@@ -19,7 +19,7 @@ import javax.imageio.spi.RegisterableService;
 
 
 @Controller
-@RequestMapping("/login")
+//@RequestMapping("/login")
 public class Login1 {
 final UsuarioRepository usuarioRepository;
 
@@ -27,6 +27,15 @@ final UsuarioRepository usuarioRepository;
 
     //@GetMapping("")
     //public String inicio() {return "login/login";}
+
+    @GetMapping("/")
+
+    public String login(@ModelAttribute("usuario")  Usuario usuario,RedirectAttributes attributes,
+                        Model model) {
+        model.addAttribute("usuario", usuario);
+
+        return "index";
+    }
 
     @GetMapping("/new")
     public String nuevoUsuario(Model model) {
@@ -59,18 +68,27 @@ final UsuarioRepository usuarioRepository;
 
 
     @PostMapping("/loguearse")
-    public String login(@ModelAttribute("usuario") @Validated(RegisterValidationsGroup.class) Usuario usuario,
+    public String login(@ModelAttribute("usuario") @Validated(LoginValidationsGroup.class) Usuario usuario,
                         BindingResult bindingResult,
-                        RedirectAttributes attributes) {
+                        RedirectAttributes attributes,
+                        Model model) {
 
-        // Verificar si se encontró un usuario y si la contraseña coincide
-        if (usuarioRepository.findByCorreo(usuario.getCorreo()) != null && SHA256.cipherPassword(usuario.getContrasena()).equals(usuario.getContrasena())) {
-            // Si las credenciales son correctas, redirige a la página de inicio o al panel de control
-            return "redirect:/paciente";
+        Usuario usuarioExistente = usuarioRepository.findByCorreo(usuario.getCorreo());
+
+
+        if (!bindingResult.hasErrors()) {
+            if (usuarioExistente != null && SHA256.cipherPassword(usuario.getContrasena()).equals(usuarioExistente.getContrasena())) {
+                // Si las credenciales son correctas, redirige a la página de inicio o al panel de control
+                return "redirect:/paciente";
+            } else {
+                // Si las credenciales son incorrectas, redirige de vuelta al formulario de inicio de sesión con un mensaje de error
+                attributes.addFlashAttribute("error", "Credenciales incorrectas");
+                return "redirect:/";
+            }
         } else {
-            // Si las credenciales son incorrectas, redirige de vuelta al formulario de inicio de sesión con un mensaje de error
-            attributes.addFlashAttribute("error", "Credenciales incorrectas");
-            return "redirect:/";
+           model.addAttribute("usuario", usuario);
+            return "index";
         }
+
     }
 }
