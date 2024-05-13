@@ -935,6 +935,7 @@ public class SuperAdminController {
 
     @GetMapping(value = {"/editarMedicamento"})
     public String editarMedicamento(@ModelAttribute("product") Medicamento medicamento,
+                                    @ModelAttribute("validateImage") ValidateImage validateImage,
                                     Model model, @RequestParam("id") int id){
 
         Optional<Medicamento> optionalMedicamento = medicamentoRepository.findById(id);
@@ -957,10 +958,13 @@ public class SuperAdminController {
     }
 
     @PostMapping("/actualizarMedicamento")
-    public String actualizarMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento,
+    public String actualizarMedicamento(@ModelAttribute("medicamento") @Valid Medicamento medicamento, BindingResult bindingResult,
+                                        @ModelAttribute("validateImage") ValidateImage validateImage, BindingResult binding2,
                                         @RequestParam(value = "nombre", required = false) String nombre,
-                                        BindingResult bindingResult, @RequestParam(value = "sedeid", required = false) List<Integer> idSedesSeleccionadas, RedirectAttributes attr, Model model){
-        if(bindingResult.hasErrors()){
+                                        @RequestParam(value = "sedeid", required = false) List<Integer> idSedesSeleccionadas,
+                                        @RequestParam(value = "file", required = false) Part file,
+                                        RedirectAttributes attr, Model model) throws IOException {
+        if(bindingResult.hasErrors() || binding2.hasErrors()){
             System.out.println("HAY ERRORES DE VALIDACIÓN:");
             for (ObjectError error : bindingResult.getAllErrors()) {
                 System.out.println("- " + error.getDefaultMessage());
@@ -989,8 +993,13 @@ public class SuperAdminController {
                 return "superAdmin/editarMedicamento";
             }
 
+            InputStream inputStream = file.getInputStream();
+            byte[] bytes = inputStream.readAllBytes();
+
             medicamento.setCategorias("NNUL");
             medicamento.setEstado(1);
+            medicamento.setImagen(bytes);
+
             if (idSedesSeleccionadas == null || idSedesSeleccionadas.isEmpty()) {
                 int idMedicamento = medicamento.getIdMedicamento();
                 System.out.println("Estoy en si el parámetros es NULL");
