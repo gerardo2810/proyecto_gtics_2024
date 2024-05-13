@@ -52,6 +52,9 @@
                 border-radius: 10px;
                 transition: background-color ease 0.2s;
             }
+            .medicamento{
+                width: 200px; height: 200px;
+            }
 
 
             .open-sans-regular-ad {
@@ -254,8 +257,8 @@
 
                     <!-- Contenedor de elementos -->
                     <div class="med-container">
-                        <div class="item" th:each="medicamento : ${listaMedicamentosSedeStock}">
-                            <img th:src="${medicamento.getImagen()}" th:alt="${medicamento.getNombre()}" class="img-item">
+                        <div class="item" th:each="medicamento, info: ${listaMedicamentosSedeStock}">
+                            <img th:src="'data:image/jpeg;base64,' + ${listaFotosMedicamentos[info.index]}" class="medicamento"/>
                             <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
                                 <div>
                                     <div class="subtitulo-item roboto-bold" th:text="${medicamento.getUnidad()}" >Unidad</div>
