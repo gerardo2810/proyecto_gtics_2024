@@ -675,7 +675,7 @@
             <tbody>
             <tr th:each="itemDeLaOrden: ${contenidoOrden}">
                 <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
-                <td><img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" width="120px" height="auto" th:alt="${medicamento.nombre}"></td>
+                <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" width="120px" height="auto" ></td>
                 <td th:text="${itemDeLaOrden.getCantidad()}"></td>
                 <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
                 <td class="resultado"></td>
@@ -735,6 +735,9 @@
 
         <br>
 
+
+
+
         <table id="miTabla2" class="table table-striped">
 
             <thead>
@@ -751,7 +754,7 @@
             <tbody>
             <tr th:each="itemDeLaOrden: ${contenidoPreOrden}">
                 <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
-                <td><img class="medicamento" th:src="${itemDeLaOrden.getIdMedicamento().imagen}"></td>
+                <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" width="120px" height="auto"></td>
                 <td th:text="${itemDeLaOrden.getCantidad()}"></td>
                 <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
                 <td class="resultado"></td>
