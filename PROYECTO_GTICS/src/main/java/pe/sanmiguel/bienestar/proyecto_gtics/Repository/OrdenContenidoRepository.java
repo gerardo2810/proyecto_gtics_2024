@@ -19,4 +19,9 @@ public interface OrdenContenidoRepository extends JpaRepository<OrdenContenido, 
 
     @Query(value="select * from orden_contenido where idOrden = ?1", nativeQuery = true)
     List<OrdenContenido> findMedicamentosByOrdenId(String id);
+
+
+
+    @Query(value="SELECT SUM(cantidad) FROM proyecto_gtics.orden_contenido where idOrden = ?1", nativeQuery = true)
+    Integer cantProductos(String id);
 }

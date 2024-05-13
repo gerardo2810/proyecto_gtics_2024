@@ -19,9 +19,6 @@
         <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
         <link rel="stylesheet" th:href="@{/css/farmacista/detalle_ordenes.css}">
         <link th:href="@{/css/footer.css}" rel="stylesheet" />
-        <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
-
-        <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
         <link rel="stylesheet" th:href="@{/css/adminsede/indexstyle.css}">
 
         <!--Mapa vista Paciente-->
@@ -160,7 +157,7 @@
 
                     <div class="title-info">
                         <div class="roboto-bold title data-label">Orden #<span th:text="${reposicion.getIdReposicion() + 10000}"></span> </div>
-                        <div th:text="Entregado" class="badge badge-pagado"></div>
+                        <div th:text="Entregado" class="badge badge-entregado"></div>
                     </div>
                 </div>
 
@@ -196,7 +193,7 @@
 
                 <hr class="my-4" style="margin-bottom: 50px; margin-top: 20px;">
 
-                <div class="title roboto-medium data-label" style="padding-bottom: 20px">Lista de Medicamentos Comprados</div>
+                <div class="title roboto-medium data-label" style="padding-bottom: 20px">Lista de Medicamentos Solicitados</div>
 
                 <div>
                     <table class="order-table">

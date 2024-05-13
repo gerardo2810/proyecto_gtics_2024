@@ -1,6 +1,10 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Dto;
 
 
+import jakarta.persistence.Lob;
+
+import java.util.Base64;
+
 public interface MedicamentosSedeStockDto {
 
     int getIdMedicamento();
@@ -19,7 +23,7 @@ public interface MedicamentosSedeStockDto {
 
     Integer getRecetable();
 
-    String getImagen();
+    byte[] getImagen();
 
     int getIdSede();
 

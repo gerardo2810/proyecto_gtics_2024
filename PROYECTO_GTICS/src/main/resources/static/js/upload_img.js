@@ -125,14 +125,7 @@ class UploadModal {
         this.state = 3;
         this.stateDisplay();
     }
-    upload() {
-        if (!this.isUploading) {
-            this.isUploading = true;
-            this.progress = 0;
-            this.state = 1;
-            this.progressLoop();
-        }
-    }
+
 }
 
 class Utils {

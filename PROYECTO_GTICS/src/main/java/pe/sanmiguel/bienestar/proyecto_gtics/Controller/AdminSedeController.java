@@ -15,6 +15,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -177,6 +178,20 @@ public class AdminSedeController {
         } else {
             List<MedicamentosSedeStockDto> listaMedicamentosSedeStock = medicamentoRepository.listarMedicamentosSedeStock(idSession); //seteamos por default
             model.addAttribute("listaMedicamentosSedeStock", listaMedicamentosSedeStock);
+            //hacer lista de fotos de medicamentos
+            ArrayList<String> listaFotosMedicamentos = new ArrayList<>();
+            List<Medicamento> listaMedicamento = medicamentoRepository.findAll();
+            int i = 0;
+            for(Medicamento medicamento: listaMedicamento){
+
+                if(medicamento.getIdMedicamento() == listaMedicamentosSedeStock.get(i).getIdMedicamento()){
+                    listaFotosMedicamentos.add(medicamento.getImagenBase64());
+                }
+                i++;
+            }
+
+            model.addAttribute("listaFotosMedicamentos", listaFotosMedicamentos);
+
             return "adminsede/medicamentos_sede";
         }
 

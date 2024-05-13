@@ -268,9 +268,14 @@
 
                 <div class="title roboto-medium data-label">
                     <div class="column-start">
-                        <div class="input-label-box">
-                            <label style="font-weight: bold; color:dimgray; margin-bottom:8px; margin-left: 200px">NUEVO MEDICAMENTO</label>
-                            <br>
+                        <div class="input-label-box" th:object="${validateImage}">
+
+                            <label style="font-weight: bold; color:dimgray; margin-bottom:2px; margin-left: 200px">NUEVO MEDICAMENTO</label>
+                            <div style="width: 600px;font-size:14px;display: flex;flex-direction: row;justify-content: center;padding-left: 66px;margin-bottom: 4px" class="invalid-feedback"
+                                 th:if="${#fields.hasErrors('file')}" th:errors="*{file}">
+                            </div>
+
+
                             <div class="profile-picture-container">
                                 <div class="profile-picture"></div>
                                 <div id="upload"  data-state="0" data-ready="false">
@@ -304,9 +309,9 @@
                                             <div class="modal__content">
                                                 <h2 class="modal__title" style="font-weight: 600">Sube una imagen para el medicamento:</h2>
                                                 <p class="modal__message" style="color:dimgray">Selecciona la imagen para subirla desde tu dispositivo</p>
-                                                <div class="modal__actions">
+                                                <div class="modal__actions" >
                                                     <button  class="modal__button modal__button--upload" type="button" data-action="file">Seleccionar imagen</button>
-                                                    <input id="file" name="imagen" type="text" hidden >
+                                                    <input th:field="*{file}" type="file" hidden >
                                                 </div>
                                                 <div class="modal__actions" hidden>
                                                     <svg class="modal__file-icon" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
