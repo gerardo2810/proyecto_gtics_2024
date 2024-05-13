@@ -116,6 +116,15 @@
             margin-bottom: 20px;
 
         }
+        .input-control3 {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            justify-content: space-between;
+            width: calc(90%);
+            margin-bottom: 20px;
+
+        }
         .input-control2 {
             flex-direction: column;
             display: flex;

@@ -38,7 +38,7 @@
                 <span>&#160;<a th:href="@{/}" class="text text-links">Regresar al Inicio de Sesión</a></span>
             </div>
 
-            <form name="signin" class="login-form" method="post" th:action="@{/login/save}" onsubmit="return validatePassword()" th:object="${usuario}">
+            <form name="signin" class="login-form" method="post" th:action="@{/save}" onsubmit="return validatePassword()" th:object="${usuario}">
                     <div class="content">
                         <div class="user-details">
                             <div class="input-control2">
