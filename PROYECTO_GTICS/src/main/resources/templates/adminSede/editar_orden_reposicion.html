@@ -266,17 +266,8 @@
                                 </div>
                             </td>
                             <td>
-                                <!--a th:href="@{'/adminsede/eliminar_medicamento_lista_seleccionada?idMedicamento=' + ${medicamento.getIdMedicamento()} + '&idReposicion=' + ${medicamento.getIdReposicion()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a-->
-                                <form class="formEstadoSolicitud" th:action="@{'/adminsede/eliminar_medicamento_lista_seleccionada'}" method="post">
-                                    <!--input type="hidden" name="getIdReposicion" th:value="${medicamento.getIdMedicamento() + '&idReposicion=' + medicamento.getIdReposicion()}"-->
-                                    <!-- Campo oculto para idMedicamento -->
-                                    <input type="hidden" name="idMedicamento" th:value="${medicamento.getIdMedicamento()}">
-                                    <!-- Campo oculto para idReposicion -->
-                                    <input type="hidden" name="idReposicion" th:value="${medicamento.getIdReposicion()}">
-                                    <button type="submit" class="delete-icon" style="background: none; border: none; text-decoration: underline; color: blue;">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
+                                <a th:href="@{'/adminsede/eliminar_medicamento_lista_seleccionada?idMedicamento=' + ${medicamento.getIdMedicamento()} + '&idReposicion=' + ${medicamento.getIdReposicion()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a>
+
                             </td>
                         </tr>
                     </tbody>
@@ -460,7 +451,6 @@
 
 
 
-
         <script>
             document.querySelectorAll(".formEstadoSolicitud").forEach(form => {
                 form.addEventListener("submit", function(e){
@@ -477,13 +467,14 @@
                         cancelButtonText: 'No, cancelar'
                     }).then((result) => {
                         if (result.isConfirmed) {
+                            // Aquí, en lugar de enviar el formulario directamente, necesitamos llamar al método submit() del formulario.
                             e.target.submit();
                         }
                     })
                 });
             });
-
         </script>
+
 
 
         <script>
