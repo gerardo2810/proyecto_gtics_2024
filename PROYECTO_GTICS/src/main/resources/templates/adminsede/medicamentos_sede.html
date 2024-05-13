@@ -266,7 +266,7 @@
                                 </div>
                                 <div th:text="'Cantidad disponible: ' + ${medicamento.getCantidad()}" style="font-size: 18px"></div>
                                 <div style="display: flex; flex-direction: row; gap: 3px; align-items: end; margin-left: 2px">
-                                    <span class="item-price roboto-regular" th:text="'Precio:'"/>
+                                    <span style="font-size: 18" th:text="'Precio:'"/>
                                     <span class="item-symbol" style="font-size: 18.4px">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.getPrecioCompra()}">Precio</span>
                                 </div>
                                 <div style="align-items: center; background-color: #ffffff" class="add-item-button-ad open-sans-regular-ad">
@@ -389,7 +389,7 @@
                     const titulo = item.getElementsByClassName('item-title')[0].innerText;
                     const precio = item.getElementsByClassName('item-price')[0].innerText;
                     const imagenSrc = item.getElementsByClassName('img-item')[0].src;
-                    console.log(imagenSrc)
+                    console.log(precio)
 
 
                     if (listaSelectedIds.indexOf(idAdd) === -1) {
