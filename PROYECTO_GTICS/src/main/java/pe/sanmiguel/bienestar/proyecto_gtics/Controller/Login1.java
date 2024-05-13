@@ -78,8 +78,15 @@ final UsuarioRepository usuarioRepository;
 
         if (!bindingResult.hasErrors()) {
             if (usuarioExistente != null && SHA256.cipherPassword(usuario.getContrasena()).equals(usuarioExistente.getContrasena())) {
-                // Si las credenciales son correctas, redirige a la página de inicio o al panel de control
-                return "redirect:/paciente";
+                if (usuarioExistente.getRol() == 1) {
+                    return "redirect:/superadmin";
+                } else if (usuarioExistente.getRol()==2) {
+                    return "redirect:/adminsede";
+                } else if (usuarioExistente.getRol()==3) {
+                    return "redirect:/farmacista";
+                } else {
+                    return "redirect:/paciente";
+                }
             } else {
                 // Si las credenciales son incorrectas, redirige de vuelta al formulario de inicio de sesión con un mensaje de error
                 attributes.addFlashAttribute("error", "Credenciales incorrectas");

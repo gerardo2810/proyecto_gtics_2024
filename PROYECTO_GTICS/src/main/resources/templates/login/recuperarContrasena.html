@@ -1,27 +1,57 @@
+
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-   <head>
-      <meta charset="utf-8">
-      <title>Popup Login Form Design | CodingNepal</title>
-      <!---CSS Longin-->
-      <link rel="stylesheet" th:href="@{/css/login.css}">
-      <!--Link de Login -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-   </head>
-   <body>
-      <div class="center">
-         <input type="checkbox" id="show">
-         <div class="container">
-            <div class="text">
-               Recuperación de contraseña
-            </div>
-            <form action="#">
-                <div class="data">
-                  <label>Correo electronico</label>
-                  <input type="text" required>
-                </div>
-            </form>
-         </div>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>Bienestar San Miguel | Login</title>
+
+
+   <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
+   <link th:href="@{/css/styles.css}" rel="stylesheet" />
+   <link th:href="@{/css/fonts.css}" rel="stylesheet" />
+   <link th:href="@{/css/login-styles/login.css}" rel="stylesheet" />
+   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+</head>
+
+<header>
+   <div class="login-top">
+      <div>
+         <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
       </div>
-   </body>
+
+      <div class="top-menu">
+         <a class="text menu-item roboto-regular" href="">Preguntas Frecuentes →</a>
+         <a class="text menu-item roboto-regular" href="">Manual de Usuario →</a>
+         <a class="text menu-item roboto-regular" href="https://munisanmiguel.gob.pe/#">Directorio de Servicios →</a>
+      </div>
+   </div>
+
+</header>
+
+<body>
+<div class="main-container">
+   <div class="login-container">
+
+      <div class="wrapper3">
+         <div class="login-title montserrat-bold">Recuperación de contraseña</div>
+         <form class="login-form" action="#">
+            <div class="input-control3">
+               <label class="input-label" style="margin-left: 10px">Correo electronico</label>
+               <input type="text" required class="input-field" placeholder="Ingrese su correo electrónico">
+            </div>
+         </form>
+
+      </div>
+
+   </div>
+</div>
+
+</body>
+
 </html>
+
+
+

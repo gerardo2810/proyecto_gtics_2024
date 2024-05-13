@@ -600,17 +600,32 @@ public class AdminSedeController {
     public String editarReposicion(@RequestParam(name = "listaIds", required = false) List<Integer> listaIds,
                                    @RequestParam(name = "listaCantidades", required = false) List<Integer> listaCantidades,
                                    @RequestParam("idReposicion") int idReposicion,
-                                   RedirectAttributes attr){
+                                   RedirectAttributes attr, Model model){
 
 
         if(listaIds == null){
             return "redirect:/adminsede/ordenes";
         }else {
-            for(int i = 0; i < listaIds.size(); i++){
-                reposicionContenidoRepository.actualizarCantidadMedicamentoOrden(listaCantidades.get(i),listaIds.get(i),idReposicion);
+            // validamos si las cantidades son negativas o positivas
+            boolean cantidadesPositivas = true;
+            for (Integer cantidad : listaCantidades){
+                if(cantidad <= 0){
+                    cantidadesPositivas = false;
+                }
             }
-            attr.addFlashAttribute("msg", "Orden de reposición #" + idReposicion + " actualizada correctamente");
-            return "redirect:/adminsede/ordenes";
+
+            if(cantidadesPositivas){
+                for(int i = 0; i < listaIds.size(); i++){
+                    reposicionContenidoRepository.actualizarCantidadMedicamentoOrden(listaCantidades.get(i),listaIds.get(i),idReposicion);
+                }
+                attr.addFlashAttribute("msg", "Orden de reposición #" + idReposicion + " actualizada correctamente");
+                return "redirect:/adminsede/ordenes";
+
+            }else {
+                attr.addFlashAttribute("msg", "No se puede ingresar cantidades iguales a cero o negativas, por favor ingrese una cantidad nuevamente");
+
+                return "adminsede/editar_orden_reposicion";
+            }
 
         }
     }
