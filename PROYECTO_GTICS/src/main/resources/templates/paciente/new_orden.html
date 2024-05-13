@@ -315,6 +315,7 @@
 
 
 
+
                         <div id="upload" class="modal" data-state="0" data-ready="false">
 
                             <div class="modal__body">
@@ -350,7 +351,7 @@
                                         <p class="modal__message" style="color:dimgray">Selecciona la imagen para subirla desde tu dispositivo</p>
                                         <div class="modal__actions">
                                             <button  class="modal__button modal__button--upload" type="button" data-action="file">Seleccionar imagen</button>
-                                            <input th:field="*{file}" type="file"  hidden >
+                                            <input th:field="*{file}" type="file"  hidden>
                                         </div>
                                         <div class="modal__actions" hidden>
                                             <svg class="modal__file-icon" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
@@ -402,6 +403,9 @@
                                 </div>
                             </div>
                         </div>
+
+
+
                     </div>
 
                 </div>
@@ -574,15 +578,13 @@
 
 
 
-
-
 <!---------Pop up---------->
 <script>
     const showPopup = document.querySelector('.btn-popup');
     const popupContainer = document.querySelector('.popup-container');
     const closePopup = document.getElementById('closePopup');
 
-    showPopup.onclick = () =>{
+    showPopup.onclick = () => {
         popupContainer.classList.add('active');
     }
 
