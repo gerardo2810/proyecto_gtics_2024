@@ -13,7 +13,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.RegisterValidations
 @Controller
 public class LoginController {
 
-    //@GetMapping("/")
+    @GetMapping("/")
 
     public String login(@ModelAttribute("usuario")  Usuario usuario,RedirectAttributes attributes,
                         Model model) {
