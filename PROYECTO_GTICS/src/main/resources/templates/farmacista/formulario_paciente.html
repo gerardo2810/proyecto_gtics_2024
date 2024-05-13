@@ -257,8 +257,11 @@
                                 <div class="order-items">
                                     <div class="selected-item" th:each="medicamento, iterIndex : ${medicamentosSeleccionados}" th:data-item-id="${medicamento.idMedicamento}">
 
-                                        <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" th:alt="${medicamento.nombre}" class="img-item"> width="40px" height="auto" th:alt="${medicamento.nombre}">
-                                        <span class="item-title-clicked" th:text="${medicamento.nombre}">Medicamento</span>
+                                        <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" width="120px" height="auto" th:alt="${medicamento.nombre}">
+                                        <div style="display: flex; flex-direction: column; gap: 10px">
+                                            <span style="font-size: 1.2rem" class="item-title-clicked" th:text="${medicamento.nombre}">Medicamento</span>
+                                            <span style="font-size: 0.8rem" class="item-title-clicked" th:text="${medicamento.getDescripcion()}">Medicamento</span>
+                                        </div>
                                         <div class="item-on-list">
                                             <div class="item-details">
                                                 <div class="selector-cantidad">
