@@ -422,29 +422,45 @@
                 });
             });
         </script>
+        <!-- Para lista1 -->
+        <div th:each="item : ${lista1}" class="lista1-item">
+            <!-- Contenido de la lista -->
+        </div>
+
+        <!-- Para lista2 -->
+        <div th:each="item : ${lista2}" class="lista2-item">
+            <!-- Contenido de la lista -->
+        </div>
 
         <script>
-            // Ejecutar cuando el contenido de la página se haya cargado completamente
             document.addEventListener('DOMContentLoaded', function() {
-                // Mostrar una alerta de bienvenida con un botón para redirigir
-                Swal.fire({
-                    title: '¡Atención!',
-                    text: 'Su inventario de medicamentos se está agotando. Por favor, revise su stock y realice los pedidos necesarios para evitar interrupciones en el servicio.',
-                    icon: 'warning',
-                    confirmButtonText: 'Entendido',
-                    showCancelButton: true,
-                    cancelButtonText: 'Ir a revisar',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // El usuario hizo clic en 'Entendido'
-                        // Aquí puedes agregar cualquier acción adicional que desees
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        // El usuario hizo clic en 'Ir a revisar'
-                        // Redirigir a otra vista
-                        window.location.href = '/adminsede/notificaciones_adminsede';
-                    }
-                });
+                // Obtener el número de elementos en las listas
+                var lista1Count = document.querySelectorAll('.lista1-item').length;
+                var lista2Count = document.querySelectorAll('.lista2-item').length;
+
+                // Verificar si alguna de las listas tiene elementos
+                if (lista1Count > 0 || lista2Count > 0) {
+                    // Mostrar la alerta
+                    Swal.fire({
+                        title: '¡Atención!',
+                        text: 'Su inventario de medicamentos se está agotando. Por favor, revise su stock y realice los pedidos necesarios para evitar interrupciones en el servicio.',
+                        icon: 'warning',
+                        confirmButtonText: 'Entendido',
+                        showCancelButton: true,
+                        cancelButtonText: 'Ir a revisar',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // El usuario hizo clic en 'Entendido'
+                            // Puedes agregar acciones adicionales aquí si es necesario
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            // El usuario hizo clic en 'Ir a revisar'
+                            // Redirigir a otra vista
+                            window.location.href = '/adminsede/notificaciones_adminsede';
+                        }
+                    });
+                }
             });
+
         </script>
 
 

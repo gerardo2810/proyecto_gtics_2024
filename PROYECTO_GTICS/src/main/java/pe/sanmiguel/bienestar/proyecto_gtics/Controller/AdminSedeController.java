@@ -95,6 +95,8 @@ public class AdminSedeController {
             return "adminsede/inicio";
         }
         model.addAttribute("listaReposicionNoEntregadasUltimas", listaReposicionNoEntregadasUltimas);
+        model.addAttribute("lista1", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
+        model.addAttribute("lista2", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
         return "adminsede/inicio";
     }
 
