@@ -38,7 +38,7 @@ final UsuarioRepository usuarioRepository;
     }
 
     @GetMapping("/new")
-    public String nuevoUsuario(Model model) {
+    public String nuevoUsuario(Model model,@ModelAttribute("usuario")  Usuario usuario) {
         model.addAttribute("usuario", new Usuario());
         return "login/prueba";
     }

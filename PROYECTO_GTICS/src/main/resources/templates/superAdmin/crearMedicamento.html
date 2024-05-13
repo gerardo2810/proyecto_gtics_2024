@@ -406,6 +406,10 @@
                                             <option value="Cápsulas">Cápsulas</option>
                                             <option value="Sobre">Sobre</option>
                                             <option value="Jarabe">Jarabe</option>
+                                            <option value="Pote">Pote</option>
+                                            <option value="Frasco">Frasco</option>
+                                            <option value="Blister">Blister</option>
+                                            <option value="Caja">Caja</option>
                                         </select>
                                     </div>
 
@@ -491,18 +495,19 @@
 
 </div>
 <br>
-<div >
+
+
+<div>
     <footer id="sticky-footer" class="footer-distributed">
         <div class="footer-left">
             <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
             <p class="footer-links">
-                <a href="">Usuarios</a> |
-                <a href="">Actividades</a> |
-                <a href="">Estadisticas</a> |
-                <a href="">Donaciones</a> |
-                <a href="">Perfil</a>
+                <a href="/superadmin" >Inicio</a> |
+                <a href="/superadmin/pedidos" >Pedidos de Reposición</a> |
+                <a href="/superadmin/medicamentos" style="text-decoration: underline; color: white;">Inventario</a> |
+                <a href="/superadmin/cambiarContrasena">Perfil</a>
             </p>
-            <p class="footer-company-name">Copyright © 2023 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
+            <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
         </div>
 
         <div class="footer-center">
@@ -535,6 +540,17 @@
         </div>
     </footer>
 </div>
+
+
+
+
+
+
+
+
+
+
+
 <!-- JQuery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- DataTable -->
