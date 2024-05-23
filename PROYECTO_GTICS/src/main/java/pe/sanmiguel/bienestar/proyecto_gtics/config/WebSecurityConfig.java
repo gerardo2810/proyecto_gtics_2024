@@ -73,13 +73,7 @@ public class WebSecurityConfig {
 
                         if(defaultSavedRequest != null){ //Cuando vengo de la URL
                             String targetURL = defaultSavedRequest.getRequestURL();
-
                             new DefaultRedirectStrategy().sendRedirect(request,response,targetURL);
-
-
-
-
-
                         }else { //Cuando vengo del Login
                             String rol = "";
 
@@ -103,6 +97,8 @@ public class WebSecurityConfig {
 
                     }
                 });
+
+        http.logout();
 
         return http.build();
     }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec = "http://www.thymeleaf.org/extras/spring-security">
 
     <head>
         <meta charset="UTF-8">
@@ -88,8 +89,9 @@
                                         </a>
                                     </li>
 
-                                    <li>
-                                        <a href="#" class="dropdown-link">
+                                    <li sec:authorize="isAuthenticated()">
+                                        <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+                                        <a href="#" class="dropdown-link" onclick="document.getElementById('logoutForm').submit(); return false;">
                                             <i class="ri-lock-line menu-item dropdown-item roboto-regular"></i> Cerrar sesión
                                         </a>
                                     </li>
