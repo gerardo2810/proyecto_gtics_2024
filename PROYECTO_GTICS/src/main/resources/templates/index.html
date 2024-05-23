@@ -40,15 +40,15 @@
 
                 <div class="alert alert-success-custom" role="alert" th:if="${mensaje != null}" th:text="${mensaje}" ></div>
                 <div class="alert alert-danger-custom" role="alert" th:if="${error != null}" th:text="${error}"></div>
-                <form name="signin" class="login-form" method="post" th:action="@{/loguearse}" th:object="${usuario}">
+                <form name="signin" class="login-form" method="post" th:action="@{/processlogin}" th:object="${usuario}">
                     <div class="input-control3">
                         <label for="correo" class="input-label" hidden>Email Address</label>
-                        <input type="email" name="correo" th:field="*{correo}" id="correo" class="input-field" placeholder="Correo Electrónico">
+                        <input type="email" name="username" th:field="*{correo}" id="correo" class="input-field" placeholder="Correo Electrónico">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" style="margin-left: 10px ; color: red"></div>
                     </div>
                     <div class="input-control3">
                         <label for="contrasena" class="input-label" hidden>Password</label>
-                        <input type="password" name="contrasena" th:field="*{contrasena}" id="contrasena" class="input-field" placeholder="Contraseña">
+                        <input type="password" name="password" th:field="*{contrasena}" id="contrasena" class="input-field" placeholder="Contraseña">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}" style="margin-left: 10px ; color: red"></div>
                     </div>
                     <div class="input-control">

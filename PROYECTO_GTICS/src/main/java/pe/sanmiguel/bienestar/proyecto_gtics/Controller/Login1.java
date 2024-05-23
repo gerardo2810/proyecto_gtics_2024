@@ -28,13 +28,18 @@ final UsuarioRepository usuarioRepository;
     //@GetMapping("")
     //public String inicio() {return "login/login";}
 
-    @GetMapping("/")
+    /*@GetMapping("/")
 
     public String login(@ModelAttribute("usuario")  Usuario usuario,RedirectAttributes attributes,
                         Model model) {
         model.addAttribute("usuario", usuario);
 
         return "index";
+    }*/
+
+    @GetMapping("/")
+    public String login() {
+        return "index2";
     }
 
     @GetMapping("/new")

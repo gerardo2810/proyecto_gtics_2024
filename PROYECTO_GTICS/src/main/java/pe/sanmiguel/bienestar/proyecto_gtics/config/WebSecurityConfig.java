@@ -1,15 +1,22 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.config;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 
 @Configuration
 public class WebSecurityConfig {
@@ -39,25 +46,46 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
 
-        http
-                .authorizeHttpRequests(authorize ->authorize
+        http.authorizeHttpRequests()
                 //Rutas para autenticación
-                .requestMatchers("/superadmin", "/superadmin/**").authenticated()
+                /*.requestMatchers("/superadmin", "/superadmin/**").authenticated()
                 .requestMatchers("/adminsede", "/adminsede/**").authenticated()
                 .requestMatchers("/farmacista", "/farmacista/**").authenticated()
-                .requestMatchers("/paciente", "/paciente/**").authenticated()
+                .requestMatchers("/paciente", "/paciente/**").authenticated()*/
                 //Autenticación por rol
-                /*.requestMatchers("/superadmin", "/superadmin/**").hasAnyAuthority("SUPERADMIN")
+                .requestMatchers("/superadmin", "/superadmin/**").hasAnyAuthority("SUPERADMIN")
                 .requestMatchers("/adminsede", "/adminsede/**").hasAnyAuthority("SUPERADMIN", "ADMINSEDE")
                 .requestMatchers("/farmacista", "/farmacista/**").hasAnyAuthority("SUPERADMIN", "FARMACISTA")
-                .requestMatchers("/paciente", "/paciente/**").hasAnyAuthority("SUPERADMIN", "PACIENTE")*/
-                .anyRequest().permitAll()
-                )
-                .formLogin(
+                .requestMatchers("/paciente", "/paciente/**").hasAnyAuthority("SUPERADMIN", "PACIENTE")
+                .anyRequest().permitAll();
+
+        http.formLogin()
+                .loginPage("/")
+                .loginProcessingUrl("/processlogin")
+                .successHandler(new AuthenticationSuccessHandler() {
+                    @Override
+                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                        String rol = "";
+
+                        for (GrantedAuthority role : authentication.getAuthorities()){
+                            rol = role.getAuthority();
+                            break;
+                        }
+
+                        if (rol.equals("SUPERADMIN")){
+                            response.sendRedirect("/superadmin");
+                        } else if (rol.equals("ADMINSEDE")) {
+                            response.sendRedirect("/adminsede");
+                            
+                        } else if (rol.equals("FARMACISTA")) {
+                            response.sendRedirect("/farmacista");
+                        }else {
+                            response.sendRedirect("/paciente");
+                        }
 
 
-                );
-
+                    }
+                });
 
         return http.build();
     }
