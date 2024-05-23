@@ -179,17 +179,17 @@
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Correo Electrónico</label>
-                                        <input class="input-form-3" type="text"  name="inputEmailAddress" th:value="${admin.getCorreo()}" readonly>
+                                        <input class="input-form-3" type="text"  name="inputEmailAddress" th:value="${session.usuario.getCorreo()}" readonly>
                                     </div>
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Nombres</label>
-                                        <input class="input-form-3" type="text" name="nombres" id="name" th:value="${admin.getNombres()}" readonly>
+                                        <input class="input-form-3" type="text" name="nombres" id="name" th:value="${session.usuario.getNombres()}" readonly>
                                     </div>
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Apellidos</label>
-                                        <input class="input-form-3" type="text" name="apellidos" th:value="${admin.getApellidos()}" readonly>
+                                        <input class="input-form-3" type="text" name="apellidos" th:value="${session.usuario.getApellidos()}" readonly>
                                     </div>
 
                                 </div>
@@ -198,22 +198,22 @@
                                 <div>
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Direccion</label>
-                                        <input class="input-form-3"  name="direccion" type="text" th:value="${admin.getDireccion()}" readonly>
+                                        <input class="input-form-3"  name="direccion" type="text" th:value="${session.usuario.getDireccion()}" readonly>
                                     </div>
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Distrito</label>
-                                        <input class="input-form-3"  name="distrito" type="text" th:value="${admin.getDistrito()}" readonly>
+                                        <input class="input-form-3"  name="distrito" type="text" th:value="${session.usuario.getDistrito()}" readonly>
                                     </div>
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">DNI</label>
-                                        <input class="input-form-3" type="text" name="dni" th:value="${admin.getDni()}" readonly>
+                                        <input class="input-form-3" type="text" name="dni" th:value="${session.usuario.getDni()}" readonly>
                                     </div>
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Teléfono</label>
-                                        <input class="input-form-3" type="text" name="celular"  th:value="${admin.getCelular()}" readonly>
+                                        <input class="input-form-3" type="text" name="celular"  th:value="${session.usuario.getCelular()}" readonly>
                                     </div>
                                 </div>
 

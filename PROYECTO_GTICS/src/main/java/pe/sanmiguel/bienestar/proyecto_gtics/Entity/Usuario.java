@@ -9,11 +9,13 @@ import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.LoginValidationsGro
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.OptionalValidationsGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.RegisterValidationsGroup;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Entity
 @Table(name = "usuario")
-public class Usuario {
+public class Usuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
@@ -100,6 +102,10 @@ public class Usuario {
 
     @Column(name = "estado_usuario")
     private Integer estadoUsuario;
+
+    //Spring Session
+
+
 
 
 }

@@ -3,6 +3,8 @@ package pe.sanmiguel.bienestar.proyecto_gtics.config;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,12 +18,16 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
+import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 
 @Configuration
 public class WebSecurityConfig {
+
+    @Autowired
+    UsuarioRepository usuarioRepository;
 
     final DataSource dataSource;
 
@@ -48,7 +54,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests()
+        http.authorizeHttpRequests() //Autenticación por roles
                 //Rutas para autenticación
                 /*.requestMatchers("/superadmin", "/superadmin/**").authenticated()
                 .requestMatchers("/adminsede", "/adminsede/**").authenticated()
@@ -61,7 +67,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/paciente", "/paciente/**").hasAnyAuthority("SUPERADMIN", "PACIENTE")
                 .anyRequest().permitAll();
 
-        http.formLogin()
+        http.formLogin() //Logueo de usuarios
                 .loginPage("/")
                 .loginProcessingUrl("/processlogin")
                 .successHandler(new AuthenticationSuccessHandler() { //Aquí ya estamos logueados (pasamos los filtros)
@@ -70,6 +76,10 @@ public class WebSecurityConfig {
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
                         DefaultSavedRequest defaultSavedRequest = (DefaultSavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+
+                        HttpSession session = request.getSession();
+                        session.setAttribute("usuario",usuarioRepository.findByCorreo(authentication.getName()));
+
 
                         if(defaultSavedRequest != null){ //Cuando vengo de la URL
                             String targetURL = defaultSavedRequest.getRequestURL();
@@ -98,7 +108,10 @@ public class WebSecurityConfig {
                     }
                 });
 
-        http.logout();
+        http.logout()
+                //.logoutUrl() FALTA HACER UNA VISTA PARA EL CIERRE DE SESISON
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true);
 
         return http.build();
     }

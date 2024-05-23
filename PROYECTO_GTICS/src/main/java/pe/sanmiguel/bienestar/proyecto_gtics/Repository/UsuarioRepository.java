@@ -86,7 +86,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(nativeQuery = true, value = "INSERT INTO usuario VALUES (?1, 3, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, 1)")
     void crearPaciente(int id, int idRol, String correo, String contrasena, String nombres, String apellidos, String celular, String dni, String direccion, String distrito, String seguro, int estadoUsuario);
 
-    Usuario findByCorreo(String correo);
+    Usuario findByCorreo(String correo); //En base al nombre del atributo "correo" del Entity Usuario
 
     Usuario findByContrasena(String contrasena);
 
@@ -135,4 +135,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     @Query(nativeQuery = true, value = "SELECT u.correo FROM proyecto_gtics.usuario u WHERE u.id <> ?")
     List<String> listarCorreosUsadosMenosUserID(int id);
+
+
 }
