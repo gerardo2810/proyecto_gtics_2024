@@ -2,8 +2,12 @@ package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
 
 import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import jakarta.validation.Valid;
+import jakarta.websocket.SessionException;
+import org.apache.catalina.Session;
+import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,10 +27,22 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession; // Importar HttpSession
+
 
 @Controller
 @RequestMapping(value="/paciente", method= RequestMethod.GET)
 public class PacienteController {
+
+
+
+
+
 
 
 
@@ -60,6 +76,8 @@ public class PacienteController {
 
 
 
+
+
     /*----------------- Method: GET -----------------*/
 
     @GetMapping(value="")
@@ -73,8 +91,21 @@ public class PacienteController {
 
 
     @GetMapping(value="/ordenes")
-    public String ordenes(Model model){
+    public String ordenes(Model model, HttpServletRequest request){
         List<Orden> lista =  ordenRepository.listarOrdenes();
+
+
+        HttpSession session = request.getSession();
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+        if (usuario != null) {
+            // Imprimir el nombre del usuario autenticado
+            System.out.println("Nombre del usuario autenticado: " + usuario.getNombres());
+        } else {
+            System.out.println("No hay usuario autenticado en la sesión.");
+        }
+
+
 
         model.addAttribute("lista",lista);
 

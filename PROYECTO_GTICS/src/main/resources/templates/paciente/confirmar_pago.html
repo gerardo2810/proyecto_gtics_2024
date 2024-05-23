@@ -236,7 +236,7 @@
 
                 <br>
                 <div style="display: flex;flex-direction: row;justify-content: center">
-                    <button class="btn-popup" type="button" style="width: 300px">Pagar</button>
+                    <a th:href="@{'/paciente/pago_tarjeta?id=' + ${ordenActual.getIdOrden()}}"><button class="btn-popup" type="button" style="width: 300px">Pagar</button></a>
                 </div>
 
 
@@ -380,7 +380,7 @@
 <script th:src="@{/js/topbar.js}"></script>
 
 
-<!---------Pop up---------->
+<!---------Pop up----------
 <script>
     const showPopup = document.querySelector('.btn-popup');
     const popupContainer = document.querySelector('.popup-container');
@@ -394,7 +394,7 @@
         popupContainer.classList.remove('active');
     }
 </script>
-
+-->
 
 
 <script>
