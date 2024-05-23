@@ -12,8 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -62,25 +64,40 @@ public class WebSecurityConfig {
         http.formLogin()
                 .loginPage("/")
                 .loginProcessingUrl("/processlogin")
-                .successHandler(new AuthenticationSuccessHandler() {
+                .successHandler(new AuthenticationSuccessHandler() { //Aquí ya estamos logueados (pasamos los filtros)
+
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        String rol = "";
 
-                        for (GrantedAuthority role : authentication.getAuthorities()){
-                            rol = role.getAuthority();
-                            break;
-                        }
+                        DefaultSavedRequest defaultSavedRequest = (DefaultSavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
 
-                        if (rol.equals("SUPERADMIN")){
-                            response.sendRedirect("/superadmin");
-                        } else if (rol.equals("ADMINSEDE")) {
-                            response.sendRedirect("/adminsede");
-                            
-                        } else if (rol.equals("FARMACISTA")) {
-                            response.sendRedirect("/farmacista");
-                        }else {
-                            response.sendRedirect("/paciente");
+                        if(defaultSavedRequest != null){ //Cuando vengo de la URL
+                            String targetURL = defaultSavedRequest.getRequestURL();
+
+                            new DefaultRedirectStrategy().sendRedirect(request,response,targetURL);
+
+
+
+
+
+                        }else { //Cuando vengo del Login
+                            String rol = "";
+
+                            for (GrantedAuthority role : authentication.getAuthorities()){
+                                rol = role.getAuthority();
+                                break;
+                            }
+
+                            if (rol.equals("SUPERADMIN")){
+                                response.sendRedirect("/superadmin");
+                            } else if (rol.equals("ADMINSEDE")) {
+                                response.sendRedirect("/adminsede");
+
+                            } else if (rol.equals("FARMACISTA")) {
+                                response.sendRedirect("/farmacista");
+                            }else {
+                                response.sendRedirect("/paciente");
+                            }
                         }
 
 
