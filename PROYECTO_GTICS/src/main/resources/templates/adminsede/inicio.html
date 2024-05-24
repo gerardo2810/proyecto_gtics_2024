@@ -142,14 +142,17 @@ xmlns:sec = "http://www.thymeleaf.org/extras/spring-security">
 
         <div style="margin-top: 80px"></div>
 
+        <div class="container">
+            <div style="padding-top: 20px; padding-bottom: 20px">
+                <div class="main-title open-sans-bold"> Inicio </div>
+                <div class="main-subtitle helvetica-medium"> Vista de Estadísticas y Órdenes de reposición</div>
+            </div>
+            <hr class="style-one">
+
+        </div>
+
         <div class = "container" th:if="${listaReposicionNoEntregadasUltimas.size() != 0}">
             <div class="container">
-
-                <div style="padding-top: 20px; padding-bottom: 20px">
-                    <div class="main-title open-sans-bold"> Inicio </div>
-                    <div class="main-subtitle helvetica-medium"> Vista de Estadísticas y Órdenes de reposición</div>
-                </div>
-                <hr class="style-one">
 
                 <div style="margin-bottom: 50px"></div>
                 <h2><i class="fa-solid fa-star" style="color: #2a2a2a;"></i><strong style="padding-left: 10px; color: #2a2a2a">Tracking órdenes de reposición</strong></h2>
