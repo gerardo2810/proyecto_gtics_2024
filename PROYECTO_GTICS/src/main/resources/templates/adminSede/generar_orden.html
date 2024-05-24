@@ -154,7 +154,7 @@
 
                                         <div class="input-label-box" style="display: flex; flex-direction: column;">
                                             <label style="font-weight: bold; color:dimgray; margin-right: 108px">Nombre del Administrador:</label>
-                                            <input class="input-form-2" type="text" name="nombres" placeholder="Ingrese sus nombres" required>
+                                            <input class="input-form-2" type="text" name="nombres" placeholder="Ingrese sus nombres" th:value="${usuario.getNombres()}" readonly>
                                         </div>
 
                                     </div>
@@ -162,35 +162,35 @@
                                     <div class="column">
                                         <div class="input-label-box" style="display: flex; flex-direction: column;">
                                             <label style="font-weight: bold; color:dimgray; margin-right: 96px">Apellidos del Administrador:</label>
-                                            <input class="input-form-2" type="text" name="apellidos" placeholder="Ingrese sus apellidos" required>
+                                            <input class="input-form-2" type="text" name="apellidos" placeholder="Ingrese sus apellidos" th:value="${usuario.getApellidos()}" readonly>
                                         </div>
                                     </div>
 
                                     <div class="column">
                                         <div class="input-label-box" style="display: flex; flex-direction: column;">
                                             <label style="font-weight: bold; color:dimgray; margin-right: 282px">DNI:</label>
-                                            <input class="input-form-2" type="text" name="dni" placeholder="Ingrese su DNI" required>
+                                            <input class="input-form-2" type="text" name="dni" placeholder="Ingrese su DNI" th:value="${usuario.getDni()}" readonly>
                                         </div>
                                     </div>
 
                                     <div class="column">
                                         <div class="input-label-box" style="display: flex; flex-direction: column;">
                                             <label style="font-weight: bold; color:dimgray; margin-right: 238px">Dirección:</label>
-                                            <input class="input-form-2" type="text" name="direccionSede" placeholder="Ingrese la dirección de la sede" required>
+                                            <input class="input-form-2" type="text" name="direccionSede" placeholder="Ingrese la dirección de la sede" th:value="${sedeSession.getDireccion()}" readonly>
                                         </div>
                                     </div>
 
                                     <div class="column">
                                         <div class="input-label-box" style="display: flex; flex-direction: column;">
                                             <label style="font-weight: bold; color:dimgray; margin-right: 255px">Correo:</label>
-                                            <input class="input-form-2" type="email" name="correo" placeholder="Ingrese su correo" required>
+                                            <input class="input-form-2" type="email" name="correo" placeholder="Ingrese su correo" th:value="${usuario.getCorreo()}" readonly>
                                         </div>
                                     </div>
 
                                     <div class="column">
                                         <div class="input-label-box" style="display: flex; flex-direction: column;">
                                             <label style="font-weight: bold; color:dimgray; margin-right: 273px">Sede:</label>
-                                            <input class="input-form-2" name="nombreSede" type="text" placeholder="Nombre de la sede" required>
+                                            <input class="input-form-2" name="nombreSede" type="text" placeholder="Nombre de la sede" th:value="${sedeSession.getNombre()}" readonly>
                                         </div>
                                     </div>
 

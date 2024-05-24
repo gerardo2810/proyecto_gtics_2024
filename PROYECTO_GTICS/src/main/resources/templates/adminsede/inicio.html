@@ -162,7 +162,7 @@ xmlns:sec = "http://www.thymeleaf.org/extras/spring-security">
             </div>
             <br/>
             <div th:each="orden : ${listaReposicionNoEntregadasUltimas}">
-                <h2 style="margin-left: 30px" th:text="${'Orden de reposición #' + orden.getIdReposicion()}">Orden de reposicion #1</h2>
+                <h2 style="margin-left: 30px" th:text="${'Orden de reposición #' + orden.getNumero()}">Orden de reposicion #1</h2>
                 <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 1}">
                     <div class="wrapper">
                         <h3>Estado de la orden</h3>

@@ -204,7 +204,7 @@
                     <div class="title roboto-medium data-label">Bienestar San Miguel | <span th:text="${sede.getNombre()}">Sede</span></div>
 
                     <div class="title-info">
-                        <div class="roboto-bold title data-label">Orden #<span th:text="${reposicion.getIdReposicion() + 10000}"></span> </div>
+                        <div class="roboto-bold title data-label">Orden #<span th:text="${reposicion.getNumero()}"></span> </div>
                         <div th:text="Recibido" class="badge badge-recibido"></div>
                     </div>
                 </div>
@@ -233,7 +233,7 @@
                     <div class="data-label roboto-medium">Datos de la Orden de reposición:</div>
 
                     <div class="invoice-data">
-                        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Número de Orden: </span><div th:text="${reposicion.getIdReposicion() + 10000}"> Aldoradin</div></div>
+                        <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Número de Orden: </span><div th:text="${reposicion.getNumero()}"> Aldoradin</div></div>
                         <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Fecha:</span><div th:text="${reposicion.getFechaIni()}">Aldoradin </div></div>
                         <div style="display: flex; flex-direction: row; gap: 3px;"><span class="data-label roboto-medium">Sede:</span><div th:text="${sede.getNombre()}"> Aldoradin</div></div>
                     </div>

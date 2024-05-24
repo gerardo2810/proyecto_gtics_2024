@@ -28,13 +28,16 @@ public interface ReposicionRepository extends JpaRepository<Reposicion, Integer>
     List<Reposicion> verMasDetallesOrdenesReposicion();
 
     @Query(nativeQuery = true, value = "SELECT MAX(r.id) FROM reposicion r")
-    Integer findLastReposicionId();
+    Optional<Integer> findLastReposicionId();
+
+    @Query(nativeQuery = true, value = "SELECT MAX(r.numero) FROM reposicion r where r.idSede = ?")
+    Optional<Integer> findLastNumeroporSede(int idSede);
 
     // Crear reposicion
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "insert into reposicion set id = ?1, tracking = ?2, fechaIni = now(), pagado = 0, precioTotal = ?3, idEstado = ?4, idSede = ?5")
-    void crearOrdenReposicion(int idReposicion, String tracking, Float precioTotal, int idEstado, int idSede);
+    @Query(nativeQuery = true, value = "insert into reposicion set id = ?1, tracking = ?2, fechaIni = now(), pagado = 0, precioTotal = ?3, idEstado = ?4, idSede = ?5, numero = ?6")
+    void crearOrdenReposicion(int idReposicion, String tracking, Float precioTotal, int idEstado, int idSede, int newNumber);
 
     @Query(nativeQuery = true, value = "select * from reposicion where id = ?1")
     Reposicion encontrarReposicionporId(int id);

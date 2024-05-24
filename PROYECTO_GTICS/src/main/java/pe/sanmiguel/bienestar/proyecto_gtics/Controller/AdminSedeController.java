@@ -367,7 +367,18 @@ public class AdminSedeController {
     }
 
     @GetMapping("/generar_orden_forms")
-    public String generarOrden(Model model){
+    public String generarOrden(Model model,
+                               HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
 
         List<Integer> stockSeleccionados = new ArrayList<>();
 
@@ -382,7 +393,8 @@ public class AdminSedeController {
         model.addAttribute("stockSeleccionados", stockSeleccionados);
         model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
         model.addAttribute("listaCantidades", listaCantidades);
-
+        model.addAttribute("usuario",usuario );
+        model.addAttribute("sedeSession", sedeSession);
         return "adminsede/generar_orden";
     }
 
@@ -580,34 +592,65 @@ public class AdminSedeController {
                                     @RequestParam("nombreSede") String nombreSede,
                                     @RequestParam("priceTotal") Float priceTotal,
                                     @RequestParam("listaIds") List<String> listaIds,
-                                    RedirectAttributes attr){
+                                    RedirectAttributes attr,
+                                    HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
 
         // Crear orden de reposición
-        Integer idReposicion = reposicionRepository.findLastReposicionId() + 1;
+
         String tracking = "RECIBIDO"; //Por Default
         Integer idEstado = 1; //Por Default
-        Integer idSede = 1; // CORREGIR CON SESSION--------------------------------------------------------
-        reposicionRepository.crearOrdenReposicion(idReposicion, tracking, priceTotal, idEstado, idSede);
+        Integer idSede = sedeSession.getIdSede(); // CORREGIR CON SESSION--------------------------------------------------------
+
+        Optional<Integer> optIntegerLastId = reposicionRepository.findLastReposicionId();
+        Integer integerLastId = 0;
+
+        if(optIntegerLastId.isPresent()){
+            integerLastId = optIntegerLastId.get();
+        }
+
+        Integer idReposicion =  integerLastId + 1;
+        //Agregamos numero de orden
+        Optional<Integer> optlastNumber = reposicionRepository.findLastNumeroporSede(idSede);
+
+        int lastNumber = 0;
+
+        if (optlastNumber.isPresent()){
+            lastNumber = optlastNumber.get();
+        }
+
+        Integer newNumber = lastNumber + 1;
+
+
+        reposicionRepository.crearOrdenReposicion(idReposicion, tracking, priceTotal, idEstado, idSede,newNumber);
+
         List<Medicamento> listaMedicamentosReposicion = new ArrayList<>();
 
         // Guardar lista de medicamentos
         int m = 0;
-        for (int i = 1; i <= (listaIds.size()/2); i++){
+        for (int i = 1; i <= (listaIds.size()/2); i++){ //ListaIds tiene [id,cantidad,id2,cantidad2,...]
 
             Integer idMedicamento = Integer.parseInt(listaIds.get(m));
             Integer cantidadMedicamento = Integer.parseInt(listaIds.get(m+1));
             reposicionContenidoRepository.guardarContenidoReposicion(idMedicamento, idReposicion, cantidadMedicamento);
-
-
             m = m + 2;
         }
 
-        sedeVistaReposicion.setNombre(nombreSede);
-        sedeVistaReposicion.setDireccion(direccionSede);
-        administradorVistaReposicion.setDni(dni);
-        administradorVistaReposicion.setCorreo(correo);
-        administradorVistaReposicion.setNombres(nombres);
-        administradorVistaReposicion.setApellidos(apellidos);
+        sedeVistaReposicion.setNombre(sedeSession.getNombre());
+        sedeVistaReposicion.setDireccion(sedeSession.getDireccion());
+        administradorVistaReposicion.setDni(usuario.getDni());
+        administradorVistaReposicion.setCorreo(usuario.getCorreo());
+        administradorVistaReposicion.setNombres(usuario.getNombres());
+        administradorVistaReposicion.setApellidos(usuario.getApellidos());
         reposicionMostrar = reposicionRepository.encontrarReposicionporId(idReposicion);
         listaMostrarNuevaCompra = reposicionContenidoRepository.listaMostrarDetalleNuevaCompra(idReposicion); //lista a mostrar
         attr.addFlashAttribute("msg", "Orden de reposición generada correctamente");

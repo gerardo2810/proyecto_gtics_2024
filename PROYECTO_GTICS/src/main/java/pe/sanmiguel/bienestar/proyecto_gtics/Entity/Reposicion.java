@@ -32,4 +32,6 @@ public class Reposicion {
     private boolean pagado;
     @Column
     private float precioTotal;
+    @Column
+    private int numero;
 }
