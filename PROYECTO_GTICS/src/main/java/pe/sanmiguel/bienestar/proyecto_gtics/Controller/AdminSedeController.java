@@ -313,8 +313,18 @@ public class AdminSedeController {
     }
 
     @GetMapping("/ver_ordenes_entregadas")
-    public String verOrdenesEntregadas(Model model){
-        int idSede = 1; //CORREGIRRRRRRRRRRRR CON SESIONNNNNNNNNNNNNNN
+    public String verOrdenesEntregadas(Model model,
+                                       HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+        int idSede = sedeSession.getIdSede();
         List<Reposicion> listaOrdenesEntregadas = reposicionRepository.listarOrdenesReposicionEntregadas(idSede);
         model.addAttribute("listaOrdenesEntregadas", listaOrdenesEntregadas);
         return "adminsede/ver_ordenes_entregadas";
@@ -330,8 +340,18 @@ public class AdminSedeController {
     }
 
     @GetMapping("/notificaciones_adminsede")
-    public String vistaNotificaciones(Model model){
-        int idSede=1;  //CORREGIRRRRRRRRRRRR CON SESIONNNNNNNNNNNNNNN
+    public String vistaNotificaciones(Model model,
+                                      HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+        int idSede = sedeSession.getIdSede();
         model.addAttribute("medicamentosSinStock", medicamentoRepository.listarMedicamentosStockPorAgotaroAgotados(idSede));
         return "adminsede/notificaciones_adminsede";
     }
@@ -345,16 +365,6 @@ public class AdminSedeController {
         model.addAttribute("listaMostrarNuevaCompra", listaMostrarNuevaCompra);
         return "adminsede/verDetalles";
     }
-
-    /*@PostMapping("/eliminar_farmacista")
-    public String eliminarFarmacista(@RequestParam("id") int id, RedirectAttributes attr){
-        sedeFarmacistaRepository.eliminarFarmacistadeSedeFarmacista(id);
-        usuarioRepository.eliminarFarmacistadeUsuario(id);
-        attr.addFlashAttribute("msg", "El farmacista fue eliminado correctamente");
-        return "redirect:/adminsede/farmacista";
-    }*/
-
-
 
     @GetMapping("/generar_orden_forms")
     public String generarOrden(Model model){
