@@ -1,8 +1,12 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +28,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping(value = "/adminsede")
 public class AdminSedeController {
-
     /* Repositorios */
     final UsuarioRepository usuarioRepository;
     final SedeRepository sedeRepository;
@@ -85,43 +88,88 @@ public class AdminSedeController {
     List<String> listaCantidades = new ArrayList<>();
 
     @GetMapping("")
-    public String showIndexAdminSede(Model model){
+    public String showIndexAdminSede(Model model,
+                                     HttpServletRequest request, HttpServletResponse response, Authentication authentication){
         //SESSION
-        int idSede = 1;
-        int finalIdReposicion = reposicionRepository.findLastReposicionIdNoEntregado();
-        int preFinalIdReposicion = finalIdReposicion - 1;
-        List<Reposicion> listaReposicionNoEntregadasUltimas = reposicionRepository.listarOrdenesReposicionNoEntregadasUltimas(idSede, finalIdReposicion, preFinalIdReposicion);
-        if(listaReposicionNoEntregadasUltimas.size() == 0){
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+        int idSede = sedeSession.getIdSede();
+
+        Optional<Integer> optFinalIdReposicion = reposicionRepository.findLastReposicionIdNoEntregadoporSede(idSede);
+
+        if(optFinalIdReposicion.isPresent()){
+            int finalIdReposicion = optFinalIdReposicion.get();
+            int preFinalIdReposicion = finalIdReposicion - 1;
+
+            List<Reposicion> listaReposicionNoEntregadasUltimas = reposicionRepository.listarOrdenesReposicionNoEntregadasUltimas(idSede, finalIdReposicion, preFinalIdReposicion);
+            if(listaReposicionNoEntregadasUltimas.size() == 0){
+                return "adminsede/inicio";
+            }
+            model.addAttribute("listaReposicionNoEntregadasUltimas", listaReposicionNoEntregadasUltimas);
+            model.addAttribute("lista1", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
+            model.addAttribute("lista2", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
             return "adminsede/inicio";
+
+        }else {
+            List<Reposicion> listaReposicionNoEntregadasUltimas = new ArrayList<>(); //incializando en size 0
+            model.addAttribute("listaReposicionNoEntregadasUltimas", listaReposicionNoEntregadasUltimas);
+            return "adminsede/inicio";
+
         }
-        model.addAttribute("listaReposicionNoEntregadasUltimas", listaReposicionNoEntregadasUltimas);
-        model.addAttribute("lista1", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
-        model.addAttribute("lista2", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
-        return "adminsede/inicio";
     }
 
     @GetMapping("/doctores")
-    public String showDoctors(Model model){
-        List<Doctor> listaDoctores = doctorRepository.listarDoctores();
-        model.addAttribute("listaDoctoresD", listaDoctores);
+    public String showDoctors(Model model,
+                              HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+        List<Doctor> listaDoctoresporSede = doctorRepository.listarDoctoresporSede(sedeSession.getIdSede());
+        model.addAttribute("listaDoctoresD", listaDoctoresporSede);
         return "adminsede/doctores";
     }
 
     @GetMapping("/farmacista")
-    public String showFarmacistas(Model model){
-        //List<Usuario> listaFarmacistas = usuarioRepository.listarFarmacistas();
+    public String showFarmacistas(Model model,
+                                  HttpServletRequest request, HttpServletResponse response, Authentication authentication){
         //SESSION
-        int idSede = 1;
-        List<UsuarioSedeFarmacistaDto> listaFarmacistasNew = usuarioRepository.listarSedeFarmacista(idSede);
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+        List<UsuarioSedeFarmacistaDto> listaFarmacistasNew = usuarioRepository.listarSedeFarmacista(sedeSession.getIdSede());
         model.addAttribute("listaFarmacistasNew", listaFarmacistasNew);
         return "adminsede/farmacistas";
     }
 
     @GetMapping("/ordenes")
-    public String showOrders(Model model){
+    public String showOrders(Model model,
+                             HttpServletRequest request, HttpServletResponse response, Authentication authentication){
         //SESSION
-        int idSede = 1;
-        List<Reposicion> listaReposicionNoEntregadas = reposicionRepository.listarOrdenesReposicionNoEntregadas(idSede) ;
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+        List<Reposicion> listaReposicionNoEntregadas = reposicionRepository.listarOrdenesReposicionNoEntregadas(sedeSession.getIdSede()) ;
         model.addAttribute("listaReposicionNoEntregadas", listaReposicionNoEntregadas);
         return "adminsede/ordenes_reposicion";
     }
@@ -158,9 +206,20 @@ public class AdminSedeController {
 
     @GetMapping("/medicamentos")
     public String showMedicamentos(@RequestParam(name = "state", required = false) String state,
-                                   Model model) {
-        int idSession = 1; //Sede 1
-        sedeSession = sedeRepository.getSedeByIdSede(idSession);
+                                   Model model,
+                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+
+        int idSession = sedeSession.getIdSede(); //Sede 1
         model.addAttribute("sedeSession", sedeSession);
 
         if ("disponible".equals(state)) {

@@ -10,6 +10,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Reposicion;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.SedeFarmacista;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReposicionRepository extends JpaRepository<Reposicion, Integer> {
@@ -48,8 +49,8 @@ public interface ReposicionRepository extends JpaRepository<Reposicion, Integer>
 
     // Encontrar los últimos 2 reposiciones que no tengan estado 5
 
-    @Query(nativeQuery = true, value = "SELECT MAX(r.id) FROM reposicion r where r.idEstado != 5")
-    Integer findLastReposicionIdNoEntregado();
+    @Query(nativeQuery = true, value = "SELECT MAX(r.id) FROM reposicion r where r.idEstado != 5 and r.idSede = ?")
+    Optional<Integer> findLastReposicionIdNoEntregadoporSede(int idSede);
 
     //Listar últimas dos reposiciones
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.reposicion where idEstado != 5 and idSede = ?1 and (id = ?2 or id = ?3)")

@@ -16,6 +16,9 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
     @Query(nativeQuery = true, value = "SELECT * from doctor")
     List<Doctor> listarDoctores();
 
+    @Query(nativeQuery = true, value = "SELECT * FROM doctor d inner join sede_doctor sd on d.id = sd.idDoctor where sd.idSede = ?")
+    List<Doctor> listarDoctoresporSede(int idSede);
+
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM proyecto_gtics.doctor WHERE id = ?")
