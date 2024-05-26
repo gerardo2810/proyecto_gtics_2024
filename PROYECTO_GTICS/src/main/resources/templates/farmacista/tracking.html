@@ -857,7 +857,7 @@
 
         <template class="reply-input-template">
             <div class="reply-input container">
-                <img src="images/avatars/image-juliusomo.webp" alt="" class="usr-img"> <!--Farmacista realizara comentarios-->
+                <img th:src="@{/img/avatars/image-juliusomo.webp}" alt="" class="usr-img"> <!--Farmacista realizara comentarios-->
                 <textarea class="cmnt-input" placeholder="Añadir un comentario..."></textarea>
                 <button class="bu-primary">Enviar</button>
             </div>
@@ -867,18 +867,18 @@
             <div class="comment-wrp">
                 <div class="comment container">
                     <div class="c-score">
-                        <img src="images/icon-plus.svg" alt="plus" class="score-control score-plus">
+                        <img th:src="@{/img/icon-plus.svg}" alt="plus" class="score-control score-plus">
                         <p class="score-number">5</p>
-                        <img src="images/icon-minus.svg" alt="minus" class="score-control score-minus">
+                        <img th:src="@{/img/icon-minus.svg}" alt="minus" class="score-control score-minus">
                     </div>
                     <div class="c-controls">
-                        <a  class="delete"><img src="images/icon-delete.svg" alt="" class="control-icon">Eliminar</a>
-                        <a  class="edit"><img src="images/icon-edit.svg" alt="" class="control-icon">Editar</a>
-                        <a  class="reply"><img src="images/icon-reply.svg" alt="" class="control-icon">Contestar</a>
+                        <a class="delete"><img th:src="@{/img/icon-delete.svg}" alt="" class="control-icon"/>Eliminar</a>
+                        <a class="edit"><img th:src="@{/img/icon-edit.svg}" alt="" class="control-icon"/>Editar</a>
+                        <a class="reply"><img th:src="@{/img/icon-reply.svg}" alt="" class="control-icon"/>Contestar</a>
                     </div>
                     <div class="c-user">
-                        <img src="images/avatars/image-maxblagun.webp" alt="" class="usr-img">
-                        <p class="usr-name">Sergio Bustamante->Admin-Sede</p>
+                        <img th:src="@{/img/avatars/image-maxblagun.webp}" alt="" class="usr-img">
+                        <p class="usr-name">Aracely->Super-Admin</p>
                         <p class="cmnt-at">Hace 2 semanas</p>
                     </div>
                     <p class="c-text">
@@ -897,7 +897,7 @@
 
                 </div> <!--commentS wrapper-->
                 <div class="reply-input container">
-                    <img src="images/avatars/image-juliusomo.webp" alt="" class="usr-img">
+                    <img th:src="@{/img/avatars/image-juliusomo.webp}" alt="" class="usr-img">
                     <textarea class="cmnt-input" placeholder="Agregar un comentario ..."></textarea>
                     <button class="bu-primary">Enviar</button>
                 </div> <!--reply input-->
@@ -1080,8 +1080,8 @@
     const data = {
         currentUser: {
             image: {
-                png: "./images/avatars/image-juliusomo.png",
-                webp: "./images/avatars/image-juliusomo.webp",
+                png: "@{/img/avatars/image-juliusomo.png}",
+                webp: "@{/img/avatars/image-juliusomo.webp}",
             },
             username: "juliusomo",
         },
@@ -1089,14 +1089,13 @@
             {
                 parent: 0,
                 id: 1,
-                content:
-                    "Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.",
+                content: "Impressive! Though it seems the drag feature could be improved...",
                 createdAt: "1 month ago",
                 score: 12,
                 user: {
                     image: {
-                        png: "./images/avatars/image-amyrobson.png",
-                        webp: "./images/avatars/image-amyrobson.webp",
+                        png: "@{/img/avatars/image-amyrobson.png}",
+                        webp: "@{/img/avatars/image-amyrobson.webp}",
                     },
                     username: "amyrobson",
                 },
@@ -1105,14 +1104,13 @@
             {
                 parent: 0,
                 id: 2,
-                content:
-                    "Woah, your project looks awesome! How long have you been coding for? I'm still new, but think I want to dive into React as well soon. Perhaps you can give me an insight on where I can learn React? Thanks!",
-                createdAt: "2 weeks ago",
+                content: "¡Tengo un problema con la venta que has hecho!...",
+                createdAt: "Hace 2 horas",
                 score: 5,
                 user: {
                     image: {
-                        png: "./images/avatars/image-maxblagun.png",
-                        webp: "./images/avatars/image-maxblagun.webp",
+                        png: "@{/img/avatars/image-maxblagun.png}",
+                        webp: "@{/img/avatars/image-maxblagun.webp}",
                     },
                     username: "maxblagun",
                 },
@@ -1120,33 +1118,16 @@
                     {
                         parent: 2,
                         id: 1,
-                        content:
-                            "If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.",
+                        content: "If you're still new, I'd recommend focusing on the fundamentals...",
                         createdAt: "1 week ago",
                         score: 4,
                         replyingTo: "maxblagun",
                         user: {
                             image: {
-                                png: "./images/avatars/image-ramsesmiron.png",
-                                webp: "./images/avatars/image-ramsesmiron.webp",
+                                png: "@{/img/avatars/image-ramsesmiron.png}",
+                                webp: "@{/img/avatars/image-ramsesmiron.webp}",
                             },
                             username: "ramsesmiron",
-                        },
-                    },
-                    {
-                        parent: 2,
-                        id: 1,
-                        content:
-                            "I couldn't agree more with this. Everything moves so fast and it always seems like everyone knows the newest library/framework. But the fundamentals are what stay constant.",
-                        createdAt: "2 days ago",
-                        score: 2,
-                        replyingTo: "ramsesmiron",
-                        user: {
-                            image: {
-                                png: "./images/avatars/image-juliusomo.png",
-                                webp: "./images/avatars/image-juliusomo.webp",
-                            },
-                            username: "juliusomo",
                         },
                     },
                 ],
