@@ -1,7 +1,11 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.Getter;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -80,9 +84,18 @@ public class FarmacistaController {
 
 
     @GetMapping(value = {"/farmacista", "/farmacista/"})
-    public String farmacistaInicio(Model model) {
+    public String farmacistaInicio(Model model,
+                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
         List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
-        sedeSession = sedeRepository.getSedeByIdSede(1);
         int numeroOrdenesPendientes = 0;
         model.addAttribute("sedeSession", sedeSession);
         model.addAttribute("listaMedicamentos", listaMedicamentos);
@@ -90,7 +103,17 @@ public class FarmacistaController {
         return "farmacista/inicio";
     }
     @GetMapping("/farmacista/ver_detalles")
-    public String farmacistaDetalles(Model model) {
+    public String farmacistaDetalles(Model model,
+                                     HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
         List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
         model.addAttribute("sedeSession", sedeSession);
         model.addAttribute("listaMedicamentos", listaMedicamentos);
@@ -109,7 +132,15 @@ public class FarmacistaController {
     }
 
     @GetMapping("/farmacista/formulario_paciente")
-    public String formPacienteData(@ModelAttribute("usuario") Usuario usuario, Model model) {
+    public String formPacienteData(@ModelAttribute("usuario") Usuario usuario, Model model,
+                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+
+        HttpSession session = request.getSession();
+        Usuario usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuarioSession.getIdUsuario());
 
         if(medicamentosSeleccionados.isEmpty()){
             return "redirect:/farmacista";
@@ -151,7 +182,17 @@ public class FarmacistaController {
                                    @RequestParam(value = "correo") String correo,
                                    @RequestParam(value = "celular") String celular,
                                    @RequestParam(value = "listaIds") List<String> listaSelectedIds,
-                                   @RequestParam(value = "priceTotal") String priceTotal) {
+                                   @RequestParam(value = "priceTotal") String priceTotal,
+                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuarioSession.getIdUsuario());
+
 
         if (bindingResult.hasErrors()){
 
@@ -285,19 +326,22 @@ public class FarmacistaController {
 
 
     @GetMapping("/farmacista/ordenes_venta")
-    public String tablaOrdenesVenta(Model model) {
+    public String tablaOrdenesVenta(Model model,
+                                    HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         List<Orden> listaOrdenesVenta = ordenRepository.findAllOrdenes();
         model.addAttribute("listaOrdenesVenta", listaOrdenesVenta);
         return "farmacista/ordenes_venta";
     }
     @GetMapping("/farmacista/ordenes_web")
-    public String tablaOrdenesWeb(Model model) {
+    public String tablaOrdenesWeb(Model model,
+                                  HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         List<Orden> listaOrdenesWeb = ordenRepository.findAllOrdenesWeb();
         model.addAttribute("listaOrdenesWeb", listaOrdenesWeb);
         return "farmacista/ordenes_web";
     }
     @GetMapping("/farmacista/pre_ordenes")
-    public String tablaPreOrdenes(Model model) {
+    public String tablaPreOrdenes(Model model,
+                                  HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         List<Orden> listaPreOrdenes = ordenRepository.findAllPreOrdenes();
         model.addAttribute("listaPreOrdenes", listaPreOrdenes);
         return "farmacista/pre_ordenes";
