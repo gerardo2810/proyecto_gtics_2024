@@ -63,7 +63,7 @@ public class WebSecurityConfig {
                 //Autenticación por rol
                 .requestMatchers("/superadmin", "/superadmin/**").hasAnyAuthority("SUPERADMIN")
                 .requestMatchers("/adminsede", "/adminsede/**").hasAnyAuthority("SUPERADMIN", "ADMINSEDE")
-                .requestMatchers("/farmacista", "/farmacista/**").hasAnyAuthority("SUPERADMIN", "FARMACISTA")
+                //.requestMatchers("/farmacista", "/farmacista/**").hasAnyAuthority("SUPERADMIN", "FARMACISTA")
                 .requestMatchers("/paciente", "/paciente/**").hasAnyAuthority("SUPERADMIN", "PACIENTE")
                 .anyRequest().permitAll();
 
