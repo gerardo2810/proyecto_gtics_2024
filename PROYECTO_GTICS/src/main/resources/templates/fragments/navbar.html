@@ -16,6 +16,7 @@
 <body>
 
 
+
     <nav class="nav-topbar container" th:fragment="navbar (active)">
 
         <div class="nav-data">
@@ -41,29 +42,90 @@
             <div class="nav-menu" id="nav-menu">
                 <ul class="nav-list">
 
-                    <!--=============== LINKS PARA FARMACISTA  ===============-->
+                    <!--=============== LINKS PARA SUPERADMIN  ===============-->
 
-                    <li><a th:href="@{/farmacista}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+
+                    <li th:if="${session.usuario.getRol() == 1}" ><a th:href="@{/superadmin}" sec:authorize="hasAnyAuthority('SUPERADMIN')"
                            class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
 
-                    <li><a th:href="@{/farmacista/ordenes_venta}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                    <li th:if="${session.usuario.getRol() == 1}" ><a th:href="@{/superadmin/pedidos}" sec:authorize="hasAnyAuthority('SUPERADMIN')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Pedidos de reposición'?'active':''}">Pedidos de reposición</a></li>
+
+                    <li th:if="${session.usuario.getRol() == 1}" ><a th:href="@{/superadmin/medicamentos}" sec:authorize="hasAnyAuthority('SUPERADMIN')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Inventario'?'active':''}">Inventario</a></li>
+
+                    <li th:if="${session.usuario.getRol() == 1}" class="dropdown-item">
+                        <div class="menu-item roboto-regular"  sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                            Usuarios <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                        </div>
+
+                        <ul class="dropdown-menu" sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                            <div class="inside-dropdown">
+                                <li>
+                                    <a th:href="@{/superadmin/administradoresSede}" class="dropdown-link" sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                                        <i class="ri-user-line menu-item roboto-regular"></i> Admnistradores de Sede
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a th:href="@{/superadmin/farmacistas}" class="dropdown-link" sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                                        <i class="ri-user-line  menu-item roboto-regular"></i> Farmacistas
+                                    </a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/superadmin/pacientes}" class="dropdown-link" sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                                        <i class="ri-user-line  menu-item roboto-regular"></i> Pacientes
+                                    </a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/superadmin/doctores}" class="dropdown-link" sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                                        <i class="ri-user-line  menu-item roboto-regular"></i> Doctores
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+
+                    <!--=============== LINKS PARA ADMINSEDE  ===============-->
+
+                    <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
+
+                    <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede/doctores}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Doctores'?'active':''}">Doctores</a></li>
+
+                    <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede/farmacistas}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Farmacistas'?'active':''}">Farmacistas</a></li>
+
+                    <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede/ordenes}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Órdenes de Reposición'?'active':''}">Órdenes de Reposición</a></li>
+
+                    <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede/medicamentos}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Inventario'?'active':''}">Inventario</a></li>
+
+                    <!--=============== LINKS PARA FARMACISTA  ===============-->
+
+                    <li th:if="${session.usuario.getRol() == 3}" ><a th:href="@{/farmacista}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
+
+                    <li th:if="${session.usuario.getRol() == 3}" ><a th:href="@{/farmacista/ordenes_venta}" sec:authorize="hasAnyAuthority('FARMACISTA')"
                            class="menu-item roboto-light" th:classappend="${active == 'Ordenes de Venta'?'active':''}">Ordenes de Venta</a></li>
 
-                    <li><a th:href="@{/farmacista/ordenes_web}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                    <li th:if="${session.usuario.getRol() == 3}" ><a th:href="@{/farmacista/ordenes_web}" sec:authorize="hasAnyAuthority('FARMACISTA')"
                            class="menu-item roboto-light" th:classappend="${active == 'Ordenes Web'?'active':''}">Ordenes Web</a></li>
 
-                    <li><a th:href="@{/farmacista/pre_ordenes}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                    <li th:if="${session.usuario.getRol() == 3}" ><a th:href="@{/farmacista/pre_ordenes}" sec:authorize="hasAnyAuthority('FARMACISTA')"
                            class="menu-item roboto-light" th:classappend="${active == 'Pre Ordenes'?'active':''}">Pre Ordenes</a></li>
 
                     <!--=============== LINKS PARA PACIENTE  ===============-->
 
-                    <li><a th:href="@{/paciente}" sec:authorize="hasAnyAuthority('PACIENTE')"
-                           class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
+                    <li th:if="${session.usuario.getRol() == 4}" ><a th:href="@{/paciente}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Pre Ordenes'?'active':''}">Pre Ordenes</a></li>
 
-                    <li><a th:href="@{/paciente/ordenes}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                    <li th:if="${session.usuario.getRol() == 4}" ><a th:href="@{/paciente/ordenes}" sec:authorize="hasAnyAuthority('PACIENTE')"
                            class="menu-item roboto-light" th:classappend="${active == 'Ordenes Web'?'active':''}">Ordenes Web</a></li>
 
-                    <li><a th:href="@{/paciente/mensajeria}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                    <li th:if="${session.usuario.getRol() == 4}" ><a th:href="@{/paciente/mensajeria}" sec:authorize="hasAnyAuthority('PACIENTE')"
                            class="menu-item roboto-light" th:classappend="${active == 'Mensajeria'?'active':''}">Mensajeria</a></li>
 
                     <!--=============== DROPDOWN ===============-->
@@ -92,7 +154,7 @@
                                 <li>
 
                                 <li>
-                                    <a th:href="@{paciente/perfil}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                                    <a th:href="@{/paciente/perfil}" sec:authorize="hasAnyAuthority('PACIENTE')"
                                        class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
                                 <li>
 
@@ -117,32 +179,95 @@
                         <div class="nav-menu-small" id="nav-menu-small">
                             <ul class="nav-list-small">
 
+                                <!--=============== LINKS PARA SUPERADMIN  ===============-->
+
+
+                                <li th:if="${session.usuario.getRol() == 1}" ><a th:href="@{/superadmin}" sec:authorize="hasAnyAuthority('SUPERADMIN')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
+
+                                <li th:if="${session.usuario.getRol() == 1}" ><a th:href="@{/superadmin/pedidos}" sec:authorize="hasAnyAuthority('SUPERADMIN')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Pedidos de reposición'?'active':''}">Pedidos de reposición</a></li>
+
+                                <li th:if="${session.usuario.getRol() == 1}" ><a th:href="@{/superadmin/medicamentos}" sec:authorize="hasAnyAuthority('SUPERADMIN')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Inventario'?'active':''}">Inventario</a></li>
+
+                                <li th:if="${session.usuario.getRol() == 1}" class="dropdown-item">
+                                    <div class="menu-item roboto-regular"  sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                                        Usuarios <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                                    </div>
+
+                                    <ul class="dropdown-menu" sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                                        <div class="inside-dropdown">
+                                            <li>
+                                                <a th:href="@{/superadmin/administradoresSede}" class="dropdown-link" sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                                                    <i class="ri-user-line menu-item roboto-regular"></i> Admnistradores de Sede
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a th:href="@{/superadmin/farmacistas}" class="dropdown-link" sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                                                    <i class="ri-user-line  menu-item roboto-regular"></i> Farmacistas
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a th:href="@{/superadmin/pacientes}" class="dropdown-link" sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                                                    <i class="ri-user-line  menu-item roboto-regular"></i> Pacientes
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a th:href="@{/superadmin/doctores}" class="dropdown-link" sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                                                    <i class="ri-user-line  menu-item roboto-regular"></i> Doctores
+                                                </a>
+                                            </li>
+                                        </div>
+                                    </ul>
+                                </li>
+
+                                <!--=============== LINKS PARA ADMINSEDE  ===============-->
+
+                                <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
+
+                                <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede/doctores}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Doctores'?'active':''}">Doctores</a></li>
+
+                                <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede/farmacistas}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Farmacistas'?'active':''}">Farmacistas</a></li>
+
+                                <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede/ordenes}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Órdenes de Reposición'?'active':''}">Órdenes de Reposición</a></li>
+
+                                <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede/medicamentos}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Inventario'?'active':''}">Inventario</a></li>                                          class="menu-item roboto-light" th:classappend="${active == 'Mensajeria'?'active':''}">Mensajeria</a></li>
+
                                 <!--=============== LINKS PARA FARMACISTA  ===============-->
 
-                                <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/farmacista}" sec:authorize="hasAnyAuthority('FARMACISTA')"
-                                       class="menu-item roboto-regular" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
+                                <li th:if="${session.usuario.getRol() == 3}" ><a th:href="@{/farmacista}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
 
-                                <li><a th:href="@{/farmacista/ordenes_venta}" sec:authorize="hasAnyAuthority('FARMACISTA')"
-                                       class="menu-item roboto-regular" th:classappend="${active == 'Ordenes de Venta'?'active':''}">Ordenes de Venta</a></li>
+                                <li th:if="${session.usuario.getRol() == 3}" ><a th:href="@{/farmacista/ordenes_venta}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Ordenes de Venta'?'active':''}">Ordenes de Venta</a></li>
 
-                                <li><a th:href="@{/farmacista/ordenes_web}" sec:authorize="hasAnyAuthority('FARMACISTA')"
-                                       class="menu-item roboto-regular" th:classappend="${active == 'Ordenes Web'?'active':''}">Ordenes Web</a></li>
+                                <li th:if="${session.usuario.getRol() == 3}" ><a th:href="@{/farmacista/ordenes_web}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Ordenes Web'?'active':''}">Ordenes Web</a></li>
 
-                                <li><a th:href="@{/farmacista/pre_ordenes}" sec:authorize="hasAnyAuthority('FARMACISTA')"
-                                       class="menu-item roboto-regular" th:classappend="${active == 'Pre Ordenes'?'active':''}">Pre Ordenes</a></li>
+                                <li th:if="${session.usuario.getRol() == 3}" ><a th:href="@{/farmacista/pre_ordenes}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Pre Ordenes'?'active':''}">Pre Ordenes</a></li>
 
                                 <!--=============== LINKS PARA PACIENTE  ===============-->
 
-                                <li><a th:href="@{/paciente}" sec:authorize="hasAnyAuthority('PACIENTE')"
-                                       class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
+                                <li th:if="${session.usuario.getRol() == 4}" ><a th:href="@{/paciente}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
 
-                                <li><a th:href="@{/paciente/ordenes}" sec:authorize="hasAnyAuthority('PACIENTE')"
-                                       class="menu-item roboto-light" th:classappend="${active == 'Ordenes Web'?'active':''}">Ordenes Web</a></li>
+                                <li th:if="${session.usuario.getRol() == 4}" ><a th:href="@{/paciente/ordenes}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Ordenes Web'?'active':''}">Ordenes Web</a></li>
 
-                                <li><a th:href="@{/paciente/mensajeria}" sec:authorize="hasAnyAuthority('PACIENTE')"
-                                       class="menu-item roboto-light" th:classappend="${active == 'Mensajeria'?'active':''}">Mensajeria</a></li>
+                                <li th:if="${session.usuario.getRol() == 4}" ><a th:href="@{/paciente/mensajeria}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Mensajeria'?'active':''}">Mensajeria</a></li>
 
                             </ul>
+
+
 
                             <ul class="nav-list-small-perfil">
 
@@ -162,7 +287,7 @@
                                 <li>
 
                                 <li>
-                                    <a th:href="@{paciente/perfil}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                                    <a th:href="@{/paciente/perfil}" sec:authorize="hasAnyAuthority('PACIENTE')"
                                        class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
                                 <li>
 
