@@ -48,7 +48,7 @@
 /* Footer left */
 
 .footer-distributed .footer-left {
-    width:45%;
+    width:40%;
 }
 
 .footer-distributed h3 {
@@ -83,17 +83,17 @@
 .footer-distributed .footer-company-name {
     line-height: 20px;
     color: #e1e1e1;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: lighter;
     margin: 0;
 }
 /* Footer Center */
 
 .footer-distributed .footer-center {
-    width: 25%;
+    width: 30%;
 }
 .footer-distributed .footer-center i {
-    background-color: #33383b;
+    background-color: #0f66bd;
     color: #ffffff;
     font-size: 25px;
     width: 38px;
@@ -160,7 +160,7 @@
     width: 35px;
     height: 35px;
     cursor: pointer;
-    background-color: #33383b;
+    background-color: #0f66bd;
     border-radius: 2px;
     font-size: 20px;
     color: #ffffff;
