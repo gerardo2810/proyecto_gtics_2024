@@ -120,7 +120,7 @@
                     <!--=============== LINKS PARA PACIENTE  ===============-->
 
                     <li th:if="${session.usuario.getRol() == 4}" ><a th:href="@{/paciente}" sec:authorize="hasAnyAuthority('PACIENTE')"
-                           class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
+                           class="menu-item roboto-light" th:classappend="${active == 'Pre Ordenes'?'active':''}">Pre Ordenes</a></li>
 
                     <li th:if="${session.usuario.getRol() == 4}" ><a th:href="@{/paciente/ordenes}" sec:authorize="hasAnyAuthority('PACIENTE')"
                            class="menu-item roboto-light" th:classappend="${active == 'Ordenes Web'?'active':''}">Ordenes Web</a></li>
