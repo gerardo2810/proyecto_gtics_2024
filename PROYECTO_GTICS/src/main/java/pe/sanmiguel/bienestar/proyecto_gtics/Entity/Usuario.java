@@ -95,7 +95,7 @@ public class Usuario implements Serializable {
     @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "No debe incluir números", groups = {RegisterValidationsGroup.class})
     @NotBlank(message = "Debe ingresar su seguro", groups = {RegisterValidationsGroup.class})
     @Size(max = 30, message = "No debe exceder de 30 caracteres", groups = {RegisterValidationsGroup.class})
-    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "No debe incluir números")
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s()]+$", message = "No debe incluir números", groups = {RegisterValidationsGroup.class})
     @NotBlank(message = "Debe ingresar su seguro")
     @Size(max = 30, message = "No debe exceder de 30 caracteres")
     private String seguro;

@@ -114,7 +114,7 @@
 
         <tr th:each="orden : ${lista}">
             <td th:text="${orden.getTracking()}"></td>
-            <td th:text="${orden.getFechaIni()}"></td>
+            <td><span th:text="${orden.getFechaIni()}" ></span></td>
             <td th:switch="${orden.getEstadoOrden()}">
                 <button class="animationButton22" th:case="2">PAGO DISPONIBLE</button>
                 <button class="btn-rcb"           th:case="3">RECIBIDO</button>
@@ -231,6 +231,27 @@
             }
             table.search(searchTerm).draw();
         });
+    });
+</script>
+
+
+<script>
+    // Obtener todas las celdas de fecha en la tabla
+    var fechaCells = document.querySelectorAll("td:nth-child(2) span");
+
+    // Recorrer todas las celdas de fecha
+    fechaCells.forEach(function(cell) {
+        // Obtener la fecha formateada en el span oculto
+        var fechaFormateada = cell.innerText;
+
+        // Parsear la fecha formateada como un objeto Date
+        var fecha = new Date(fechaFormateada);
+
+        // Formatear la fecha como 'dd-MM-yyyy'
+        var fechaFormateadaDDMMYYYY = ('0' + fecha.getDate()).slice(-2) + '-' + ('0' + (fecha.getMonth() + 1)).slice(-2) + '-' + fecha.getFullYear();
+
+        // Reemplazar el texto en la celda con la fecha formateada como 'dd-MM-yyyy'
+        cell.innerText = fechaFormateadaDDMMYYYY;
     });
 </script>
 </body>
