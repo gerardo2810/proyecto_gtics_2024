@@ -94,7 +94,7 @@
                     <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede/doctores}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
                            class="menu-item roboto-light" th:classappend="${active == 'Doctores'?'active':''}">Doctores</a></li>
 
-                    <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede/farmacistas}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
+                    <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede/farmacista}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
                            class="menu-item roboto-light" th:classappend="${active == 'Farmacistas'?'active':''}">Farmacistas</a></li>
 
                     <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede/ordenes}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
