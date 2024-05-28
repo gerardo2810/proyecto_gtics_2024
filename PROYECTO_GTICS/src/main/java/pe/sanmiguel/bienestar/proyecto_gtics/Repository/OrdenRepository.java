@@ -44,8 +44,8 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     List<Orden> findBySedeId(Integer idSede);*/
 
 
-    @Query(value="select * from orden where idEstado not in (8,9) and idTipo != 3; ", nativeQuery = true)
-    List <Orden> listarOrdenes();
+    @Query(value="select * from orden where idEstado not in (8,9) and idTipo not in (1,3) and idPaciente = ?; ", nativeQuery = true)
+    List <Orden> listarOrdenes(Integer idPaciente);
 
 
     @Query(value="select * from orden where idEstado not in (8,9) and idTipo = 3; ", nativeQuery = true)

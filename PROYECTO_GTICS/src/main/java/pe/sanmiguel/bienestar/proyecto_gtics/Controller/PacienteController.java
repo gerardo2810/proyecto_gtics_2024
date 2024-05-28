@@ -90,11 +90,14 @@ public class PacienteController {
 
     @GetMapping(value="/ordenes")
     public String ordenes(Model model, HttpServletRequest request, HttpServletResponse response, Authentication authentication){
-        List<Orden> lista =  ordenRepository.listarOrdenes();
 
 
         HttpSession session = request.getSession();
         Usuario usuario = (Usuario) session.getAttribute("usuario");
+        
+        List<Orden> lista =  ordenRepository.listarOrdenes();
+
+
 
         if (usuario != null) {
             // Imprimir el nombre del usuario autenticado
@@ -186,7 +189,7 @@ public class PacienteController {
 
     @GetMapping(value = "/perfil")
     public String perfil(){
-        return "paciente/perfil";
+        return "perfil";
     }
 
     @GetMapping(value = "/cambio_contrasena")
