@@ -109,7 +109,7 @@ public class WebSecurityConfig {
                 });
 
         http.logout()
-                //.logoutUrl() FALTA HACER UNA VISTA PARA EL CIERRE DE SESISON
+                .logoutUrl("/")
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true);
 
