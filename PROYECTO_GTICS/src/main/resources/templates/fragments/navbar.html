@@ -77,13 +77,30 @@
                             <div class="inside-dropdown">
 
                                 <li>
-                                    <a th:href="@{/farmacista/perfil}" sec:authorize="hasAnyAuthority('FARMACISTA')"
-                                       class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-light"></i> Perfil</a>
+                                    <a th:href="@{/superadmin/perfil}" sec:authorize="hasAnyAuthority('SUPERADMIN')"
+                                       class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
                                 <li>
+
+                                <li>
+                                    <a th:href="@{/adminsede/perfil}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
+                                       class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
+                                <li>
+
+                                <li>
+                                    <a th:href="@{/farmacista/perfil}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                                       class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
+                                <li>
+
+                                <li>
+                                    <a th:href="@{paciente/perfil}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                                       class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
+                                <li>
+
                                 <form th:action="@{/logout}" method="post">
                                     <input class="dropdown-link" type="submit" value="(Cerrar Sesión)">
                                 </form>
                                 </li>
+
                             </div>
                         </ul>
                     </li>
@@ -113,6 +130,18 @@
 
                                 <li><a th:href="@{/farmacista/pre_ordenes}" sec:authorize="hasAnyAuthority('FARMACISTA')"
                                        class="menu-item roboto-regular" th:classappend="${active == 'Pre Ordenes'?'active':''}">Pre Ordenes</a></li>
+
+                                <!--=============== LINKS PARA PACIENTE  ===============-->
+
+                                <li><a th:href="@{/paciente}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                                       class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
+
+                                <li><a th:href="@{/paciente/ordenes}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                                       class="menu-item roboto-light" th:classappend="${active == 'Ordenes Web'?'active':''}">Ordenes Web</a></li>
+
+                                <li><a th:href="@{/paciente/mensajeria}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                                       class="menu-item roboto-light" th:classappend="${active == 'Mensajeria'?'active':''}">Mensajeria</a></li>
+
                             </ul>
 
                             <ul class="nav-list-small-perfil">
