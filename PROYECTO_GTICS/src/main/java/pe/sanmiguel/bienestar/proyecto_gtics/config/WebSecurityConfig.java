@@ -109,7 +109,7 @@ public class WebSecurityConfig {
                 });
 
         http.logout()
-                .logoutUrl("/")
+                .logoutUrl("/logout")
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true);
 

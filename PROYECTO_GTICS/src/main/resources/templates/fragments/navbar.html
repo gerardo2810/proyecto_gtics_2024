@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="header (title)">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}"></title>
+
+    <style>
+        .active {
+            text-decoration: underline;
+            color: white;
+        }
+    </style>
+
+</head>
+<body>
+
+
+    <nav class="nav-topbar container" th:fragment="navbar (active)">
+
+        <div class="nav-data">
+            <div>
+                <a href="/farmacista"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+            </div>
+
+            <!--=============== NAV MENU ===============-->
+
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li><a th:href="@{/farmacista}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
+
+                    <li><a th:href="@{/farmacista/ordenes_venta}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Ordenes de Venta'?'active':''}">Ordenes de Venta</a></li>
+
+                    <li><a th:href="@{/farmacista/ordenes_web}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Ordenes Web'?'active':''}">Ordenes Web</a></li>
+
+                    <li><a th:href="@{/farmacista/pre_ordenes}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Pre Ordenes'?'active':''}">Pre Ordenes</a></li>
+
+                    <!--=============== DROPDOWN ===============-->
+                    <li class="dropdown-item">
+                        <div class="menu-item roboto-light">
+                            <i class="fas fa-user fa-fw"></i>
+                            <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                        </div>
+
+                        <ul class="dropdown-menu">
+                            <div class="inside-dropdown">
+
+                                <li>
+                                    <a th:href="@{/farmacista/perfil}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                                       class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-light"></i> Perfil</a>
+                                <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <input class="dropdown-link" type="submit" value="(Cerrar Sesión)">
+                                </form>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="nav-toggle" id="nav-toggle">
+                <i class="ri-menu-line nav-burger" id="menu-icon"></i>
+                <i class="ri-close-line nav-close"></i>
+
+                <div class="menu-small" id="menu-small">
+                    <div class="inside-menu-small">
+                        <div class="nav-menu-small" id="nav-menu-small">
+                            <ul class="nav-list-small">
+
+                                <li><a th:href="@{/farmacista}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                                       class="menu-item roboto-regular" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
+
+                                <li><a th:href="@{/farmacista/ordenes_venta}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                                       class="menu-item roboto-regular" th:classappend="${active == 'Ordenes de Venta'?'active':''}">Ordenes de Venta</a></li>
+
+                                <li><a th:href="@{/farmacista/ordenes_web}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                                       class="menu-item roboto-regular" th:classappend="${active == 'Ordenes Web'?'active':''}">Ordenes Web</a></li>
+
+                                <li><a th:href="@{/farmacista/pre_ordenes}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                                       class="menu-item roboto-regular" th:classappend="${active == 'Pre Ordenes'?'active':''}">Pre Ordenes</a></li>
+                            </ul>
+
+                            <ul class="nav-list-small-perfil">
+                                <li>
+                                    <a th:href="@{/farmacista/perfil}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                                       class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
+                                <li>
+                                <li>
+                                    <form th:action="@{/logout}" method="post">
+                                        <input class="dropdown-link" type="submit" value="(Cerrar Sesión)">
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </nav>
+
+    <script>
+        window.onload = function () {
+            $('#onload').fadeOut();
+            $('body').removeClass('loader-hidden');
+        }
+
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            let opened = false;
+
+            $('#menu-small').hide();
+
+            $('#nav-toggle').click(function (e) {
+                e.stopPropagation();
+                if (opened) {
+                    $('#menu-small').hide();
+                } else {
+                    $('#menu-small').show();
+                }
+                opened = !opened;
+            });
+        });
+    </script>
+
+<div th:fragment="footer">
+    <div>
+        <footer id="sticky-footer" class="footer-distributed">
+            <div class="footer-left">
+                <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
+
+                <div class="footer-links">
+                    <a th:href="@{/farmacista}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                       class="menu-item roboto-light">Inicio</a>
+                    <div style="align-self: center">|</div>
+                    <a th:href="@{/farmacista/ordenes_venta}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                       class="menu-item roboto-light">Ordenes de Venta</a>
+                    <div style="align-self: center">|</div>
+                    <a th:href="@{/farmacista/ordenes_web}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                       class="menu-item roboto-light">Ordenes Web</a>
+                    <div style="align-self: center">|</div>
+                    <a th:href="@{/farmacista/pre_ordenes}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                       class="menu-item roboto-light">Pre Ordenes</a>
+                </div>
+                <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
+            </div>
+
+            <div class="footer-center">
+                <div>
+                    <i class="fa fa-map-marker"></i>
+                    <p><span>Av. Universitaria 1801, San Miguel, 15088</span> Lima, Perú</p>
+                </div>
+
+                <div>
+                    <i class="fa fa-phone"></i>
+                    <p>+51 982 876 098</p>
+                </div>
+
+                <div>
+                    <i class="fa fa-envelope"></i>
+                    <p><a href="mailto:sagar00001.co@gmail.com">Lorem ipsum dolor sit amet.</a></p>
+                </div>
+            </div>
+
+            <div class="footer-right">
+                <p class="footer-company-about">
+                    <span>Lorem, ipsum dolor.</span>
+                    La carrera de <strong>Ingeniería de las telecomunicaciones</strong> de la <strong>Pontificia Universidad Catolica del Perú</strong> diseñó una pagina WEB.
+                </p>
+                <div class="footer-icons">
+                    <a href="https://www.facebook.com/profile.php?id=100009473024310&mibextid=LQQJ4d"><i class="fa fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/leo.leonar071/?igshid=OGQ5ZDc2ODk2ZA%3D%3Ds"><i class="fa fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@pucp"><i class="fa fa-youtube"></i></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+
+</body>
+</html>

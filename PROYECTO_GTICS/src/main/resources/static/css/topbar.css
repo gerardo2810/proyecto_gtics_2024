@@ -74,21 +74,19 @@
     justify-content: space-between;
     align-items: center;
     transition: color 0.2s ease;
-    font-weight: 30;
-    transition: border-bottom 3s ease;
 }
 
 .menu-item:hover {
-    color: rgb(10, 45, 136);
+    color: rgb(200, 214, 255);
 }
 
 .menu-item.active:hover {
-    color: rgb(10, 45, 136);
-    border-bottom: 2px solid rgb(10, 45, 136);
+    color: rgb(200, 214, 255);
+    border-bottom: 1px solid rgb(200, 214, 255);
 }
 
 .menu-item.active {
-    border-bottom: 2px solid white;
+    border-bottom: 1px solid white;
 }
 
 
@@ -103,7 +101,7 @@
 }
 
 .menu-item-small:hover {
-    color: rgb(10, 45, 136);
+    color: rgb(200, 214, 255);
 }
 
 
