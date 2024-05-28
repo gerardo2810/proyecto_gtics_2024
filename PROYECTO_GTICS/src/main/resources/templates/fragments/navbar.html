@@ -19,14 +19,30 @@
     <nav class="nav-topbar container" th:fragment="navbar (active)">
 
         <div class="nav-data">
-            <div>
+
+            <div sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                <a href="/superadmin"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+            </div>
+
+            <div sec:authorize="hasAnyAuthority('ADMINSEDE')">
+                <a href="/adminsede"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+            </div>
+
+            <div sec:authorize="hasAnyAuthority('FARMACISTA')">
                 <a href="/farmacista"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+            </div>
+
+            <div sec:authorize="hasAnyAuthority('PACIENTE')">
+                <a href="/paciente"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
             </div>
 
             <!--=============== NAV MENU ===============-->
 
             <div class="nav-menu" id="nav-menu">
                 <ul class="nav-list">
+
+                    <!--=============== LINKS PARA FARMACISTA  ===============-->
+
                     <li><a th:href="@{/farmacista}" sec:authorize="hasAnyAuthority('FARMACISTA')"
                            class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
 
@@ -38,6 +54,17 @@
 
                     <li><a th:href="@{/farmacista/pre_ordenes}" sec:authorize="hasAnyAuthority('FARMACISTA')"
                            class="menu-item roboto-light" th:classappend="${active == 'Pre Ordenes'?'active':''}">Pre Ordenes</a></li>
+
+                    <!--=============== LINKS PARA PACIENTE  ===============-->
+
+                    <li><a th:href="@{/paciente}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
+
+                    <li><a th:href="@{/paciente/ordenes}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Ordenes de Venta'?'active':''}">Ordenes</a></li>
+
+                    <li><a th:href="@{/paciente/mensajeria}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Ordenes Web'?'active':''}">Mensajería</a></li>
 
                     <!--=============== DROPDOWN ===============-->
                     <li class="dropdown-item">
@@ -73,6 +100,8 @@
                         <div class="nav-menu-small" id="nav-menu-small">
                             <ul class="nav-list-small">
 
+                                <!--=============== LINKS PARA FARMACISTA  ===============-->
+
                                 <li><a th:href="@{/farmacista}" sec:authorize="hasAnyAuthority('FARMACISTA')"
                                        class="menu-item roboto-regular" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
 
@@ -87,10 +116,27 @@
                             </ul>
 
                             <ul class="nav-list-small-perfil">
+
+                                <li>
+                                    <a th:href="@{/superadmin/perfil}" sec:authorize="hasAnyAuthority('SUPERADMIN')"
+                                       class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
+                                <li>
+
+                                <li>
+                                    <a th:href="@{/adminsede/perfil}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
+                                       class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
+                                <li>
+
                                 <li>
                                     <a th:href="@{/farmacista/perfil}" sec:authorize="hasAnyAuthority('FARMACISTA')"
                                        class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
                                 <li>
+
+                                <li>
+                                    <a th:href="@{paciente/perfil}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                                       class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
+                                <li>
+
                                 <li>
                                     <form th:action="@{/logout}" method="post">
                                         <input class="dropdown-link" type="submit" value="(Cerrar Sesión)">
@@ -106,6 +152,10 @@
         </div>
 
     </nav>
+
+
+
+
 
     <script>
         window.onload = function () {

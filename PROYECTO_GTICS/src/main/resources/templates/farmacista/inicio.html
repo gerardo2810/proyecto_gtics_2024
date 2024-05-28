@@ -25,6 +25,8 @@
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/perfil.css}">
 
+    <script th:href="@{/js/pagination.js}"></script>
+
     <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
 
     <!--=============== JQUERY ===============-->
@@ -152,20 +154,22 @@
                 </div>
 
                 <!-- Contenedor de elementos -->
-                <div class="med-container">
-                    <div class="item" th:each="medicamento : ${listaMedicamentos}">
-                        <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" th:alt="${medicamento.nombre}" class="img-item">
-                        <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
-                            <div>
-                                <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
-                                <div class="item-title roboto-medium" th:text="${medicamento.nombre}">Medicamento</div>
-                            </div>
+                <div id="content">
+                    <div class="med-container">
+                        <div class="item" th:each="medicamento : ${listaMedicamentos}">
+                            <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" th:alt="${medicamento.nombre}" class="img-item">
+                            <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
+                                <div>
+                                    <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
+                                    <div class="item-title roboto-medium" th:text="${medicamento.nombre}">Medicamento</div>
+                                </div>
 
+                            </div>
+                            <div style="display: flex; flex-direction: row; gap: 3px; align-items: end;">
+                                <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
+                            </div>
+                            <button class="add-item-button open-sans-regular" th:data-item-id="${medicamento.idMedicamento}">Añadir Producto</button>
                         </div>
-                        <div style="display: flex; flex-direction: row; gap: 3px; align-items: end;">
-                            <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
-                        </div>
-                        <button class="add-item-button open-sans-regular" th:data-item-id="${medicamento.idMedicamento}">Añadir Producto</button>
                     </div>
                 </div>
 

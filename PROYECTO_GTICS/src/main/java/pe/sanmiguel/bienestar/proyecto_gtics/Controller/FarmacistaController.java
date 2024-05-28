@@ -465,7 +465,7 @@ public class FarmacistaController {
 
         model.addAttribute("farmacista", farmacistaSession);
         model.addAttribute("contrasena", passwordDots);
-        return "farmacista/perfil";
+        return "perfil";
     }
 
     @PostMapping("/farmacista/actualizar_contrasena")
