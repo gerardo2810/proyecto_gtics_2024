@@ -61,10 +61,10 @@
                            class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
 
                     <li><a th:href="@{/paciente/ordenes}" sec:authorize="hasAnyAuthority('PACIENTE')"
-                           class="menu-item roboto-light" th:classappend="${active == 'Ordenes de Venta'?'active':''}">Ordenes</a></li>
+                           class="menu-item roboto-light" th:classappend="${active == 'Ordenes Web'?'active':''}">Ordenes Web</a></li>
 
                     <li><a th:href="@{/paciente/mensajeria}" sec:authorize="hasAnyAuthority('PACIENTE')"
-                           class="menu-item roboto-light" th:classappend="${active == 'Ordenes Web'?'active':''}">Mensajería</a></li>
+                           class="menu-item roboto-light" th:classappend="${active == 'Mensajeria'?'active':''}">Mensajeria</a></li>
 
                     <!--=============== DROPDOWN ===============-->
                     <li class="dropdown-item">
