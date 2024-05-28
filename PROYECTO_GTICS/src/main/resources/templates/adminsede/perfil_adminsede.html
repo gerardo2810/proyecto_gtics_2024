@@ -37,99 +37,11 @@
     </head>
 
     <header class="header-topbar">
-        <nav class="nav-topbar container">
-
-
-            <div class="nav-data">
-                <div>
-                    <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
-                </div>
-
-                <!--=============== NAV MENU ===============-->
-
-                <div class="nav-menu" id="nav-menu">
-                    <ul class="nav-list">
-                        <li><a href="/adminsede" class="menu-item roboto-regular">Inicio</a></li>
-
-                        <li><a href="/adminsede/doctores" class="menu-item roboto-regular">Doctores</a></li>
-
-                        <li><a href="/adminsede/farmacista" class="menu-item roboto-regular">Farmacistas</a></li>
-
-                        <li><a href="/adminsede/ordenes" class="menu-item roboto-regular">Órdenes de Reposición</a></li>
-
-                        <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular">Inventario</a></li>
-
-                        <!--=============== DROPDOWN ===============-->
-                        <li class="dropdown-item">
-                            <div class="menu-item roboto-regular">
-                                <i class="fas fa-user fa-fw"></i>
-                                <i class="ri-arrow-down-s-line dropdown-arrow"></i>
-                            </div>
-
-                            <ul class="dropdown-menu">
-                                <div class="inside-dropdown">
-                                    <li>
-                                        <a href="/adminsede/perfil_adminsede" class="dropdown-link">
-                                            <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="/adminsede/cambiar_contrasena" class="dropdown-link">
-                                            <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
-                                        </a>
-                                    </li>
-
-                                    <li sec:authorize="isAuthenticated()">
-                                        <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
-                                        <a href="#" class="dropdown-link" onclick="document.getElementById('logoutForm').submit(); return false;">
-                                            <i class="ri-lock-line menu-item dropdown-item roboto-regular"></i> Cerrar sesión
-                                        </a>
-                                    </li>
-                                </div>
-                            </ul>
-                        </li>
-
-                    </ul>
-                </div>
-
-                <div class="nav-toggle" id="nav-toggle">
-                    <i class="ri-menu-line nav-burger" id="menu-icon"></i>
-                    <i class="ri-close-line nav-close"></i>
-
-                    <div class="menu-small" id="menu-small">
-                        <div class="inside-menu-small">
-                            <div class="nav-menu-small" id="nav-menu-small">
-                                <ul class="nav-list-small">
-                                    <li><a href="/adminsede" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
-
-                                    <li><a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a></li>
-
-                                    <li><a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a></li>
-
-                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular">Órdenes de Reposición</a></li>
-
-                                    <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Inventario</a></li>
-                                </ul>
-
-                                <ul class="nav-list-small-perfil">
-                                    <li><a href="/adminsede/cambiar_contrasena" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
-
-                                    <li><a href="/adminsede/" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-        </nav>
+        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
     </header>
+
+
     <body>
-
-
 
         <div class="container" style="margin-top: 90px">
 
