@@ -2,8 +2,7 @@ package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
 
 import jakarta.servlet.annotation.MultipartConfig;
-import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Part;
+import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
 import jakarta.websocket.SessionException;
 import org.apache.catalina.Session;
@@ -31,7 +30,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession; // Importar HttpSession
 
 
@@ -91,7 +89,7 @@ public class PacienteController {
 
 
     @GetMapping(value="/ordenes")
-    public String ordenes(Model model, HttpServletRequest request){
+    public String ordenes(Model model, HttpServletRequest request, HttpServletResponse response, Authentication authentication){
         List<Orden> lista =  ordenRepository.listarOrdenes();
 
 
