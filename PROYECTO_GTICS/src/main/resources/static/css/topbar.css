@@ -198,13 +198,26 @@
 .dropdown-link {
     padding: 1.25rem 1.25rem 1.25rem 2.5rem;
     color: var(--color-white);
-    background-color: rgba(26,115,232,0.7);
+    background-color: #0d6efd;
     backdrop-filter: blur(15px);
     display: flex;
     align-items: center;
     column-gap: .5rem;
     font-weight: var(--font-semi-bold);
     transition: background-color .3s;
+}
+
+.icon-sign-out{
+    padding: 1.25rem 1.25rem 1.25rem 2.5rem;
+    color: var(--color-white);
+    background-color: #0d6efd;
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    column-gap: .5rem;
+    font-weight: var(--font-semi-bold);
+    transition: background-color .3s;
+    cursor: default;
 }
 
 .dropdown-link i {

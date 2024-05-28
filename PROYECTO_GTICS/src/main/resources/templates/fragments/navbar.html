@@ -159,7 +159,10 @@
                                 <li>
 
                                 <form th:action="@{/logout}" method="post">
-                                    <input class="dropdown-link" type="submit" value="(Cerrar Sesión)">
+                                    <div style="display: flex; flex-direction: row">
+                                        <i class="fa fa-sign-out icon-sign-out" ></i>
+                                        <input  type="submit" value="Cerrar Sesión">
+                                    </div>
                                 </form>
                                 </li>
 
