@@ -41,105 +41,12 @@
         </style>
     </head>
 
-
     <header class="header-topbar">
-        <nav class="nav-topbar container">
-
-
-            <div class="nav-data">
-                <div>
-                    <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
-                </div>
-
-                <!--=============== NAV MENU ===============-->
-
-                <div class="nav-menu" id="nav-menu">
-                    <ul class="nav-list">
-                        <li><a href="/adminsede" class="menu-item roboto-regular">Inicio</a></li>
-
-                        <li><a href="/adminsede/doctores" class="menu-item roboto-regular">Doctores</a></li>
-
-                        <li><a href="/adminsede/farmacista" class="menu-item roboto-regular">Farmacistas</a></li>
-
-                        <li><a href="/adminsede/ordenes" class="menu-item roboto-regular"  style="text-decoration: underline; color: white;">Órdenes de Reposición</a></li>
-
-                        <li><a href="/adminsede/medicamentos" class="menu-item roboto-regular">Inventario</a></li>
-
-                        <!--=============== DROPDOWN ===============-->
-                        <li class="dropdown-item">
-                            <div class="menu-item roboto-regular">
-                                <i class="fas fa-user fa-fw"></i>
-                                <i class="ri-arrow-down-s-line dropdown-arrow"></i>
-                            </div>
-
-                            <ul class="dropdown-menu">
-                                <div class="inside-dropdown">
-                                    <li>
-                                        <a href="/adminsede/perfil_adminsede" class="dropdown-link">
-                                            <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="/adminsede/cambiar_contrasena" class="dropdown-link">
-                                            <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
-                                        </a>
-                                    </li>
-
-                                    <li sec:authorize="isAuthenticated()">
-                                        <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
-                                        <a href="#" class="dropdown-link" onclick="document.getElementById('logoutForm').submit(); return false;">
-                                            <i class="ri-lock-line menu-item dropdown-item roboto-regular"></i> Cerrar sesión
-                                        </a>
-                                    </li>
-                                </div>
-                            </ul>
-                        </li>
-
-                    </ul>
-                </div>
-
-                <div class="nav-toggle" id="nav-toggle">
-                    <i class="ri-menu-line nav-burger" id="menu-icon"></i>
-                    <i class="ri-close-line nav-close"></i>
-
-                    <div class="menu-small" id="menu-small">
-                        <div class="inside-menu-small">
-                            <div class="nav-menu-small" id="nav-menu-small">
-                                <ul class="nav-list-small">
-                                    <li><a href="/adminsede" class="menu-item-small roboto-regular">Inicio</a></li>
-
-                                    <li><a href="/adminsede/doctores" class="menu-item-small roboto-regular">Doctores</a></li>
-
-                                    <li><a href="/adminsede/farmacista" class="menu-item-small roboto-regular">Farmacistas</a></li>
-
-                                    <li><a href="/adminsede/ordenes" class="menu-item-small roboto-regular" style="text-decoration: underline; color: white;">Órdenes de Reposición</a></li>
-
-                                    <li><a href="/adminsede/medicamentos" class="menu-item-small roboto-regular">Inventario</a></li>
-                                </ul>
-
-                                <ul class="nav-list-small-perfil">
-                                    <li><a href="/adminsede/" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
-
-                                    <li><a href="/adminsede/" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-        </nav>
+        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
     </header>
 
+
     <body>
-
-
-
-
-
 
         <div class="container">
             <div style="padding-top: 20px; padding-bottom: 20px">
@@ -212,52 +119,8 @@
         <br>
 
 
-
-        <div >
-            <footer id="sticky-footer" class="footer-distributed">
-                <div class="footer-left">
-                    <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
-                    <p class="footer-links">
-                        <a href="">Usuarios</a> |
-                        <a href="">Actividades</a> |
-                        <a href="">Estadisticas</a> |
-                        <a href="">Donaciones</a> |
-                        <a href="">Perfil</a>
-                    </p>
-                    <p class="footer-company-name">Copyright © 2023 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
-                </div>
-
-                <div class="footer-center">
-                    <div>
-                        <i class="fa fa-map-marker"></i>
-                        <p><span>Av. Universitaria 1801, San Miguel, 15088</span> Lima, Perú</p>
-                    </div>
-
-                    <div>
-                        <i class="fa fa-phone"></i>
-                        <p>+51 982 876 098</p>
-                    </div>
-
-                    <div>
-                        <i class="fa fa-envelope"></i>
-                        <p><a href="mailto:sagar00001.co@gmail.com">Lorem ipsum dolor sit amet.</a></p>
-                    </div>
-                </div>
-
-                <div class="footer-right">
-                    <p class="footer-company-about">
-                        <span>Lorem, ipsum dolor.</span>
-                        La carrera de <strong>Ingeniería de las telecomunicaciones</strong> de la <strong>Pontificia Universidad Catolica del Perú</strong> diseñó una pagina WEB.
-                    </p>
-                    <div class="footer-icons">
-                        <a href="https://www.facebook.com/profile.php?id=100009473024310&mibextid=LQQJ4d"><i class="fa fa-facebook"></i></a>
-                        <a href="https://www.instagram.com/leo.leonar071/?igshid=OGQ5ZDc2ODk2ZA%3D%3Ds"><i class="fa fa-instagram"></i></a>
-                        <a href="https://www.youtube.com/@pucp"><i class="fa fa-youtube"></i></a>
-                    </div>
-                </div>
-            </footer>
+        <div th:replace="~{fragments/navbar.html :: footer}">
         </div>
-
 
 
 

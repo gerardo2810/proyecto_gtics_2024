@@ -741,7 +741,7 @@ public class AdminSedeController {
         }
     }
 
-    @GetMapping("/perfil_adminsede")
+    @GetMapping("/perfil")
     public String vistaPerfil(Model model){
         int idSession = 102;
         Optional<Usuario> adminsessionOpt = usuarioRepository.findById(idSession);
@@ -757,7 +757,7 @@ public class AdminSedeController {
         model.addAttribute("admin", adminSession);
         model.addAttribute("contrasena", passwordDots);
 
-        return "adminsede/perfil_adminsede";
+        return "perfil";
     }
 
     @PostMapping("/actualizar_contrasena")
