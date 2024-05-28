@@ -119,7 +119,7 @@
 
                                 <!--=============== LINKS PARA FARMACISTA  ===============-->
 
-                                <li><a th:href="@{/farmacista}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                                <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/farmacista}" sec:authorize="hasAnyAuthority('FARMACISTA')"
                                        class="menu-item roboto-regular" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
 
                                 <li><a th:href="@{/farmacista/ordenes_venta}" sec:authorize="hasAnyAuthority('FARMACISTA')"
