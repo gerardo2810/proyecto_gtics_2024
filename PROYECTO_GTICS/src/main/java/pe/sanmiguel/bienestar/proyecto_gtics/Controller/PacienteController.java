@@ -79,8 +79,12 @@ public class PacienteController {
     /*----------------- Method: GET -----------------*/
 
     @GetMapping(value="")
-    public String preOrdenes(Model model){
-        List<Orden> lista =  ordenRepository.listarPreOrdenes();
+    public String preOrdenes(Model model, HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+
+        HttpSession session = request.getSession();
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+        List<Orden> lista =  ordenRepository.listarPreOrdenes(usuario.getIdUsuario());
         model.addAttribute("lista",lista);
 
         return "paciente/pre_ordenes";
@@ -94,10 +98,8 @@ public class PacienteController {
 
         HttpSession session = request.getSession();
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        
-        List<Orden> lista =  ordenRepository.listarOrdenes();
 
-
+        List<Orden> lista =  ordenRepository.listarOrdenes(usuario.getIdUsuario());
 
         if (usuario != null) {
             // Imprimir el nombre del usuario autenticado
@@ -271,8 +273,15 @@ public class PacienteController {
                                @ModelAttribute("ordenDto") @Valid OrdenDto ordenDto, BindingResult bin2,
                                @RequestParam(value = "file", required = false) Part file,
                                @RequestParam(value = "listaIds", required = false) List<Integer> lista,
+                               @RequestParam(value = "idDoctor", required = false) Integer idDoctor,
                                @RequestParam(value = "priceTotal", required = false) Float total,
-                               Model model, RedirectAttributes redirectAttributes) throws IOException {
+                               @RequestParam(value = "seguro", required = false) String seguro,
+                               Model model, RedirectAttributes redirectAttributes,
+                               HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+
+
+        HttpSession session = request.getSession();
+        Usuario usuario1 = (Usuario) session.getAttribute("usuario");
 
 
         System.out.println(total);
@@ -296,18 +305,13 @@ public class PacienteController {
                 model.addAttribute("currentCant", listaCantidades);
             }
 
-
-
-
-
-
             return "paciente/new_orden";
 
         }else{
+
+
             InputStream inputStream = file.getInputStream();
             byte[] bytes = inputStream.readAllBytes();
-
-
 
 
             String tracking = new String();
@@ -315,9 +319,8 @@ public class PacienteController {
             LocalDateTime fechaIni = LocalDateTime.now();
             LocalDateTime fechaFin = LocalDateTime.now();
             Integer idFarmacista = new Integer(1); //el id del Farmacista
-            Usuario udb = usuarioRepository.getById(1); // el id del usuario Paciente que realiza la orden
             Sede s = sedeRepository.getById(1); //el id de la Sede
-            Doctor doc = doctorRepository.getById(1); //el id del doctor
+            Doctor doc = doctorRepository.getById(idDoctor); //el id del doctor
 
 
 
@@ -329,15 +332,13 @@ public class PacienteController {
             orden.setFechaFin(fechaFin);
             orden.setPrecioTotal(total);
             orden.setIdFarmacista(idFarmacista);
-            orden.setPaciente(udb);
+            orden.setPaciente(usuario1);
             orden.setTipoOrden(2);
             orden.setEstadoOrden(1);
             orden.setSede(s);
             orden.setDoctor(doc);
             orden.setEstadoPreOrden(1);
-            orden.setSeguroUsado(usuario.getSeguro());
-
-            //Imagen de receta proxima a usar
+            orden.setSeguroUsado(seguro);
             orden.setImagen(bytes);
 
 
