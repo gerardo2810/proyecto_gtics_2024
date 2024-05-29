@@ -1,8 +1,12 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
 import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
+import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 
 
 import java.io.IOException;
@@ -184,46 +189,36 @@ public class SuperAdminController {
         return "superAdmin/cambiarcontrasenia";
     }
 
-    @PostMapping("/actualizarContrasena")
-    public String cambiarContrasenia( Usuario superadmin, BindingResult bindingResult,
-                                      @RequestParam(value = "contrasena", required = false) String contrasenia,
-                                      RedirectAttributes attr, Model model) throws IOException {
+    @PostMapping("/actualizar_contrasena")
+    public String actualizarContrasena(Usuario superadmin, BindingResult bindingResult,
+                                       @RequestParam(value = "newContrasena", required = true) String newContrasena,
+                                       @RequestParam(value = "confirmContrasena", required = true) String confirmContrasena,
+                                       @RequestParam(value = "oldContrasena", required = true) String oldContrasena,
+                                       RedirectAttributes attr, Model model,
+                                       HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 
-        superadmin = usuarioRepository.superAdmin();
-        String passwordOld = superadmin.getContrasena();
+        HttpSession session = request.getSession();
+        Usuario usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
 
-        String passwordNew = hashPasswordSHA256(contrasenia);
+        if (SHA256.verifyPassword(oldContrasena, usuarioSession.getContrasena())){
 
-        System.out.println("Contra antigua: " + passwordOld);
-        System.out.println("Contra nueva: " + passwordNew);
+            if (newContrasena.equals(confirmContrasena)){
 
-            System.out.println("NO HAY ERRORES DE VALIDACIÓN:");
-            if (Objects.equals(passwordNew, passwordOld)) {
-                System.out.println("ESTOY AQUI:");
-                usuarioRepository.actualizarContrasena(passwordOld);
-                attr.addFlashAttribute("msg", "Se ingresó la misma contraseña");
-                return "redirect:/superadmin/cambiarContrasena";
-            } else {
-                if(contrasenia.length()>30){
-                    usuarioRepository.actualizarContrasena(contrasenia);
-                    attr.addFlashAttribute("msg", "La contraseña no se actualizó, no se realizaron cambios.");
-                    return "redirect:/superadmin/cambiarContrasena";
-                } else if (!isValidPassword(contrasenia)) {
-                    System.out.println("O AQUII:");
-                    String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
-                    bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
-                    superadmin = usuarioRepository.superAdmin();
-                    model.addAttribute("superadmin", superadmin);
-                    model.addAttribute("error", errorMsg); // Añade el error al modelo
-                    return "superAdmin/cambiarcontrasenia";
+                if (isValidPassword(newContrasena)){
+                    usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
+                    attr.addFlashAttribute("msgSuccess", "Contraseña actualizada correctamente.");
+                } else {
+                    attr.addFlashAttribute("msg", "Ingrese una contraseña válida. De más de 8 carácteres, con dígitos y carácteres especiales.");
                 }
-
-                System.out.println("MEJOR AQUI:");
-                String hashedPassword = hashPasswordSHA256(contrasenia);
-                usuarioRepository.actualizarContrasena(hashedPassword);
-                attr.addFlashAttribute("msg", "Contraseña actualizada correctamente");
-                return "redirect:/superadmin/cambiarContrasena";
+            } else {
+                attr.addFlashAttribute("msg", "Las contraseñas no coinciden.");
             }
+
+        } else {
+            attr.addFlashAttribute("msg", "Introduzca su contraseña actual.");
+        }
+        return "redirect:/farmacista/perfil";
     }
 
     @GetMapping(value = {"/historialSolicitudes"})

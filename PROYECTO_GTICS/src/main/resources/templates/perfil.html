@@ -146,7 +146,7 @@
 
                     </div>
 
-                    <div class="card" th:if="${session.usuario.getRol() == 2}" style="max-height: 220px; max-width: 1150px; width: 100%;">
+                    <div class="card" th:if="${session.usuario.getRol() == 1}" style="max-height: 220px; max-width: 1150px; width: 100%;">
                         <div class="card-header">Cambiar Contraseña</div>
                         <div th:if="${msgSuccess != null}" style="width: 300px; padding-left: 30px; padding-top: 10px;" class="valid-feedback">
                             <p th:text="${msgSuccess}"></p>
@@ -158,7 +158,7 @@
 
                         <div class="card-body">
 
-                            <form id="formAdminsede" method="post" th:action="@{'/adminsede/actualizar_contrasena'}" th:object="${adminsede}"  enctype="multipart/form-data">
+                            <form id="formSuperadmin" method="post" th:action="@{'/superadmin/actualizar_contrasena'}" th:object="${superadmin}"  enctype="multipart/form-data">
 
 
                                 <div style="width: 100%">
