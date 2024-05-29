@@ -11,7 +11,7 @@ const data = {
             parent: 0,
             id: 1,
             content:
-                "Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.",
+                "Hola, Jorge Coronado Maxwell estuve revisando esta órden de venta y los medicamentos que tenemos en stock estan vencidos. Por lo que es necesario reemplazar o devolver el dinero al cliente",
             createdAt: "Hace una hora",
             user: {
                 image: {
