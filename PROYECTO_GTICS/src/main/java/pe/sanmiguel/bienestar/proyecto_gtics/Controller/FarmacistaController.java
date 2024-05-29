@@ -470,7 +470,9 @@ public class FarmacistaController {
 
     @PostMapping("/farmacista/actualizar_contrasena")
     public String actualizarContrasena(Usuario farmacista, BindingResult bindingResult,
-                                     @RequestParam(value = "contrasena", required = false) String contrasena,
+                                     @RequestParam(value = "newContrasena", required = false) String newContrasena,
+                                     @RequestParam(value = "confirmContrasena", required = false) String confirmContrasena,
+                                     @RequestParam(value = "oldContrasena", required = false) String oldContrasena,
                                      RedirectAttributes attr, Model model,
                                      HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 
@@ -478,35 +480,19 @@ public class FarmacistaController {
         usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
         session.setAttribute("usuario", usuarioSession);
 
-        String passwordOld = usuarioSession.getContrasena();
-        String passwordNew = SHA256.cipherPassword(contrasena);
+        if (usuarioSession.getContrasena().equals(SHA256.cipherPassword(oldContrasena))){
 
-
-        String passwordHash = usuarioSession.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-        String passwordDots = "*************";
-
-        System.out.println("Contra antigua: " + passwordOld);
-        System.out.println("Contra nueva: " + passwordNew);
-
-        System.out.println("NO HAY ERRORES DE VALIDACIÓN:");
-        if (Objects.equals(passwordNew, passwordOld)) {
-            System.out.println("ESTOY AQUI:");
-            usuarioRepository.actualizarContrasena(passwordOld);
-            attr.addFlashAttribute("msg", "Se mantiene la misma contraseña");
-            return "redirect:/farmacista/perfil";
-        } else {
-            if (!isValidPassword(contrasena)) {
-                System.out.println("O AQUII:");
-                String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
-                bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
-                model.addAttribute("superadmin", usuarioSession);
-                model.addAttribute("error", errorMsg); // Añade el error al modelo
+            if (newContrasena.equals(confirmContrasena)){
+                usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
+                attr.addFlashAttribute("msg", "Contraseña actualizada correctamente.");
+                return "redirect:/farmacista/perfil";
+            } else {
+                attr.addFlashAttribute("msg", "Las contraseñas no coinciden.");
                 return "redirect:/farmacista/perfil";
             }
-            System.out.println("MEJOR AQUI:");
-            String hashedPassword = SHA256.cipherPassword(contrasena);
-            usuarioRepository.actualizarContrasena(hashedPassword);
-            attr.addFlashAttribute("msg", "Contraseña actualizada correctamente");
+
+        } else {
+            attr.addFlashAttribute("msg", "Introduzca su contraseña actual.");
             return "redirect:/farmacista/perfil";
         }
     }
