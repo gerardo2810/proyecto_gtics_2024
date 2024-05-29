@@ -87,9 +87,25 @@ public class FarmacistaController {
         //Iniciamos la sesión
         HttpSession session = request.getSession();
         usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
-        session.setAttribute("usuario", usuarioSession);
+        if (usuarioSession == null) {
+            usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+            session.setAttribute("usuario", usuarioSession);
+        }
 
-        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
+        Integer idSede = (Integer) session.getAttribute("idSede");
+
+        if (idSede == null) {
+            Sede sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
+
+            // Verificar si sedeSession es nulo
+            if (sedeSession != null) {
+                idSede = sedeSession.getIdSede();
+                session.setAttribute("idSede", idSede);
+            } else {
+                // Manejar el caso cuando sedeSession es nulo
+                return "errorPage"; // O alguna página de error apropiada
+            }
+        }
 
         List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
         int numeroOrdenesPendientes = 0;

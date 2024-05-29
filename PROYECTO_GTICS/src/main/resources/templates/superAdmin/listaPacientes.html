@@ -119,7 +119,11 @@
                     <div th:if="${paciente.estadoUsuario== 1}" class="disponible" style="margin-left: 35px"></div>
                     <div th:if="${paciente.estadoUsuario== 2}" class="no_disponible" style="margin-left: 35px"></div>
                 </td>
-                <td style="text-align: center"><a href="/paciente"><img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/></a></td>
+                <td style="text-align: center">
+                    <a th:href="@{'/impersonate?username=' + ${paciente.correo}}">
+                        <img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/>
+                    </a>
+                </td>
             </tr>
             </tbody>
         </table>

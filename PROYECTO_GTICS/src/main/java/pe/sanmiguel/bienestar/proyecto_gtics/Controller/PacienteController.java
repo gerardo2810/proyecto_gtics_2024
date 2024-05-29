@@ -85,7 +85,11 @@ public class PacienteController {
     public String preOrdenes(Model model, HttpServletRequest request, HttpServletResponse response, Authentication authentication){
 
         HttpSession session = request.getSession();
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        if (usuario == null) {
+            usuario = usuarioRepository.findByCorreo(authentication.getName());
+            session.setAttribute("usuario", usuario);
+        }
 
         List<Orden> lista =  ordenRepository.listarPreOrdenes(usuario.getIdUsuario());
         model.addAttribute("lista",lista);
