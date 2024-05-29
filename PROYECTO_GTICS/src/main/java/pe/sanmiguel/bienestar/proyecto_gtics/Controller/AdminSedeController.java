@@ -761,45 +761,35 @@ public class AdminSedeController {
     }
 
     @PostMapping("/actualizar_contrasena")
-    public String actualizarContrasena(Usuario adminsedeSession, BindingResult bindingResult,
-                                       @RequestParam(value = "contrasena", required = false) String contrasena,
-                                       RedirectAttributes attr, Model model) throws IOException {
+    public String actualizarContrasena(Usuario adminsede, BindingResult bindingResult,
+                                       @RequestParam(value = "newContrasena", required = true) String newContrasena,
+                                       @RequestParam(value = "confirmContrasena", required = true) String confirmContrasena,
+                                       @RequestParam(value = "oldContrasena", required = true) String oldContrasena,
+                                       RedirectAttributes attr, Model model,
+                                       HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 
-        int idSession = 102;
-        Optional<Usuario> adminsessionOpt = usuarioRepository.findById(idSession);
-        adminsedeSession = adminsessionOpt.get();
+        HttpSession session = request.getSession();
+        Usuario usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
 
-        String passwordOld = adminsedeSession.getContrasena();
-        String passwordNew = SHA256.cipherPassword(contrasena);
+        if (SHA256.verifyPassword(oldContrasena, usuarioSession.getContrasena())){
 
+            if (newContrasena.equals(confirmContrasena)){
 
-        String passwordHash = adminsedeSession.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-        String passwordDots = hashToDots(passwordHash);
-
-        System.out.println("Contra antigua: " + passwordOld);
-        System.out.println("Contra nueva: " + passwordNew);
-
-        System.out.println("NO HAY ERRORES DE VALIDACIÓN:");
-        if (Objects.equals(passwordNew, passwordOld)) {
-            System.out.println("ESTOY AQUI:");
-            usuarioRepository.actualizarContrasenaUsuario(passwordOld, idSession);
-            attr.addFlashAttribute("msg", "Se mantiene la misma contraseña");
-            return "redirect:/adminsede/perfil_adminsede";
-        } else {
-            if (!isValidPassword(contrasena)) {
-                System.out.println("O AQUII:");
-                String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
-                bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
-                model.addAttribute("admin", adminsedeSession);
-                model.addAttribute("error", errorMsg); // Añade el error al modelo
-                return "adminsede/perfil_adminsede";
+                if (isValidPassword(newContrasena)){
+                    usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
+                    attr.addFlashAttribute("msgSuccess", "Contraseña actualizada correctamente.");
+                } else {
+                    attr.addFlashAttribute("msg", "Ingrese una contraseña válida. De más de 8 carácteres, con dígitos y carácteres especiales.");
+                }
+            } else {
+                attr.addFlashAttribute("msg", "Las contraseñas no coinciden.");
             }
-            System.out.println("MEJOR AQUI:");
-            String hashedPassword = SHA256.cipherPassword(contrasena);
-            usuarioRepository.actualizarContrasenaUsuario(hashedPassword, idSession);
-            attr.addFlashAttribute("msg", "Contraseña actualizada correctamente");
-            return "redirect:/adminsede/perfil_adminsede";
+
+        } else {
+            attr.addFlashAttribute("msg", "Introduzca su contraseña actual.");
         }
+        return "redirect:/adminsede/perfil";
     }
 
     private boolean isValidPassword(String password) {

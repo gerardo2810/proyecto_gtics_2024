@@ -17,10 +17,22 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
 
     @Query(value = "SELECT o.* FROM orden o JOIN tipo_orden t ON o.idTipo = t.id WHERE t.nombre = 'WEB'", nativeQuery = true)
     List<Orden> findAllOrdenesWeb();
+
+    @Query(value = "SELECT o.* FROM orden o JOIN tipo_orden t ON o.idTipo = t.id WHERE t.nombre = 'WEB' AND o.idSede = :idSede", nativeQuery = true)
+    List<Orden> findAllOrdenesWebPorSede(@Param("idSede") Integer idSede);
+
     @Query(value = "SELECT o.* FROM orden o JOIN tipo_orden t ON o.idTipo = t.id WHERE t.nombre != 'PREORDEN'", nativeQuery = true)
     List<Orden> findAllOrdenes();
+
+    @Query(value = "SELECT o.* FROM orden o JOIN tipo_orden t ON o.idTipo = t.id WHERE t.nombre != 'PREORDEN' AND o.idSede = :idSede", nativeQuery = true)
+    List<Orden> findAllOrdenesPorSede(@Param("idSede") Integer idSede);
+
     @Query(value = "SELECT o.* FROM orden o JOIN tipo_orden t ON o.idTipo = t.id WHERE t.nombre = 'PREORDEN'", nativeQuery = true)
     List<Orden> findAllPreOrdenes();
+
+    @Query(value = "SELECT o.* FROM orden o JOIN tipo_orden t ON o.idTipo = t.id WHERE t.nombre = 'PREORDEN' AND o.idSede = :idSede", nativeQuery = true)
+    List<Orden> findAllPreOrdenesPorSede(@Param("idSede") Integer idSede);
+
     @Query(value="SELECT MAX(orden.id) FROM Orden orden", nativeQuery = true)
     Integer findLastOrdenId();
 

@@ -52,13 +52,16 @@
 
             <div style="margin-bottom: 40px"></div>
 
-            <nav class="nav nav-borders">
-                <a class="nav-link active ms-0"  href="/adminsede/perfil_adminsede"target="__blank">Perfil</a>
-                <a class="nav-link"  href="/adminsede/notificaciones_adminsede" target="__blank">Notificaciones</a>
-            </nav>
-            <br/>
-            <hr class="mt-0 mb-4">
-            <br/>
+            <div th:if="${session.usuario.getRol() == 2}">
+                <nav class="nav nav-borders">
+                    <a class="nav-link active ms-0"  href="/adminsede/perfil_adminsede"target="__blank">Perfil</a>
+                    <a class="nav-link"  href="/adminsede/notificaciones_adminsede" target="__blank">Notificaciones</a>
+                </nav>
+                <br/>
+                <hr class="mt-0 mb-4">
+                <br/>
+            </div>
+
 
 
 
@@ -143,38 +146,259 @@
 
                     </div>
 
-                    <div class="card" style="max-height: 130px; max-width: 1150px; width: 100%;">
+                    <div class="card" th:if="${session.usuario.getRol() == 1}" style="max-height: 220px; max-width: 1150px; width: 100%;">
                         <div class="card-header">Cambiar Contraseña</div>
+                        <div th:if="${msgSuccess != null}" style="width: 300px; padding-left: 30px; padding-top: 10px;" class="valid-feedback">
+                            <p th:text="${msgSuccess}"></p>
+                        </div>
+
+                        <div th:if="${msg != null}" style="width: 300px; padding-left: 30px; padding-top: 10px;" class="invalid-feedback">
+                            <p th:text="${msg}"></p>
+                        </div>
+
                         <div class="card-body">
 
+                            <form id="formSuperadmin" method="post" th:action="@{'/superadmin/actualizar_contrasena'}" th:object="${superadmin}"  enctype="multipart/form-data">
 
-                            <form id="form"  method="post" th:action="@{'/adminsede/actualizar_contrasena'}" th:object="${admin}"  enctype="multipart/form-data">
 
-                                <div class="interface-formulario" style="width: 100%">
-                                    <div style="padding-left: 40px">
+                                <div style="width: 100%">
+                                    <div class="interface-formulario" style="width: 100%">
+
                                         <div class="input-label-box">
-                                            <label style="font-weight: bold; color:dimgray; width: 110px">Contraseña</label>
-                                            <input class="input-form-3 form-control" th:value="${contrasena}" type="password" name="contrasena">
-                                            <div style="width: 300px" class="invalid-feedback">
-                                                <p th:text="${error}"></p>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <div>
-                                        <div style="display: flex; justify-content: flex-end;">
-                                            <div style="padding-top: 10px;">
-                                                <button class="btn btn-primary" type="submit">Cambiar Contraseña</button>
+                                            <div>
+
+                                                <div>
+                                                    <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 38px">Nueva Contraseña</label>
+                                                    <input class="input-form-3 form-control" th:value="${newContrasena}" type="password" name="newContrasena">
+                                                </div>
+
+                                                <div>
+                                                    <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Confirmar Contraseña</label>
+                                                    <input class="input-form-3 form-control" th:value="${confirmContrasena}" type="password" name="confirmContrasena">
+                                                </div>
+
                                             </div>
                                         </div>
+
+                                        <div class="input-label-box">
+
+                                            <div>
+                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Contraseña Anterior</label>
+                                                <input class="input-form-3 form-control" th:value="${oldContrasena}" type="password" name="oldContrasena">
+
+
+                                                <div>
+                                                    <div style="display: flex; justify-content: flex-end;">
+                                                        <div style="padding-top: 10px;">
+                                                            <button class="btn btn-primary" type="submit">Cambiar Contraseña</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
-
                             </form>
 
 
                         </div>
                     </div>
+
+
+
+                    <div class="card" th:if="${session.usuario.getRol() == 2}" style="max-height: 220px; max-width: 1150px; width: 100%;">
+                        <div class="card-header">Cambiar Contraseña</div>
+                        <div th:if="${msgSuccess != null}" style="width: 300px; padding-left: 30px; padding-top: 10px;" class="valid-feedback">
+                            <p th:text="${msgSuccess}"></p>
+                        </div>
+
+                        <div th:if="${msg != null}" style="width: 300px; padding-left: 30px; padding-top: 10px;" class="invalid-feedback">
+                            <p th:text="${msg}"></p>
+                        </div>
+
+                        <div class="card-body">
+
+                            <form id="formAdminsede" method="post" th:action="@{'/adminsede/actualizar_contrasena'}" th:object="${adminsede}"  enctype="multipart/form-data">
+
+
+                                <div style="width: 100%">
+                                    <div class="interface-formulario" style="width: 100%">
+
+                                        <div class="input-label-box">
+
+                                            <div>
+
+                                                <div>
+                                                    <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 38px">Nueva Contraseña</label>
+                                                    <input class="input-form-3 form-control" th:value="${newContrasena}" type="password" name="newContrasena">
+                                                </div>
+
+                                                <div>
+                                                    <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Confirmar Contraseña</label>
+                                                    <input class="input-form-3 form-control" th:value="${confirmContrasena}" type="password" name="confirmContrasena">
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="input-label-box">
+
+                                            <div>
+                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Contraseña Anterior</label>
+                                                <input class="input-form-3 form-control" th:value="${oldContrasena}" type="password" name="oldContrasena">
+
+
+                                                <div>
+                                                    <div style="display: flex; justify-content: flex-end;">
+                                                        <div style="padding-top: 10px;">
+                                                            <button class="btn btn-primary" type="submit">Cambiar Contraseña</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </form>
+
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="card" th:if="${session.usuario.getRol() == 3}" style="max-height: 220px; max-width: 1150px; width: 100%;">
+                        <div class="card-header">Cambiar Contraseña</div>
+                        <div th:if="${msgSuccess != null}" style="width: 300px; padding-left: 30px; padding-top: 10px;" class="valid-feedback">
+                            <p th:text="${msgSuccess}"></p>
+                        </div>
+
+                        <div th:if="${msg != null}" style="width: 300px; padding-left: 30px; padding-top: 10px;" class="invalid-feedback">
+                            <p th:text="${msg}"></p>
+                        </div>
+
+                        <div class="card-body">
+
+                            <form id="formFarmacista" method="post" th:action="@{'/farmacista/actualizar_contrasena'}" th:object="${farmacista}"  enctype="multipart/form-data">
+
+
+                                <div style="width: 100%">
+                                    <div class="interface-formulario" style="width: 100%">
+
+                                        <div class="input-label-box">
+
+                                        <div>
+
+                                            <div>
+                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 38px">Nueva Contraseña</label>
+                                                <input class="input-form-3 form-control" th:value="${newContrasena}" type="password" name="newContrasena">
+                                            </div>
+
+                                            <div>
+                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Confirmar Contraseña</label>
+                                                <input class="input-form-3 form-control" th:value="${confirmContrasena}" type="password" name="confirmContrasena">
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                        <div class="input-label-box">
+
+                                        <div>
+                                            <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Contraseña Anterior</label>
+                                            <input class="input-form-3 form-control" th:value="${oldContrasena}" type="password" name="oldContrasena">
+
+
+                                            <div>
+                                                <div style="display: flex; justify-content: flex-end;">
+                                                    <div style="padding-top: 10px;">
+                                                        <button class="btn btn-primary" type="submit">Cambiar Contraseña</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    </div>
+                                </div>
+                            </form>
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="card" th:if="${session.usuario.getRol() == 4}" style="max-height: 220px; max-width: 1150px; width: 100%;">
+                        <div class="card-header">Cambiar Contraseña</div>
+                        <div th:if="${msgSuccess != null}" style="width: 300px; padding-left: 30px; padding-top: 10px;" class="valid-feedback">
+                            <p th:text="${msgSuccess}"></p>
+                        </div>
+
+                        <div th:if="${msg != null}" style="width: 300px; padding-left: 30px; padding-top: 10px;" class="invalid-feedback">
+                            <p th:text="${msg}"></p>
+                        </div>
+
+                        <div class="card-body">
+
+                            <form id="formPaciente" method="post" th:action="@{'/paciente/actualizar_contrasena'}" th:object="${paciente}"  enctype="multipart/form-data">
+
+
+                                <div style="width: 100%">
+                                    <div class="interface-formulario" style="width: 100%">
+
+                                        <div class="input-label-box">
+
+                                            <div>
+
+                                                <div>
+                                                    <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 38px">Nueva Contraseña</label>
+                                                    <input class="input-form-3 form-control" th:value="${newContrasena}" type="password" name="newContrasena">
+                                                </div>
+
+                                                <div>
+                                                    <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Confirmar Contraseña</label>
+                                                    <input class="input-form-3 form-control" th:value="${confirmContrasena}" type="password" name="confirmContrasena">
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="input-label-box">
+
+                                            <div>
+                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Contraseña Anterior</label>
+                                                <input class="input-form-3 form-control" th:value="${oldContrasena}" type="password" name="oldContrasena">
+
+
+                                                <div>
+                                                    <div style="display: flex; justify-content: flex-end;">
+                                                        <div style="padding-top: 10px;">
+                                                            <button class="btn btn-primary" type="submit">Cambiar Contraseña</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </form>
+
+
+                        </div>
+                    </div>
+
+
+
+
+
                 </div>
 
             </div>
@@ -200,12 +424,11 @@
         <!-- Bootstrap-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-        <script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const formSuperadmin = document.getElementById("formSuperadmin");
 
-            const form = document.getElementById("form");
-            var img = document.getElementById("file");
-
-            form.addEventListener("submit", e =>{
+            formSuperadmin.addEventListener("submit", e => {
                 e.preventDefault();
 
                 Swal.fire({
@@ -220,13 +443,90 @@
                     footer: '<a href="" style="text-decoration: underline; color: #3F71EA;">Volver a revisar los datos</a>'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        form.submit();
+                        formSuperadmin.submit();
                     }
                 });
+            });
+        });
+    </script>
 
-            })
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const formAdminsede = document.getElementById("formAdminsede");
 
-        </script>
+            formAdminsede.addEventListener("submit", e => {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: '¿Está seguro que desea cambiar su contraseña?',
+                    icon: 'warning',
+                    iconColor: '#DC3545',
+                    showCancelButton: true,
+                    cancelButtonColor: '#DC3545',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#0D6EFD',
+                    confirmButtonText: 'Confirmar',
+                    footer: '<a href="" style="text-decoration: underline; color: #3F71EA;">Volver a revisar los datos</a>'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        formAdminsede.submit();
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const formFarmacista = document.getElementById("formFarmacista");
+
+            formFarmacista.addEventListener("submit", e => {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: '¿Está seguro que desea cambiar su contraseña?',
+                    icon: 'warning',
+                    iconColor: '#DC3545',
+                    showCancelButton: true,
+                    cancelButtonColor: '#DC3545',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#0D6EFD',
+                    confirmButtonText: 'Confirmar',
+                    footer: '<a href="" style="text-decoration: underline; color: #3F71EA;">Volver a revisar los datos</a>'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        formFarmacista.submit();
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const formPaciente = document.getElementById("formPaciente");
+
+            formPaciente.addEventListener("submit", e => {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: '¿Está seguro que desea cambiar su contraseña?',
+                    icon: 'warning',
+                    iconColor: '#DC3545',
+                    showCancelButton: true,
+                    cancelButtonColor: '#DC3545',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#0D6EFD',
+                    confirmButtonText: 'Confirmar',
+                    footer: '<a href="" style="text-decoration: underline; color: #3F71EA;">Volver a revisar los datos</a>'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        formPaciente.submit();
+                    }
+                });
+            });
+        });
+    </script>
 
         <script th:src="@{/js/upload_img.js}"></script>
         <script th:src="@{/js/topbar.js}"></script>

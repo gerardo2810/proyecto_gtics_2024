@@ -250,3 +250,11 @@ img,svg{vertical-align:middle}
     margin-top: 0.25rem; /* Espacio arriba del mensaje */
     display: block; /* Asegura que el div se muestre como bloque */
 }
+
+/* Estilos para los mensajes de error */
+.valid-feedback {
+    color: #47af49; /* Rojo */
+    font-size: 0.875em; /* Tamaño de fuente más pequeño */
+    margin-top: 0.25rem; /* Espacio arriba del mensaje */
+    display: block; /* Asegura que el div se muestre como bloque */
+}

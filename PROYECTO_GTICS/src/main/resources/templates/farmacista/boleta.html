@@ -242,7 +242,7 @@
 
                 <div style="display: flex;flex-direction: row; column-gap: 6px">
                     <p style="color:black">Tipo: </p>
-                    <p style="color:#69707A" th:if="${orden.getTipoOrden() == 1}">Orden Física</p>
+                    <p style="color:#69707A" th:if="${orden.getTipoOrden() == 1}">Venta en Tienda</p>
                     <p style="color:#69707A" th:if="${orden.getTipoOrden() == 2}">Orden Web </p>
                 </div>
 
@@ -263,7 +263,7 @@
 
                 <div style="display: flex;flex-direction: row; column-gap: 6px">
                     <p style="color:black">Atendido por:</p>
-                    <p style="color:#69707A" th:text="${'Leonardo Ernesto Aldoradin Yaranga'}"></p>
+                    <p style="color:#69707A" th:text="${session.usuario.getNombres() + ' ' + session.usuario.getApellidos()}"></p>
                 </div>
 
 

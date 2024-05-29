@@ -24,6 +24,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
@@ -31,6 +33,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.servlet.http.HttpSession; // Importar HttpSession
+import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 
 
 @Controller
@@ -199,6 +202,48 @@ public class PacienteController {
         return "paciente/cambioContraseña";
     }
 
+    private boolean isValidPassword(String password) {
+        if (password == null || password.trim().isEmpty()) {
+            return false; // Contraseña es nula o está en blanco
+        }
+        // Al menos una mayúscula, una minúscula, un caracter especial y mínimo 8 caracteres
+        String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
+    @PostMapping("/actualizar_contrasena")
+    public String actualizarContrasena(Usuario paciente, BindingResult bindingResult,
+                                       @RequestParam(value = "newContrasena", required = true) String newContrasena,
+                                       @RequestParam(value = "confirmContrasena", required = true) String confirmContrasena,
+                                       @RequestParam(value = "oldContrasena", required = true) String oldContrasena,
+                                       RedirectAttributes attr, Model model,
+                                       HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+
+        HttpSession session = request.getSession();
+        Usuario usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
+        if (SHA256.verifyPassword(oldContrasena, usuarioSession.getContrasena())){
+
+            if (newContrasena.equals(confirmContrasena)){
+
+                if (isValidPassword(newContrasena)){
+                    usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
+                    attr.addFlashAttribute("msgSuccess", "Contraseña actualizada correctamente.");
+                } else {
+                    attr.addFlashAttribute("msg", "Ingrese una contraseña válida. De más de 8 carácteres, con dígitos y carácteres especiales.");
+                }
+            } else {
+                attr.addFlashAttribute("msg", "Las contraseñas no coinciden.");
+            }
+
+        } else {
+            attr.addFlashAttribute("msg", "Introduzca su contraseña actual.");
+        }
+        return "redirect:/farmacista/perfil";
+    }
 
     @GetMapping(value = "/confirmar_pago")
     public String confirmarPago(Model model, @RequestParam("id") String idOrden){
