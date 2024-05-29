@@ -320,9 +320,12 @@ public class FarmacistaController {
     @GetMapping("/farmacista/ordenes_venta")
     public String tablaOrdenesVenta(Model model,
                                     HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+
         HttpSession session = request.getSession();
         usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
         session.setAttribute("usuario", usuarioSession);
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
 
         sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
         List<Orden> listaOrdenesVenta = ordenRepository.findAllOrdenesPorSede(sedeSession.getIdSede());
@@ -332,9 +335,12 @@ public class FarmacistaController {
     @GetMapping("/farmacista/ordenes_web")
     public String tablaOrdenesWeb(Model model,
                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+
         HttpSession session = request.getSession();
         usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
         session.setAttribute("usuario", usuarioSession);
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
 
         sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
         List<Orden> listaOrdenesWeb = ordenRepository.findAllOrdenesWebPorSede(sedeSession.getIdSede());
@@ -344,9 +350,12 @@ public class FarmacistaController {
     @GetMapping("/farmacista/pre_ordenes")
     public String tablaPreOrdenes(Model model,
                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+
         HttpSession session = request.getSession();
         usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
         session.setAttribute("usuario", usuarioSession);
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
 
         sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
         List<Orden> listaPreOrdenes = ordenRepository.findAllPreOrdenesPorSede(sedeSession.getIdSede());
@@ -356,7 +365,14 @@ public class FarmacistaController {
 
 
     @GetMapping("farmacista/aprobar_orden_web")
-    public String aprobarOrdenWeb(Model model, @RequestParam("id") String idOrden){
+    public String aprobarOrdenWeb(Model model, @RequestParam("id") String idOrden,
+                                  HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
 
         Optional<Orden> ordenWebOptional = ordenRepository.findById(Integer.valueOf(idOrden));
         List<OrdenContenido> contenidoOrdenWeb = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
@@ -378,7 +394,14 @@ public class FarmacistaController {
     }
 
     @GetMapping("farmacista/ver_preorden_tracking")
-    public String verPreOrdenTracking(@RequestParam("id") String idPreOrden){
+    public String verPreOrdenTracking(@RequestParam("id") String idPreOrden,
+                                      HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
 
         Orden preOrden = ordenRepository.findPreordenByOrdenId(Integer.valueOf(idPreOrden));
         String idOrdenParent = String.valueOf(preOrden.getOrdenParent());
@@ -387,45 +410,79 @@ public class FarmacistaController {
     }
 
     @GetMapping("farmacista/ver_orden_tracking")
-    public String verOrdenTracking(Model model, @RequestParam("id") String idOrden){
+    public String verOrdenTracking(Model model, @RequestParam("id") String idOrden,
+                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication,
+                                   RedirectAttributes attr){
+
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
 
         Optional<Orden> ordenOptional = ordenRepository.findById(Integer.valueOf(idOrden));
-        List<OrdenContenido> contenidoOrden = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
 
-        boolean containsPreOrden = false;
-        Orden preOrdenChild = ordenRepository.findPreordenByOrdenId(Integer.valueOf(idOrden));
+        if (ordenOptional.isPresent()){
 
-        if (ordenOptional.isPresent()) {
             Orden ordenWebComprobada = ordenOptional.get();
-            ArrayList<OrdenContenido> contenidoPreOrden = new ArrayList<>();
 
-            if (preOrdenChild != null) {
-                containsPreOrden = true;
-                contenidoPreOrden = (ArrayList<OrdenContenido>) ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(preOrdenChild.getIdOrden()));
+            if (ordenWebComprobada.getSede().getIdSede() == sedeSession.getIdSede()){
+                List<OrdenContenido> contenidoOrden = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+
+                boolean containsPreOrden = false;
+                Orden preOrdenChild = ordenRepository.findPreordenByOrdenId(Integer.valueOf(idOrden));
+
+
+                ArrayList<OrdenContenido> contenidoPreOrden = new ArrayList<>();
+
+                if (preOrdenChild != null) {
+                    containsPreOrden = true;
+                    contenidoPreOrden = (ArrayList<OrdenContenido>) ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(preOrdenChild.getIdOrden()));
+                }
+
+                model.addAttribute("containsPreOrden", containsPreOrden);
+
+                model.addAttribute("preOrden", preOrdenChild);
+                model.addAttribute("contenidoPreOrden", contenidoPreOrden);
+
+                model.addAttribute("idOrden", idOrden);
+                model.addAttribute("contenidoOrden", contenidoOrden);
+                model.addAttribute("orden", ordenWebComprobada);
+                return "farmacista/tracking";
+            } else {
+                attr.addFlashAttribute("msg", "La orden buscada no ha sido encontrada.");
+                return "redirect:/farmacista/ordenes_venta";
             }
-
-            model.addAttribute("containsPreOrden", containsPreOrden);
-
-            model.addAttribute("preOrden", preOrdenChild);
-            model.addAttribute("contenidoPreOrden", contenidoPreOrden);
-
-            model.addAttribute("idOrden", idOrden);
-            model.addAttribute("contenidoOrden", contenidoOrden);
-            model.addAttribute("orden", ordenWebComprobada);
-            return "farmacista/tracking";
         } else {
-            return "farmacista/errorPages/no_existe_orden";
+            attr.addFlashAttribute("msg", "La orden buscada no ha sido encontrada.");
+            return "redirect:/farmacista/ordenes_venta";
         }
     }
 
     @GetMapping("/farmacista/ver_boleta")
-    public String verBoleta(Model model, @RequestParam("id") String idOrden) {
+    public String verBoleta(Model model, @RequestParam("id") String idOrden,
+                            HttpServletRequest request, HttpServletResponse response, Authentication authentication,
+                            RedirectAttributes attr) {
+
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
 
         Optional<Orden> ordenOptional = ordenRepository.findById(Integer.valueOf(idOrden));
         List<OrdenContenido> contenidoOrden = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
 
         if (ordenOptional.isPresent()){
             Orden ordenComprobada = ordenOptional.get();
+
+            if (ordenComprobada.getSede().getIdSede() == sedeSession.getIdSede()){
+
+            } else {
+
+            }
+
+
 
             model.addAttribute("orden",ordenComprobada);
             model.addAttribute("contenidoOrden", contenidoOrden);
@@ -480,23 +537,24 @@ public class FarmacistaController {
         usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
         session.setAttribute("usuario", usuarioSession);
 
-        System.out.println(usuarioSession.getContrasena());
-
-        if (usuarioSession.getContrasena().equals(SHA256.cipherPassword(oldContrasena))){
+        if (SHA256.verifyPassword(oldContrasena, usuarioSession.getContrasena())){
 
             if (newContrasena.equals(confirmContrasena)){
-                usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
-                attr.addFlashAttribute("msg", "Contraseña actualizada correctamente.");
-                return "redirect:/farmacista/perfil";
+
+                if (isValidPassword(newContrasena)){
+                    usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
+                    attr.addFlashAttribute("msgSuccess", "Contraseña actualizada correctamente.");
+                } else {
+                    attr.addFlashAttribute("msg", "Ingrese una contraseña válida. De más de 8 carácteres, con dígitos y carácteres especiales.");
+                }
             } else {
                 attr.addFlashAttribute("msg", "Las contraseñas no coinciden.");
-                return "redirect:/farmacista/perfil";
             }
 
         } else {
             attr.addFlashAttribute("msg", "Introduzca su contraseña actual.");
-            return "redirect:/farmacista/perfil";
         }
+        return "redirect:/farmacista/perfil";
     }
 
 

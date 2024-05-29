@@ -70,6 +70,10 @@
 
         <hr class="style-one">
 
+        <div th:if="${msg != null}" style="width: 300px; padding-top: 20px;" class="invalid-feedback">
+            <p th:text="${msg}"></p>
+        </div>
+
         <div style="margin-bottom: 10px"></div>
 
         <div style="min-height: 350px">

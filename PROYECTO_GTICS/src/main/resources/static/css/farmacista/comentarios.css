@@ -1,14 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap");
 :root {
-    --Moderate-blue: hsl(238, 40%, 52%);
-    --Soft-Red: hsl(358, 79%, 66%);
-    --Light-grayish-blue: hsl(239, 57%, 85%);
+    --Moderate-blue: hsl(219, 72%, 43%);
+    --Soft-Red: hsl(358, 90%, 45%);
+    --Moderate-blue: hsl(238, 100%, 58%);
     --Pale-red: hsl(357, 100%, 86%);
 
     --Dark-blue: hsl(212, 24%, 26%);
     --Grayish-Blue: hsl(211, 10%, 45%);
     --Light-gray: hsl(223, 19%, 93%);
-    --Very-light-gray: hsl(228, 33%, 97%);
+    --Very-light-gray: hsl(227, 90%, 4%);
     --White: hsl(0, 0%, 100%);
 }
 * {
@@ -41,6 +41,11 @@ button:hover{
 }
 .comment-section{
     padding: 0 1rem;
+}
+.commentarios{
+    border-radius: 8px;
+    padding: 1.5rem;
+    background-color: var(--White);
 }
 
 .comments-wrp {
@@ -192,7 +197,7 @@ button:hover{
 }
 
 @media screen and (max-width:640px) {
-    .container{
+    .commentarios{
         padding: .75rem;
     }
     .replies{
