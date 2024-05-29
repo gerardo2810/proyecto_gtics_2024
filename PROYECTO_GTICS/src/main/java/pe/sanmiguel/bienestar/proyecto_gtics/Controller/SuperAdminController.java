@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,6 +37,7 @@ import java.util.regex.Pattern;
 public class SuperAdminController {
 
     private int idUsuario;
+    private UserDetailsService userDetailsService;
     final UsuarioRepository usuarioRepository;
     final DoctorRepository doctorRepository;
     final SedeRepository sedeRepository;
@@ -65,7 +67,15 @@ public class SuperAdminController {
     Integer idEstadoFarmacista;
 
     @GetMapping(value = {""})
-    public String showIndexSuperAdmin(Model model){
+    public String showIndexSuperAdmin(Model model,
+                                      HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         List<Sede> adminSedelist = sedeRepository.listarAdministroresSede();
         List<SedeFarmacista> farmacistaList = sedeFarmacistaRepository.listarFarmacistasPorSede();
         List<Usuario> pacientelist = usuarioRepository.listarUsuariosSegunRol(4);
@@ -78,7 +88,14 @@ public class SuperAdminController {
     }
 
     @GetMapping(value = {"/administradoresSede"})
-    public String showAdministradoresSede(Model model){
+    public String showAdministradoresSede(Model model,
+                                          HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         List<Sede> adminSedelist = sedeRepository.listarAdministroresSede();
         List<Usuario> adminSinSede = usuarioRepository.listarAdministradoresSinSede();
         List<Usuario> adminBaneados = usuarioRepository.listarAdministradoresBaneados();
@@ -90,7 +107,14 @@ public class SuperAdminController {
         return "superAdmin/listaAdministSede";
     }
     @GetMapping(value = {"/farmacistas"})
-    public String showFarmacistas(Model model){
+    public String showFarmacistas(Model model,
+                                  HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         List<SedeFarmacista> farmacistaList = sedeFarmacistaRepository.listarFarmacistasActivosInactivos();
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("farmacistlist", farmacistaList);
@@ -99,21 +123,42 @@ public class SuperAdminController {
     }
 
     @GetMapping(value = {"/pacientes"})
-    public String showPacientes(Model model){
+    public String showPacientes(Model model,
+                                HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         List<Usuario> pacientelist = usuarioRepository.listarUsuariosSegunRol(4);
         model.addAttribute("pacientelist", pacientelist);
         return "superAdmin/listaPacientes";
     }
 
     @GetMapping(value = {"/doctores"})
-    public String showDoctores(Model model){
+    public String showDoctores(Model model,
+                               HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         List<Doctor> doctorList = doctorRepository.findAll();
         model.addAttribute("doctorList", doctorList);
         return "superAdmin/listaDoctores";
     }
 
     @GetMapping(value = {"/pedidos"})
-    public String showPedidos(Model model){
+    public String showPedidos(Model model,
+                              HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         List<Reposicion> reposicionList = reposicionRepository.listarOrdenesReposicion();
         model.addAttribute("reposicionList", reposicionList);
         return "superAdmin/pedidos";
@@ -143,7 +188,13 @@ public class SuperAdminController {
     }
 
     @GetMapping(value = {"/masdetallesPedidos"})
-    public String masDetallesPedidos(Model model){
+    public String masDetallesPedidos(Model model,
+                                     HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
 
         Optional<Reposicion> optionalReposicion = reposicionRepository.findById(idVerReposicionCreada);
         List<ReposicionContenido> contenidoReposicion = reposicionContenidoRepository.buscarMedicamentosByReposicionId(String.valueOf(idVerReposicionCreada));
@@ -160,7 +211,14 @@ public class SuperAdminController {
 
 
     @GetMapping(value = {"/solicitudes"})
-    public String showSolicitudes(Model model){
+    public String showSolicitudes(Model model,
+                                  HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         List<SedeFarmacista> solicitudesList = sedeFarmacistaRepository.listarSolicitudesFarmacistas();
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("solicitudesList", solicitudesList);
@@ -169,7 +227,14 @@ public class SuperAdminController {
     }
 
     @GetMapping(value = {"/medicamentos"})
-    public String showMedicamentos(Model model){
+    public String showMedicamentos(Model model,
+                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         List<Medicamento> listaMedicamentos = medicamentoRepository.listarMedicamentosActivos();
         model.addAttribute("listaMedicamentos", listaMedicamentos);
         return "superAdmin/medicamentos";
@@ -178,7 +243,14 @@ public class SuperAdminController {
 
 
     @GetMapping(value = {"/cambiarContrasena"})
-    public String cambiarContraseña(Model model){
+    public String cambiarContraseña(Model model,
+                                    HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         Usuario superadmin = usuarioRepository.superAdmin();
 
         String passwordHash = superadmin.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
@@ -189,47 +261,71 @@ public class SuperAdminController {
         return "superAdmin/cambiarcontrasenia";
     }
 
-    @PostMapping("/actualizar_contrasena")
-    public String actualizarContrasena(Usuario superadmin, BindingResult bindingResult,
-                                       @RequestParam(value = "newContrasena", required = true) String newContrasena,
-                                       @RequestParam(value = "confirmContrasena", required = true) String confirmContrasena,
-                                       @RequestParam(value = "oldContrasena", required = true) String oldContrasena,
-                                       RedirectAttributes attr, Model model,
-                                       HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+    @PostMapping("/actualizarContrasena")
+    public String cambiarContrasenia( Usuario superadmin, BindingResult bindingResult,
+                                      @RequestParam(value = "contrasena", required = false) String contrasenia,
+                                      RedirectAttributes attr, Model model) throws IOException {
 
-        HttpSession session = request.getSession();
-        Usuario usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
-        session.setAttribute("usuario", usuarioSession);
+        superadmin = usuarioRepository.superAdmin();
+        String passwordOld = superadmin.getContrasena();
 
-        if (SHA256.verifyPassword(oldContrasena, usuarioSession.getContrasena())){
+        String passwordNew = hashPasswordSHA256(contrasenia);
 
-            if (newContrasena.equals(confirmContrasena)){
+        System.out.println("Contra antigua: " + passwordOld);
+        System.out.println("Contra nueva: " + passwordNew);
 
-                if (isValidPassword(newContrasena)){
-                    usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
-                    attr.addFlashAttribute("msgSuccess", "Contraseña actualizada correctamente.");
-                } else {
-                    attr.addFlashAttribute("msg", "Ingrese una contraseña válida. De más de 8 carácteres, con dígitos y carácteres especiales.");
-                }
-            } else {
-                attr.addFlashAttribute("msg", "Las contraseñas no coinciden.");
+        System.out.println("NO HAY ERRORES DE VALIDACIÓN:");
+        if (Objects.equals(passwordNew, passwordOld)) {
+            System.out.println("ESTOY AQUI:");
+            usuarioRepository.actualizarContrasena(passwordOld);
+            attr.addFlashAttribute("msg", "Se ingresó la misma contraseña");
+            return "redirect:/superadmin/cambiarContrasena";
+        } else {
+            if(contrasenia.length()>30){
+                usuarioRepository.actualizarContrasena(contrasenia);
+                attr.addFlashAttribute("msg", "La contraseña no se actualizó, no se realizaron cambios.");
+                return "redirect:/superadmin/cambiarContrasena";
+            } else if (!isValidPassword(contrasenia)) {
+                System.out.println("O AQUII:");
+                String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
+                bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
+                superadmin = usuarioRepository.superAdmin();
+                model.addAttribute("superadmin", superadmin);
+                model.addAttribute("error", errorMsg); // Añade el error al modelo
+                return "superAdmin/cambiarcontrasenia";
             }
 
-        } else {
-            attr.addFlashAttribute("msg", "Introduzca su contraseña actual.");
+            System.out.println("MEJOR AQUI:");
+            String hashedPassword = SHA256.cipherPassword(contrasenia);
+            usuarioRepository.actualizarContrasena(hashedPassword);
+            attr.addFlashAttribute("msg", "Contraseña actualizada correctamente");
+            return "redirect:/superadmin/cambiarContrasena";
         }
-        return "redirect:/farmacista/perfil";
     }
 
     @GetMapping(value = {"/historialSolicitudes"})
-    public String verHistorialSolicitudes(Model model){
+    public String verHistorialSolicitudes(Model model,
+                                          HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         List<SedeFarmacista> solicitudesAcepRech = sedeFarmacistaRepository.listarSolicitudesAceptadasyRechazadas();
         model.addAttribute("solicitudesAcepRech", solicitudesAcepRech);
         return "superAdmin/historialSolicitudes";
     }
 
     @GetMapping(value = {"/aprobarSolicitudes"})
-    public String aprobarSolicitudes(Model model, @RequestParam("id") int id){
+    public String aprobarSolicitudes(Model model, @RequestParam("id") int id,
+                                     HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         Usuario usuarioFarmacista = usuarioRepository.encontrarFarmacistaporIdActivosInactivos(id);
         Optional<SedeFarmacista> optionalSedeFarmacista = sedeFarmacistaRepository.buscarCodigoFarmacista(id);
         if(optionalSedeFarmacista.isPresent()){
@@ -245,7 +341,14 @@ public class SuperAdminController {
     }
 
     @GetMapping(value = {"/crearAdministrador"})
-    public String crearAdminitrador(@ModelAttribute("administrador") Usuario administrador, Model model){
+    public String crearAdminitrador(@ModelAttribute("administrador") Usuario administrador, Model model,
+                                    HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
         model.addAttribute("sedeDisponibleList", sedeDisponibleList);
         return "superAdmin/crearAdministrador";
@@ -354,7 +457,14 @@ public class SuperAdminController {
     }
 
     @GetMapping("/asignarSedeAdministradorSede")
-    public String asignarSedeAdministrador(@ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResult, @RequestParam("datosAdministrador") Integer datosAdministrador, @RequestParam("sedeid") int sedeId, Model model, RedirectAttributes attr) {
+    public String asignarSedeAdministrador(@ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResult, @RequestParam("datosAdministrador") Integer datosAdministrador, @RequestParam("sedeid") int sedeId, Model model, RedirectAttributes attr,
+                                           HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         System.out.println("Valor Admin del administrador: " + administrador.getIdUsuario());
         System.out.println("Valor Admin final: " + datosAdministrador);
         System.out.println("Valor Sede final: " + sedeId);
@@ -366,7 +476,14 @@ public class SuperAdminController {
 
     @GetMapping(value = {"/editarAdministrador"})
     public String editarAdministrador(Usuario administrador,
-                                      Model model, @RequestParam("id") String id){
+                                      Model model, @RequestParam("id") String id,
+                                      HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         int idAdmin = Integer.parseInt(id);
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(idAdmin);
         Optional<Sede> optionalAdministradorSede = sedeRepository.buscarAdminID(idAdmin);
@@ -568,7 +685,8 @@ public class SuperAdminController {
 
     @GetMapping(value = {"/editarAsignarAdministrador"})
     public String asignarNuevaSedeAdministrador(Usuario administrador,
-                                      Model model, @RequestParam("id") String id, RedirectAttributes attr ){
+                                                Model model, @RequestParam("id") String id, RedirectAttributes attr,
+                                                HttpServletRequest request, HttpServletResponse response, Authentication authentication){
         int idAdmin = Integer.parseInt(id);
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(idAdmin);
         System.out.println("Valor Dentro de editar de optional usuario: " + optionalUsuario.get().getIdUsuario());
@@ -620,7 +738,14 @@ public class SuperAdminController {
 
 
     @GetMapping(value = {"/crearDoctor"})
-    public String crearDoctor(@ModelAttribute("doctor") Doctor doctor, RedirectAttributes attr, Model model){
+    public String crearDoctor(@ModelAttribute("doctor") Doctor doctor, RedirectAttributes attr, Model model,
+                              HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         List<Sede> sedeDisponibleList = sedeRepository.findAll();
         model.addAttribute("sedeDisponibleList", sedeDisponibleList);
         return "superAdmin/crearDoctor";
@@ -662,7 +787,13 @@ public class SuperAdminController {
     }
 
     @GetMapping(value = {"/editarDoctor"})
-    public String editarDoctor(@ModelAttribute("doctor") Doctor doctor, Model model, @RequestParam("id") int id){
+    public String editarDoctor(@ModelAttribute("doctor") Doctor doctor, Model model, @RequestParam("id") int id,
+                               HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
 
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
 
@@ -771,7 +902,13 @@ public class SuperAdminController {
     }
 
     @GetMapping(value = {"/editarFarmacista"})
-    public String editarFarmacista(@ModelAttribute("farmacista") @Valid Usuario farmacista, BindingResult bindingResult, Model model, @RequestParam("id") int id){
+    public String editarFarmacista(@ModelAttribute("farmacista") @Valid Usuario farmacista, BindingResult bindingResult, Model model, @RequestParam("id") int id,
+                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
 
         Optional<Usuario> optionalFarmacista = usuarioRepository.findById(id);
 
@@ -875,7 +1012,14 @@ public class SuperAdminController {
 
 
     @GetMapping(value = {"/crearMedicamento"})
-    public String crearMedicamento(@ModelAttribute("medicamento") Medicamento medicamento, @ModelAttribute("validateImage") ValidateImage validateImage, Model model){
+    public String crearMedicamento(@ModelAttribute("medicamento") Medicamento medicamento, @ModelAttribute("validateImage") ValidateImage validateImage, Model model,
+                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         List<Sede> sedeDisponibleList = sedeRepository.findAll();
         model.addAttribute("sedeDisponibleList", sedeDisponibleList);
         return "superAdmin/crearMedicamento";
@@ -931,7 +1075,13 @@ public class SuperAdminController {
     @GetMapping(value = {"/editarMedicamento"})
     public String editarMedicamento(@ModelAttribute("product") Medicamento medicamento,
                                     @ModelAttribute("validateImage") ValidateImage validateImage,
-                                    Model model, @RequestParam("id") int id){
+                                    Model model, @RequestParam("id") int id,
+                                    HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
 
         Optional<Medicamento> optionalMedicamento = medicamentoRepository.findById(id);
 
