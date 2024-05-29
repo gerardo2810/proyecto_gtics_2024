@@ -387,34 +387,52 @@ public class FarmacistaController {
     }
 
     @GetMapping("farmacista/ver_orden_tracking")
-    public String verOrdenTracking(Model model, @RequestParam("id") String idOrden){
+    public String verOrdenTracking(Model model, @RequestParam("id") String idOrden,
+                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication,
+                                   RedirectAttributes attr){
+
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
 
         Optional<Orden> ordenOptional = ordenRepository.findById(Integer.valueOf(idOrden));
-        List<OrdenContenido> contenidoOrden = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
 
-        boolean containsPreOrden = false;
-        Orden preOrdenChild = ordenRepository.findPreordenByOrdenId(Integer.valueOf(idOrden));
+        if (ordenOptional.isPresent()){
 
-        if (ordenOptional.isPresent()) {
             Orden ordenWebComprobada = ordenOptional.get();
-            ArrayList<OrdenContenido> contenidoPreOrden = new ArrayList<>();
 
-            if (preOrdenChild != null) {
-                containsPreOrden = true;
-                contenidoPreOrden = (ArrayList<OrdenContenido>) ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(preOrdenChild.getIdOrden()));
+            if (ordenWebComprobada.getSede().getIdSede() == sedeSession.getIdSede()){
+                List<OrdenContenido> contenidoOrden = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+
+                boolean containsPreOrden = false;
+                Orden preOrdenChild = ordenRepository.findPreordenByOrdenId(Integer.valueOf(idOrden));
+
+
+                ArrayList<OrdenContenido> contenidoPreOrden = new ArrayList<>();
+
+                if (preOrdenChild != null) {
+                    containsPreOrden = true;
+                    contenidoPreOrden = (ArrayList<OrdenContenido>) ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(preOrdenChild.getIdOrden()));
+                }
+
+                model.addAttribute("containsPreOrden", containsPreOrden);
+
+                model.addAttribute("preOrden", preOrdenChild);
+                model.addAttribute("contenidoPreOrden", contenidoPreOrden);
+
+                model.addAttribute("idOrden", idOrden);
+                model.addAttribute("contenidoOrden", contenidoOrden);
+                model.addAttribute("orden", ordenWebComprobada);
+                return "farmacista/tracking";
+            } else {
+                attr.addFlashAttribute("msg", "La orden buscada no ha sido encontrada.");
+                return "redirect:/farmacista/ordenes_venta";
             }
-
-            model.addAttribute("containsPreOrden", containsPreOrden);
-
-            model.addAttribute("preOrden", preOrdenChild);
-            model.addAttribute("contenidoPreOrden", contenidoPreOrden);
-
-            model.addAttribute("idOrden", idOrden);
-            model.addAttribute("contenidoOrden", contenidoOrden);
-            model.addAttribute("orden", ordenWebComprobada);
-            return "farmacista/tracking";
         } else {
-            return "farmacista/errorPages/no_existe_orden";
+            attr.addFlashAttribute("msg", "La orden buscada no ha sido encontrada.");
+            return "redirect:/farmacista/ordenes_venta";
         }
     }
 
