@@ -424,9 +424,9 @@ public class FarmacistaController {
 
         if (ordenOptional.isPresent()){
 
-            Orden ordenWebComprobada = ordenOptional.get();
+            Orden ordenComprobada = ordenOptional.get();
 
-            if (ordenWebComprobada.getSede().getIdSede() == sedeSession.getIdSede()){
+            if (ordenComprobada.getSede().getIdSede() == sedeSession.getIdSede()){
                 List<OrdenContenido> contenidoOrden = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
 
                 boolean containsPreOrden = false;
@@ -447,7 +447,7 @@ public class FarmacistaController {
 
                 model.addAttribute("idOrden", idOrden);
                 model.addAttribute("contenidoOrden", contenidoOrden);
-                model.addAttribute("orden", ordenWebComprobada);
+                model.addAttribute("orden", ordenComprobada);
                 return "farmacista/tracking";
             } else {
                 attr.addFlashAttribute("msg", "La orden buscada no ha sido encontrada.");
@@ -478,17 +478,18 @@ public class FarmacistaController {
 
             if (ordenComprobada.getSede().getIdSede() == sedeSession.getIdSede()){
 
-            } else {
+                model.addAttribute("orden",ordenComprobada);
+                model.addAttribute("contenidoOrden", contenidoOrden);
+                return "farmacista/boleta";
 
+            } else {
+                attr.addFlashAttribute("msg", "La orden buscada no ha sido encontrada.");
+                return "redirect:/farmacista/ordenes_venta";
             }
 
-
-
-            model.addAttribute("orden",ordenComprobada);
-            model.addAttribute("contenidoOrden", contenidoOrden);
-            return "farmacista/boleta";
         } else {
-            return "farmacista/errorPages/no_existe_orden";
+            attr.addFlashAttribute("msg", "La orden buscada no ha sido encontrada.");
+            return "redirect:/farmacista/ordenes_venta";
         }
     }
 
