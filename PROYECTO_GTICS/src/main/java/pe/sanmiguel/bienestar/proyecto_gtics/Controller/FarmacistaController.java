@@ -332,6 +332,10 @@ public class FarmacistaController {
     @GetMapping("/farmacista/ordenes_web")
     public String tablaOrdenesWeb(Model model,
                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
         sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
         List<Orden> listaOrdenesWeb = ordenRepository.findAllOrdenesWebPorSede(sedeSession.getIdSede());
         model.addAttribute("listaOrdenesWeb", listaOrdenesWeb);
@@ -340,6 +344,10 @@ public class FarmacistaController {
     @GetMapping("/farmacista/pre_ordenes")
     public String tablaPreOrdenes(Model model,
                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
         sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
         List<Orden> listaPreOrdenes = ordenRepository.findAllPreOrdenesPorSede(sedeSession.getIdSede());
         model.addAttribute("listaPreOrdenes", listaPreOrdenes);
