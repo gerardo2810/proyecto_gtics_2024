@@ -194,7 +194,8 @@ public class AdminSedeController {
 
     @GetMapping("/editar_orden_reposicion")
     public String editOrden(@RequestParam("id") int id,
-                            Model model, HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+                            Model model, HttpServletRequest request, HttpServletResponse response, Authentication authentication,
+                            RedirectAttributes attr){
 
         //SESSION
         //Iniciamos la sesión
@@ -218,15 +219,14 @@ public class AdminSedeController {
                 model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
                 return "adminsede/editar_orden_reposicion";
             }else{
-                return "adminsede/editar_orden_reposicion";
+                attr.addFlashAttribute("msgred", "La orden de reposición buscada no ha sido encontrada.");
+                return "redirect:/adminsede/ordenes";
 
             }
-
         }else {
-            return "adminsede/ordenes_reposicion";
+            attr.addFlashAttribute("msgred", "La orden de reposición buscada no ha sido encontrada.");
+            return "redirect:/adminsede/ordenes";
         }
-
-
 
     }
 
