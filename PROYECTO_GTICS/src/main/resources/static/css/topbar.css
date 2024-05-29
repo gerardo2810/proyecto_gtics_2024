@@ -124,8 +124,11 @@
         left: 0;
         z-index: 50;
         width: 100%;
-        background-color: rgba(26,115,232,0.7);
+        background-color: #0d6efd;
         backdrop-filter: blur(15px);
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
     }
 
     .nav-menu-small {
@@ -141,13 +144,13 @@
         display: flex;
         flex-direction: column;
         gap: 0.7rem;
-        font-size: 1.1rem;
+        font-size: 18px;
     }
 
     .nav-list-small-perfil {
+        margin: 0;
         display: flex;
         flex-direction: column;
-        gap: 0.3rem;
         width: 80%;
     }
 
@@ -169,7 +172,10 @@
 }
 
 .inside-dropdown {
-    margin-top: 25px;
+    margin-top: 20px;
+    border: 2px solid #0d6efd;
+    border-radius: 8px;
+
 }
 
 .dropdown-menu {
@@ -183,6 +189,8 @@
     opacity: 0;
     pointer-events: none;
     transition: opacity .3s, top .3s;
+
+
 }
 
 @media(max-width: 1600px) {

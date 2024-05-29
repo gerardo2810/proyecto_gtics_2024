@@ -159,7 +159,7 @@
                                 <li>
 
                                 <form th:action="@{/logout}" method="post">
-                                        <input class="dropdown-link" type="submit" style="cursor: pointer" value="Cerrar Sesión">
+                                        <input class="dropdown-link" type="submit" style="cursor: pointer;font-size: 14px" value="Cerrar Sesión">
                                 </form>
                                 </li>
 
@@ -238,7 +238,7 @@
                                                                                  class="menu-item roboto-light" th:classappend="${active == 'Órdenes de Reposición'?'active':''}">Órdenes de Reposición</a></li>
 
                                 <li th:if="${session.usuario.getRol() == 2}" ><a th:href="@{/adminsede/medicamentos}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
-                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Inventario'?'active':''}">Inventario</a></li>                                          class="menu-item roboto-light" th:classappend="${active == 'Mensajeria'?'active':''}">Mensajeria</a></li>
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Inventario'?'active':''}">Inventario</a></li>
 
                                 <!--=============== LINKS PARA FARMACISTA  ===============-->
 
@@ -257,7 +257,7 @@
                                 <!--=============== LINKS PARA PACIENTE  ===============-->
 
                                 <li th:if="${session.usuario.getRol() == 4}" ><a th:href="@{/paciente}" sec:authorize="hasAnyAuthority('PACIENTE')"
-                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Inicio'?'active':''}">Inicio</a></li>
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Pre Ordenes'?'active':''}">Pre Ordenes</a></li>
 
                                 <li th:if="${session.usuario.getRol() == 4}" ><a th:href="@{/paciente/ordenes}" sec:authorize="hasAnyAuthority('PACIENTE')"
                                                                                  class="menu-item roboto-light" th:classappend="${active == 'Ordenes Web'?'active':''}">Ordenes Web</a></li>
@@ -273,27 +273,27 @@
 
                                 <li>
                                     <a th:href="@{/superadmin/perfil}" sec:authorize="hasAnyAuthority('SUPERADMIN')"
-                                       class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
+                                       class="menu-item roboto-light" style="margin-top: 8px;font-size: 18px">Perfil</a>
                                 <li>
 
                                 <li>
                                     <a th:href="@{/adminsede/perfil}" sec:authorize="hasAnyAuthority('ADMINSEDE')"
-                                       class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
+                                       class="menu-item roboto-light" style="margin-top: 8px;font-size: 18px">Perfil</a>
                                 <li>
 
                                 <li>
                                     <a th:href="@{/farmacista/perfil}" sec:authorize="hasAnyAuthority('FARMACISTA')"
-                                       class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
+                                       class="menu-item roboto-light" style="margin-top: 8px;font-size: 18px">Perfil</a>
                                 <li>
 
                                 <li>
                                     <a th:href="@{/paciente/perfil}" sec:authorize="hasAnyAuthority('PACIENTE')"
-                                       class="dropdown-link"><i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Perfil</a>
+                                       class="menu-item roboto-light" style="margin-top: 8px;font-size: 18px">Perfil</a>
                                 <li>
 
                                 <li>
                                     <form th:action="@{/logout}" method="post">
-                                        <input class="dropdown-link" type="submit" value="(Cerrar Sesión)">
+                                        <input  class="menu-item roboto-light" style="background-color: #0d6efd; border:none;margin-top: 8px; margin-bottom:8px;font-size: 18px; cursor: pointer" type="submit" value="Cerrar Sesión">
                                     </form>
                                 </li>
                             </ul>
