@@ -170,7 +170,7 @@
 
                         <div class="input-label-box">
                             <label style="font-weight: bold; color:dimgray">Correo:</label>
-                            <input class="input-form" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid': ''}" type="text" placeholder="Ingrese el correo" required>
+                            <input class="input-form" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid': ''}" type="password" placeholder="Ingrese el correo" required>
                             <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" id="validationServer03Feedback" class="invalid-feedback">
                                 Mensaje de error de nombres
                             </div>
