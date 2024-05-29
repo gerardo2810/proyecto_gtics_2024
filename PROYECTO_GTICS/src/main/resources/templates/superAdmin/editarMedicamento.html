@@ -130,6 +130,11 @@
             width: 350px; /* ajusta el tamaño según lo desees */
             height: auto; /* para mantener la proporción */
         }
+        .custom-textarea {
+            width: 620px;  /* Ancho del cuadro de texto */
+            height: 80px; /* Altura del cuadro de texto */
+            resize: none;  /* Deshabilitar redimensionamiento */
+        }
         @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
     </style>
 </head>
@@ -286,26 +291,16 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="column">
-
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Descripción:</label>
-                                    <input class="input-form" type="text" th:field="*{descripcion}"  name="descripcion" placeholder="Ingrese descripción" th:classappend="${#fields.hasErrors('descripcion')?'is-invalid':''}" required>
-                                    <div  class="invalid-feedback"
-                                          th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
+                                    <textarea class="input-form custom-textarea" th:field="*{descripcion}" name="descripcion" placeholder="Ingrese descripción" th:classappend="${#fields.hasErrors('descripcion')?'is-invalid':''}" REQUIRED></textarea>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
                                         No puede estar vacío
                                     </div>
                                 </div>
-
-                                <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">¿Es recetable?:</label>
-                                    <select class="select-form" name="recetable" required>
-                                        <option value="1" th:selected="${medicamento.recetable != null && medicamento.recetable == 1}">Sí</option>
-                                        <option value="2" th:selected="${medicamento.recetable != null && medicamento.recetable == 2}">No</option>
-                                    </select>
-                                </div>
                             </div>
+
 
                             <div class="column">
                                 <div class="input-label-box">
@@ -331,7 +326,7 @@
                             <div class="column">
 
                                 <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Precio compra:</label>
+                                    <label style="font-weight: bold; color:dimgray">Precio compra  (S/):</label>
                                     <input class="input-form" type="text" th:field="*{precioCompra}"  name="preciocompra" placeholder="Ingrese precio de compra" th:classappend="${#fields.hasErrors('precioCompra')?'is-invalid':''}" required>
                                     <div style="width: 300px" class="invalid-feedback"
                                          th:if="${#fields.hasErrors('precioCompra')}" th:errors="*{precioCompra}">
@@ -340,7 +335,7 @@
                                 </div>
 
                                 <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">Precio Venta:</label>
+                                    <label style="font-weight: bold; color:dimgray">Precio Venta  (S/):</label>
                                     <input class="input-form" type="text" th:field="*{precioVenta}"  name="precioventa" placeholder="Ingrese precio de venta" th:classappend="${#fields.hasErrors('precioVenta')?'is-invalid':''}" required>
                                     <div  style="width: 300px" class="invalid-feedback"
                                           th:if="${#fields.hasErrors('precioVenta')}" th:errors="*{precioVenta}">
@@ -348,6 +343,16 @@
                                     </div>
                                 </div>
 
+                            </div>
+                            <div class="column">
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray">¿Es recetable?:</label>
+                                    <select class="select-form" name="recetable" required>
+                                        <option value="1" th:selected="${medicamento.recetable != null && medicamento.recetable == 1}">Sí</option>
+                                        <option value="2" th:selected="${medicamento.recetable != null && medicamento.recetable == 2}">No</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
