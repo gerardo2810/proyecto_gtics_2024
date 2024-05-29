@@ -146,12 +146,12 @@
 
                     </div>
 
-                    <div class="card" style="max-height: 130px; max-width: 1150px; width: 100%;">
+                    <div th:if="${session.usuario.getRol() == 1}" class="card" style="max-height: 130px; max-width: 1150px; width: 100%;">
                         <div class="card-header">Cambiar Contraseña</div>
                         <div class="card-body">
 
 
-                            <form id="form"  method="post" th:action="@{'/adminsede/actualizar_contrasena'}" th:object="${admin}"  enctype="multipart/form-data">
+                            <form id="form-superadmin"  method="post" th:action="@{'/superadmin/cambiarContrasena'}" th:object="${admin}"  enctype="multipart/form-data">
 
                                 <div class="interface-formulario" style="width: 100%">
                                     <div style="padding-left: 40px">
@@ -178,6 +178,137 @@
 
                         </div>
                     </div>
+
+
+
+                    <div class="card" th:if="${session.usuario.getRol() == 2}" style="max-height: 130px; max-width: 1150px; width: 100%;">
+                        <div class="card-header">Cambiar Contraseña</div>
+                        <div class="card-body">
+
+
+                            <form id="form-adminsede" method="post" th:action="@{'/adminsede/actualizar_contrasena'}" th:object="${admin}"  enctype="multipart/form-data">
+
+                                <div class="interface-formulario" style="width: 100%">
+                                    <div style="padding-left: 40px">
+                                        <div class="input-label-box">
+                                            <label style="font-weight: bold; color:dimgray; width: 110px">Contraseña</label>
+                                            <input class="input-form-3 form-control" th:value="${contrasena}" type="password" name="contrasena">
+                                            <div style="width: 300px" class="invalid-feedback">
+                                                <p th:text="${error}"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div style="display: flex; justify-content: flex-end;">
+                                            <div style="padding-top: 10px;">
+                                                <button class="btn btn-primary" type="submit">Cambiar Contraseña</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="card" th:if="${session.usuario.getRol() == 3}" style="max-height: 200px; max-width: 1150px; width: 100%;">
+                        <div class="card-header">Cambiar Contraseña</div>
+                        <div style="width: 300px" class="invalid-feedback">
+                            <p th:text="${error}"></p>
+                        </div>
+                        <div class="card-body">
+
+                            <form id="form-farmacista" method="post" th:action="@{'/farmacista/actualizar_contrasena'}" th:object="${farmacista}"  enctype="multipart/form-data">
+
+
+                                <div style="width: 100%">
+                                    <div class="interface-formulario" style="width: 100%">
+
+                                        <div class="input-label-box">
+
+                                        <div>
+
+                                            <div>
+                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 38px">Nueva Contraseña</label>
+                                                <input class="input-form-3 form-control" th:value="${contrasena}" type="password" name="contrasena">
+                                            </div>
+
+                                            <div>
+                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Confirmar Contraseña</label>
+                                                <input class="input-form-3 form-control" th:value="${contrasena}" type="password" name="contrasena">
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                        <div class="input-label-box">
+
+                                        <div>
+                                            <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Contraseña Anterior</label>
+                                            <input class="input-form-3 form-control" th:value="${contrasena}" type="password" name="contrasena">
+
+
+                                            <div>
+                                                <div style="display: flex; justify-content: flex-end;">
+                                                    <div style="padding-top: 10px;">
+                                                        <button class="btn btn-primary" type="submit">Cambiar Contraseña</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    </div>
+                                </div>
+                            </form>
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="card" th:if="${session.usuario.getRol() == 4}" style="max-height: 130px; max-width: 1150px; width: 100%;">
+                        <div class="card-header">Cambiar Contraseña</div>
+                        <div class="card-body">
+
+
+                            <form id="form-paciente" method="post" th:action="@{'/farmacista/actualizar_contrasena'}" th:object="${admin}"  enctype="multipart/form-data">
+
+                                <div class="interface-formulario" style="width: 100%">
+                                    <div style="padding-left: 40px">
+                                        <div class="input-label-box">
+                                            <label style="font-weight: bold; color:dimgray; width: 110px">Contraseña</label>
+                                            <input class="input-form-3 form-control" th:value="${contrasena}" type="password" name="contrasena">
+                                            <div style="width: 300px" class="invalid-feedback">
+                                                <p th:text="${error}"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div style="display: flex; justify-content: flex-end;">
+                                            <div style="padding-top: 10px;">
+                                                <button class="btn btn-primary" type="submit">Cambiar Contraseña</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+
+
+                        </div>
+                    </div>
+
+
+
+
+
                 </div>
 
             </div>
@@ -205,10 +336,79 @@
 
         <script>
 
-            const form = document.getElementById("form");
+            const formSuperadmin = document.getElementById("form-superadmin");
+            const formAdminsede = document.getElementById("form-adminsede");
+            const formFarmacista = document.getElementById("form-farmacista");
+            const formPaciente = document.getElementById("form-paciente");
+
+
             var img = document.getElementById("file");
 
-            form.addEventListener("submit", e =>{
+
+            formSuperadmin.addEventListener("submit", e =>{
+                e.preventDefault();
+
+                Swal.fire({
+                    title: '¿Está seguro que desea cambiar su contraseña?',
+                    icon: 'warning',
+                    iconColor: '#DC3545',
+                    showCancelButton: true,
+                    cancelButtonColor: '#DC3545',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#0D6EFD',
+                    confirmButtonText: 'Confirmar',
+                    footer: '<a href="" style="text-decoration: underline; color: #3F71EA;">Volver a revisar los datos</a>'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+
+            })
+
+            formAdminsede.addEventListener("submit", e =>{
+                e.preventDefault();
+
+                Swal.fire({
+                    title: '¿Está seguro que desea cambiar su contraseña?',
+                    icon: 'warning',
+                    iconColor: '#DC3545',
+                    showCancelButton: true,
+                    cancelButtonColor: '#DC3545',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#0D6EFD',
+                    confirmButtonText: 'Confirmar',
+                    footer: '<a href="" style="text-decoration: underline; color: #3F71EA;">Volver a revisar los datos</a>'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+
+            })
+
+            formFarmacista.addEventListener("submit", e =>{
+                e.preventDefault();
+
+                Swal.fire({
+                    title: '¿Está seguro que desea cambiar su contraseña?',
+                    icon: 'warning',
+                    iconColor: '#DC3545',
+                    showCancelButton: true,
+                    cancelButtonColor: '#DC3545',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#0D6EFD',
+                    confirmButtonText: 'Confirmar',
+                    footer: '<a href="" style="text-decoration: underline; color: #3F71EA;">Volver a revisar los datos</a>'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+
+            })
+
+            formPaciente.addEventListener("submit", e =>{
                 e.preventDefault();
 
                 Swal.fire({

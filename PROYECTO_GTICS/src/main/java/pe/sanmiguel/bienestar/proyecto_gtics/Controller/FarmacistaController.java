@@ -442,9 +442,6 @@ public class FarmacistaController {
         return "farmacista/facturacion";
     }
 
-    private String hashToDots(String passwordHash) {
-        return "*************"; // Repite el carácter '*' según la longitud del hash
-    }
 
     private boolean isValidPassword(String password) {
         if (password == null || password.trim().isEmpty()) {
@@ -458,30 +455,35 @@ public class FarmacistaController {
     }
 
     @GetMapping("farmacista/perfil")
-    public String cambiarContrasena(Model model){
+    public String cambiarContrasena(Model model,
+                                    HttpServletRequest request, HttpServletResponse response, Authentication authentication){
 
-        String passwordHash = usuarioSession.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-        String passwordDots = hashToDots(passwordHash);
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
 
+        String passwordDots = "*************";
         model.addAttribute("farmacista", usuarioSession);
         model.addAttribute("contrasena", passwordDots);
         return "perfil";
     }
 
     @PostMapping("/farmacista/actualizar_contrasena")
-    public String actualizarContrasena(Usuario farmacistaSession, BindingResult bindingResult,
+    public String actualizarContrasena(Usuario farmacista, BindingResult bindingResult,
                                      @RequestParam(value = "contrasena", required = false) String contrasena,
-                                     RedirectAttributes attr, Model model) throws IOException {
+                                     RedirectAttributes attr, Model model,
+                                     HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 
-        Optional<Usuario> farmacistaSessionOpt = usuarioRepository.findById(115);
-        farmacistaSession = farmacistaSessionOpt.get();
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
 
-        String passwordOld = farmacistaSession.getContrasena();
+        String passwordOld = usuarioSession.getContrasena();
         String passwordNew = SHA256.cipherPassword(contrasena);
 
 
-        String passwordHash = farmacistaSession.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-        String passwordDots = hashToDots(passwordHash);
+        String passwordHash = usuarioSession.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+        String passwordDots = "*************";
 
         System.out.println("Contra antigua: " + passwordOld);
         System.out.println("Contra nueva: " + passwordNew);
@@ -497,9 +499,9 @@ public class FarmacistaController {
                 System.out.println("O AQUII:");
                 String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
                 bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
-                model.addAttribute("superadmin", farmacistaSession);
+                model.addAttribute("superadmin", usuarioSession);
                 model.addAttribute("error", errorMsg); // Añade el error al modelo
-                return "farmacista/perfil";
+                return "redirect:/farmacista/perfil";
             }
             System.out.println("MEJOR AQUI:");
             String hashedPassword = SHA256.cipherPassword(contrasena);
