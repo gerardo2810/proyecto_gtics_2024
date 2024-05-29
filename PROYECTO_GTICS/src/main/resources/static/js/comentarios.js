@@ -93,35 +93,44 @@ const spawnReplyInput = (parent, parentId, replyTo = undefined) => {
 
 const createCommentNode = (commentObject) => {
     const commentTemplate = document.querySelector(".comment-template");
-    var commentNode = commentTemplate.content.cloneNode(true);
+    const commentNode = commentTemplate.content.cloneNode(true);
+
     commentNode.querySelector(".usr-name").textContent = commentObject.user.username;
     commentNode.querySelector(".usr-img").src = commentObject.user.image.webp;
     commentNode.querySelector(".cmnt-at").textContent = commentObject.createdAt;
     commentNode.querySelector(".c-body").textContent = commentObject.content;
+
     if (commentObject.replyingTo) {
         commentNode.querySelector(".reply-to").textContent = "@" + commentObject.replyingTo;
     }
 
-
-    if (commentObject.user.username == data.currentUser.username) {
+    if (commentObject.user.username === data.currentUser.username) {
         commentNode.querySelector(".comment").classList.add("this-user");
+
         commentNode.querySelector(".delete").addEventListener("click", () => {
             promptDel(commentObject);
         });
-        commentNode.querySelector(".edit").addEventListener("click", (e) => {
-            const path = e.path[3].querySelector(".c-body");
-            if (!path.getAttribute("contenteditable")) {
-                path.setAttribute("contenteditable", true);
-                path.focus();
+
+        const editButton = commentNode.querySelector(".edit");
+        const cBody = commentNode.querySelector(".c-body");
+
+        editButton.addEventListener("click", () => {
+            if (!cBody.isContentEditable) {
+                cBody.setAttribute("contenteditable", true);
+                cBody.focus();
+                editButton.textContent = "Save";
             } else {
-                path.removeAttribute("contenteditable");
+                cBody.removeAttribute("contenteditable");
+                commentObject.content = cBody.textContent;
+                editButton.textContent = "Edit";
+                initComments();  // Reinitialize comments to reflect the updated content
             }
         });
-        return commentNode;
     }
 
     return commentNode;
 };
+
 
 const appendComment = (parentNode, commentNode, parentId) => {
     const bu_reply = commentNode.querySelector(".reply");
