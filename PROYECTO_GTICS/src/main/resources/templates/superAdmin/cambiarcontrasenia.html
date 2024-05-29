@@ -210,27 +210,52 @@
 
                 </div>
 
-                <div class="card" style="max-height: 130px; max-width: 1150px; width: 100%;">
+                <div class="card" style="max-height: 220px; max-width: 1150px; width: 100%;">
                     <div class="card-header">Cambiar Contraseña</div>
-                    <div class="card-body">
+                    <div class="card-body" style="height: 300px">
 
                             <div class="interface-formulario" style="width: 100%">
                                 <div style="padding-left: 40px">
                                     <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray; width: 110px">Contraseña</label>
-                                        <input class="input-form-3 form-control" th:value="${contrasenia}"  type="password" name="contrasena" th:classappend="${#fields.hasErrors('contrasena')?'is-invalid':''}" >
-                                        <div style="width: 300px" class="invalid-feedback">
-                                            <p th:text="${error}"></p>
-                                        </div>
-                                    </div>
-                                </div>
+                                        <div>
 
-                                <div>
-                                    <div style="display: flex; justify-content: flex-end;">
-                                        <div style="padding-top: 10px;">
-                                            <button class="btn btn-primary" style="width: 200px" type="submit">Cambiar Contraseña</button>
+                                            <div>
+                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 38px">Nueva Contraseña</label>
+                                                <input class="input-form-3 form-control" th:value="${newContrasena}" type="password" name="newContrasena">
+                                                <div style="width: 300px" class="invalid-feedback">
+                                                    <p th:text="${error}"></p>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Confirmar Contraseña</label>
+                                                <input class="input-form-3 form-control" th:value="${confirmContrasena}" type="password" name="confirmContrasena">
+                                            </div>
+
                                         </div>
                                     </div>
+
+                                </div>
+                                <div style="padding-left: 40px">
+                                    <div class="input-label-box">
+                                        <div>
+
+                                            <div>
+                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Contraseña Anterior</label>
+                                                <input class="input-form-3 form-control" th:value="${oldContrasena}" type="password" name="oldContrasena">
+                                            </div>
+
+                                            <div>
+                                                <div style="display: flex; justify-content: flex-start;">
+                                                    <div style="padding-top: 10px;">
+                                                        <button class="btn btn-primary" style="width: 200px" type="submit">Cambiar Contraseña</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                     </div>

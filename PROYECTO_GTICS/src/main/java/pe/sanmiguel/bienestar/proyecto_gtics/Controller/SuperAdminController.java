@@ -63,6 +63,7 @@ public class SuperAdminController {
         this.sedeDoctorRepository = sedeDoctorRepository;
     }
 
+    Usuario usuarioSession;
     Integer idVerReposicionCreada;
     Integer idEstadoFarmacista;
 
@@ -73,8 +74,8 @@ public class SuperAdminController {
         //SESSION
         //Iniciamos la sesión
         HttpSession session = request.getSession();
-        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
-        session.setAttribute("usuario", usuario);
+        usuarioSession  = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
 
         List<Sede> adminSedelist = sedeRepository.listarAdministroresSede();
         List<SedeFarmacista> farmacistaList = sedeFarmacistaRepository.listarFarmacistasPorSede();
@@ -242,65 +243,51 @@ public class SuperAdminController {
 
 
 
-    @GetMapping(value = {"/cambiarContrasena"})
+    @GetMapping(value = {"/perfil"})
     public String cambiarContraseña(Model model,
                                     HttpServletRequest request, HttpServletResponse response, Authentication authentication){
         //SESSION
         //Iniciamos la sesión
         HttpSession session = request.getSession();
-        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
-        session.setAttribute("usuario", usuario);
+        usuarioSession  = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
 
-        Usuario superadmin = usuarioRepository.superAdmin();
-
-        String passwordHash = superadmin.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-        String passwordDots = hashToDots(passwordHash);
-
-        model.addAttribute("superadmin", superadmin);
+        String passwordDots = "*************";
+        model.addAttribute("superadmin", usuarioSession);
         model.addAttribute("contrasenia", passwordDots);
-        return "superAdmin/cambiarcontrasenia";
+        return "perfil";
     }
 
-    @PostMapping("/actualizarContrasena")
+    @PostMapping("/actualizar_contrasena")
     public String cambiarContrasenia( Usuario superadmin, BindingResult bindingResult,
-                                      @RequestParam(value = "contrasena", required = false) String contrasenia,
-                                      RedirectAttributes attr, Model model) throws IOException {
+                                      @RequestParam(value = "newContrasena", required = true) String newContrasena,
+                                      @RequestParam(value = "confirmContrasena", required = true) String confirmContrasena,
+                                      @RequestParam(value = "oldContrasena", required = true) String oldContrasena,
+                                      RedirectAttributes attr, Model model,
+                                      HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 
-        superadmin = usuarioRepository.superAdmin();
-        String passwordOld = superadmin.getContrasena();
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
 
-        String passwordNew = hashPasswordSHA256(contrasenia);
+        if (SHA256.verifyPassword(oldContrasena, usuarioSession.getContrasena())){
 
-        System.out.println("Contra antigua: " + passwordOld);
-        System.out.println("Contra nueva: " + passwordNew);
+            if (newContrasena.equals(confirmContrasena)){
 
-        System.out.println("NO HAY ERRORES DE VALIDACIÓN:");
-        if (Objects.equals(passwordNew, passwordOld)) {
-            System.out.println("ESTOY AQUI:");
-            usuarioRepository.actualizarContrasena(passwordOld);
-            attr.addFlashAttribute("msg", "Se ingresó la misma contraseña");
-            return "redirect:/superadmin/cambiarContrasena";
-        } else {
-            if(contrasenia.length()>30){
-                usuarioRepository.actualizarContrasena(contrasenia);
-                attr.addFlashAttribute("msg", "La contraseña no se actualizó, no se realizaron cambios.");
-                return "redirect:/superadmin/cambiarContrasena";
-            } else if (!isValidPassword(contrasenia)) {
-                System.out.println("O AQUII:");
-                String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
-                bindingResult.rejectValue("contrasena", "error.contrasena", errorMsg);
-                superadmin = usuarioRepository.superAdmin();
-                model.addAttribute("superadmin", superadmin);
-                model.addAttribute("error", errorMsg); // Añade el error al modelo
-                return "superAdmin/cambiarcontrasenia";
+                if (isValidPassword(newContrasena)){
+                    usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
+                    attr.addFlashAttribute("msgSuccess", "Contraseña actualizada correctamente.");
+                } else {
+                    attr.addFlashAttribute("msg", "Ingrese una contraseña válida. De más de 8 carácteres, con dígitos y carácteres especiales.");
+                }
+            } else {
+                attr.addFlashAttribute("msg", "Las contraseñas no coinciden.");
             }
 
-            System.out.println("MEJOR AQUI:");
-            String hashedPassword = SHA256.cipherPassword(contrasenia);
-            usuarioRepository.actualizarContrasena(hashedPassword);
-            attr.addFlashAttribute("msg", "Contraseña actualizada correctamente");
-            return "redirect:/superadmin/cambiarContrasena";
+        } else {
+            attr.addFlashAttribute("msg", "Introduzca su contraseña actual.");
         }
+        return "redirect:/superadmin/perfil";
     }
 
     @GetMapping(value = {"/historialSolicitudes"})
