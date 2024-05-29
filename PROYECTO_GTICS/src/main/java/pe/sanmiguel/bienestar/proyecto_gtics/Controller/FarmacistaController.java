@@ -470,15 +470,17 @@ public class FarmacistaController {
 
     @PostMapping("/farmacista/actualizar_contrasena")
     public String actualizarContrasena(Usuario farmacista, BindingResult bindingResult,
-                                     @RequestParam(value = "newContrasena", required = false) String newContrasena,
-                                     @RequestParam(value = "confirmContrasena", required = false) String confirmContrasena,
-                                     @RequestParam(value = "oldContrasena", required = false) String oldContrasena,
+                                     @RequestParam(value = "newContrasena", required = true) String newContrasena,
+                                     @RequestParam(value = "confirmContrasena", required = true) String confirmContrasena,
+                                     @RequestParam(value = "oldContrasena", required = true) String oldContrasena,
                                      RedirectAttributes attr, Model model,
                                      HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 
         HttpSession session = request.getSession();
         usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
         session.setAttribute("usuario", usuarioSession);
+
+        System.out.println(usuarioSession.getContrasena());
 
         if (usuarioSession.getContrasena().equals(SHA256.cipherPassword(oldContrasena))){
 

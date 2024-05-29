@@ -8,8 +8,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class SHA256 {
     public static String cipherPassword(String password) {
-        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        return hashedPassword;
+        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
 }
