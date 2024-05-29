@@ -185,7 +185,7 @@
     flex-direction: column;
     justify-content: end;
     overflow: initial;
-    right: 120px;
+    right: 230px;
     opacity: 0;
     pointer-events: none;
     transition: opacity .3s, top .3s;
