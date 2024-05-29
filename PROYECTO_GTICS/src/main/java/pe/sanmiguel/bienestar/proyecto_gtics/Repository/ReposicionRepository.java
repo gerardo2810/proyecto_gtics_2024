@@ -56,8 +56,8 @@ public interface ReposicionRepository extends JpaRepository<Reposicion, Integer>
     Optional<Integer> findLastReposicionIdNoEntregadoporSede(int idSede);
 
     //Listar últimas dos reposiciones
-    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.reposicion where idEstado != 5 and idSede = ?1 and (id = ?2 or id = ?3)")
-    List<Reposicion> listarOrdenesReposicionNoEntregadasUltimas(int idSede, int finalId, int preFinalId);
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.reposicion where idEstado != 5 and idSede = ?1 and (numero = ?2 or numero = ?3)")
+    List<Reposicion> listarOrdenesReposicionNoEntregadasUltimas(int idSede, int finalNum, int preFinalNum);
 
     //Eliminar Reposición
     @Transactional

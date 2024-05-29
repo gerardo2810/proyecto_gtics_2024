@@ -71,6 +71,8 @@ public class WebSecurityConfig {
         http.formLogin() //Logueo de usuarios
                 .loginPage("/")
                 .loginProcessingUrl("/processlogin")
+                .passwordParameter("contrasena")
+                .usernameParameter("correo")
                 .successHandler(new AuthenticationSuccessHandler() { //Aquí ya estamos logueados (pasamos los filtros)
 
                     @Override

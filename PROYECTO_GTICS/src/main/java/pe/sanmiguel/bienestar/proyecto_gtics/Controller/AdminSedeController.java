@@ -114,13 +114,13 @@ public class AdminSedeController {
             }
         }
 
-        Optional<Integer> optFinalIdReposicion = reposicionRepository.findLastReposicionIdNoEntregadoporSede(idSede);
+        Optional<Integer> optFinalNumReposicion = reposicionRepository.findLastNumeroporSede(idSede);
 
-        if(optFinalIdReposicion.isPresent()){
-            int finalIdReposicion = optFinalIdReposicion.get();
-            int preFinalIdReposicion = finalIdReposicion - 1;
+        if(optFinalNumReposicion.isPresent()){
+            int finalNumReposicion = optFinalNumReposicion.get();
+            int preFinalNumReposicion = finalNumReposicion - 1;
 
-            List<Reposicion> listaReposicionNoEntregadasUltimas = reposicionRepository.listarOrdenesReposicionNoEntregadasUltimas(idSede, finalIdReposicion, preFinalIdReposicion);
+            List<Reposicion> listaReposicionNoEntregadasUltimas = reposicionRepository.listarOrdenesReposicionNoEntregadasUltimas(idSede, finalNumReposicion, preFinalNumReposicion);
             if(listaReposicionNoEntregadasUltimas.size() == 0){
                 return "adminsede/inicio";
             }
@@ -207,13 +207,39 @@ public class AdminSedeController {
 
     @GetMapping("/editar_orden_reposicion")
     public String editOrden(@RequestParam("id") int id,
-                            Model model){
+                            Model model, HttpServletRequest request, HttpServletResponse response, Authentication authentication,
+                            RedirectAttributes attr){
 
-        int idSede = 1;
-        List<ReposicionContenidoMedicamentoDto> listaMedicamentosSeleccionados = reposicionContenidoRepository.listaMostrarMedicamentosSeleccionados(id);
-        model.addAttribute("idOrden", id);
-        model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
-        return "adminsede/editar_orden_reposicion";
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+        int idSede = sedeSession.getIdSede();
+
+        Optional<Reposicion> optReposicion = reposicionRepository.findById(id);
+
+        if(optReposicion.isPresent()){
+            Reposicion reposicionSeleccionada = optReposicion.get();
+            // Ahora comparamos Ids
+            if(reposicionSeleccionada.getIdSede().getIdSede() == idSede){
+                List<ReposicionContenidoMedicamentoDto> listaMedicamentosSeleccionados = reposicionContenidoRepository.listaMostrarMedicamentosSeleccionados(id);
+                model.addAttribute("idOrden", id);
+                model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
+                return "adminsede/editar_orden_reposicion";
+            }else{
+                attr.addFlashAttribute("msgred", "La orden de reposición buscada no ha sido encontrada.");
+                return "redirect:/adminsede/ordenes";
+
+            }
+        }else {
+            attr.addFlashAttribute("msgred", "La orden de reposición buscada no ha sido encontrada.");
+            return "redirect:/adminsede/ordenes";
+        }
 
     }
 
@@ -230,7 +256,6 @@ public class AdminSedeController {
 
         //Sacamos la sede del adminsede
         Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
-
 
         int idSession = sedeSession.getIdSede(); //Sede 1
         model.addAttribute("sedeSession", sedeSession);
@@ -563,7 +588,7 @@ public class AdminSedeController {
             //Pasados los filtros:
 
             if (codigoValido == 1 && codigoMedicoUnico && dniNoExistente){
-                usuarioRepository.crearFarmacistaSinAprobar(idUsuario, idRol, usuarioFarmacista.getCorreo(), usuarioFarmacista.getContrasena(), usuarioFarmacista.getNombres(), usuarioFarmacista.getApellidos(), usuarioFarmacista.getCelular(), usuarioFarmacista.getDni(), usuarioFarmacista.getDireccion(), usuarioFarmacista.getDistrito(), usuarioFarmacista.getSeguro(), estadoUsuario);
+                usuarioRepository.crearFarmacistaSinAprobar(idUsuario, idRol, usuarioFarmacista.getCorreo(), SHA256.cipherPassword(usuarioFarmacista.getContrasena()), usuarioFarmacista.getNombres(), usuarioFarmacista.getApellidos(), usuarioFarmacista.getCelular(), usuarioFarmacista.getDni(), usuarioFarmacista.getDireccion(), usuarioFarmacista.getDistrito(), usuarioFarmacista.getSeguro(), estadoUsuario);
                 sedeFarmacistaRepository.crearSedeFarmacista(idSede, idUsuario, codigoMed, aprobado);
                 attr.addFlashAttribute("msg", "Solicitud de farmacista " + usuarioFarmacista.getNombres() + " " + usuarioFarmacista.getApellidos() + " enviada correctamente");
                 return "redirect:/adminsede/farmacista";
