@@ -3,12 +3,10 @@ package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.Getter;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,19 +14,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pe.sanmiguel.bienestar.proyecto_gtics.CurrentTimeSQL;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.FarmacistaValidationsGroup;
-import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.RegisterValidationsGroup;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,6 +35,7 @@ public class FarmacistaController {
     final UsuarioRepository usuarioRepository;
     final SedeRepository sedeRepository;
     final SedeStockRepository sedeStockRepository;
+    final SedeFarmacistaRepository sedeFarmacistaRepository;
     final MedicamentoRepository medicamentoRepository;
     final OrdenRepository ordenRepository;
     final OrdenContenidoRepository ordenContenidoRepository;
@@ -49,10 +43,11 @@ public class FarmacistaController {
     final EstadoPreOrdenRepository estadoPreOrdenRepository;
     final DoctorRepository doctorRepository;
 
-    public FarmacistaController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, SedeStockRepository sedeStockRepository, MedicamentoRepository medicamentoRepository, OrdenRepository ordenRepository, OrdenContenidoRepository ordenContenidoRepository, ReposicionRepository reposicionRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository) {
+    public FarmacistaController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, SedeStockRepository sedeStockRepository, SedeFarmacistaRepository sedeFarmacistaRepository, MedicamentoRepository medicamentoRepository, OrdenRepository ordenRepository, OrdenContenidoRepository ordenContenidoRepository, ReposicionRepository reposicionRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository) {
         this.usuarioRepository = usuarioRepository;
         this.sedeRepository = sedeRepository;
         this.sedeStockRepository = sedeStockRepository;
+        this.sedeFarmacistaRepository = sedeFarmacistaRepository;
         this.medicamentoRepository = medicamentoRepository;
         this.ordenRepository = ordenRepository;
         this.ordenContenidoRepository = ordenContenidoRepository;
@@ -67,6 +62,7 @@ public class FarmacistaController {
     /* Variables Internas */
 
     Sede sedeSession;
+    Usuario usuarioSession;
     List<Medicamento> medicamentosSeleccionados = new ArrayList<>();
     List<String> listaCantidades = new ArrayList<>();
 
@@ -90,10 +86,10 @@ public class FarmacistaController {
         //SESSION
         //Iniciamos la sesión
         HttpSession session = request.getSession();
-        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
-        session.setAttribute("usuario", usuario);
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
 
-        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
 
         List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
         int numeroOrdenesPendientes = 0;
@@ -108,11 +104,10 @@ public class FarmacistaController {
 
         //Iniciamos la sesión
         HttpSession session = request.getSession();
-        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
-        session.setAttribute("usuario", usuario);
+        Usuario usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
 
-        //Sacamos la sede del adminsede
-        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+        Sede sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
 
         List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
         model.addAttribute("sedeSession", sedeSession);
@@ -139,8 +134,7 @@ public class FarmacistaController {
         Usuario usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
         session.setAttribute("usuario", usuarioSession);
 
-        //Sacamos la sede del adminsede
-        Sede sedeSession = sedeRepository.sedeAdminID(usuarioSession.getIdUsuario());
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
 
         if(medicamentosSeleccionados.isEmpty()){
             return "redirect:/farmacista";
@@ -164,6 +158,7 @@ public class FarmacistaController {
             model.addAttribute("stockSeleccionados", stockSeleccionados);
             model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
             model.addAttribute("listaCantidades", listaCantidades);
+
             return "farmacista/formulario_paciente";
         }
     }
@@ -190,9 +185,7 @@ public class FarmacistaController {
         Usuario usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
         session.setAttribute("usuario", usuarioSession);
 
-        //Sacamos la sede del adminsede
-        Sede sedeSession = sedeRepository.sedeAdminID(usuarioSession.getIdUsuario());
-
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
 
         if (bindingResult.hasErrors()){
 
@@ -238,8 +231,7 @@ public class FarmacistaController {
                 Orden newOrden = new Orden();
                 newOrden.setFechaIni(now);
                 newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
-                //Id conocido porque no hay session
-                newOrden.setIdFarmacista(115);
+                newOrden.setIdFarmacista(usuarioSession.getIdUsuario());
                 newOrden.setTipoOrden(1);
                 newOrden.setEstadoOrden(8);
                 newOrden.setSede(sedeSession);
@@ -328,21 +320,28 @@ public class FarmacistaController {
     @GetMapping("/farmacista/ordenes_venta")
     public String tablaOrdenesVenta(Model model,
                                     HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        List<Orden> listaOrdenesVenta = ordenRepository.findAllOrdenes();
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
+        List<Orden> listaOrdenesVenta = ordenRepository.findAllOrdenesPorSede(sedeSession.getIdSede());
         model.addAttribute("listaOrdenesVenta", listaOrdenesVenta);
         return "farmacista/ordenes_venta";
     }
     @GetMapping("/farmacista/ordenes_web")
     public String tablaOrdenesWeb(Model model,
                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        List<Orden> listaOrdenesWeb = ordenRepository.findAllOrdenesWeb();
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
+        List<Orden> listaOrdenesWeb = ordenRepository.findAllOrdenesWebPorSede(sedeSession.getIdSede());
         model.addAttribute("listaOrdenesWeb", listaOrdenesWeb);
         return "farmacista/ordenes_web";
     }
     @GetMapping("/farmacista/pre_ordenes")
     public String tablaPreOrdenes(Model model,
                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        List<Orden> listaPreOrdenes = ordenRepository.findAllPreOrdenes();
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
+        List<Orden> listaPreOrdenes = ordenRepository.findAllPreOrdenesPorSede(sedeSession.getIdSede());
         model.addAttribute("listaPreOrdenes", listaPreOrdenes);
         return "farmacista/pre_ordenes";
     }
@@ -453,17 +452,10 @@ public class FarmacistaController {
     @GetMapping("farmacista/perfil")
     public String cambiarContrasena(Model model){
 
-        Optional<Usuario> farmacistaSessionOpt = usuarioRepository.findById(115);
-        Usuario farmacistaSession = new Usuario();
-
-        if (farmacistaSessionOpt.isPresent()){
-            farmacistaSession = farmacistaSessionOpt.get();
-        }
-
-        String passwordHash = farmacistaSession.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+        String passwordHash = usuarioSession.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
         String passwordDots = hashToDots(passwordHash);
 
-        model.addAttribute("farmacista", farmacistaSession);
+        model.addAttribute("farmacista", usuarioSession);
         model.addAttribute("contrasena", passwordDots);
         return "perfil";
     }
@@ -596,9 +588,8 @@ public class FarmacistaController {
 
             int i = 0;
 
-            /* Usaremos la Sede 1 porque aún no contamos con Session*/
             SedeStockId sedeStockId = new SedeStockId();
-            sedeStockId.setIdSede(1);
+            sedeStockId.setIdSede(sedeSession.getIdSede());
 
             for (Medicamento med : medicamentosSeleccionados) {
 

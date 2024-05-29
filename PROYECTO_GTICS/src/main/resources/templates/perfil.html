@@ -52,13 +52,16 @@
 
             <div style="margin-bottom: 40px"></div>
 
-            <nav class="nav nav-borders">
-                <a class="nav-link active ms-0"  href="/adminsede/perfil_adminsede"target="__blank">Perfil</a>
-                <a class="nav-link"  href="/adminsede/notificaciones_adminsede" target="__blank">Notificaciones</a>
-            </nav>
-            <br/>
-            <hr class="mt-0 mb-4">
-            <br/>
+            <div th:if="${session.usuario.getRol() == 2}">
+                <nav class="nav nav-borders">
+                    <a class="nav-link active ms-0"  href="/adminsede/perfil_adminsede"target="__blank">Perfil</a>
+                    <a class="nav-link"  href="/adminsede/notificaciones_adminsede" target="__blank">Notificaciones</a>
+                </nav>
+                <br/>
+                <hr class="mt-0 mb-4">
+                <br/>
+            </div>
+
 
 
 
@@ -87,7 +90,10 @@
                                 <div>
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Puesto</label>
-                                        <input class="input-form-3" name="inputRol" type="text"  th:value="${'Administrador de sede'}" readonly>
+                                        <input class="input-form-3" name="inputRol" type="text" th:if="${session.usuario.getRol() == 1}" th:value="${'Administrador General'}" readonly>
+                                        <input class="input-form-3" name="inputRol" type="text" th:if="${session.usuario.getRol() == 2}" th:value="${'Administrador de Sede'}" readonly>
+                                        <input class="input-form-3" name="inputRol" type="text" th:if="${session.usuario.getRol() == 3}" th:value="${'Farmacista'}" readonly>
+                                        <input class="input-form-3" name="inputRol" type="text" th:if="${session.usuario.getRol() == 4}" th:value="${'Paciente'}" readonly>
                                     </div>
 
                                     <div class="input-label-box">
