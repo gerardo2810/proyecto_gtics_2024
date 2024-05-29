@@ -215,11 +215,16 @@
                     </div>
 
 
-                    <div class="card" th:if="${session.usuario.getRol() == 3}" style="max-height: 200px; max-width: 1150px; width: 100%;">
+                    <div class="card" th:if="${session.usuario.getRol() == 3}" style="max-height: 220px; max-width: 1150px; width: 100%;">
                         <div class="card-header">Cambiar Contraseña</div>
-                        <div style="width: 300px" class="invalid-feedback">
-                            <p th:text="${error}"></p>
+                        <div th:if="${msgSuccess != null}" style="width: 300px; padding-left: 30px; padding-top: 10px;" class="valid-feedback">
+                            <p th:text="${msgSuccess}"></p>
                         </div>
+
+                        <div th:if="${msg != null}" style="width: 300px; padding-left: 30px; padding-top: 10px;" class="invalid-feedback">
+                            <p th:text="${msg}"></p>
+                        </div>
+
                         <div class="card-body">
 
                             <form id="form-farmacista" method="post" th:action="@{'/farmacista/actualizar_contrasena'}" th:object="${farmacista}"  enctype="multipart/form-data">

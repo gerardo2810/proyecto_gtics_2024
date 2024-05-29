@@ -480,13 +480,11 @@ public class FarmacistaController {
         usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
         session.setAttribute("usuario", usuarioSession);
 
-        System.out.println(usuarioSession.getContrasena());
-
-        if (usuarioSession.getContrasena().equals(SHA256.cipherPassword(oldContrasena))){
+        if (SHA256.verifyPassword(oldContrasena, usuarioSession.getContrasena())){
 
             if (newContrasena.equals(confirmContrasena)){
                 usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
-                attr.addFlashAttribute("msg", "Contraseña actualizada correctamente.");
+                attr.addFlashAttribute("msgSuccess", "Contraseña actualizada correctamente.");
                 return "redirect:/farmacista/perfil";
             } else {
                 attr.addFlashAttribute("msg", "Las contraseñas no coinciden.");
