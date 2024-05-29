@@ -483,18 +483,21 @@ public class FarmacistaController {
         if (SHA256.verifyPassword(oldContrasena, usuarioSession.getContrasena())){
 
             if (newContrasena.equals(confirmContrasena)){
-                usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
-                attr.addFlashAttribute("msgSuccess", "Contraseña actualizada correctamente.");
-                return "redirect:/farmacista/perfil";
+
+                if (isValidPassword(newContrasena)){
+                    usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
+                    attr.addFlashAttribute("msgSuccess", "Contraseña actualizada correctamente.");
+                } else {
+                    attr.addFlashAttribute("msg", "Ingrese una contraseña válida. De más de 8 carácteres, con dígitos y carácteres especiales.");
+                }
             } else {
                 attr.addFlashAttribute("msg", "Las contraseñas no coinciden.");
-                return "redirect:/farmacista/perfil";
             }
 
         } else {
             attr.addFlashAttribute("msg", "Introduzca su contraseña actual.");
-            return "redirect:/farmacista/perfil";
         }
+        return "redirect:/farmacista/perfil";
     }
 
 
