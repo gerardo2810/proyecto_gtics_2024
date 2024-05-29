@@ -101,13 +101,13 @@ public class AdminSedeController {
 
         int idSede = sedeSession.getIdSede();
 
-        Optional<Integer> optFinalIdReposicion = reposicionRepository.findLastReposicionIdNoEntregadoporSede(idSede);
+        Optional<Integer> optFinalNumReposicion = reposicionRepository.findLastNumeroporSede(idSede);
 
-        if(optFinalIdReposicion.isPresent()){
-            int finalIdReposicion = optFinalIdReposicion.get();
-            int preFinalIdReposicion = finalIdReposicion - 1;
+        if(optFinalNumReposicion.isPresent()){
+            int finalNumReposicion = optFinalNumReposicion.get();
+            int preFinalNumReposicion = finalNumReposicion - 1;
 
-            List<Reposicion> listaReposicionNoEntregadasUltimas = reposicionRepository.listarOrdenesReposicionNoEntregadasUltimas(idSede, finalIdReposicion, preFinalIdReposicion);
+            List<Reposicion> listaReposicionNoEntregadasUltimas = reposicionRepository.listarOrdenesReposicionNoEntregadasUltimas(idSede, finalNumReposicion, preFinalNumReposicion);
             if(listaReposicionNoEntregadasUltimas.size() == 0){
                 return "adminsede/inicio";
             }
