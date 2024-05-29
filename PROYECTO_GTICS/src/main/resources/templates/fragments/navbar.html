@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="${title}"></title>
 
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
     <style>
         .active {
             text-decoration: underline;
@@ -305,13 +307,10 @@
             </div>
         </div>
 
-        <div th:if="${session.usuario.getRol() == 3}">
-
-
-
-        </div>
-
     </nav>
+
+
+    
 
 
 
