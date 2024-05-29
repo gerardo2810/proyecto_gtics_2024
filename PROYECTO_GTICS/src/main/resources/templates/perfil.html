@@ -90,10 +90,12 @@
                                 <div>
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Puesto</label>
-                                        <input class="input-form-3" name="inputRol" type="text" th:if="${session.usuario.getRol() == 1}" th:value="${'Administrador General'}" readonly>
-                                        <input class="input-form-3" name="inputRol" type="text" th:if="${session.usuario.getRol() == 2}" th:value="${'Administrador de Sede'}" readonly>
-                                        <input class="input-form-3" name="inputRol" type="text" th:if="${session.usuario.getRol() == 3}" th:value="${'Farmacista'}" readonly>
-                                        <input class="input-form-3" name="inputRol" type="text" th:if="${session.usuario.getRol() == 4}" th:value="${'Paciente'}" readonly>
+                                        <input class="input-form-3" name="inputRol" th:if="${session.usuario.getRol() == 1}" type="text"  th:value="${'Administrador Principal'}" readonly>
+                                        <input class="input-form-3" name="inputRol" th:if="${session.usuario.getRol() == 2}" type="text"  th:value="${'Administrador de sede'}" readonly>
+                                        <input class="input-form-3" name="inputRol" th:if="${session.usuario.getRol() == 3}" type="text"  th:value="${'Farmacista'}" readonly>
+                                        <input class="input-form-3" name="inputRol" th:if="${session.usuario.getRol() == 4}" type="text"  th:value="${'Paciente'}" readonly>
+
+
                                     </div>
 
                                     <div class="input-label-box">
