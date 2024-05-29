@@ -25,21 +25,13 @@ final UsuarioRepository usuarioRepository;
 
     public Login1(UsuarioRepository usuarioRepository) {this.usuarioRepository = usuarioRepository;}
 
-    //@GetMapping("")
-    //public String inicio() {return "login/login";}
-
-    /*@GetMapping("/")
-
-    public String login(@ModelAttribute("usuario")  Usuario usuario,RedirectAttributes attributes,
-                        Model model) {
-        model.addAttribute("usuario", usuario);
-
-        return "index";
-    }*/
 
     @GetMapping("/")
-    public String login() {
-        return "index2";
+    public String login(Model model) {
+        if (!model.containsAttribute("usuario")) {
+            model.addAttribute("usuario", new Usuario());
+        }
+        return "index";
     }
 
     @GetMapping("/new")
@@ -95,12 +87,27 @@ final UsuarioRepository usuarioRepository;
             } else {
                 // Si las credenciales son incorrectas, redirige de vuelta al formulario de inicio de sesión con un mensaje de error
                 attributes.addFlashAttribute("error", "Credenciales incorrectas");
-                return "redirect:/";
+                return "redirect:/paciente";
             }
         } else {
            model.addAttribute("usuario", usuario);
+           if (usuarioExistente.getEstadoUsuario() == 2) {
+               attributes.addFlashAttribute("error", "Usuario a falta de aprobación");
+           }
             return "index";
         }
 
     }
 }
+
+//@GetMapping("")
+//public String inicio() {return "login/login";}
+
+    /*@GetMapping("/")
+
+    public String login(@ModelAttribute("usuario")  Usuario usuario,RedirectAttributes attributes,
+                        Model model) {
+        model.addAttribute("usuario", usuario);
+
+        return "index";
+    }*/
