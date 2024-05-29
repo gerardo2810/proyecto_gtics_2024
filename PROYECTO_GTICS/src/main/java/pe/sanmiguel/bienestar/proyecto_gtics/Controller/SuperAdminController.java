@@ -1177,4 +1177,6 @@ public class SuperAdminController {
         attr.addFlashAttribute("msg", "Medicamento borrado exitosamente");
         return "redirect:/superadmin/medicamentos";
     }
+
+
 }

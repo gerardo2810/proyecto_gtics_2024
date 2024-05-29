@@ -168,7 +168,11 @@
                     <div th:if="${sede.admin.estadoUsuario== 1}" class="disponible" style="margin-left: 35px"></div>
                     <div th:if="${sede.admin.estadoUsuario== 2}" class="no_disponible" style="margin-left: 35px"></div>
                 </td>
-                <td style="text-align: center"><a href="/adminsede"><img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/></a></td>
+                <td style="text-align: center">
+                    <a th:href="@{'/impersonate?username=' + ${sede.admin.correo}}">
+                        <img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/>
+                    </a>
+                </td>
                 <td><a th:href="@{'/superadmin/editarAdministrador' + '?id=' + ${sede.admin.idUsuario}}"><img width="24" height="24" src="https://img.icons8.com/?size=256&id=6698&format=png" alt="Editar"/></a></td>
                 <td>
                     <form id="formBanear" th:action="@{'/superadmin/banearAdministrador'}" method="post">

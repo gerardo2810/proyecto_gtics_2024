@@ -94,12 +94,25 @@ public class AdminSedeController {
         //Iniciamos la sesión
         HttpSession session = request.getSession();
         Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
-        session.setAttribute("usuario", usuario);
+        if (usuario == null) {
+            usuario = usuarioRepository.findByCorreo(authentication.getName());
+            session.setAttribute("usuario", usuario);
+        }
 
-        //Sacamos la sede del adminsede
-        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+        Integer idSede = (Integer) session.getAttribute("idSede");
 
-        int idSede = sedeSession.getIdSede();
+        if (idSede == null) {
+            Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+            // Verificar si sedeSession es nulo
+            if (sedeSession != null) {
+                idSede = sedeSession.getIdSede();
+                session.setAttribute("idSede", idSede);
+            } else {
+                // Manejar el caso cuando sedeSession es nulo
+                return "errorPage"; // O alguna página de error apropiada
+            }
+        }
 
         Optional<Integer> optFinalNumReposicion = reposicionRepository.findLastNumeroporSede(idSede);
 
@@ -194,7 +207,8 @@ public class AdminSedeController {
 
     @GetMapping("/editar_orden_reposicion")
     public String editOrden(@RequestParam("id") int id,
-                            Model model, HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+                            Model model, HttpServletRequest request, HttpServletResponse response, Authentication authentication,
+                            RedirectAttributes attr){
 
         //SESSION
         //Iniciamos la sesión
@@ -218,15 +232,14 @@ public class AdminSedeController {
                 model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
                 return "adminsede/editar_orden_reposicion";
             }else{
-                return "adminsede/editar_orden_reposicion";
+                attr.addFlashAttribute("msgred", "La orden de reposición buscada no ha sido encontrada.");
+                return "redirect:/adminsede/ordenes";
 
             }
-
         }else {
-            return "adminsede/ordenes_reposicion";
+            attr.addFlashAttribute("msgred", "La orden de reposición buscada no ha sido encontrada.");
+            return "redirect:/adminsede/ordenes";
         }
-
-
 
     }
 

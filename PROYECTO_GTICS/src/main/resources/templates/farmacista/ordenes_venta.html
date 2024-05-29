@@ -71,13 +71,13 @@
 
         <hr class="style-one">
 
-        <div th:if="${msg != null}" style="width: 300px; padding-top: 20px;" class="invalid-feedback">
-            <p th:text="${msg}"></p>
-        </div>
+        <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert" style="margin-top: 30px; background-color: #F8D7DA; color: #58151C; border-color: #f1aeb5"></div>
+
+
 
         <div style="margin-bottom: 10px"></div>
 
-        <div style="min-height: 350px">
+        <div style="min-height: 60vh">
 
             <div class="column-start" style="padding-bottom: 1px">
 
