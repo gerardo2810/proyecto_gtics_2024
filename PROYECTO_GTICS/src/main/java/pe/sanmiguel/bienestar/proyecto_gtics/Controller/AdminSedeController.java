@@ -194,13 +194,39 @@ public class AdminSedeController {
 
     @GetMapping("/editar_orden_reposicion")
     public String editOrden(@RequestParam("id") int id,
-                            Model model){
+                            Model model, HttpServletRequest request, HttpServletResponse response, Authentication authentication){
 
-        int idSede = 1;
-        List<ReposicionContenidoMedicamentoDto> listaMedicamentosSeleccionados = reposicionContenidoRepository.listaMostrarMedicamentosSeleccionados(id);
-        model.addAttribute("idOrden", id);
-        model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
-        return "adminsede/editar_orden_reposicion";
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+        int idSede = sedeSession.getIdSede();
+
+        Optional<Reposicion> optReposicion = reposicionRepository.findById(id);
+
+        if(optReposicion.isPresent()){
+            Reposicion reposicionSeleccionada = optReposicion.get();
+            // Ahora comparamos Ids
+            if(reposicionSeleccionada.getIdSede().getIdSede() == idSede){
+                List<ReposicionContenidoMedicamentoDto> listaMedicamentosSeleccionados = reposicionContenidoRepository.listaMostrarMedicamentosSeleccionados(id);
+                model.addAttribute("idOrden", id);
+                model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
+                return "adminsede/editar_orden_reposicion";
+            }else{
+                return "adminsede/editar_orden_reposicion";
+
+            }
+
+        }else {
+            return "adminsede/ordenes_reposicion";
+        }
+
+
 
     }
 
@@ -217,7 +243,6 @@ public class AdminSedeController {
 
         //Sacamos la sede del adminsede
         Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
-
 
         int idSession = sedeSession.getIdSede(); //Sede 1
         model.addAttribute("sedeSession", sedeSession);
