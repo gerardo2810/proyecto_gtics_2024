@@ -17,8 +17,11 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
+import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
+
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -114,9 +117,18 @@ public class WebSecurityConfig {
         http.logout()
                 .logoutUrl("/logout")
                 .deleteCookies("JSESSIONID")
-                .invalidateHttpSession(true);
-
+                .invalidateHttpSession(true)
+                .logoutSuccessHandler(new SimpleUrlLogoutSuccessHandler() {
+                    @Override
+                    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                        logger.info("Logout successful. Adding logout message to session.");
+                        request.getSession().setAttribute("logoutMessage", "Se cerró sesión exitosamente");
+                        setDefaultTargetUrl("/");
+                        super.onLogoutSuccess(request, response, authentication);
+                    }
+                });
         return http.build();
     }
 
 }
+

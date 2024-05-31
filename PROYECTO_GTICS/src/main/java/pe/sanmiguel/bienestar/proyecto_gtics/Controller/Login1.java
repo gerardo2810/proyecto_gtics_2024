@@ -14,6 +14,9 @@ import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.LoginValidationsGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.OptionalValidationsGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.RegisterValidationsGroup;
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.spi.RegisterableService;
 
@@ -25,11 +28,21 @@ final UsuarioRepository usuarioRepository;
 
     public Login1(UsuarioRepository usuarioRepository) {this.usuarioRepository = usuarioRepository;}
 
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+
 
     @GetMapping("/")
-    public String login(Model model) {
+    public String login(Model model,  HttpServletRequest request) {
         if (!model.containsAttribute("usuario")) {
             model.addAttribute("usuario", new Usuario());
+        }
+        Object logoutMessage = request.getSession().getAttribute("logoutMessage");
+        if (logoutMessage != null) {
+            logger.info("Logout message found in session: " + logoutMessage);
+            model.addAttribute("logoutMessage", logoutMessage);
+            request.getSession().removeAttribute("logoutMessage");
+        } else {
+            logger.info("No logout message found in session.");
         }
         return "index";
     }

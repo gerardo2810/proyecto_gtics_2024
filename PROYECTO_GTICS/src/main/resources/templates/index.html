@@ -37,7 +37,9 @@
                 <div class="login-title montserrat-bold">Iniciar Sesión</div>
 
                 <p class="text text-normal">¿No tiene cuenta? <span>  &#160 <a th:href="@{/new}" class="text text-links">Registrarse</a></span></p>
-
+                <div th:if="${logoutMessage != null}" class="alert alert-danger-custom" role="alert">
+                    <p th:text="${logoutMessage}"></p>
+                </div>
                 <div class="alert alert-success-custom" role="alert" th:if="${mensaje != null}" th:text="${mensaje}" ></div>
                 <div class="alert alert-danger-custom" role="alert" th:if="${error != null}" th:text="${error}"></div>
                 <form name="signin" class="login-form" method="post" th:action="@{/processlogin}" th:object="${usuario}">
