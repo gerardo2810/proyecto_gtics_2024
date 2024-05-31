@@ -112,7 +112,7 @@
 
                         <div class="input-label-box">
                             <label style="font-weight: bold; color:dimgray">Correo electrónico:</label>
-                            <input th:field="*{correo}" name="correo" class="input-form" th:classappend="${#fields.hasErrors('distrito') ? 'is-invalid': ''}" type="text" placeholder="Ingrese su correo" required>
+                            <input th:field="*{correo}" name="correo" class="input-form" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid': ''}" type="text" placeholder="Ingrese su correo" required>
                             <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" id="validationServer03Feedback" class="invalid-feedback">
                                 Mensaje de error de correo
                             </div>
