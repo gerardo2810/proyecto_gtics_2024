@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="${title}"></title>
 
+
+
     <style>
         .active {
             text-decoration: underline;
             color: white;
+        }
+        .container{
+            width: 100% !important;
         }
     </style>
 
@@ -305,16 +310,7 @@
             </div>
         </div>
 
-        <div th:if="${session.usuario.getRol() == 3}">
-
-
-
-        </div>
-
     </nav>
-
-
-
 
 
     <script>

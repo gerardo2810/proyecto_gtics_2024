@@ -65,11 +65,14 @@ public class WebSecurityConfig {
                 .requestMatchers("/adminsede", "/adminsede/**").hasAnyAuthority("SUPERADMIN", "ADMINSEDE")
                 .requestMatchers("/farmacista", "/farmacista/**").hasAnyAuthority("SUPERADMIN", "FARMACISTA")
                 .requestMatchers("/paciente", "/paciente/**").hasAnyAuthority("SUPERADMIN", "PACIENTE")
+                .requestMatchers("/impersonate").hasAuthority("SUPERADMIN")
                 .anyRequest().permitAll();
 
         http.formLogin() //Logueo de usuarios
                 .loginPage("/")
                 .loginProcessingUrl("/processlogin")
+                .passwordParameter("contrasena")
+                .usernameParameter("correo")
                 .successHandler(new AuthenticationSuccessHandler() { //Aquí ya estamos logueados (pasamos los filtros)
 
                     @Override
