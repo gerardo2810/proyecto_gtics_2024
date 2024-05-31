@@ -33,7 +33,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Query(value = "SELECT o.* FROM orden o JOIN tipo_orden t ON o.idTipo = t.id WHERE t.nombre = 'PREORDEN' AND o.idSede = :idSede", nativeQuery = true)
     List<Orden> findAllPreOrdenesPorSede(@Param("idSede") Integer idSede);
 
-    @Query(value="SELECT MAX(orden.id) FROM Orden orden", nativeQuery = true)
+    @Query(value="SELECT MAX(orden.id) FROM orden orden", nativeQuery = true)
     Integer findLastOrdenId();
 
     @Transactional
@@ -45,7 +45,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     Orden getOrdenByIdOrden(Integer idOrden);
 
 
-    @Query(nativeQuery = true, value = "SELECT o2.* FROM Orden o1 LEFT JOIN Orden o2 ON o1.id = o2.idOrden WHERE o1.id = :idOrden")
+    @Query(nativeQuery = true, value = "SELECT o2.* FROM orden o1 LEFT JOIN orden o2 ON o1.id = o2.idOrden WHERE o1.id = :idOrden")
     Orden findPreordenByOrdenId(@Param("idOrden") Integer idOrden);
 
 
