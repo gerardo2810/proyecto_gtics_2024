@@ -12,6 +12,8 @@
     <link th:href="@{/css/fonts.css}" rel="stylesheet" />
     <link th:href="@{/css/login-styles/login.css}" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <header>
@@ -30,6 +32,38 @@
 </header>
 
 <body>
+<script th:if="${logoutMessage != null}">
+
+        let timerInterval;
+
+        Swal.fire({
+            html: '<p style="color:#34ADE6;font-size:30px;font-weight: bold">!LA SESIÓN SE CERRÓ EXITOSAMENTE!</p><img src="/img/logout_check.gif" alt="Descripción del GIF">',
+            timer: 3430,
+            showConfirmButton: false,
+            backdrop: `
+              white
+              center
+              no-repeat
+          `,
+            didOpen: () => {
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                    timer.textContent = `${Swal.getTimerLeft()}`;
+                }, 100);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+            }
+        }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+                console.log("I was closed by the timer");
+            }
+        });
+
+
+
+</script>
     <div class="main-container">
         <div class="login-container">
 
@@ -37,9 +71,12 @@
                 <div class="login-title montserrat-bold">Iniciar Sesión</div>
 
                 <p class="text text-normal">¿No tiene cuenta? <span>  &#160 <a th:href="@{/new}" class="text text-links">Registrarse</a></span></p>
+
+                <!--
                 <div th:if="${logoutMessage != null}" class="alert alert-danger-custom" role="alert">
                     <p th:text="${logoutMessage}"></p>
-                </div>
+                </div> -->
+
                 <div class="alert alert-success-custom" role="alert" th:if="${mensaje != null}" th:text="${mensaje}" ></div>
                 <div class="alert alert-danger-custom" role="alert" th:if="${error != null}" th:text="${error}"></div>
                 <form name="signin" class="login-form" method="post" th:action="@{/processlogin}" th:object="${usuario}">
@@ -63,6 +100,8 @@
 
         </div>
     </div>
+
+
 
 </body>
 
