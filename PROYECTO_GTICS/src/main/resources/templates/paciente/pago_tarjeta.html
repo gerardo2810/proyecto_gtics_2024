@@ -18,6 +18,7 @@
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
 
+
     <link rel="stylesheet" th:href="@{/css/paciente/pago_tarjeta.css}">
 
 
@@ -62,9 +63,7 @@
 
 
 
-            <form method="post" action="/paciente/procesar_pago">
-
-
+            <form method="post" th:action="@{/paciente/procesar_pago}" th:object="${tarjeta}">
 
                 <div style="display: flex; flex-direction: column; ">
                     <p style="font-weight: 600">Número de Tarjeta</p>
@@ -90,8 +89,12 @@
 
                     </div>
 
+                    <div style="position: relative;">
+                    <input th:field="*{numero_tarjeta}" th:classappend="${#fields.hasErrors('numero_tarjeta') ? 'error' : ''}" type="text" maxlength="16" style="width: 550px;" class="card-number-input" >
+                        <i th:if="${#fields.hasErrors('numero_tarjeta')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                    </div>
 
-                    <input type="text" maxlength="16" style="width: 550px;" class="card-number-input" name="numTarjeta" required>
+                    <div class="error-message"  th:if="${#fields.hasErrors('numero_tarjeta')}" th:errors="*{numero_tarjeta}"></div>
 
 
 
@@ -111,7 +114,7 @@
                     <div style="display: flex; flex-direction: row;justify-content: end; align-items: center;">
 
                         <div class="inputBox" style="margin-top: 0;margin-right: 10px;">
-                            <select class="month-input" style="width: 130px;" name="mes" required>
+                            <select class="month-input" style="width: 130px;" th:field="*{mes}" th:classappend="${#fields.hasErrors('mes') ? 'error' : ''}">
                                 <option value="month" selected disabled>MM</option>
                                 <option value="01">Enero</option>
                                 <option value="02">Febrero</option>
@@ -126,10 +129,13 @@
                                 <option value="11">Noviembre</option>
                                 <option value="12">Diciembre</option>
                             </select>
+
+                            <div class="error-message"  th:if="${#fields.hasErrors('mes')}" th:errors="*{mes}"></div>
+
                         </div>
                         <span style="font-size: 20px;margin-top: 8px;margin-right: 10px;">/</span>
                         <div class="inputBox" style="margin-top: 0;">
-                            <select name="anio" id="" class="year-input" style="width: 130px;">
+                            <select name="anio" id="" class="year-input" style="width: 130px;" th:field="*{anio}" th:classappend="${#fields.hasErrors('anio') ? 'error' : ''}">
                                 <option value="year" selected disabled>AA</option>
                                 <option value="2024">2024</option>
                                 <option value="2025">2025</option>
@@ -139,6 +145,9 @@
                                 <option value="2029">2029</option>
                                 <option value="2030">2030</option>
                             </select>
+
+                            <div class="error-message"  th:if="${#fields.hasErrors('mes')}" th:errors="*{anio}"></div>
+
                         </div>
 
                     </div>
@@ -155,8 +164,14 @@
 
                     <div style="display: flex; flex-direction: column; justify-content: end;">
                         <div class="inputBox" style="margin-top: 0;">
-                            <input type="text" id="passwd" maxlength="4" class="cvv-input" name="cvv" required>
+                            <div style="position: relative;">
+                                <input type="text"  maxlength="4" class="cvv-input"  th:field="*{cvv}" th:classappend="${#fields.hasErrors('cvv') ? 'error' : ''}">
+                                <i th:if="${#fields.hasErrors('cvv')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                            </div>
                         </div>
+
+                        <div class="error-message"  th:if="${#fields.hasErrors('cvv')}" th:errors="*{cvv}"></div>
+
 
                         <!--
                         <div style="display: flex; flex-direction: row; column-gap: 5px;justify-content: center;">
@@ -185,7 +200,14 @@
                     <div style="display: flex; flex-direction: column; justify-content: end;">
                         <div class="inputBox" style="margin-top: 0;">
 
-                            <input type="text" class="card-holder-input" style="width: 330px;" name="titular" required>
+                            <div style="position: relative;">
+                                <input type="text" class="card-holder-input" style="width: 330px;" th:field="*{titular}" th:classappend="${#fields.hasErrors('titular') ? 'error' : ''}">
+                                <i th:if="${#fields.hasErrors('titular')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <div class="error-message"  th:if="${#fields.hasErrors('titular')}" th:errors="*{titular}"></div>
+
+
+
                             <input type="hidden" class="card-holder-input" style="width: 330px;" th:value="${orden.getIdOrden()}" name="idOrden">
                         </div>
 
