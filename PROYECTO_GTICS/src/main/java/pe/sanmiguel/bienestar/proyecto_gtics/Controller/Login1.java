@@ -76,6 +76,11 @@ final UsuarioRepository usuarioRepository;
   @GetMapping("/recuperarContra")
     public String recuperarContra() {return "login/recuperarContrasena";}
 
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+        return "/login/error"; // Nombre de la vista que se debe mostrar
+    }
+
 
     @PostMapping("/loguearse")
     public String login(@ModelAttribute("usuario") @Validated(LoginValidationsGroup.class) Usuario usuario,
@@ -90,8 +95,8 @@ final UsuarioRepository usuarioRepository;
             if (usuarioExistente != null && SHA256.cipherPassword(usuario.getContrasena()).equals(usuarioExistente.getContrasena())) {
                 if (usuarioExistente.getRol() == 1) {
                     return "redirect:/superadmin";
-                } else if (usuarioExistente.getRol()==2) {
-                    return "redirect:/adminsede";
+                //} else if (usuarioExistente.getRol()==2) {
+                 //   return "redirect:/adminsede";
                 } else if (usuarioExistente.getRol()==3) {
                     return "redirect:/farmacista";
                 } else {

@@ -263,6 +263,7 @@
         border-color: #f5c6cb;  /* Color del borde */
         border-radius: 0.25rem;  /* Radio del borde */
         padding: 1rem;  /* Espaciado interno */
+        /*max-height: 30px; */
     }
 
     /* Estilo para el enlace dentro del alert */
