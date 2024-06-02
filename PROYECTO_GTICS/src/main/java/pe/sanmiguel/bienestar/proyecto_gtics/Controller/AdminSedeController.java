@@ -716,19 +716,27 @@ public class AdminSedeController {
 
 
     @GetMapping("/verDetallesOrdenEntregada")
-    public String verDetallesOrdenEntregado(Model model){
-        model.addAttribute("listaMostrarNuevaCompra", listaMostrarNuevaCompra);
-        model.addAttribute("reposicionMostrar", reposicionMostrar);
+    public String verDetallesOrdenEntregado(Model model,
+                                            HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
 
         //Datos que se corregirán con sesion para la Sede --------------------------------------------
-        sedeVistaReposicion.setNombre("Administrador 1");
-        sedeVistaReposicion.setDireccion("Av. Los Pinos 656");
+        sedeVistaReposicion.setNombre(sedeSession.getNombre());
+        sedeVistaReposicion.setDireccion(sedeSession.getDireccion());
 
         //Datos que se corregirán con sesion para el Administrador --------------------------------------------
-        administradorVistaReposicion.setDni("12345678");
-        administradorVistaReposicion.setCorreo("admin.sede1@gmail.com");
-        administradorVistaReposicion.setNombres("Admin");
-        administradorVistaReposicion.setApellidos("Sede1");
+        administradorVistaReposicion.setDni(usuario.getDni());
+        administradorVistaReposicion.setCorreo(usuario.getCorreo());
+        administradorVistaReposicion.setNombres(usuario.getNombres());
+        administradorVistaReposicion.setApellidos(usuario.getApellidos());
 
         model.addAttribute("sede", sedeVistaReposicion);
         model.addAttribute("administradorMostrar", administradorVistaReposicion);
