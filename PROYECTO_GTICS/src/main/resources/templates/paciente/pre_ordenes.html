@@ -115,7 +115,7 @@
 
         <tr th:each="orden : ${lista}">
             <td th:text="${orden.getTracking()}"></td>
-            <td><span th:text="${orden.getFechaIni()}" ></span></td>
+            <td style="text-align: center" th:text="${#temporals.format(orden.getFechaIni(), 'dd/MM/yyyy   -   HH:mm')}"></td>
             <td th:switch="${orden.getEstadoOrden()}">
                 <button class="animationButton22" th:case="2">PAGO DISPONIBLE</button>
                 <button class="btn-rcb"           th:case="3">RECIBIDO</button>
