@@ -61,12 +61,33 @@
         min-height: 90vh;
         width: 100%;
     }
+
+    .login-container3{
+        display: flex;
+        position: relative;
+        justify-content: center;
+        align-items: center;
+        min-height: 90vh;
+        width: 100%;
+    }
     .wrapper2{
 
         justify-content: space-between;
         margin-bottom: 100px;
         max-width: 1000px;
         width: 800px;
+        margin-top: 2rem;
+        padding: 2rem 2.5rem 1rem 2.5rem;
+        outline: none;
+        border-radius: 0.25rem;
+        border: 1px solid #d9d9d9;
+        color: var(--color-black);
+        background: var(--color-white);
+        box-shadow: var(--shadow-large);
+    }
+    .wrapper4 {
+        max-width: 25rem;
+        width: 100%;
         margin-top: 2rem;
         padding: 2rem 2.5rem 1rem 2.5rem;
         outline: none;
@@ -127,6 +148,11 @@
             justify-content: space-between;
             margin-bottom: 20px;
 
+        }
+        .input-control4 {
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
         .input-control3 {
             display: flex;
@@ -230,6 +256,28 @@
             visibility: visible;
         }
 
+        .input-submit2 {
+            display: block;
+            margin: 0 auto;
+            font-family: inherit;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: inherit;
+            cursor: pointer;
+            width: 20%;
+            max-width: 50%;
+            height: auto;
+            padding: 0.65rem 1.25rem;
+            border: none;
+            outline: none;
+            border-radius: 2rem;
+            color: var(--color-white);
+            background: var(--color-blue);
+            box-shadow: var(--shadow-medium);
+            text-transform: capitalize;
+            text-rendering: optimizeLegibility;
+        }
         .form123-control.error i.fa-exclamation-circle {
             color: #E72C2C;
             visibility: visible;

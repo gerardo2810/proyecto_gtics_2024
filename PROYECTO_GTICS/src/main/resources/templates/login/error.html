@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Bienestar San Miguel | Login</title>
-
+    <title>Bienestar San Miguel | Error 403</title>
 
     <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
@@ -13,7 +12,6 @@
     <link th:href="@{/css/login-styles/login.css}" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </head>
 
 <header>
@@ -28,15 +26,34 @@
             <a class="text menu-item roboto-regular" href="https://munisanmiguel.gob.pe/#">Directorio de Servicios →</a>
         </div>
     </div>
-
 </header>
 
 <body>
+<div class="main-container">
+    <div class="login-container">
+        <div class="wrapper text-center">
+            <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo">
+            <h1 class="display-1">ERROR 403</h1>
+            <div class="lock">
+                <div class="top"></div>
+                <div class="bottom"></div>
+            </div>
+            <h2 class="mt-4">Acceso Denegado</h2>
+            <p class="lead">No tienes permiso para acceder a esta página.</p>
+            <div class="login-form" style="margin-bottom: 10px; align-items: center">
+                <div class="input-control4">
+                    <input onclick="goBack()" class="input-submit2" value="Volver">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-
-
-
-
-
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </body>
+</html>
 
