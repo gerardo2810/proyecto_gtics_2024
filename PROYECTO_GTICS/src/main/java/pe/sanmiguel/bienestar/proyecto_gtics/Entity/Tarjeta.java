@@ -17,17 +17,13 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
-public class Tarjeta implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
-
+public class Tarjeta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Pattern(regexp="\\d+", message="Debe contener solo números")
-    @Size(min=16, max = 16, message = "Debe tener al menos 16 dígitos")
+    @Size(min=16, max = 16, message = "Debe tener 16 dígitos")
     @NotBlank(message = "Debe ingresar su numero de tarjeta")
     @Positive(message = "El número debe ser mayor a cero")
     private String numero_tarjeta;
@@ -39,10 +35,12 @@ public class Tarjeta implements Serializable {
     private String anio;
 
     @NotBlank(message = "Debe colocar el código CVV")
+    @Size(min=4, max = 4, message = "Debe tener 4 dígitos")
     @Pattern(regexp="\\d+", message="Debe contener solo números")
     private String cvv;
 
     @NotBlank(message = "Debe colocar el nombre del titular de la tarjeta")
+    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$", message = "El nombre del titular solo puede contener letras")
     private String titular;
 
 }

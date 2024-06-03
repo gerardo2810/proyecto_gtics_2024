@@ -129,7 +129,7 @@ public class PacienteController {
 
         Orden orden = ordenRepository.getOrdenByIdOrden(id);
 
-        model.addAttribute("orden", orden);
+        model.addAttribute("idOrden", orden.getIdOrden());
 
         return "paciente/pago_tarjeta";
     }
@@ -453,18 +453,13 @@ public class PacienteController {
 
 
             System.out.println(bindingResult.getAllErrors());
+            model.addAttribute("idOrden",idOrden);
 
             return "paciente/pago_tarjeta";
 
         }else{
-            System.out.printf(tarjeta2);
-            System.out.println(mes);
-            System.out.println(anio);
-            System.out.printf(cvv);
-            System.out.println(titular);
-            System.out.println(idOrden);
-            ordenRepository.actualizarEstadoOrden(3,idOrden);
 
+            ordenRepository.actualizarEstadoOrden(3,idOrden);
             redirectAttributes.addFlashAttribute("msg2", "Orden Creada");
             return "redirect:/paciente/boleta_pago?id=" + idOrden;
         }
