@@ -17,11 +17,12 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 
 import javax.sql.DataSource;
@@ -70,7 +71,14 @@ public class WebSecurityConfig {
                 .requestMatchers("/farmacista", "/farmacista/**").hasAnyAuthority("SUPERADMIN", "FARMACISTA")
                 .requestMatchers("/paciente", "/paciente/**").hasAnyAuthority("SUPERADMIN", "PACIENTE")
                 .requestMatchers("/impersonate").hasAuthority("SUPERADMIN")
-                .anyRequest().permitAll();
+                .anyRequest().permitAll()
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(new AccessDeniedHandler() {
+                    @Override
+                    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+                        response.sendRedirect("/access-denied");
+                    }});
 
         http.formLogin() //Logueo de usuarios
                 .loginPage("/")
@@ -86,6 +94,7 @@ public class WebSecurityConfig {
 
                         HttpSession session = request.getSession();
                         session.setAttribute("usuario",usuarioRepository.findByCorreo(authentication.getName()));
+                        Usuario usuario = (Usuario) session.getAttribute("usuario");
 
 
                         if(defaultSavedRequest != null){ //Cuando vengo de la URL
@@ -106,8 +115,10 @@ public class WebSecurityConfig {
 
                             } else if (rol.equals("FARMACISTA")) {
                                 response.sendRedirect("/farmacista");
-                            }else {
+                            }else if (rol.equals("PACIENTE")){
                                 response.sendRedirect("/paciente");
+                            }else if (usuario.getEstadoUsuario().equals(2) && usuario.getEstadoContra().equals(2) ){
+                                response.sendRedirect("/cambiarcontra");
                             }
                         }
 
@@ -128,6 +139,7 @@ public class WebSecurityConfig {
                         super.onLogoutSuccess(request, response, authentication);
                     }
                 });
+
         return http.build();
     }
 

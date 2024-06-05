@@ -1,13 +1,20 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
+import pe.sanmiguel.bienestar.proyecto_gtics.PasswordService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 
@@ -342,12 +350,21 @@ public class SuperAdminController {
     }
 
     int sedeId;
+
+    @Autowired
+    private PasswordService passwordService;
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @PostMapping("/guardarAdministrador")
     public String agregarNuevoAdministrador(@ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResult,
                                             @RequestParam(value = "sedeid", required = false) String idSede,
                                             @RequestParam(value = "dni", required = false) String dni,
                                             @RequestParam(value = "correo", required = false) String correo,
-                                            RedirectAttributes attr, Model model) throws IOException {
+                                            RedirectAttributes attr, Model model) throws IOException, MessagingException {
         if(bindingResult.hasErrors()){
             System.out.println("HAY ERRORES DE VALIDACIÓN:");
             for (ObjectError error : bindingResult.getAllErrors()) {
@@ -371,49 +388,78 @@ public class SuperAdminController {
                 return "superAdmin/crearAdministrador";
             }
 
+            // Generar contraseña temporal
+            String temporaryPassword = passwordService.generateTemporaryPassword();
+            System.out.println("Contraseña temporal." + temporaryPassword);
+            String hashedPassword = SHA256.cipherPassword(temporaryPassword);
+            administrador.setContrasena(hashedPassword);
+             // Indicar que el usuario debe cambiar la contraseña en el primer inicio de sesión
+
+
             if(idSede == null || idSede.isEmpty()){
                 System.out.println("ID ADMIN: " + administrador.getIdUsuario());
 
-                String password = administrador.getContrasena();
-                if (!isValidPassword(password)) {
-                    bindingResult.rejectValue("contrasena", "error.contrasena", "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.");
-                    return "superAdmin/crearAdministrador";
-                }
-
-                String hashedPassword = hashPasswordSHA256(password);
-                administrador.setContrasena(hashedPassword);
                 administrador.setRol(2);
                 administrador.setEstadoUsuario(5);
                 usuarioRepository.save(administrador);
+                sendTemporaryPasswordEmail(administrador.getCorreo(), temporaryPassword);
                 attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
                 return "redirect:/superadmin/administradoresSede";
             }else{
                 if(administrador.getIdUsuario() != 0){
                     System.out.println("ID ADMIN si no es vacio: " + administrador.getIdUsuario());
                     int idsede = Integer.parseInt(idSede);
-                    String password = administrador.getContrasena();
-                    String hashedPassword = hashPasswordSHA256(password);
-                    administrador.setContrasena(hashedPassword);
+
                     administrador.setRol(2);
                     administrador.setEstadoUsuario(1);
                     usuarioRepository.save(administrador);
                     sedeRepository.asignarAdministradorSede(administrador.getIdUsuario(), idsede);
+                    sendTemporaryPasswordEmail(administrador.getCorreo(), temporaryPassword);
                     attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
                     return "redirect:/superadmin/administradoresSede";
                 }else{
                     System.out.println("ID ADMIN si es vacio: " + administrador.getIdUsuario());
-                    String password = administrador.getContrasena();
-                    String hashedPassword = hashPasswordSHA256(password);
-                    administrador.setContrasena(hashedPassword);
+
                     administrador.setRol(2);
                     administrador.setEstadoUsuario(5);
                     usuarioRepository.save(administrador);
+                    sendTemporaryPasswordEmail(administrador.getCorreo(), temporaryPassword);
                     attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
                     return "redirect:/superadmin/administradoresSede";
                 }
             }
         }
     }
+
+    private void sendTemporaryPasswordEmail(String to, String temporaryPassword) throws MessagingException {
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setFrom("bienestar.sanmiguel1@outlook.com");
+        helper.setTo(to);
+        helper.setSubject("Contraseña Temporal para Nuevo Administrador");
+
+
+        String emailContent = "<html>" +
+                "<body style='font-family: Arial, sans-serif; margin: 0; padding: 0;'>" +
+                "<div style='background-color: #007BFF; padding: 20px; text-align: center;'>" +
+                "<h1 style='color: #1B4F72; margin: 0;'>Bienestar <span style='color: #FFFFFF;'>San Miguel</span></h1>" +
+                "</div>" +
+                "<div style='border: 2px solid #007BFF; border-radius: 10px; padding: 20px; margin: 20px;'>" +
+                "<h2 style='color: #007BFF;'>Hola,</h2>" +
+                "<p>Tu cuenta de administrador ha sido creada. Por favor, usa la siguiente contraseña temporal para iniciar sesión:</p>" +
+                "<p style='font-size: 20px; color: #007BFF; font-weight: bold; text-align: center;'>" + temporaryPassword + "</p>" +
+                "<p>Debes cambiar esta contraseña inmediatamente después de tu primer inicio de sesión. La contraseña temporal es válida por 24 horas. Si no cambias tu contraseña en este tiempo, tendrás que solicitar una nueva.</p>" +
+                "<p>Gracias.</p>" +
+                "</div>" +
+                "</body>" +
+                "</html>";
+
+        helper.setText(emailContent, true);
+        mailSender.send(message);
+    }
+
 
     private boolean isValidPassword(String password) {
         if (password == null || password.trim().isEmpty()) {
@@ -481,13 +527,12 @@ public class SuperAdminController {
             List<Sede> sedeList = sedeRepository.findAll();
 
             String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-            String passwordDots = hashToDots(passwordHash);
+            String passwordDots = "*************";
 
             List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
             model.addAttribute("sedeAdministrador", sedeAdministrador);
             model.addAttribute("sedeList", sedeList);
             model.addAttribute("administrador", administrador);
-            model.addAttribute("contrasenia", passwordDots);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
             return "superAdmin/editarAdministrador";
         }else {
@@ -505,12 +550,11 @@ public class SuperAdminController {
             Sede sedeListAdminID = sedeRepository.sedeAdminID(administrador.getIdUsuario());
             List<Sede> sedeList = sedeRepository.findAll();
             String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-            String passwordDots = hashToDots(passwordHash);
+            String passwordDots = "*************";
 
             List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
             model.addAttribute("sedeAdministrador", sedeListAdminID);
             model.addAttribute("sedeList", sedeList);
-            model.addAttribute("contrasenia", passwordDots);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
 
             return "superAdmin/editarAdministrador";
@@ -529,13 +573,12 @@ public class SuperAdminController {
                 List<Sede> sedeList = sedeRepository.findAll();
 
                 String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-                String passwordDots = hashToDots(passwordHash);
+                String passwordDots = "*************";
 
                 List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
                 model.addAttribute("sedeAdministrador", sedeListAdminID);
                 model.addAttribute("sedeList", sedeList);
                 model.addAttribute("estadoUsuarioList", estadoUsuarioList);
-                model.addAttribute("contrasenia", passwordDots);
                 bindingResult.rejectValue("correo", "error.correo", "El correo ya se encuentra registrado.");
                 return "superAdmin/editarAdministrador";
             }
@@ -547,13 +590,12 @@ public class SuperAdminController {
                 List<Sede> sedeList = sedeRepository.findAll();
 
                 String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-                String passwordDots = hashToDots(passwordHash);
+                String passwordDots = "*************";
 
                 List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
                 model.addAttribute("sedeAdministrador", sedeListAdminID);
                 model.addAttribute("sedeList", sedeList);
                 model.addAttribute("estadoUsuarioList", estadoUsuarioList);
-                model.addAttribute("contrasenia", passwordDots);
                 bindingResult.rejectValue("dni", "error.dni", "El DNI ya se encuentra registrado.");
                 return "superAdmin/editarAdministrador";
             }
@@ -561,13 +603,15 @@ public class SuperAdminController {
             Usuario adminDatos = usuarioRepository.administradorSede(idAdministradorNuevo);
             String passwordOld = adminDatos.getContrasena();
 
-            String passwordNew = hashPasswordSHA256(contrasenia);
+            String passwordNew = SHA256.cipherPassword(contrasenia);
 
             System.out.println("Contra antigua: " + passwordOld);
             System.out.println("Contra nueva: " + passwordNew);
 
-            if(contrasenia.length()>30){
-                administrador.setContrasena(contrasenia);
+            if(contrasenia.isEmpty()){
+                System.out.println("Contra vacia: " + administrador.getContrasena());
+                String contradeAdmin = usuarioRepository.contraAdmin(administrador.getIdUsuario());
+                administrador.setContrasena(contradeAdmin);
             } else if (!isValidPassword(contrasenia)) {
                 System.out.println("O AQUII:");
                 String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
@@ -576,13 +620,12 @@ public class SuperAdminController {
                 List<Sede> sedeList = sedeRepository.findAll();
 
                 String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-                String passwordDots = hashToDots(passwordHash);
+                String passwordDots = "*************";
 
                 List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
                 model.addAttribute("sedeAdministrador", sedeListAdminID);
                 model.addAttribute("sedeList", sedeList);
                 model.addAttribute("estadoUsuarioList", estadoUsuarioList);
-                model.addAttribute("contrasenia", passwordDots);
                 model.addAttribute("error", errorMsg); // Añade el error al modelo
                 return "superAdmin/editarAdministrador";
             }
@@ -592,12 +635,17 @@ public class SuperAdminController {
             /*Se ubica el administrador de la sede nueva elegida*/
             Sede sedeTieneAdministrador = sedeRepository.getSedeByIdSede(idSede);
             /*Se obtiene el id del administrador de la sede nueva elegida*/
-
+            System.out.println("Contra vacia: " + administrador.getContrasena());
             if(idSede == AdministradorTieneSede.getIdSede()){
-                String password = administrador.getContrasena();
-
-                String hashedPassword = hashPasswordSHA256(password);
-                administrador.setContrasena(hashedPassword);
+                if(contrasenia.isEmpty()) {
+                    System.out.println("Contra vacia: " + administrador.getContrasena());
+                    String contradeAdmin = usuarioRepository.contraAdmin(administrador.getIdUsuario());
+                    administrador.setContrasena(contradeAdmin);
+                }
+                else{
+                    String hashedPassword = SHA256.cipherPassword(contrasenia);
+                    administrador.setContrasena(hashedPassword);
+                }
 
                 System.out.println("Sedes iguales: " );
                 usuarioRepository.save(administrador);
@@ -608,11 +656,15 @@ public class SuperAdminController {
                 /*Se obtiene el id de la sede actual del admin*/
                 int idSedeAntigua = AdministradorTieneSede.getIdSede();
 
-                String password = administrador.getContrasena();
-                System.out.println("Contraseña admin: " + password);
-
-                String hashedPassword = hashPasswordSHA256(password);
-                administrador.setContrasena(hashedPassword);
+                if(contrasenia.isEmpty()) {
+                    System.out.println("Contra vacia: " + administrador.getContrasena());
+                    String contradeAdmin = usuarioRepository.contraAdmin(administrador.getIdUsuario());
+                    administrador.setContrasena(contradeAdmin);
+                }
+                else{
+                    String hashedPassword = SHA256.cipherPassword(contrasenia);
+                    administrador.setContrasena(hashedPassword);
+                }
 
                 if (sedeTieneAdministrador.getAdmin()==null){
                     sedeRepository.eliminarAdminAntiguo(idSedeAntigua);
@@ -630,7 +682,6 @@ public class SuperAdminController {
             }
         }
     }
-
 
     @PostMapping("/eliminarAdministrador")
     public String eliminarAdministrador(@RequestParam(value = "idAdministrador") String idAdministrador, @RequestParam(value = "idSede") int idSede, RedirectAttributes attr){
@@ -815,8 +866,8 @@ public class SuperAdminController {
             return "superAdmin/editarDoctor";
         }else{
 
-            List<String> correosUsados = usuarioRepository.listarCorreosUsadosMenosUserID(doctor.getIdDoctor());
-            List<String> dnisUsados = usuarioRepository.listarDNIsUsadosMenosUserID(doctor.getIdDoctor());
+            List<String> correosUsados = doctorRepository.listarCorreosUsadosMenosUserID(doctor.getIdDoctor());
+            List<String> dnisUsados = doctorRepository.listarDNIsUsadosMenosUserID(doctor.getIdDoctor());
 
             if (correosUsados.contains(correo)) {
                 System.out.println("El correo está en la lista.");
@@ -909,7 +960,6 @@ public class SuperAdminController {
 
             model.addAttribute("farmacista", farmacista);
             model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
-            model.addAttribute("contrasenia", passwordDots);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
             return "superAdmin/editarFarmacista";
         } else {
@@ -935,7 +985,6 @@ public class SuperAdminController {
             String passwordDots = hashToDots(passwordHash);
             model.addAttribute("farmacista", farmacista);
             model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
-            model.addAttribute("contrasenia", passwordDots);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
             return "superAdmin/editarFarmacista";
         }else{
@@ -948,7 +997,6 @@ public class SuperAdminController {
                 String passwordDots = hashToDots(passwordHash);
                 model.addAttribute("farmacista", farmacista);
                 model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
-                model.addAttribute("contrasenia", passwordDots);
                 model.addAttribute("estadoUsuarioList", estadoUsuarioList);
                 bindingResult.rejectValue("correo", "error.correo", "El correo ya se encuentra registrado.");
                 return "superAdmin/editarFarmacista";
@@ -957,13 +1005,10 @@ public class SuperAdminController {
             Usuario adminDatos = usuarioRepository.farmacista(idFarmacistaNuevo);
             String passwordOld = adminDatos.getContrasena();
 
-            String passwordNew = hashPasswordSHA256(contrasenia);
-
-            System.out.println("Contra antigua: " + passwordOld);
-            System.out.println("Contra nueva: " + passwordNew);
-
-            if(passwordNew.length()>30){
-                farmacista.setContrasena(passwordNew);
+            if(contrasenia.isEmpty()){
+                System.out.println("Contra vacia: " + farmacista.getContrasena());
+                String contradeAdmin = usuarioRepository.contraAdmin(farmacista.getIdUsuario());
+                farmacista.setContrasena(contradeAdmin);
             } else if (!isValidPassword(contrasenia)) {
                 System.out.println("O AQUII:");
                 String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
@@ -971,14 +1016,21 @@ public class SuperAdminController {
                 SedeFarmacista datosFarmacistaSede = sedeFarmacistaRepository.buscarFarmacistaSede(farmacista.getIdUsuario());
                 List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
                 String passwordHash = farmacista.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-                String passwordDots = hashToDots(passwordHash);
                 model.addAttribute("farmacista", farmacista);
                 model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
-                model.addAttribute("contrasenia", passwordDots);
                 model.addAttribute("estadoUsuarioList", estadoUsuarioList);
-                model.addAttribute("contrasenia", passwordDots);
                 model.addAttribute("error", errorMsg); // Añade el error al modelo
                 return "superAdmin/editarFarmacista";
+            }
+
+            if(contrasenia.isEmpty()) {
+                System.out.println("Contra vacia: " + farmacista.getContrasena());
+                String contradeAdmin = usuarioRepository.contraAdmin(farmacista.getIdUsuario());
+                farmacista.setContrasena(contradeAdmin);
+            }
+            else{
+                String hashedPassword = SHA256.cipherPassword(contrasenia);
+                farmacista.setContrasena(hashedPassword);
             }
 
             attr.addFlashAttribute("msg", "Datos del farmacista actualizados exitosamente");

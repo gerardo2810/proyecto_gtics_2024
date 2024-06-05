@@ -125,11 +125,11 @@ public class PacienteController {
 
 
     @GetMapping(value="/pago_tarjeta")
-    public String pago_tarjeta(Model model, @RequestParam(value="id") Integer id){
+    public String pago_tarjeta(Model model, @RequestParam(value="id") Integer id,  @ModelAttribute("tarjeta") Tarjeta tarjeta){
 
         Orden orden = ordenRepository.getOrdenByIdOrden(id);
 
-        model.addAttribute("orden", orden);
+        model.addAttribute("idOrden", orden.getIdOrden());
 
         return "paciente/pago_tarjeta";
     }
@@ -438,24 +438,37 @@ public class PacienteController {
 
 
     @PostMapping(value="/procesar_pago")
-    public String pago_recibido(Model model, RedirectAttributes redirectAttributes,  @RequestParam(value="numTarjeta") String tarjeta,
+    public String pago_recibido(Model model, @ModelAttribute("tarjeta") @Valid Tarjeta tarjeta, BindingResult bindingResult,
+                                                                        RedirectAttributes redirectAttributes,
+                                                                        @RequestParam(value="numero_tarjeta") String tarjeta2,
                                                                         @RequestParam(value="mes") String mes,
                                                                         @RequestParam(value="anio") String anio,
                                                                         @RequestParam(value="cvv") String cvv,
                                                                         @RequestParam(value="titular") String titular,
                                                                         @RequestParam(value="idOrden") Integer idOrden){
 
-        System.out.printf(tarjeta);
-        System.out.println(mes);
-        System.out.println(anio);
-        System.out.printf(cvv);
-        System.out.println(titular);
         System.out.println(idOrden);
-        ordenRepository.actualizarEstadoOrden(3,idOrden);
+
+        if(bindingResult.hasErrors()){
 
 
-        redirectAttributes.addFlashAttribute("msg2", "Orden Creada");
-        return "redirect:/paciente/boleta_pago?id=" + idOrden;
+            System.out.println(bindingResult.getAllErrors());
+            model.addAttribute("idOrden",idOrden);
+
+            return "paciente/pago_tarjeta";
+
+        }else{
+
+            ordenRepository.actualizarEstadoOrden(3,idOrden);
+            redirectAttributes.addFlashAttribute("msg2", "Orden Creada");
+            return "redirect:/paciente/boleta_pago?id=" + idOrden;
+        }
+
+
+
+
+
+
     }
 
 

@@ -11,7 +11,7 @@ const data = {
             parent: 0,
             id: 1,
             content:
-                "Hola, Jorge Coronado Maxwell estuve revisando esta órden de venta y los medicamentos que tenemos en stock estan vencidos. Por lo que es necesario reemplazar o devolver el dinero al cliente",
+                "Hola, Jorge Coronado Maxwell se robó todos los medicamentos de la sede y nos dejó sin stock, por lo tanto no se pueden hacer ventas en orden fisica ni por web",
             createdAt: "Hace una hora",
             user: {
                 image: {
