@@ -1,9 +1,11 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
+import pe.sanmiguel.bienestar.proyecto_gtics.EmailService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
@@ -77,6 +80,33 @@ public class FarmacistaController {
 
     /* Variables Internas */
 
+
+    @Autowired
+    private EmailService emailService;
+
+    @GetMapping(value = "/correo_prueba")
+    public String prueba(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+
+        String toEmail = "a20191641@pucp.edu.pe";
+        String subject = "Este es un correo de Prueba!";
+
+        HttpSession session = request.getSession();
+        Usuario usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+        String nombre = usuarioSession.getNombres() + " " + usuarioSession.getApellidos();
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("nombre", nombre);
+
+        try {
+            emailService.sendHtmlEmail(toEmail, subject, "welcome-email", variables);
+            System.out.println("Correo HTML enviado con éxito!");
+            return "redirect:/farmacista";
+        } catch (MessagingException e) {
+            System.out.println("Error al enviar el correo HTML: " + e.getMessage());
+            return "redirect:/farmacista";
+        }
+    }
 
 
     @GetMapping(value = {"/farmacista", "/farmacista/"})
