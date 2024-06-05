@@ -1,24 +1,28 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+import jakarta.mail.MessagingException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pe.sanmiguel.bienestar.proyecto_gtics.EmailService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.LoginValidationsGroup;
-import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.OptionalValidationsGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.RegisterValidationsGroup;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.imageio.spi.RegisterableService;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 @Controller
@@ -52,26 +56,45 @@ final UsuarioRepository usuarioRepository;
         model.addAttribute("usuario", new Usuario());
         return "login/prueba";
     }
+    @Autowired
+    private EmailService emailService;
 
-  @PostMapping("/save")
-   public String guardarNuevoUsuario(@ModelAttribute("usuario") @Validated(RegisterValidationsGroup.class) Usuario usuario, BindingResult bindingResult, RedirectAttributes attributes, Model model){
+    @PostMapping("/save")
+    public String guardarNuevoUsuario(@ModelAttribute("usuario") @Validated(RegisterValidationsGroup.class) Usuario usuario,
+                                      BindingResult bindingResult, RedirectAttributes attributes, Model model) {
+
+        if (!bindingResult.hasErrors()) {
+            String contrasenaSinCifrar = usuario.getContrasena();
+            String contrasenaHasheada = SHA256.cipherPassword(contrasenaSinCifrar);
+            usuario.setContrasena(contrasenaHasheada);
+            usuario.setRol(4);
+            usuario.setEstadoUsuario(2);
+            usuarioRepository.save(usuario);
+
+            // Enviar el correo de bienvenida
+            String subject = "ola";
+            String htmlFilePath = "/templates/login/correo.html";
+
+            //String filename="src/main/resources/templates/login/correo.html";
+            //Path pathToFile = Paths.get(filename);
+            //System.out.println(pathToFile.toAbsolutePath());
+            //String htmlFilePath = pathToFile.toAbsolutePath().toString();
 
 
-       if (!bindingResult.hasErrors()) {
-           String contrasenaSinCifrar = usuario.getContrasena();
-           String contrasenaHasheada = SHA256.cipherPassword(contrasenaSinCifrar);
-           usuario.setContrasena(contrasenaHasheada);
-           usuario.setRol(4);
-           usuario.setEstadoUsuario(2);
-           usuarioRepository.save(usuario);
-           attributes.addFlashAttribute("mensaje", "Usuario creado correctamente");
-           return "redirect:/";
-       } else {
-           model.addAttribute("usuario", usuario);
+            try {
+                emailService.sendEmail(usuario.getCorreo(), subject, htmlFilePath);
+                attributes.addFlashAttribute("mensaje", "Usuario creado correctamente y correo enviado.");
+            } catch (MessagingException | IOException e) {
+                e.printStackTrace();
+                attributes.addFlashAttribute("mensaje", "Usuario creado, pero hubo un error al enviar el correo: " + e.getMessage());
+            }
 
-           return "login/prueba";
-       }
-  }
+            return "redirect:/";
+        } else {
+            model.addAttribute("usuario", usuario);
+            return "login/prueba";
+        }
+    }
 
   @GetMapping("/recuperarContra")
     public String recuperarContra() {return "login/recuperarContrasena";}
