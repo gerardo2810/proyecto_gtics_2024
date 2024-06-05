@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -72,11 +72,13 @@ final UsuarioRepository usuarioRepository;
                                       BindingResult bindingResult, RedirectAttributes attributes, Model model) {
 
         if (!bindingResult.hasErrors()) {
-            usuario.setRol(4);
+            usuario.setRol(5);
             usuario.setEstadoUsuario(2);
             String temporaryPassword = passwordService.generateTemporaryPassword();
-            usuario.setContrasena(temporaryPassword);
             usuario.setEstadoContra(2);
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(temporaryPassword);
+            usuario.setContrasena(encodedPassword);
             usuarioRepository.save(usuario);
 
 
@@ -86,7 +88,7 @@ final UsuarioRepository usuarioRepository;
             Map<String, Object> variables2 = new HashMap<>();
 
             variables.put("nombre", usuario.getNombres());
-            variables2.put("contra", usuario.getContrasena());
+            variables2.put("contra", temporaryPassword);
 
             //String filename="src/main/resources/templates/login/correo.html";
             //Path pathToFile = Paths.get(filename);
@@ -121,11 +123,45 @@ final UsuarioRepository usuarioRepository;
     /*@PostMapping("/cambiarcontra")
     public String cambiarContra(@ModelAttribute("usuario") @Validated(LoginValidationsGroup.class) Usuario usuario,
                                 BindingResult bindingResult,
+                                @RequestParam("contrasenaNueva") String contrasenaNueva,
                                 RedirectAttributes attributes,
                                 Model model) {
 
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("error", "Error en el formulario");
+            return "/cambiarcontra";
+        }
+
         Usuario usuarioExistente = usuarioRepository.findByCorreo(usuario.getCorreo());
 
+        if (usuarioExistente == null) {
+            attributes.addFlashAttribute("error", "Usuario no encontrado");
+            return "redirect:/";
+        }
+
+        // Validar la nueva contraseña
+        if (contrasenaNueva == null) {
+            attributes.addFlashAttribute("error", "La contraseña debe tener al menos 6 caracteres");
+            return "redirect:/cambiarcontra";
+        }
+
+        // Encriptar la nueva contraseña
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(contrasenaNueva);
+        usuarioExistente.setContrasena(encodedPassword);
+
+        usuarioExistente.setRol(5);
+        usuarioExistente.setEstadoUsuario(1);
+        usuario.setEstadoContra(1);
+
+        // Guardar los cambios en la base de datos
+        usuarioRepository.save(usuarioExistente);
+
+        // Agregar un mensaje de éxito
+        attributes.addFlashAttribute("success", "Contraseña cambiada exitosamente");
+
+        return "redirect:/";
+    }
     }*/
 
 

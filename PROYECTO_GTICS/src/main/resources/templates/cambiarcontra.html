@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bienestar San Miguel | Error 403</title>
+
+    <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/fonts.css}" rel="stylesheet" />
+    <link th:href="@{/css/login-styles/login.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<header>
+    <div class="login-top">
+        <div>
+            <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+        </div>
+
+        <div class="top-menu">
+            <a class="text menu-item roboto-regular" href="">Preguntas Frecuentes →</a>
+            <a class="text menu-item roboto-regular" href="">Manual de Usuario →</a>
+            <a class="text menu-item roboto-regular" href="https://munisanmiguel.gob.pe/#">Directorio de Servicios →</a>
+        </div>
+    </div>
+</header>
+
+<body>
+<div class="main-container">
+    <div class="login-container">
+        <div class="wrapper text-center">
+            <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo">
+            <h1 class="display-1">Cambia tu contraseña</h1>
+            <div class="lock">
+                <div class="top"></div>
+                <div class="bottom"></div>
+            </div>
+
+            <form class="login-form"  th:action="@{/cambiarcontra}" onsubmit="return validatePassword()" th:object="${usuario}">
+                <div class="input-control2">
+                    <span class="details" style="margin-left: 10px">Contraseña</span>
+                    <input type="password" th:field="*{contrasena}" class="input-field2" placeholder="Ingrese su contraseña">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}" style="margin-left: 10px ; color: red"></div>
+                </div>
+                <div class="input-control2">
+                    <span class="details" style="margin-left: 10px">Confirmar su contraseña</span>
+                    <label for="contrasena2" class="input-label" hidden>Contraseña</label>
+                    <input type="password" name="contrasena2" id="contrasena2" class="input-field2" placeholder="Confirme su contraseña">
+                </div>
+            </form>
+            <div class="login-form" style="margin-bottom: 10px; align-items: center">
+                <div class="input-control4">
+                    <input onclick="goBack()" class="input-submit2" value="Volver">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validatePassword() {
+        var password = document.getElementById('contrasena').value;
+        var confirmPassword = document.getElementById('contrasena2').value;
+        if (password !== confirmPassword) {
+            alert("Las contraseñas no coinciden.");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+</body>
+</html>
+
