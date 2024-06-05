@@ -1,5 +1,7 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -361,7 +364,7 @@ public class SuperAdminController {
                                             @RequestParam(value = "sedeid", required = false) String idSede,
                                             @RequestParam(value = "dni", required = false) String dni,
                                             @RequestParam(value = "correo", required = false) String correo,
-                                            RedirectAttributes attr, Model model) throws IOException {
+                                            RedirectAttributes attr, Model model) throws IOException, MessagingException {
         if(bindingResult.hasErrors()){
             System.out.println("HAY ERRORES DE VALIDACIÓN:");
             for (ObjectError error : bindingResult.getAllErrors()) {
@@ -428,19 +431,32 @@ public class SuperAdminController {
         }
     }
 
-    private void sendTemporaryPasswordEmail(String to, String temporaryPassword) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("bienestar.sanmiguel1@outlook.com");
-        message.setTo(to);
-        message.setSubject("Contraseña Temporal para Nuevo Administrador");
-        message.setText("Hola,\n\nTu cuenta de administrador ha sido creada. " +
-                "Por favor, usa la siguiente contraseña temporal para iniciar sesión:\n\n" +
-                temporaryPassword + "\n\n" +
-                "Debes cambiar esta contraseña inmediatamente después de tu primer inicio de sesión. " +
-                "La contraseña temporal es válida por 24 horas. " +
-                "Si no cambias tu contraseña en este tiempo, tendrás que solicitar una nueva.\n\n" +
-                "Gracias.");
+    private void sendTemporaryPasswordEmail(String to, String temporaryPassword) throws MessagingException {
 
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setFrom("bienestar.sanmiguel1@outlook.com");
+        helper.setTo(to);
+        helper.setSubject("Contraseña Temporal para Nuevo Administrador");
+
+
+        String emailContent = "<html>" +
+                "<body style='font-family: Arial, sans-serif; margin: 0; padding: 0;'>" +
+                "<div style='background-color: #007BFF; padding: 20px; text-align: center;'>" +
+                "<h1 style='color: #1B4F72; margin: 0;'>Bienestar <span style='color: #FFFFFF;'>San Miguel</span></h1>" +
+                "</div>" +
+                "<div style='border: 2px solid #007BFF; border-radius: 10px; padding: 20px; margin: 20px;'>" +
+                "<h2 style='color: #007BFF;'>Hola,</h2>" +
+                "<p>Tu cuenta de administrador ha sido creada. Por favor, usa la siguiente contraseña temporal para iniciar sesión:</p>" +
+                "<p style='font-size: 20px; color: #007BFF; font-weight: bold; text-align: center;'>" + temporaryPassword + "</p>" +
+                "<p>Debes cambiar esta contraseña inmediatamente después de tu primer inicio de sesión. La contraseña temporal es válida por 24 horas. Si no cambias tu contraseña en este tiempo, tendrás que solicitar una nueva.</p>" +
+                "<p>Gracias.</p>" +
+                "</div>" +
+                "</body>" +
+                "</html>";
+
+        helper.setText(emailContent, true);
         mailSender.send(message);
     }
 
