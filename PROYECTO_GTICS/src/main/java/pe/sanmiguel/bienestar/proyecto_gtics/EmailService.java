@@ -61,4 +61,25 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    public void sendHtmlEmail2(String toEmail, String subject, String templateName, Map<String, Object> variables, Map<String, Object> variables2) throws MessagingException, jakarta.mail.MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+        Context context = new Context();
+        context.setVariables(variables);
+        String htmlContent = templateEngine.process(templateName, context);
+
+        Context context2 = new Context();
+        context2.setVariables(variables2);
+        String htmlContent2 = templateEngine.process(templateName, context2);
+
+        helper.setTo(toEmail);
+        helper.setSubject(subject);
+        helper.setText(htmlContent, true);
+        helper.setText(htmlContent2, true);
+        helper.setFrom("bienestar.sanmiguel1@outlook.com");
+
+        mailSender.send(message);
+    }
+
 }

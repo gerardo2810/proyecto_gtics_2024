@@ -18,6 +18,7 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
+import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.security.access.AccessDeniedException;
@@ -93,6 +94,7 @@ public class WebSecurityConfig {
 
                         HttpSession session = request.getSession();
                         session.setAttribute("usuario",usuarioRepository.findByCorreo(authentication.getName()));
+                        Usuario usuario = (Usuario) session.getAttribute("usuario");
 
 
                         if(defaultSavedRequest != null){ //Cuando vengo de la URL
@@ -113,8 +115,10 @@ public class WebSecurityConfig {
 
                             } else if (rol.equals("FARMACISTA")) {
                                 response.sendRedirect("/farmacista");
-                            }else {
+                            }else if (rol.equals("PACIENTE")){
                                 response.sendRedirect("/paciente");
+                            }else if (usuario.getEstadoUsuario().equals(2) && usuario.getEstadoContra().equals(2) ){
+                                response.sendRedirect("/cambiarcontra");
                             }
                         }
 

@@ -103,6 +103,9 @@ public class Usuario implements Serializable {
     @Column(name = "estado_usuario")
     private Integer estadoUsuario;
 
+    @Column(name = "estado_contra")
+    private Integer estadoContra;
+
     //Spring Session
 
 

@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Welcome to Our Service</title>
+    <title>Bienestar San Miguel</title>
 </head>
 <body>
-<h1>Welcome, ${usuario.nombres}!</h1>
-<p>Thank you for registering with us. We are excited to have you on board.</p>
-<p>If you have any questions, feel free to contact us at support@example.com.</p>
-<p>Best regards,</p>
-<p>The Team</p>
+<h1 th:text="${'Bienvenido(a) a la página de Bienestar San Miguel'}"></h1>
+<h1 th:text="${'Esta es su contraseña temporal , ' + contra + ', la cual usará para completar su registro.'}"></h1>
+
 </body>
 </html>

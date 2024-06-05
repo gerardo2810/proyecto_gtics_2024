@@ -1,6 +1,7 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
 import jakarta.mail.MessagingException;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.EmailService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
+import pe.sanmiguel.bienestar.proyecto_gtics.PasswordService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.LoginValidationsGroup;
@@ -23,12 +25,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Controller
 //@RequestMapping("/login")
 public class Login1 {
 final UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private PasswordService passwordService;
 
     public Login1(UsuarioRepository usuarioRepository) {this.usuarioRepository = usuarioRepository;}
 
@@ -64,16 +72,21 @@ final UsuarioRepository usuarioRepository;
                                       BindingResult bindingResult, RedirectAttributes attributes, Model model) {
 
         if (!bindingResult.hasErrors()) {
-            String contrasenaSinCifrar = usuario.getContrasena();
-            String contrasenaHasheada = SHA256.cipherPassword(contrasenaSinCifrar);
-            usuario.setContrasena(contrasenaHasheada);
             usuario.setRol(4);
             usuario.setEstadoUsuario(2);
+            String temporaryPassword = passwordService.generateTemporaryPassword();
+            usuario.setContrasena(temporaryPassword);
+            usuario.setEstadoContra(2);
             usuarioRepository.save(usuario);
 
+
             // Enviar el correo de bienvenida
-            String subject = "ola";
-            String htmlFilePath = "/templates/login/correo.html";
+            String subject = "Bienvenido(a) a Bienestar San Miguel";
+            Map<String, Object> variables = new HashMap<>();
+            Map<String, Object> variables2 = new HashMap<>();
+
+            variables.put("nombre", usuario.getNombres());
+            variables2.put("contra", usuario.getContrasena());
 
             //String filename="src/main/resources/templates/login/correo.html";
             //Path pathToFile = Paths.get(filename);
@@ -82,9 +95,10 @@ final UsuarioRepository usuarioRepository;
 
 
             try {
-                emailService.sendEmail(usuario.getCorreo(), subject, htmlFilePath);
+                emailService.sendHtmlEmail2(usuario.getCorreo(), subject,"login/correo", variables, variables2);
                 attributes.addFlashAttribute("mensaje", "Usuario creado correctamente y correo enviado.");
-            } catch (MessagingException | IOException e) {
+                return "redirect:/";
+            } catch (MessagingException e) {
                 e.printStackTrace();
                 attributes.addFlashAttribute("mensaje", "Usuario creado, pero hubo un error al enviar el correo: " + e.getMessage());
             }
@@ -102,6 +116,22 @@ final UsuarioRepository usuarioRepository;
     @GetMapping("/access-denied")
     public String accessDenied() {
         return "/login/error"; // Nombre de la vista que se debe mostrar
+    }
+
+    @PostMapping("/cambiarcontra")
+    public String cambiarContra(@ModelAttribute("usuario") @Validated(LoginValidationsGroup.class) Usuario usuario,
+                                BindingResult bindingResult,
+                                RedirectAttributes attributes,
+                                Model model) {
+
+        Usuario usuarioExistente = usuarioRepository.findByCorreo(usuario.getCorreo());
+
+
+
+
+
+
+
     }
 
 
@@ -125,8 +155,10 @@ final UsuarioRepository usuarioRepository;
                 } else {
                     return "redirect:/paciente";
                 }
-            } else {
+            } else if (usuarioExistente != null &&  usuario.getContrasena().equals(usuarioExistente.getContrasena())){
                 // Si las credenciales son incorrectas, redirige de vuelta al formulario de inicio de sesión con un mensaje de error
+                return "redirect:/cambiarcontra";
+            }else{
                 attributes.addFlashAttribute("error", "Credenciales incorrectas");
                 return "redirect:/paciente";
             }
