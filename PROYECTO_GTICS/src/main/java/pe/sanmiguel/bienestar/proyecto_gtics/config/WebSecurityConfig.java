@@ -70,6 +70,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/adminsede", "/adminsede/**").hasAnyAuthority("SUPERADMIN", "ADMINSEDE")
                 .requestMatchers("/farmacista", "/farmacista/**").hasAnyAuthority("SUPERADMIN", "FARMACISTA")
                 .requestMatchers("/paciente", "/paciente/**").hasAnyAuthority("SUPERADMIN", "PACIENTE")
+                .requestMatchers("/cambiarcontratemporal").hasAnyAuthority("TEMPORAL")
                 .requestMatchers("/impersonate").hasAuthority("SUPERADMIN")
                 .anyRequest().permitAll()
                 .and()
@@ -112,13 +113,12 @@ public class WebSecurityConfig {
                                 response.sendRedirect("/superadmin");
                             } else if (rol.equals("ADMINSEDE")) {
                                 response.sendRedirect("/adminsede");
-
                             } else if (rol.equals("FARMACISTA")) {
                                 response.sendRedirect("/farmacista");
-                            }else if (rol.equals("PACIENTE")){
-                                response.sendRedirect("/paciente");
-                            }else if (usuario.getEstadoUsuario().equals(2) && usuario.getEstadoContra().equals(2) ){
+                            }else if (rol.equals("TEMPORAL") ){
                                 response.sendRedirect("/cambiarcontra");
+                            }else if (rol.equals("PACIENTE") ){
+                                response.sendRedirect("/paciente");
                             }
                         }
 
