@@ -230,6 +230,7 @@ public class AdminSedeController {
                 List<ReposicionContenidoMedicamentoDto> listaMedicamentosSeleccionados = reposicionContenidoRepository.listaMostrarMedicamentosSeleccionados(id);
                 model.addAttribute("idOrden", id);
                 model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
+                model.addAttribute("reposicion", reposicionSeleccionada);
                 return "adminsede/editar_orden_reposicion";
             }else{
                 attr.addFlashAttribute("msgred", "La orden de reposición buscada no ha sido encontrada.");
@@ -460,10 +461,15 @@ public class AdminSedeController {
         List<ReposicionContenidoMedicamentoDto> listaMedicamentosSeleccionados = reposicionContenidoRepository.listaMostrarMedicamentosSeleccionados(idReposicion);
         model.addAttribute("listaMedicamentosSeleccionados", listaMedicamentosSeleccionados);
 
+
         // Si la orden de reposicion ya no tiene medicamentos entonces se elimina la orden:
         if(listaMedicamentosSeleccionados.size() == 0){
             reposicionRepository.eliminarReposicionporId(idReposicion);
         }
+
+        Reposicion reposicionSeleccionada = reposicionRepository.encontrarReposicionporId(idReposicion);
+
+        model.addAttribute("reposicion", reposicionSeleccionada);
 
         return "adminsede/editar_orden_reposicion";
     }
@@ -611,10 +617,43 @@ public class AdminSedeController {
     }
 
     @PostMapping("/generar_orden")
-    public String fillContentOrder(@RequestParam("listaIds") List<String> listaSelectedIds){
+    public String fillContentOrder(@RequestParam("listaIds") List<String> listaSelectedIds,
+                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication,
+                                   RedirectAttributes attr){
+
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+
+
         if (!listaSelectedIds.isEmpty()){
             medicamentosSeleccionados = getMedicamentosFromLista(listaSelectedIds);
             listaCantidades = getCantidadesFromLista(listaSelectedIds);
+
+            // Solo podemos reponer los medicamentos que se encuentren en sede
+            List<Integer> listaIdsMedicamentoEnSede = sedeStockRepository.listarIdsMedicamentoporSede(sedeSession.getIdSede());
+
+            //Extraemos los ids de los medicamentos solicitados
+            List<Integer> listaIdsMedicamentosSolicitados = new ArrayList<>();
+            for(int i = 0; i < (listaSelectedIds.size()/2); i++){
+                listaIdsMedicamentosSolicitados.add(Integer.parseInt(listaSelectedIds.get(2*i)));
+            }
+
+            //Verificamos
+            for (int idmedicamento : listaIdsMedicamentosSolicitados){
+
+                if(!listaIdsMedicamentoEnSede.contains(idmedicamento)){
+                    attr.addFlashAttribute("msgred", "Orden no realizada debido a que el medicamento seleccionado no se encuentra disponible.");
+                    return "redirect:/adminsede/medicamentos";
+                }
+            }
+
             return "redirect:/adminsede/generar_orden_forms";
         } else {
             return "redirect:/adminsede/medicamentos";
@@ -758,8 +797,19 @@ public class AdminSedeController {
     public String editarReposicion(@RequestParam(name = "listaIds", required = false) List<Integer> listaIds,
                                    @RequestParam(name = "listaCantidades", required = false) List<Integer> listaCantidades,
                                    @RequestParam("idReposicion") int idReposicion,
-                                   RedirectAttributes attr, Model model){
+                                   RedirectAttributes attr, Model model,
+                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication){
 
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+        Reposicion reposicion = reposicionRepository.encontrarReposicionporId(idReposicion);
 
         if(listaIds == null){
             return "redirect:/adminsede/ordenes";
@@ -776,11 +826,11 @@ public class AdminSedeController {
                 for(int i = 0; i < listaIds.size(); i++){
                     reposicionContenidoRepository.actualizarCantidadMedicamentoOrden(listaCantidades.get(i),listaIds.get(i),idReposicion);
                 }
-                attr.addFlashAttribute("msg", "Orden de reposición #" + (idReposicion + 10000) + " actualizada correctamente");
+                attr.addFlashAttribute("msg", "Orden de reposición #" + reposicion.getNumero() + " actualizada correctamente");
                 return "redirect:/adminsede/ordenes";
 
             }else {
-                attr.addFlashAttribute("msg", "Error en la actualización de cantidad de medicamento en la orden #" + (idReposicion + 10000) + ", solo está permitido colocar cantidades positivas");
+                attr.addFlashAttribute("msgred", "Error en la actualización de cantidad de medicamento en la orden #" + reposicion.getNumero() + ", solo está permitido colocar cantidades positivas");
                 return "redirect:/adminsede/ordenes";
             }
 

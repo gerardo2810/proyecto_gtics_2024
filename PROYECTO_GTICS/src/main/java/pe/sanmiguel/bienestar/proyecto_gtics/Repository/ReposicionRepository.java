@@ -90,4 +90,6 @@ public interface ReposicionRepository extends JpaRepository<Reposicion, Integer>
             "END", nativeQuery = true)
     void createIncrementReposicionStateEvent(@Param("ordenId") Integer ordenId);
 
+
+
 }
