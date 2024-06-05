@@ -118,7 +118,7 @@ final UsuarioRepository usuarioRepository;
         return "/login/error"; // Nombre de la vista que se debe mostrar
     }
 
-    @PostMapping("/cambiarcontra")
+    /*@PostMapping("/cambiarcontra")
     public String cambiarContra(@ModelAttribute("usuario") @Validated(LoginValidationsGroup.class) Usuario usuario,
                                 BindingResult bindingResult,
                                 RedirectAttributes attributes,
@@ -126,13 +126,7 @@ final UsuarioRepository usuarioRepository;
 
         Usuario usuarioExistente = usuarioRepository.findByCorreo(usuario.getCorreo());
 
-
-
-
-
-
-
-    }
+    }*/
 
 
     @PostMapping("/loguearse")
