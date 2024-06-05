@@ -6,8 +6,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
+import pe.sanmiguel.bienestar.proyecto_gtics.PasswordService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 
@@ -342,6 +347,15 @@ public class SuperAdminController {
     }
 
     int sedeId;
+
+    @Autowired
+    private PasswordService passwordService;
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @PostMapping("/guardarAdministrador")
     public String agregarNuevoAdministrador(@ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResult,
                                             @RequestParam(value = "sedeid", required = false) String idSede,
@@ -371,49 +385,65 @@ public class SuperAdminController {
                 return "superAdmin/crearAdministrador";
             }
 
+            // Generar contraseña temporal
+            String temporaryPassword = passwordService.generateTemporaryPassword();
+            System.out.println("Contraseña temporal." + temporaryPassword);
+            String hashedPassword = SHA256.cipherPassword(temporaryPassword);
+            administrador.setContrasena(hashedPassword);
+             // Indicar que el usuario debe cambiar la contraseña en el primer inicio de sesión
+
+
             if(idSede == null || idSede.isEmpty()){
                 System.out.println("ID ADMIN: " + administrador.getIdUsuario());
 
-                String password = administrador.getContrasena();
-                if (!isValidPassword(password)) {
-                    bindingResult.rejectValue("contrasena", "error.contrasena", "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.");
-                    return "superAdmin/crearAdministrador";
-                }
-
-                String hashedPassword = hashPasswordSHA256(password);
-                administrador.setContrasena(hashedPassword);
                 administrador.setRol(2);
                 administrador.setEstadoUsuario(5);
                 usuarioRepository.save(administrador);
+                sendTemporaryPasswordEmail(administrador.getCorreo(), temporaryPassword);
                 attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
                 return "redirect:/superadmin/administradoresSede";
             }else{
                 if(administrador.getIdUsuario() != 0){
                     System.out.println("ID ADMIN si no es vacio: " + administrador.getIdUsuario());
                     int idsede = Integer.parseInt(idSede);
-                    String password = administrador.getContrasena();
-                    String hashedPassword = hashPasswordSHA256(password);
-                    administrador.setContrasena(hashedPassword);
+
                     administrador.setRol(2);
                     administrador.setEstadoUsuario(1);
                     usuarioRepository.save(administrador);
                     sedeRepository.asignarAdministradorSede(administrador.getIdUsuario(), idsede);
+                    sendTemporaryPasswordEmail(administrador.getCorreo(), temporaryPassword);
                     attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
                     return "redirect:/superadmin/administradoresSede";
                 }else{
                     System.out.println("ID ADMIN si es vacio: " + administrador.getIdUsuario());
-                    String password = administrador.getContrasena();
-                    String hashedPassword = hashPasswordSHA256(password);
-                    administrador.setContrasena(hashedPassword);
+
                     administrador.setRol(2);
                     administrador.setEstadoUsuario(5);
                     usuarioRepository.save(administrador);
+                    sendTemporaryPasswordEmail(administrador.getCorreo(), temporaryPassword);
                     attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
                     return "redirect:/superadmin/administradoresSede";
                 }
             }
         }
     }
+
+    private void sendTemporaryPasswordEmail(String to, String temporaryPassword) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("bienestar.sanmiguel1@outlook.com");
+        message.setTo(to);
+        message.setSubject("Contraseña Temporal para Nuevo Administrador");
+        message.setText("Hola,\n\nTu cuenta de administrador ha sido creada. " +
+                "Por favor, usa la siguiente contraseña temporal para iniciar sesión:\n\n" +
+                temporaryPassword + "\n\n" +
+                "Debes cambiar esta contraseña inmediatamente después de tu primer inicio de sesión. " +
+                "La contraseña temporal es válida por 24 horas. " +
+                "Si no cambias tu contraseña en este tiempo, tendrás que solicitar una nueva.\n\n" +
+                "Gracias.");
+
+        mailSender.send(message);
+    }
+
 
     private boolean isValidPassword(String password) {
         if (password == null || password.trim().isEmpty()) {
