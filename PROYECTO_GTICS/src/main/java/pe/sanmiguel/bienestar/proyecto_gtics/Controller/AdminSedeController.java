@@ -798,46 +798,67 @@ public class AdminSedeController {
 
     @PostMapping("/editarReposicion")
     public String editarReposicion(@RequestParam(name = "listaIds", required = false) List<Integer> listaIds,
-                                   @RequestParam(name = "listaCantidades", required = false) List<Integer> listaCantidades,
+                                   @RequestParam(name = "listaCantidades", required = false) List<String> listaCantidadesString,
                                    @RequestParam("idReposicion") int idReposicion,
                                    RedirectAttributes attr, Model model,
                                    HttpServletRequest request, HttpServletResponse response, Authentication authentication){
-
-        //SESSION
-        //Iniciamos la sesión
-        HttpSession session = request.getSession();
-        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
-        session.setAttribute("usuario", usuario);
-
-        //Sacamos la sede del adminsede
-        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
-
         Reposicion reposicion = reposicionRepository.encontrarReposicionporId(idReposicion);
+        //Si manda alguna letra:
+        boolean letraEncontrada = false;
 
-        if(listaIds == null){
-            return "redirect:/adminsede/ordenes";
-        }else {
-            // validamos si las cantidades son negativas o positivas
-            boolean cantidadesPositivas = true;
-            for (Integer cantidad : listaCantidades){
-                if(cantidad <= 0){
-                    cantidadesPositivas = false;
-                }
+        for (String cadena : listaCantidadesString) {
+            try {
+                Integer.parseInt(cadena);
+            } catch (NumberFormatException e) {
+                letraEncontrada = true;
+                break;
             }
-
-            if(cantidadesPositivas){
-                for(int i = 0; i < listaIds.size(); i++){
-                    reposicionContenidoRepository.actualizarCantidadMedicamentoOrden(listaCantidades.get(i),listaIds.get(i),idReposicion);
-                }
-                attr.addFlashAttribute("msg", "Orden de reposición #" + reposicion.getNumero() + " actualizada correctamente");
-                return "redirect:/adminsede/ordenes";
-
-            }else {
-                attr.addFlashAttribute("msgred", "Error en la actualización de cantidad de medicamento en la orden #" + reposicion.getNumero() + ", solo está permitido colocar cantidades positivas");
-                return "redirect:/adminsede/ordenes";
-            }
-
         }
+
+        if(!letraEncontrada){
+            List<Integer> listaCantidades = listaCantidadesString.stream().map(Integer::parseInt).collect(Collectors.toList());
+
+            //SESSION
+            //Iniciamos la sesión
+            HttpSession session = request.getSession();
+            Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+            session.setAttribute("usuario", usuario);
+
+            //Sacamos la sede del adminsede
+            Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+            if(listaIds == null){
+                return "redirect:/adminsede/ordenes";
+            }else {
+                // validamos si las cantidades son negativas o positivas
+                boolean cantidadesPositivas = true;
+                for (Integer cantidad : listaCantidades){
+                    if(cantidad <= 0){
+                        cantidadesPositivas = false;
+                    }
+                }
+
+                if(cantidadesPositivas){
+                    for(int i = 0; i < listaIds.size(); i++){
+                        reposicionContenidoRepository.actualizarCantidadMedicamentoOrden(listaCantidades.get(i),listaIds.get(i),idReposicion);
+                    }
+                    attr.addFlashAttribute("msg", "Orden de reposición #" + reposicion.getNumero() + " actualizada correctamente");
+                    return "redirect:/adminsede/ordenes";
+
+                }else {
+                    attr.addFlashAttribute("msgred", "Error en la actualización de cantidad de medicamento en la orden #" + reposicion.getNumero() + ", solo está permitido colocar números enteros positivos");
+                    return "redirect:/adminsede/ordenes";
+                }
+
+            }
+
+        }else {
+            attr.addFlashAttribute("msgred", "Error en la actualización de cantidad de medicamento en la orden #" + reposicion.getNumero() + ", solo está permitido colocar números enteros positivos");
+            return "redirect:/adminsede/ordenes";
+        }
+
+
+
     }
 
     @GetMapping("/perfil")
