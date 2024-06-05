@@ -511,13 +511,12 @@ public class SuperAdminController {
             List<Sede> sedeList = sedeRepository.findAll();
 
             String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-            String passwordDots = hashToDots(passwordHash);
+            String passwordDots = "*************";
 
             List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
             model.addAttribute("sedeAdministrador", sedeAdministrador);
             model.addAttribute("sedeList", sedeList);
             model.addAttribute("administrador", administrador);
-            model.addAttribute("contrasenia", passwordDots);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
             return "superAdmin/editarAdministrador";
         }else {
@@ -535,12 +534,11 @@ public class SuperAdminController {
             Sede sedeListAdminID = sedeRepository.sedeAdminID(administrador.getIdUsuario());
             List<Sede> sedeList = sedeRepository.findAll();
             String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-            String passwordDots = hashToDots(passwordHash);
+            String passwordDots = "*************";
 
             List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
             model.addAttribute("sedeAdministrador", sedeListAdminID);
             model.addAttribute("sedeList", sedeList);
-            model.addAttribute("contrasenia", passwordDots);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
 
             return "superAdmin/editarAdministrador";
@@ -559,13 +557,12 @@ public class SuperAdminController {
                 List<Sede> sedeList = sedeRepository.findAll();
 
                 String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-                String passwordDots = hashToDots(passwordHash);
+                String passwordDots = "*************";
 
                 List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
                 model.addAttribute("sedeAdministrador", sedeListAdminID);
                 model.addAttribute("sedeList", sedeList);
                 model.addAttribute("estadoUsuarioList", estadoUsuarioList);
-                model.addAttribute("contrasenia", passwordDots);
                 bindingResult.rejectValue("correo", "error.correo", "El correo ya se encuentra registrado.");
                 return "superAdmin/editarAdministrador";
             }
@@ -577,13 +574,12 @@ public class SuperAdminController {
                 List<Sede> sedeList = sedeRepository.findAll();
 
                 String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-                String passwordDots = hashToDots(passwordHash);
+                String passwordDots = "*************";
 
                 List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
                 model.addAttribute("sedeAdministrador", sedeListAdminID);
                 model.addAttribute("sedeList", sedeList);
                 model.addAttribute("estadoUsuarioList", estadoUsuarioList);
-                model.addAttribute("contrasenia", passwordDots);
                 bindingResult.rejectValue("dni", "error.dni", "El DNI ya se encuentra registrado.");
                 return "superAdmin/editarAdministrador";
             }
@@ -591,13 +587,15 @@ public class SuperAdminController {
             Usuario adminDatos = usuarioRepository.administradorSede(idAdministradorNuevo);
             String passwordOld = adminDatos.getContrasena();
 
-            String passwordNew = hashPasswordSHA256(contrasenia);
+            String passwordNew = SHA256.cipherPassword(contrasenia);
 
             System.out.println("Contra antigua: " + passwordOld);
             System.out.println("Contra nueva: " + passwordNew);
 
-            if(contrasenia.length()>30){
-                administrador.setContrasena(contrasenia);
+            if(contrasenia.isEmpty()){
+                System.out.println("Contra vacia: " + administrador.getContrasena());
+                String contradeAdmin = usuarioRepository.contraAdmin(administrador.getIdUsuario());
+                administrador.setContrasena(contradeAdmin);
             } else if (!isValidPassword(contrasenia)) {
                 System.out.println("O AQUII:");
                 String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
@@ -606,13 +604,12 @@ public class SuperAdminController {
                 List<Sede> sedeList = sedeRepository.findAll();
 
                 String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-                String passwordDots = hashToDots(passwordHash);
+                String passwordDots = "*************";
 
                 List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
                 model.addAttribute("sedeAdministrador", sedeListAdminID);
                 model.addAttribute("sedeList", sedeList);
                 model.addAttribute("estadoUsuarioList", estadoUsuarioList);
-                model.addAttribute("contrasenia", passwordDots);
                 model.addAttribute("error", errorMsg); // Añade el error al modelo
                 return "superAdmin/editarAdministrador";
             }
@@ -622,12 +619,17 @@ public class SuperAdminController {
             /*Se ubica el administrador de la sede nueva elegida*/
             Sede sedeTieneAdministrador = sedeRepository.getSedeByIdSede(idSede);
             /*Se obtiene el id del administrador de la sede nueva elegida*/
-
+            System.out.println("Contra vacia: " + administrador.getContrasena());
             if(idSede == AdministradorTieneSede.getIdSede()){
-                String password = administrador.getContrasena();
-
-                String hashedPassword = hashPasswordSHA256(password);
-                administrador.setContrasena(hashedPassword);
+                if(contrasenia.isEmpty()) {
+                    System.out.println("Contra vacia: " + administrador.getContrasena());
+                    String contradeAdmin = usuarioRepository.contraAdmin(administrador.getIdUsuario());
+                    administrador.setContrasena(contradeAdmin);
+                }
+                else{
+                    String hashedPassword = SHA256.cipherPassword(contrasenia);
+                    administrador.setContrasena(hashedPassword);
+                }
 
                 System.out.println("Sedes iguales: " );
                 usuarioRepository.save(administrador);
@@ -638,11 +640,15 @@ public class SuperAdminController {
                 /*Se obtiene el id de la sede actual del admin*/
                 int idSedeAntigua = AdministradorTieneSede.getIdSede();
 
-                String password = administrador.getContrasena();
-                System.out.println("Contraseña admin: " + password);
-
-                String hashedPassword = hashPasswordSHA256(password);
-                administrador.setContrasena(hashedPassword);
+                if(contrasenia.isEmpty()) {
+                    System.out.println("Contra vacia: " + administrador.getContrasena());
+                    String contradeAdmin = usuarioRepository.contraAdmin(administrador.getIdUsuario());
+                    administrador.setContrasena(contradeAdmin);
+                }
+                else{
+                    String hashedPassword = SHA256.cipherPassword(contrasenia);
+                    administrador.setContrasena(hashedPassword);
+                }
 
                 if (sedeTieneAdministrador.getAdmin()==null){
                     sedeRepository.eliminarAdminAntiguo(idSedeAntigua);
@@ -660,7 +666,6 @@ public class SuperAdminController {
             }
         }
     }
-
 
     @PostMapping("/eliminarAdministrador")
     public String eliminarAdministrador(@RequestParam(value = "idAdministrador") String idAdministrador, @RequestParam(value = "idSede") int idSede, RedirectAttributes attr){
@@ -845,8 +850,8 @@ public class SuperAdminController {
             return "superAdmin/editarDoctor";
         }else{
 
-            List<String> correosUsados = usuarioRepository.listarCorreosUsadosMenosUserID(doctor.getIdDoctor());
-            List<String> dnisUsados = usuarioRepository.listarDNIsUsadosMenosUserID(doctor.getIdDoctor());
+            List<String> correosUsados = doctorRepository.listarCorreosUsadosMenosUserID(doctor.getIdDoctor());
+            List<String> dnisUsados = doctorRepository.listarDNIsUsadosMenosUserID(doctor.getIdDoctor());
 
             if (correosUsados.contains(correo)) {
                 System.out.println("El correo está en la lista.");
@@ -939,7 +944,6 @@ public class SuperAdminController {
 
             model.addAttribute("farmacista", farmacista);
             model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
-            model.addAttribute("contrasenia", passwordDots);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
             return "superAdmin/editarFarmacista";
         } else {
@@ -965,7 +969,6 @@ public class SuperAdminController {
             String passwordDots = hashToDots(passwordHash);
             model.addAttribute("farmacista", farmacista);
             model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
-            model.addAttribute("contrasenia", passwordDots);
             model.addAttribute("estadoUsuarioList", estadoUsuarioList);
             return "superAdmin/editarFarmacista";
         }else{
@@ -978,7 +981,6 @@ public class SuperAdminController {
                 String passwordDots = hashToDots(passwordHash);
                 model.addAttribute("farmacista", farmacista);
                 model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
-                model.addAttribute("contrasenia", passwordDots);
                 model.addAttribute("estadoUsuarioList", estadoUsuarioList);
                 bindingResult.rejectValue("correo", "error.correo", "El correo ya se encuentra registrado.");
                 return "superAdmin/editarFarmacista";
@@ -987,13 +989,10 @@ public class SuperAdminController {
             Usuario adminDatos = usuarioRepository.farmacista(idFarmacistaNuevo);
             String passwordOld = adminDatos.getContrasena();
 
-            String passwordNew = hashPasswordSHA256(contrasenia);
-
-            System.out.println("Contra antigua: " + passwordOld);
-            System.out.println("Contra nueva: " + passwordNew);
-
-            if(passwordNew.length()>30){
-                farmacista.setContrasena(passwordNew);
+            if(contrasenia.isEmpty()){
+                System.out.println("Contra vacia: " + farmacista.getContrasena());
+                String contradeAdmin = usuarioRepository.contraAdmin(farmacista.getIdUsuario());
+                farmacista.setContrasena(contradeAdmin);
             } else if (!isValidPassword(contrasenia)) {
                 System.out.println("O AQUII:");
                 String errorMsg = "Debe escribir una contraseña. Esta debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.";
@@ -1001,14 +1000,21 @@ public class SuperAdminController {
                 SedeFarmacista datosFarmacistaSede = sedeFarmacistaRepository.buscarFarmacistaSede(farmacista.getIdUsuario());
                 List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
                 String passwordHash = farmacista.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
-                String passwordDots = hashToDots(passwordHash);
                 model.addAttribute("farmacista", farmacista);
                 model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
-                model.addAttribute("contrasenia", passwordDots);
                 model.addAttribute("estadoUsuarioList", estadoUsuarioList);
-                model.addAttribute("contrasenia", passwordDots);
                 model.addAttribute("error", errorMsg); // Añade el error al modelo
                 return "superAdmin/editarFarmacista";
+            }
+
+            if(contrasenia.isEmpty()) {
+                System.out.println("Contra vacia: " + farmacista.getContrasena());
+                String contradeAdmin = usuarioRepository.contraAdmin(farmacista.getIdUsuario());
+                farmacista.setContrasena(contradeAdmin);
+            }
+            else{
+                String hashedPassword = SHA256.cipherPassword(contrasenia);
+                farmacista.setContrasena(hashedPassword);
             }
 
             attr.addFlashAttribute("msg", "Datos del farmacista actualizados exitosamente");

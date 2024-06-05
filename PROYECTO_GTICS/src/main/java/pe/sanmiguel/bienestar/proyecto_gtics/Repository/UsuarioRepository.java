@@ -136,5 +136,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(nativeQuery = true, value = "SELECT u.correo FROM proyecto_gtics.usuario u WHERE u.id <> ?")
     List<String> listarCorreosUsadosMenosUserID(int id);
 
-
+    @Query(nativeQuery = true, value="SELECT contrasena FROM proyecto_gtics.usuario WHERE id = ?")
+    String contraAdmin(int id);
 }
