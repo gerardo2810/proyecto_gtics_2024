@@ -553,7 +553,7 @@ public class AdminSedeController {
             for (SedeFarmacista sedeFarmacista : listasedeFarmacistas){
                 if(codigoMed.equals(sedeFarmacista.getCodigoMed())){
                     //no se crea el farmacista debido a que es repetido el codigo medico
-                    attr.addFlashAttribute("msg", "Codigo de colegiatura ya existente en el sistema, por favor ingrese uno nuevamente");
+                    attr.addFlashAttribute("msgred", "Codigo de colegiatura ya existente en el sistema, por favor ingrese uno nuevamente");
                     codigoMedicoUnico  = false;
                     return "redirect:/adminsede/solicitud_farmacista";
 
@@ -569,7 +569,7 @@ public class AdminSedeController {
             for (Usuario usuario : listaUsuarios){
                 if(usuarioFarmacista.getDni().equals(usuario.getDni())){
                     //no se crea el farmacista debido a que es repetido el codigo medico
-                    attr.addFlashAttribute("msg", "DNI ya existente en el sistema, por favor ingrese uno nuevamente");
+                    attr.addFlashAttribute("msgred", "DNI ya existente en el sistema, por favor ingrese uno nuevamente");
                     dniNoExistente  = false;
                     return "redirect:/adminsede/solicitud_farmacista";
 
@@ -581,7 +581,7 @@ public class AdminSedeController {
             for (Usuario usuario : listaUsuarios){
                 if(usuarioFarmacista.getCorreo().equals(usuario.getCorreo())){
                     //no se crea el farmacista debido a que es repetido el codigo medico
-                    attr.addFlashAttribute("msg", "Correo ya existente en el sistema, por favor ingrese uno nuevamente");
+                    attr.addFlashAttribute("msgred", "Correo ya existente en el sistema, por favor ingrese uno nuevamente");
                     dniNoExistente  = false;
                     return "redirect:/adminsede/solicitud_farmacista";
 
@@ -600,7 +600,7 @@ public class AdminSedeController {
                 return "redirect:/adminsede/farmacista";
             }else {
                 //no se crea el farmacista debido a que el dni o el codigo no coinciden
-                attr.addFlashAttribute("msg", "Codigo de colegiatura no válido, por favor ingrese nuevamente");
+                attr.addFlashAttribute("msgred", "Codigo de colegiatura no válido, por favor ingrese nuevamente");
                 return "redirect:/adminsede/solicitud_farmacista";
             }
 
