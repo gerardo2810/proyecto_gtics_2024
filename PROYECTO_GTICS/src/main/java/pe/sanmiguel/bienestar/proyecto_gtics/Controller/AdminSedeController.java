@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
@@ -18,6 +19,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Dto.UsuarioSedeFarmacistaDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.AdminSedeValidationsGroup;
 
 import java.io.IOException;
 import java.util.*;
@@ -480,8 +482,9 @@ public class AdminSedeController {
     @PostMapping("/editarFarmacista")
     public String editarFarmacista(RedirectAttributes attr,
                                    SedeFarmacista sedeFarmacista,
-                                   @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
-                                   Model model, @RequestParam("correo") String correo){
+                                   Model model, @RequestParam("correo") String correo,
+                                   @ModelAttribute("usuario") @Validated(AdminSedeValidationsGroup.class) Usuario usuario, BindingResult bindingResult
+                                   ){
 
         List<String> correosUsados = usuarioRepository.listarCorreosUsadosMenosUserID(usuario.getIdUsuario());
         if (correosUsados.contains(correo)) {
@@ -519,7 +522,7 @@ public class AdminSedeController {
 
     }
     @PostMapping("/solicitud_farmacista_post")
-    public String solicitudAgregarFarmacista(@ModelAttribute("usuarioFarmacista") @Valid Usuario usuarioFarmacista, BindingResult bindingResult,
+    public String solicitudAgregarFarmacista(@ModelAttribute("usuarioFarmacista") @Validated(AdminSedeValidationsGroup.class) Usuario usuarioFarmacista, BindingResult bindingResult,
                                              @RequestParam("codigoMed") String codigoMed,
                                              RedirectAttributes attr){
 
