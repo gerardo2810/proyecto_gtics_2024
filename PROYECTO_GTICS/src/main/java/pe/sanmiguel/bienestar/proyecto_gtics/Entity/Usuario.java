@@ -27,8 +27,8 @@ public class Usuario implements Serializable {
     private String correo;
 
     @Column
-    @NotBlank(message = "Debe ingresar una contraseña", groups = {RegisterValidationsGroup.class, OptionalValidationsGroup.class , LoginValidationsGroup.class, AdminSedeValidationsGroup.class})
-    @Size(min = 8, message = "Debe ingresar al menos 8 caracteres", groups = {RegisterValidationsGroup.class, OptionalValidationsGroup.class, AdminSedeValidationsGroup.class })
+    @NotBlank(message = "Debe ingresar una contraseña", groups = {RegisterValidationsGroup.class, OptionalValidationsGroup.class , LoginValidationsGroup.class})
+    @Size(min = 8, message = "Debe ingresar al menos 8 caracteres", groups = {RegisterValidationsGroup.class, OptionalValidationsGroup.class})
     private String contrasena;
 
     @Column
@@ -90,9 +90,9 @@ public class Usuario implements Serializable {
 
     @Column
     @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+$", message = "No debe incluir números", groups = {RegisterValidationsGroup.class})
-    @NotBlank(message = "Debe ingresar su seguro", groups = {RegisterValidationsGroup.class, AdminSedeValidationsGroup.class})
-    @Size(max = 30, message = "No debe exceder de 30 caracteres", groups = {RegisterValidationsGroup.class, AdminSedeValidationsGroup.class})
-    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s()]+$", message = "No debe incluir números", groups = {RegisterValidationsGroup.class, AdminSedeValidationsGroup.class})
+    @NotBlank(message = "Debe ingresar su seguro", groups = {RegisterValidationsGroup.class})
+    @Size(max = 30, message = "No debe exceder de 30 caracteres", groups = {RegisterValidationsGroup.class})
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s()]+$", message = "No debe incluir números", groups = {RegisterValidationsGroup.class})
     @NotBlank(message = "Debe ingresar su seguro")
     @Size(max = 30, message = "No debe exceder de 30 caracteres")
     private String seguro;

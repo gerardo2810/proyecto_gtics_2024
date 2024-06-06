@@ -72,7 +72,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_usuario = 4 WHERE id = ?")
+    @Query(nativeQuery = true, value = "delete from proyecto_gtics.usuario where id = ?")
     void eliminarFarmacista(int idFarmacista);
 
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.usuario where idRol = 2 and estado_usuario = 3")
@@ -138,4 +138,21 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     @Query(nativeQuery = true, value="SELECT contrasena FROM proyecto_gtics.usuario WHERE id = ?")
     String contraAdmin(int id);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET contrasena = ?1 WHERE id = ?2")
+    void actualizarContrasenaFarmacista(String contra, int id);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_usuario = 1 WHERE id = ?")
+    void actualizarEstadoFarmacista(int id);
+
+
+
+
+
+
+
 }

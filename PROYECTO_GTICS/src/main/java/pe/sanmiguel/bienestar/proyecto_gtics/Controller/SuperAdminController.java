@@ -182,12 +182,25 @@ public class SuperAdminController {
 
     @PostMapping("/estadoSolicitudFarmacista")
     public String verEstadoSolicitud(@RequestParam(value = "estadoSolicitud") int idEstadoSolicitud,
+                                     @RequestParam(value = "correo") String correoSolicitud,
                                      @RequestParam(value = "idUsuario") int idUsuario, RedirectAttributes attr){
         System.out.println("Valor de Estado solicitud: " + idEstadoSolicitud);
         System.out.println("Valor de id farmacista: " + idUsuario);
+        System.out.println("correo del farmacista: " + correoSolicitud);
+        String contrasena = usuarioRepository.contraAdmin(idUsuario);
+
         if(idEstadoSolicitud==1){
             sedeFarmacistaRepository.aprobarSolicitud(idUsuario);
             attr.addFlashAttribute("msg", "Solicitud aceptada exitosamente");
+            try {
+                sendTemporaryPasswordEmailFarmacista(correoSolicitud, contrasena);
+            } catch (MessagingException e) {
+                System.err.println("Error al enviar o recibir correo: " + e.getMessage());
+                e.printStackTrace();
+            }
+            String hashedPassword = SHA256.cipherPassword(contrasena);
+            usuarioRepository.actualizarContrasenaFarmacista(hashedPassword, idUsuario);
+            usuarioRepository.actualizarEstadoFarmacista(idUsuario);
             return "redirect:/superadmin/solicitudes";
         }else {
             sedeFarmacistaRepository.denegarSolicitud(idUsuario);
@@ -451,6 +464,35 @@ public class SuperAdminController {
                 "<p>Tu cuenta de administrador ha sido creada. Por favor, usa la siguiente contraseña temporal para iniciar sesión:</p>" +
                 "<p style='font-size: 20px; color: #007BFF; font-weight: bold; text-align: center;'>" + temporaryPassword + "</p>" +
                 "<p>Debes cambiar esta contraseña inmediatamente después de tu primer inicio de sesión. La contraseña temporal es válida por 24 horas. Si no cambias tu contraseña en este tiempo, tendrás que solicitar una nueva.</p>" +
+                "<p>Gracias.</p>" +
+                "</div>" +
+                "</body>" +
+                "</html>";
+
+        helper.setText(emailContent, true);
+        mailSender.send(message);
+    }
+
+    private void sendTemporaryPasswordEmailFarmacista(String to, String temporaryPassword) throws MessagingException {
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setFrom("bienestar.sanmiguel1@outlook.com");
+        helper.setTo(to);
+        helper.setSubject("Contraseña Temporal para Nuevo Farmacista");
+
+
+        String emailContent = "<html>" +
+                "<body style='font-family: Arial, sans-serif; margin: 0; padding: 0;'>" +
+                "<div style='background-color: #007BFF; padding: 20px; text-align: center;'>" +
+                "<h1 style='color: #1B4F72; margin: 0;'>Bienestar <span style='color: #FFFFFF;'>San Miguel</span></h1>" +
+                "</div>" +
+                "<div style='border: 2px solid #007BFF; border-radius: 10px; padding: 20px; margin: 20px;'>" +
+                "<h2 style='color: #007BFF;'>Hola,</h2>" +
+                "<p>Tu cuenta de farmacista ha sido creada. Por favor, usa la siguiente contraseña temporal para iniciar sesión:</p>" +
+                "<p style='font-size: 20px; color: #007BFF; font-weight: bold; text-align: center;'>" + temporaryPassword + "</p>" +
+                "<p>Debes cambiar esta contraseña inmediatamente después de tu primer inicio de sesión. La contraseña temporal es válida por 5 minutos. Si no cambias tu contraseña en este tiempo, tendrás que solicitar una nueva.</p>" +
                 "<p>Gracias.</p>" +
                 "</div>" +
                 "</body>" +
