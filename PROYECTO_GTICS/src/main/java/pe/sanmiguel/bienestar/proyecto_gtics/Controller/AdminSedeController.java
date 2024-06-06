@@ -349,6 +349,7 @@ public class AdminSedeController {
 
     @GetMapping("/solicitud_farmacista")
     public String solicitudFarmacista(@ModelAttribute("usuarioFarmacista") Usuario usuarioFarmacista, //model attribute del farmacista
+                                      @ModelAttribute("sedeFarmacista") SedeFarmacista sedeFarmacista,
                                       Model model){
         return "adminsede/solicitud_agregar_farmacista";
     }
@@ -522,11 +523,11 @@ public class AdminSedeController {
 
     }
     @PostMapping("/solicitud_farmacista_post")
-    public String solicitudAgregarFarmacista(@ModelAttribute("usuarioFarmacista") @Validated(AdminSedeValidationsGroup.class) Usuario usuarioFarmacista, BindingResult bindingResult,
+    public String solicitudAgregarFarmacista(@ModelAttribute("usuarioFarmacista") @Validated(AdminSedeValidationsGroup.class) Usuario usuarioFarmacista, BindingResult bindingResult, @ModelAttribute("sedeFarmacista") @Validated(AdminSedeValidationsGroup.class) SedeFarmacista sedeFarmacista, BindingResult bindingResult1,
                                              @RequestParam("codigoMed") String codigoMed,
                                              RedirectAttributes attr){
 
-        if(!bindingResult.hasErrors()){
+        if(!bindingResult.hasErrors() && !bindingResult1.hasErrors()){
             int estadoUsuario = 2;
             int idRol = 3;
             int idUsuario = usuarioRepository.findLastUsuarioId() + 1;
@@ -553,8 +554,8 @@ public class AdminSedeController {
 
             List<SedeFarmacista> listasedeFarmacistas = sedeFarmacistaRepository.findAll();
 
-            for (SedeFarmacista sedeFarmacista : listasedeFarmacistas){
-                if(codigoMed.equals(sedeFarmacista.getCodigoMed())){
+            for (SedeFarmacista sedeFarmacista1 : listasedeFarmacistas){
+                if(codigoMed.equals(sedeFarmacista1.getCodigoMed())){
                     //no se crea el farmacista debido a que es repetido el codigo medico
                     attr.addFlashAttribute("msgred", "Codigo de colegiatura ya existente en el sistema, por favor ingrese uno nuevamente");
                     codigoMedicoUnico  = false;

@@ -72,7 +72,7 @@
     <div class="container-xl px-4 mt-4">
         <!-- Account page navigation-->
         <nav class="nav nav-borders">
-            <a class="nav-link" href="/adminsede/perfil_adminsede" target="__blank">Perfil</a>
+            <a class="nav-link" href="/adminsede/perfil" target="__blank">Perfil</a>
             <a class="nav-link active ms-0" href="/adminsede/notificaciones_adminsede" target="__blank">Notificaciones</a>  <!--Es ta vista puede ser usada para paciente así podra ver sus metodos de pago y las compras que ha realizado hasta el momento-->
         </nav>
         <hr class="mt-0 mb-4">
@@ -143,7 +143,7 @@
                     <button class="btn-red">Agotado</button>
                 </div>
                 <div th:if="${medicamento.getCantidad() > 0 and medicamento.getCantidad() <= 25}">
-                    <button class="btn-red">Por agostarse</button>
+                    <button class="btn-red" style="background-color: #ECCB44">Por agostarse</button>
                 </div>
             </td>
         </tr>
