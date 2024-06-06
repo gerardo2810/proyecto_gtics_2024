@@ -120,7 +120,7 @@ final UsuarioRepository usuarioRepository;
         return "/login/error"; // Nombre de la vista que se debe mostrar
     }
 
-    /*@PostMapping("/cambiarcontra")
+    @PostMapping("/cambiarcontra")
     public String cambiarContra(@ModelAttribute("usuario") @Validated(LoginValidationsGroup.class) Usuario usuario,
                                 BindingResult bindingResult,
                                 @RequestParam("contrasenaNueva") String contrasenaNueva,
@@ -162,7 +162,7 @@ final UsuarioRepository usuarioRepository;
 
         return "redirect:/";
     }
-    }*/
+
 
 
     @PostMapping("/loguearse")
