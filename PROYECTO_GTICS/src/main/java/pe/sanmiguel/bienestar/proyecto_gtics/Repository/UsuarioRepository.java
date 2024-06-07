@@ -98,7 +98,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     //Crear Farmacista
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "INSERT INTO usuario VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, null ,?12, null)")
+    @Query(nativeQuery = true, value = "INSERT INTO usuario VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, null ,?12, 0)")
     void crearFarmacistaSinAprobar(int id, int idRol, String correo, String contrasena, String nombres, String apellidos, String celular, String dni, String direccion, String distrito, String seguro, int estadoUsuario);
 
     @Transactional

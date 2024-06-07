@@ -201,6 +201,10 @@ public class SuperAdminController {
             String hashedPassword = SHA256.cipherPassword(contrasena);
             usuarioRepository.actualizarContrasenaFarmacista(hashedPassword, idUsuario);
             usuarioRepository.actualizarEstadoFarmacista(idUsuario);
+
+            //Se le envía el correo con la contraseña, luego de eso necesita de un timer de 5 minutos para cambiarla
+            
+
             return "redirect:/superadmin/solicitudes";
         }else {
             sedeFarmacistaRepository.denegarSolicitud(idUsuario);
