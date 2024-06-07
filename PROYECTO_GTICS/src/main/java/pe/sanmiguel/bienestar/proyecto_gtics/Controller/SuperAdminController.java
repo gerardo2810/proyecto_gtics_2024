@@ -33,10 +33,7 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLOutput;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -203,7 +200,25 @@ public class SuperAdminController {
             usuarioRepository.actualizarEstadoFarmacista(idUsuario);
 
             //Se le envía el correo con la contraseña, luego de eso necesita de un timer de 5 minutos para cambiarla
-            
+            long tiempoEnvio = System.currentTimeMillis(); //tiempo donde se envía
+
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Usuario usuario = usuarioRepository.encontrarFarmacistaporId(idUsuario);
+                    long currentTime = System.currentTimeMillis();
+                    if (currentTime - tiempoEnvio >= 1 * 60 * 1000 && usuario.getEstadoContra() == 0) {
+                        // Si han pasado 5 minutos y la contraseña no ha sido cambiada
+                        String expiredPassword = "noRegistrado";
+                        String passwordHashNoRegistrado = SHA256.cipherPassword(expiredPassword);
+                        usuarioRepository.actualizarContrasenaFarmacista(passwordHashNoRegistrado, idUsuario);
+                        System.out.println("La contraseña ha expirado para " + usuario.getCorreo());
+                    }
+                }
+            }, 1 * 60 * 1000); //Se ejecuta esta funcion luego de 1 minuto
+
+
 
             return "redirect:/superadmin/solicitudes";
         }else {
