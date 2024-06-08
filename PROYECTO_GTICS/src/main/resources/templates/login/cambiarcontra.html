@@ -17,7 +17,7 @@
 <header>
     <div class="login-top">
         <div>
-            <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+            <a href="/static"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
         </div>
 
         <div class="top-menu">
@@ -39,10 +39,13 @@
                 <div class="bottom"></div>
             </div>
 
-            <form class="login-form"  th:action="@{/cambiarcontra}" onsubmit="return validatePassword()" th:object="${usuario}">
+            <form class="login-form" method="post" th:action="@{/cambiarcontra/actualizar}" onsubmit="return validatePassword()" th:object="${usuario}">
+
+                <div class="alert alert-danger-custom" role="alert" th:if="${error != null}" th:text="${error}" style="margin-bottom: 10px"></div>
+
                 <div class="input-control2">
                     <span class="details" style="margin-left: 10px">Contraseña</span>
-                    <input type="password" th:field="*{contrasena}" class="input-field2" placeholder="Ingrese su contraseña">
+                    <input type="password" th:field="*{contrasena}" class="input-field2" placeholder="Ingrese su nueva contraseña">
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}" style="margin-left: 10px ; color: red"></div>
                 </div>
                 <div class="input-control2">
@@ -50,12 +53,13 @@
                     <label for="contrasena2" class="input-label" hidden>Contraseña</label>
                     <input type="password" name="contrasena2" id="contrasena2" class="input-field2" placeholder="Confirme su contraseña">
                 </div>
-            </form>
-            <div class="login-form" style="margin-bottom: 10px; align-items: center">
-                <div class="input-control4">
-                    <input onclick="goBack()" class="input-submit2" value="Volver">
+                <div class="login-form" style="margin-bottom: 10px; align-items: center">
+                    <div class="input-control">
+                        <input type="submit" name="submit" class="input-submit" value="Cambiar contraseña">
+                    </div>
                 </div>
-            </div>
+            </form>
+
         </div>
     </div>
 </div>

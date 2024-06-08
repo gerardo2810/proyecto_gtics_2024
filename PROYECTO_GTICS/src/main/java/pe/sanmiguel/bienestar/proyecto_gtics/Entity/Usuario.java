@@ -27,8 +27,8 @@ public class Usuario implements Serializable {
     private String correo;
 
     @Column
-    @NotBlank(message = "Debe ingresar una contraseña", groups = {RegisterValidationsGroup.class, OptionalValidationsGroup.class , LoginValidationsGroup.class})
-    @Size(min = 8, message = "Debe ingresar al menos 8 caracteres", groups = {RegisterValidationsGroup.class, OptionalValidationsGroup.class})
+    @NotBlank(message = "Debe ingresar una contraseña", groups = {OptionalValidationsGroup.class , LoginValidationsGroup.class, CambioContraGroup.class})
+    @Size(min = 8, message = "Debe ingresar al menos 8 caracteres", groups = {RegisterValidationsGroup.class, OptionalValidationsGroup.class, CambioContraGroup.class})
     private String contrasena;
 
     @Column
