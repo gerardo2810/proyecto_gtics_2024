@@ -62,6 +62,7 @@ final UsuarioRepository usuarioRepository;
     @GetMapping("/new")
     public String nuevoUsuario(Model model,@ModelAttribute("usuario")  Usuario usuario) {
         model.addAttribute("usuario", new Usuario());
+
         return "login/prueba";
     }
     @Autowired
@@ -73,14 +74,17 @@ final UsuarioRepository usuarioRepository;
 
         if (!bindingResult.hasErrors()) {
             usuario.setRol(5);
-            usuario.setEstadoUsuario(2);
+            usuario.setEstadoUsuario(1);
             String temporaryPassword = passwordService.generateTemporaryPassword();
             usuario.setEstadoContra(2);
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            System.out.println(temporaryPassword);
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
             String encodedPassword = passwordEncoder.encode(temporaryPassword);
             usuario.setContrasena(encodedPassword);
+            System.out.println(encodedPassword);
             usuarioRepository.save(usuario);
-
+            System.out.println(temporaryPassword);
+            System.out.println(encodedPassword);
 
             // Enviar el correo de bienvenida
             String subject = "Bienvenido(a) a Bienestar San Miguel";
@@ -117,10 +121,12 @@ final UsuarioRepository usuarioRepository;
 
     @GetMapping("/access-denied")
     public String accessDenied() {
-        return "/login/error"; // Nombre de la vista que se debe mostrar
+        return "login/error"; // Nombre de la vista que se debe mostrar
     }
 
-    @PostMapping("/cambiarcontra")
+
+
+   /* @PostMapping("/cambiarcontra")
     public String cambiarContra(@ModelAttribute("usuario") @Validated(LoginValidationsGroup.class) Usuario usuario,
                                 BindingResult bindingResult,
                                 @RequestParam("contrasenaNueva") String contrasenaNueva,
@@ -161,7 +167,7 @@ final UsuarioRepository usuarioRepository;
         attributes.addFlashAttribute("success", "Contraseña cambiada exitosamente");
 
         return "redirect:/";
-    }
+    } */
 
 
 
@@ -178,8 +184,8 @@ final UsuarioRepository usuarioRepository;
             if (usuarioExistente != null && SHA256.cipherPassword(usuario.getContrasena()).equals(usuarioExistente.getContrasena())) {
                 if (usuarioExistente.getRol() == 1) {
                     return "redirect:/superadmin";
-                //} else if (usuarioExistente.getRol()==2) {
-                 //   return "redirect:/adminsede";
+                } else if (usuarioExistente.getRol()==2) {
+                    return "redirect:/adminsede";
                 } else if (usuarioExistente.getRol()==3) {
                     return "redirect:/farmacista";
                 } else {
@@ -187,7 +193,7 @@ final UsuarioRepository usuarioRepository;
                 }
             } else if (usuarioExistente != null &&  usuario.getContrasena().equals(usuarioExistente.getContrasena())){
                 // Si las credenciales son incorrectas, redirige de vuelta al formulario de inicio de sesión con un mensaje de error
-                return "redirect:/cambiarcontra";
+                return "redirect:login/cambiarcontra";
             }else{
                 attributes.addFlashAttribute("error", "Credenciales incorrectas");
                 return "redirect:/paciente";
