@@ -369,6 +369,14 @@ public class SuperAdminController {
         }
     }
 
+    public class EmailValidator {
+        private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+
+        public static boolean isValidEmail(String email) {
+            return email != null && Pattern.matches(EMAIL_REGEX, email);
+        }
+    }
+
     @GetMapping(value = {"/crearAdministrador"})
     public String crearAdminitrador(@ModelAttribute("administrador") Usuario administrador, Model model,
                                     HttpServletRequest request, HttpServletResponse response, Authentication authentication){
@@ -419,6 +427,17 @@ public class SuperAdminController {
             if (correosUsados.contains(correo)) {
                 System.out.println("El correo está en la lista.");
                 bindingResult.rejectValue("correo", "error.correo", "El correo ya se encuentra registrado.");
+                return "superAdmin/crearAdministrador";
+            }
+
+            if (!EmailValidator.isValidEmail(correo)) {
+                bindingResult.rejectValue("correo", "error.correo", "Debe ingresar un correo electrónico válido.");
+                System.out.println("HAY ERRORES DE VALIDACIÓN:");
+                for (ObjectError error : bindingResult.getAllErrors()) {
+                    System.out.println("- " + error.getDefaultMessage());
+                }
+                List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
                 return "superAdmin/crearAdministrador";
             }
 
@@ -756,6 +775,22 @@ public class SuperAdminController {
                 return "superAdmin/editarAdministrador";
             }
 
+            if (!EmailValidator.isValidEmail(correo)) {
+                bindingResult.rejectValue("correo", "error.correo", "Debe ingresar un correo electrónico válido.");
+                System.out.println("HAY ERRORES DE VALIDACIÓN:");
+                Sede sedeListAdminID = sedeRepository.sedeAdminID(administrador.getIdUsuario());
+                List<Sede> sedeList = sedeRepository.findAll();
+                String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+                String passwordDots = "*************";
+
+                List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
+                model.addAttribute("sedeAdministrador", sedeListAdminID);
+                model.addAttribute("sedeList", sedeList);
+                model.addAttribute("estadoUsuarioList", estadoUsuarioList);
+
+                return "superAdmin/editarAdministrador";
+            }
+
             Usuario adminDatos = usuarioRepository.administradorSede(idAdministradorNuevo);
             String passwordOld = adminDatos.getContrasena();
 
@@ -974,6 +1009,14 @@ public class SuperAdminController {
                 return "superAdmin/crearDoctor";
             }
 
+            if (!EmailValidator.isValidEmail(correo)) {
+                bindingResul.rejectValue("correo", "error.correo", "Debe ingresar un correo electrónico válido.");
+                System.out.println("HAY ERRORES DE VALIDACIÓN:");
+                List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                return "superAdmin/crearDoctor";
+            }
+
             doctorRepository.save(doctor);
             attr.addFlashAttribute("msg", "Nuevo doctor creado exitosamente");
             return "redirect:/superadmin/doctores";
@@ -1049,6 +1092,18 @@ public class SuperAdminController {
                 model.addAttribute("doctor", doctor);
                 model.addAttribute("doctoresVisiblesSede", sedeDoctorList);
                 bindingResult.rejectValue("dni", "error.dni", "El DNI ya se encuentra registrado.");
+                return "superAdmin/editarDoctor";
+            }
+
+            if (!EmailValidator.isValidEmail(correo)) {
+                bindingResult.rejectValue("correo", "error.correo", "Debe ingresar un correo electrónico válido.");
+                System.out.println("HAY ERRORES DE VALIDACIÓN:");
+                List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                List<SedeDoctor> sedeDoctorList = sedeDoctorRepository.listarSedesDondeEstaDoctor(doctor.getIdDoctor());
+                List<Integer> idsSedes = sedeDoctorRepository.listarSedesPorIdDoctor(doctor.getIdDoctor());
+                model.addAttribute("idsSede", idsSedes);
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                model.addAttribute("doctoresVisiblesSede", sedeDoctorList);
                 return "superAdmin/editarDoctor";
             }
 
@@ -1157,6 +1212,23 @@ public class SuperAdminController {
                 bindingResult.rejectValue("correo", "error.correo", "El correo ya se encuentra registrado.");
                 return "superAdmin/editarFarmacista";
             }
+
+            if (!EmailValidator.isValidEmail(correo)) {
+                bindingResult.rejectValue("correo", "error.correo", "Debe ingresar un correo electrónico válido.");
+                System.out.println("HAY ERRORES DE VALIDACIÓN:");
+                for (ObjectError error : bindingResult.getAllErrors()) {
+                    System.out.println("- " + error.getDefaultMessage());
+                }
+                SedeFarmacista datosFarmacistaSede = sedeFarmacistaRepository.buscarFarmacistaSede(farmacista.getIdUsuario());
+                List<EstadoUsuario> estadoUsuarioList = estadoUsuarioRepository.listarEstadosUsuarios();
+                String passwordHash = farmacista.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
+                String passwordDots = hashToDots(passwordHash);
+                model.addAttribute("farmacista", farmacista);
+                model.addAttribute("datosFarmacistaSede", datosFarmacistaSede);
+                model.addAttribute("estadoUsuarioList", estadoUsuarioList);
+                return "superAdmin/editarFarmacista";
+            }
+
             int idFarmacistaNuevo = farmacista.getIdUsuario();
             Usuario adminDatos = usuarioRepository.farmacista(idFarmacistaNuevo);
             String passwordOld = adminDatos.getContrasena();
