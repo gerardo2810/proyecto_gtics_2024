@@ -1158,6 +1158,14 @@ public class SuperAdminController {
                 return "superAdmin/crearMedicamento";
             }
 
+            String contentType = file.getContentType();
+            if (!contentType.equals("image/png") && !contentType.equals("image/jpeg")) {
+                binding2.rejectValue("file", "error.file", "Solo se aceptan archivos PNG o JPEG.");
+                List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                return "superAdmin/crearMedicamento";
+            }
+
             InputStream inputStream = file.getInputStream();
             byte[] bytes = inputStream.readAllBytes();
 
@@ -1246,6 +1254,23 @@ public class SuperAdminController {
                 medicamento.setImagen(imaMedicamento.getImagen());
             } else {
                 System.out.println("Se recibe una imagen.");
+
+                String contentType = file.getContentType();
+                if (!contentType.equals("image/png") && !contentType.equals("image/jpeg")) {
+                    binding2.rejectValue("file", "error.file", "Solo se aceptan archivos PNG o JPEG.");
+                    System.out.println("HAY ERRORES DE VALIDACIÓN:");
+                    for (ObjectError error : bindingResult.getAllErrors()) {
+                        System.out.println("- " + error.getDefaultMessage());
+                    }
+                    List<SedeStock> sedeStockList = sedeStockRepository.medicamentoPresenteSedes(medicamento.getIdMedicamento());
+                    List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                    List<Integer> idsSede = sedeStockRepository.listarMedicamentosEnSedePorId(medicamento.getIdMedicamento());
+                    model.addAttribute("idsSede", idsSede);
+                    model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                    model.addAttribute("medicamentosVisiblesSede", sedeStockList);
+                    return "superAdmin/editarMedicamento";
+                }
+
                 InputStream inputStream = file.getInputStream();
                 byte[] bytes = inputStream.readAllBytes();
                 medicamento.setImagen(bytes);
@@ -1264,6 +1289,23 @@ public class SuperAdminController {
                     medicamento.setImagen(imaMedicamento.getImagen());
                 } else {
                     System.out.println("Se recibe una imagen.");
+
+                    String contentType = file.getContentType();
+                    if (!contentType.equals("image/png") && !contentType.equals("image/jpeg")) {
+                        binding2.rejectValue("file", "error.file", "Solo se aceptan archivos PNG o JPEG.");
+                        System.out.println("HAY ERRORES DE VALIDACIÓN:");
+                        for (ObjectError error : bindingResult.getAllErrors()) {
+                            System.out.println("- " + error.getDefaultMessage());
+                        }
+                        List<SedeStock> sedeStockList = sedeStockRepository.medicamentoPresenteSedes(medicamento.getIdMedicamento());
+                        List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                        List<Integer> idsSede = sedeStockRepository.listarMedicamentosEnSedePorId(medicamento.getIdMedicamento());
+                        model.addAttribute("idsSede", idsSede);
+                        model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                        model.addAttribute("medicamentosVisiblesSede", sedeStockList);
+                        return "superAdmin/editarMedicamento";
+                    }
+
                     InputStream inputStream = file.getInputStream();
                     byte[] bytes = inputStream.readAllBytes();
                     medicamento.setImagen(bytes);
@@ -1293,6 +1335,23 @@ public class SuperAdminController {
                         medicamento.setImagen(imaMedicamento.getImagen());
                     } else {
                         System.out.println("Se recibe una imagen.");
+
+                        String contentType = file.getContentType();
+                        if (!contentType.equals("image/png") && !contentType.equals("image/jpeg")) {
+                            binding2.rejectValue("file", "error.file", "Solo se aceptan archivos PNG o JPEG.");
+                            System.out.println("HAY ERRORES DE VALIDACIÓN:");
+                            for (ObjectError error : bindingResult.getAllErrors()) {
+                                System.out.println("- " + error.getDefaultMessage());
+                            }
+                            List<SedeStock> sedeStockList1 = sedeStockRepository.medicamentoPresenteSedes(medicamento.getIdMedicamento());
+                            List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                            List<Integer> idsSede = sedeStockRepository.listarMedicamentosEnSedePorId(medicamento.getIdMedicamento());
+                            model.addAttribute("idsSede", idsSede);
+                            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                            model.addAttribute("medicamentosVisiblesSede", sedeStockList1);
+                            return "superAdmin/editarMedicamento";
+                        }
+
                         InputStream inputStream = file.getInputStream();
                         byte[] bytes = inputStream.readAllBytes();
                         medicamento.setImagen(bytes);
@@ -1315,6 +1374,24 @@ public class SuperAdminController {
                         medicamento.setImagen(imaMedicamento.getImagen());
                     } else {
                         System.out.println("Se recibe una imagen.");
+
+                        String contentType = file.getContentType();
+                        if (!contentType.equals("image/png") && !contentType.equals("image/jpeg")) {
+                            binding2.rejectValue("file", "error.file", "Solo se aceptan archivos PNG o JPEG.");
+                            System.out.println("HAY ERRORES DE VALIDACIÓN:");
+                            for (ObjectError error : bindingResult.getAllErrors()) {
+                                System.out.println("- " + error.getDefaultMessage());
+                            }
+                            List<SedeStock> sedeStockList1 = sedeStockRepository.medicamentoPresenteSedes(medicamento.getIdMedicamento());
+                            List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                            List<Integer> idsSede = sedeStockRepository.listarMedicamentosEnSedePorId(medicamento.getIdMedicamento());
+                            model.addAttribute("idsSede", idsSede);
+                            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                            model.addAttribute("medicamentosVisiblesSede", sedeStockList1);
+                            return "superAdmin/editarMedicamento";
+                        }
+
+
                         InputStream inputStream = file.getInputStream();
                         byte[] bytes = inputStream.readAllBytes();
                         medicamento.setImagen(bytes);
