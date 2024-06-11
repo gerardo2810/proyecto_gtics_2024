@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Medicamento;
+import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 
 import java.util.List;
 
@@ -58,4 +59,7 @@ public interface MedicamentoRepository extends JpaRepository<Medicamento, Intege
     List<String> listarNombresMedicamento();
     @Query(nativeQuery = true, value = "SELECT m.nombre FROM proyecto_gtics.medicamento m WHERE m.idMedicamento <> ?")
     List<String> listarNombresMedicamentoID(int idMedicamento);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.medicamento WHERE idMedicamento = ?")
+    Medicamento imagenMedicamento(int idMedicamento);
 }

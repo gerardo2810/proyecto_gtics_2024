@@ -1240,17 +1240,38 @@ public class SuperAdminController {
                 return "superAdmin/editarMedicamento";
             }
 
-            InputStream inputStream = file.getInputStream();
-            byte[] bytes = inputStream.readAllBytes();
+            if (file == null || file.getSize() == 0) {
+                System.out.println("La imagen es nula o vacía.");
+                Medicamento imaMedicamento = medicamentoRepository.imagenMedicamento(medicamento.getIdMedicamento());
+                medicamento.setImagen(imaMedicamento.getImagen());
+            } else {
+                System.out.println("Se recibe una imagen.");
+                InputStream inputStream = file.getInputStream();
+                byte[] bytes = inputStream.readAllBytes();
+                medicamento.setImagen(bytes);
+            }
 
             medicamento.setCategorias("NNUL");
             medicamento.setEstado(1);
-            medicamento.setImagen(bytes);
+
 
             if (idSedesSeleccionadas == null || idSedesSeleccionadas.isEmpty()) {
                 int idMedicamento = medicamento.getIdMedicamento();
                 System.out.println("Estoy en si el parámetros es NULL");
-                medicamento.setImagen(null);
+                if (file == null || file.getSize() == 0) {
+                    System.out.println("La imagen es nula o vacía.");
+                    Medicamento imaMedicamento = medicamentoRepository.imagenMedicamento(medicamento.getIdMedicamento());
+                    medicamento.setImagen(imaMedicamento.getImagen());
+                } else {
+                    System.out.println("Se recibe una imagen.");
+                    InputStream inputStream = file.getInputStream();
+                    byte[] bytes = inputStream.readAllBytes();
+                    medicamento.setImagen(bytes);
+                }
+
+                medicamento.setCategorias("NNUL");
+                medicamento.setEstado(1);
+
                 sedeStockRepository.borrarSedesAnteriores(idMedicamento);
                 medicamentoRepository.save(medicamento);
                 attr.addFlashAttribute("msg", "Medicamento actualizado exitosamente");
@@ -1266,7 +1287,20 @@ public class SuperAdminController {
                     for (Integer idSede : idSedesSeleccionadas) {
                         medicamentoRepository.asignarMedicamentoPorSede(idSede,idMedicamento,0);
                     }
-                    medicamento.setImagen(null);
+                    if (file == null || file.getSize() == 0) {
+                        System.out.println("La imagen es nula o vacía.");
+                        Medicamento imaMedicamento = medicamentoRepository.imagenMedicamento(medicamento.getIdMedicamento());
+                        medicamento.setImagen(imaMedicamento.getImagen());
+                    } else {
+                        System.out.println("Se recibe una imagen.");
+                        InputStream inputStream = file.getInputStream();
+                        byte[] bytes = inputStream.readAllBytes();
+                        medicamento.setImagen(bytes);
+                    }
+
+                    medicamento.setCategorias("NNUL");
+                    medicamento.setEstado(1);
+
                     medicamentoRepository.save(medicamento);
                     attr.addFlashAttribute("msg", "Medicamento actualizado exitosamente");
                     return "redirect:/superadmin/medicamentos";
@@ -1275,7 +1309,20 @@ public class SuperAdminController {
                     for (Integer idSede : idSedesSeleccionadas) {
                         medicamentoRepository.asignarMedicamentoPorSede(idSede,idMedicamento,0);
                     }
-                    medicamento.setImagen(null);
+                    if (file == null || file.getSize() == 0) {
+                        System.out.println("La imagen es nula o vacía.");
+                        Medicamento imaMedicamento = medicamentoRepository.imagenMedicamento(medicamento.getIdMedicamento());
+                        medicamento.setImagen(imaMedicamento.getImagen());
+                    } else {
+                        System.out.println("Se recibe una imagen.");
+                        InputStream inputStream = file.getInputStream();
+                        byte[] bytes = inputStream.readAllBytes();
+                        medicamento.setImagen(bytes);
+                    }
+
+                    medicamento.setCategorias("NNUL");
+                    medicamento.setEstado(1);
+
                     medicamentoRepository.save(medicamento);
                     attr.addFlashAttribute("msg", "Medicamento actualizado exitosamente");
                     return "redirect:/superadmin/medicamentos";
