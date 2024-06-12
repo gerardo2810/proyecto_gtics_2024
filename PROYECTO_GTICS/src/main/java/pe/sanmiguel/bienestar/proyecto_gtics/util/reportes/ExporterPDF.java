@@ -123,7 +123,7 @@ public class ExporterPDF {
         PdfPTable tabla = new PdfPTable(7);
         tabla.setWidthPercentage(100);
         tabla.setSpacingBefore(15);
-        tabla.setWidths(new float[] {1f, 3f, 1.5f, 4f, 1.8f,1.5f,1.5f});
+        tabla.setWidths(new float[] {1f, 3f, 3f, 2f, 1.8f,1.5f,1.7f});
         tabla.setWidthPercentage(110);
 
         escribirCabeceraDeLaTabla(tabla);
