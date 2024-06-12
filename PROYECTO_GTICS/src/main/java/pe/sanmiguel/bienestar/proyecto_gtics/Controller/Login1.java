@@ -68,7 +68,7 @@ final UsuarioRepository usuarioRepository;
     public String nuevoUsuario(Model model,@ModelAttribute("usuario")  Usuario usuario) {
         model.addAttribute("usuario", new Usuario());
 
-        return "login/prueba2";
+        return "login/prueba";
     }
     @Autowired
     private EmailService emailService;
@@ -117,7 +117,7 @@ final UsuarioRepository usuarioRepository;
             return "redirect:/";
         } else {
             model.addAttribute("usuario", usuario);
-            return "login/prueba2";
+            return "login/prueba";
         }
     }
 
@@ -129,12 +129,7 @@ final UsuarioRepository usuarioRepository;
         return "login/error"; // Nombre de la vista que se debe mostrar
     }
 
-    @GetMapping("/api/dni")
-    @ResponseBody
-    public List<String> getDniInfo(@RequestParam String dni) {
-        ResponseEntity<String> response = dniAPI.getDni(dni);
-        return dniAPI.responseToList(response);
-    }
+
 
 
 

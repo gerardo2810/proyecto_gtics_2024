@@ -41,7 +41,7 @@
                         <div class="input-control2">
                             <span class="details" style="margin-left: 10px">DNI</span>
                             <input type="number" id="dni" th:field="*{dni}" class="input-field2" placeholder="Ingrese su DNI">
-                            <input type="submit" name="submit" class="input-submit" value="Buscar" id="buscarDni">
+                            <input type="submit" name="submit" class="input-submit" value="Buscar" id="buscarDni" style="margin-top: 10px">
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" style="margin-left: 10px ; color: red"></div>
                         </div>
                         <div class="input-control2">
