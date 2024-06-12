@@ -287,7 +287,7 @@ public class FarmacistaController {
             model.addAttribute("nombres", apiNombres);
             model.addAttribute("apellidos", apiApellidos);
 
-            System.out.println(apiNombres);
+            System.out.println(values);
             return "farmacista/formulario_paciente";
         }
 
@@ -370,6 +370,7 @@ public class FarmacistaController {
                 newOrden.setFechaIni(now);
                 newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
                 newOrden.setIdFarmacista(usuarioSession.getIdUsuario());
+                newOrden.setPaciente(pacienteOnStore);
                 newOrden.setTipoOrden(1);
                 newOrden.setEstadoOrden(8);
                 newOrden.setSede(sedeSession);
@@ -762,6 +763,7 @@ public class FarmacistaController {
             }
 
             usuarioRepository.save(user);
+            System.out.println(user.getIdUsuario());
 
             this.userExist = userExist;
             this.user = user;

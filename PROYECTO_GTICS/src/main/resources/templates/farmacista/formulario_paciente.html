@@ -71,7 +71,7 @@
                                 </div>
 
                                 <div style="margin-top: 37px">
-                                    <button type="submit" class="btn btn-p" ><i class="fas fa-search"></i></button>
+                                    <button type="submit" id="buscarDni" class="btn btn-p" ><i class="fas fa-search"></i></button>
                                 </div>
                             </div>
                             </form>
@@ -83,22 +83,23 @@
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray"></label>
-                                <input placeholder="DNI" th:field="*{dni}"  id="dniInput" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
+                                <input placeholder="DNI" th:field="*{dni}"  id="dni" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
                                 <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
                             </div>
+
 
 
                             <div class="column">
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray"></label>
-                                    <input placeholder="DNI" th:field="*{nombres}"  id="nombresInput" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}">
+                                    <input placeholder="Nombres del paciente" th:value="${nombres}" name="nombres" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}">
                                     <div  class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
                                 </div>
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray"></label>
-                                    <input placeholder="DNI" th:field="*{apellidos}" id="apellidosInput" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}">
+                                    <input placeholder="Apellidos del paciente" th:value="${apellidos}" name="apellidos" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}">
                                     <div  class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
                                 </div>
 
@@ -237,6 +238,7 @@
 
 
 </body>
+
 
 <script>
     const frameworks = [
