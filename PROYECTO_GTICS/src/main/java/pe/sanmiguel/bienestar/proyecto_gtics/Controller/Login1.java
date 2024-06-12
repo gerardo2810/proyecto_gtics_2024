@@ -2,12 +2,14 @@ package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pe.sanmiguel.bienestar.proyecto_gtics.DniAPI;
 import pe.sanmiguel.bienestar.proyecto_gtics.EmailService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 import pe.sanmiguel.bienestar.proyecto_gtics.PasswordService;
@@ -26,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -36,6 +39,9 @@ final UsuarioRepository usuarioRepository;
 
     @Autowired
     private PasswordService passwordService;
+
+    @Autowired
+    private DniAPI dniAPI;
 
     public Login1(UsuarioRepository usuarioRepository) {this.usuarioRepository = usuarioRepository;}
 
@@ -62,7 +68,7 @@ final UsuarioRepository usuarioRepository;
     public String nuevoUsuario(Model model,@ModelAttribute("usuario")  Usuario usuario) {
         model.addAttribute("usuario", new Usuario());
 
-        return "login/prueba";
+        return "login/prueba2";
     }
     @Autowired
     private EmailService emailService;
@@ -111,7 +117,7 @@ final UsuarioRepository usuarioRepository;
             return "redirect:/";
         } else {
             model.addAttribute("usuario", usuario);
-            return "login/prueba";
+            return "login/prueba2";
         }
     }
 
@@ -121,6 +127,13 @@ final UsuarioRepository usuarioRepository;
     @GetMapping("/access-denied")
     public String accessDenied() {
         return "login/error"; // Nombre de la vista que se debe mostrar
+    }
+
+    @GetMapping("/api/dni")
+    @ResponseBody
+    public List<String> getDniInfo(@RequestParam String dni) {
+        ResponseEntity<String> response = dniAPI.getDni(dni);
+        return dniAPI.responseToList(response);
     }
 
 

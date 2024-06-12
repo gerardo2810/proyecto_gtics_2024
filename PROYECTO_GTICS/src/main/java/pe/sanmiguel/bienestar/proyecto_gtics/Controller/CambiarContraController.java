@@ -40,7 +40,7 @@ public class CambiarContraController {
         if (!model.containsAttribute("usuario")) {
             model.addAttribute("usuario", new Usuario());
         }
-        return "/login/cambiarcontra";
+        return "login/cambiarcontra";
     }
 
     @PostMapping("/cambiarcontra/actualizar_contrasena")
@@ -64,7 +64,7 @@ public class CambiarContraController {
                 attr.addFlashAttribute("msg", "Las contraseñas no coinciden.");
             }
 
-        return "/";
+        return "redirect:/";
     }
 
 
@@ -82,7 +82,7 @@ public class CambiarContraController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("error", "Error en el formulario");
-            return "/login/cambiarcontra";
+            return "login/cambiarcontra";
         }
 
         usuarioRepository.actualizarContrasenaUsuario(passwordEncoder.encode(usuario.getContrasena()), usuarioSession.getIdUsuario());
