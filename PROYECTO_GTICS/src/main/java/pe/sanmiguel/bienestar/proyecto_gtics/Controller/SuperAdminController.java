@@ -1,5 +1,6 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import com.lowagie.text.DocumentException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -26,6 +27,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.PasswordService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
+import pe.sanmiguel.bienestar.proyecto_gtics.util.reportes.ExporterPDF;
 
 
 import java.io.IOException;
@@ -33,6 +35,8 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLOutput;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1581,6 +1585,23 @@ public class SuperAdminController {
         attr.addFlashAttribute("msg", "Medicamento borrado exitosamente");
         return "redirect:/superadmin/medicamentos";
     }
+
+    //Exportar PDF para reporte
+    @GetMapping("/exportarPDF")
+    public void exportarListadoMedicamentosPDF(HttpServletResponse response) throws DocumentException, IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String fechaActual = dateFormatter.format(new Date());
+        String cabecera = "Content-Disposition";
+        String valor = "attachment; filename=Medicamentos_" + fechaActual + ".pdf";
+        response.setHeader(cabecera, valor);
+
+        List<Medicamento> medicamentos = medicamentoRepository.findAll();
+        ExporterPDF exporter = new ExporterPDF(medicamentos);
+        exporter.exportar(response);
+
+    }
+
 
 
 }
