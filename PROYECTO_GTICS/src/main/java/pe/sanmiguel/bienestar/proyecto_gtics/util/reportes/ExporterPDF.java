@@ -9,6 +9,7 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfTable;
 import com.lowagie.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletResponse;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.VentasMedicamentosTotalDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Medicamento;
 
 import java.awt.*;
@@ -17,9 +18,9 @@ import java.util.List;
 
 public class ExporterPDF {
 
-    private List<Medicamento> listaMedicamentos;
+    private List<VentasMedicamentosTotalDto> listaMedicamentos;
 
-    public ExporterPDF(List<Medicamento> listaMedicamentos) {
+    public ExporterPDF(List<VentasMedicamentosTotalDto> listaMedicamentos) {
         this.listaMedicamentos = listaMedicamentos;
     }
 
@@ -40,13 +41,7 @@ public class ExporterPDF {
         celda.setPhrase(new Phrase("Nombre", fuente));
         tabla.addCell(celda);
 
-        celda.setPhrase(new Phrase("Número de unidad", fuente));
-        tabla.addCell(celda);
-
         celda.setPhrase(new Phrase("Unidad", fuente));
-        tabla.addCell(celda);
-
-        celda.setPhrase(new Phrase("Categoría", fuente));
         tabla.addCell(celda);
 
         celda.setPhrase(new Phrase("Precio de compra", fuente));
@@ -54,18 +49,24 @@ public class ExporterPDF {
 
         celda.setPhrase(new Phrase("Precio de venta", fuente));
         tabla.addCell(celda);
+
+        celda.setPhrase(new Phrase("Cantidad vendida", fuente));
+        tabla.addCell(celda);
+
+        celda.setPhrase(new Phrase("Ganancia", fuente));
+        tabla.addCell(celda);
     }
 
     private void escribirDatosDeLaTabla(PdfPTable tabla){
 
-        for(Medicamento medicamento: listaMedicamentos){
+        for(VentasMedicamentosTotalDto medicamento: listaMedicamentos){
             tabla.addCell(String.valueOf(medicamento.getIdMedicamento()));
             tabla.addCell(medicamento.getNombre());
-            tabla.addCell(String.valueOf(medicamento.getNumunidad()));
             tabla.addCell(medicamento.getUnidad());
-            tabla.addCell(medicamento.getCategorias());
             tabla.addCell(String.valueOf(medicamento.getPrecioCompra()));
             tabla.addCell(String.valueOf(medicamento.getPrecioVenta()));
+            tabla.addCell(String.valueOf(medicamento.getTotalCantidad()));
+            tabla.addCell(String.valueOf(medicamento.getGananciaTotal()));
         }
     }
 
@@ -82,7 +83,7 @@ public class ExporterPDF {
         fuente.setSize(18);
 
         // Crear un Chunk con subrayado
-        Chunk tituloChunk = new Chunk("Lista de medicamentos", fuente);
+        Chunk tituloChunk = new Chunk("Ventas de medicamentos", fuente);
         tituloChunk.setUnderline(1f, -2f);  // grosor y desplazamiento del subrayado
 
         // Crear un Paragraph y añadir el Chunk

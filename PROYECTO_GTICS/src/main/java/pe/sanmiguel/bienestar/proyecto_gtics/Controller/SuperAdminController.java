@@ -23,6 +23,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.VentasMedicamentosTotalDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.PasswordService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
@@ -1596,7 +1597,7 @@ public class SuperAdminController {
         String valor = "attachment; filename=Medicamentos_" + fechaActual + ".pdf";
         response.setHeader(cabecera, valor);
 
-        List<Medicamento> medicamentos = medicamentoRepository.findAll();
+        List<VentasMedicamentosTotalDto> medicamentos = medicamentoRepository.listaMedicamentosVentas();
         ExporterPDF exporter = new ExporterPDF(medicamentos);
         exporter.exportar(response);
 

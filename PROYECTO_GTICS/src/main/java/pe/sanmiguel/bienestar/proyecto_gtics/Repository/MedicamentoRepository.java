@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.VentasMedicamentosTotalDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Medicamento;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 
@@ -62,4 +63,9 @@ public interface MedicamentoRepository extends JpaRepository<Medicamento, Intege
 
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.medicamento WHERE idMedicamento = ?")
     Medicamento imagenMedicamento(int idMedicamento);
+
+    //Para reportes:
+    @Query(nativeQuery = true, value = "SELECT o.idMedicamento, m.nombre, m.unidad, m.precioCompra, m.precioVenta, SUM(o.cantidad) AS totalCantidad, SUM(o.cantidad * (m.precioVenta - m.precioCompra)) AS gananciaTotal FROM orden_contenido o INNER JOIN medicamento m ON o.idMedicamento = m.idMedicamento GROUP BY o.idMedicamento, m.nombre, m.unidad, m.precioCompra, m.precioVenta")
+    List<VentasMedicamentosTotalDto> listaMedicamentosVentas();
+
 }
