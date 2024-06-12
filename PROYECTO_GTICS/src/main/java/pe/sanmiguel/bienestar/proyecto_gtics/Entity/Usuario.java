@@ -63,10 +63,10 @@ public class Usuario implements Serializable {
     private String celular;
 
     @Column
-    @Pattern(regexp="\\d+", message="El DNI debe contener solo números", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, AdminSedeValidationsGroup.class})
-    @Size(min = 8, max = 8, message = "Debe tener 8 dígitos", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, AdminSedeValidationsGroup.class})
-    @NotBlank(message = "Debe ingresar el número de su dni", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, AdminSedeValidationsGroup.class})
-    @Positive(message= "Deben ser un número positivo", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, AdminSedeValidationsGroup.class})
+    @Pattern(regexp="\\d+", message="El DNI debe contener solo números", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, AdminSedeValidationsGroup.class, DniApiValidationGroup.class})
+    @Size(min = 8, max = 8, message = "Debe tener 8 dígitos", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, AdminSedeValidationsGroup.class, DniApiValidationGroup.class})
+    @NotBlank(message = "Debe ingresar el número de su dni", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, AdminSedeValidationsGroup.class, DniApiValidationGroup.class})
+    @Positive(message= "Deben ser un número positivo", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, AdminSedeValidationsGroup.class, DniApiValidationGroup.class})
     @Pattern(regexp="\\d+", message="El DNI debe contener solo números")
     @Size(min = 8, max = 8, message = "Debe tener 8 dígitos")
     @NotBlank(message = "Debe ingresar el número de su dni")
