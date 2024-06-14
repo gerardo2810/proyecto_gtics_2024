@@ -313,7 +313,7 @@ public class FarmacistaController {
         System.out.println(dni);
         System.out.println(name);
         System.out.println(lastname);
-
+        System.out.println(listaSelectedIds);
         //Iniciamos la sesión
         HttpSession session = request.getSession();
         Usuario usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
@@ -361,6 +361,10 @@ public class FarmacistaController {
             verificationUser verificationUser = new verificationUser(name,lastname,dni,distrito,direccion,seguro,correo,celular);
 
             this.pacienteOnStore = verificationUser.getUser();
+            System.out.println("Paciente on Store: " + pacienteOnStore);
+            System.out.println("ID del paciente: " + pacienteOnStore.getIdUsuario());
+
+
 
             if (verificationStock.getMedicamentosSinStock().isEmpty()) {
 
@@ -374,7 +378,9 @@ public class FarmacistaController {
                 newOrden.setTipoOrden(1);
                 newOrden.setEstadoOrden(8);
                 newOrden.setSede(sedeSession);
+                System.out.println(pacienteOnStore);
                 newOrden.setSeguroUsado(Objects.requireNonNullElse(seguro, "false"));
+                System.out.println(pacienteOnStore);
 
 
                 if (!(doctor == null)) {
@@ -383,9 +389,17 @@ public class FarmacistaController {
                     }
                 }
 
+                System.out.println("Orden antes de guardar: " + newOrden);
+
+                System.out.println(pacienteOnStore);
                 newOrden.setPaciente(this.pacienteOnStore);
 
+
+                System.out.println(newOrden);
+
                 ordenRepository.save(newOrden);
+                System.out.println("Orden guardada: " + newOrden);
+                System.out.println(ordenRepository);
 
                 int i = 0;
                 for (Medicamento med : medicamentosSeleccionados){
