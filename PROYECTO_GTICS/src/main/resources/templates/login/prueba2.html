@@ -35,23 +35,25 @@
                 Registro
                 <span>&#160;<a th:href="@{/}" class="text text-links">Regresar al Inicio de Sesión</a></span>
             </div>
-            <form name="signin" class="login-form" method="post" th:action="@{/save}" onsubmit="return validatePassword()" th:object="${usuario}">
-                <div class="content">
-                    <div class="user-details">
+            <div class="content">
+                <div class="user-details">
+                    <form method="post" th:action="@{/DNIapi}" th:object="${usuario}">
                         <div class="input-control2">
                             <span class="details" style="margin-left: 10px">DNI</span>
-                            <input type="number" id="dni" th:field="*{dni}" class="input-field2" placeholder="Ingrese su DNI">
-                            <input type="submit" name="submit" class="input-submit" value="Buscar" id="buscarDni" style="margin-top: 10px">
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" style="margin-left: 10px ; color: red"></div>
+                            <input type="text" id="dni" th:field="*{dni}" class="input-field2" placeholder="Ingrese su DNI" required pattern="\d{8}" maxlength="8">
+                            <button type="submit" id="buscarDni" class="btn btn-p"><i class="fas fa-search"></i></button>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}" style="margin-left: 10px; color: red"></div>
                         </div>
+                    </form>
+                    <form name="signin" class="login-form" method="post" th:action="@{/save}" onsubmit="return validatePassword()" th:object="${usuario}">
                         <div class="input-control2">
                             <span class="details" style="margin-left: 10px">Nombres</span>
-                            <input type="text" id="nombres" th:field="*{nombres}" class="input-field2" placeholder="Ingrese sus nombres" disabled>
+                            <input type="text" id="nombres" th:field="*{nombres}" class="input-field2" placeholder="Ingrese sus nombres" readonly>
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}" style="margin-left: 10px ; color: red"></div>
                         </div>
                         <div class="input-control2">
                             <span class="details" style="margin-left: 10px">Apellidos</span>
-                            <input type="text" id="apellidos" th:field="*{apellidos}" class="input-field2" placeholder="Ingrese sus apellidos" disabled>
+                            <input type="text" id="apellidos" th:field="*{apellidos}" class="input-field2" placeholder="Ingrese sus apellidos" readonly>
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}" style="margin-left: 10px ; color: red"></div>
                         </div>
                         <div class="input-control2">
@@ -131,32 +133,33 @@
                             </select>
                             <div class="invalid-feedback" th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}" style="margin-left: 10px ; color: red"></div>
                         </div>
-                    </div>
+                        <div class="content">
+                            <div class="input-control">
+                                <input type="submit" name="submit" class="input-submit" value="Registrar">
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="content">
-                    <div class="input-control">
-                        <input type="submit" name="submit" class="input-submit" value="Registrar">
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function(){
-        $('#buscarDni').click(function(){
-            var dni = $('#dni').val();
+    $(document).ready(function() {
+        $('form').submit(function(e) {
+            e.preventDefault();
             $.ajax({
-                url: 'http://localhost:8080/api/dni',
-                type: 'GET',
-                data: {dni: dni},
-                success: function(response) {
-                    $('#nombres').val(response[0]);
-                    $('#apellidos').val(response[1] + " " + response[2]);
+                type: 'POST',
+                url: '/DNIapi',
+                data: $(this).serialize(),
+                success: function(data) {
+                    $('#nombres').val(data.nombres);
+                    $('#apellidos').val(data.apellidos);
                 },
-                error: function() {
-                    alert('Error al obtener los datos del DNI');
+                error: function(error) {
+                    console.error('Error fetching data from API:', error);
                 }
             });
         });
