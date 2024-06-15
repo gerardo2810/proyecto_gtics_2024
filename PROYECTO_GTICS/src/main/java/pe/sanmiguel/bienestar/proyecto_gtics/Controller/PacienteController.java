@@ -6,6 +6,9 @@ import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
 import jakarta.websocket.SessionException;
 import org.apache.catalina.Session;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -156,14 +159,17 @@ public class PacienteController {
 
 
     @GetMapping(value="/new_orden")
-    public String new_orden(Model model, @ModelAttribute("usuario") Usuario usuario, @ModelAttribute("ordenDto") OrdenDto ordenDto){
+    public String new_orden(HttpSession session, Model model, @ModelAttribute("usuario") Usuario usuario, @ModelAttribute("ordenDto") OrdenDto ordenDto, HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
+        model.addAttribute("usuario", userSession);
+
 
         List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
-
         List<Doctor> listaDoctores = doctorRepository.findAll();
         model.addAttribute("listaDoctores", listaDoctores);
         model.addAttribute("listaMedicamentos", listaMedicamentos);
-
+        model.addAttribute("emptyInput", 1);
 
         return "paciente/new_orden";}
 
