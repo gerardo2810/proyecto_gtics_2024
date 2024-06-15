@@ -13,6 +13,8 @@
     <link th:href="@{/css/login-styles/login.css}" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
 
 </head>
 
@@ -79,6 +81,15 @@
 
                 <div class="alert alert-success-custom" role="alert" th:if="${mensaje != null}" th:text="${mensaje}" ></div>
                 <div class="alert alert-danger-custom" role="alert" th:if="${error != null}" th:text="${error}"></div>
+
+                <div th:if="${param.error}" style="display: flex; justify-content: center; align-items: center; height: 36px;">
+                    <i  style="color: #E72C2C; margin-right: 10px;font-size: 18px;" class="fas fa-exclamation-circle"></i>
+                    <h4 class="form-signin-heading" style="color: #E72C2C;">Usuario o contraseña incorrectos</h4>
+                </div>
+
+
+
+
                 <form name="signin" class="login-form" method="post" th:action="@{/processlogin}" th:object="${usuario}">
                     <div class="input-control3">
                         <label for="correo" class="input-label" hidden>Email Address</label>
@@ -90,12 +101,17 @@
                         <input type="password" name="contrasena" th:field="*{contrasena}" id="contrasena" class="input-field" placeholder="Contraseña">
                         <div class="invalid-feedback" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}" style="margin-left: 10px ; color: red"></div>
                     </div>
+                    <div class="form-check" style="margin-left: 10px">
+                        <input class="form-check-input" type="checkbox" id="mostrarContrasena" >
+                        <label style="color:dimgray" class="form-check-label" >Mostrar contraseña</label>
+                    </div>
+                    <br>
                     <div class="input-control">
                         <a th:href="@{/recuperarContra}" class="text text-links">Recuperar Contraseña</a>
                         <input type="submit" name="submit" class="input-submit" value="Iniciar Sesión">
                     </div>
+
                 </form>
-                <h4 th:if="${param.error}" class="form-signin-heading" style="color:red">Acceso denegado</h4>
             </div>
 
         </div>
@@ -104,5 +120,14 @@
 
 
 </body>
-
+<script>
+    document.getElementById("mostrarContrasena").addEventListener("change", function() {
+        var contrasenaInput = document.getElementById("contrasena");
+        if (this.checked) {
+            contrasenaInput.type = "text";
+        } else {
+            contrasenaInput.type = "password";
+        }
+    });
+</script>
 </html>
