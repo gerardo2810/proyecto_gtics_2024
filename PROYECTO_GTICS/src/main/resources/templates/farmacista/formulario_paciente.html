@@ -54,60 +54,58 @@
         <hr class="style-one">
 
 
-        <form id="finalizar" method="post" th:action="@{/farmacista/finalizar_compra}" th:object="${usuario}">
-
-            <div class="container-form">
-                <div style="display: flex;flex-direction: row; column-gap: 25px">
 
 
 
-                    <div>
+            <div class="container-form" >
 
-                        <div class="search-bar" style="padding-bottom: 20px; padding-top: 20px; display: flex; flex-direction: row; justify-content: space-between;">
+                <div class="grid-sus">
 
-
-                        </div>
-
-                        <div class="column">
-
-                            <div style="display: flex; flex-direction: row; justify-content: space-between; gap: 10px">
+                        <div class="dni-form">
+                            <form method="post" th:action="@{/farmacista/form_paciente}" th:object="${usuario}">
+                            <div style="display: flex; flex-direction: row; justify-content: start; gap: 10px">
                                 <div class="input-label-box">
-                                    <label style="font-weight: bold; color:dimgray">DNI:</label>
-                                    <input id="dniInput" class="input-form-dni" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del paciente"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
+                                    <label style="font-weight: bold; color:dimgray">Ingrese el DNI del Paciente</label>
+                                    <input class="input-form-dni" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del paciente"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
                                     <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
                                 </div>
 
                                 <div style="margin-top: 37px">
-                                    <div class="btn btn-p" ><i class="fas fa-search"></i></div>
+                                    <button type="submit" id="buscarDni" class="btn btn-p" ><i class="fas fa-search"></i></button>
                                 </div>
                             </div>
+                            </form>
+                        </div>
 
+                    <form class="finalizar" id="finalizar" method="post" style="display: contents;" th:action="@{/farmacista/finalizar_compra}" th:object="${usuario}">
+
+                        <div class="data-form">
 
                             <div class="input-label-box">
-                                <label style="font-weight: bold; color:dimgray">Correo:</label>
-                                <input id="correoInput" class="input-form-2" type="email"  th:field="*{correo}" placeholder="Ingrese el correo del paciente" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid' : ''}">
-                                <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" class="invalid-feedback" ></div>
+                                <label style="font-weight: bold; color:dimgray"></label>
+                                <input placeholder="DNI" th:field="*{dni}"  id="dni" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
+                                <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
                             </div>
+
+
+
+                            <div class="column">
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray"></label>
+                                    <input placeholder="Nombres del paciente" th:value="${nombres}" name="nombres" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}">
+                                    <div  class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
+                                </div>
+
+                                <div class="input-label-box">
+                                    <label style="font-weight: bold; color:dimgray"></label>
+                                    <input placeholder="Apellidos del paciente" th:value="${apellidos}" name="apellidos" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}">
+                                    <div  class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
+                                </div>
 
                         </div>
 
-                        <div class="column">
-
-                            <div class="input-label-box">
-                                <label style="font-weight: bold; color:dimgray">Nombre del paciente:</label>
-                                <input id="nombresInput" class="input-form-2" type="text" th:field="*{nombres}" placeholder="Ingrese los nombres del paciente"  th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}"/>
-                                <div class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
-                            </div>
-
-                            <div class="input-label-box">
-                                <label style="font-weight: bold; color:dimgray">Apellidos del paciente:</label>
-                                <input id="apellidosInput" class="input-form-2" type="text"  th:field="*{apellidos}" placeholder="Ingrese los apellidos del paciente" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}">
-                                <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
-                            </div>
-
-                        </div>
-
-                        <div class="column">
+                            <div class="column">
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Seguro:</label>
@@ -136,7 +134,7 @@
 
                         </div>
 
-                        <div class="column">
+                            <div class="column">
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Distrito:</label>
@@ -152,7 +150,7 @@
 
                         </div>
 
-                        <div class="column-start">
+                            <div class="column">
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Teléfono:</label>
@@ -161,12 +159,17 @@
                             </div>
 
 
+                            <div class="input-label-box">
+                                <label style="font-weight: bold; color:dimgray">Correo:</label>
+                                <input id="correoInput" class="input-form-2" type="email"  th:field="*{correo}" placeholder="Ingrese el correo del paciente" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid' : ''}">
+                                <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" class="invalid-feedback" ></div>
+                            </div>
+
                         </div>
 
-                        <a href="/farmacista"><button class="return-button montserrat-medium" id="cancel">Cancelar</button></a>
+                            <a href="/farmacista"><button class="return-button montserrat-medium" id="cancel">Cancelar</button></a>
 
-
-                    </div>
+                        </div>
 
                     <div style="width: 100%;">
                         <section class="items-list">
@@ -218,12 +221,12 @@
                         </section>
                     </div>
 
-
+                    </form>
 
                 </div>
             </div>
 
-        </form>
+
 
     </div>
 
@@ -232,110 +235,10 @@
     <div th:replace="~{fragments/navbar.html :: footer}">
     </div>
 
-<div hidden="hidden">
-    <table id = "tabla_s">
-        <tr th:each="u : ${listaUsuarios}">
-            <td id="s_dni" th:text="${u.getDni()}"></td>
-            <td id="s_correo" th:text="${u.getCorreo()}"></td>
-            <td id="s_nombres" th:text="${u.getNombres()}"></td>
-            <td id="s_apellidos" th:text="${u.getApellidos()}"></td>
-            <td id="s_distrito" th:text="${u.getDistrito()}"></td>
-            <td id="s_direccion" th:text="${u.getDireccion()}"></td>
-            <td id="s_celular" th:text="${u.getCelular()}"></td>
-        </tr>
-    </table>
-</div>
-
-    <script>
-        // Obtener referencia al botón de búsqueda
-        var searchButton = document.querySelector('.btn-p');
-
-        // Agregar un event listener para el clic en el botón de búsqueda
-        searchButton.addEventListener('click', function() {
-            // Obtener el valor del campo de entrada de DNI
-            var dniInputValue = document.getElementById('dniInput').value;
-            console.log(dniInputValue);
-
-
-
-            // Obtener todas las celdas que muestran los DNIs
-            var tableCells = document.querySelectorAll("#tabla_s td#s_dni");
-
-            // Variable para almacenar si se encontró el DNI
-            var found = false;
-            var matchingRow = null;
-
-            // Iterar sobre todas las celdas
-            tableCells.forEach(function(cell) {
-                // Obtener el texto de la celda eliminando los espacios en blanco
-                var cellText = cell.textContent.trim();
-
-                console.log(cellText);
-
-                // Si el texto de la celda coincide exactamente con el valor del DNI introducido
-                if (cellText === dniInputValue) {
-                    matchingRow = cell.closest('tr');
-                    found = true;
-                }
-            });
-
-            console.log(matchingRow);
-
-            // Si se encontró el DNI, mostrar alerta
-            if (found) {
-                const Swal = window.Swal;
-                // Mostrar la alerta con SweetAlert
-                Swal.fire({
-                    title: 'Paciente Encontrado',
-                    text: '¿Quieres obtener los datos del paciente guardado?',
-                    icon: 'info',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, continuar',
-                    cancelButtonText: 'No, cancelar'
-                }).then((result) => {
-                    // Si el usuario confirma, autorellena los inputs del formulario
-                    if (result.isConfirmed) {
-                        // Obtener los datos de la fila
-                        var dni = matchingRow.querySelector("#s_dni").textContent.trim();
-                        var correo = matchingRow.querySelector("#s_correo").textContent.trim();
-                        var nombres = matchingRow.querySelector("#s_nombres").textContent.trim();
-                        var apellidos = matchingRow.querySelector("#s_apellidos").textContent.trim();
-                        var distrito = matchingRow.querySelector("#s_distrito").textContent.trim();
-                        var direccion = matchingRow.querySelector("#s_direccion").textContent.trim();
-                        var celular = matchingRow.querySelector("#s_celular").textContent.trim();
-
-                        // Autorellenar los campos del formulario con los datos obtenidos
-                        document.getElementById('dniInput').value = dni;
-                        document.getElementById('correoInput').value = correo;
-                        document.getElementById('nombresInput').value = nombres;
-                        document.getElementById('apellidosInput').value = apellidos;
-                        document.getElementById('distritoInput').value = distrito;
-                        document.getElementById('direccionInput').value = direccion;
-                        document.getElementById('celularInput').value = celular;
-                    } else {
-
-                    }
-                });
-            } else {
-                const Swal = window.Swal;
-                // Mostrar la alerta con SweetAlert
-                Swal.fire({
-                    title: 'Paciente no Encontrado',
-                    text: 'El DNI no está registrado en el sistema, proceda con el llenado de datos',
-                    icon: 'info',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Aceptar',
-                });
-            }
-
-            console.log("¿Coincide el DNI con algún valor de la tabla?", found);
-        });
-    </script>
 
 
 </body>
+
 
 <script>
     const frameworks = [
@@ -449,18 +352,8 @@
                 cancelButtonText: hayProblemaConStock ? 'Cambiar Medicinas' : 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    if (verificarCamposLlenos(form)) {
-                        event.preventDefault();
-                        form.submit();
-                    } else {
-                        Swal.fire({
-                            title: 'Faltan Datos',
-                            text: 'Por favor, completa todos los campos antes de enviar el formulario.',
-                            icon: 'warning',
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'Continuar',
-                        });
-                    }
+                    event.preventDefault();
+                    form.submit();
                 } else if (result.isDismissed && hayProblemaConStock && verificarCamposLlenos(form)) {
                     window.location.href = '/farmacista/cambiar_medicamentos';
                 } else {

@@ -718,6 +718,24 @@ hr.style-one {
     padding: 10px 0 10px 0;
 }
 
+
+.grid-sus{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    grid-template-rows: repeat(auto-fill, 100px);
+}
+
+.dni-form{
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.data-form {
+    grid-column: 1;
+    grid-row: 2;
+}
+
 .hide {
     display: none;
 }
@@ -749,7 +767,7 @@ hr.style-one {
     margin-top: 6px;
     padding-left: 15px;
     outline: none;
-    width: 300px !important;
+    width: 330px !important;
     height: 42px;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
@@ -760,7 +778,7 @@ hr.style-one {
     margin-top: 6px;
     padding-left: 15px;
     outline: none;
-    width: 235px !important;
+    width: 640px !important;
     height: 42px;
     border: 1px solid #DFDFDF;
     border-radius: 5px;
@@ -768,7 +786,7 @@ hr.style-one {
 }
 
 .select-form {
-    width: 315px !important;
+    width: 345px !important;
     height: 48px;
     margin-top:4px;
     padding: 10px 12px;
@@ -816,9 +834,9 @@ hr.style-one {
     display: flex;
     flex-direction: row;
     row-gap: 11px;
-    column-gap: 20px;
-    justify-content: center;
-    padding-bottom: 15px;
+    column-gap: 25px;
+    justify-content: start;
+    padding-bottom: 10px;
 }
 
 .continue-button {
@@ -990,8 +1008,8 @@ hr.style-one {
 }
 
 .order-items {
-    min-height: 520px;
-    max-height: 520px;
+    min-height: 440px;
+    max-height: 440px;
     overflow: auto;
 }
 

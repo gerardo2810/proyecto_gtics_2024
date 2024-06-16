@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +17,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pe.sanmiguel.bienestar.proyecto_gtics.DniAPI;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.EmailService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.DniApiValidationGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.FarmacistaValidationsGroup;
 
 import java.io.IOException;
@@ -46,7 +49,7 @@ public class FarmacistaController {
     final EstadoPreOrdenRepository estadoPreOrdenRepository;
     final DoctorRepository doctorRepository;
 
-    public FarmacistaController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, SedeStockRepository sedeStockRepository, SedeFarmacistaRepository sedeFarmacistaRepository, MedicamentoRepository medicamentoRepository, OrdenRepository ordenRepository, OrdenContenidoRepository ordenContenidoRepository, ReposicionRepository reposicionRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository) {
+    public FarmacistaController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, SedeStockRepository sedeStockRepository, SedeFarmacistaRepository sedeFarmacistaRepository, MedicamentoRepository medicamentoRepository, OrdenRepository ordenRepository, OrdenContenidoRepository ordenContenidoRepository, ReposicionRepository reposicionRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository, DniAPI dniAPI) {
         this.usuarioRepository = usuarioRepository;
         this.sedeRepository = sedeRepository;
         this.sedeStockRepository = sedeStockRepository;
@@ -57,6 +60,7 @@ public class FarmacistaController {
         this.reposicionRepository  =reposicionRepository;
         this.estadoPreOrdenRepository = estadoPreOrdenRepository;
         this.doctorRepository = doctorRepository;
+        this.dniAPI = dniAPI;
     }
 
     /* Repositorios */
@@ -83,6 +87,8 @@ public class FarmacistaController {
 
     @Autowired
     private EmailService emailService;
+
+    final DniAPI dniAPI;
 
     @GetMapping(value = "/correo_prueba")
     public String prueba(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
@@ -196,10 +202,8 @@ public class FarmacistaController {
                 }
             }
 
-            ArrayList<Usuario> listaUsuarios = (ArrayList<Usuario>) usuarioRepository.listarUsuariosSegunRol(4);
             ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) doctorRepository.findAll();
 
-            model.addAttribute("listaUsuarios", listaUsuarios);
             model.addAttribute("listaDoctores", listaDoctores);
             model.addAttribute("stockSeleccionados", stockSeleccionados);
             model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
@@ -209,22 +213,12 @@ public class FarmacistaController {
         }
     }
 
-    @PostMapping("/farmacista/finalizar_compra")
-    public String createOrdenVenta(@ModelAttribute("usuario") @Validated(FarmacistaValidationsGroup.class) Usuario usuario,
-                                   BindingResult bindingResult,
-                                   Model model,
-                                   @RequestParam(value = "nombres") String name,
-                                   @RequestParam(value = "apellidos") String lastname,
-                                   @RequestParam(value = "dni") String dni,
-                                   @RequestParam(value = "distrito") String distrito,
-                                   @RequestParam(value = "direccion") String direccion,
-                                   @RequestParam(value = "doctor", required = false) String doctor,
-                                   @RequestParam(value = "seguro", required = false) String seguro,
-                                   @RequestParam(value = "correo") String correo,
-                                   @RequestParam(value = "celular") String celular,
-                                   @RequestParam(value = "listaIds") List<String> listaSelectedIds,
-                                   @RequestParam(value = "priceTotal") String priceTotal,
-                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    @PostMapping("/farmacista/form_paciente")
+    public String dniApi(@ModelAttribute("usuario") @Validated(DniApiValidationGroup.class) Usuario usuario,
+                         BindingResult bindingResult,
+                         Model model,
+                         @RequestParam(value = "dni") String dni,
+                         HttpServletRequest request, HttpServletResponse response, Authentication authentication){
 
         //Iniciamos la sesión
         HttpSession session = request.getSession();
@@ -256,6 +250,104 @@ public class FarmacistaController {
             model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
             model.addAttribute("listaCantidades", listaCantidades);
 
+            model.addAttribute("nombres", "");
+            model.addAttribute("apellidos", "");
+            model.addAttribute("dni", "");
+
+            return "farmacista/formulario_paciente";
+
+        } else {
+            List<Integer> stockSeleccionados = new ArrayList<>();
+
+            for (Medicamento med : medicamentosSeleccionados) {
+                if (sedeStockRepository.getSedeStockByIdSedeAndIdMedicamento(sedeSession, med).isPresent()) {
+                    stockSeleccionados.add(sedeStockRepository.getSedeStockByIdMedicamentoAndIdSede(med,sedeSession).getCantidad());
+                } else {
+                    stockSeleccionados.add(0);
+                }
+            }
+
+            ArrayList<Usuario> listaUsuarios = (ArrayList<Usuario>) usuarioRepository.listarUsuariosSegunRol(4);
+            ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) doctorRepository.findAll();
+
+            model.addAttribute("listaUsuarios", listaUsuarios);
+            model.addAttribute("listaDoctores", listaDoctores);
+            model.addAttribute("stockSeleccionados", stockSeleccionados);
+            model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
+            model.addAttribute("listaCantidades", listaCantidades);
+
+            ResponseEntity<String> responseDni = DniAPI.getDni(dni);
+            List<String> values = DniAPI.responseToList(responseDni);
+
+            String apiDni = values.get(4);
+            String apiNombres = values.get(0);
+            String apiApellidos = (values.get(1) + " " + values.get(2));
+
+            model.addAttribute("dni", apiDni);
+            model.addAttribute("nombres", apiNombres);
+            model.addAttribute("apellidos", apiApellidos);
+
+            System.out.println(values);
+            return "farmacista/formulario_paciente";
+        }
+
+    }
+
+    @PostMapping("/farmacista/finalizar_compra")
+    public String createOrdenVenta(@ModelAttribute("usuario") @Validated(FarmacistaValidationsGroup.class) Usuario usuario,
+                                   BindingResult bindingResult,
+                                   Model model,
+                                   @RequestParam(value = "dni") String dni,
+                                   @RequestParam(value = "nombres") String name,
+                                   @RequestParam(value = "apellidos") String lastname,
+                                   @RequestParam(value = "distrito") String distrito,
+                                   @RequestParam(value = "direccion") String direccion,
+                                   @RequestParam(value = "doctor", required = false) String doctor,
+                                   @RequestParam(value = "seguro", required = false) String seguro,
+                                   @RequestParam(value = "correo") String correo,
+                                   @RequestParam(value = "celular") String celular,
+                                   @RequestParam(value = "listaIds") List<String> listaSelectedIds,
+                                   @RequestParam(value = "priceTotal") String priceTotal,
+                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+
+        System.out.println(dni);
+        System.out.println(name);
+        System.out.println(lastname);
+        System.out.println(listaSelectedIds);
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
+
+        if (bindingResult.hasErrors()){
+
+            System.out.println(bindingResult.getAllErrors());
+
+            List<Integer> stockSeleccionados = new ArrayList<>();
+
+            for (Medicamento med : medicamentosSeleccionados) {
+                if (sedeStockRepository.getSedeStockByIdSedeAndIdMedicamento(sedeSession, med).isPresent()) {
+                    stockSeleccionados.add(sedeStockRepository.getSedeStockByIdMedicamentoAndIdSede(med,sedeSession).getCantidad());
+                } else {
+                    stockSeleccionados.add(0);
+                }
+            }
+
+            ArrayList<Usuario> listaUsuarios = (ArrayList<Usuario>) usuarioRepository.listarUsuariosSegunRol(4);
+            ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) doctorRepository.findAll();
+
+            model.addAttribute("listaUsuarios", listaUsuarios);
+            model.addAttribute("listaDoctores", listaDoctores);
+            model.addAttribute("stockSeleccionados", stockSeleccionados);
+            model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
+            model.addAttribute("listaCantidades", listaCantidades);
+
+            model.addAttribute("nombres", "");
+            model.addAttribute("apellidos", "");
+            model.addAttribute("dni", "");
+
             return "farmacista/formulario_paciente";
 
         } else {
@@ -269,6 +361,10 @@ public class FarmacistaController {
             verificationUser verificationUser = new verificationUser(name,lastname,dni,distrito,direccion,seguro,correo,celular);
 
             this.pacienteOnStore = verificationUser.getUser();
+            System.out.println("Paciente on Store: " + pacienteOnStore);
+            System.out.println("ID del paciente: " + pacienteOnStore.getIdUsuario());
+
+
 
             if (verificationStock.getMedicamentosSinStock().isEmpty()) {
 
@@ -278,10 +374,13 @@ public class FarmacistaController {
                 newOrden.setFechaIni(now);
                 newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
                 newOrden.setIdFarmacista(usuarioSession.getIdUsuario());
+                newOrden.setPaciente(pacienteOnStore);
                 newOrden.setTipoOrden(1);
                 newOrden.setEstadoOrden(8);
                 newOrden.setSede(sedeSession);
+                System.out.println(pacienteOnStore);
                 newOrden.setSeguroUsado(Objects.requireNonNullElse(seguro, "false"));
+                System.out.println(pacienteOnStore);
 
 
                 if (!(doctor == null)) {
@@ -290,9 +389,17 @@ public class FarmacistaController {
                     }
                 }
 
+                System.out.println("Orden antes de guardar: " + newOrden);
+
+                System.out.println(pacienteOnStore);
                 newOrden.setPaciente(this.pacienteOnStore);
 
+
+                System.out.println(newOrden);
+
                 ordenRepository.save(newOrden);
+                System.out.println("Orden guardada: " + newOrden);
+                System.out.println(ordenRepository);
 
                 int i = 0;
                 for (Medicamento med : medicamentosSeleccionados){
@@ -670,6 +777,7 @@ public class FarmacistaController {
             }
 
             usuarioRepository.save(user);
+            System.out.println(user.getIdUsuario());
 
             this.userExist = userExist;
             this.user = user;

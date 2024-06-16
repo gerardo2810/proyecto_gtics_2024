@@ -1,19 +1,26 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
 import jakarta.mail.MessagingException;
-import org.apache.commons.lang3.RandomStringUtils;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pe.sanmiguel.bienestar.proyecto_gtics.DniAPI;
 import pe.sanmiguel.bienestar.proyecto_gtics.EmailService;
+import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Doctor;
+import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Medicamento;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 import pe.sanmiguel.bienestar.proyecto_gtics.PasswordService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.DniApiValidationGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.LoginValidationsGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.RegisterValidationsGroup;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +33,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -37,6 +46,9 @@ final UsuarioRepository usuarioRepository;
 
     @Autowired
     private PasswordService passwordService;
+
+    @Autowired
+    private DniAPI dniAPI;
 
     public Login1(UsuarioRepository usuarioRepository) {this.usuarioRepository = usuarioRepository;}
 
@@ -63,10 +75,38 @@ final UsuarioRepository usuarioRepository;
     public String nuevoUsuario(Model model,@ModelAttribute("usuario")  Usuario usuario) {
         model.addAttribute("usuario", new Usuario());
 
-        return "login/prueba";
+        return "login/prueba3";
     }
     @Autowired
     private EmailService emailService;
+
+
+    @PostMapping("/DNIapi")
+    public String dniApi(@ModelAttribute("usuario") @Validated(DniApiValidationGroup.class) Usuario usuario,
+                         BindingResult bindingResult,
+                         Model model,
+                         @RequestParam(value = "dni") String dni) {
+
+        if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getAllErrors());
+            return "login/prueba3";
+        } else {
+            ResponseEntity<String> responseDni = DniAPI.getDni(dni);
+            List<String> values = DniAPI.responseToList(responseDni);
+
+            String apiDni = values.get(4);
+            String apiNombres = values.get(0);
+            String apiApellidos = (values.get(1) + " " + values.get(2));
+
+            model.addAttribute("dni", apiDni);
+            model.addAttribute("nombres", apiNombres);
+            model.addAttribute("apellidos", apiApellidos);
+            model.addAttribute("dniApi", apiDni);
+
+            System.out.println(values);
+            return "login/prueba3";
+        }
+    }
 
     @PostMapping("/save")
     public String guardarNuevoUsuario(@ModelAttribute("usuario") @Validated(RegisterValidationsGroup.class) Usuario usuario,
@@ -94,12 +134,6 @@ final UsuarioRepository usuarioRepository;
             variables.put("nombre", usuario.getNombres());
             variables2.put("contra", temporaryPassword);
 
-            //String filename="src/main/resources/templates/login/correo.html";
-            //Path pathToFile = Paths.get(filename);
-            //System.out.println(pathToFile.toAbsolutePath());
-            //String htmlFilePath = pathToFile.toAbsolutePath().toString();
-
-
             try {
                 emailService.sendHtmlEmail2(usuario.getCorreo(), subject,"login/correo", variables, variables2);
                 attributes.addFlashAttribute("mensaje", "Usuario creado correctamente y correo enviado.");
@@ -112,7 +146,7 @@ final UsuarioRepository usuarioRepository;
             return "redirect:/";
         } else {
             model.addAttribute("usuario", usuario);
-            return "login/prueba";
+            return "login/prueba3";
         }
     }
 
@@ -123,6 +157,8 @@ final UsuarioRepository usuarioRepository;
     public String accessDenied() {
         return "login/error"; // Nombre de la vista que se debe mostrar
     }
+
+
 
 
 
