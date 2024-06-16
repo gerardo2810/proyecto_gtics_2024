@@ -1071,6 +1071,65 @@ public class SuperAdminController {
         return "superAdmin/crearDoctor";
     }
 
+    @PostMapping("/form_doctor")
+    public String dniApiDoctor(@ModelAttribute("doctor") @Validated(DniApiValidationGroup.class) Doctor doctor,
+                         BindingResult bindingResult,
+                         Model model,
+                         @RequestParam(value = "dni") String dni,
+                         HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+
+        if (bindingResult.hasErrors()){
+            System.out.println("HAY ERRORES DE VALIDACIÓN:");
+            for (ObjectError error : bindingResult.getAllErrors()) {
+                System.out.println("- " + error.getDefaultMessage());
+            }
+            List<Sede> sedeDisponibleList = sedeRepository.findAll();
+            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+
+            model.addAttribute("nombres", "");
+            model.addAttribute("apellidos", "");
+            model.addAttribute("dni", "");
+
+            return "superAdmin/crearDoctor";
+
+        } else {
+
+            List<String> dnisUsados = usuarioRepository.listarDNIsUsados();
+
+            if (dnisUsados.contains(dni)) {
+                System.out.println("El DNI está en la lista.");
+                List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                bindingResult.rejectValue("dni", "error.dni", "El DNI ya se encuentra registrado.");
+                return "superAdmin/crearDoctor";
+            }
+
+            List<Sede> sedeDisponibleList = sedeRepository.findAll();
+            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+
+            ResponseEntity<String> responseDni = DniAPI.getDni(dni);
+            List<String> values = DniAPI.responseToList(responseDni);
+
+            String apiDni = values.get(4);
+            String apiNombres = values.get(0);
+            String apiApellidos = (values.get(1) + " " + values.get(2));
+
+            model.addAttribute("dni", apiDni);
+            model.addAttribute("nombres", apiNombres);
+            model.addAttribute("apellidos", apiApellidos);
+
+            System.out.println(values);
+            return "superAdmin/crearDoctor";
+        }
+
+    }
+
     @PostMapping("/guardarDoctor")
     public String crearNuevoDoctor(@ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResul,
                                    @RequestParam(value = "dni", required = false) String dni,
