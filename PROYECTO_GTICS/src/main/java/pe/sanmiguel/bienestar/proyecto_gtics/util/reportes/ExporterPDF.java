@@ -57,13 +57,20 @@ public class ExporterPDF {
     private void escribirDatosDeLaTabla(PdfPTable tabla){
 
         for(VentasMedicamentosTotalDto medicamento: listaMedicamentos){
-            tabla.addCell(medicamento.getNombre());
-            tabla.addCell(medicamento.getUnidad());
-            tabla.addCell(String.valueOf(medicamento.getPrecioCompra()));
-            tabla.addCell(String.valueOf(medicamento.getPrecioVenta()));
-            tabla.addCell(String.valueOf(medicamento.getTotalCantidad()));
-            tabla.addCell(String.valueOf(medicamento.getGananciaTotal()));
+            tabla.addCell(crearCeldaCentrada(medicamento.getNombre()));
+            tabla.addCell(crearCeldaCentrada(medicamento.getUnidad()));
+            tabla.addCell(crearCeldaCentrada(String.valueOf(medicamento.getPrecioCompra())));
+            tabla.addCell(crearCeldaCentrada(String.valueOf(medicamento.getPrecioVenta())));
+            tabla.addCell(crearCeldaCentrada(String.valueOf(medicamento.getTotalCantidad())));
+            tabla.addCell(crearCeldaCentrada(String.valueOf(medicamento.getGananciaTotal())));
         }
+    }
+
+    private PdfPCell crearCeldaCentrada(String texto) {
+        PdfPCell celda = new PdfPCell(new Phrase(texto));
+        celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+        celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        return celda;
     }
 
     public void exportar(HttpServletResponse response) throws DocumentException, IOException {
