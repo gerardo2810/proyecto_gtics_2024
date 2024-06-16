@@ -35,9 +35,6 @@ public class ExporterPDF {
         Font fuente = FontFactory.getFont(FontFactory.HELVETICA);
         fuente.setColor(Color.WHITE);
 
-        celda.setPhrase(new Phrase("ID", fuente));
-        tabla.addCell(celda);
-
         celda.setPhrase(new Phrase("Nombre", fuente));
         tabla.addCell(celda);
 
@@ -60,7 +57,6 @@ public class ExporterPDF {
     private void escribirDatosDeLaTabla(PdfPTable tabla){
 
         for(VentasMedicamentosTotalDto medicamento: listaMedicamentos){
-            tabla.addCell(String.valueOf(medicamento.getIdMedicamento()));
             tabla.addCell(medicamento.getNombre());
             tabla.addCell(medicamento.getUnidad());
             tabla.addCell(String.valueOf(medicamento.getPrecioCompra()));
@@ -83,7 +79,7 @@ public class ExporterPDF {
         fuente.setSize(18);
 
         // Crear un Chunk con subrayado
-        Chunk tituloChunk = new Chunk("Ventas de medicamentos", fuente);
+        Chunk tituloChunk = new Chunk("Lista de ventas de medicamentos", fuente);
         tituloChunk.setUnderline(1f, -2f);  // grosor y desplazamiento del subrayado
 
         // Crear un Paragraph y añadir el Chunk
@@ -120,10 +116,10 @@ public class ExporterPDF {
         espacio2.setSpacingBefore(20); // Ajusta el espacio según sea necesario
         documento.add(espacio2);
 
-        PdfPTable tabla = new PdfPTable(7);
+        PdfPTable tabla = new PdfPTable(6);
         tabla.setWidthPercentage(100);
         tabla.setSpacingBefore(15);
-        tabla.setWidths(new float[] {1f, 3f, 3f, 2f, 1.8f,1.5f,1.7f});
+        tabla.setWidths(new float[] {3f, 3f, 2f, 1.8f,1.5f,1.7f});
         tabla.setWidthPercentage(110);
 
         escribirCabeceraDeLaTabla(tabla);
