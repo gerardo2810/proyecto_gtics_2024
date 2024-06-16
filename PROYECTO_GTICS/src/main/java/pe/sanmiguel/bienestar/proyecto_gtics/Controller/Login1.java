@@ -75,7 +75,7 @@ final UsuarioRepository usuarioRepository;
     public String nuevoUsuario(Model model,@ModelAttribute("usuario")  Usuario usuario) {
         model.addAttribute("usuario", new Usuario());
 
-        return "login/prueba2";
+        return "login/prueba3";
     }
     @Autowired
     private EmailService emailService;
@@ -89,7 +89,7 @@ final UsuarioRepository usuarioRepository;
 
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.getAllErrors());
-            return "login/prueba2";
+            return "login/prueba3";
         } else {
             ResponseEntity<String> responseDni = DniAPI.getDni(dni);
             List<String> values = DniAPI.responseToList(responseDni);
@@ -101,9 +101,10 @@ final UsuarioRepository usuarioRepository;
             model.addAttribute("dni", apiDni);
             model.addAttribute("nombres", apiNombres);
             model.addAttribute("apellidos", apiApellidos);
+            model.addAttribute("dniApi", apiDni);
 
             System.out.println(values);
-            return "login/prueba2";
+            return "login/prueba3";
         }
     }
 
@@ -145,7 +146,7 @@ final UsuarioRepository usuarioRepository;
             return "redirect:/";
         } else {
             model.addAttribute("usuario", usuario);
-            return "login/prueba2";
+            return "login/prueba3";
         }
     }
 
