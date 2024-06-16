@@ -50,7 +50,9 @@ final UsuarioRepository usuarioRepository;
     @Autowired
     private DniAPI dniAPI;
 
-    public Login1(UsuarioRepository usuarioRepository) {this.usuarioRepository = usuarioRepository;}
+    public Login1(UsuarioRepository usuarioRepository, DniAPI dniAPI) {
+        this.dniAPI = dniAPI;
+        this.usuarioRepository = usuarioRepository;}
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 

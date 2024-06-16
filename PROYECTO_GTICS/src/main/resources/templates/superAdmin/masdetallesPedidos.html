@@ -11,6 +11,7 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
 
   <!--=============== CSS ===============-->
+  <link th:href="@{/css/preloader.css}" rel="stylesheet" />
   <link th:href="@{/css/styles.css}" rel="stylesheet" />
   <link th:href="@{/css/fonts.css}" rel="stylesheet" />
   <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
@@ -39,7 +40,11 @@
 </head>
 
 
-<body style="background-color: white;">
+<body class="loader-hidden" style="background-color: white;">
+
+<div class="container-loader loader-hidden" id="onload">
+  <div class="loader"></div>
+</div>
 <!--=============== HEADER ===============-->
 <header class="header-topbar">
   <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Pedidos de reposición')}"></nav>
@@ -248,6 +253,13 @@
     });
   });
 
+
+</script>
+<script>
+  window.onload = function () {
+    $('#onload').fadeOut();
+    $('body').removeClass('loader-hidden');
+  }
 
 </script>
 

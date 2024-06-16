@@ -17,6 +17,7 @@
 
     <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
     <link rel="stylesheet" th:href="@{/css/superadmin/superadmin.css}">
+    <link th:href="@{/css/preloader.css}" rel="stylesheet" />
 
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" th:href="@{/css/fonts.css}">
@@ -69,7 +70,11 @@
 </head>
 
 
-<body>
+<body class="loader-hidden">
+
+<div class="container-loader loader-hidden" id="onload">
+    <div class="loader"></div>
+</div>
 <!--=============== HEADER ===============-->
 <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inventario')}"></nav>
@@ -265,5 +270,13 @@
     });
 </script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    window.onload = function () {
+        $('#onload').fadeOut();
+        $('body').removeClass('loader-hidden');
+    }
+
+</script>
 </body>
 </html>
