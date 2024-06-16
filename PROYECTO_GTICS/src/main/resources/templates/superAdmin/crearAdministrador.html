@@ -80,8 +80,8 @@
         }
 
         .profile-picture {
-            width: 400px;
-            height: 400px;
+            width: 350px;
+            height: 350px;
             background-color: lightgray;
             background-image: url('https://static.vecteezy.com/system/resources/previews/014/591/700/non_2x/office-manager-man-icon-outline-style-vector.jpg');
             background-size: cover;
@@ -95,7 +95,7 @@
             padding-left: 15px;
             background-color: #EBF5FB;
             outline: none;
-            width: 540px !important;
+            width: 450px !important;
             height: 42px;
             border: 1px solid #DFDFDF;
             border-radius: 5px;
@@ -152,25 +152,14 @@
                 <div class="column-start" style="display:flex; flex-direction:column; align-items:center;">
                     <div class="input-label-box" style="display:flex; flex-direction:column; align-items:center;">
                         <label style="font-weight: bold; color:dimgray; margin-bottom:8px;">NUEVO ADMINISTRADOR</label>
-                        <div class="profile-picture-container" style="display:flex; justify-content:center;">
-                            <div class="profile-picture"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="container-form">
-
-                <div style="display: flex; flex-direction: column; row-gap: 25px;">
-                    <div class="row">
-                        <br>
                         <div class="dni-form">
                             <form method="post" th:action="@{/superadmin/form_administrador}" th:object="${administrador}">
                                 <div style="display: flex; flex-direction: row; justify-content: start; gap: 10px">
                                     <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Ingrese el DNI del Administrador</label>
+                                        <label style="font-weight: bold; color:dimgray; font-size: medium">Ingrese el DNI del Administrador</label>
                                         <input class="input-form-dni" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del administrador"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
-                                        <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+                                        <div  class="invalid-feedback" style="font-size: medium" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
                                     </div>
                                     <div style="margin-top: 37px">
                                         <button type="submit" id="buscarDni" class="btn btn-p"><i class="fas fa-search"></i></button>
@@ -178,11 +167,19 @@
                                 </div>
                             </form>
                         </div>
-                        <br>
-                    </div>
 
-                    <form class="login-form" id="finalizar"  method="post" th:action="@{'/superadmin/guardarAdministrador'}" th:object="${administrador}" enctype="multipart/form-data">
-                        <div class="row">
+                        <div class="profile-picture-container" style="display:flex; justify-content:center;">
+                            <div class="profile-picture"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form class="login-form" id="finalizar"  method="post" th:action="@{'/superadmin/guardarAdministrador'}" th:object="${administrador}" enctype="multipart/form-data">
+                <div class="container-form">
+
+                    <div style="display: flex; flex-direction: column; row-gap: 25px;">
+                        <div>
                             <div class="column">
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Nombre del administrador:</label>
@@ -254,10 +251,10 @@
                                 <button class="btn-p" type="submit">Confirmar</button>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
 
-            </div>
+                </div>
+            </form>
 
         </div>
     </div>
