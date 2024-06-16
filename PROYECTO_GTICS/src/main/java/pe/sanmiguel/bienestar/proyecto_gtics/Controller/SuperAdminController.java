@@ -430,6 +430,19 @@ public class SuperAdminController {
             return "superAdmin/crearAdministrador";
 
         } else {
+
+            List<String> dnisUsados = usuarioRepository.listarDNIsUsados();
+
+            System.out.println("DNI usado " + dni);
+            if (dnisUsados.contains(dni)) {
+                System.out.println("El DNI está en la lista.");
+                bindingResult.rejectValue("dni", "error.dni", "El DNI ya se encuentra registrado.");
+                model.addAttribute("nombres", "");
+                model.addAttribute("apellidos", "");
+                model.addAttribute("dni", "");
+                return "superAdmin/crearAdministrador";
+            }
+
             List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
 
