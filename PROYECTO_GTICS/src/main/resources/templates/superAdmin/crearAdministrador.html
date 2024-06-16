@@ -66,31 +66,6 @@
         body {
             padding-top: 80px;
         }
-        .btn-c {
-            display: inline-block;
-            padding: 12px 20px;
-            color:white;
-            background-color: #771677;
-            text-decoration: none;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s, border-color 0.3s;
-            font-size: 17px;
-            margin-right: 20px;
-        }
-        .btn-n {
-            display: inline-block;
-            padding: 12px 20px;
-            color:white;
-            background-color: #1a72e7;
-            text-decoration: none;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s, border-color 0.3s;
-            font-size: 17px;
-        }
 
         .detalle-orden-container {
             padding: 25px 30px 25px 30px;
@@ -115,9 +90,39 @@
             border-radius: 10px;
             display: inline-block;
         }
+        .input-form-dni {
+            margin-top: 6px;
+            padding-left: 15px;
+            background-color: #EBF5FB;
+            outline: none;
+            width: 540px !important;
+            height: 42px;
+            border: 1px solid #DFDFDF;
+            border-radius: 5px;
+            font-size: 17px;
+        }
+        .btn-p {
+            display: inline-block;
+            padding: 12px 20px;
+            color:white;
+            background-color: #378fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 17px;
+        }
+        .select-form {
+            width: 300px !important;
+            height: 45px;
+            margin-top:4px;
+            padding: 10px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background-color: transparent;
+            font-size: 15px;
+            outline: none;
 
-        .seccion-especifica {
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
         }
         @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
     </style>
@@ -140,125 +145,125 @@
         <br>
     </div>
 
-    <form id="form"  method="post" th:action="@{'/superadmin/guardarAdministrador'}" th:object="${administrador}" enctype="multipart/form-data">
-        <div class="detalle-orden-container">
+    <div class="detalle-orden-container">
 
-            <div class="invoice-title">
-                <div class="title roboto-medium data-label" style="padding-right:80px; padding-left:120px; display:flex; justify-content:center; align-items:center; text-align:center;">
-                    <div class="column-start" style="display:flex; flex-direction:column; align-items:center;">
-                        <div class="input-label-box" style="display:flex; flex-direction:column; align-items:center;">
-                            <label style="font-weight: bold; color:dimgray; margin-bottom:8px;">NUEVO ADMINISTRADOR</label>
-                            <div class="profile-picture-container" style="display:flex; justify-content:center;">
-                                <div class="profile-picture"></div>
-                            </div>
+        <div class="invoice-title">
+            <div class="title roboto-medium data-label" style="padding-right:80px; padding-left:120px; display:flex; justify-content:center; align-items:center; text-align:center;">
+                <div class="column-start" style="display:flex; flex-direction:column; align-items:center;">
+                    <div class="input-label-box" style="display:flex; flex-direction:column; align-items:center;">
+                        <label style="font-weight: bold; color:dimgray; margin-bottom:8px;">NUEVO ADMINISTRADOR</label>
+                        <div class="profile-picture-container" style="display:flex; justify-content:center;">
+                            <div class="profile-picture"></div>
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <div class="container-form">
 
-                <div class="container-form">
+                <div style="display: flex; flex-direction: column; row-gap: 25px;">
+                    <div class="row">
+                        <br>
+                        <div class="dni-form">
+                            <form method="post" th:action="@{/superadmin/form_administrador}" th:object="${administrador}">
+                                <div style="display: flex; flex-direction: row; justify-content: start; gap: 10px">
+                                    <div class="input-label-box">
+                                        <label style="font-weight: bold; color:dimgray">Ingrese el DNI del Administrador</label>
+                                        <input class="input-form-dni" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del administrador"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
+                                        <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+                                    </div>
+                                    <div style="margin-top: 37px">
+                                        <button type="submit" id="buscarDni" class="btn btn-p"><i class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <br>
+                    </div>
 
-                    <div style="display: flex;flex-direction: row; column-gap: 25px">
-
-                        <div>
+                    <form class="login-form" id="finalizar"  method="post" th:action="@{'/superadmin/guardarAdministrador'}" th:object="${administrador}" enctype="multipart/form-data">
+                        <div class="row">
                             <div class="column">
-
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Nombre del administrador:</label>
-                                    <input  th:field="*{nombres}" class="input-form" type="text" name="nombres"
-                                            th:classappend="${#fields.hasErrors('nombres')?'is-invalid':''}" placeholder="Ingrese el nombre" >
-                                    <div style="width: 300px" class="invalid-feedback"
-                                          th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}">
-                                        No puede estar vacío
-                                    </div>
+                                    <input style="width: 300px" placeholder="Ingrese el nombre" th:value="${nombres}" name="nombres" class="input-form" type="text" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}">
+                                    <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
                                 </div>
-
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Apellidos del administrador:</label>
-                                    <input  th:field="*{apellidos}" class="input-form" type="text" name="apellidos" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}"  placeholder="Ingrese el apellido" >
-                                    <div style="width: 300px" class="invalid-feedback"
-                                          th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}">
-                                        No puede estar vacío
-                                    </div>
+                                    <input style="width: 300px" placeholder="Ingrese el apellido" th:value="${apellidos}" name="apellidos" class="input-form" type="text" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}">
+                                    <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
                                 </div>
-
                             </div>
-
                             <div class="column">
-
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">DNI:</label>
-                                    <input th:field="*{dni}" class="input-form" type="text" name="dni" placeholder="Ingrese su DNI" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" >
-                                    <div style="width: 300px" class="invalid-feedback"
-                                          th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">
+                                    <input th:field="*{dni}" class="input-form" type="text" name="dni" placeholder="Ingrese su DNI" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
+                                    <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">
                                         No puede estar vacío
                                     </div>
                                 </div>
-
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Dirección:</label>
-                                    <input th:field="*{direccion}" class="input-form" type="text" name="direccion" placeholder="Ingrese su dirección" th:classappend="${#fields.hasErrors('direccion')?'is-invalid':''}" >
-                                    <div style="width: 300px" class="invalid-feedback"
-                                          th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}">
+                                    <input th:field="*{direccion}" class="input-form" type="text" name="direccion" placeholder="Ingrese su dirección" th:classappend="${#fields.hasErrors('direccion') ? 'is-invalid' : ''}">
+                                    <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}">
                                         No puede estar vacío
                                     </div>
                                 </div>
-
                             </div>
-
                             <div class="column">
-
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Distrito:</label>
-                                    <input th:field="*{distrito}" class="input-form" name="distrito" type="text" placeholder="Ingrese el distrito donde reside" th:classappend="${#fields.hasErrors('distrito')?'is-invalid':''}" >
-                                    <div style="width: 300px" class="invalid-feedback"
-                                          th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}">
+                                    <input th:field="*{distrito}" class="input-form" name="distrito" type="text" placeholder="Ingrese el distrito donde reside" th:classappend="${#fields.hasErrors('distrito') ? 'is-invalid' : ''}">
+                                    <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}">
                                         No puede estar vacío
                                     </div>
                                 </div>
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Seguro:</label>
-                                    <input th:field="*{seguro}" class="input-form" type="text" name="seguro" th:classappend="${#fields.hasErrors('seguro')?'is-invalid':''}" placeholder="Ingrese el seguro" >
-                                    <div style="width: 300px" class="invalid-feedback"
-                                          th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}">
-                                        No puede estar vacío
-                                    </div>
+                                    <select class="select-form" name="seguro" required>
+                                        <option selected disabled>Seleccione un Seguro</option>
+                                        <option th:value="${'Ninguno'}">Ninguno</option>
+                                        <option th:value="${'Estatal (SIS)'}">Estatal (SIS)</option>
+                                        <option th:value="${'Pacífico Seguros'}">Pacífico Seguros</option>
+                                        <option th:value="${'Mapfre'}">Mapfre</option>
+                                        <option th:value="${'Rimac Seguros'}">Rimac Seguros</option>
+                                        <option th:value="${'La Positiva'}">La Positiva</option>
+                                        <option th:value="${'Sanitas'}">Sanitas</option>
+                                        <option th:value="${'Seguro EsSalud'}">Seguro EsSalud</option>
+                                    </select>
                                 </div>
-
                             </div>
-
                             <div class="column">
-
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Correo electrónico:</label>
-                                    <input th:field="*{correo}" class="input-form" type="text" name="correo" placeholder="Ingrese el correo" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}" >
-                                    <div style="width: 300px" class="invalid-feedback"
-                                          th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
+                                    <input th:field="*{correo}" class="input-form" type="text" name="correo" placeholder="Ingrese el correo" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid' : ''}">
+                                    <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
                                         No puede estar vacío
                                     </div>
                                 </div>
-
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Teléfono:</label>
-                                    <input th:field="*{celular}" class="input-form" type="text" name="celular" placeholder="Ingrese su teléfono" th:classappend="${#fields.hasErrors('celular')?'is-invalid':''}" >
-                                    <div style="width: 300px" class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}">
+                                    <input th:field="*{celular}" class="input-form" type="text" name="celular" placeholder="Ingrese su teléfono" th:classappend="${#fields.hasErrors('celular') ? 'is-invalid' : ''}">
+                                    <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}">
                                         No puede estar vacío
                                     </div>
                                 </div>
                             </div>
+                            <br>
+                            <div class="column-buttons">
+                                <a href="/superadmin/administradoresSede"><button class="btn-cancel" type="button">Cancelar</button></a>
+                                <button class="btn-p" type="submit">Confirmar</button>
+                            </div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="column-buttons">
-                        <a href="/superadmin/administradoresSede"><button class="btn-cancel" type="button">Cancelar</button></a>
-                        <button class="btn-p" type="submit">Confirmar</button>
-                    </div>
+                    </form>
                 </div>
 
             </div>
+
         </div>
-    </form>
+    </div>
+
 </div>
 
 <br><br><br>

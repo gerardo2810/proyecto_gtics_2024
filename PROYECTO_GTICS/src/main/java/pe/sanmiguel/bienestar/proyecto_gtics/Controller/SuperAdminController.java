@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -20,14 +21,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pe.sanmiguel.bienestar.proyecto_gtics.DniAPI;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.VentasMedicamentosTotalDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.PasswordService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.DniApiValidationGroup;
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.SuperAdminValidationsGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.util.reportes.ExporterPDF;
 
 
@@ -396,6 +401,59 @@ public class SuperAdminController {
         return "superAdmin/crearAdministrador";
     }
 
+
+    @PostMapping("/form_administrador")
+    public String dniApi(@ModelAttribute("administrador") @Validated(DniApiValidationGroup.class) Usuario administrador,
+                         BindingResult bindingResult,
+                         Model model,
+                         @RequestParam(value = "dni") String dni,
+                         HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+
+        if (bindingResult.hasErrors()){
+            System.out.println("HAY ERRORES DE VALIDACIÓN:");
+            for (ObjectError error : bindingResult.getAllErrors()) {
+                System.out.println("- " + error.getDefaultMessage());
+            }
+            List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
+            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+
+            model.addAttribute("nombres", "");
+            model.addAttribute("apellidos", "");
+            model.addAttribute("dni", "");
+
+            return "superAdmin/crearAdministrador";
+
+        } else {
+            List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
+            model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+
+            ResponseEntity<String> responseDni = DniAPI.getDni(dni);
+            List<String> values = DniAPI.responseToList(responseDni);
+
+            String apiDni = values.get(4);
+            String apiNombres = values.get(0);
+            String apiApellidos = (values.get(1) + " " + values.get(2));
+
+            model.addAttribute("dni", apiDni);
+            model.addAttribute("nombres", apiNombres);
+            model.addAttribute("apellidos", apiApellidos);
+
+            System.out.println("DNI: " + administrador.getDni());
+            System.out.println("Nombre: " + administrador.getNombres());
+            System.out.println("Apellidos: " + administrador.getApellidos());
+            System.out.println(values);
+            return "superAdmin/crearAdministrador";
+        }
+
+    }
+
+
     int sedeId;
 
     @Autowired
@@ -407,11 +465,23 @@ public class SuperAdminController {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @PostMapping("/guardarAdministrador")
-    public String agregarNuevoAdministrador(@ModelAttribute("administrador") @Valid Usuario administrador, BindingResult bindingResult,
+    public String agregarNuevoAdministrador(@ModelAttribute("administrador") @Validated(SuperAdminValidationsGroup.class) Usuario administrador, BindingResult bindingResult,
+                                            Model model,
                                             @RequestParam(value = "sedeid", required = false) String idSede,
+                                            @RequestParam(value = "nombres") String name,
+                                            @RequestParam(value = "apellidos") String lastname,
                                             @RequestParam(value = "dni", required = false) String dni,
                                             @RequestParam(value = "correo", required = false) String correo,
-                                            RedirectAttributes attr, Model model) throws IOException, MessagingException {
+                                            HttpServletRequest request, HttpServletResponse response, Authentication authentication,
+                                            RedirectAttributes attr) throws IOException, MessagingException {
+        System.out.println(dni);
+        System.out.println(name);
+        System.out.println(lastname);
+
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         if(bindingResult.hasErrors()){
             System.out.println("HAY ERRORES DE VALIDACIÓN:");
             for (ObjectError error : bindingResult.getAllErrors()) {
@@ -419,6 +489,9 @@ public class SuperAdminController {
             }
             List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+            model.addAttribute("nombres", "");
+            model.addAttribute("apellidos", "");
+            model.addAttribute("dni", "");
             return "superAdmin/crearAdministrador";
         }else{
             List<String> dnisUsados = usuarioRepository.listarDNIsUsados();
