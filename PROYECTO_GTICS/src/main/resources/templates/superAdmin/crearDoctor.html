@@ -93,6 +93,28 @@
             transition: background-color 0.3s, border-color 0.3s;
             font-size: 17px;
         }
+        .input-form-dni {
+            margin-top: 6px;
+            padding-left: 15px;
+            background-color: #EBF5FB;
+            outline: none;
+            width: 450px !important;
+            height: 42px;
+            border: 1px solid #DFDFDF;
+            border-radius: 5px;
+            font-size: 17px;
+        }
+        .btn-p {
+            display: inline-block;
+            padding: 12px 20px;
+            color:white;
+            background-color: #378fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 17px;
+        }
 
         .detalle-orden-container {
             padding: 25px 30px 25px 30px;
@@ -132,7 +154,7 @@
 </div>
 <!--=============== HEADER ===============-->
 <header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
+    <nav th:replace="~{fragments/navbar.html :: navbar( active = '')}"></nav>
 </header>
 
 <div class="container">
@@ -144,124 +166,131 @@
         <div style="margin-bottom: 20px"></div>
         <br>
     </div>
-    <form id="form"  method="post" th:action="@{'/superadmin/guardarDoctor'}" th:object="${doctor}" enctype="multipart/form-data">
+
         <div class="detalle-orden-container">
 
-            <div class="invoice-title">
+                <div class="invoice-title">
+                    <div class="title roboto-medium data-label" style="padding-right:80px; padding-left:120px; display:flex; justify-content:center; align-items:center; text-align:center;">
+                        <div class="column-start" style="display:flex; flex-direction:column; align-items:center;">
+                            <div class="input-label-box" style="display:flex; flex-direction:column; align-items:center;">
+                                <label style="font-weight: bold; color:dimgray; margin-bottom:10px;">NUEVO DOCTOR</label>
 
-                <div class="title roboto-medium data-label" style="padding-right:80px; padding-left:120px; display:flex; justify-content:center; align-items:center; text-align:center;">
-                    <div class="column-start" style="display:flex; flex-direction:column; align-items:center;">
-                        <div class="input-label-box" style="display:flex; flex-direction:column; align-items:center;">
-                            <label style="font-weight: bold; color:dimgray; margin-bottom:10px;">NUEVO DOCTOR</label>
-                            <div class="profile-picture-container" style="display:flex; justify-content:center;">
-                                <div class="profile-picture"></div>
+                                <div class="dni-form">
+                                    <form method="post" th:action="@{/superadmin/form_doctor}" th:object="${doctor}">
+                                        <div style="display: flex; flex-direction: row; justify-content: start; gap: 10px">
+                                            <div class="input-label-box">
+                                                <label style="font-weight: bold; color:dimgray; font-size: medium">Ingrese el DNI del Doctor</label>
+                                                <input class="input-form-dni" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del doctor"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
+                                                <div  class="invalid-feedback" style="font-size: medium" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+                                            </div>
+                                            <div style="margin-top: 37px">
+                                                <button type="submit" id="buscarDni" class="btn btn-p"><i class="fas fa-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="profile-picture-container" style="display:flex; justify-content:center;">
+                                    <div class="profile-picture"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <form id="form"  method="post" th:action="@{'/superadmin/guardarDoctor'}" th:object="${doctor}" enctype="multipart/form-data">
+                        <div class="container-form">
+
+                            <div style="display: flex;flex-direction: row; column-gap: 25px">
+
+                                <div>
+                                    <div class="column">
+                                        <div class="input-label-box">
+                                            <label style="font-weight: bold; color:dimgray">Nombre del doctor:</label>
+                                            <input style="width: 300px" placeholder="Ingrese el nombre" th:value="${nombres}" name="nombres" class="input-form" type="text" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}" readonly>
+                                            <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
+                                        </div>
+
+                                        <div class="input-label-box">
+                                            <label style="font-weight: bold; color:dimgray">Apellidos del doctor:</label>
+                                            <input style="width: 300px" placeholder="Ingrese el apellido" th:value="${apellidos}" name="apellidos" class="input-form" type="text" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}" readonly>
+                                            <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="column">
+
+                                        <div class="input-label-box">
+                                            <label style="font-weight: bold; color:dimgray">DNI:</label>
+                                            <input placeholder="Ingrese el DNI" th:value="${dni}" name="dni" class="input-form" type="text" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}" readonly>
+                                            <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{dni}"></div>
+                                        </div>
+
+                                        <div class="input-label-box">
+                                            <label style="font-weight: bold; color:dimgray">Dirección:</label>
+                                            <input class="input-form" type="text" th:field="*{direccion}"  name="direccion" placeholder="Ingrese su dirección" th:classappend="${#fields.hasErrors('direccion')?'is-invalid':''}" >
+                                            <div style="width: 300px" class="invalid-feedback"
+                                                  th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}">
+                                                No puede estar vacío
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="column">
+
+                                        <div class="input-label-box">
+                                            <label style="font-weight: bold; color:dimgray">Distrito:</label>
+                                            <input class="input-form" th:field="*{distrito}" name="distrito" type="text" placeholder="Ingrese el distrito donde reside" th:classappend="${#fields.hasErrors('distrito')?'is-invalid':''}" >
+                                            <div style="width: 300px" class="invalid-feedback"
+                                                  th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}">
+                                                No puede estar vacío
+                                            </div>
+                                        </div>
+
+                                        <div class="input-label-box">
+                                            <label style="font-weight: bold; color:dimgray">Teléfono:</label>
+                                            <input class="input-form" type="text" th:field="*{celular}" name="telefono" placeholder="Ingrese su teléfono" th:classappend="${#fields.hasErrors('celular')?'is-invalid':''}" >
+                                            <div style="width: 300px" class="invalid-feedback"
+                                                  th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}">
+                                                No puede estar vacío
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="column">
+                                        <div class="input-label-box">
+                                            <label style="font-weight: bold; color:dimgray">Especialidad:</label>
+                                            <input class="input-form" type="text" th:field="*{especialidad}" name="telefono" placeholder="Ingrese la especialidad" th:classappend="${#fields.hasErrors('especialidad')?'is-invalid':''}" >
+                                            <div style="width: 300px" class="invalid-feedback"
+                                                  th:if="${#fields.hasErrors('especialidad')}" th:errors="*{especialidad}">
+                                                No puede estar vacío
+                                            </div>
+                                        </div>
+
+
+                                        <div class="input-label-box">
+                                            <label style="font-weight: bold; color:dimgray">Correo electrónico:</label>
+                                            <input class="input-form" type="email" th:field="*{correo}" name="correo" placeholder="Ingrese el correo" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}" >
+                                            <div style="width: 300px" class="invalid-feedback"
+                                                  th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
+                                                No puede estar vacío
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <br>
+                            <div class="column-buttons">
+                                <a href="/superadmin/doctores"><button class="btn-cancel" type="button">Cancelar</button></a>
+                                <button class="btn-p" type="submit">Confirmar</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-
-                    <div class="container-form">
-
-                        <div style="display: flex;flex-direction: row; column-gap: 25px">
-
-                            <div>
-                                <div class="column">
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Nombre del doctor:</label>
-                                        <input class="input-form" type="text" th:field="*{nombres}" name="nombres" th:classappend="${#fields.hasErrors('nombres')?'is-invalid':''}" placeholder="Ingrese sus nombres" >
-                                        <div style="width: 300px" class="invalid-feedback"
-                                              th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}">
-                                            No puede estar vacío
-                                        </div>
-                                    </div>
-
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Apellidos del doctor:</label>
-                                        <input class="input-form" type="text"  th:field="*{apellidos}" name="apellidos" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}" placeholder="Ingrese sus apellidos" >
-                                        <div style="width: 300px" class="invalid-feedback"
-                                              th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}">
-                                            No puede estar vacío
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="column">
-
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">DNI:</label>
-                                        <input class="input-form" type="text" th:field="*{dni}"  name="dni" placeholder="Ingrese su DNI" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" >
-                                        <div style="width: 300px" class="invalid-feedback"
-                                              th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">
-                                            No puede estar vacío
-                                        </div>
-                                    </div>
-
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Dirección:</label>
-                                        <input class="input-form" type="text" th:field="*{direccion}"  name="direccion" placeholder="Ingrese su dirección" th:classappend="${#fields.hasErrors('direccion')?'is-invalid':''}" >
-                                        <div style="width: 300px" class="invalid-feedback"
-                                              th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}">
-                                            No puede estar vacío
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="column">
-
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Distrito:</label>
-                                        <input class="input-form" th:field="*{distrito}" name="distrito" type="text" placeholder="Ingrese el distrito donde reside" th:classappend="${#fields.hasErrors('distrito')?'is-invalid':''}" >
-                                        <div style="width: 300px" class="invalid-feedback"
-                                              th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}">
-                                            No puede estar vacío
-                                        </div>
-                                    </div>
-
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Teléfono:</label>
-                                        <input class="input-form" type="text" th:field="*{celular}" name="telefono" placeholder="Ingrese su teléfono" th:classappend="${#fields.hasErrors('celular')?'is-invalid':''}" >
-                                        <div style="width: 300px" class="invalid-feedback"
-                                              th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}">
-                                            No puede estar vacío
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="column">
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Especialidad:</label>
-                                        <input class="input-form" type="text" th:field="*{especialidad}" name="telefono" placeholder="Ingrese la especialidad" th:classappend="${#fields.hasErrors('especialidad')?'is-invalid':''}" >
-                                        <div style="width: 300px" class="invalid-feedback"
-                                              th:if="${#fields.hasErrors('especialidad')}" th:errors="*{especialidad}">
-                                            No puede estar vacío
-                                        </div>
-                                    </div>
-
-
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray">Correo electrónico:</label>
-                                        <input class="input-form" type="email" th:field="*{correo}" name="correo" placeholder="Ingrese el correo" th:classappend="${#fields.hasErrors('correo')?'is-invalid':''}" >
-                                        <div style="width: 300px" class="invalid-feedback"
-                                              th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
-                                            No puede estar vacío
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <br>
-                        <div class="column-buttons">
-                            <a href="/superadmin/doctores"><button class="btn-cancel" type="button">Cancelar</button></a>
-                            <button class="btn-p" type="submit">Confirmar</button>
-                        </div>
-                    </div>
-            </div>
         </div>
-    </form>
+
 </div>
 
 <br><br><br>
