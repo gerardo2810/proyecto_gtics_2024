@@ -477,23 +477,19 @@
         }
     });
 
+    let userId1 = /*[[${userId1}]]*/ '';
+    let userId2 = /*[[${userId2}]]*/ '';
+
     var ipLocal = /*[[${iplocal}]]*/ '';
     console.log(ipLocal)
+    console.log(userId1)
+    console.log(userId2)
 
-    let socket = new WebSocket("ws://20.11.65.155:8080/chat"); //mi direccion ip local, usar ipconfig o netstat -a para saber cual es, de recomendacion poner la red lan del celular en mi laptop en configuracion del adaptador
+    //let socket = new WebSocket("ws://20.11.65.155:8080/chat/" + userId1 + "/" + userId2); //mi direccion ip local, usar ipconfig o netstat -a para saber cual es, de recomendacion poner la red lan del celular en mi laptop en configuracion del adaptador
 
-    // let socket = new WebSocket("ws://" + ipLocal + ":8080/chat"); //mi direccion ip local, usar ipconfig o netstat -a para saber cual es, de recomendacion poner la red lan del celular en mi laptop en configuracion del adaptador
+    let socket = new WebSocket("ws://" + ipLocal + ":8080/chat/" + userId1 + "/" + userId2);
 
     socket.onmessage = function (event) {
-
-        if (event.data.startsWith("USER_COUNT:")) {
-            // Extrae el número de usuarios del mensaje recibido
-            userCount = parseInt(event.data.substring("USER_COUNT:".length));
-
-            // Actualiza el contador de usuarios en la interfaz de usuario
-            updateUsersCount();
-
-        }else{
 
             let messageArea = document.getElementById("messageArea");
             var fechaActual = new Date();
@@ -506,7 +502,6 @@
                 var tiempoActual = horaActual + ':' + minutosActuales;
             }
 
-
             messageArea.innerHTML += ' <div class="message me">\n' +
                 '                    <p class="messageContent" >' + event.data +
                 '                    </p><div class="messageDetails">\n' +
@@ -514,32 +509,17 @@
                 '                        </div><i class="fa-solid fa-check"></i>\n' +
                 '                    </div>\n' +
                 '                </div>'
-
-        }
-
-
-
     }
 
     function sendMessage(){
-        //let username = document.getElementById("username");
         let messageInput = document.getElementById("messageInput");
 
         if(messageInput.value.trim() != ''){
-            //let fullMessage = username.value + ": " + messageInput.value;
             let fullMessage = messageInput.value;
             socket.send(fullMessage);
             messageInput.value = '';
         }
 
-    }
-
-
-    function updateUsersCount() {
-        let usersCountElement = document.getElementById("usersCount");
-        if (usersCountElement) {
-            usersCountElement.textContent = 'USUARIOS CONECTADOS: ' + userCount;
-        }
     }
 
 
