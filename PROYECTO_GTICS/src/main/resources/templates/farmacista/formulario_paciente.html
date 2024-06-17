@@ -81,23 +81,21 @@
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray"></label>
-                                <input placeholder="DNI" th:field="*{dni}"  id="dni" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
+                                <input hidden placeholder="DNI" th:field="*{dni}"  id="dni" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
                                 <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
                             </div>
-
-
 
                             <div class="column">
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray"></label>
-                                    <input placeholder="Nombres del paciente" th:value="${nombres}" name="nombres" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}">
+                                    <input readonly placeholder="Nombres del paciente" th:value="${nombres}" name="nombres" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}">
                                     <div  class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
                                 </div>
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray"></label>
-                                    <input placeholder="Apellidos del paciente" th:value="${apellidos}" name="apellidos" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}">
+                                    <input readonly placeholder="Apellidos del paciente" th:value="${apellidos}" name="apellidos" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}">
                                     <div  class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
                                 </div>
 

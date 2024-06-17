@@ -446,8 +446,7 @@ public class SuperAdminController {
             List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
 
-            ResponseEntity<String> responseDni = DniAPI.getDni(dni);
-            List<String> values = DniAPI.responseToList(responseDni);
+            List<String> values = DniAPI.getDni(dni);
 
             String apiDni = values.get(4);
             String apiNombres = values.get(0);
@@ -1113,8 +1112,7 @@ public class SuperAdminController {
             List<Sede> sedeDisponibleList = sedeRepository.findAll();
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
 
-            ResponseEntity<String> responseDni = DniAPI.getDni(dni);
-            List<String> values = DniAPI.responseToList(responseDni);
+            List<String> values = DniAPI.getDni(dni);
 
             String apiDni = values.get(4);
             String apiNombres = values.get(0);

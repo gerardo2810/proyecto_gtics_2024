@@ -44,7 +44,6 @@ public class DniController {
 
     @GetMapping("/dni")
     public List<String> getDniInfo(@RequestParam String dni) {
-        ResponseEntity<String> response = dniAPI.getDni(dni);
-        return dniAPI.responseToList(response);
+        return dniAPI.getDni(dni);
     }
 }

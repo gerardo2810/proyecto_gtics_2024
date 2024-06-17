@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import org.json.simple.JSONObject;
@@ -19,7 +20,7 @@ public class DniAPI {
 
     /* APIS.NET.PE */
     private static final String BASE_URL = "https://api.apis.net.pe/v2/reniec/dni?numero=";
-    private static final String BEARER_TOKEN = "apis-token-8965.CkDfdbu7Iv7UFSlasuNUMqeT4Mqihpqr"; // Token
+    private static final String BEARER_TOKEN = "apis-token-9064.5WCzn6X328Q2gIu0iPb1sCgy35LAQn3H"; // Token
 
     /* APISPERU.NET */
     /*
@@ -27,9 +28,10 @@ public class DniAPI {
     private static final String BEARER_TOKEN = "63d3045c50befe3ba510e6cc787916eb9e579cee712dc8fae2ec478386e4f488"; // Token
     */
 
-    public static ResponseEntity<String> getDni(String dni) {
+    public static List<String> getDni(String dni) {
         RestTemplate restTemplate = new RestTemplate();
         String url = BASE_URL + dni;
+        List<String> error = new ArrayList<>();
 
         // Configurar los encabezados
         HttpHeaders headers = new HttpHeaders();
@@ -44,9 +46,9 @@ public class DniAPI {
 
         // Verificar la respuesta
         if (response.getStatusCode().is2xxSuccessful()) {
-            return response;
+            return responseToList(response);
         } else {
-            return response;
+            return error;
         }
     }
 
@@ -72,4 +74,6 @@ public class DniAPI {
 
         return values;
     }
+
+
 }

@@ -278,19 +278,24 @@ public class FarmacistaController {
             model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
             model.addAttribute("listaCantidades", listaCantidades);
 
-            ResponseEntity<String> responseDni = DniAPI.getDni(dni);
-            List<String> values = DniAPI.responseToList(responseDni);
+            List<String> values = DniAPI.getDni(dni);
 
-            String apiDni = values.get(4);
-            String apiNombres = values.get(0);
-            String apiApellidos = (values.get(1) + " " + values.get(2));
+            if (!values.isEmpty()){
+                String apiDni = values.get(4);
+                String apiNombres = values.get(0);
+                String apiApellidos = (values.get(1) + " " + values.get(2));
 
-            model.addAttribute("dni", apiDni);
-            model.addAttribute("nombres", apiNombres);
-            model.addAttribute("apellidos", apiApellidos);
+                model.addAttribute("dni", apiDni);
+                model.addAttribute("nombres", apiNombres);
+                model.addAttribute("apellidos", apiApellidos);
 
-            System.out.println(values);
-            return "farmacista/formulario_paciente";
+                System.out.println(values);
+                return "farmacista/formulario_paciente";
+            } else {
+                // Caso cuando el dni no existe
+                model.addAttribute("dniError", "error");
+                return "farmacista/formulario_paciente";
+            }
         }
 
     }
