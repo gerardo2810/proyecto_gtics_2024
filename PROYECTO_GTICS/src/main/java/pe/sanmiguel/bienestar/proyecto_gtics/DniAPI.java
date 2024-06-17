@@ -14,6 +14,8 @@ import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class DniAPI {
@@ -85,14 +87,30 @@ public class DniAPI {
             return input;
         }
 
+        // Lista de palabras que deben permanecer en minúsculas
+        List<String> lowerCaseWords = Arrays.asList("de", "del", "la", "los", "las", "y", "da", "dos");
+
         String[] words = input.split("\\s+");
         StringBuilder formattedName = new StringBuilder();
 
-        for (String word : words) {
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
             if (!word.isEmpty()) {
-                formattedName.append(Character.toUpperCase(word.charAt(0)));
-                if (word.length() > 1) {
-                    formattedName.append(word.substring(1).toLowerCase());
+                // Capitaliza la primera palabra siempre
+                if (i == 0) {
+                    formattedName.append(Character.toUpperCase(word.charAt(0)));
+                    if (word.length() > 1) {
+                        formattedName.append(word.substring(1).toLowerCase());
+                    }
+                } else {
+                    if (lowerCaseWords.contains(word.toLowerCase())) {
+                        formattedName.append(word.toLowerCase());
+                    } else {
+                        formattedName.append(Character.toUpperCase(word.charAt(0)));
+                        if (word.length() > 1) {
+                            formattedName.append(word.substring(1).toLowerCase());
+                        }
+                    }
                 }
                 formattedName.append(" ");
             }
@@ -101,5 +119,7 @@ public class DniAPI {
         // Quitar el último espacio adicional
         return formattedName.toString().trim();
     }
+
+
 
 }
