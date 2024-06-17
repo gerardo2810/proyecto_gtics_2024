@@ -102,7 +102,7 @@ public class ExporterPDF {
         Paragraph titulo = new Paragraph(tituloChunk);
         titulo.setAlignment(Paragraph.ALIGN_CENTER);
 
-        String imagePath = "src/main/resources/static/media/logo_main.png"; // Reemplaza con la ruta a tu imagen
+        String imagePath = "src/main/resources/static/media/logo_main.png"; // poner la ruta
         Image imagen = Image.getInstance(imagePath);
 
         //Escalamos la imagen:
@@ -118,16 +118,16 @@ public class ExporterPDF {
         imagen.setAbsolutePosition(xPos, yPos);
         documento.add(imagen);
 
-        // Añadir espacio adicional para evitar superposición
+        // Añade espacio adicional para evitar superposición
         Paragraph espacio = new Paragraph(" ");
         espacio.setSpacingBefore(80); // Ajusta el espacio según sea necesario
         documento.add(espacio);
 
 
-        // Añadir el título al documento
+        // Añade el título al documento
         documento.add(titulo);
 
-        // Añadir espacio adicional para evitar superposición
+        // Añade espacio adicional para evitar superposición
         Paragraph espacio2 = new Paragraph(" ");
         espacio2.setSpacingBefore(20); // Ajusta el espacio según sea necesario
         documento.add(espacio2);
