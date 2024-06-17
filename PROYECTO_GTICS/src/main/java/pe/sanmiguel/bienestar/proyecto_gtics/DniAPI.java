@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import org.json.simple.JSONObject;
@@ -13,13 +14,15 @@ import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class DniAPI {
 
     /* APIS.NET.PE */
     private static final String BASE_URL = "https://api.apis.net.pe/v2/reniec/dni?numero=";
-    private static final String BEARER_TOKEN = "apis-token-8965.CkDfdbu7Iv7UFSlasuNUMqeT4Mqihpqr"; // Token
+    private static final String BEARER_TOKEN = "apis-token-9064.5WCzn6X328Q2gIu0iPb1sCgy35LAQn3H"; // Token
 
     /* APISPERU.NET */
     /*
@@ -27,9 +30,10 @@ public class DniAPI {
     private static final String BEARER_TOKEN = "63d3045c50befe3ba510e6cc787916eb9e579cee712dc8fae2ec478386e4f488"; // Token
     */
 
-    public static ResponseEntity<String> getDni(String dni) {
+    public static List<String> getDni(String dni) {
         RestTemplate restTemplate = new RestTemplate();
         String url = BASE_URL + dni;
+        List<String> error = new ArrayList<>();
 
         // Configurar los encabezados
         HttpHeaders headers = new HttpHeaders();
@@ -44,9 +48,9 @@ public class DniAPI {
 
         // Verificar la respuesta
         if (response.getStatusCode().is2xxSuccessful()) {
-            return response;
+            return responseToList(response);
         } else {
-            return response;
+            return error;
         }
     }
 
@@ -59,9 +63,10 @@ public class DniAPI {
             JSONObject jsonObject = (JSONObject) parser.parse(response.getBody());
 
             // Extraer los valores de las claves y añadirlos a la lista
-            values.add((String) jsonObject.get("nombres"));
-            values.add((String) jsonObject.get("apellidoPaterno"));
-            values.add((String) jsonObject.get("apellidoMaterno"));
+            values.add(formatString((String) jsonObject.get("nombres")));
+            values.add(formatString((String) jsonObject.get("apellidoPaterno")));
+            values.add(formatString((String) jsonObject.get("apellidoMaterno")));
+            values.add(formatString((String) jsonObject.get("dni")));
             values.add((String) jsonObject.get("tipoDocumento"));
             values.add((String) jsonObject.get("numeroDocumento"));
             values.add((String) jsonObject.get("digitoVerificador"));
@@ -70,6 +75,51 @@ public class DniAPI {
             e.printStackTrace();
         }
 
+        for (String value : values) {
+            System.out.println(value);
+        }
+
         return values;
     }
+
+    public static String formatString(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        // Lista de palabras que deben permanecer en minúsculas
+        List<String> lowerCaseWords = Arrays.asList("de", "del", "la", "los", "las", "y", "da", "dos");
+
+        String[] words = input.split("\\s+");
+        StringBuilder formattedName = new StringBuilder();
+
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            if (!word.isEmpty()) {
+                // Capitaliza la primera palabra siempre
+                if (i == 0) {
+                    formattedName.append(Character.toUpperCase(word.charAt(0)));
+                    if (word.length() > 1) {
+                        formattedName.append(word.substring(1).toLowerCase());
+                    }
+                } else {
+                    if (lowerCaseWords.contains(word.toLowerCase())) {
+                        formattedName.append(word.toLowerCase());
+                    } else {
+                        formattedName.append(Character.toUpperCase(word.charAt(0)));
+                        if (word.length() > 1) {
+                            formattedName.append(word.substring(1).toLowerCase());
+                        }
+                    }
+                }
+                formattedName.append(" ");
+            }
+        }
+
+        // Quitar el último espacio adicional
+        return formattedName.toString().trim();
+    }
+
+
+
 }

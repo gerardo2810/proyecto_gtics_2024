@@ -134,6 +134,15 @@
                 <a style="margin: auto" th:href="@{'/farmacista/aprobar_orden_web?id=' + ${orden.getIdOrden()}}">
                     <button class="aprobar" style="font-size: 1rem;">APROBAR ORDEN</button>
                 </a>
+
+
+                <form method="post" th:action="@{'/farmacista/crear_chat'}" style="display: flex; justify-content: center;">
+                    <input type="hidden" name="idOrden" th:value="${orden.getIdOrden()}">
+                    <input type="hidden" name="idPaciente" th:value="${orden.getPaciente().getIdUsuario()}" >
+                    <input type="hidden" name="idFarmacista" th:value="${orden.getIdFarmacista()}">
+                    <button type="submit" class="aprobar" style="font-size: 1rem; width: 300px">Iniciar conversación con el paciente</button>
+                </form>
+
             </div>
 
 

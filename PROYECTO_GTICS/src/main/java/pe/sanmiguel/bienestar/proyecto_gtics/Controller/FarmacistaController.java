@@ -12,10 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.DniAPI;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
@@ -26,7 +23,10 @@ import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.DniApiValidationGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.FarmacistaValidationsGroup;
 
+import javax.print.attribute.standard.PresentationDirection;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -49,7 +49,9 @@ public class FarmacistaController {
     final EstadoPreOrdenRepository estadoPreOrdenRepository;
     final DoctorRepository doctorRepository;
 
-    public FarmacistaController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, SedeStockRepository sedeStockRepository, SedeFarmacistaRepository sedeFarmacistaRepository, MedicamentoRepository medicamentoRepository, OrdenRepository ordenRepository, OrdenContenidoRepository ordenContenidoRepository, ReposicionRepository reposicionRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository, DniAPI dniAPI) {
+    final ChatRepository chatRepository;
+
+    public FarmacistaController(ChatRepository chatRepository, UsuarioRepository usuarioRepository, SedeRepository sedeRepository, SedeStockRepository sedeStockRepository, SedeFarmacistaRepository sedeFarmacistaRepository, MedicamentoRepository medicamentoRepository, OrdenRepository ordenRepository, OrdenContenidoRepository ordenContenidoRepository, ReposicionRepository reposicionRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository, DniAPI dniAPI) {
         this.usuarioRepository = usuarioRepository;
         this.sedeRepository = sedeRepository;
         this.sedeStockRepository = sedeStockRepository;
@@ -61,6 +63,7 @@ public class FarmacistaController {
         this.estadoPreOrdenRepository = estadoPreOrdenRepository;
         this.doctorRepository = doctorRepository;
         this.dniAPI = dniAPI;
+        this.chatRepository = chatRepository;
     }
 
     /* Repositorios */
@@ -276,19 +279,25 @@ public class FarmacistaController {
             model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
             model.addAttribute("listaCantidades", listaCantidades);
 
-            ResponseEntity<String> responseDni = DniAPI.getDni(dni);
-            List<String> values = DniAPI.responseToList(responseDni);
+            List<String> values = DniAPI.getDni(dni);
 
-            String apiDni = values.get(4);
-            String apiNombres = values.get(0);
-            String apiApellidos = (values.get(1) + " " + values.get(2));
+            if (!values.isEmpty()){
+                String apiDni = values.get(4);
+                String apiNombres = values.get(0);
+                String apiApellidos = (values.get(1) + " " + values.get(2));
 
-            model.addAttribute("dni", apiDni);
-            model.addAttribute("nombres", apiNombres);
-            model.addAttribute("apellidos", apiApellidos);
+                model.addAttribute("dni", apiDni);
+                model.addAttribute("nombres", apiNombres);
+                model.addAttribute("apellidos", apiApellidos);
 
-            System.out.println(values);
-            return "farmacista/formulario_paciente";
+                System.out.println(values);
+                return "farmacista/formulario_paciente";
+            } else {
+                // Caso cuando el dni no existe
+                String dniError = "error";
+                model.addAttribute("dniError", dniError);
+                return "farmacista/formulario_paciente";
+            }
         }
 
     }
@@ -709,6 +718,81 @@ public class FarmacistaController {
             attr.addFlashAttribute("msg", "Introduzca su contraseña actual.");
         }
         return "redirect:/farmacista/perfil";
+
+    }
+
+
+    @PostMapping(value="/farmacista/crear_chat")
+    public String crearChat(@RequestParam("idOrden") Integer idOrden, @RequestParam("idPaciente") Integer idPaciente, @RequestParam("idFarmacista") Integer idFarmacista){
+
+        System.out.println("idPaciente:" + idPaciente);
+        System.out.println("idFarmacista:" + idFarmacista);
+        System.out.println("idOrden:" + idOrden);
+
+        Chat verificarChat = chatRepository.buscarChat(idPaciente, idFarmacista);
+
+
+        if(verificarChat == null){
+
+            Integer lastId = chatRepository.findLastChatId();
+            if(lastId != null){
+                chatRepository.crearChat(lastId+1, idPaciente, idFarmacista);
+            }else if (lastId == null){
+                chatRepository.crearChat(1, idPaciente, idFarmacista);
+            }
+
+            return "redirect:/farmacista/chat/" + idFarmacista+ "/" + idPaciente;
+
+        } else{
+            return "redirect:/farmacista/mensajeria";
+        }
+
+    }
+
+
+    @GetMapping(value="/farmacista/mensajeria")
+    public String mensajeria(HttpSession session, Model model){
+
+        Usuario userSession = (Usuario) session.getAttribute("usuario");;
+
+        List<Chat> lista = chatRepository.listaChatsParaFarmacista(userSession.getIdUsuario());
+
+        model.addAttribute("listaChats", lista);
+
+        return "farmacista/mensajeria";}
+
+
+
+    @GetMapping(value = "/farmacista/chat/{userId1}/{userId2}")
+    public String chat(HttpSession session, @PathVariable String userId1, @PathVariable String userId2, Model model) {
+
+        model.addAttribute("userId1", userId1);
+        model.addAttribute("userId2", userId2);
+
+        Usuario paciente = usuarioRepository.getById(Integer.parseInt(userId2));
+
+
+        try {
+            InetAddress localhost = InetAddress.getLocalHost();
+            System.out.println("Mi dirección IP local es: " + localhost.getHostAddress());
+            model.addAttribute("iplocal", localhost.getHostAddress());
+        } catch (UnknownHostException e) {
+            System.out.println("Error obteniendo la dirección IP local");
+            e.printStackTrace();
+        }
+
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
+
+        if (userSession != null && (userSession.getIdUsuario().toString().equals(userId1) || userSession.getIdUsuario().toString().equals(userId2))) {
+            System.out.println("El usuario pertenece al chat");
+            model.addAttribute("idUser", userSession.getIdUsuario());
+            model.addAttribute("paciente", paciente);
+
+            return "farmacista/chat";
+        } else {
+            System.out.println("El usuario no pertenece al chat");
+            return "farmacista/mensajeria";
+        }
     }
 
 

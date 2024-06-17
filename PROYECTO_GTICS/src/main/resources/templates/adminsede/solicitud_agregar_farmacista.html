@@ -127,7 +127,23 @@
 
         </div>
 
+        <div class="container-form" >
+            <div style="display: flex; justify-content: center; align-items: center">
+                <form method="post" th:action="@{'/adminsede/solicitud_dni_farmacista'}" th:object="${usuarioFarmacista}">
+                    <div style="display: flex; flex-direction: row; justify-content: start; gap: 10px">
+                        <div class="input-label-box">
+                            <label style="font-weight: bold; color:dimgray">Ingrese el DNI del Farmacista</label>
+                            <input class="input-form-dni" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del paciente"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
+                            <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+                        </div>
 
+                        <div style="margin-top: 37px">
+                            <button type="submit" id="buscarDni" class="btn btn-p" ><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
 
 
@@ -139,19 +155,22 @@
                         <div class="column" style="justify-content: center">
 
                             <div class="input-label-box">
-                                <label style="font-weight: bold; color:dimgray">Nombre del farmacista:</label>
-                                <input class="input-form" th:field="*{nombres}" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid': ''}" type="text" placeholder="Ingrese sus nombres"/>
-                                <div th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}" id="validationServer03Feedback" class="invalid-feedback">
-                                    Mensaje de error de nombres
-                                </div>
+                                <label style="font-weight: bold; color:dimgray"></label>
+                                <input hidden placeholder="DNI" th:field="*{dni}"  id="dni" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
+                                <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+                            </div>
+                            <div  class="invalid-feedback" th:if="${dniError}">El DNI ingresado no existe.</div>
+
+                            <div class="input-label-box">
+                                <label style="font-weight: bold; color:dimgray"></label>
+                                <input readonly placeholder="Nombres del farmacista" th:value="${nombres}" name="nombres" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}">
+                                <div  class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
                             </div>
 
                             <div class="input-label-box">
-                                <label style="font-weight: bold; color:dimgray">Apellidos del farmacista:</label>
-                                <input class="input-form" th:field="*{apellidos}" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid': ''}" type="text" placeholder="Ingrese sus apellidos">
-                                <div th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}" id="validationServer03Feedback" class="invalid-feedback">
-                                    Mensaje de error de nombres
-                                </div>
+                                <label style="font-weight: bold; color:dimgray"></label>
+                                <input readonly placeholder="Apellidos del farmacista" th:value="${apellidos}" name="apellidos" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}">
+                                <div  class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
                             </div>
 
                         </div>

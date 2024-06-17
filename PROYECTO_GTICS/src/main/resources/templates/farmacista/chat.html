@@ -210,6 +210,34 @@
 <div class="container" style="display: flex; flex-direction: row; column-gap: 10px">
 
 
+    <!--
+
+    <div class="container">
+
+        <div>
+
+            <div id="messageArea" style="width: 300px; height: 300px; border:4px solid red"></div>
+
+            <div>
+                <label>Nombre de usuario:</label>
+                <input type="text" id="username" placeholder="Introduce tu nombre">
+            </div>
+            <br>
+            <div>
+                <label>Mensaje:</label>
+                <input type="text" id="messageInput" placeholder="Introduce tu mensaje">
+            </div>
+            <br>
+            <div>
+                <button onclick="sendMessage()">Enviar</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    -->
+
 
 
     <div class="container">
@@ -221,7 +249,7 @@
             <div class="ChatHead">
                 <li class="group">
                     <div class="avatar"><img src="/img/farmaceutico.png"></div>
-                    <p class="GroupName" th:text="${farmacista.getNombres() + ' ' + farmacista.getApellidos()}"></p>
+                    <p class="GroupName" th:text="${'Paciente: ' + paciente.getNombres() + ' ' + paciente.getApellidos()}"></p>
 
                 </li>
                 <div class="callGroup">
@@ -234,14 +262,14 @@
 
                 <div class="messageSeperator">Hoy</div>
 
-                <div class="message you">
+
+                <div class="message me">
                     <p class="messageContent">Buenas noches</p>
                     <div class="messageDetails">
-                        <div class="messageTime">6:21 PM</div>
+                        <div class="messageTime">6:25 PM</div>
                         <i class="fa-solid fa-check"></i>
                     </div>
                 </div>
-
 
 
 
@@ -459,16 +487,16 @@
 
     socket.onmessage = function (event) {
 
-            let messageArea = document.getElementById("messageArea");
-            var fechaActual = new Date();
-            var horaActual = fechaActual.getHours();
-            var minutosActuales = fechaActual.getMinutes();
+        let messageArea = document.getElementById("messageArea");
+        var fechaActual = new Date();
+        var horaActual = fechaActual.getHours();
+        var minutosActuales = fechaActual.getMinutes();
 
-            if (minutosActuales<10){
-                var tiempoActual = horaActual + ':0' + minutosActuales;
-            }else{
-                var tiempoActual = horaActual + ':' + minutosActuales;
-            }
+        if (minutosActuales<10){
+            var tiempoActual = horaActual + ':0' + minutosActuales;
+        }else{
+            var tiempoActual = horaActual + ':' + minutosActuales;
+        }
 
         // Parsear el mensaje JSON recibido
         var messageData = JSON.parse(event.data);

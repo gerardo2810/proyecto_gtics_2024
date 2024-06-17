@@ -3,9 +3,7 @@ package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -14,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pe.sanmiguel.bienestar.proyecto_gtics.DniAPI;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.ReposicionContenidoMedicamentoDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.UsuarioSedeFarmacistaDto;
@@ -54,7 +53,9 @@ public class AdminSedeController {
     @Autowired
     private JavaMailSender mailSender;
 
-    public AdminSedeController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, SedeStockRepository sedeStockRepository, MedicamentoRepository medicamentoRepository, OrdenRepository ordenRepository, OrdenContenidoRepository ordenContenidoRepository, ReposicionRepository reposicionRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository, SedeFarmacistaRepository sedeFarmacistaRepository, ReposicionContenidoRepository reposicionContenidoRepository) {
+    final DniAPI dniAPI;
+
+    public AdminSedeController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, SedeStockRepository sedeStockRepository, MedicamentoRepository medicamentoRepository, OrdenRepository ordenRepository, OrdenContenidoRepository ordenContenidoRepository, ReposicionRepository reposicionRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository, SedeFarmacistaRepository sedeFarmacistaRepository, ReposicionContenidoRepository reposicionContenidoRepository, DniAPI dniAPI) {
         this.usuarioRepository = usuarioRepository;
         this.sedeRepository = sedeRepository;
         this.sedeStockRepository = sedeStockRepository;
@@ -66,6 +67,7 @@ public class AdminSedeController {
         this.doctorRepository = doctorRepository;
         this.sedeFarmacistaRepository = sedeFarmacistaRepository;
         this.reposicionContenidoRepository = reposicionContenidoRepository;
+        this.dniAPI = dniAPI;
     }
     /*Variables locales*/
     Sede sedeVistaReposicion = new Sede();
@@ -530,9 +532,46 @@ public class AdminSedeController {
 
 
     }
+
+
+    @PostMapping("/solicitud_dni_farmacista")
+    public String solicitudDniFarmacista(@ModelAttribute("usuarioFarmacista") Usuario usuarioFarmacista, //model attribute del farmacista
+                                      @ModelAttribute("sedeFarmacista") SedeFarmacista sedeFarmacista,
+                                      @RequestParam(value = "dni") String dni,
+                                      Model model){
+
+        List<String> values = DniAPI.getDni(dni);
+
+        if (!values.isEmpty()){
+            String apiDni = values.get(4);
+            String apiNombres = values.get(0);
+            String apiApellidos = (values.get(1) + " " + values.get(2));
+
+            model.addAttribute("dni", apiDni);
+            model.addAttribute("nombres", apiNombres);
+            model.addAttribute("apellidos", apiApellidos);
+
+            System.out.println(values);
+            return "adminsede/solicitud_agregar_farmacista";
+        } else {
+            // Caso cuando el dni no existe
+            String dniError = "error";
+            model.addAttribute("dniError", dniError);
+            return "adminsede/solicitud_agregar_farmacista";
+        }
+    }
+
+
     @PostMapping("/solicitud_farmacista_post")
     public String solicitudAgregarFarmacista(@ModelAttribute("usuarioFarmacista") @Validated(AdminSedeValidationsGroup.class) Usuario usuarioFarmacista, BindingResult bindingResult, @ModelAttribute("sedeFarmacista") @Validated(AdminSedeValidationsGroup.class) SedeFarmacista sedeFarmacista, BindingResult bindingResult1,
                                              @RequestParam("codigoMed") String codigoMed,
+                                             @RequestParam(value = "dni") String dni,
+                                             @RequestParam(value = "nombres") String name,
+                                             @RequestParam(value = "apellidos") String lastname,
+                                             @RequestParam(value = "distrito") String distrito,
+                                             @RequestParam(value = "direccion") String direccion,
+                                             @RequestParam(value = "correo") String correo,
+                                             @RequestParam(value = "celular") String celular,
                                              RedirectAttributes attr){
 
         if(!bindingResult.hasErrors() && !bindingResult1.hasErrors()){

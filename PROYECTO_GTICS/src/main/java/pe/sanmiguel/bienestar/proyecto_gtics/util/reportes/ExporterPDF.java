@@ -9,6 +9,7 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfTable;
 import com.lowagie.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletResponse;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.OrdenOrdenContenidoDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.VentasMedicamentosTotalDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Medicamento;
 
@@ -18,7 +19,15 @@ import java.util.List;
 
 public class ExporterPDF {
 
+    //Exportar Lista de Ventas de Medicamentos Super Admin
+
     private List<VentasMedicamentosTotalDto> listaMedicamentos;
+    private List<VentasMedicamentosTotalDto> listaMedicamentosSede1;
+    private List<VentasMedicamentosTotalDto> listaMedicamentosSede2;
+    private List<VentasMedicamentosTotalDto> listaMedicamentosSede3;
+    private List<VentasMedicamentosTotalDto> listaMedicamentosSede4;
+    private List<VentasMedicamentosTotalDto> listaMedicamentosSede5;
+
 
     public ExporterPDF(List<VentasMedicamentosTotalDto> listaMedicamentos) {
         this.listaMedicamentos = listaMedicamentos;
@@ -93,7 +102,7 @@ public class ExporterPDF {
         Paragraph titulo = new Paragraph(tituloChunk);
         titulo.setAlignment(Paragraph.ALIGN_CENTER);
 
-        String imagePath = "src/main/resources/static/media/logo_main.png"; // Reemplaza con la ruta a tu imagen
+        String imagePath = "src/main/resources/static/media/logo_main.png"; // poner la ruta
         Image imagen = Image.getInstance(imagePath);
 
         //Escalamos la imagen:
@@ -109,16 +118,16 @@ public class ExporterPDF {
         imagen.setAbsolutePosition(xPos, yPos);
         documento.add(imagen);
 
-        // Añadir espacio adicional para evitar superposición
+        // Añade espacio adicional para evitar superposición
         Paragraph espacio = new Paragraph(" ");
         espacio.setSpacingBefore(80); // Ajusta el espacio según sea necesario
         documento.add(espacio);
 
 
-        // Añadir el título al documento
+        // Añade el título al documento
         documento.add(titulo);
 
-        // Añadir espacio adicional para evitar superposición
+        // Añade espacio adicional para evitar superposición
         Paragraph espacio2 = new Paragraph(" ");
         espacio2.setSpacingBefore(20); // Ajusta el espacio según sea necesario
         documento.add(espacio2);
@@ -136,6 +145,19 @@ public class ExporterPDF {
         documento.close();
 
     }
+
+    //Exportar Lista de cantidades de ventas realizadas en todas las sedes
+
+    //Primero extraemos las ganancias de cada sede:
+
+
+
+
+
+
+
+
+
 
 
 

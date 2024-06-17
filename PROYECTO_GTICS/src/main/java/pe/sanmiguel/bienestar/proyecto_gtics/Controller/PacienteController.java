@@ -62,7 +62,9 @@ public class PacienteController {
     final EstadoPreOrdenRepository estadoPreOrdenRepository;
     final OrdenContenidoRepository ordenContenidoRepository;
 
-    public PacienteController(OrdenContenidoRepository ordenContenidoRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository,EstadoOrdenRepository estadoOrdenRepository,TipoOrdenRepository tipoOrdenRepository,SedeRepository sedeRepository, MedicamentoRepository medicamentoRepository, UsuarioRepository usuarioRepository, OrdenRepository ordenRepository){
+    final ChatRepository chatRepository;
+
+    public PacienteController(ChatRepository chatRepository, OrdenContenidoRepository ordenContenidoRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository,EstadoOrdenRepository estadoOrdenRepository,TipoOrdenRepository tipoOrdenRepository,SedeRepository sedeRepository, MedicamentoRepository medicamentoRepository, UsuarioRepository usuarioRepository, OrdenRepository ordenRepository){
         this.medicamentoRepository = medicamentoRepository;
         this.usuarioRepository = usuarioRepository;
         this.ordenRepository = ordenRepository;
@@ -72,6 +74,7 @@ public class PacienteController {
         this.doctorRepository = doctorRepository;
         this.estadoPreOrdenRepository = estadoPreOrdenRepository;
         this.ordenContenidoRepository = ordenContenidoRepository;
+        this.chatRepository = chatRepository;
     }
 
 
@@ -139,6 +142,35 @@ public class PacienteController {
 
 
 
+    @GetMapping(value = "/chat/{userId1}/{userId2}")
+    public String chat(HttpSession session, @PathVariable String userId1, @PathVariable String userId2, Model model) {
+        model.addAttribute("userId1", userId1);
+        model.addAttribute("userId2", userId2);
+
+        Usuario farmacista = usuarioRepository.getById(Integer.parseInt(userId2));
+
+        try {
+            InetAddress localhost = InetAddress.getLocalHost();
+            System.out.println("Mi dirección IP local es: " + localhost.getHostAddress());
+            model.addAttribute("iplocal", localhost.getHostAddress());
+        } catch (UnknownHostException e) {
+            System.out.println("Error obteniendo la dirección IP local");
+            e.printStackTrace();
+        }
+
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
+
+        if (userSession != null && (userSession.getIdUsuario().toString().equals(userId1) || userSession.getIdUsuario().toString().equals(userId2))) {
+            System.out.println("El usuario pertenece al chat");
+            model.addAttribute("idUser", userSession.getIdUsuario());
+            model.addAttribute("farmacista", farmacista);
+            return "paciente/chat";
+        } else {
+            System.out.println("El usuario no pertenece al chat");
+            return "paciente/mensajeria";
+        }
+    }
+
 
     @GetMapping(value="/tracking")
     public String tracking(Model model, @RequestParam("id") String idOrden){
@@ -174,23 +206,18 @@ public class PacienteController {
         return "paciente/new_orden";}
 
     @GetMapping(value="/mensajeria")
-    public String mensajeria(){return "paciente/mensajeria";}
+    public String mensajeria(HttpSession session, Model model){
 
-    @GetMapping(value = "/chat")
-    public String chat(Model model){
+        Usuario userSession = (Usuario) session.getAttribute("usuario");;
 
-        try {
-            InetAddress localhost = InetAddress.getLocalHost();
-            System.out.println("Mi dirección IP local es: " + localhost.getHostAddress());
-            model.addAttribute("iplocal", localhost.getHostAddress());
-        } catch (UnknownHostException e) {
-            System.out.println("Errooooooooooooooooooooooooor");
-            e.printStackTrace();
-        }
+        List<Chat> lista = chatRepository.listaChatsParaPaciente(userSession.getIdUsuario());
+
+        model.addAttribute("listaChats", lista);
 
 
-        return "paciente/chat";
-    }
+        return "paciente/mensajeria";}
+
+
 
     @GetMapping(value = "/orden_paciente_stock")
     public String ordenPacienteStock(){

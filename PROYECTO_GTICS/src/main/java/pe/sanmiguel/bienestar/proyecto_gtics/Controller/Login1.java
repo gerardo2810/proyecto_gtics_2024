@@ -93,8 +93,7 @@ final UsuarioRepository usuarioRepository;
             System.out.println(bindingResult.getAllErrors());
             return "login/prueba3";
         } else {
-            ResponseEntity<String> responseDni = DniAPI.getDni(dni);
-            List<String> values = DniAPI.responseToList(responseDni);
+            List<String> values = DniAPI.getDni(dni);
 
             String apiDni = values.get(4);
             String apiNombres = values.get(0);
