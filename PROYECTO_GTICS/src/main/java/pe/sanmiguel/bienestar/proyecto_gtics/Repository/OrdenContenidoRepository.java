@@ -3,6 +3,7 @@ package pe.sanmiguel.bienestar.proyecto_gtics.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.OrdenOrdenContenidoDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.OrdenContenido;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.OrdenContenidoId;
 
@@ -24,4 +25,7 @@ public interface OrdenContenidoRepository extends JpaRepository<OrdenContenido, 
 
     @Query(value="SELECT SUM(cantidad) FROM proyecto_gtics.orden_contenido where idOrden = ?1", nativeQuery = true)
     Integer cantProductos(String id);
+
+    @Query(value = "SELECT o.id, o.idSede, oc.cantidad FROM orden o inner join orden_contenido oc on o.id = oc.idOrden where idSede = ?1", nativeQuery = true)
+    List<OrdenOrdenContenidoDto> listarOrdenContenidoTotalporSede(int idSede);
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.OrdenOrdenContenidoSedeDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Orden;
 
 import java.util.List;
@@ -110,5 +111,8 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
             "    END WHILE; " +
             "END", nativeQuery = true)
     void createIncrementOrderWebStateEvent(@Param("ordenId") Integer ordenId);
+
+    @Query(nativeQuery = true, value = "SELECT o.id, o.precioTotal, idSede, idMedicamento FROM orden o inner join orden_contenido oc on o.id = oc.idOrden where idSede = ?")
+    List<OrdenOrdenContenidoSedeDto> listaOrdenOrdenContenidoporSede(int idSede);
 
 }

@@ -9,6 +9,7 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfTable;
 import com.lowagie.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletResponse;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.OrdenOrdenContenidoDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.VentasMedicamentosTotalDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Medicamento;
 
@@ -21,6 +22,12 @@ public class ExporterPDF {
     //Exportar Lista de Ventas de Medicamentos Super Admin
 
     private List<VentasMedicamentosTotalDto> listaMedicamentos;
+    private List<VentasMedicamentosTotalDto> listaMedicamentosSede1;
+    private List<VentasMedicamentosTotalDto> listaMedicamentosSede2;
+    private List<VentasMedicamentosTotalDto> listaMedicamentosSede3;
+    private List<VentasMedicamentosTotalDto> listaMedicamentosSede4;
+    private List<VentasMedicamentosTotalDto> listaMedicamentosSede5;
+
 
     public ExporterPDF(List<VentasMedicamentosTotalDto> listaMedicamentos) {
         this.listaMedicamentos = listaMedicamentos;
@@ -141,8 +148,14 @@ public class ExporterPDF {
 
     //Exportar Lista de cantidades de ventas realizadas en todas las sedes
 
-    //Primero extraemos la cantidad total de medicamentos vendidos por cada sede:
-    
+    //Primero extraemos las ganancias de cada sede:
+
+
+
+
+
+
+
 
 
 
