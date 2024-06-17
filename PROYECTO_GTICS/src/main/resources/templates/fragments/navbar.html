@@ -122,6 +122,9 @@
                     <li th:if="${session.usuario.getRol() == 3}" ><a th:href="@{/farmacista/pre_ordenes}" sec:authorize="hasAnyAuthority('FARMACISTA')"
                            class="menu-item roboto-light" th:classappend="${active == 'Pre Ordenes'?'active':''}">Pre Ordenes</a></li>
 
+                    <li th:if="${session.usuario.getRol() == 3}" ><a th:href="@{/farmacista/mensajeria}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                           class="menu-item roboto-light" th:classappend="${active == 'Mensajeria'?'active':''}">Mensajeria</a></li>
+
                     <!--=============== LINKS PARA PACIENTE  ===============-->
 
                     <li th:if="${session.usuario.getRol() == 4}" ><a th:href="@{/paciente}" sec:authorize="hasAnyAuthority('PACIENTE')"
@@ -258,6 +261,9 @@
 
                                 <li th:if="${session.usuario.getRol() == 3}" ><a th:href="@{/farmacista/pre_ordenes}" sec:authorize="hasAnyAuthority('FARMACISTA')"
                                                                                  class="menu-item roboto-light" th:classappend="${active == 'Pre Ordenes'?'active':''}">Pre Ordenes</a></li>
+
+                                <li th:if="${session.usuario.getRol() == 3}" ><a th:href="@{/farmacista/mensajeria}" sec:authorize="hasAnyAuthority('FARMACISTA')"
+                                                                                 class="menu-item roboto-light" th:classappend="${active == 'Mensajeria'?'active':''}">Mensajeria</a></li>
 
                                 <!--=============== LINKS PARA PACIENTE  ===============-->
 

@@ -477,13 +477,16 @@
         }
     });
 
+    let idUserOnpage = /*[[${idUser}]]*/ '';
     let userId1 = /*[[${userId1}]]*/ '';
     let userId2 = /*[[${userId2}]]*/ '';
-
     var ipLocal = /*[[${iplocal}]]*/ '';
+
+
     console.log(ipLocal)
-    console.log(userId1)
-    console.log(userId2)
+    console.log('idUserOnpage:', idUserOnpage);
+    console.log('userId1:', userId1);
+    console.log('userId2:', userId2);
 
     //let socket = new WebSocket("ws://20.11.65.155:8080/chat/" + userId1 + "/" + userId2); //mi direccion ip local, usar ipconfig o netstat -a para saber cual es, de recomendacion poner la red lan del celular en mi laptop en configuracion del adaptador
 
@@ -502,25 +505,74 @@
                 var tiempoActual = horaActual + ':' + minutosActuales;
             }
 
-            messageArea.innerHTML += ' <div class="message me">\n' +
-                '                    <p class="messageContent" >' + event.data +
-                '                    </p><div class="messageDetails">\n' +
-                '                        <div class="messageTime">' + tiempoActual  +
-                '                        </div><i class="fa-solid fa-check"></i>\n' +
-                '                    </div>\n' +
-                '                </div>'
-    }
+        // Parsear el mensaje JSON recibido
+        var messageData = JSON.parse(event.data);
 
-    function sendMessage(){
-        let messageInput = document.getElementById("messageInput");
-
-        if(messageInput.value.trim() != ''){
-            let fullMessage = messageInput.value;
-            socket.send(fullMessage);
-            messageInput.value = '';
+        // Verificar si el mensaje pertenece al usuario 1 o usuario 2
+        if (messageData.senderId === userId1) {
+            // Mensaje enviado por el usuario 1 (izquierda)
+            messageArea.innerHTML += '<div class="message you">\n' +
+                '    <p class="messageContent">' + messageData.message +
+                '    </p><div class="messageDetails">\n' +
+                '        <div class="messageTime">' + tiempoActual +
+                '        </div><i class="fa-solid fa-check"></i>\n' +
+                '    </div>\n' +
+                '</div>';
+        } else if (messageData.senderId === userId2) {
+            // Mensaje enviado por el usuario 2 (derecha)
+            messageArea.innerHTML += '<div class="message me">\n' +
+                '    <p class="messageContent">' + messageData.message +
+                '    </p><div class="messageDetails">\n' +
+                '        <div class="messageTime">' + tiempoActual +
+                '        </div><i class="fa-solid fa-check"></i>\n' +
+                '    </div>\n' +
+                '</div>';
         }
 
+
+
     }
+
+    function sendMessage() {
+        let messageInput = document.getElementById("messageInput");
+        let message = messageInput.value.trim();
+
+        if (message !== '') {
+
+
+
+
+            if (idUserOnpage.toString() === userId1) {
+                console.log('Este usuario es el 1');
+                let messageObject = {
+                    senderId: userId1, // Cambia según el usuario actual (userId1 o userId2)
+                    message: message
+                };
+                socket.send(JSON.stringify(messageObject)); // Enviar el mensaje como JSON
+                messageInput.value = ''; // Limpiar el campo de entrada después de enviar
+            }else {
+                console.log('Este usuario es el 2');
+                let messageObject = {
+                    senderId: userId2, // Cambia según el usuario actual (userId1 o userId2)
+                    message: message
+                };
+                socket.send(JSON.stringify(messageObject)); // Enviar el mensaje como JSON
+                messageInput.value = ''; // Limpiar el campo de entrada después de enviar
+            }
+
+
+
+
+
+
+
+
+
+
+
+        }
+    }
+
 
 
 

@@ -12,10 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.DniAPI;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
@@ -27,6 +24,8 @@ import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.DniApiValidationGro
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.FarmacistaValidationsGroup;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -709,6 +708,37 @@ public class FarmacistaController {
             attr.addFlashAttribute("msg", "Introduzca su contraseña actual.");
         }
         return "redirect:/farmacista/perfil";
+    }
+
+
+    @GetMapping(value="/farmacista/mensajeria")
+    public String mensajeria(){return "paciente/mensajeria";}
+
+    @GetMapping(value = "/farmacista/chat/{userId1}/{userId2}")
+    public String chat(HttpSession session, @PathVariable String userId1, @PathVariable String userId2, Model model) {
+
+        model.addAttribute("userId1", userId1);
+        model.addAttribute("userId2", userId2);
+
+        try {
+            InetAddress localhost = InetAddress.getLocalHost();
+            System.out.println("Mi dirección IP local es: " + localhost.getHostAddress());
+            model.addAttribute("iplocal", localhost.getHostAddress());
+        } catch (UnknownHostException e) {
+            System.out.println("Error obteniendo la dirección IP local");
+            e.printStackTrace();
+        }
+
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
+
+        if (userSession != null && (userSession.getIdUsuario().toString().equals(userId1) || userSession.getIdUsuario().toString().equals(userId2))) {
+            System.out.println("El usuario pertenece al chat");
+            model.addAttribute("idUser", userSession.getIdUsuario());
+            return "paciente/chat";
+        } else {
+            System.out.println("El usuario no pertenece al chat");
+            return "paciente/mensajeria";
+        }
     }
 
 
