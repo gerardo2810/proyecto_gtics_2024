@@ -17,6 +17,8 @@
         <link rel="stylesheet" th:href="@{/css/footer.css}">
         <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
         <link rel="stylesheet" th:href="@{/css/perfil.css}">
+        <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+
 
         <title>Bienestar San Miguel | Perfil</title>
 
@@ -41,7 +43,10 @@
     </header>
 
 
-    <body>
+    <body class="loader-hidden">
+    <div class="container-loader loader-hidden" id="onload">
+        <div class="loader"></div>
+    </div>
 
         <div class="container" style="margin-top: 90px">
 
@@ -243,8 +248,12 @@
                 });
             });
         </script>
+    <script>
+        window.onload = function () {
+            $('#onload').fadeOut();
+            $('body').removeClass('loader-hidden');
+        }
 
-
-
+    </script>
     </body>
 </html>

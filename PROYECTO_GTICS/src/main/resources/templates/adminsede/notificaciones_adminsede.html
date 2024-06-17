@@ -20,6 +20,8 @@
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
     <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+    <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+
 
     <!--=============== DataTable ===============-->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
@@ -58,7 +60,12 @@
 </header>
 
 
-<body>
+<body class="loader-hidden">
+
+<div class="container-loader loader-hidden" id="onload">
+    <div class="loader"></div>
+</div>
+
 
 
 <div class="container">
@@ -242,6 +249,14 @@
             table.search(searchTerm).draw();
         });
     });
+</script>
+
+<script>
+    window.onload = function () {
+        $('#onload').fadeOut();
+        $('body').removeClass('loader-hidden');
+    }
+
 </script>
 </body>
 

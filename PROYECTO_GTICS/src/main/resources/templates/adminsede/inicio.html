@@ -23,8 +23,10 @@
         <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
         <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
         <link rel="stylesheet" th:href="@{/css/graficos.css}">
+    <link th:href="@{/css/preloader.css}" rel="stylesheet" />
 
-        <!--=============== JS ===============-->
+
+    <!--=============== JS ===============-->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js" integrity="sha512-k37wQcV4v2h6jgYf5IUz1MoSKPpDs630XGSmCaCCOXxy2awgAWKHGZWr9nMyGgk3IOxA1NxdkN8r1JHgkUtMoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -47,7 +49,12 @@
         <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
     </header>
 
-    <body>
+    <body class="loader-hidden">
+
+
+    <div class="container-loader loader-hidden" id="onload">
+        <div class="loader"></div>
+    </div>
 
     <div style="margin-top: 80px"></div>
 
@@ -630,6 +637,14 @@
             });
 
         </script>
+
+    <script>
+        window.onload = function () {
+            $('#onload').fadeOut();
+            $('body').removeClass('loader-hidden');
+        }
+
+    </script>
 
 
 

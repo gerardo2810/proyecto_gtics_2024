@@ -20,6 +20,7 @@
         <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
         <link rel="stylesheet" th:href="@{/css/farmacista/detalle_ordenes.css}">
         <link th:href="@{/css/footer.css}" rel="stylesheet" />
+        <link th:href="@{/css/preloader.css}" rel="stylesheet" />
 
         <link rel="stylesheet" th:href="@{/css/adminsede/indexstyle.css}">
 
@@ -94,7 +95,11 @@
     </header>
 
 
-    <body style="background-color: white;">
+    <body style="background-color: white;" class="loader-hidden">
+
+    <div class="container-loader loader-hidden" id="onload">
+        <div class="loader"></div>
+    </div>
 
         <div class="container" style="margin-top:90px;">
 
@@ -197,70 +202,81 @@
 
         <div th:replace="~{fragments/navbar.html :: footer}">
         </div>
+        <script>
+            $(document).ready(function() {
+                let opened = false;
+
+                $('#menu-small').hide();
+
+                $('#nav-toggle').click(function (e) {
+                    e.stopPropagation();
+                    if (opened) {
+                        $('#menu-small').hide();
+                    } else {
+                        $('#menu-small').show();
+                    }
+                    opened = !opened;
+                });
+            });
+        </script>
+
+        <script>
+            // Puntos del mapa
+
+            const locations = [
+                { lat: -12.067713, lng: -77.067505 },
+                { lat: -12.067739299285414, lng: -77.07048533833166 },
+                { lat: -12.067991537715104, lng: -77.07550755645634 },
+                { lat : -12.068533248724986, lng: -77.07808532986617},
+                { lat: -12.069724275588285, lng: -77.07804924250952}
+            ]
+
+
+            // Inicializar mapa
+            function initMap() {
+                const map = new google.maps.Map(document.getElementById("map"), {
+                    zoom: 16,
+                    center: locations[0],
+                });
+
+                // Crear marcador
+                const marker = new google.maps.Marker({
+                    position: locations[0],
+                    map: map,
+                    icon: {
+                        url: "../img/moto_icon.png", // Ruta de la imagen de la moto
+                        scaledSize: new google.maps.Size(55, 50) // Tamaño personalizado (ancho, alto)
+                    } // Ruta de la imagen de la moto
+                });
+
+                // Mover el marcador a través de los puntos
+
+                let i = 0;
+                const interval = setInterval(() => {
+                    i++;
+                    if (i >= locations.length) {
+                        clearInterval(interval); // Detener el intervalo cuando llega a la tercera posición
+                        return;
+                    }
+                    marker.setPosition(locations[i]);
+                }, 2000); // Cambia de ubicación cada 3 segundos
+
+            }
+
+        </script>
+
+
+
+        <script>
+            window.onload = function () {
+                $('#onload').fadeOut();
+                $('body').removeClass('loader-hidden');
+            }
+
+        </script>
 
     </body>
 
-    <script>
-        $(document).ready(function() {
-            let opened = false;
 
-            $('#menu-small').hide();
-
-            $('#nav-toggle').click(function (e) {
-                e.stopPropagation();
-                if (opened) {
-                    $('#menu-small').hide();
-                } else {
-                    $('#menu-small').show();
-                }
-                opened = !opened;
-            });
-        });
-    </script>
-
-    <script>
-        // Puntos del mapa
-
-        const locations = [
-            { lat: -12.067713, lng: -77.067505 },
-            { lat: -12.067739299285414, lng: -77.07048533833166 },
-            { lat: -12.067991537715104, lng: -77.07550755645634 },
-            { lat : -12.068533248724986, lng: -77.07808532986617},
-            { lat: -12.069724275588285, lng: -77.07804924250952}
-        ]
-
-
-        // Inicializar mapa
-        function initMap() {
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 16,
-                center: locations[0],
-            });
-
-            // Crear marcador
-            const marker = new google.maps.Marker({
-                position: locations[0],
-                map: map,
-                icon: {
-                    url: "../img/moto_icon.png", // Ruta de la imagen de la moto
-                    scaledSize: new google.maps.Size(55, 50) // Tamaño personalizado (ancho, alto)
-                } // Ruta de la imagen de la moto
-            });
-
-            // Mover el marcador a través de los puntos
-
-            let i = 0;
-            const interval = setInterval(() => {
-                i++;
-                if (i >= locations.length) {
-                    clearInterval(interval); // Detener el intervalo cuando llega a la tercera posición
-                    return;
-                }
-                marker.setPosition(locations[i]);
-            }, 2000); // Cambia de ubicación cada 3 segundos
-
-        }
-
-    </script>
 
 </html>

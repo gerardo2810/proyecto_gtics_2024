@@ -21,6 +21,8 @@
         <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
         <link rel="stylesheet" th:href="@{/css/adminsede/estilos.css}">
         <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+        <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+
 
 
         <!--=============== SWEETALERT ===============-->
@@ -93,9 +95,14 @@
     </header>
 
 
-    <body>
+    <body class="loader-hidden">
 
-        <div class="container">
+    <div class="container-loader loader-hidden" id="onload">
+        <div class="loader"></div>
+    </div>
+
+
+    <div class="container">
             <div style="padding-top: 20px; padding-bottom: 20px">
                 <div class="main-title open-sans-bold"> Farmacistas </div>
                 <div class="main-subtitle helvetica-medium"> Vista de farmacistas pertenecientes a la sede</div>
@@ -261,6 +268,14 @@
             });
 
         </script>
+
+    <script>
+        window.onload = function () {
+            $('#onload').fadeOut();
+            $('body').removeClass('loader-hidden');
+        }
+
+    </script>
 
     </body>
 
