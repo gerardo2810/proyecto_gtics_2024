@@ -62,7 +62,9 @@ public class PacienteController {
     final EstadoPreOrdenRepository estadoPreOrdenRepository;
     final OrdenContenidoRepository ordenContenidoRepository;
 
-    public PacienteController(OrdenContenidoRepository ordenContenidoRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository,EstadoOrdenRepository estadoOrdenRepository,TipoOrdenRepository tipoOrdenRepository,SedeRepository sedeRepository, MedicamentoRepository medicamentoRepository, UsuarioRepository usuarioRepository, OrdenRepository ordenRepository){
+    final ChatRepository chatRepository;
+
+    public PacienteController(ChatRepository chatRepository, OrdenContenidoRepository ordenContenidoRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository,EstadoOrdenRepository estadoOrdenRepository,TipoOrdenRepository tipoOrdenRepository,SedeRepository sedeRepository, MedicamentoRepository medicamentoRepository, UsuarioRepository usuarioRepository, OrdenRepository ordenRepository){
         this.medicamentoRepository = medicamentoRepository;
         this.usuarioRepository = usuarioRepository;
         this.ordenRepository = ordenRepository;
@@ -72,6 +74,7 @@ public class PacienteController {
         this.doctorRepository = doctorRepository;
         this.estadoPreOrdenRepository = estadoPreOrdenRepository;
         this.ordenContenidoRepository = ordenContenidoRepository;
+        this.chatRepository = chatRepository;
     }
 
 
@@ -144,6 +147,8 @@ public class PacienteController {
         model.addAttribute("userId1", userId1);
         model.addAttribute("userId2", userId2);
 
+        Usuario farmacista = usuarioRepository.getById(Integer.parseInt(userId2));
+
         try {
             InetAddress localhost = InetAddress.getLocalHost();
             System.out.println("Mi dirección IP local es: " + localhost.getHostAddress());
@@ -158,6 +163,7 @@ public class PacienteController {
         if (userSession != null && (userSession.getIdUsuario().toString().equals(userId1) || userSession.getIdUsuario().toString().equals(userId2))) {
             System.out.println("El usuario pertenece al chat");
             model.addAttribute("idUser", userSession.getIdUsuario());
+            model.addAttribute("farmacista", farmacista);
             return "paciente/chat";
         } else {
             System.out.println("El usuario no pertenece al chat");
@@ -200,7 +206,16 @@ public class PacienteController {
         return "paciente/new_orden";}
 
     @GetMapping(value="/mensajeria")
-    public String mensajeria(){return "paciente/mensajeria";}
+    public String mensajeria(HttpSession session, Model model){
+
+        Usuario userSession = (Usuario) session.getAttribute("usuario");;
+
+        List<Chat> lista = chatRepository.listaChatsParaPaciente(userSession.getIdUsuario());
+
+        model.addAttribute("listaChats", lista);
+
+
+        return "paciente/mensajeria";}
 
 
 

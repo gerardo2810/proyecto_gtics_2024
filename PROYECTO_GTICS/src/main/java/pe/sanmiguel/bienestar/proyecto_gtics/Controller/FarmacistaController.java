@@ -48,7 +48,9 @@ public class FarmacistaController {
     final EstadoPreOrdenRepository estadoPreOrdenRepository;
     final DoctorRepository doctorRepository;
 
-    public FarmacistaController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, SedeStockRepository sedeStockRepository, SedeFarmacistaRepository sedeFarmacistaRepository, MedicamentoRepository medicamentoRepository, OrdenRepository ordenRepository, OrdenContenidoRepository ordenContenidoRepository, ReposicionRepository reposicionRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository, DniAPI dniAPI) {
+    final ChatRepository chatRepository;
+
+    public FarmacistaController(ChatRepository chatRepository, UsuarioRepository usuarioRepository, SedeRepository sedeRepository, SedeStockRepository sedeStockRepository, SedeFarmacistaRepository sedeFarmacistaRepository, MedicamentoRepository medicamentoRepository, OrdenRepository ordenRepository, OrdenContenidoRepository ordenContenidoRepository, ReposicionRepository reposicionRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository, DniAPI dniAPI) {
         this.usuarioRepository = usuarioRepository;
         this.sedeRepository = sedeRepository;
         this.sedeStockRepository = sedeStockRepository;
@@ -60,6 +62,7 @@ public class FarmacistaController {
         this.estadoPreOrdenRepository = estadoPreOrdenRepository;
         this.doctorRepository = doctorRepository;
         this.dniAPI = dniAPI;
+        this.chatRepository = chatRepository;
     }
 
     /* Repositorios */
@@ -712,13 +715,25 @@ public class FarmacistaController {
 
 
     @GetMapping(value="/farmacista/mensajeria")
-    public String mensajeria(){return "paciente/mensajeria";}
+    public String mensajeria(HttpSession session, Model model){
+
+        Usuario userSession = (Usuario) session.getAttribute("usuario");;
+
+        List<Chat> lista = chatRepository.listaChatsParaFarmacista(userSession.getIdUsuario());
+
+        model.addAttribute("listaChats", lista);
+
+
+        return "farmacista/mensajeria";}
 
     @GetMapping(value = "/farmacista/chat/{userId1}/{userId2}")
     public String chat(HttpSession session, @PathVariable String userId1, @PathVariable String userId2, Model model) {
 
         model.addAttribute("userId1", userId1);
         model.addAttribute("userId2", userId2);
+
+        Usuario paciente = usuarioRepository.getById(Integer.parseInt(userId2));
+
 
         try {
             InetAddress localhost = InetAddress.getLocalHost();
@@ -734,10 +749,12 @@ public class FarmacistaController {
         if (userSession != null && (userSession.getIdUsuario().toString().equals(userId1) || userSession.getIdUsuario().toString().equals(userId2))) {
             System.out.println("El usuario pertenece al chat");
             model.addAttribute("idUser", userSession.getIdUsuario());
-            return "paciente/chat";
+            model.addAttribute("paciente", paciente);
+
+            return "farmacista/chat";
         } else {
             System.out.println("El usuario no pertenece al chat");
-            return "paciente/mensajeria";
+            return "farmacista/mensajeria";
         }
     }
 

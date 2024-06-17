@@ -1,6 +1,6 @@
-    <!DOCTYPE html>
-    <html lang="es" xmlns:th="http://www.thymeleaf.org"
-          xmlns:sec = "http://www.thymeleaf.org/extras/spring-security">
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec = "http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <!--=============== REMIXICONS ===============-->
@@ -68,7 +68,7 @@
         <thead>
         <tr style="background-color: #378fff">
             <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Orden de compra</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Farmacista</th>
+            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Paciente</th>
             <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Chat</th>
         </tr>
         </thead>
@@ -76,12 +76,11 @@
 
         <tr th:each="chat : ${listaChats}">
             <td>XYZWXZ</td>
-            <td th:text="${chat.getIdUser2().getNombres() + ' ' + chat.getIdUser2().getApellidos()}"></td>
+            <td th:text="${chat.getIdUser1().getNombres() + ' ' + chat.getIdUser1().getApellidos()}"></td>
             <td class="action" >
-                <a th:href="@{'/paciente/chat/' + ${chat.getIdUser1()+'/'+chat.getIdUser2()}  }"><button class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button></a>
+                <a th:href="@{'/farmacista/chat/' + ${chat.getIdUser2()+'/'+chat.getIdUser1()}  }"><button class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button></a>
             </td>
         </tr>
-
 
 
         </tbody>
