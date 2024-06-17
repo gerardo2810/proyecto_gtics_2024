@@ -23,6 +23,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.DniApiValidationGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.FarmacistaValidationsGroup;
 
+import javax.print.attribute.standard.PresentationDirection;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -717,6 +718,35 @@ public class FarmacistaController {
             attr.addFlashAttribute("msg", "Introduzca su contraseña actual.");
         }
         return "redirect:/farmacista/perfil";
+
+    }
+
+
+    @PostMapping(value="/farmacista/crear_chat")
+    public String crearChat(@RequestParam("idOrden") Integer idOrden, @RequestParam("idPaciente") Integer idPaciente, @RequestParam("idFarmacista") Integer idFarmacista){
+
+        System.out.println("idPaciente:" + idPaciente);
+        System.out.println("idFarmacista:" + idFarmacista);
+        System.out.println("idOrden:" + idOrden);
+
+        Chat verificarChat = chatRepository.buscarChat(idPaciente, idFarmacista);
+
+
+        if(verificarChat == null){
+
+            Integer lastId = chatRepository.findLastChatId();
+            if(lastId != null){
+                chatRepository.crearChat(lastId+1, idPaciente, idFarmacista);
+            }else if (lastId == null){
+                chatRepository.crearChat(1, idPaciente, idFarmacista);
+            }
+
+            return "redirect:/farmacista/chat/" + idFarmacista+ "/" + idPaciente;
+
+        } else{
+            return "redirect:/farmacista/mensajeria";
+        }
+
     }
 
 
@@ -729,8 +759,9 @@ public class FarmacistaController {
 
         model.addAttribute("listaChats", lista);
 
-
         return "farmacista/mensajeria";}
+
+
 
     @GetMapping(value = "/farmacista/chat/{userId1}/{userId2}")
     public String chat(HttpSession session, @PathVariable String userId1, @PathVariable String userId2, Model model) {
