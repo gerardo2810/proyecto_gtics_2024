@@ -72,8 +72,33 @@ public class DniAPI {
             e.printStackTrace();
         }
 
+        for (String value : values) {
+            System.out.println(value);
+        }
+
         return values;
     }
 
+    public static String formatString(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        String[] words = input.split("\\s+");
+        StringBuilder formattedName = new StringBuilder();
+
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                formattedName.append(Character.toUpperCase(word.charAt(0)));
+                if (word.length() > 1) {
+                    formattedName.append(word.substring(1).toLowerCase());
+                }
+                formattedName.append(" ");
+            }
+        }
+
+        // Quitar el último espacio adicional
+        return formattedName.toString().trim();
+    }
 
 }
