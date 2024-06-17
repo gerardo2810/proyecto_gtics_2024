@@ -20,6 +20,8 @@
         <link rel="stylesheet" th:href="@{/css/datatables.css}">
         <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
         <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+        <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+
 
 
         <!--=============== SWEETALERT ===============-->
@@ -100,8 +102,15 @@
     </header>
 
 
-    <body>
-        <form method="post" th:action="@{/adminsede/editarReposicion}" enctype="multipart/form-data">
+    <body class="loader-hidden">
+
+
+    <div class="container-loader loader-hidden" id="onload">
+        <div class="loader"></div>
+    </div>
+
+
+    <form method="post" th:action="@{/adminsede/editarReposicion}" enctype="multipart/form-data">
 
             <input name = "idReposicion" th:value="${idOrden}" th:type="hidden">
 
