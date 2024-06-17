@@ -62,7 +62,8 @@ public class DniAPI {
 
             // Extraer los valores de las claves y añadirlos a la lista
             values.add(formatString((String) jsonObject.get("nombres")));
-            values.add(formatString((String) jsonObject.get("apellidos")));
+            values.add(formatString((String) jsonObject.get("apellidoPaterno")));
+            values.add(formatString((String) jsonObject.get("apellidoMaterno")));
             values.add(formatString((String) jsonObject.get("dni")));
             values.add((String) jsonObject.get("tipoDocumento"));
             values.add((String) jsonObject.get("numeroDocumento"));
