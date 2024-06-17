@@ -293,7 +293,8 @@ public class FarmacistaController {
                 return "farmacista/formulario_paciente";
             } else {
                 // Caso cuando el dni no existe
-                model.addAttribute("dniError", "error");
+                String dniError = "error";
+                model.addAttribute("dniError", dniError);
                 return "farmacista/formulario_paciente";
             }
         }

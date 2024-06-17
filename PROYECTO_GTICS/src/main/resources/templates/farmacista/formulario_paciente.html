@@ -84,6 +84,8 @@
                                 <input hidden placeholder="DNI" th:field="*{dni}"  id="dni" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
                                 <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
                             </div>
+                            <div  class="invalid-feedback" th:if="${dniError}">El DNI ingresado no existe.</div>
+
 
                             <div class="column">
 
