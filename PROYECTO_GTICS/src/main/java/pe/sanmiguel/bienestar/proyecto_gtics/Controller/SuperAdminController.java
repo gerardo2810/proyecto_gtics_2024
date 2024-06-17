@@ -3,15 +3,12 @@ package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 import com.lowagie.text.DocumentException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
@@ -23,9 +20,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.DniAPI;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.TopVentasDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.VentasMedicamentosTotalDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.PasswordService;
@@ -40,7 +37,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLOutput;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -63,9 +59,10 @@ public class SuperAdminController {
     final MedicamentoRepository medicamentoRepository;
     final SedeStockRepository sedeStockRepository;
     final SedeDoctorRepository sedeDoctorRepository;
+    final OrdenContenidoRepository ordenContenidoRepository;
 
 
-    public SuperAdminController(UsuarioRepository usuarioRepository, DoctorRepository doctorRepository, SedeRepository sedeRepository, SedeFarmacistaRepository sedeFarmacistaRepository, ReposicionRepository reposicionRepository, ReposicionContenidoRepository reposicionContenidoRepository, EstadoUsuarioRepository estadoUsuarioRepository, MedicamentoRepository medicamentoRepository, SedeStockRepository sedeStockRepository, SedeDoctorRepository sedeDoctorRepository) {
+    public SuperAdminController(UsuarioRepository usuarioRepository, DoctorRepository doctorRepository, SedeRepository sedeRepository, SedeFarmacistaRepository sedeFarmacistaRepository, ReposicionRepository reposicionRepository, ReposicionContenidoRepository reposicionContenidoRepository, EstadoUsuarioRepository estadoUsuarioRepository, MedicamentoRepository medicamentoRepository, SedeStockRepository sedeStockRepository, SedeDoctorRepository sedeDoctorRepository, OrdenContenidoRepository ordenContenidoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.doctorRepository = doctorRepository;
         this.sedeRepository = sedeRepository;
@@ -76,6 +73,7 @@ public class SuperAdminController {
         this.medicamentoRepository = medicamentoRepository;
         this.sedeStockRepository = sedeStockRepository;
         this.sedeDoctorRepository = sedeDoctorRepository;
+        this.ordenContenidoRepository = ordenContenidoRepository;
     }
 
     Usuario usuarioSession;
@@ -1741,7 +1739,12 @@ public class SuperAdminController {
         response.setHeader(cabecera, valor);
 
         List<VentasMedicamentosTotalDto> medicamentos = medicamentoRepository.listaMedicamentosVentas();
-        ExporterPDF exporter = new ExporterPDF(medicamentos);
+        List<TopVentasDto> listaVentasSede1 = ordenContenidoRepository.listartopVentarporSede(1);
+        List<TopVentasDto> listaVentasSede2 = ordenContenidoRepository.listartopVentarporSede(2);
+        List<TopVentasDto> listaVentasSede3 = ordenContenidoRepository.listartopVentarporSede(3);
+        List<TopVentasDto> listaVentasSede4 = ordenContenidoRepository.listartopVentarporSede(4);
+        List<TopVentasDto> listaVentasSede5 = ordenContenidoRepository.listartopVentarporSede(5);
+        ExporterPDF exporter = new ExporterPDF(medicamentos, listaVentasSede1, listaVentasSede2, listaVentasSede3, listaVentasSede4, listaVentasSede5, medicamentoRepository);
         exporter.exportar(response);
 
     }
