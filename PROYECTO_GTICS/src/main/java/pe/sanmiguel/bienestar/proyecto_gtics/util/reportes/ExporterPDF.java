@@ -18,6 +18,8 @@ import java.util.List;
 
 public class ExporterPDF {
 
+    //Exportar Lista de Ventas de Medicamentos Super Admin
+
     private List<VentasMedicamentosTotalDto> listaMedicamentos;
 
     public ExporterPDF(List<VentasMedicamentosTotalDto> listaMedicamentos) {
@@ -136,6 +138,13 @@ public class ExporterPDF {
         documento.close();
 
     }
+
+    //Exportar Lista de cantidades de ventas realizadas en todas las sedes
+
+    //Primero extraemos la cantidad total de medicamentos vendidos por cada sede:
+    
+
+
 
 
 

@@ -14,6 +14,8 @@
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
     <!--=============== CSS ===============-->
+    <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
     <link th:href="@{/css/fonts.css}" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
@@ -140,8 +142,13 @@
 </head>
 
 
-<body>
+<body class="loader-hidden">
 <!--=============== HEADER ===============-->
+
+<div class="container-loader loader-hidden" id="onload">
+    <div class="loader"></div>
+</div>
+
 <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inventario')}"></nav>
 </header>
@@ -558,6 +565,13 @@
         };
         xhr.send(formData);
     }
+</script>
+<script>
+    window.onload = function () {
+        $('#onload').fadeOut();
+        $('body').removeClass('loader-hidden');
+    }
+
 </script>
 
 
