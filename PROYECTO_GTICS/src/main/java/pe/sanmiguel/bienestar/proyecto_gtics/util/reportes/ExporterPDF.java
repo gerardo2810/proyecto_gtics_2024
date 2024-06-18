@@ -34,6 +34,15 @@ public class ExporterPDF {
     private List<TopVentasDto> listaVentastopSede4;
     private List<TopVentasDto> listaVentastopSede5;
 
+    private Float gananciaTotal = 0.0f;
+    private BigDecimal gananciaTotalsede1 = BigDecimal.valueOf(0);
+    private BigDecimal gananciaTotalsede2 = BigDecimal.valueOf(0);
+    private BigDecimal gananciaTotalsede3 = BigDecimal.valueOf(0);
+    private BigDecimal gananciaTotalsede4 = BigDecimal.valueOf(0);
+    private BigDecimal gananciaTotalsede5 = BigDecimal.valueOf(0);
+
+
+
 
     public ExporterPDF(List<VentasMedicamentosTotalDto> listaMedicamentos, List<TopVentasDto> listaVentastopSede1, List<TopVentasDto> listaVentastopSede2, List<TopVentasDto> listaVentastopSede3, List<TopVentasDto> listaVentastopSede4, List<TopVentasDto> listaVentastopSede5, MedicamentoRepository medicamentoRepository) {
         this.listaMedicamentos = listaMedicamentos;
@@ -65,6 +74,37 @@ public class ExporterPDF {
         tabla.addCell(celda);
     }
 
+    private void agregarFilaTotal(Document document, String texto1, String texto2) throws DocumentException {
+        PdfPTable tablaTotal = new PdfPTable(2);
+        tablaTotal.setWidthPercentage(50); // Ajusta el ancho según sea necesario
+        tablaTotal.setSpacingBefore(10f); // Espaciado antes de la tabla
+
+        // Fuentes
+        Font fuenteBlanca = FontFactory.getFont(FontFactory.HELVETICA);
+        fuenteBlanca.setColor(Color.WHITE);
+
+        Font fuenteNegra = FontFactory.getFont(FontFactory.HELVETICA);
+        fuenteNegra.setColor(Color.BLACK);
+
+        // Celda 1: "Ganancia Total"
+        PdfPCell celda1 = new PdfPCell(new Phrase(texto1, fuenteBlanca));
+        celda1.setBackgroundColor(Color.decode("#0d6efd"));
+        celda1.setPadding(5);
+        celda1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        tablaTotal.addCell(celda1);
+
+        // Celda 2: Valor de la ganancia
+        PdfPCell celda2 = new PdfPCell(new Phrase(texto2, fuenteNegra));
+        celda2.setBackgroundColor(Color.WHITE);
+        celda2.setPadding(5);
+        celda2.setHorizontalAlignment(Element.ALIGN_CENTER);
+        tablaTotal.addCell(celda2);
+
+        // Agregar la tabla al documento
+        document.add(tablaTotal);
+    }
+
+
     private void escribirDatosDeLaTabla(PdfPTable tabla){
 
         DecimalFormat df = new DecimalFormat("#0.00");
@@ -77,6 +117,9 @@ public class ExporterPDF {
             tabla.addCell(crearCeldaCentrada(df.format(medicamento.getPrecioVenta())));
             tabla.addCell(crearCeldaCentrada(df2.format(medicamento.getTotalCantidad())));
             tabla.addCell(crearCeldaCentrada(df.format(medicamento.getGananciaTotal())));
+            gananciaTotal = gananciaTotal + medicamento.getGananciaTotal();
+
+
         }
     }
 
@@ -98,6 +141,8 @@ public class ExporterPDF {
                 BigDecimal m = medicamento.getPrecioCompra();
                 BigDecimal n = medicamento.getPrecioVenta();
                 tabla.addCell(crearCeldaCentrada(String.valueOf(new BigDecimal(topVentasDto.getCantidadVendida()).multiply(n.subtract(m)))));
+                gananciaTotalsede1 = gananciaTotalsede1.add(new BigDecimal(topVentasDto.getCantidadVendida()).multiply(n.subtract(m)));
+
 
             }else {
                 System.out.println("No hay medicamento");
@@ -124,7 +169,7 @@ public class ExporterPDF {
                 BigDecimal m = medicamento.getPrecioCompra();
                 BigDecimal n = medicamento.getPrecioVenta();
                 tabla.addCell(crearCeldaCentrada(String.valueOf(new BigDecimal(topVentasDto.getCantidadVendida()).multiply(n.subtract(m)))));
-
+                gananciaTotalsede2 = gananciaTotalsede2.add(new BigDecimal(topVentasDto.getCantidadVendida()).multiply(n.subtract(m)));
             }else {
                 System.out.println("No hay medicamento");
             }
@@ -150,7 +195,7 @@ public class ExporterPDF {
                 BigDecimal m = medicamento.getPrecioCompra();
                 BigDecimal n = medicamento.getPrecioVenta();
                 tabla.addCell(crearCeldaCentrada(String.valueOf(new BigDecimal(topVentasDto.getCantidadVendida()).multiply(n.subtract(m)))));
-
+                gananciaTotalsede3 = gananciaTotalsede3.add(new BigDecimal(topVentasDto.getCantidadVendida()).multiply(n.subtract(m)));
             }else {
                 System.out.println("No hay medicamento");
             }
@@ -176,7 +221,7 @@ public class ExporterPDF {
                 BigDecimal m = medicamento.getPrecioCompra();
                 BigDecimal n = medicamento.getPrecioVenta();
                 tabla.addCell(crearCeldaCentrada(String.valueOf(new BigDecimal(topVentasDto.getCantidadVendida()).multiply(n.subtract(m)))));
-
+                gananciaTotalsede4 = gananciaTotalsede4.add(new BigDecimal(topVentasDto.getCantidadVendida()).multiply(n.subtract(m)));
             }else {
                 System.out.println("No hay medicamento");
             }
@@ -202,7 +247,8 @@ public class ExporterPDF {
                 BigDecimal m = medicamento.getPrecioCompra();
                 BigDecimal n = medicamento.getPrecioVenta();
                 tabla.addCell(crearCeldaCentrada(String.valueOf(new BigDecimal(topVentasDto.getCantidadVendida()).multiply(n.subtract(m)))));
-
+                gananciaTotalsede5 = gananciaTotalsede5.add(new BigDecimal(topVentasDto.getCantidadVendida()).multiply(n.subtract(m)));
+                System.out.println(gananciaTotalsede5);
             }else {
                 System.out.println("No hay medicamento");
             }
@@ -238,6 +284,7 @@ public class ExporterPDF {
         titulo.setAlignment(Paragraph.ALIGN_CENTER);
 
         String imagePath = "src/main/resources/static/media/logo_main.png"; // poner la ruta
+        //ruta: img/media/logo_main.png
         Image imagen = Image.getInstance(imagePath);
 
         //Escalamos la imagen:
@@ -277,12 +324,16 @@ public class ExporterPDF {
 
         documento.add(tabla);
 
+        documento.add(espacio);
+
+        agregarFilaTotal(documento, "Ganancia total", String.valueOf(gananciaTotal));
+
         // Añade espacio adicional para evitar superposición
         espacio.setSpacingBefore(20); // Ajusta el espacio según sea necesario
         documento.add(espacio);
 
         // Crear un Chunk con subrayado
-        Chunk tituloChunk2 = new Chunk("Top 5 ventas de medicamentos en la Sede 1", fuente);
+        Chunk tituloChunk2 = new Chunk("Top 5 ventas de medicamentos en Sede Central", fuente);
         tituloChunk2.setUnderline(1f, -2f);  // grosor y desplazamiento del subrayado
 
         // Crear un Paragraph y añadir el Chunk
@@ -307,15 +358,22 @@ public class ExporterPDF {
         documento.add(tabla2);
 
         // Añade espacio adicional para evitar superposición
-        espacio.setSpacingBefore(20); // Ajusta el espacio según sea necesario
+        espacio.setSpacingBefore(15); // Ajusta el espacio según sea necesario
         documento.add(espacio);
+
+        agregarFilaTotal(documento, "Ganancia total", String.valueOf(gananciaTotalsede1));
 
         // Añade espacio adicional para evitar superposición
         espacio.setSpacingBefore(80); // Ajusta el espacio según sea necesario
         documento.add(espacio);
 
+        documento.add(imagen);
+        espacio.setSpacingBefore(20);
+        documento.add(espacio);
+        documento.add(espacio);
+
         // Crear un Chunk con subrayado
-        Chunk tituloChunk3 = new Chunk("Top 5 ventas de medicamentos en la Sede 2", fuente);
+        Chunk tituloChunk3 = new Chunk("Top 5 ventas de medicamentos en Sede Norte", fuente);
         tituloChunk3.setUnderline(1f, -2f);  // grosor y desplazamiento del subrayado
 
         // Crear un Paragraph y añadir el Chunk
@@ -324,8 +382,27 @@ public class ExporterPDF {
 
         documento.add(titulo3);
 
+        documento.add(espacio);
+
+        PdfPTable tabla3 = new PdfPTable(6);
+        tabla3.setWidthPercentage(100);
+        tabla3.setSpacingBefore(15);
+        tabla3.setWidths(new float[] {3f, 3f, 2f, 1.8f,1.5f,1.7f});
+        tabla3.setWidthPercentage(110);
+
+        escribirCabeceraDeLaTabla(tabla3);
+        escribirDatosDeLaTablaSede2(tabla3);
+
+        documento.add(tabla3);
+
+        documento.add(espacio);
+
+        agregarFilaTotal(documento, "Ganancia total", String.valueOf(gananciaTotalsede2));
+
+        documento.add(espacio);
+
         // Crear un Chunk con subrayado
-        Chunk tituloChunk4 = new Chunk("Top 5 ventas de medicamentos en la Sede 3", fuente);
+        Chunk tituloChunk4 = new Chunk("Top 5 ventas de medicamentos en Sede Sur", fuente);
         tituloChunk4.setUnderline(1f, -2f);  // grosor y desplazamiento del subrayado
 
         // Crear un Paragraph y añadir el Chunk
@@ -334,8 +411,29 @@ public class ExporterPDF {
 
         documento.add(titulo4);
 
+        documento.add(espacio);
+
+        PdfPTable tabla4 = new PdfPTable(6);
+        tabla4.setWidthPercentage(100);
+        tabla4.setSpacingBefore(15);
+        tabla4.setWidths(new float[] {3f, 3f, 2f, 1.8f,1.5f,1.7f});
+        tabla4.setWidthPercentage(110);
+
+        escribirCabeceraDeLaTabla(tabla4);
+        escribirDatosDeLaTablaSede3(tabla4);
+        documento.add(tabla4);
+        espacio.setSpacingBefore(20);
+        documento.add(espacio);
+        agregarFilaTotal(documento, "Ganancia total", String.valueOf(gananciaTotalsede3));
+        espacio.setSpacingBefore(80);
+        documento.add(espacio);
+        documento.add(imagen);
+        espacio.setSpacingBefore(20);
+        documento.add(espacio);
+        documento.add(espacio);
+
         // Crear un Chunk con subrayado
-        Chunk tituloChunk5 = new Chunk("Top 5 ventas de medicamentos en la Sede 4", fuente);
+        Chunk tituloChunk5 = new Chunk("Top 5 ventas de medicamentos en Sede Este", fuente);
         tituloChunk5.setUnderline(1f, -2f);  // grosor y desplazamiento del subrayado
 
         // Crear un Paragraph y añadir el Chunk
@@ -344,8 +442,28 @@ public class ExporterPDF {
 
         documento.add(titulo5);
 
+        documento.add(espacio);
+
+        PdfPTable tabla5 = new PdfPTable(6);
+        tabla5.setWidthPercentage(100);
+        tabla5.setSpacingBefore(15);
+        tabla5.setWidths(new float[] {3f, 3f, 2f, 1.8f,1.5f,1.7f});
+        tabla5.setWidthPercentage(110);
+
+        escribirCabeceraDeLaTabla(tabla5);
+        escribirDatosDeLaTablaSede4(tabla5);
+
+        documento.add(tabla5);
+
+        documento.add(espacio);
+
+        agregarFilaTotal(documento, "Ganancia total", String.valueOf(gananciaTotalsede4));
+
+        espacio.setSpacingBefore(20);
+        documento.add(espacio);
+
         // Crear un Chunk con subrayado
-        Chunk tituloChunk6 = new Chunk("Top 5 ventas de medicamentos en la Sede 5", fuente);
+        Chunk tituloChunk6 = new Chunk("Top 5 ventas de medicamentos en Sede Oeste", fuente);
         tituloChunk6.setUnderline(1f, -2f);  // grosor y desplazamiento del subrayado
 
         // Crear un Paragraph y añadir el Chunk
@@ -354,13 +472,27 @@ public class ExporterPDF {
 
         documento.add(titulo6);
 
+        documento.add(espacio);
+
+        PdfPTable tabla6 = new PdfPTable(6);
+        tabla6.setWidthPercentage(100);
+        tabla6.setSpacingBefore(15);
+        tabla6.setWidths(new float[] {3f, 3f, 2f, 1.8f,1.5f,1.7f});
+        tabla6.setWidthPercentage(110);
+
+        escribirCabeceraDeLaTabla(tabla6);
+        escribirDatosDeLaTablaSede5(tabla6);
+
+        documento.add(tabla6);
+
+        documento.add(espacio);
+
+        agregarFilaTotal(documento, "Ganancia total", String.valueOf(gananciaTotalsede5));
+
         documento.close();
 
     }
 
-    //Exportar Lista de cantidades de ventas realizadas en todas las sedes
-
-    //Primero extraemos las ganancias de cada sede:
 
 
 
