@@ -22,6 +22,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.DniAPI;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.OrdenesExporterDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.TopVentasDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.VentasMedicamentosTotalDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
@@ -30,6 +31,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.DniApiValidationGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.SuperAdminValidationsGroup;
+import pe.sanmiguel.bienestar.proyecto_gtics.util.reportes.ExporterExcel;
 import pe.sanmiguel.bienestar.proyecto_gtics.util.reportes.ExporterPDF;
 
 
@@ -60,9 +62,10 @@ public class SuperAdminController {
     final SedeStockRepository sedeStockRepository;
     final SedeDoctorRepository sedeDoctorRepository;
     final OrdenContenidoRepository ordenContenidoRepository;
+    final OrdenRepository ordenRepository;
 
 
-    public SuperAdminController(UsuarioRepository usuarioRepository, DoctorRepository doctorRepository, SedeRepository sedeRepository, SedeFarmacistaRepository sedeFarmacistaRepository, ReposicionRepository reposicionRepository, ReposicionContenidoRepository reposicionContenidoRepository, EstadoUsuarioRepository estadoUsuarioRepository, MedicamentoRepository medicamentoRepository, SedeStockRepository sedeStockRepository, SedeDoctorRepository sedeDoctorRepository, OrdenContenidoRepository ordenContenidoRepository) {
+    public SuperAdminController(UsuarioRepository usuarioRepository, DoctorRepository doctorRepository, SedeRepository sedeRepository, SedeFarmacistaRepository sedeFarmacistaRepository, ReposicionRepository reposicionRepository, ReposicionContenidoRepository reposicionContenidoRepository, EstadoUsuarioRepository estadoUsuarioRepository, MedicamentoRepository medicamentoRepository, SedeStockRepository sedeStockRepository, SedeDoctorRepository sedeDoctorRepository, OrdenContenidoRepository ordenContenidoRepository, OrdenRepository ordenRepository) {
         this.usuarioRepository = usuarioRepository;
         this.doctorRepository = doctorRepository;
         this.sedeRepository = sedeRepository;
@@ -74,6 +77,7 @@ public class SuperAdminController {
         this.sedeStockRepository = sedeStockRepository;
         this.sedeDoctorRepository = sedeDoctorRepository;
         this.ordenContenidoRepository = ordenContenidoRepository;
+        this.ordenRepository = ordenRepository;
     }
 
     Usuario usuarioSession;
@@ -1745,6 +1749,21 @@ public class SuperAdminController {
         List<TopVentasDto> listaVentasSede4 = ordenContenidoRepository.listartopVentarporSede(4);
         List<TopVentasDto> listaVentasSede5 = ordenContenidoRepository.listartopVentarporSede(5);
         ExporterPDF exporter = new ExporterPDF(medicamentos, listaVentasSede1, listaVentasSede2, listaVentasSede3, listaVentasSede4, listaVentasSede5, medicamentoRepository);
+        exporter.exportar(response);
+
+    }
+
+    @GetMapping("/exportarExcel")
+    public void exportarListadoMedicamentosExcel(HttpServletResponse response) throws DocumentException, IOException {
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String fechaActual = dateFormatter.format(new Date());
+        String cabecera = "Content-Disposition";
+        String valor = "attachment; filename=OrdenesWeb_" + fechaActual + ".xlsx";
+        response.setHeader(cabecera, valor);
+
+        List<OrdenesExporterDto> listaExporter = ordenRepository.listarOrdenesExporter();
+        ExporterExcel exporter = new ExporterExcel(listaExporter);
         exporter.exportar(response);
 
     }

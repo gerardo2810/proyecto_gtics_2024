@@ -333,7 +333,7 @@ public class ExporterPDF {
         documento.add(espacio);
 
         // Crear un Chunk con subrayado
-        Chunk tituloChunk2 = new Chunk("Top 5 ventas de medicamentos en Sede Central", fuente);
+        Chunk tituloChunk2 = new Chunk("Medicamentos más vendidos en Sede Central", fuente);
         tituloChunk2.setUnderline(1f, -2f);  // grosor y desplazamiento del subrayado
 
         // Crear un Paragraph y añadir el Chunk
@@ -373,7 +373,7 @@ public class ExporterPDF {
         documento.add(espacio);
 
         // Crear un Chunk con subrayado
-        Chunk tituloChunk3 = new Chunk("Top 5 ventas de medicamentos en Sede Norte", fuente);
+        Chunk tituloChunk3 = new Chunk("Medicamentos más vendidos en Sede Norte", fuente);
         tituloChunk3.setUnderline(1f, -2f);  // grosor y desplazamiento del subrayado
 
         // Crear un Paragraph y añadir el Chunk
@@ -402,7 +402,7 @@ public class ExporterPDF {
         documento.add(espacio);
 
         // Crear un Chunk con subrayado
-        Chunk tituloChunk4 = new Chunk("Top 5 ventas de medicamentos en Sede Sur", fuente);
+        Chunk tituloChunk4 = new Chunk("Medicamentos más vendidos en Sede Sur", fuente);
         tituloChunk4.setUnderline(1f, -2f);  // grosor y desplazamiento del subrayado
 
         // Crear un Paragraph y añadir el Chunk
@@ -433,7 +433,7 @@ public class ExporterPDF {
         documento.add(espacio);
 
         // Crear un Chunk con subrayado
-        Chunk tituloChunk5 = new Chunk("Top 5 ventas de medicamentos en Sede Este", fuente);
+        Chunk tituloChunk5 = new Chunk("Medicamentos más vendidos en Sede Este", fuente);
         tituloChunk5.setUnderline(1f, -2f);  // grosor y desplazamiento del subrayado
 
         // Crear un Paragraph y añadir el Chunk
@@ -463,7 +463,7 @@ public class ExporterPDF {
         documento.add(espacio);
 
         // Crear un Chunk con subrayado
-        Chunk tituloChunk6 = new Chunk("Top 5 ventas de medicamentos en Sede Oeste", fuente);
+        Chunk tituloChunk6 = new Chunk("Medicamentos más vendidos en Sede Oeste", fuente);
         tituloChunk6.setUnderline(1f, -2f);  // grosor y desplazamiento del subrayado
 
         // Crear un Paragraph y añadir el Chunk
