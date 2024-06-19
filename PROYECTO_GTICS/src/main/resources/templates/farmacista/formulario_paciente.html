@@ -66,6 +66,7 @@
                                     <label style="font-weight: bold; color:dimgray">Ingrese el DNI del Paciente</label>
                                     <input class="input-form-dni" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del paciente"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
                                     <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+                                    <div  class="invalid-feedback" th:if="${dniError}">El DNI ingresado no existe.</div>
                                 </div>
 
                                 <div style="margin-top: 37px">
@@ -83,7 +84,7 @@
                                 <label style="font-weight: bold; color:dimgray"></label>
                                 <input hidden placeholder="DNI" th:field="*{dni}"  id="dni" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
                             </div>
-                            <div  class="invalid-feedback" th:if="${dniError}">El DNI ingresado no existe.</div>
+
 
 
                             <div class="column">

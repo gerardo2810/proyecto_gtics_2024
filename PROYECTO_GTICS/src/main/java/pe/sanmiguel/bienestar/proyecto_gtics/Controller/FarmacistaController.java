@@ -281,7 +281,7 @@ public class FarmacistaController {
 
             List<String> values = DniAPI.getDni(dni);
 
-            if (!values.isEmpty()){
+            if (!values.get(1).isEmpty()){
                 String apiDni = values.get(4);
                 String apiNombres = values.get(0);
                 String apiApellidos = (values.get(1) + " " + values.get(2));

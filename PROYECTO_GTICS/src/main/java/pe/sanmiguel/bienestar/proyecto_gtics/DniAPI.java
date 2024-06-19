@@ -71,14 +71,11 @@ public class DniAPI {
             values.add((String) jsonObject.get("numeroDocumento"));
             values.add((String) jsonObject.get("digitoVerificador"));
 
+            System.out.println(jsonObject);
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        for (String value : values) {
-            System.out.println(value);
-        }
-
         return values;
     }
 
