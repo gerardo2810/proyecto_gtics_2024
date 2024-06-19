@@ -126,6 +126,13 @@
             outline: none;
 
         }
+        .invalid-feedback2 {
+            color: #dc3545; /* Rojo */
+            font-size: 0.875em; /* Tamaño de fuente más pequeño */
+            margin-top: 0.25rem; /* Espacio arriba del mensaje */
+            display: block; /* Asegura que el div se muestre como bloque */
+        }
+
         @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
     </style>
 </head>
@@ -163,8 +170,8 @@
                                 <div style="display: flex; flex-direction: row; justify-content: start; gap: 10px">
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; font-size: medium">Ingrese el DNI del Administrador</label>
-                                        <input class="input-form-dni" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del administrador"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
-                                        <div  class="invalid-feedback" style="font-size: medium" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+                                        <input class="input-form-dni" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del administrador"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}" required>
+                                        <div  class="invalid-feedback" style="font-size: small" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
                                     </div>
                                     <div style="margin-top: 37px">
                                         <button type="submit" id="buscarDni" class="btn btn-p"><i class="fas fa-search"></i></button>
@@ -194,14 +201,14 @@
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Apellidos del administrador:</label>
                                     <input style="width: 300px" placeholder="Ingrese el apellido" th:value="${apellidos}" name="apellidos" class="input-form" type="text" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}" readonly>
-                                    <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
+                                    <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{nombres}"></div>
                                 </div>
                             </div>
                             <div class="column">
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">DNI:</label>
-                                    <input placeholder="Ingrese el DNI" th:value="${dni}" name="dni" class="input-form" type="text" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}" readonly>
-                                    <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{dni}"></div>
+                                    <input placeholder="Ingrese el DNI" th:value="${dni}" name="dni" class="input-form" type="text" readonly>
+
                                 </div>
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Dirección:</label>
