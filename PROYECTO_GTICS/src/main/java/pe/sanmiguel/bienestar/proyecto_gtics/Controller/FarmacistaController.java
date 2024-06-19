@@ -298,16 +298,24 @@ public class FarmacistaController {
             List<String> values = DniAPI.getDni(dni);
 
             if (!(values.isEmpty())){
-                String apiDni = values.get(3);
-                String apiNombres = values.get(0);
-                String apiApellidos = (values.get(1) + " " + values.get(2));
 
-                model.addAttribute("dni", apiDni);
-                model.addAttribute("nombres", apiNombres);
-                model.addAttribute("apellidos", apiApellidos);
+                if (!values.get(0).isEmpty()){
+                    String apiDni = values.get(3);
+                    String apiNombres = values.get(0);
+                    String apiApellidos = (values.get(1) + " " + values.get(2));
 
-                System.out.println(values);
-                return "farmacista/formulario_paciente";
+                    model.addAttribute("dni", apiDni);
+                    model.addAttribute("nombres", apiNombres);
+                    model.addAttribute("apellidos", apiApellidos);
+
+                    System.out.println(values);
+                    return "farmacista/formulario_paciente";
+                } else {
+                    // Caso cuando el dni no existe
+                    String dniError = "error";
+                    model.addAttribute("dniError", dniError);
+                    return "farmacista/formulario_paciente";
+                }
             } else {
                 // Caso cuando el dni no existe
                 String dniError = "error";
