@@ -95,7 +95,7 @@ final UsuarioRepository usuarioRepository;
         } else {
             List<String> values = DniAPI.getDni(dni);
 
-            String apiDni = values.get(4);
+            String apiDni = values.get(3);
             String apiNombres = values.get(0);
             String apiApellidos = (values.get(1) + " " + values.get(2));
 
