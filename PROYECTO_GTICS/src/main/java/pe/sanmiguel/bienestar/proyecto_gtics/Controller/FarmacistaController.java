@@ -93,6 +93,20 @@ public class FarmacistaController {
 
     final DniAPI dniAPI;
 
+    @GetMapping(value = "/prueba_api")
+    public String pruebaDniApi(){
+
+        List<String> values = DniAPI.getDni("15513412");
+
+        String apiDni = values.get(4);
+        String apiNombres = values.get(0);
+        String apiApellidos = (values.get(1) + " " + values.get(2));
+
+        System.out.println(values);
+
+        return "redirect:/farmacista";
+    }
+
     @GetMapping(value = "/correo_prueba")
     public String prueba(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
 
@@ -281,7 +295,7 @@ public class FarmacistaController {
 
             List<String> values = DniAPI.getDni(dni);
 
-            if (!values.get(1).isEmpty()){
+            if (!(values.get(1) == null)){
                 String apiDni = values.get(4);
                 String apiNombres = values.get(0);
                 String apiApellidos = (values.get(1) + " " + values.get(2));
