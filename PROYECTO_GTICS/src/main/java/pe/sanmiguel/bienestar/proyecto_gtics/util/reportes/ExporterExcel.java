@@ -77,8 +77,7 @@ public class ExporterExcel {
         celda.setCellStyle(estilo);
     }
 
-    private void escribirDatosTabla(){
-
+    private void escribirDatosTabla() {
         int numeroFilas = 1;
 
         CellStyle estilo = libro.createCellStyle();
@@ -96,10 +95,20 @@ public class ExporterExcel {
         estilo.setBorderLeft(BorderStyle.THIN);
         estilo.setBorderRight(BorderStyle.THIN);
 
-        //Decimal Format
-        DecimalFormat df = new DecimalFormat("#.##");
+        // Crear un estilo para el formato numérico con dos decimales
+        CellStyle estiloNumerico = libro.createCellStyle();
+        estiloNumerico.setFont(fuente);
+        estiloNumerico.setAlignment(HorizontalAlignment.CENTER);
+        estiloNumerico.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloNumerico.setBorderTop(BorderStyle.THIN);
+        estiloNumerico.setBorderBottom(BorderStyle.THIN);
+        estiloNumerico.setBorderLeft(BorderStyle.THIN);
+        estiloNumerico.setBorderRight(BorderStyle.THIN);
 
-        for(OrdenesExporterDto ordenesExporterDto : listaOrdenesExportar){
+        DataFormat format = libro.createDataFormat();
+        estiloNumerico.setDataFormat(format.getFormat("0.00"));
+
+        for (OrdenesExporterDto ordenesExporterDto : listaOrdenesExportar) {
             Row fila = hoja.createRow(numeroFilas++);
 
             Cell celda = fila.createCell(0);
@@ -129,12 +138,11 @@ public class ExporterExcel {
 
             celda = fila.createCell(5);
             double precioTotal = ordenesExporterDto.getPrecioTotal();
-            celda.setCellValue(Double.parseDouble(df.format(precioTotal)));
+            System.out.println(precioTotal);
+            celda.setCellValue(precioTotal);
             hoja.autoSizeColumn(5);
-            celda.setCellStyle(estilo);
-
+            celda.setCellStyle(estiloNumerico);
         }
-
     }
 
     public void exportar(HttpServletResponse response) throws IOException {
