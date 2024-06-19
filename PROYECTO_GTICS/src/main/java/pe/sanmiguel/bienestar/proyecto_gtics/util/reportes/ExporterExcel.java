@@ -14,6 +14,7 @@ public class ExporterExcel {
 
     private XSSFWorkbook libro;
     private XSSFSheet hoja;
+    private String tipo;
 
     private List<OrdenesExporterDto> listaOrdenesExportar;
 
@@ -61,11 +62,11 @@ public class ExporterExcel {
         celda.setCellStyle(estilo);
 
         celda = fila.createCell(2);
-        celda.setCellValue("Fecha de inicio");
+        celda.setCellValue("Fecha de emisión");
         celda.setCellStyle(estilo);
 
         celda = fila.createCell(3);
-        celda.setCellValue("Fecha de fin");
+        celda.setCellValue("Tipo");
         celda.setCellStyle(estilo);
 
         celda = fila.createCell(4);
@@ -125,9 +126,17 @@ public class ExporterExcel {
             celda.setCellValue(ordenesExporterDto.getFechaIni().toString());
             hoja.autoSizeColumn(2);
             celda.setCellStyle(estilo);
+            
+            if(ordenesExporterDto.getIdTipo() == 1){
+                tipo = "Física";
+            } else if (ordenesExporterDto.getIdTipo() == 2) {
+                tipo = "Web";
+            }else {
+                tipo = "Pre orden";
+            }
 
             celda = fila.createCell(3);
-            celda.setCellValue(ordenesExporterDto.getFechaFin().toString());
+            celda.setCellValue(tipo);
             hoja.autoSizeColumn(3);
             celda.setCellStyle(estilo);
 
