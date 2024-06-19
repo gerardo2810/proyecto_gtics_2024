@@ -188,7 +188,7 @@
                                         </div>
                                         <div class="item-on-list">
                                             <div class="item-details">
-                                                <div class="selector-cantidad">
+                                                <div class="selector-cantidad" style="min-width: 80px">
                                                     <i class="fa-solid fa-minus restar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
                                                     <input type="text" th:value="${listaCantidades.get(iterIndex.index)}" class="item-quantity-clicked" th:data-item-id="${medicamento.idMedicamento}">
                                                     <i class="fa-solid fa-plus sumar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
