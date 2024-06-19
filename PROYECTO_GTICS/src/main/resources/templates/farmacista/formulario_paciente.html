@@ -59,13 +59,14 @@
 
                 <div class="grid-sus">
 
-                        <div class="dni-form">
+                        <div class="dni-form" style="padding-top: 15px">
                             <form method="post" th:action="@{/farmacista/form_paciente}" th:object="${usuario}">
                             <div style="display: flex; flex-direction: row; justify-content: start; gap: 10px">
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Ingrese el DNI del Paciente</label>
                                     <input class="input-form-dni" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del paciente"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
                                     <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+                                    <div  class="invalid-feedback" th:if="${dniError}">El DNI ingresado no existe.</div>
                                 </div>
 
                                 <div style="margin-top: 37px">
@@ -83,7 +84,7 @@
                                 <label style="font-weight: bold; color:dimgray"></label>
                                 <input hidden placeholder="DNI" th:field="*{dni}"  id="dni" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
                             </div>
-                            <div  class="invalid-feedback" th:if="${dniError}">El DNI ingresado no existe.</div>
+
 
 
                             <div class="column">
@@ -160,6 +161,7 @@
                                 <label style="font-weight: bold; color:dimgray">Correo:</label>
                                 <input id="correoInput" class="input-form-2" type="email"  th:field="*{correo}" placeholder="Ingrese el correo del paciente" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid' : ''}">
                                 <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" class="invalid-feedback" ></div>
+                                <div  class="invalid-feedback" th:if="${badEmail}">El correo ingresado corresponde a otro paciente. Por favor solicite otro</div>
                             </div>
 
                         </div>
@@ -182,11 +184,11 @@
                                         <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" width="120px" height="auto" th:alt="${medicamento.nombre}">
                                         <div style="display: flex; flex-direction: column; gap: 10px">
                                             <span style="font-size: 1.2rem" class="item-title-clicked" th:text="${medicamento.nombre}">Medicamento</span>
-                                            <span style="font-size: 0.8rem" class="item-title-clicked" th:text="${medicamento.getDescripcion()}">Medicamento</span>
+                                            <span style="font-size: 0.8rem; max-width: 200px" class="item-title-clicked" th:text="${medicamento.getDescripcion()}">Medicamento</span>
                                         </div>
                                         <div class="item-on-list">
                                             <div class="item-details">
-                                                <div class="selector-cantidad">
+                                                <div class="selector-cantidad" style="min-width: 80px">
                                                     <i class="fa-solid fa-minus restar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
                                                     <input type="text" th:value="${listaCantidades.get(iterIndex.index)}" class="item-quantity-clicked" th:data-item-id="${medicamento.idMedicamento}">
                                                     <i class="fa-solid fa-plus sumar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>

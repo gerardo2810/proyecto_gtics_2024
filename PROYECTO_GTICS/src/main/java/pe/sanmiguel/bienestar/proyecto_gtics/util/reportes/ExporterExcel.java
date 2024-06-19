@@ -14,6 +14,7 @@ public class ExporterExcel {
 
     private XSSFWorkbook libro;
     private XSSFSheet hoja;
+    private String tipo;
 
     private List<OrdenesExporterDto> listaOrdenesExportar;
 
@@ -61,11 +62,11 @@ public class ExporterExcel {
         celda.setCellStyle(estilo);
 
         celda = fila.createCell(2);
-        celda.setCellValue("Fecha de inicio");
+        celda.setCellValue("Fecha de emisión");
         celda.setCellStyle(estilo);
 
         celda = fila.createCell(3);
-        celda.setCellValue("Fecha de fin");
+        celda.setCellValue("Tipo");
         celda.setCellStyle(estilo);
 
         celda = fila.createCell(4);
@@ -77,8 +78,7 @@ public class ExporterExcel {
         celda.setCellStyle(estilo);
     }
 
-    private void escribirDatosTabla(){
-
+    private void escribirDatosTabla() {
         int numeroFilas = 1;
 
         CellStyle estilo = libro.createCellStyle();
@@ -96,10 +96,20 @@ public class ExporterExcel {
         estilo.setBorderLeft(BorderStyle.THIN);
         estilo.setBorderRight(BorderStyle.THIN);
 
-        //Decimal Format
-        DecimalFormat df = new DecimalFormat("#.##");
+        // Crear un estilo para el formato numérico con dos decimales
+        CellStyle estiloNumerico = libro.createCellStyle();
+        estiloNumerico.setFont(fuente);
+        estiloNumerico.setAlignment(HorizontalAlignment.CENTER);
+        estiloNumerico.setVerticalAlignment(VerticalAlignment.CENTER);
+        estiloNumerico.setBorderTop(BorderStyle.THIN);
+        estiloNumerico.setBorderBottom(BorderStyle.THIN);
+        estiloNumerico.setBorderLeft(BorderStyle.THIN);
+        estiloNumerico.setBorderRight(BorderStyle.THIN);
 
-        for(OrdenesExporterDto ordenesExporterDto : listaOrdenesExportar){
+        DataFormat format = libro.createDataFormat();
+        estiloNumerico.setDataFormat(format.getFormat("0.00"));
+
+        for (OrdenesExporterDto ordenesExporterDto : listaOrdenesExportar) {
             Row fila = hoja.createRow(numeroFilas++);
 
             Cell celda = fila.createCell(0);
@@ -116,9 +126,17 @@ public class ExporterExcel {
             celda.setCellValue(ordenesExporterDto.getFechaIni().toString());
             hoja.autoSizeColumn(2);
             celda.setCellStyle(estilo);
+            
+            if(ordenesExporterDto.getIdTipo() == 1){
+                tipo = "Física";
+            } else if (ordenesExporterDto.getIdTipo() == 2) {
+                tipo = "Web";
+            }else {
+                tipo = "Pre orden";
+            }
 
             celda = fila.createCell(3);
-            celda.setCellValue(ordenesExporterDto.getFechaFin().toString());
+            celda.setCellValue(tipo);
             hoja.autoSizeColumn(3);
             celda.setCellStyle(estilo);
 
@@ -129,12 +147,11 @@ public class ExporterExcel {
 
             celda = fila.createCell(5);
             double precioTotal = ordenesExporterDto.getPrecioTotal();
-            celda.setCellValue(Double.parseDouble(df.format(precioTotal)));
+            System.out.println(precioTotal);
+            celda.setCellValue(precioTotal);
             hoja.autoSizeColumn(5);
-            celda.setCellStyle(estilo);
-
+            celda.setCellStyle(estiloNumerico);
         }
-
     }
 
     public void exportar(HttpServletResponse response) throws IOException {

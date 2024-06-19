@@ -116,7 +116,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Query(nativeQuery = true, value = "SELECT o.id, o.precioTotal, idSede, idMedicamento FROM orden o inner join orden_contenido oc on o.id = oc.idOrden where idSede = ?")
     List<OrdenOrdenContenidoSedeDto> listaOrdenOrdenContenidoporSede(int idSede);
 
-    @Query(nativeQuery = true, value = "SELECT o.id, o.fechaIni, o.fechaFin, o.precioTotal, u.nombres, u.apellidos, s.nombre as nombreSede FROM orden o inner join usuario u on o.idPaciente = u.id inner join sede s on o.idSede = s.id")
+    @Query(nativeQuery = true, value = "SELECT o.id, o.fechaIni, o.fechaFin, o.precioTotal, u.nombres, u.apellidos, s.nombre as nombreSede, o.idTipo FROM orden o inner join usuario u on o.idPaciente = u.id inner join sede s on o.idSede = s.id;")
     List<OrdenesExporterDto> listarOrdenesExporter();
 
 }

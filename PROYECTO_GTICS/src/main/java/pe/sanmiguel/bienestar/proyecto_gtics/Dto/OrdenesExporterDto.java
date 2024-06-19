@@ -18,6 +18,8 @@ public interface OrdenesExporterDto {
 
     String getNombreSede();
 
+    Integer getIdTipo();
+
 
 
 }

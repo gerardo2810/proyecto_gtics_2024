@@ -416,7 +416,6 @@ public class SuperAdminController {
         Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
         session.setAttribute("usuario", usuario);
 
-
         if (bindingResult.hasErrors()){
             System.out.println("HAY ERRORES DE VALIDACIÓN:");
             for (ObjectError error : bindingResult.getAllErrors()) {
@@ -450,21 +449,33 @@ public class SuperAdminController {
 
             List<String> values = DniAPI.getDni(dni);
 
-            String apiDni = values.get(4);
-            String apiNombres = values.get(0);
-            String apiApellidos = (values.get(1) + " " + values.get(2));
+            if (!(values.isEmpty())){
+                if(!(values.get(0).isEmpty())){
+                    String apiDni = values.get(3);
+                    String apiNombres = values.get(0);
+                    String apiApellidos = (values.get(1) + " " + values.get(2));
+                    model.addAttribute("dni", apiDni);
+                    model.addAttribute("nombres", apiNombres);
+                    model.addAttribute("apellidos", apiApellidos);
 
-            model.addAttribute("dni", apiDni);
-            model.addAttribute("nombres", apiNombres);
-            model.addAttribute("apellidos", apiApellidos);
-
-            System.out.println("DNI: " + administrador.getDni());
-            System.out.println("Nombre: " + administrador.getNombres());
-            System.out.println("Apellidos: " + administrador.getApellidos());
-            System.out.println(values);
-            return "superAdmin/crearAdministrador";
+                    System.out.println("DNI: " + administrador.getDni());
+                    System.out.println("Nombre: " + administrador.getNombres());
+                    System.out.println("Apellidos: " + administrador.getApellidos());
+                    System.out.println(values);
+                    return "superAdmin/crearAdministrador";
+                }else{
+                    // Caso cuando el dni no existe
+                    String dniError = "error";
+                    bindingResult.rejectValue("dni", "error.dni", "El DNI no existe.");
+                    return "superAdmin/crearAdministrador";
+                }
+            }else{
+                // Caso cuando el dni no existe
+                String dniError = "error";
+                bindingResult.rejectValue("dni", "error.dni", "El DNI no existe.");
+                return "superAdmin/crearAdministrador";
+            }
         }
-
     }
 
 
@@ -1115,19 +1126,29 @@ public class SuperAdminController {
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
 
             List<String> values = DniAPI.getDni(dni);
+            if (!(values.isEmpty())){
+                if(!(values.get(0).isEmpty())) {
+                    String apiDni = values.get(3);
+                    String apiNombres = values.get(0);
+                    String apiApellidos = (values.get(1) + " " + values.get(2));
 
-            String apiDni = values.get(4);
-            String apiNombres = values.get(0);
-            String apiApellidos = (values.get(1) + " " + values.get(2));
+                    model.addAttribute("dni", apiDni);
+                    model.addAttribute("nombres", apiNombres);
+                    model.addAttribute("apellidos", apiApellidos);
 
-            model.addAttribute("dni", apiDni);
-            model.addAttribute("nombres", apiNombres);
-            model.addAttribute("apellidos", apiApellidos);
-
-            System.out.println(values);
-            return "superAdmin/crearDoctor";
+                    System.out.println(values);
+                    return "superAdmin/crearDoctor";
+                }else{
+                    String dniError = "error";
+                    bindingResult.rejectValue("dni", "error.dni", "El DNI no existe.");
+                    return "superAdmin/crearDoctor";
+                }
+            }else{
+                String dniError = "error";
+                bindingResult.rejectValue("dni", "error.dni", "El DNI no existe.");
+                return "superAdmin/crearDoctor";
+            }
         }
-
     }
 
     @PostMapping("/guardarDoctor")

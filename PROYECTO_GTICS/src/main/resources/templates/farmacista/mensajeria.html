@@ -75,7 +75,7 @@
         <tbody>
 
         <tr th:each="chat : ${listaChats}">
-            <td>XYZWXZ</td>
+            <td th:text="${'10' + chat.getIdChat()}"></td>
             <td th:text="${chat.getIdUser1().getNombres() + ' ' + chat.getIdUser1().getApellidos()}"></td>
             <td class="action" >
                 <a th:href="@{'/farmacista/chat/' + ${chat.getIdUser2()+'/'+chat.getIdUser1()}  }"><button class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button></a>
