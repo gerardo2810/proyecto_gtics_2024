@@ -159,13 +159,13 @@
 
 
                             <div class="input-label-box">
-                                <label style="font-weight: bold; color:dimgray"></label>
+                                <label style="font-weight: bold; color:dimgray">Nombres del farmacista:</label>
                                 <input readonly placeholder="Nombres del farmacista" th:value="${nombres}" name="nombres" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}">
                                 <div  class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
                             </div>
 
                             <div class="input-label-box">
-                                <label style="font-weight: bold; color:dimgray"></label>
+                                <label style="font-weight: bold; color:dimgray">Apellidos del farmacista:</label>
                                 <input readonly placeholder="Apellidos del farmacista" th:value="${apellidos}" name="apellidos" class="input-form-2" type="text" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}">
                                 <div  class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
                             </div>
