@@ -21,14 +21,15 @@ import java.util.List;
 public class DniAPI {
 
     /* APIS.NET.PE */
+     /*
     private static final String BASE_URL = "https://api.apis.net.pe/v2/reniec/dni?numero=";
     private static final String BEARER_TOKEN = "apis-token-9064.5WCzn6X328Q2gIu0iPb1sCgy35LAQn3H"; // Token
-
+    */
     /* APISPERU.NET */
-    /*
+
     private static final String BASE_URL = "https://apisperu.net/api/dni/";
     private static final String BEARER_TOKEN = "63d3045c50befe3ba510e6cc787916eb9e579cee712dc8fae2ec478386e4f488"; // Token
-    */
+
 
     public static List<String> getDni(String dni) {
         RestTemplate restTemplate = new RestTemplate();
@@ -45,6 +46,8 @@ public class DniAPI {
 
         // Realizar la solicitud
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+
+        System.out.println(response);
 
         // Verificar la respuesta
         if (response.getStatusCode().is2xxSuccessful()) {
