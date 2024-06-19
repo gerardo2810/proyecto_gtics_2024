@@ -96,11 +96,13 @@ public class FarmacistaController {
     @GetMapping(value = "/prueba_api")
     public String pruebaDniApi(){
 
-        List<String> values = DniAPI.getDni("15513412");
+        List<String> values = DniAPI.getDni("1145552");
 
-        String apiDni = values.get(4);
-        String apiNombres = values.get(0);
-        String apiApellidos = (values.get(1) + " " + values.get(2));
+        if (!values.isEmpty()){
+            String apiDni = values.get(3);
+            String apiNombres = values.get(0);
+            String apiApellidos = (values.get(1) + " " + values.get(2));
+        }
 
         System.out.println(values);
 
@@ -295,8 +297,8 @@ public class FarmacistaController {
 
             List<String> values = DniAPI.getDni(dni);
 
-            if (!(values.get(1) == null)){
-                String apiDni = values.get(4);
+            if (!(values.isEmpty())){
+                String apiDni = values.get(3);
                 String apiNombres = values.get(0);
                 String apiApellidos = (values.get(1) + " " + values.get(2));
 
