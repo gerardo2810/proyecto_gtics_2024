@@ -397,6 +397,11 @@ public class FarmacistaController {
                         String badEmail = "error";
                         model.addAttribute("badEmail", badEmail);
 
+                        // Datos ya jalados de la API
+                        model.addAttribute("nombres", name);
+                        model.addAttribute("apellidos", lastname);
+                        model.addAttribute("dni", dni);
+
                         return "farmacista/formulario_paciente";
                     }
                 }
