@@ -344,10 +344,8 @@ public class FarmacistaController {
                 }
             }
 
-            ArrayList<Usuario> listaUsuarios = (ArrayList<Usuario>) usuarioRepository.listarUsuariosSegunRol(4);
             ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) doctorRepository.findAll();
 
-            model.addAttribute("listaUsuarios", listaUsuarios);
             model.addAttribute("listaDoctores", listaDoctores);
             model.addAttribute("stockSeleccionados", stockSeleccionados);
             model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
@@ -362,14 +360,53 @@ public class FarmacistaController {
         } else {
 
             idVerOrdenCreada = 0;
-
             medicamentosSeleccionados = getMedicamentosFromLista(listaSelectedIds);
             listaCantidades = getCantidadesFromLista(listaSelectedIds);
 
             verificationStock verificationStock = new verificationStock(medicamentosSeleccionados, listaCantidades);
-            verificationUser verificationUser = new verificationUser(name,lastname,dni,distrito,direccion,seguro,correo,celular);
 
-            this.pacienteOnStore = verificationUser.getUser();
+            if (usuarioRepository.findPacienteByCorreo(correo).isPresent()){
+                Usuario usuarioToComp = usuarioRepository.findPacienteByCorreo(correo).get();
+
+                if (usuarioToComp.getDni().equals(dni)){
+                    verificationUser verificationUser = new verificationUser(name,lastname,dni,distrito,direccion,seguro,correo,celular);
+                    this.pacienteOnStore = verificationUser.getUser();
+                } else {
+                    if(medicamentosSeleccionados.isEmpty()){
+                        return "redirect:/farmacista";
+                    } else {
+
+                        List<Integer> stockSeleccionados = new ArrayList<>();
+
+                        for (Medicamento med : medicamentosSeleccionados) {
+                            if (sedeStockRepository.getSedeStockByIdSedeAndIdMedicamento(sedeSession, med).isPresent()) {
+                                stockSeleccionados.add(sedeStockRepository.getSedeStockByIdMedicamentoAndIdSede(med,sedeSession).getCantidad());
+                            } else {
+                                stockSeleccionados.add(0);
+                            }
+                        }
+
+                        ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) doctorRepository.findAll();
+
+                        model.addAttribute("listaDoctores", listaDoctores);
+                        model.addAttribute("stockSeleccionados", stockSeleccionados);
+                        model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
+                        model.addAttribute("listaCantidades", listaCantidades);
+
+                        // Caso cuando el correo ya existe en DB
+                        String badEmail = "error";
+                        model.addAttribute("badEmail", badEmail);
+
+                        return "farmacista/formulario_paciente";
+                    }
+                }
+
+            } else {
+                verificationUser verificationUser = new verificationUser(name,lastname,dni,distrito,direccion,seguro,correo,celular);
+                this.pacienteOnStore = verificationUser.getUser();
+            }
+
+
             System.out.println("Paciente on Store: " + pacienteOnStore);
             System.out.println("ID del paciente: " + pacienteOnStore.getIdUsuario());
 
@@ -391,7 +428,6 @@ public class FarmacistaController {
                 newOrden.setSeguroUsado(Objects.requireNonNullElse(seguro, "false"));
                 System.out.println(pacienteOnStore);
 
-
                 if (!(doctor == null)) {
                     if (!doctor.isEmpty() && !doctor.equals("no-doctor")) {
                         newOrden.setDoctor(doctorRepository.getByIdDoctor(Integer.valueOf(doctor)));
@@ -408,7 +444,6 @@ public class FarmacistaController {
 
                 ordenRepository.save(newOrden);
                 System.out.println("Orden guardada: " + newOrden);
-                System.out.println(ordenRepository);
 
                 int i = 0;
                 for (Medicamento med : medicamentosSeleccionados){
@@ -440,17 +475,6 @@ public class FarmacistaController {
                 return "redirect:/farmacista/crear_preorden";
             }
         }
-    }
-
-
-
-    @PostMapping("/farmacista/finalizar_compra_preorden")
-    public String createOrdenVenta() {
-
-        idVerOrdenCreada = 6; // Ejemplo fijo, falta realizar comprobaciones y llenado a base de datos para hacerlo dinámico
-
-        return "redirect:/farmacista/ver_pre_orden";
-
     }
 
 
@@ -829,23 +853,29 @@ public class FarmacistaController {
             boolean userExist = false;
             Usuario user = new Usuario();
 
-            Optional<Usuario> userOptional = usuarioRepository.findPacienteByCorreoAndDni(correo, dni);
+            Optional<Usuario> userOptional = usuarioRepository.findPacienteByDni(dni);
 
             if (userOptional.isPresent()) {
+
                 userExist = true;
                 user = userOptional.get();
 
-                user.setNombres(name);
-                user.setApellidos(lastname);
-                user.setCelular(celular);
-                user.setDireccion(direccion);
-                user.setDistrito(distrito);
-                user.setSeguro(Objects.requireNonNullElse(seguro, "false"));
-                usuarioRepository.save(user);
+                if (user.getEstadoUsuario().equals(2)){
+                    user.setCelular(celular);
+                    user.setDireccion(direccion);
+                    user.setDistrito(distrito);
+                    user.setSeguro(Objects.requireNonNullElse(seguro, "false"));
+                    user.setCorreo(correo);
+                    usuarioRepository.save(user);
+                } else {
+                    user.setSeguro(Objects.requireNonNullElse(seguro, "false"));
+                    usuarioRepository.save(user);
+                }
 
             } else {
                 Usuario newUser = new Usuario();
                 newUser.setRol(4);
+
                 newUser.setCorreo(correo);
                 newUser.setContrasena("00000000");
                 newUser.setNombres(name);
@@ -858,9 +888,10 @@ public class FarmacistaController {
                 newUser.setEstadoUsuario(2);
 
                 user = newUser;
+                usuarioRepository.save(user);
             }
 
-            usuarioRepository.save(user);
+
             System.out.println(user.getIdUsuario());
 
             this.userExist = userExist;

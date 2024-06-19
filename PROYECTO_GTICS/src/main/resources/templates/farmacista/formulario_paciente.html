@@ -161,6 +161,7 @@
                                 <label style="font-weight: bold; color:dimgray">Correo:</label>
                                 <input id="correoInput" class="input-form-2" type="email"  th:field="*{correo}" placeholder="Ingrese el correo del paciente" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid' : ''}">
                                 <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" class="invalid-feedback" ></div>
+                                <div  class="invalid-feedback" th:if="${badEmail}">El correo ingresado corresponde a otro paciente. Por favor solicite otro</div>
                             </div>
 
                         </div>

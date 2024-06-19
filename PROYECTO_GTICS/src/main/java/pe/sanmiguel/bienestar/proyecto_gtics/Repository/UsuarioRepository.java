@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.UsuarioSedeFarmacistaDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     Optional<Usuario> findByCorreoAndDni(String correo, String dni);
 
+    @Query(nativeQuery = true, value="SELECT * FROM proyecto_gtics.usuario u WHERE u.dni = ?1")
+    Optional<Usuario> findPacienteByDni(String dni);
+
+    @Query(nativeQuery = true, value="SELECT * FROM proyecto_gtics.usuario u WHERE u.correo = ?1")
+    Optional<Usuario> findPacienteByCorreo(String correo);
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM proyecto_gtics.usuario u WHERE u.correo = ?1")
+    int countByCorreo(String correo);
 
     @Query(nativeQuery = true, value="SELECT * FROM proyecto_gtics.usuario u WHERE u.correo = ?1 AND u.dni = ?2")
     Optional<Usuario> findPacienteByCorreoAndDni(String correo, String dni);
