@@ -30,10 +30,16 @@ public class FirebaseConfig {
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
 
-        FirebaseApp firebaseApp = FirebaseApp.initializeApp(options);
+        FirebaseApp firebaseApp;
+
+        // Verifica que no se genere una instancia duplicada de Firebase
+        try {
+            firebaseApp = FirebaseApp.getInstance();
+        } catch (IllegalStateException e) {
+            firebaseApp = FirebaseApp.initializeApp(options);
+        }
 
         return FirestoreClient.getFirestore(firebaseApp);
 
     }
-
 }
