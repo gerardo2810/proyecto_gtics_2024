@@ -181,7 +181,7 @@ public class PacienteController {
 
 
 
-        if (userSession != null && (userSession.getIdUsuario().toString().equals(userId1) || userSession.getIdUsuario().toString().equals(userId2))) {
+        if (chatActual != null && userSession != null && (userSession.getIdUsuario().toString().equals(userId1) || userSession.getIdUsuario().toString().equals(userId2))) {
             System.out.println("El usuario pertenece al chat");
             model.addAttribute("idUser", userSession.getIdUsuario());
             model.addAttribute("farmacista", farmacista);
