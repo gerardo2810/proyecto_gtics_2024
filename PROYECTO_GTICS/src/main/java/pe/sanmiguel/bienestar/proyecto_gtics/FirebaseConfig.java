@@ -1,5 +1,7 @@
 package pe.sanmiguel.bienestar.proyecto_gtics;
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +23,9 @@ public class FirebaseConfig {
     @Bean
     public Firestore firestore() throws Exception {
 
-        FileInputStream serviceAccount = (FileInputStream) firebaseJsonRepository.firebaseJSON();
+        String json = firebaseJsonRepository.firebaseJSON();
+
+        InputStream serviceAccount = new ByteArrayInputStream(json.getBytes());
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();

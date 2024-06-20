@@ -27,7 +27,7 @@ public interface ChatRepository extends JpaRepository<Chat, Integer> {
             ") AS json_result\n" +
             "FROM firebase_json\n" +
             "WHERE id = 1;")
-    List<Chat> firebaseJSON();
+    String firebaseJSON();
 
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.chat where idUser1=?;")
     List<Chat> listaChatsParaPaciente(int idPaciente);
