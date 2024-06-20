@@ -243,13 +243,33 @@
 
 
                 <div th:each="mensaje : ${mensajes}">
-                    <div class="message you">
-                        <p class="messageContent" th:text="${mensaje.getMensaje()}"></p>
-                        <div class="messageDetails">
-                            <div class="messageTime" th:text="${mensaje.getFormattedTime()}"></div>
-                            <i class="fa-solid fa-check"></i>
+
+                    <div th:switch="${mensaje.getIdRol()}">
+
+                        <div th:case="'F'" class="message you">
+                            <p class="messageContent" th:text="${mensaje.getMensaje()}"></p>
+                            <div class="messageDetails">
+                                <div class="messageTime" th:text="${mensaje.getFormattedTime()}"></div>
+                                <i class="fa-solid fa-check"></i>
+                            </div>
                         </div>
+
+
+                        <div th:case="'P'" class="message me">
+                            <p class="messageContent" th:text="${mensaje.getMensaje()}"></p>
+                            <div class="messageDetails">
+                                <div class="messageTime" th:text="${mensaje.getFormattedTime()}"></div>
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                        </div>
+
+
+
                     </div>
+
+
+
+
                 </div>
 
 
