@@ -21,6 +21,7 @@
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.css" integrity="sha512-0Nyh7Nf4sn+T48aTb6VFkhJe0FzzcOlqqZMahy/rhZ8Ii5Q9ZXG/1CbunUuEbfgxqsQfWXjnErKZosDSHVKQhQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
     <!--=============== DataTable ===============-->
@@ -225,8 +226,6 @@
 
                 </li>
                 <div class="callGroup">
-                    <i class="fa-solid fa-phone"></i>
-                    <i class="fa-solid fa-video"></i>
 
                 </div>
             </div>
@@ -241,6 +240,22 @@
                         <i class="fa-solid fa-check"></i>
                     </div>
                 </div>
+
+
+                <div th:each="mensaje : ${mensajes}">
+                    <div class="message you">
+                        <p class="messageContent" th:text="${mensaje.getMensaje()}"></p>
+                        <div class="messageDetails">
+                            <div class="messageTime" th:text="${mensaje.getFormattedTime()}"></div>
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
 
 
 
@@ -258,16 +273,7 @@
 
                 <input type="text" id="messageInput" class="inputMensaje" style="width: 300px" placeholder="Ingrese su mensaje">
 
-                <div>
-                    <img  class="emoji" tabindex="1" draggable="false" src="https://cdn0.iconfinder.com/data/icons/buma-emojis/36/smiling-256.png">
-                    <div tabindex="1" class="bar">
-                        <p clas="emoticon">😎</p>
-                        <p clas="emoticon">😄</p>
-                        <p clas="emoticon">🎉</p>
-                        <p clas="emoticon">🤡</p>
-                    </div>
 
-                </div>
 
 
 
@@ -428,8 +434,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-<script th:src="@{/js/topbar.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.js" integrity="sha512-aGWPnmdBhJ0leVHhQaRASgb0InV/Z2BWsscdj1Vwt29Oic91wECPixuXsWESpFfCcYPLfOlBZzN2nqQdMxlGTQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+<script>
+    $("#messageInput").emojioneArea()
+
+</script>
+
+
+<script th:src="@{/js/topbar.js}"></script>
 
 <script th:inline="javascript">
 
@@ -453,9 +466,8 @@
     console.log('userId1:', userId1);
     console.log('userId2:', userId2);
 
-    let socket = new WebSocket("ws://34.121.204.43:8080/chat/" + userId1 + "/" + userId2); //mi direccion ip local, usar ipconfig o netstat -a para saber cual es, de recomendacion poner la red lan del celular en mi laptop en configuracion del adaptador
-
-    //let socket = new WebSocket("ws://" + ipLocal + ":8080/chat/" + userId1 + "/" + userId2);
+    //let socket = new WebSocket("ws://34.121.204.43:8080/chat/" + userId1 + "/" + userId2);
+    let socket = new WebSocket("ws://" + ipLocal + ":8080/chat/" + userId1 + "/" + userId2);
 
     socket.onmessage = function (event) {
 
