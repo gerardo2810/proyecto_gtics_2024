@@ -136,6 +136,7 @@ public class AdminSedeController {
             if(listaReposicionNoEntregadasUltimas.size() == 0){
                 return "adminsede/inicio";
             }
+            model.addAttribute("listaMedicamentos",medicamentoRepository.findAll());
             model.addAttribute("listaReposicionNoEntregadasUltimas", listaReposicionNoEntregadasUltimas);
             model.addAttribute("lista1", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
             model.addAttribute("lista2", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
