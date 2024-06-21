@@ -148,23 +148,7 @@ public class PacienteController {
         return "paciente/pago_tarjeta";
     }
 
-    @CrossOrigin(origins = "http://localhost:8080") // Reemplaza con la URL de tu frontend
-    @PostMapping("/enviar-mensaje")
-    public String enviarMensaje(@RequestBody Mensaje mensaje) {
-        // Código del controlador
-    
-
-    // Aquí puedes procesar el mensaje recibido, guardar en la base de datos, etc.
-        System.out.println("Mensaje recibido:");
-        System.out.println("SenderId: " + mensaje.getSenderId());
-        System.out.println("Message: " + mensaje.getMessage());
-
-        // Devuelve una respuesta, por ejemplo, un mensaje de confirmación
-        return "Mensaje recibido correctamente";
-    }
-
-
-
+   
 
     @GetMapping(value = "/chat/{userId1}/{userId2}")
     public String chat(HttpSession session, @PathVariable String userId1, @PathVariable String userId2, Model model) {
