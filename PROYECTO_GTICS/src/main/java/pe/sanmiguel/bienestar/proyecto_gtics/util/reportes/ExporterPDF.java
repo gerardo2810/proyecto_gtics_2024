@@ -9,6 +9,7 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.VentasMedicamentosTotalDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.TopVentasDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Medicamento;
@@ -16,6 +17,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Repository.MedicamentoRepository;
 
 import java.awt.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -283,9 +285,14 @@ public class ExporterPDF {
         Paragraph titulo = new Paragraph(tituloChunk);
         titulo.setAlignment(Paragraph.ALIGN_CENTER);
 
-        String imagePath = "src/main/resources/static/media/logo_main.png"; // poner la ruta
+        ClassPathResource imgFile = new ClassPathResource("static/media/logo_main.png");
+        InputStream inputStream = imgFile.getInputStream();
+        Image imagen = Image.getInstance(inputStream.readAllBytes());
+        inputStream.close();
+
+        //String imagePath = "static/media/logo_main.png"; // poner la ruta
         //ruta: img/media/logo_main.png
-        Image imagen = Image.getInstance(imagePath);
+        //Image imagen = Image.getInstance(imagePath);
 
         //Escalamos la imagen:
         imagen.scaleToFit(180, 180);
@@ -367,7 +374,7 @@ public class ExporterPDF {
         espacio.setSpacingBefore(80); // Ajusta el espacio según sea necesario
         documento.add(espacio);
 
-        documento.add(imagen);
+        // documento.add(imagen);
         espacio.setSpacingBefore(20);
         documento.add(espacio);
         documento.add(espacio);
@@ -427,7 +434,7 @@ public class ExporterPDF {
         agregarFilaTotal(documento, "Ganancia total", String.valueOf(gananciaTotalsede3));
         espacio.setSpacingBefore(80);
         documento.add(espacio);
-        documento.add(imagen);
+        // documento.add(imagen);
         espacio.setSpacingBefore(20);
         documento.add(espacio);
         documento.add(espacio);
