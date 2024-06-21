@@ -1,8 +1,4 @@
-/*!
- * ApexCharts v3.26.0
- * (c) 2018-2021 Juned Chhipa
- * Released under the MIT License.
- */
+
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -30837,21 +30833,6 @@
           apexChart.render();
         }
       }
-      /**
-       * This static method allows users to call chart methods without necessarily from the
-       * instance of the chart in case user has assigned chartID to the targeted chart.
-       * The chartID is used for mapping the instance stored in Apex._chartInstances global variable
-       *
-       * This is helpful in cases when you don't have reference of the chart instance
-       * easily and need to call the method from anywhere.
-       * For eg, in React/Vue applications when you have many parent/child components,
-       * and need easy reference to other charts for performing dynamic operations
-       *
-       * @param {string} chartID - The unique identifier which will be used to call methods
-       * on that chart instance
-       * @param {function} fn - The method name to call
-       * @param {object} opts - The parameters which are accepted in the original method will be passed here in the same order.
-       */
 
     }, {
       key: "exec",
