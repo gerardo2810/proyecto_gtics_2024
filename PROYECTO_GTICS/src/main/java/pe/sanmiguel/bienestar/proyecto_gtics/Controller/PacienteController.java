@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.ChatFirebase;
 import pe.sanmiguel.bienestar.proyecto_gtics.ChatService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
+import pe.sanmiguel.bienestar.proyecto_gtics.Mensaje;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
 import java.io.IOException;
@@ -146,6 +147,22 @@ public class PacienteController {
 
         return "paciente/pago_tarjeta";
     }
+
+    @CrossOrigin(origins = "http://localhost:8080") // Reemplaza con la URL de tu frontend
+    @PostMapping("/enviar-mensaje")
+    public String enviarMensaje(@RequestBody Mensaje mensaje) {
+        // Código del controlador
+    
+
+    // Aquí puedes procesar el mensaje recibido, guardar en la base de datos, etc.
+        System.out.println("Mensaje recibido:");
+        System.out.println("SenderId: " + mensaje.getSenderId());
+        System.out.println("Message: " + mensaje.getMessage());
+
+        // Devuelve una respuesta, por ejemplo, un mensaje de confirmación
+        return "Mensaje recibido correctamente";
+    }
+
 
 
 

@@ -30,7 +30,6 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
     <!--==========================================-->
 
-
     <title>Mensajería | Bienestar San Miguel</title>
 
     <style>
@@ -297,7 +296,7 @@
 
 
 
-                <button onclick="sendMessage()" class="enviar-msg"><i class="fa-solid fa-paper-plane"></i></button>
+                <button onclick="sendMessage()" class="enviar-msg" id="botonEnviar"><i class="fa-solid fa-paper-plane"></i></button>
 
             </div>
 
@@ -464,7 +463,12 @@
 
 <script th:src="@{/js/topbar.js}"></script>
 
-<script th:inline="javascript">
+
+
+
+<script  th:inline="javascript">
+
+
 
 
     const messageInput = document.getElementById("messageInput");
@@ -543,6 +547,35 @@
                 };
                 socket.send(JSON.stringify(messageObject));
                 messageInput.value = '';
+
+
+                // Crear un objeto XMLHttpRequest
+                var xhttp = new XMLHttpRequest();
+
+                // Definir la función de devolución de llamada cuando la solicitud se complete
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4) {
+                        // Verificar si la solicitud se completó y recibió una respuesta exitosa
+                        if (this.status == 200) {
+                            console.log("Datos enviados con éxito al controlador");
+                        } else {
+                            console.error("Error al enviar datos al controlador:", this.status);
+                        }
+                    }
+                };
+
+                // Abrir una nueva solicitud POST al endpoint del controlador
+                xhttp.open("POST", "/paciente/enviar-mensaje", true);
+
+                // Establecer el encabezado Content-Type para la solicitud
+                xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                // Convertir el objeto de datos a formato JSON
+                var data = JSON.stringify(messageObject);
+
+                // Enviar la solicitud con los datos JSON
+                xhttp.send(data);
+
             }else {
                 let messageObject = {
                     senderId: userId1,
@@ -550,7 +583,40 @@
                 };
                 socket.send(JSON.stringify(messageObject));
                 messageInput.value = '';
+
+
+
+                // Crear un objeto XMLHttpRequest
+                var xhttp = new XMLHttpRequest();
+
+                // Definir la función de devolución de llamada cuando la solicitud se complete
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4) {
+                        // Verificar si la solicitud se completó y recibió una respuesta exitosa
+                        if (this.status == 200) {
+                            console.log("Datos enviados con éxito al controlador");
+                        } else {
+                            console.error("Error al enviar datos al controlador:", this.status);
+                        }
+                    }
+                };
+
+                // Abrir una nueva solicitud POST al endpoint del controlador
+                xhttp.open("POST", "/paciente/enviar-mensaje", true);
+
+                // Establecer el encabezado Content-Type para la solicitud
+                xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                // Convertir el objeto de datos a formato JSON
+                var data = JSON.stringify(messageObject);
+
+                // Enviar la solicitud con los datos JSON
+                xhttp.send(data);
             }
+
+
+
+
 
         }
     }
