@@ -14,12 +14,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pe.sanmiguel.bienestar.proyecto_gtics.DniAPI;
+import pe.sanmiguel.bienestar.proyecto_gtics.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
-import pe.sanmiguel.bienestar.proyecto_gtics.EmailService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
-import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.DniApiValidationGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.FarmacistaValidationsGroup;
 
@@ -29,6 +27,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -65,6 +64,9 @@ public class FarmacistaController {
         this.dniAPI = dniAPI;
         this.chatRepository = chatRepository;
     }
+
+    @Autowired
+    private ChatService chatService;
 
     /* Repositorios */
 
@@ -818,28 +820,40 @@ public class FarmacistaController {
 
     @GetMapping(value = "/farmacista/chat/{userId1}/{userId2}")
     public String chat(HttpSession session, @PathVariable String userId1, @PathVariable String userId2, Model model) {
-
         model.addAttribute("userId1", userId1);
         model.addAttribute("userId2", userId2);
 
-        Usuario paciente = usuarioRepository.getById(Integer.parseInt(userId2));
+        Chat chatActual  = chatRepository.buscarChat(Integer.parseInt(userId2),Integer.parseInt(userId1));
 
 
-        try {
-            InetAddress localhost = InetAddress.getLocalHost();
+
+        /*----------------------IP LOCAL-------------------------*/
+        try {InetAddress localhost = InetAddress.getLocalHost();
             System.out.println("Mi dirección IP local es: " + localhost.getHostAddress());
-            model.addAttribute("iplocal", localhost.getHostAddress());
-        } catch (UnknownHostException e) {
+            model.addAttribute("iplocal", localhost.getHostAddress());} catch (UnknownHostException e) {
             System.out.println("Error obteniendo la dirección IP local");
-            e.printStackTrace();
-        }
+            e.printStackTrace();}
+        /*------------------------------------------------------*/
 
         Usuario userSession = (Usuario) session.getAttribute("usuario");
 
-        if (userSession != null && (userSession.getIdUsuario().toString().equals(userId1) || userSession.getIdUsuario().toString().equals(userId2))) {
+        if ( chatActual != null && userSession != null && (userSession.getIdUsuario().toString().equals(userId1) || userSession.getIdUsuario().toString().equals(userId2))) {
+
             System.out.println("El usuario pertenece al chat");
+
+            /*----------------------FIREBASE-------------------------*/
+            List <ChatFirebase> chats = null;
+            try {chats = chatService.getChatsByIdChat(chatActual.getIdChat());}
+            catch (InterruptedException | ExecutionException e) {e.printStackTrace();}
+            System.out.println(chats);
+            /*------------------------------------------------------*/
+
+
+            Usuario paciente = usuarioRepository.getById(Integer.parseInt(userId2));
             model.addAttribute("idUser", userSession.getIdUsuario());
             model.addAttribute("paciente", paciente);
+            model.addAttribute("mensajes", chats);
+
 
             return "farmacista/chat";
         } else {

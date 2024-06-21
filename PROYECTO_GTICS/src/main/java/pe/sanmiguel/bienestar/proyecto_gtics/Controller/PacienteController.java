@@ -148,7 +148,7 @@ public class PacienteController {
         return "paciente/pago_tarjeta";
     }
 
-   
+
 
     @GetMapping(value = "/chat/{userId1}/{userId2}")
     public String chat(HttpSession session, @PathVariable String userId1, @PathVariable String userId2, Model model) {
