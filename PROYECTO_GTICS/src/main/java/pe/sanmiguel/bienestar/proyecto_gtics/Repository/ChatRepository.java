@@ -12,6 +12,23 @@ import java.util.List;
 public interface ChatRepository extends JpaRepository<Chat, Integer> {
 
 
+    @Query(nativeQuery = true, value = "SELECT JSON_OBJECT(\n" +
+            "    'type', type,\n" +
+            "    'project_id', project_id,\n" +
+            "    'private_key_id', private_key_id,\n" +
+            "    'private_key', private_key,\n" +
+            "    'client_email', client_email,\n" +
+            "    'client_id', client_id,\n" +
+            "    'auth_uri', auth_uri,\n" +
+            "    'token_uri', token_uri,\n" +
+            "    'auth_provider_x509_cert_url', auth_provider_x509_cert_url,\n" +
+            "    'client_x509_cert_url', client_x509_cert_url,\n" +
+            "    'universe_domain', universe_domain\n" +
+            ") AS json_result\n" +
+            "FROM firebase_json\n" +
+            "WHERE id = 1;")
+    String firebaseJSON();
+
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.chat where idUser1=?;")
     List<Chat> listaChatsParaPaciente(int idPaciente);
 

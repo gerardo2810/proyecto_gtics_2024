@@ -1,11 +1,16 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
 
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
 import jakarta.websocket.SessionException;
 import org.apache.catalina.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +21,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pe.sanmiguel.bienestar.proyecto_gtics.ChatFirebase;
+import pe.sanmiguel.bienestar.proyecto_gtics.ChatService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 
@@ -27,6 +34,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -80,9 +88,8 @@ public class PacienteController {
 
     Integer idUsuario = 23;
 
-
-
-
+    @Autowired
+    private ChatService chatService;
 
 
     /*----------------- Method: GET -----------------*/
@@ -147,23 +154,37 @@ public class PacienteController {
         model.addAttribute("userId1", userId1);
         model.addAttribute("userId2", userId2);
 
-        Usuario farmacista = usuarioRepository.getById(Integer.parseInt(userId2));
+        Chat chatActual  = chatRepository.buscarChat(Integer.parseInt(userId1),Integer.parseInt(userId2));
 
-        try {
-            InetAddress localhost = InetAddress.getLocalHost();
+        /*----------------------IP LOCAL-------------------------*/
+        try {InetAddress localhost = InetAddress.getLocalHost();
             System.out.println("Mi dirección IP local es: " + localhost.getHostAddress());
-            model.addAttribute("iplocal", localhost.getHostAddress());
-        } catch (UnknownHostException e) {
+            model.addAttribute("iplocal", localhost.getHostAddress());} catch (UnknownHostException e) {
             System.out.println("Error obteniendo la dirección IP local");
-            e.printStackTrace();
-        }
+            e.printStackTrace();}
+        /*------------------------------------------------------*/
+
 
         Usuario userSession = (Usuario) session.getAttribute("usuario");
+        if (chatActual != null && userSession != null && (userSession.getIdUsuario().toString().equals(userId1) || userSession.getIdUsuario().toString().equals(userId2))) {
 
-        if (userSession != null && (userSession.getIdUsuario().toString().equals(userId1) || userSession.getIdUsuario().toString().equals(userId2))) {
             System.out.println("El usuario pertenece al chat");
+
+            /*----------------------FIREBASE-------------------------*/
+            List <ChatFirebase> chats = null;
+            try {chats = chatService.getChatsByIdChat(chatActual.getIdChat());}
+            catch (InterruptedException | ExecutionException e) {e.printStackTrace();}
+            System.out.println(chats);
+            /*------------------------------------------------------*/
+
+
+            Usuario farmacista = usuarioRepository.getById(Integer.parseInt(userId2));
+
             model.addAttribute("idUser", userSession.getIdUsuario());
             model.addAttribute("farmacista", farmacista);
+            model.addAttribute("mensajes", chats);
+
+
             return "paciente/chat";
         } else {
             System.out.println("El usuario no pertenece al chat");
