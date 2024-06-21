@@ -71,7 +71,7 @@
                 display: flex;
                 align-items: center;
                 grid-column: span 1;
-                height: 320px;
+                height: 300px;
             }
 
             .mail {
@@ -87,6 +87,7 @@
             }
             .notes {
                 grid-column: span 1;
+                margin-top: -350px; /* Ajusta este valor según sea necesario */
             }
 
             .avatar {
@@ -147,12 +148,13 @@
     <div class="container">
         <div class="cont">
             <div class="profile">
-                <div class="avatar">MM</div>
+                <div class="avatar">ML</div>
                 <div class="info">
-                    <h2>Bienvenida, Maria  </h2>
-                    <p>asasa.com</p>
-                    <p>Bienestar San Miguel</p>
+                    <h2 class="fw-bold" th:text="'Bienvenid@, ' + ${usuario.getNombres()} + ' ' + ${usuario.getApellidos()}"></h2>
+                    <p class="fw-medium" th:text="${usuario.getCorreo()}"></p>
+                    <p th:text="'Bienestar San Miguel - ' + ${sedesesion.getNombre()}"></p>
                 </div>
+
             </div>
             <div class="mail">
                 <h4 class="fs-20 font-w700 mb-2">Medicamentos Favoritos</h4>
