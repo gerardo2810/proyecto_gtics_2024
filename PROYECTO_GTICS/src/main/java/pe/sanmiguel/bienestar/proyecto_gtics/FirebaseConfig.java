@@ -20,6 +20,8 @@ public class FirebaseConfig {
 
     @Autowired
     private ChatRepository firebaseJsonRepository;
+
+
     @Bean
     public Firestore firestore() throws Exception {
 
@@ -40,6 +42,8 @@ public class FirebaseConfig {
         }
 
         return FirestoreClient.getFirestore(firebaseApp);
+
+
 
     }
 }

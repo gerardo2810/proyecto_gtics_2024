@@ -536,44 +536,24 @@
 
         if (message !== '') {
 
-
-
-
             if (idUserOnpage.toString() === userId1) {
-                console.log('Este usuario es el 1');
                 let messageObject = {
-                    senderId: userId2, // Cambia según el usuario actual (userId1 o userId2)
+                    senderId: userId2,
                     message: message
                 };
-                socket.send(JSON.stringify(messageObject)); // Enviar el mensaje como JSON
-                messageInput.value = ''; // Limpiar el campo de entrada después de enviar
+                socket.send(JSON.stringify(messageObject));
+                messageInput.value = '';
             }else {
-                console.log('Este usuario es el 2');
                 let messageObject = {
-                    senderId: userId1, // Cambia según el usuario actual (userId1 o userId2)
+                    senderId: userId1,
                     message: message
                 };
-                socket.send(JSON.stringify(messageObject)); // Enviar el mensaje como JSON
-                messageInput.value = ''; // Limpiar el campo de entrada después de enviar
+                socket.send(JSON.stringify(messageObject));
+                messageInput.value = '';
             }
-
-
-
-
-
-
-
-
-
-
 
         }
     }
-
-
-
-
-
 </script>
 <script>
     $(document).ready(function() {

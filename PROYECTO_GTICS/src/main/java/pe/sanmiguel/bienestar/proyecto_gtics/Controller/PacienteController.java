@@ -156,21 +156,6 @@ public class PacienteController {
 
         Chat chatActual  = chatRepository.buscarChat(Integer.parseInt(userId1),Integer.parseInt(userId2));
 
-        Usuario farmacista = usuarioRepository.getById(Integer.parseInt(userId2));
-        Usuario userSession = (Usuario) session.getAttribute("usuario");
-
-
-
-        /*----------------------FIREBASE-------------------------*/
-        List <ChatFirebase> chats = null;
-        try {chats = chatService.getChatsByIdChat(chatActual.getIdChat());}
-        catch (InterruptedException | ExecutionException e) {e.printStackTrace();}
-        System.out.println(chats);
-        /*------------------------------------------------------*/
-
-
-
-
         /*----------------------IP LOCAL-------------------------*/
         try {InetAddress localhost = InetAddress.getLocalHost();
             System.out.println("Mi dirección IP local es: " + localhost.getHostAddress());
@@ -180,9 +165,21 @@ public class PacienteController {
         /*------------------------------------------------------*/
 
 
-
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
         if (chatActual != null && userSession != null && (userSession.getIdUsuario().toString().equals(userId1) || userSession.getIdUsuario().toString().equals(userId2))) {
+
             System.out.println("El usuario pertenece al chat");
+
+            /*----------------------FIREBASE-------------------------*/
+            List <ChatFirebase> chats = null;
+            try {chats = chatService.getChatsByIdChat(chatActual.getIdChat());}
+            catch (InterruptedException | ExecutionException e) {e.printStackTrace();}
+            System.out.println(chats);
+            /*------------------------------------------------------*/
+
+
+            Usuario farmacista = usuarioRepository.getById(Integer.parseInt(userId2));
+
             model.addAttribute("idUser", userSession.getIdUsuario());
             model.addAttribute("farmacista", farmacista);
             model.addAttribute("mensajes", chats);
