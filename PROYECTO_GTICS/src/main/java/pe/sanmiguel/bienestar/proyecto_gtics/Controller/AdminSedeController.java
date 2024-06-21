@@ -136,7 +136,11 @@ public class AdminSedeController {
             if(listaReposicionNoEntregadasUltimas.size() == 0){
                 return "adminsede/inicio";
             }
+            Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
             model.addAttribute("listaMedicamentos",medicamentoRepository.findAll());
+            model.addAttribute("usuario",usuario);
+            model.addAttribute("sedesesion",sedeSession);
             model.addAttribute("listaReposicionNoEntregadasUltimas", listaReposicionNoEntregadasUltimas);
             model.addAttribute("lista1", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
             model.addAttribute("lista2", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
