@@ -348,6 +348,33 @@ hr.style-one {
     color: #80868b;
 }
 
+.pagination {
+    margin-top: 2px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.pagination button {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: black;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+    background-color: #ddd;
+}
+
+.pagination button.active {
+    background-color: #0d6efd;
+    color: white;
+}
 
 /* END FILTROS PANEL */
 
