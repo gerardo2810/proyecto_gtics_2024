@@ -32,20 +32,24 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js" integrity="sha512-k37wQcV4v2h6jgYf5IUz1MoSKPpDs630XGSmCaCCOXxy2awgAWKHGZWr9nMyGgk3IOxA1NxdkN8r1JHgkUtMoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script th:src="@{/js/tracking.js}"></script>
 
+
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
         <!-- Font Awesome -->
         <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+        <!--=============== HTML 2 PDF ===============-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 
         <!--=============== SWEETALERT ===============-->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
 
+
         <!--=============== DataTable ===============-->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
         <!--  Bootstrap-->
         <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
         <style>
             * {
@@ -437,7 +441,7 @@
 
         <!-- Modal -->
         <div id="myModal" class="modal">
-            <div class="modal-content">
+            <div class="modal-content" >
                 <span class="close">&times;</span>
                 <div class="column-start" style="padding-bottom: 1px">
 
@@ -448,26 +452,32 @@
                         <button id="download" class="pdf">DESCARGAR COMO PDF</button>
                         <button onclick="imprimir()" class="print">IMPRIMIR</button>
                     </div>
+                    <script>
+                        function goBack() {
+                            window.history.back();
+                        }
+                    </script>
                 </div>
                 <br>
-                <table id="miTabla" class="table table-striped">
-                    <thead>
-                    <tr style="background-color: #378fff">
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Unidad</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Categorias</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;"></th>
+                <div id="boleta">
+                    <table id="miTabla" class="table table-striped" >
+                        <thead>
+                        <tr style="background-color: #378fff">
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Unidad</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Categorias</th>
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="medicamento : ${listaMedicamentos}">
-                        <td th:text="${medicamento.getNombre()}"></td>
-                        <td th:text="${ medicamento.getUnidad()}"></td>
-                        <td th:text="${medicamento.getCategorias()}"></td>
-                    </tr>
-                    </tbody>
-                </table>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="medicamento : ${listaMedicamentos}">
+                            <td th:text="${medicamento.getNombre()}"></td>
+                            <td th:text="${ medicamento.getUnidad()}"></td>
+                            <td th:text="${medicamento.getCategorias()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     <div class="container" th:if="${listaReposicionNoEntregadasUltimas.size() != 0}">
@@ -613,9 +623,7 @@
         <br/>
         <div th:replace="~{fragments/navbar.html :: footer}">
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
         <script>
             $(document).ready(function() {
                 var opened = false;
@@ -783,19 +791,6 @@
                     }
                 })
             }
-
-            jQuery(window).on('load', function () {
-                setTimeout(function () {
-                    card1sCenter();
-                }, 1000);
-            });
-            jQuery(document).ready(function () {
-                setTimeout(function () {
-                    dlabSettingsOptions.version = 'dark';
-                    new dlabSettings(dlabSettingsOptions);
-                }, 1500)
-            });
-
         </script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -820,14 +815,14 @@
 
     </script>
     <script>
-
-
         function imprimir() {
             var contenido = document.getElementById('boleta').innerHTML;
             var originalBody = document.body.innerHTML;
             document.body.innerHTML = contenido;
             window.print();
             document.body.innerHTML = originalBody;
+            location.reload(); // Para recargar la página y restaurar el contenido original
+
         }
 
         window.onload = function () {
@@ -848,8 +843,12 @@
                 html2pdf().from(invoice).set(opt).save();
             });
         }
-
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <!-- DataTable -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 
     <script>
         window.onload = function () {
