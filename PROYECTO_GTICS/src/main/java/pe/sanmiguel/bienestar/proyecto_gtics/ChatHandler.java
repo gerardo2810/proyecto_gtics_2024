@@ -1,21 +1,29 @@
 package pe.sanmiguel.bienestar.proyecto_gtics;
 
+import com.google.cloud.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import java.util.concurrent.ExecutionException;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.json.JSONObject;
 
 @Service
 public class ChatHandler extends TextWebSocketHandler {
+
+
+    @Autowired
+    ChatService chatService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChatHandler.class);
 
@@ -80,7 +88,32 @@ public class ChatHandler extends TextWebSocketHandler {
             }
 
 
-            System.out.println(userId1 + ' ' +  userId2 + ' ' +  message.getPayload());
+            System.out.println( "ChatHandler --> userId1: "  + userId1 + " , userId2: " +  userId2 + " --> " +  message.getPayload());
+
+
+
+            try {
+                String payload = message.getPayload();
+                JSONObject json = new JSONObject(payload);
+                String actualMessage = json.getString("message");
+                String rol = json.getString("userRol");
+                String timestamp = json.getString("timestamp");
+                Integer idChat  = json.getInt("idChat");
+
+
+                ChatFirebase chat = new ChatFirebase();
+                chat.setIdChat(idChat);
+                chat.setIdRol(rol);
+                chat.setMensaje(actualMessage);
+                chat.setTimeDate(Timestamp.parseTimestamp(timestamp));
+
+                chatService.addChat(chat);
+
+
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                System.out.println("Error adding chat: " + e.getMessage());
+            }
 
         }
     }

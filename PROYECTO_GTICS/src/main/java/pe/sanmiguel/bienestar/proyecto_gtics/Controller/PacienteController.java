@@ -181,6 +181,7 @@ public class PacienteController {
 
             Usuario farmacista = usuarioRepository.getById(Integer.parseInt(userId2));
 
+            model.addAttribute("idChat", chatActual.getIdChat());
             model.addAttribute("idUser", userSession.getIdUsuario());
             model.addAttribute("farmacista", farmacista);
             model.addAttribute("mensajes", chats);
