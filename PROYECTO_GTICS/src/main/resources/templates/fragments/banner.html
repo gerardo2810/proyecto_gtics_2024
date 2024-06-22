@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="header (title)">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}"></title>
+
+</head>
+<body>
+
+
+<div th:fragment="banner">
+    <div class="context">
+
+        <div class="container" style="margin-top: 100px;">
+
+            <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
+                <div>
+                    <a class="main-subtitle-banner open-sans-regular">⏩ Bienvenido de nuevo, <a class="main-subtitle-banner open-sans-regular" th:text="${session.usuario.getNombres()} + ' ' + ${session.usuario.getApellidos()}"></a> </a>
+                </div>
+
+                <div style="display: flex; flex-direction: row; gap: 20px;">
+
+                    <div style="display: flex; flex-direction: row; gap: 10px;">
+
+                        <div class="config-btn">
+                            <i class="fa-solid fa-gear"></i>
+                        </div>
+
+                        <div class="notif-btn">
+                            <i class="fa-solid fa-bell"></i>
+                        </div>
+
+                    </div>
+                    <img class="image--cover" src="https://raw.githubusercontent.com/mdn/learning-area/master/html/multimedia-and-embedding/images-in-html/dinosaur_small.jpg">
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+
+
+    <div class="area" >
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div >
+</div>
+
+</body>
+</html>
