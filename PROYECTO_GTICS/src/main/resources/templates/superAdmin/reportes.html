@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
+        <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+        <!--=============== REMIXICONS ===============-->
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+
+        <!--=============== CSS ===============-->
+
+        <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+        <link rel="stylesheet" th:href="@{/css/superadmin/superadmin.css}">
+        <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/styles.css}">
+        <link rel="stylesheet" th:href="@{/css/fonts.css}">
+        <link rel="stylesheet" th:href="@{/css/topbar.css}">
+        <link rel="stylesheet" th:href="@{/css/footer.css}">
+        <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
+        <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+        <link rel="stylesheet" th:href="@{/css/datatables.css}">
+        <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
+
+        <!--=============== JAVASCRIPT ===============-->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
+        <!--  Bootstrap-->
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
+
+        <!--=============== CSS ===============-->
+
+        <title>Bienestar San Miguel | SuperAdmin | Reportes de órdenes</title>
+
+        <style>
+            body {
+                padding-top: 50px;
+            }
+            .btn-c {
+                display: inline-block;
+                padding: 12px 20px;
+                color:white;
+                background-color: #771677;
+                text-decoration: none;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s, border-color 0.3s;
+                font-size: 17px;
+            }
+            .btn-n {
+                display: inline-block;
+                padding: 12px 20px;
+                color:white;
+                background-color: #1a72e7;
+                text-decoration: none;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s, border-color 0.3s;
+                font-size: 17px;
+            }
+            @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
+        </style>
+    </head>
+
+
+    <body class="loader-hidden">
+
+        <!-- Ver el loader
+        <div class="container-loader loader-hidden" id="onload">
+            <div class="loader"></div>
+        </div>
+         -->
+
+        <!--=============== HEADER ===============-->
+        <header class="header-topbar">
+            <nav th:replace="~{fragments/navbar.html :: navbar( active = '')}"></nav>
+        </header>
+
+        <br><br>
+        <main style="margin-left: 20px; margin-right: 20px">
+            <br><br>
+
+            <div class="container">
+                <div style="margin-bottom: 20px"></div>
+                <div style="margin-bottom: 30px"></div>
+                <div class="titulo"><b>Reporte de órdenes</b></div>
+                <div style="margin-bottom: 20px"></div>
+                <br>
+            </div>
+            <div class="container">
+                <br>
+
+                <div style="display: flex; flex-direction: row; justify-content: space-between">
+                    <div class="column-start" style="padding-bottom: 1px">
+                        <div style="display: flex; flex-direction: column; justify-content: start">
+                            <input id="searchInput" type="text" class="input-form" style="margin-top: 4px;width: 300px;height: 40px" placeholder="Buscar doctor">
+                        </div>
+                        <button class="btn-p" id="limpiarFiltros">Limpiar Filtros</button>
+                        <div id="botonesExportacion"></div>
+                    </div>
+
+                </div>
+
+                <table id="miTabla" class="display" style="padding-top: 10px">
+                    <thead>
+                        <tr style="background-color: #378fff">
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombres del paciente</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Apellidos del paciente</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha de emisión de la orden</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Tipo de orden</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Sede</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr  th:each="ordenes, info : ${listaOrdenes}">
+                            <td style="text-align: center" th:text="${ordenes.nombres}" ></td>
+                            <td style="text-align: center" th:text="${ordenes.apellidos}" ></td>
+                            <td style="text-align: center" th:text="${ordenes.getFechaIni()}"></td>
+                            <td style="text-align: center" th:if="${ordenes.getIdTipo() == 1}" th:text="Física"></td>
+                            <td style="text-align: center" th:if="${ordenes.getIdTipo() == 2}" th:text="Web"></td>
+                            <td style="text-align: center" th:if="${ordenes.getIdTipo() == 3}" th:text="Pre orden"></td>
+                            <td style="text-align: center" th:text="${ordenes.getNombreSede()}"></td>
+                            <td style="text-align: center" th:text="${#numbers.formatDecimal(ordenes.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}"></td>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <br><br><br><br>
+        </main>
+
+    <div th:replace="~{fragments/navbar.html :: footer}">
+    </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                var table = $('#miTabla').DataTable({
+                    "pageLength":10,
+                    "lengthChange": false,
+                    "language": {
+                        "emptyTable": "No hay registros disponibles",
+                        "zeroRecords": "No se encontraron registros coincidentes",
+                        "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                        "search" : "Buscar:",
+                        "paginate": {
+                            "first": "Primero",
+                            "last": "Último",
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+                        },
+                        "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+                    },
+                    dom: "Bfrtip",
+                    buttons:{
+                        dom:{
+                            button:{
+                                className: 'btn-p',
+                                tag: 'button',
+                                style: 'background-color: #689F38'
+                            }
+                        },
+                        buttons:[
+                            {
+                                extend:"excel",
+                                text:'Exportar tabla en Excel',
+                                className: 'btn-p',
+                                excelStyles:{
+                                    template:'blue_medium'
+                                },
+                                init: function(api, node, config) {
+                                    $(node).css('background-color', '#689F38');
+                                }
+                            }
+                        ]
+                    }
+
+                });
+
+                table.buttons().container().appendTo('#botonesExportacion');
+
+                $('#filtroEstado').on('change', function() {
+                    var estado = $(this).val();
+                    table.column(2).search(estado).draw();
+
+                });
+
+                $('#limpiarFiltros').on('click', function() {
+                    $('#filtroEstado').val('');
+                    table.search('').columns().search('').draw();
+                });
+            });
+        </script>
+
+        <style>
+            div.dataTables_wrapper div.dataTables_filter {
+                text-align: right;
+                display: none !important;
+            }
+        </style>
+
+        <script>
+            $(document).ready(function() {
+                var table = $('#miTabla').DataTable();
+
+                $('#searchInput').on('input', function() {
+                    var searchTerm = $(this).val().trim().toLowerCase();
+                    if (searchTerm === "") {
+                        table.search("").draw();
+                        return;
+                    }
+                    table.search(searchTerm).draw();
+                });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                var opened = false;
+
+                $('#menu-small').hide();
+
+                $('#nav-toggle').click(function (e) {
+                    e.stopPropagation();
+                    if (opened) {
+                        $('#menu-small').hide();
+                    } else {
+                        $('#menu-small').show();
+                    }
+                    opened = !opened;
+                });
+            });
+        </script>
+
+
+        <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+
+
+        <!-- Para usar los botones -->
+        <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
+
+
+        <!-- Para los estilos en Excel     -->
+        <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.templates.min.js"></script>
+
+    </body>
+</html>

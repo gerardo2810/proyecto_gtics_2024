@@ -1789,6 +1789,14 @@ public class SuperAdminController {
 
     }
 
+    @GetMapping("/reportes")
+    public String verReportes(Model model){
+
+        List<OrdenesExporterDto> listaOrdenesReportes = ordenRepository.listarOrdenesExporter();
+        model.addAttribute("listaOrdenes", listaOrdenesReportes);
+        return "superAdmin/reportes";
+    }
+
 
 
 }

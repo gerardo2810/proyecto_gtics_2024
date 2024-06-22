@@ -374,7 +374,7 @@ public class ExporterPDF {
         espacio.setSpacingBefore(80); // Ajusta el espacio según sea necesario
         documento.add(espacio);
 
-        // documento.add(imagen);
+        documento.add(imagen);
         espacio.setSpacingBefore(20);
         documento.add(espacio);
         documento.add(espacio);
@@ -434,7 +434,7 @@ public class ExporterPDF {
         agregarFilaTotal(documento, "Ganancia total", String.valueOf(gananciaTotalsede3));
         espacio.setSpacingBefore(80);
         documento.add(espacio);
-        // documento.add(imagen);
+        documento.add(imagen);
         espacio.setSpacingBefore(20);
         documento.add(espacio);
         documento.add(espacio);
