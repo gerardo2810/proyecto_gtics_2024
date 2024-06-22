@@ -70,15 +70,14 @@
 
     <body class="loader-hidden">
 
-        <!-- Ver el loader
         <div class="container-loader loader-hidden" id="onload">
             <div class="loader"></div>
         </div>
-         -->
+
 
         <!--=============== HEADER ===============-->
         <header class="header-topbar">
-            <nav th:replace="~{fragments/navbar.html :: navbar( active = '')}"></nav>
+            <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Reporte de órdenes')}"></nav>
         </header>
 
         <br><br>
@@ -100,7 +99,7 @@
                         <div style="display: flex; flex-direction: column; justify-content: start">
                             <input id="searchInput" type="text" class="input-form" style="margin-top: 4px;width: 300px;height: 40px" placeholder="Buscar orden">
                         </div>
-                        <button class="btn-p" id="limpiarFiltros">Limpiar Filtros</button>
+                        <button class="btn-p" id="limpiarFiltros" href="superadmin/reportes" >Limpiar Filtros</button>
                         <div id="botonesExportacion"></div>
                     </div>
 
@@ -240,6 +239,14 @@
                     opened = !opened;
                 });
             });
+        </script>
+
+        <script>
+            window.onload = function () {
+                $('#onload').fadeOut();
+                $('body').removeClass('loader-hidden');
+            }
+
         </script>
 
 
