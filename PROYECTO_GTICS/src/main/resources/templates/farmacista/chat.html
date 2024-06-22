@@ -120,6 +120,25 @@
 
     <style>
 
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px #a5aaad;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #0d6efd;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #0d6efd;
+        }
+
 
         .kapsayici{
             display:flex;
@@ -210,40 +229,7 @@
 <div class="container" style="display: flex; flex-direction: row; column-gap: 10px">
 
 
-    <!--
-
-    <div class="container">
-
-        <div>
-
-            <div id="messageArea" style="width: 300px; height: 300px; border:4px solid red"></div>
-
-            <div>
-                <label>Nombre de usuario:</label>
-                <input type="text" id="username" placeholder="Introduce tu nombre">
-            </div>
-            <br>
-            <div>
-                <label>Mensaje:</label>
-                <input type="text" id="messageInput" placeholder="Introduce tu mensaje">
-            </div>
-            <br>
-            <div>
-                <button onclick="sendMessage()">Enviar</button>
-            </div>
-
-        </div>
-
-    </div>
-
-    -->
-
-
-
-    <div class="container">
-
-
-        <p id="usersCount" style="padding-bottom: 12px; font-family: 'Montserrat', sans-serif; font-weight: bold;font-size: 14px"></p>
+    <div>
 
         <section class="Chat">
             <div class="ChatHead">
@@ -252,11 +238,7 @@
                     <p class="GroupName" th:text="${'Paciente: ' + paciente.getNombres() + ' ' + paciente.getApellidos()}"></p>
 
                 </li>
-                <div class="callGroup">
-                    <i class="fa-solid fa-phone"></i>
-                    <i class="fa-solid fa-video"></i>
 
-                </div>
             </div>
             <div class="MessageContainer">
 
@@ -267,7 +249,6 @@
                     <p class="messageContent">Buenas noches</p>
                     <div class="messageDetails">
                         <div class="messageTime">6:25 PM</div>
-                        <i class="fa-solid fa-check"></i>
                     </div>
                 </div>
 
@@ -280,7 +261,6 @@
                             <p class="messageContent" th:text="${mensaje.getMensaje()}"></p>
                             <div class="messageDetails">
                                 <div class="messageTime" th:text="${mensaje.getFormattedTime()}"></div>
-                                <i class="fa-solid fa-check"></i>
                             </div>
                         </div>
 
@@ -289,7 +269,6 @@
                             <p class="messageContent" th:text="${mensaje.getMensaje()}"></p>
                             <div class="messageDetails">
                                 <div class="messageTime" th:text="${mensaje.getFormattedTime()}"></div>
-                                <i class="fa-solid fa-check"></i>
                             </div>
                         </div>
 
@@ -316,18 +295,6 @@
             <div style="display: flex; flex-direction: row; column-gap: 10px; padding: 15px">
 
                 <input type="text" id="messageInput" class="inputMensaje" style="width: 300px" placeholder="Ingrese su mensaje">
-
-                <div>
-                    <img  class="emoji" tabindex="1" draggable="false" src="https://cdn0.iconfinder.com/data/icons/buma-emojis/36/smiling-256.png">
-                    <div tabindex="1" class="bar">
-                        <p clas="emoticon">😎</p>
-                        <p clas="emoticon">😄</p>
-                        <p clas="emoticon">🎉</p>
-                        <p clas="emoticon">🤡</p>
-                    </div>
-
-                </div>
-
 
 
                 <button onclick="sendMessage()" class="enviar-msg"><i class="fa-solid fa-paper-plane"></i></button>
@@ -512,9 +479,9 @@
     console.log('userId1:', userId1);
     console.log('userId2:', userId2);
 
-    let socket = new WebSocket("ws://34.121.204.43:8080/chat/" + userId1 + "/" + userId2); //mi direccion ip local, usar ipconfig o netstat -a para saber cual es, de recomendacion poner la red lan del celular en mi laptop en configuracion del adaptador
+    //let socket = new WebSocket("ws://34.121.204.43:8080/chat/" + userId1 + "/" + userId2); //mi direccion ip local, usar ipconfig o netstat -a para saber cual es, de recomendacion poner la red lan del celular en mi laptop en configuracion del adaptador
 
-    //let socket = new WebSocket("ws://" + ipLocal + ":8080/chat/" + userId1 + "/" + userId2);
+    let socket = new WebSocket("ws://" + ipLocal + ":8080/chat/" + userId1 + "/" + userId2);
 
     socket.onmessage = function (event) {
 
@@ -539,7 +506,7 @@
                 '    <p class="messageContent">' + messageData.message +
                 '    </p><div class="messageDetails">\n' +
                 '        <div class="messageTime">' + tiempoActual +
-                '        </div><i class="fa-solid fa-check"></i>\n' +
+                '        </div>\n' +
                 '    </div>\n' +
                 '</div>';
         } else if (messageData.senderId === userId2) {
@@ -548,7 +515,7 @@
                 '    <p class="messageContent">' + messageData.message +
                 '    </p><div class="messageDetails">\n' +
                 '        <div class="messageTime">' + tiempoActual +
-                '        </div><i class="fa-solid fa-check"></i>\n' +
+                '        </div>\n' +
                 '    </div>\n' +
                 '</div>';
         }
