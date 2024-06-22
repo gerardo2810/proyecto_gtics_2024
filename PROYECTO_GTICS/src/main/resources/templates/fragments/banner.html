@@ -21,18 +21,33 @@
 
                 <div style="display: flex; flex-direction: row; gap: 20px;">
 
-                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
 
-                        <div class="config-btn">
-                            <i class="fa-solid fa-gear"></i>
+                        <div>
+
+                            <div style="position: absolute; padding-top: 5px; padding-left: 20px; font-size: 0.6rem">⚪</div>
+
+                            <div class="notif-btn">
+                                <i class="fa-solid fa-bell"></i>
+                            </div>
+
                         </div>
 
-                        <div class="notif-btn">
-                            <i class="fa-solid fa-bell"></i>
+                        <div>
+                            <div class="config-btn">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
                         </div>
+
+                        <div>
+                            <div class="notif-btn">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                            </div>
+                        </div>
+
 
                     </div>
-                    <img class="image--cover" src="https://raw.githubusercontent.com/mdn/learning-area/master/html/multimedia-and-embedding/images-in-html/dinosaur_small.jpg">
+                    <img class="image--cover" th:src="@{/img/default_profile.png}">
                 </div>
 
             </div>
