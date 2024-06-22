@@ -33,9 +33,7 @@
     <title>Mensajería | Bienestar San Miguel</title>
 
     <style>
-        body {
-            padding-top: 80px;
-        }
+
         .container2 {
             border: 2px solid #dedede;
             background-color: #f1f1f1;
@@ -199,13 +197,14 @@
     </style>
 </head>
 
+
+<body>
+
 <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Boleta')}"></nav>
 </header>
 
-
-<body>
-
+<div th:replace="~{fragments/banner.html :: banner}"></div>
 
 
 <div class="container">
