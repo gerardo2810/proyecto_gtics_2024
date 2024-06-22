@@ -7,14 +7,13 @@
 section {
     background-color: white;
     box-shadow: var(--box-shadow);
-    width: 689px;
+    width: 700px;
     backdrop-filter: blur(55px);
     display: flex;
     flex-direction: column;
     overflow: auto;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    border: 2px solid #aaaaaa;
+    border-radius: 8px;
+    height: 620px
 
 }
 
@@ -68,7 +67,6 @@ section {
 .ChatHead {
     display: flex;
     align-items: center;
-    background-color: #0d6efd;
     color:white;
 
 }
@@ -84,8 +82,10 @@ section {
 }
 
 .ChatHead .group .GroupName {
-    font-size: 17px;
+    font-size: 20px;
     width: 260px;
+    font-weight: bold;
+    color: dimgray;
 }
 
 .ChatHead .group .avatar {
@@ -140,8 +140,8 @@ section {
     padding: 10px;
     flex: 1;
     border-radius: 10px;
-    border: 2px solid #aaaaaa;
-    background-color: #ebebebc6;
+    border: 1px solid #aaaaaa;
+    background-color: white;
 }
 
 .enviar-msg {
@@ -163,7 +163,6 @@ section {
 .MessageContainer{
     display: flex;
     height:100%;
-    width:100%;
     padding:10px;
     flex-direction: column;
     overflow: auto;
@@ -176,14 +175,17 @@ section {
     padding:10px 15px;
     width:fit-content;
     flex-direction: column;
-    border-radius: 5px;
+    border-radius: 25px;
     margin:5px;
     position: relative;
 }
 .you{
-    background-color: #251d1d;
-    color:white;
+    background-color: #eeeeef;
+    color: black;
     text-align:left;
+    padding-top: 14px;
+    padding-left: 22px;
+    padding-right: 22px;
 }
 .message i{
     color:#0d6efd;
@@ -207,12 +209,12 @@ section {
     padding-right:5px;
     font-weight: 300;
     color:white;
-
-
-
 }
+
+
+
 .you .messageDetails .messageTime{
-    color: white;
+    color: black;
 }
 .you i{
     color:#0d6efd;
@@ -223,16 +225,17 @@ section {
 }
 
 .me{
-    margin-left:510px;
-    background-color: #0d6efd;
+    margin-left: 523px;
+    background-color: #1b85ff;
     text-align: right;
-    color:white
+    color: white;
+    padding-top: 14px;
+    padding-left: 22px;
+    padding-right: 22px;
 }
 .messageSeperator{
     margin: 10px auto;
     padding:8px 15px;
-    border-radius:20px ;
     width:fit-content;
-    color: white;
-    background-color: dimgray;
+    color: dimgray;
 }
