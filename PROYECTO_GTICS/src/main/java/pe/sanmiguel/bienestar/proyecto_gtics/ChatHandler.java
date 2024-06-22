@@ -54,6 +54,11 @@ public class ChatHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String uri = session.getUri().toString();
         String[] pathSegments = uri.split("/");
+
+
+
+
+
         if (pathSegments.length >= 5) {
             String userId1 = pathSegments[pathSegments.length - 2];
             String userId2 = pathSegments[pathSegments.length - 1];
@@ -65,6 +70,7 @@ public class ChatHandler extends TextWebSocketHandler {
                 sessions = chatSessions.get(chatId2);
             }
 
+
             if (sessions != null) {
                 for (WebSocketSession webSocketSession : sessions) {
                     if (webSocketSession.isOpen()) {
@@ -72,6 +78,10 @@ public class ChatHandler extends TextWebSocketHandler {
                     }
                 }
             }
+
+
+            System.out.println(userId1 + ' ' +  userId2 + ' ' +  message.getPayload());
+
         }
     }
 }
