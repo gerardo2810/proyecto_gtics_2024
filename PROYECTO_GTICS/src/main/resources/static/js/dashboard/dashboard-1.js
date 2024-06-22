@@ -1014,11 +1014,11 @@
 	}();
 
 	
-		
+
 	jQuery(window).on('load',function(){
 		setTimeout(function(){
 			dlabChartlist.load();
-		}, 1000); 
+		}, 0.1);
 		
 	});
 
