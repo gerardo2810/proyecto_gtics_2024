@@ -36,9 +36,6 @@
         <title>Bienestar San Miguel | SuperAdmin | Reportes de órdenes</title>
 
         <style>
-            body {
-                padding-top: 50px;
-            }
             .btn-c {
                 display: inline-block;
                 padding: 12px 20px;
@@ -79,6 +76,8 @@
         <header class="header-topbar">
             <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Reporte de órdenes')}"></nav>
         </header>
+
+        <div th:replace="~{fragments/banner.html :: banner}"></div>
 
         <br><br>
         <main style="margin-left: 20px; margin-right: 20px">
