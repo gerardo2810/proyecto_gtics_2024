@@ -45,9 +45,6 @@
         <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
 
         <style>
-            body {
-                padding-top: 80px;
-            }
             .btn-c {
                 display: inline-block;
                 padding: 12px 20px;
@@ -85,18 +82,54 @@
                 border-color: #c3e6cb;
             }
             @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
+
+            .area {
+                height: 19vh !important;
+            }
+
+            .circles {
+                height: 19vh !important;
+            }
+
+            .banner-btn {
+                color: #fff !important;
+                border: solid 1px #fff !important;
+                border-radius: 5px !important;
+                cursor: pointer !important;
+                align-items: center !important;
+                display: flex !important;
+                background: none !important;
+            }
+
+            .bell-btn {
+                padding: 14px 14px 14px 14px;
+                font-size: 1.1rem !important;
+            }
+
+            .user-btn {
+                padding: 10px 12px 10px 12px;
+                font-size: 1.1rem !important;
+            }
+
+            .exit-btn {
+                padding: 14px 12px 14px 12px;
+                font-size: 1.1rem !important;
+            }
+
         </style>
 
         <title>Órdenes de reposición</title>
     </head>
 
 
+    <body class="loader-hidden">
+
     <header class="header-topbar">
         <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Órdenes de Reposición')}"></nav>
     </header>
 
+    <div th:replace="~{fragments/banner.html :: banner}"></div>
 
-    <body class="loader-hidden">
     <div class="container-loader loader-hidden" id="onload">
         <div class="loader"></div>
     </div>
@@ -120,21 +153,24 @@
                 <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/ver_ordenes_entregadas'" style="margin-left: 64%; font-size: 17px; padding: 12px 20px">Ver órdenes entregadas</button>
             </div>
             <br/>
+            <input type="text" id="searchInput" placeholder="Buscar por número de orden" style="margin-left: 30px; margin-right: 30px; padding: 12px 20px; font-size: 17px;width: 350px;border: 3px solid rgba(33,145,253,0.75)">
             <br/>
+            <br>
             <div class="hola">
                 <div class="chau" th:each="orden : ${listaReposicionNoEntregadas}" >
-                <h2 style="margin-left: 30px" th:text="${ 'Orden de reposición #'+ orden.getNumero()}">Orden de reposicion #1</h2>
-                <div th:if="${orden.getEstado().getIdEstado() == 1}" style="display: flex; align-items: center;">
-                    <a th:href="@{'/adminsede/editar_orden_reposicion?id=' + ${orden.getIdReposicion()}}" class="edit-icon" style="margin-left: 30px"><i class="fas fa-pencil-alt"></i></a>
-                    <!--a th:href="@{'/adminsede/eliminar_orden_reposicion?id=' + ${orden.getIdReposicion()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a-->
-                    <form class="formEstadoSolicitud" th:action="@{'/adminsede/eliminar_orden_reposicion'}" method="post">
-                        <input type="hidden" name="getIdReposicion" th:value="${orden.getIdReposicion()}">
-                        <button type="submit" class="delete-icon" style="background: none; border: none; text-decoration: underline; color: blue;">
-                            <i class="fas fa-trash-alt" style="margin-left: 10px;"></i>
-                        </button>
-                    </form>
-                </div>
-                <div th:if="${orden.getEstado().getIdEstado() == 2}" style="display: flex; align-items: center;">
+                    <div class="orden-container">
+                        <h2 class="orden-numero" style="margin-left: 30px" th:text="${ 'Orden de reposición #'+ orden.getNumero()}">Orden de reposición #1</h2>
+                        <div th:if="${orden.getEstado().getIdEstado() == 1}" style="display: flex; align-items: center;">
+                            <a th:href="@{'/adminsede/editar_orden_reposicion?id=' + ${orden.getIdReposicion()}}" class="edit-icon" style="margin-left: 30px"><i class="fas fa-pencil-alt"></i></a>
+                            <!--a th:href="@{'/adminsede/eliminar_orden_reposicion?id=' + ${orden.getIdReposicion()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a-->
+                            <form class="formEstadoSolicitud" th:action="@{'/adminsede/eliminar_orden_reposicion'}" method="post">
+                                <input type="hidden" name="getIdReposicion" th:value="${orden.getIdReposicion()}">
+                                <button type="submit" class="delete-icon" style="background: none; border: none; text-decoration: underline; color: blue;">
+                                    <i class="fas fa-trash-alt" style="margin-left: 10px;"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <div th:if="${orden.getEstado().getIdEstado() == 2}" style="display: flex; align-items: center;">
                     <a th:href="@{'/adminsede/editar_orden_reposicion?id=' + ${orden.getIdReposicion()}}" class="edit-icon" style="margin-left: 30px"><i class="fas fa-pencil-alt"></i></a>
 
                     <!--a th:href="@{'/adminsede/eliminar_orden_reposicion?id=' + ${orden.getIdReposicion()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a-->
@@ -146,7 +182,7 @@
                     </form>
                 </div>
 
-                <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 1}">
+                        <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 1}">
                     <div class="wrapper">
                         <h3>Estado de la orden</h3>
                         <div class="progress-container" style="margin-top: 60px">
@@ -184,7 +220,7 @@
                     </div>
                 </div>
 
-                <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 2}">
+                        <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 2}">
                     <div class="wrapper">
                         <h3>Estado de la orden</h3>
                         <div class="progress-container" style="margin-top: 60px">
@@ -223,7 +259,7 @@
                 </div>
 
 
-                <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 3}">
+                        <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 3}">
                     <div class="wrapper">
                         <h3>Estado de la orden</h3>
                         <div class="progress-container" style="margin-top: 60px">
@@ -261,7 +297,7 @@
                     </div>
                 </div>
 
-                <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 4}">
+                        <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 4}">
                     <div class="wrapper">
                         <div><h3>Estado de la orden</h3></div>
                         <div class="progress-container" style="margin-top: 60px">
@@ -299,7 +335,8 @@
                     </div>
                 </div>
 
-            </div>
+                    </div>
+                </div>
             </div>
         <div class="pagination" id="pagination">
             <!-- Aquí se añadirán los botones de paginación -->
@@ -412,6 +449,22 @@
             $('body').removeClass('loader-hidden');
         }
 
+    </script>
+
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function () {
+            var input = this.value.toLowerCase();
+            var ordenes = document.querySelectorAll('.orden-container');
+
+            ordenes.forEach(function (orden) {
+                var numeroOrden = orden.querySelector('.orden-numero').textContent.toLowerCase();
+                if (numeroOrden.includes(input)) {
+                    orden.style.display = '';
+                } else {
+                    orden.style.display = 'none';
+                }
+            });
+        });
     </script>
 
     </body>

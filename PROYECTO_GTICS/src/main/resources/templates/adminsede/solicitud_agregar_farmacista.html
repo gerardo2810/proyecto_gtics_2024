@@ -50,15 +50,11 @@
         <title>Bienestar San Miguel | Agregar Farmacistas</title>
 
         <style>
-            body {
-                padding-top: 90px;
-            }
+
         </style>
 
         <style>
-            body {
-                padding-top: 80px;
-            }
+
             .btn-c {
                 display: inline-block;
                 padding: 12px 20px;
@@ -96,16 +92,53 @@
                 border-color: #c3e6cb;
             }
             @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
+            .area {
+                height: 19vh !important;
+            }
+
+            .circles {
+                height: 19vh !important;
+            }
+
+            .banner-btn {
+                color: #fff !important;
+                border: solid 1px #fff !important;
+                border-radius: 5px !important;
+                cursor: pointer !important;
+                align-items: center !important;
+                display: flex !important;
+                background: none !important;
+            }
+
+            .bell-btn {
+                padding: 14px 14px 14px 14px;
+                font-size: 1.1rem !important;
+            }
+
+            .user-btn {
+                padding: 10px 12px 10px 12px;
+                font-size: 1.1rem !important;
+            }
+
+            .exit-btn {
+                padding: 14px 12px 14px 12px;
+                font-size: 1.1rem !important;
+            }
+
         </style>
 
 
     </head>
+    <body class="loader-hidden">
+
 
     <header class="header-topbar">
         <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
     </header>
 
-    <body class="loader-hidden">
+    <div th:replace="~{fragments/banner.html :: banner}"></div>
+
+
     <div class="container-loader loader-hidden" id="onload">
         <div class="loader"></div>
     </div>
@@ -113,7 +146,6 @@
 
         <div class="container">
 
-            <div style="margin-bottom: 50px"></div>
             <div style="padding-top: 20px; padding-bottom: 20px">
                 <div class="main-title open-sans-bold"> Nuevo farmacista </div>
                 <div class="main-subtitle helvetica-medium"> Generar solicitud de nuevo farmacista</div>

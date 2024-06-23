@@ -42,14 +42,9 @@
         <title>Bienestar San Miguel | Farmacistas</title>
 
         <style>
-            body {
-                padding-top: 80px;
-            }
+
         </style>
         <style>
-            body {
-                padding-top: 80px;
-            }
             .btn-c {
                 display: inline-block;
                 padding: 12px 20px;
@@ -90,12 +85,14 @@
         </style>
     </head>
 
+    <body class="loader-hidden">
+
     <header class="header-topbar">
         <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Farmacistas')}"></nav>
     </header>
 
+    <div th:replace="~{fragments/banner.html :: banner}"></div>
 
-    <body class="loader-hidden">
 
     <div class="container-loader loader-hidden" id="onload">
         <div class="loader"></div>

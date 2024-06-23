@@ -40,9 +40,6 @@
         <title>Bienestar San Miguel | Administrador de Sede | Editar orden de reposición</title>
 
         <style>
-            body {
-                padding-top: 80px;
-            }
 
             .btn-red{
                 padding: 9px;
@@ -97,18 +94,18 @@
         </style>
     </head>
 
+    <body class="loader-hidden">
+
     <header class="header-topbar">
         <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
     </header>
 
-
-    <body class="loader-hidden">
+    <div th:replace="~{fragments/banner.html :: banner}"></div>
 
 
     <div class="container-loader loader-hidden" id="onload">
         <div class="loader"></div>
     </div>
-
 
     <form method="post" th:action="@{/adminsede/editarReposicion}" enctype="multipart/form-data">
 
