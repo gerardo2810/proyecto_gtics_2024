@@ -20,6 +20,7 @@
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
     <link th:href="@{/css/fonts.css}" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+    <link rel="stylesheet" th:href="@{/css/farmacista/ver_productos.css}">
     <link rel="stylesheet" th:href="@{/css/farmacista/comentarios.css}">
     <link th:href="@{/css/footer.css}" rel="stylesheet" />
 
@@ -32,8 +33,7 @@
     <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
     <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
-
-
+    <script th:href="@{/js/pagination.js}"></script>
 
 
 
@@ -51,6 +51,30 @@
     <script scr="/js/map.js"></script>
 
     <title>Tracking | Bienestar San Miguel</title>
+    <style >
+
+        .ui-w-40 {
+            width: 40px !important;
+            height: auto;
+        }
+
+        .card {
+            box-shadow: 0 1px 15px 1px rgba(52, 40, 104, .08);
+        }
+
+        .ui-product-color {
+            display: inline-block;
+            overflow: hidden;
+            margin: .144em;
+            width: .875rem;
+            height: .875rem;
+            border-radius: 10rem;
+            -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset;
+            vertical-align: middle;
+        }
+    </style>
+</head>
 
     <style>
 
@@ -145,8 +169,8 @@
     <div class="container" th:if="${orden.getTipoOrden() == 2 && orden.getEstadoOrden() != 9}" >
 
         <div style="padding-top: 20px; padding-bottom: 20px">
-            <div class="main-title open-sans-bold" style="font-size: 2.2rem" th:text="${'Estado de la Orden #' + (orden.getIdOrden() + 10000)}"> Estado de la Orden </div>
-            <div class="main-subtitle montserrat-regular" th:text="${'Tracking: ' + orden.getTracking()}"> Tracking </div>
+            <!--div class="main-title open-sans-bold" style="font-size: 2.2rem" th:text="${'Estado de la Orden #' + (orden.getIdOrden() + 10000)}"> Estado de la Orden </div-->
+            <!--div class="main-subtitle montserrat-regular" th:text="${'Tracking: ' + orden.getTracking()}"> Tracking </-->
         </div>
 
         <hr class="style-one">
@@ -156,11 +180,12 @@
     </div>
 
 
+
     <div style="max-width: 1536px;margin-inline: auto;padding: 0 30px 0 30px;" th:if="${orden.getTipoOrden() == 2}" th:switch="${orden.getEstadoOrden()}">
 
         <div th:case="1" style="display: flex;justify-content: center">
 
-            <div style="display: flex; flex-direction: column; gap: 20px; justify-items: center;">
+            <!--div style="display: flex; flex-direction: column; gap: 20px; justify-items: center;">
                 <p style="font-size: 30px;color:#0d6efd ">La orden está disponible para ser aprobada</p>
 
                 <a style="margin: auto" th:href="@{'/farmacista/aprobar_orden_web?id=' + ${orden.getIdOrden()}}">
@@ -175,7 +200,7 @@
                     <button type="submit" class="aprobar" style="font-size: 1rem; width: 300px">Iniciar conversación con el paciente</button>
                 </form>
 
-            </div>
+            </div-->
 
 
         </div>
@@ -360,10 +385,6 @@
                 <p style="font-size: 30px;color:#0d6efd ">!Su orden ha sido entregada exitosamente!</p>
             </div>
         </div>
-
-
-
-
 
 
     </div>
@@ -583,11 +604,6 @@
             </div>
         </div>
 
-
-
-
-
-
     </div>
 
 
@@ -595,80 +611,106 @@
 
 
 <div>
-    <div class="container">
-
-        <div style="margin-bottom: 65px"></div>
-        <div style="padding-top: 20px; padding-bottom: 20px">
-            <div class="main-title open-sans-bold" style="font-size: 2.2rem" th:if="${orden.getEstadoOrden() != 9}"> Contenido de la Orden </div>
-            <div class="main-title open-sans-bold" style="font-size: 2.2rem" th:if="${orden.getEstadoOrden() == 9}"> Contenido de la Orden Anulada </div>
-        </div>
-
-        <hr class="style-one">
-
-        <div style="margin-bottom: 30px"></div>
-
-        <div style="padding-right: 0; padding-left: 0"> </div>
-    </div>
 
 
     <div class="container">
+        <div class="container px-3 my-5 clearfix">
+            <div id="content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 th:text="${orden.getEstadoOrden() != 9 ? 'Contenido de la Orden: Tracking ' + orden.getTracking() : 'Contenido de la Orden Anulada: Tracking ' + orden.getTracking()}"></h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered m-0">
+                                <thead>
+                                <tr>
 
-        <div style="display: flex; flex-direction: row; justify-content: space-between">
+                                    <th class="text-center py-3 px-4" style="min-width: 400px;">Medicamento &amp; Details</th>
+                                    <th class="text-right py-3 px-4" style="width: 100px;">Imagen</th>
+                                    <th class="text-center py-3 px-4" style="width: 120px;">Cantidad</th>
+                                    <th class="text-right py-3 px-4" style="width: 100px;">Precio unitario</th>
+                                    <th class="text-right py-3 px-4" style="width: 100px;">Precio total</th>
 
-            <input id="searchInput" type="text" class="input-form" style="margin-top: 4px;width: 370px;height: 40px;font-size: 15px" placeholder="Buscar por nombre del medicamento">
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="itemDeLaOrden: ${contenidoOrden}">
+                                    <td th:text="${itemDeLaOrden.getIdMedicamento().nombre} + ': ' + ${itemDeLaOrden.getIdMedicamento().descripcion}"></td>
+                                    <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" width="120px" height="auto" ></td>
+                                    <td th:text="${itemDeLaOrden.getCantidad()}"></td>
+                                    <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
 
+                                    <td class="resultado"></td>
+                                    <script th:inline="javascript">
+                                        function limitarDigitos(numero) {
+                                            var numeroStr = numero.toString();
+                                            // Obtener los primeros 4 dígitos
+                                            var primerosCuatroDigitos = numeroStr.substring(0, 4);
+                                            var numeroLimitado = parseFloat(primerosCuatroDigitos);
+                                            return numeroLimitado;
+                                        }
+                                        var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
+                                        var cantidad = [[${itemDeLaOrden.getCantidad()}]];
+                                        var resultado = precioVenta * cantidad;
+                                        console.log(resultado)
+                                        var resultadoLimitado = limitarDigitos(resultado);
+                                        document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
+                                    </script>
+                                </tr>
 
+                                </tbody>
+                            </table>
+                        </div>
 
-            <a th:if="${orden.getEstadoOrden() != 1 && orden.getEstadoOrden() != 2} " th:href="@{'/farmacista/ver_boleta?id=' + ${orden.getIdOrden()}}" >
-                <button class="print">VER BOLETA</button>
-            </a>
+                        <!--div class="d-flex flex-wrap justify-content-between align-items-center pb-4">
+                            <div class="d-flex">
+                                <div class="text-right mt-4 mr-5">
+                                    <label class="text-muted font-weight-normal m-0">Discount</label>
+                                    <div class="text-large"><strong>$20</strong></div>
+                                </div>
+                                <div class="text-right mt-4">
+                                    <label class="text-muted font-weight-normal m-0">Total price</label>
+                                    <div class="text-large"><strong>$1164.65</strong></div>
+                                </div>
+                            </div>
+                        </div-->
+                        <br>
+                        <br>
+                        <div class="float-right">
+                            <button class="print" onclick="goBack()">REGRESAR</button>
+                            <script>
+                                function goBack() {
+                                    window.history.back();
+                                }
+                            </script>
+                            <a th:if="${orden.getEstadoOrden() != 1 && orden.getEstadoOrden() != 2} " th:href="@{'/farmacista/ver_boleta?id=' + ${orden.getIdOrden()}}" >
+                                <button class="print">VER BOLETA</button>
+                            </a>
 
+                            <div th:if="${orden.getTipoOrden() == 2}" th:switch="${orden.getEstadoOrden()}">
+                                <div th:case="1" >
+                                        <a  th:href="@{'/farmacista/aprobar_orden_web?id=' + ${orden.getIdOrden()}}">
+                                            <button class="print">APROBAR ORDEN</button>
+                                        </a>
+                                        <form method="post" th:action="@{'/farmacista/crear_chat'}" >
+                                            <input type="hidden" name="idOrden" th:value="${orden.getIdOrden()}">
+                                            <input type="hidden" name="idPaciente" th:value="${orden.getPaciente().getIdUsuario()}" >
+                                            <input type="hidden" name="idFarmacista" th:value="${session.usuario.getIdUsuario()}">
+                                            <button type="submit" class="print" >Iniciar conversación con el paciente</button>
+                                        </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="pagination" id="pagination">
+                    <!-- Aquí se añadirán los botones de paginación -->
+                </div>
+            </div>
         </div>
-
-        <br>
-
-        <table id="miTabla" class="table table-striped">
-
-            <thead>
-            <tr style="background-color: #378fff">
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio unitario</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio total</th>
-            </tr>
-            </thead>
-
-
-            <tbody>
-            <tr th:each="itemDeLaOrden: ${contenidoOrden}">
-                <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
-                <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" width="120px" height="auto" ></td>
-                <td th:text="${itemDeLaOrden.getCantidad()}"></td>
-                <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
-                <td class="resultado"></td>
-                <script th:inline="javascript">
-                    function limitarDigitos(numero) {
-                        var numeroStr = numero.toString();
-                        // Obtener los primeros 4 dígitos
-                        var primerosCuatroDigitos = numeroStr.substring(0, 4);
-                        var numeroLimitado = parseFloat(primerosCuatroDigitos);
-                        return numeroLimitado;
-                    }
-                    var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
-                    var cantidad = [[${itemDeLaOrden.getCantidad()}]];
-                    var resultado = precioVenta * cantidad;
-                    console.log(resultado)
-                    var resultadoLimitado = limitarDigitos(resultado);
-                    document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
-                </script>
-            </tr>
-
-
-
-
-            </tbody>
-        </table>
 
         <div style="padding-bottom: 20px"></div>
 
@@ -702,9 +744,6 @@
         </div>
 
         <br>
-
-
-
 
         <table id="miTabla2" class="table table-striped">
 
@@ -742,9 +781,6 @@
                     document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
                 </script>
             </tr>
-
-
-
 
             </tbody>
         </table>
@@ -870,6 +906,55 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <script th:src="@{/js/topbar.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const itemsPerPage = 10; // Número de medicamentos por página
+        let currentPage = 1; // Página actual
+
+        const medicamentos = document.querySelectorAll('.card .item');
+        const totalMedicamentos = medicamentos.length;
+
+        function mostrarMedicamentos() {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+
+            medicamentos.forEach((medicamento, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    medicamento.style.display = 'block';
+                } else {
+                    medicamento.style.display = 'none';
+                }
+            });
+
+            mostrarPaginacion();
+        }
+
+        function mostrarPaginacion() {
+            const totalPages = Math.ceil(totalMedicamentos / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.addEventListener('click', function() {
+                    currentPage = i;
+                    mostrarMedicamentos();
+                });
+
+                if (i === currentPage) {
+                    button.classList.add('active'); // Añadir clase 'active' al botón de la página actual
+                }
+
+                pagination.appendChild(button);
+            }
+        }
+
+        // Mostrar la paginación y la primera página al cargar la página
+        mostrarMedicamentos();
+    });
+
+</script>
 
 <script>
     google.maps.event.addDomListener(window, 'load', initMap);
@@ -969,6 +1054,8 @@
         });
     });
 </script>
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/js/comentarios.js}"></script>
 
 </body>
