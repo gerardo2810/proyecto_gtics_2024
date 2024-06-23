@@ -131,7 +131,7 @@
             margin-right: 5px; /* Espacio entre el icono y el texto */
         }
         .area {
-            height: 19vh !important;
+            height: 12vh !important;
         }
 
         .circles {
@@ -154,7 +154,7 @@
         }
 
         .user-btn {
-            padding: 10px 12px 10px 12px;
+            padding: 13px 14px 13px 14px;
             font-size: 1.1rem !important;
         }
 
@@ -234,7 +234,7 @@
 
 
 <header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Boleta')}"></nav>
+    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Mensajeria')}"></nav>
 </header>
 
 
@@ -260,7 +260,7 @@
 
 <br>
 
-<div class="container" style="display: flex; flex-direction: row; column-gap: 30px">
+<div class="container" style="display: flex; flex-direction: row; column-gap: 60px">
 
 
 
@@ -270,7 +270,7 @@
         <section class="Chat">
             <div class="ChatHead">
                 <li class="group">
-                    <div class="avatar"><img src="/img/farmaceutico.png"></div>
+                    <div><img width="64" height="64" src="https://img.icons8.com/external-creatype-flat-colourcreatype/64/external-doctor-medic-health-creatype-flat-colourcreatype-2.png" alt="external-doctor-medic-health-creatype-flat-colourcreatype-2"/></div>
                     <p class="GroupName" th:text="${ 'Farmacista: ' +   farmacista.getNombres() + ' ' + farmacista.getApellidos()}"></p>
 
                 </li>
@@ -353,8 +353,8 @@
 
     </div>
 
-    <div style="display: flex; flex-direction: column">
-        <div class="container">
+    <div style="display: flex; flex-direction: column;justify-content: center; width: 800px">
+        <div>
             <table id="miTabla2" class="table table-striped">
                 <h2>Contenido de la orden</h2>
                 <thead>
@@ -419,7 +419,7 @@
         <br>
         <br>
 
-        <div class="container">
+        <div>
             <table id="miTabla3" class="table table-striped">
                 <h2>Medicamentos sin Stock</h2>
                 <thead>
@@ -473,17 +473,8 @@
 <br>
 <br>
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+
+
 
 
 
