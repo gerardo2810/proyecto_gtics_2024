@@ -116,22 +116,54 @@
         }
 
 
+        .area {
+            height: 19vh !important;
+        }
 
+        .circles {
+            height: 19vh !important;
+        }
+
+        .banner-btn {
+            color: #fff !important;
+            border: solid 1px #fff !important;
+            border-radius: 5px !important;
+            cursor: pointer !important;
+            align-items: center !important;
+            display: flex !important;
+            background: none !important;
+        }
+
+        .bell-btn {
+            padding: 14px 14px 14px 14px;
+            font-size: 1.1rem !important;
+        }
+
+        .user-btn {
+            padding: 10px 12px 10px 12px;
+            font-size: 1.1rem !important;
+        }
+
+        .exit-btn {
+            padding: 14px 12px 14px 12px;
+            font-size: 1.1rem !important;
+        }
 
     </style>
 
 </head>
 
 
-
-<header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
-</header>
-
 <body style="background-color: white;">
 
+<header class="header-topbar">
+    <nav th:replace="~{fragments/navbar.html :: navbar( active = '')}"></nav>
+</header>
 
-<div class="container" style="margin-top:90px;">
+
+<div th:replace="~{fragments/banner.html :: banner}"></div>
+
+<div class="container" >
 
 
     <div style="padding-top: 20px; padding-bottom: 20px">

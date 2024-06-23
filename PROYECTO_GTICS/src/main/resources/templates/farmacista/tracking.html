@@ -53,9 +53,7 @@
     <title>Tracking | Bienestar San Miguel</title>
 
     <style>
-        body {
-            padding-top: 40px;
-        }
+
         #filtroEstado:focus {
 
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
@@ -77,6 +75,38 @@
             display: none !important;
         }
 
+        .area {
+            height: 19vh !important;
+        }
+
+        .circles {
+            height: 19vh !important;
+        }
+
+        .banner-btn {
+            color: #fff !important;
+            border: solid 1px #fff !important;
+            border-radius: 5px !important;
+            cursor: pointer !important;
+            align-items: center !important;
+            display: flex !important;
+            background: none !important;
+        }
+
+        .bell-btn {
+            padding: 14px 14px 14px 14px;
+            font-size: 1.1rem !important;
+        }
+
+        .user-btn {
+            padding: 10px 12px 10px 12px;
+            font-size: 1.1rem !important;
+        }
+
+        .exit-btn {
+            padding: 14px 12px 14px 12px;
+            font-size: 1.1rem !important;
+        }
 
     </style>
 
@@ -100,17 +130,19 @@
 
     </script>
 </head>
+<body>
+
 
 <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Ordenes de Venta')}"></nav>
 </header>
 
-<body>
 
+<div th:replace="~{fragments/banner.html :: banner}"></div>
 
-<div>
+<div class="container">
 
-    <div class="container" th:if="${orden.getTipoOrden() == 2 && orden.getEstadoOrden() != 9}" style="padding-top: 40px">
+    <div class="container" th:if="${orden.getTipoOrden() == 2 && orden.getEstadoOrden() != 9}" >
 
         <div style="padding-top: 20px; padding-bottom: 20px">
             <div class="main-title open-sans-bold" style="font-size: 2.2rem" th:text="${'Estado de la Orden #' + (orden.getIdOrden() + 10000)}"> Estado de la Orden </div>

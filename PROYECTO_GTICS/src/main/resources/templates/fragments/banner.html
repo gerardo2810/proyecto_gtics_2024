@@ -23,26 +23,86 @@
 
                     <div style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
 
+                        <!-- Configurar Notificaciones SUPERADMIN -->
+                        <div th:if="${session.usuario.getRol() == 1}" >
+                            <a style="color: white" th:href="@{/superadmin/perfil}" sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                                <div class="banner-btn bell-btn">
+                                    <i class="fa-regular fa-bell"></i>
+                                </div>
+
+                                <div th:if="${session.usuario.getRol() == null}" class="banner-btn bell-btn">
+                                    <i class="fa-solid fa-bell"></i>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Configurar Notificaciones ADMINSEDE -->
+                        <div th:if="${session.usuario.getRol() == 2}" >
+                            <a style="color: white" th:href="@{/adminsede/perfil}" sec:authorize="hasAnyAuthority('ADMINSEDE')">
+                                <div class="banner-btn bell-btn">
+                                    <i class="fa-regular fa-bell"></i>
+                                </div>
+
+                                <div th:if="${session.usuario.getRol() == null}" class="banner-btn bell-btn">
+                                    <i class="fa-solid fa-bell"></i>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Configurar Notificaciones FARMACISTA -->
+                        <div th:if="${session.usuario.getRol() == 3}" >
+                            <a style="color: white" th:href="@{/farmacista/perfil}" sec:authorize="hasAnyAuthority('FARMACISTA')">
+                                <div class="banner-btn bell-btn">
+                                    <i class="fa-regular fa-bell"></i>
+                                </div>
+
+                                <div th:if="${session.usuario.getRol() == null}" class="banner-btn bell-btn">
+                                    <i class="fa-solid fa-bell"></i>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Configurar Notificaciones PACIENTE -->
+                        <div th:if="${session.usuario.getRol() == 4}" >
+                            <a style="color: white" th:href="@{/paciente/perfil}" sec:authorize="hasAnyAuthority('PACIENTE')">
+                                <div class="banner-btn bell-btn">
+                                    <i class="fa-regular fa-bell"></i>
+                                </div>
+
+                                <div th:if="${session.usuario.getRol() == null}" class="banner-btn bell-btn">
+                                    <i class="fa-solid fa-bell"></i>
+                                </div>
+                            </a>
+                        </div>
+
+
                         <div>
+                            <div class="banner-btn user-btn">
+                                <a style="color: white" th:href="@{/superadmin/perfil}" sec:authorize="hasAnyAuthority('SUPERADMIN')">
+                                    <i class="fa-regular fa-user"></i>
+                                </a>
 
-                            <div style="position: absolute; padding-top: 5px; padding-left: 20px; font-size: 0.6rem">⚪</div>
+                                <a style="color: white" th:href="@{/adminsede/perfil}" sec:authorize="hasAnyAuthority('ADMINSEDE')">
+                                    <i class="fa-regular fa-user"></i>
+                                </a>
 
-                            <div class="notif-btn">
-                                <i class="fa-solid fa-bell"></i>
+                                <a style="color: white" th:href="@{/farmacista/perfil}" sec:authorize="hasAnyAuthority('FARMACISTA')">
+                                    <i class="fa-regular fa-user"></i>
+                                </a>
+
+                                <a style="color: white" th:href="@{/paciente/perfil}" sec:authorize="hasAnyAuthority('PACIENTE')">
+                                    <i class="fa-regular fa-user"></i>
+                                </a>
+
                             </div>
-
                         </div>
 
                         <div>
-                            <div class="config-btn">
-                                <i class="fa-solid fa-user"></i>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="notif-btn">
-                                <i class="fa-solid fa-right-from-bracket"></i>
-                            </div>
+                            <form th:action="@{/logout}" method="post">
+                            <button class="banner-btn exit-btn">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            </button>
+                            </form>
                         </div>
 
 

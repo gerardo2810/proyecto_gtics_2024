@@ -58,7 +58,6 @@
 
 <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
-
 </header>
 
 <div th:replace="~{fragments/banner.html :: banner}"></div>
@@ -175,6 +174,11 @@
                             <button class="add-item-button open-sans-regular" th:data-item-id="${medicamento.idMedicamento}">Añadir Producto</button>
                         </div>
                     </div>
+
+                    <div class="pagination" id="pagination">
+                        <!-- Aquí se añadirán los botones de paginación -->
+                    </div>
+
                 </div>
 
             </section>
@@ -186,6 +190,56 @@
     <div th:replace="~{fragments/navbar.html :: footer}">
     </div>
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const itemsPerPage = 10; // Número de medicamentos por página
+        let currentPage = 1; // Página actual
+
+        const medicamentos = document.querySelectorAll('.med-container .item');
+        const totalMedicamentos = medicamentos.length;
+
+        function mostrarMedicamentos() {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+
+            medicamentos.forEach((medicamento, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    medicamento.style.display = 'block';
+                } else {
+                    medicamento.style.display = 'none';
+                }
+            });
+
+            mostrarPaginacion();
+        }
+
+        function mostrarPaginacion() {
+            const totalPages = Math.ceil(totalMedicamentos / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.addEventListener('click', function() {
+                    currentPage = i;
+                    mostrarMedicamentos();
+                });
+
+                if (i === currentPage) {
+                    button.classList.add('active'); // Añadir clase 'active' al botón de la página actual
+                }
+
+                pagination.appendChild(button);
+            }
+        }
+
+        // Mostrar la paginación y la primera página al cargar la página
+        mostrarMedicamentos();
+    });
+
+</script>
 
 <script>
 

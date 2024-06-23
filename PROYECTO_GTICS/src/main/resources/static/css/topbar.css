@@ -441,18 +441,38 @@
 }
 
 
+.main-subtitle-banner {
+    font-size: 1.4rem;
+    padding-top: 5px;
+}
 
-.config-btn, .notif-btn {
+.banner-btn {
     color: #fff;
     border: solid 1px #fff;
     border-radius: 5px;
     cursor: pointer;
     align-items: center;
     display: flex;
-    padding: 10px;
+    background: none !important;
 }
 
-.config-btn:hover, .notif-btn:hover {
+.bell-btn {
+    padding: 12px 12px 12px 12px;
+    font-size: 1.1rem !important;
+}
+
+.user-btn {
+    padding: 10px 12px 10px 12px;
+    font-size: 1.1rem !important;
+}
+
+.exit-btn {
+    padding: 12px 10px 12px 10px;
+    font-size: 1.1rem !important;
+}
+
+
+.banner-btn:hover {
     border: solid 1px #a5c3e7;
 }
 
