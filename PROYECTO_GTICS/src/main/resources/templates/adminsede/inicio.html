@@ -493,9 +493,11 @@
                         <tr style="background-color: #378fff">
                             <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
                             <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Unidad</th>
-                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Categorias</th>
-                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">asa</th>
-                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">assa</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio de compra</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio de venta</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad vendida</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Ganancia</th>
+
 
 
 
@@ -505,9 +507,10 @@
                         <tr th:each="medicamento : ${listaMedicamentos}">
                             <td th:text="${medicamento.getNombre()}"></td>
                             <td th:text="${ medicamento.getUnidad()}"></td>
-                            <td th:text="${medicamento.getCategorias()}"></td>
-                            <td th:text="${medicamento.getIdMedicamento()}"></td>
                             <td th:text="${medicamento.getPrecioCompra()}"></td>
+                            <td th:text="${medicamento.getPrecioVenta()}"></td>
+                            <td th:text="${medicamento.getCantidadVendida()}"></td>
+                            <td th:text="${medicamento.getGanancia()}"></td>
 
 
 

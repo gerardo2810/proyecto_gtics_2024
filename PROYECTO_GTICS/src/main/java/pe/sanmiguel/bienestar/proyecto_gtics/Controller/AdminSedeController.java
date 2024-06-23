@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.DniAPI;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.ReposicionContenidoMedicamentoDto;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.TopVentasDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.UsuarioSedeFarmacistaDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.PasswordService;
@@ -23,6 +24,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.AdminSedeValidationsGroup;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -138,12 +140,13 @@ public class AdminSedeController {
             }
             Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
 
-            model.addAttribute("listaMedicamentos",medicamentoRepository.findAll());
+            model.addAttribute("listaMedicamentos",medicamentoRepository.listarVentasMedicamentosporSede(idSede));
             model.addAttribute("usuario",usuario);
             model.addAttribute("sedesesion",sedeSession);
             model.addAttribute("listaReposicionNoEntregadasUltimas", listaReposicionNoEntregadasUltimas);
             model.addAttribute("lista1", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
             model.addAttribute("lista2", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
+
             return "adminsede/inicio";
 
         }else {
