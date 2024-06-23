@@ -106,11 +106,18 @@
 
 </head>
 
+
+
+<body style="background-color: white;">
+
+
 <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Boleta')}"></nav>
 </header>
 
-<body style="background-color: white;">
+<div th:replace="~{fragments/banner.html :: banner}"></div>
+
+
 <script th:if="${msg2 != null}">
     Swal.fire({
         icon: "success",

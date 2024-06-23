@@ -661,7 +661,8 @@ public class FarmacistaController {
 
                 model.addAttribute("preOrden", preOrdenChild);
                 model.addAttribute("contenidoPreOrden", contenidoPreOrden);
-
+                Usuario userSession = (Usuario) session.getAttribute("usuario");
+                model.addAttribute("usuario", userSession);
                 model.addAttribute("idOrden", idOrden);
                 model.addAttribute("contenidoOrden", contenidoOrden);
                 model.addAttribute("orden", ordenComprobada);

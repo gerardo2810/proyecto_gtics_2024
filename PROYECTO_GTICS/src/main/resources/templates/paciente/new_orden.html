@@ -41,9 +41,6 @@
     <title>Nueva Orden Web | Bienestar San Miguel</title>
 
     <style>
-        body {
-            padding-top: 80px;
-        }
 
         .pagination {
             margin-top: 2px;
@@ -85,12 +82,19 @@
     </script>
 </head>
 
+
+
+
+<body>
+
+
 <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Boleta')}"></nav>
 </header>
 
 
-<body>
+<div th:replace="~{fragments/banner.html :: banner}"></div>
+
 
 <div class="container">
 

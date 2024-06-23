@@ -46,9 +46,6 @@
     <title>Tracking | Bienestar San Miguel</title>
 
     <style>
-        body {
-            padding-top: 90px;
-        }
         #filtroEstado:focus {
 
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
@@ -94,13 +91,18 @@
     </script>
 </head>
 
-<header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Boleta')}"></nav>
-</header>
+
 
 
 
 <body>
+
+<header class="header-topbar">
+    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Boleta')}"></nav>
+</header>
+
+<div th:replace="~{fragments/banner.html :: banner}"></div>
+
 
 
 <div class="container">

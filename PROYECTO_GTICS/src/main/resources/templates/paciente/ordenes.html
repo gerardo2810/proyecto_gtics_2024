@@ -47,19 +47,22 @@
     <title>Ordenes Web | Bienestar San Miguel</title>
 
 
-    <style>
-        body {
-            padding-top: 90px;
-        }
-    </style>
 </head>
+
+
+
+<body>
+
+
 
 
 <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Ordenes Web')}"></nav>
 </header>
 
-<body>
+
+<div th:replace="~{fragments/banner.html :: banner}"></div>
+
 
 <script th:if="${msg != null}">
     Swal.fire({

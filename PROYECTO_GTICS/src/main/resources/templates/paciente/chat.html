@@ -51,9 +51,7 @@
         ::-webkit-scrollbar-thumb:hover {
             background-color: #0d6efd;
         }
-        body {
-            padding-top: 80px;
-        }
+
         .container2 {
             border: 2px solid #dedede;
             background-color: #f1f1f1;
@@ -198,12 +196,18 @@
     </style>
 </head>
 
+
+
+
+<body>
+
+
 <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Boleta')}"></nav>
 </header>
 
 
-<body>
+<div th:replace="~{fragments/banner.html :: banner}"></div>
 
 
 
@@ -503,16 +507,21 @@
 
     socket.onmessage = function (event) {
 
-            let messageArea = document.getElementById("messageArea");
-            var fechaActual = new Date();
-            var horaActual = fechaActual.getHours();
-            var minutosActuales = fechaActual.getMinutes();
+        let messageArea = document.getElementById("messageArea");
+        var fechaActual = new Date();
+        var horaActual = fechaActual.getHours();
+        var minutosActuales = fechaActual.getMinutes();
+        var periodo = horaActual >= 12 ? 'p.m.' : 'a.m.';
+        if (horaActual > 12) {
+            horaActual -= 12;
+        } else if (horaActual === 0) {
+            horaActual = 12;
+        }
+        var minutosFormateados = minutosActuales < 10 ? '0' + minutosActuales : minutosActuales;
 
-            if (minutosActuales<10){
-                var tiempoActual = horaActual + ':0' + minutosActuales;
-            }else{
-                var tiempoActual = horaActual + ':' + minutosActuales;
-            }
+
+        var tiempoActual = horaActual + ':' + minutosFormateados + ' ' + periodo;
+
 
         // Parsear el mensaje JSON recibido
         var messageData = JSON.parse(event.data);
