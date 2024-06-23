@@ -235,23 +235,52 @@
                 }
             }
 
+            .context{
+                color: #e9ecef !important;
+
+            }
+            .area {
+                height: 19vh !important;
+            }
+
+            .circles {
+                height: 19vh !important;
+            }
+
+            .banner-btn {
+                color: #fff !important;
+                border: solid 1px #fff !important;
+                border-radius: 5px !important;
+                cursor: pointer !important;
+                align-items: center !important;
+                display: flex !important;
+                background: none !important;
+            }
+
+            .banner-btn:hover {
+                border: solid 1px #a5c3e7;
+            }
+            .main-subtitle-banner {
+                color: #e9ecef !important;
+            }
+
         </style>
 
         <title>Bienestar San Miguel | Administrador de Sede</title>
     </head>
 
+<body class="loader-hidden">
+
     <header class="header-topbar">
         <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
     </header>
 
-    <body class="loader-hidden">
 
+    <div th:replace="~{fragments/banner.html :: banner}"></div>
 
     <div class="container-loader loader-hidden" id="onload">
         <div class="loader"></div>
     </div>
-
-    <div style="margin-top: 80px"></div>
 
     <div class="container">
         <div style="padding-top: 20px; padding-bottom: 20px">

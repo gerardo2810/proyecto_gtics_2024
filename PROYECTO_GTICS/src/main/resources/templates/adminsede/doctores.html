@@ -36,18 +36,17 @@
         <title>Generar orden de reposición</title>
 
         <style>
-            body {
-                padding-top: 80px;
-            }
         </style>
     </head>
+
+    <body class="loader-hidden">
 
     <header class="header-topbar">
         <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Doctores')}"></nav>
     </header>
 
+    <div th:replace="~{fragments/banner.html :: banner}"></div>
 
-    <body class="loader-hidden">
     <div class="container-loader loader-hidden" id="onload">
         <div class="loader"></div>
     </div>
