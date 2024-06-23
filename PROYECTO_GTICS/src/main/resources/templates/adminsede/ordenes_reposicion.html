@@ -349,51 +349,60 @@
             const itemsPerPage = 5; // Número de medicamentos por página
             let currentPage = 1; // Página actual
 
-            const medicamentos = document.querySelectorAll('.hola .chau');
-            const totalMedicamentos = medicamentos.length;
+            const medicamentos = Array.from(document.querySelectorAll('.hola .chau'));
+            let filteredMedicamentos = medicamentos; // Inicialmente, todos los medicamentos están en la lista filtrada
 
             function mostrarMedicamentos() {
                 const startIndex = (currentPage - 1) * itemsPerPage;
                 const endIndex = startIndex + itemsPerPage;
 
-                medicamentos.forEach((medicamento, index) => {
-                    if (index >= startIndex && index < endIndex) {
-                        medicamento.style.display = 'block';
-                    } else {
-                        medicamento.style.display = 'none';
-                    }
-                });
+                // Ocultar todos los medicamentos
+                medicamentos.forEach(medicamento => medicamento.style.display = 'none');
+
+                // Mostrar solo los medicamentos filtrados y paginados
+                filteredMedicamentos.slice(startIndex, endIndex).forEach(medicamento => medicamento.style.display = 'block');
 
                 mostrarPaginacion();
             }
 
             function mostrarPaginacion() {
-                const totalPages = Math.ceil(totalMedicamentos / itemsPerPage);
+                const totalPages = Math.ceil(filteredMedicamentos.length / itemsPerPage);
                 const pagination = document.getElementById('pagination');
                 pagination.innerHTML = '';
 
-                for (let i = 1; i <= totalPages; i++) {
-                    const button = document.createElement('button');
-                    button.textContent = i;
-                    button.addEventListener('click', function() {
-                        currentPage = i;
-                        mostrarMedicamentos();
-                    });
+                if (totalPages > 1) {
+                    for (let i = 1; i <= totalPages; i++) {
+                        const button = document.createElement('button');
+                        button.textContent = i;
+                        button.addEventListener('click', function() {
+                            currentPage = i;
+                            mostrarMedicamentos();
+                        });
 
-                    if (i === currentPage) {
-                        button.classList.add('active'); // Añadir clase 'active' al botón de la página actual
+                        if (i === currentPage) {
+                            button.classList.add('active'); // Añadir clase 'active' al botón de la página actual
+                        }
+
+                        pagination.appendChild(button);
                     }
-
-                    pagination.appendChild(button);
                 }
             }
+
+            document.getElementById('searchInput').addEventListener('input', function() {
+                const input = this.value.toLowerCase();
+                filteredMedicamentos = medicamentos.filter(medicamento => {
+                    const numeroOrden = medicamento.querySelector('.orden-numero').textContent.toLowerCase();
+                    return numeroOrden.includes(input);
+                });
+
+                currentPage = 1; // Resetear a la primera página después del filtrado
+                mostrarMedicamentos();
+            });
 
             // Mostrar la paginación y la primera página al cargar la página
             mostrarMedicamentos();
         });
-
     </script>
-
 
 
         <!--Footer -->
