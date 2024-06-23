@@ -338,6 +338,8 @@ public class ExporterPDF {
         // Añade espacio adicional para evitar superposición
         espacio.setSpacingBefore(20); // Ajusta el espacio según sea necesario
         documento.add(espacio);
+        documento.add(espacio);
+        documento.add(espacio);
 
         // Crear un Chunk con subrayado
         Chunk tituloChunk2 = new Chunk("Medicamentos más vendidos en Sede Central", fuente);
