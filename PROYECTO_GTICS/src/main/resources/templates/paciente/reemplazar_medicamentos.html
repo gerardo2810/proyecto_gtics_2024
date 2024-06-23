@@ -89,13 +89,14 @@
     </style>
 </head>
 
-
-
-
-
-
 <body>
 
+
+
+
+
+
+<div th:replace="~{fragments/banner.html :: banner}"></div>
 
 <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Boleta')}"></nav>
@@ -106,8 +107,6 @@
 
 
 <div class="container">
-
-    <div style="margin-bottom: 50px"></div>
     <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Orden XYZWXZ</strong></h2>
     <div style="margin-bottom: 20px"></div>
     <hr style="border-top: 1px solid #DFDFDF;">
