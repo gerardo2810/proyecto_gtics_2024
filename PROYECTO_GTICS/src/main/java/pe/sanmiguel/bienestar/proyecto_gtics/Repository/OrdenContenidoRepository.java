@@ -31,4 +31,10 @@ public interface OrdenContenidoRepository extends JpaRepository<OrdenContenido, 
 
     @Query(nativeQuery = true, value = "SELECT oc.idMedicamento, SUM(oc.cantidad) as cantidadVendida FROM proyecto_gtics.orden o inner join orden_contenido oc on o.id = oc.idOrden where o.idSede = ? group by oc.idMedicamento order by cantidadVendida desc limit 0, 5")
     List<TopVentasDto> listartopVentarporSede(int idSede);
+
+    //Para reportes en Admin de sede
+    @Query(nativeQuery = true, value = "SELECT oc.idMedicamento, SUM(oc.cantidad) as cantidadVendida FROM proyecto_gtics.orden o inner join orden_contenido oc on o.id = oc.idOrden where o.idSede = ? group by oc.idMedicamento order by cantidadVendida desc")
+    List<TopVentasDto> listarVentasporSede(int idSede);
+
+
 }

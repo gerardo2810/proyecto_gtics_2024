@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.VentasMedicamentosTotalDto;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.VentasMedicamentosporSedeDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Medicamento;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 
@@ -69,6 +70,10 @@ public interface MedicamentoRepository extends JpaRepository<Medicamento, Intege
     //Para reportes:
     @Query(nativeQuery = true, value = "SELECT o.idMedicamento, m.nombre, m.unidad, m.precioCompra, m.precioVenta, SUM(o.cantidad) AS totalCantidad, SUM(o.cantidad * (m.precioVenta - m.precioCompra)) AS gananciaTotal FROM orden_contenido o INNER JOIN medicamento m ON o.idMedicamento = m.idMedicamento GROUP BY o.idMedicamento, m.nombre, m.unidad, m.precioCompra, m.precioVenta")
     List<VentasMedicamentosTotalDto> listaMedicamentosVentas();
+
+    @Query(nativeQuery = true, value = "SELECT oc.idMedicamento, m.nombre, m.unidad, m.precioCompra, m.precioVenta, SUM(oc.cantidad) as cantidadVendida, (m.precioVenta - m.precioCompra) * SUM(oc.cantidad) AS ganancia FROM proyecto_gtics.orden o inner join orden_contenido oc on o.id = oc.idOrden inner join medicamento m on m.idMedicamento = oc.idMedicamento where o.idSede = ?1 group by oc.idMedicamento order by cantidadVendida desc")
+    List<VentasMedicamentosporSedeDto> listarVentasMedicamentosporSede(int idSede);
+
 
     @Query(nativeQuery = true, value = "SELECT m.* FROM proyecto_gtics.sede_stock s, proyecto_gtics.medicamento m, proyecto_gtics.sede p\n" +
             "WHERE s.idMedicamento = m.idMedicamento and p.id=s.idSede and p.nombre=?")
