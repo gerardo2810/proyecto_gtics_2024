@@ -120,9 +120,9 @@
                             <td style="text-align: center" th:text="${ordenes.nombres}" ></td>
                             <td style="text-align: center" th:text="${ordenes.apellidos}" ></td>
                             <td style="text-align: center" th:text="${ordenes.getFechaIni()}"></td>
-                            <td style="text-align: center" th:if="${ordenes.getIdTipo() == 1}" th:text="Física"></td>
-                            <td style="text-align: center" th:if="${ordenes.getIdTipo() == 2}" th:text="Web"></td>
-                            <td style="text-align: center" th:if="${ordenes.getIdTipo() == 3}" th:text="Pre orden"></td>
+                            <td style="text-align: center" th:if="${ordenes.getIdTipo() == 1}" th:text="'Física'"></td>
+                            <td style="text-align: center" th:if="${ordenes.getIdTipo() == 2}" th:text="'Web'"></td>
+                            <td style="text-align: center" th:if="${ordenes.getIdTipo() == 3}" th:text="'Pre orden'"></td>
                             <td style="text-align: center" th:text="${ordenes.getNombreSede()}"></td>
                             <td style="text-align: center" th:text="${#numbers.formatDecimal(ordenes.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}"></td>
 
