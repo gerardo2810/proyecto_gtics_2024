@@ -677,28 +677,39 @@
                         </div-->
                         <br>
                         <br>
-                        <div class="float-right">
+                        <div class="float-right botones-tracking">
+
                             <button class="print" onclick="goBack()">REGRESAR</button>
+
                             <script>
                                 function goBack() {
                                     window.history.back();
                                 }
                             </script>
+
+
                             <a th:if="${orden.getEstadoOrden() != 1 && orden.getEstadoOrden() != 2} " th:href="@{'/farmacista/ver_boleta?id=' + ${orden.getIdOrden()}}" >
                                 <button class="print">VER BOLETA</button>
                             </a>
 
                             <div th:if="${orden.getTipoOrden() == 2}" th:switch="${orden.getEstadoOrden()}">
                                 <div th:case="1" >
+
+
+
                                         <a  th:href="@{'/farmacista/aprobar_orden_web?id=' + ${orden.getIdOrden()}}">
                                             <button class="print">APROBAR ORDEN</button>
                                         </a>
+
+
                                         <form method="post" th:action="@{'/farmacista/crear_chat'}" >
                                             <input type="hidden" name="idOrden" th:value="${orden.getIdOrden()}">
                                             <input type="hidden" name="idPaciente" th:value="${orden.getPaciente().getIdUsuario()}" >
                                             <input type="hidden" name="idFarmacista" th:value="${session.usuario.getIdUsuario()}">
                                             <button type="submit" class="print" >Iniciar conversación con el paciente</button>
                                         </form>
+
+
                                 </div>
                             </div>
 
