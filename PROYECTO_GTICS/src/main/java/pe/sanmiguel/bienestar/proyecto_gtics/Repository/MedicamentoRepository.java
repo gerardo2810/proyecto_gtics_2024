@@ -70,6 +70,8 @@ public interface MedicamentoRepository extends JpaRepository<Medicamento, Intege
     @Query(nativeQuery = true, value = "SELECT o.idMedicamento, m.nombre, m.unidad, m.precioCompra, m.precioVenta, SUM(o.cantidad) AS totalCantidad, SUM(o.cantidad * (m.precioVenta - m.precioCompra)) AS gananciaTotal FROM orden_contenido o INNER JOIN medicamento m ON o.idMedicamento = m.idMedicamento GROUP BY o.idMedicamento, m.nombre, m.unidad, m.precioCompra, m.precioVenta")
     List<VentasMedicamentosTotalDto> listaMedicamentosVentas();
 
-
+    @Query(nativeQuery = true, value = "SELECT m.* FROM proyecto_gtics.sede_stock s, proyecto_gtics.medicamento m, proyecto_gtics.sede p\n" +
+            "WHERE s.idMedicamento = m.idMedicamento and p.id=s.idSede and p.nombre=?")
+    List<Medicamento> listarMedicamentoSede(String nombreMedicamento);
 
 }

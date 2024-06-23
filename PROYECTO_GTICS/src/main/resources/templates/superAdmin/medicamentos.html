@@ -111,22 +111,15 @@
                     </div>
 
                     <div class="categorias-title">
-                        Categorías
+                        Por Sedes
                     </div>
 
                     <div class="list-categorias">
 
-                        <div class="categoria-div"><a class="categoria" href="">Todas las Categorías</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Problemas Generales</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Antibacterianos Sistémicos</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Antineoplásicos e Inmunomoduladores</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Cuidado Dermatológico</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Cuidado Muscular y Articular</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Cuidado Oftalmológico</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Cuidado Otológico</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Cuidado Estomatológico</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Cuidado de la Mujer</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Infecciones y Relacionados</a></div>
+                        <div class="categoria-div"><a class="categoria" href="/superadmin/medicamentos">Todas las Sedes</a></div>
+                        <div  th:each="sede : ${sedes}">
+                            <div class="categoria-div"><a class="categoria" th:href="@{'/superadmin/medicamentos' + '?state=' + ${sede.getNombre()}}" th:text="${sede.getNombre()}">Problemas Generales</a></div>
+                        </div>
 
                     </div>
 
