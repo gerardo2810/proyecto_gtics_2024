@@ -488,21 +488,14 @@
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.js" integrity="sha512-aGWPnmdBhJ0leVHhQaRASgb0InV/Z2BWsscdj1Vwt29Oic91wECPixuXsWESpFfCcYPLfOlBZzN2nqQdMxlGTQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-
 <script>
     //$("#messageInput").emojioneArea()
-
 </script>
-
 
 <script th:src="@{/js/topbar.js}"></script>
 
 
-
-
 <script  th:inline="javascript">
-
-
 
 
     const messageInput = document.getElementById("messageInput");
@@ -570,7 +563,6 @@
         }
 
 
-
     }
 
     function sendMessage() {
@@ -592,7 +584,6 @@
                 socket.send(JSON.stringify(messageObject));
                 messageInput.value = '';
 
-
             }else {
 
                 let messageObject = {
@@ -605,13 +596,16 @@
 
                 socket.send(JSON.stringify(messageObject));
                 messageInput.value = '';
+
             }
 
-
-
         }
+
     }
+
 </script>
+
+
 <script>
     $(document).ready(function() {
         var table = $('#miTabla2').DataTable({
