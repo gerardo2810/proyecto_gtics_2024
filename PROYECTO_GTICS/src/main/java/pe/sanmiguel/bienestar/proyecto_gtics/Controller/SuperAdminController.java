@@ -282,7 +282,7 @@ public class SuperAdminController {
     }
 
     @GetMapping(value = {"/medicamentos"})
-    public String showMedicamentos(Model model,
+    public String showMedicamentos(@RequestParam(name = "state", required = false) String state, Model model,
                                    HttpServletRequest request, HttpServletResponse response, Authentication authentication){
         //SESSION
         //Iniciamos la sesión
@@ -290,8 +290,26 @@ public class SuperAdminController {
         Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
         session.setAttribute("usuario", usuario);
 
-        List<Medicamento> listaMedicamentos = medicamentoRepository.listarMedicamentosActivos();
-        model.addAttribute("listaMedicamentos", listaMedicamentos);
+        List<Sede> sedeList = sedeRepository.findAll();
+
+        if(state==null){
+            System.out.println("Estoy en stado null");
+            List<Medicamento> listaMedicamentos = medicamentoRepository.listarMedicamentosActivos();
+            model.addAttribute("listaMedicamentos", listaMedicamentos);
+            model.addAttribute("sedes", sedeList);
+            return "superAdmin/medicamentos";
+        }else{
+            System.out.println("Stado es " +state);
+            for(Sede sede:sedeList){
+                String nombreSede = sede.getNombre();
+                if(state.equals(nombreSede)){
+                    List<Medicamento> listaMedicamentosSede = medicamentoRepository.listarMedicamentoSede(state);
+                    model.addAttribute("listaMedicamentos", listaMedicamentosSede);
+                    model.addAttribute("sedes", sedeList);
+                    return "superAdmin/medicamentos";
+                }
+            }
+        }
         return "superAdmin/medicamentos";
     }
 

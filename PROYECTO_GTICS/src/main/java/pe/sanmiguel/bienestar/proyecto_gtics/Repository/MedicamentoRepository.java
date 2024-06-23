@@ -75,5 +75,8 @@ public interface MedicamentoRepository extends JpaRepository<Medicamento, Intege
     List<VentasMedicamentosporSedeDto> listarVentasMedicamentosporSede(int idSede);
 
 
+    @Query(nativeQuery = true, value = "SELECT m.* FROM proyecto_gtics.sede_stock s, proyecto_gtics.medicamento m, proyecto_gtics.sede p\n" +
+            "WHERE s.idMedicamento = m.idMedicamento and p.id=s.idSede and p.nombre=?")
+    List<Medicamento> listarMedicamentoSede(String nombreMedicamento);
 
 }

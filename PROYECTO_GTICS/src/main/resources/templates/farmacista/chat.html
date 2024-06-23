@@ -113,7 +113,7 @@
             margin-right: 5px; /* Espacio entre el icono y el texto */
         }
         .area {
-            height: 19vh !important;
+            height: 12vh !important;
         }
 
         .circles {
@@ -136,7 +136,7 @@
         }
 
         .user-btn {
-            padding: 10px 12px 10px 12px;
+            padding: 13px 14px 13px 14px;
             font-size: 1.1rem !important;
         }
 
@@ -256,7 +256,7 @@
 
 <br>
 
-<div class="container" style="display: flex; flex-direction: row; column-gap: 10px">
+<div class="container" style="display: flex; flex-direction: row; column-gap: 60px">
 
 
     <div>
@@ -264,7 +264,7 @@
         <section class="Chat">
             <div class="ChatHead">
                 <li class="group">
-                    <div class="avatar"><img src="/img/farmaceutico.png"></div>
+                    <div ><img width="60" height="60" src="https://img.icons8.com/papercut/100/user-male-circle.png" alt="user-male-circle"/></div>
                     <p class="GroupName" th:text="${'Paciente: ' + paciente.getNombres() + ' ' + paciente.getApellidos()}"></p>
 
                 </li>
@@ -345,8 +345,8 @@
 
     </div>
 
-    <div class="container" style="display: flex; flex-direction: column">
-        <div class="container">
+    <div style="display: flex; flex-direction: column;justify-content: center; width: 800px">
+        <div>
             <table id="miTabla2" class="table table-striped">
                 <h2>Contenido de la orden</h2>
                 <thead>
@@ -363,7 +363,7 @@
                 <tbody>
                 <tr>
                     <td>Paracetamol 100 mg</td>
-                    <td><img id="imagen" class="medicamento" src="/img/paracetamol.jpg" style="width: 75px ; height: 75px"></td>
+                    <td><img  class="medicamento" src="/img/paracetamol.jpg" style="width: 75px ; height: 75px"></td>
                     <td>5</td>
                     <td>S/. 6</td>
                     <td>S/. 30</td>
@@ -411,7 +411,7 @@
         <br>
         <br>
 
-        <div class="container">
+        <div>
             <table id="miTabla3" class="table table-striped">
                 <h2>Medicamentos sin Stock</h2>
                 <thead>
@@ -428,7 +428,7 @@
                 <tbody>
                 <tr>
                     <td>Paracetamol 100 mg</td>
-                    <td><img  class="medicamento" src="/img/paracetamol.jpg" style="width: 75px ; height: 75px"></td>
+                    <td><img id="imagen" class="medicamento" src="/img/paracetamol.jpg" style="width: 75px ; height: 75px"></td>
                     <td>5</td>
                     <td>S/. 6</td>
                     <td>S/. 30</td>
@@ -465,17 +465,7 @@
 <br>
 <br>
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+
 
 
 

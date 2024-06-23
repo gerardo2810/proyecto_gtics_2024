@@ -101,7 +101,7 @@
         <div class="interface">
 
 
-            <div class="filtros">
+            <div class="filtros" style="height: 350px; width: 240px">
 
 
                 <div class="container-filters">
@@ -111,22 +111,15 @@
                     </div>
 
                     <div class="categorias-title">
-                        Categorías
+                        Por Sedes
                     </div>
 
                     <div class="list-categorias">
 
-                        <div class="categoria-div"><a class="categoria" href="">Todas las Categorías</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Problemas Generales</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Antibacterianos Sistémicos</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Antineoplásicos e Inmunomoduladores</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Cuidado Dermatológico</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Cuidado Muscular y Articular</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Cuidado Oftalmológico</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Cuidado Otológico</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Cuidado Estomatológico</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Cuidado de la Mujer</a></div>
-                        <div class="categoria-div"><a class="categoria" href="">Infecciones y Relacionados</a></div>
+                        <div class="categoria-div"><a class="categoria" href="/superadmin/medicamentos">Todas las Sedes</a></div>
+                        <div  th:each="sede : ${sedes}">
+                            <div class="categoria-div"><a class="categoria" th:href="@{'/superadmin/medicamentos' + '?state=' + ${sede.getNombre()}}" th:text="${sede.getNombre()}">Problemas Generales</a></div>
+                        </div>
 
                     </div>
 
@@ -147,29 +140,35 @@
                 </div>
 
                 <!-- Contenedor de elementos -->
-                <div class="med-container">
-                    <div class="item" th:each="medicamento : ${listaMedicamentos}">
-                        <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" class="img-item"/>
-                        <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
-                            <div>
-                                <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}">Unidad</div>
-                                <div class="item-title roboto-medium" th:text="${medicamento.nombre}">Medicamento</div>
+                <div id="content">
+                    <div class="med-container">
+                        <div class="item" th:each="medicamento : ${listaMedicamentos}">
+                            <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" class="img-item"/>
+                            <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
+                                <div>
+                                    <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}">Unidad</div>
+                                    <div class="item-title roboto-medium" th:text="${medicamento.nombre}">Medicamento</div>
+                                </div>
+
                             </div>
+                            <div style="display: flex; flex-direction: row; gap: 3px; align-items: end;">
+                                <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
+                            </div>
+                            <div style="display: flex;">
+                                <a th:href="@{'/superadmin/editarMedicamento' + '?id=' + ${medicamento.idMedicamento}}">
+                                    <button class="add-item-button open-sans-regular" style="margin-right: 10px">Editar</button>
+                                </a>
 
+                                <form id="formEstadoMedicamento" th:action="@{'/superadmin/eliminarMedicamento'}" method="post">
+                                    <input type="hidden" name="idMedicamento" th:value="${medicamento.idMedicamento}">
+                                    <button type="submit" class="add-item-button open-sans-regular" >Eliminar</button>
+                                </form>
+                            </div>
                         </div>
-                        <div style="display: flex; flex-direction: row; gap: 3px; align-items: end;">
-                            <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
-                        </div>
-                        <div style="display: flex;">
-                            <a th:href="@{'/superadmin/editarMedicamento' + '?id=' + ${medicamento.idMedicamento}}">
-                                <button class="add-item-button open-sans-regular" style="margin-right: 10px">Editar</button>
-                            </a>
+                    </div>
 
-                            <form id="formEstadoMedicamento" th:action="@{'/superadmin/eliminarMedicamento'}" method="post">
-                                <input type="hidden" name="idMedicamento" th:value="${medicamento.idMedicamento}">
-                                <button type="submit" class="add-item-button open-sans-regular" >Eliminar</button>
-                            </form>
-                        </div>
+                    <div class="pagination" id="pagination" style="display:flex; justify-content: center">
+                        <!-- Aquí se añadirán los botones de paginación -->
                     </div>
                 </div>
 
@@ -184,6 +183,56 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const itemsPerPage = 10; // Número de medicamentos por página
+        let currentPage = 1; // Página actual
+
+        const medicamentos = document.querySelectorAll('.med-container .item');
+        const totalMedicamentos = medicamentos.length;
+
+        function mostrarMedicamentos() {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+
+            medicamentos.forEach((medicamento, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    medicamento.style.display = 'block';
+                } else {
+                    medicamento.style.display = 'none';
+                }
+            });
+
+            mostrarPaginacion();
+        }
+
+        function mostrarPaginacion() {
+            const totalPages = Math.ceil(totalMedicamentos / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.addEventListener('click', function() {
+                    currentPage = i;
+                    mostrarMedicamentos();
+                });
+
+                if (i === currentPage) {
+                    button.classList.add('active'); // Añadir clase 'active' al botón de la página actual
+                }
+
+                pagination.appendChild(button);
+            }
+        }
+
+        // Mostrar la paginación y la primera página al cargar la página
+        mostrarMedicamentos();
+    });
+
+</script>
 
 <script>
     $(document).ready(function() {
