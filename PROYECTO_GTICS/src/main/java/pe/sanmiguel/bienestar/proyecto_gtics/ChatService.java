@@ -27,6 +27,7 @@ public class ChatService {
     public List<ChatFirebase> getChatsByIdChat(Integer idChat) throws ExecutionException, InterruptedException {
         ApiFuture<QuerySnapshot> future = firestore.collection("chats")
                 .whereEqualTo("idChat", idChat)
+                .orderBy("timeDate", Query.Direction.ASCENDING)  // Ordenar por campo timeDate
                 .get();
 
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();

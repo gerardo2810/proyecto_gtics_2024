@@ -22,7 +22,93 @@
     <title>Bienestar San Miguel | Farmacista</title>
 </head>
 
+
+
 <body>
+
+<header class="header-topbar">
+    <nav class="nav-topbar container">
+
+
+        <div class="nav-data">
+            <div>
+                <a href="/"><img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo"></a>
+            </div>
+
+            <!--=============== NAV MENU ===============-->
+
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li><a href="/farmacista" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
+
+                    <li><a href="/farmacista/ordenes_venta" class="menu-item roboto-regular">Ordenes de Venta</a></li>
+
+                    <li><a href="/farmacista/ordenes_web" class="menu-item roboto-regular">Ordenes Web</a></li>
+
+                    <li><a href="/farmacista/pre_ordenes" class="menu-item roboto-regular">Pre Ordenes</a></li>
+
+                    <!--=============== DROPDOWN ===============-->
+                    <li class="dropdown-item">
+                        <div class="menu-item roboto-regular">
+                            Perfil <i class="ri-arrow-down-s-line dropdown-arrow"></i>
+                        </div>
+
+                        <ul class="dropdown-menu">
+                            <div class="inside-dropdown">
+                                <li>
+                                    <a href="/farmacista/cambio_contraseña" class="dropdown-link">
+                                        <i class="ri-user-line menu-item dropdown-item roboto-regular"></i> Cambiar contraseña
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="#" class="dropdown-link">
+                                        <i class="ri-lock-line menu-item dropdown-item roboto-regular"></i> Cerrar sesión
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="nav-toggle" id="nav-toggle">
+                <i class="ri-menu-line nav-burger" id="menu-icon"></i>
+                <i class="ri-close-line nav-close"></i>
+
+                <div class="menu-small" id="menu-small">
+                    <div class="inside-menu-small">
+                        <div class="nav-menu-small" id="nav-menu-small">
+                            <ul class="nav-list-small">
+                                <li><a href="/farmacista" class="menu-item roboto-regular" style="text-decoration: underline; color: white;">Inicio</a></li>
+
+                                <li><a href="/farmacista/ordenes_venta" class="menu-item-small roboto-regular">Ordenes de Venta</a></li>
+
+                                <li><a href="/farmacista/ordenes_web" class="menu-item-small roboto-regular">Ordenes Web</a></li>
+
+                                <li><a href="/farmacista/pre_ordenes" class="menu-item-small roboto-regular">Pre Ordenes</a></li>
+                            </ul>
+
+                            <ul class="nav-list-small-perfil">
+                                <li><a href="/farmacista/cambio_contraseña" class="menu-item-small roboto-regular"><i class="ri-user-line roboto-regular"></i>Cambiar contraseña</a></li>
+
+                                <li><a href="/farmacista/pre_ordenes" class="menu-item-small roboto-regular"><i class="ri-lock-line roboto-regular"></i>Cerrar sesión</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </nav>
+</header>
+
+
+<div th:replace="~{fragments/banner.html :: banner}"></div>
+
 
 <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Pre Ordenes')}"></nav>

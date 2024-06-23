@@ -181,6 +181,7 @@ public class PacienteController {
 
             Usuario farmacista = usuarioRepository.getById(Integer.parseInt(userId2));
 
+
             model.addAttribute("idChat", chatActual.getIdChat());
             model.addAttribute("idUser", userSession.getIdUsuario());
             model.addAttribute("farmacista", farmacista);
@@ -423,7 +424,7 @@ public class PacienteController {
             tracking= ordenRepository.findLastOrdenId()+1 + "-2024";
             LocalDateTime fechaIni = LocalDateTime.now();
             LocalDateTime fechaFin = LocalDateTime.now();
-            Integer idFarmacista = new Integer(1); //el id del Farmacista
+            Integer idFarmacista = new Integer(120); //el id del Farmacista
             Sede s = sedeRepository.getById(1); //el id de la Sede
             Doctor doc = doctorRepository.getById(idDoctor); //el id del doctor
 
@@ -432,6 +433,7 @@ public class PacienteController {
 
             Orden orden = new Orden();
             orden.setIdOrden(ordenRepository.findLastOrdenId()+1);
+            System.out.println("Ultimo id en db de orden: " + ordenRepository.findLastOrdenId());
             orden.setTracking(tracking);
             orden.setFechaIni(fechaIni);
             orden.setFechaFin(fechaFin);

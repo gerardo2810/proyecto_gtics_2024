@@ -51,9 +51,7 @@
         ::-webkit-scrollbar-thumb:hover {
             background-color: #0d6efd;
         }
-        body {
-            padding-top: 80px;
-        }
+
         .container2 {
             border: 2px solid #dedede;
             background-color: #f1f1f1;
@@ -230,6 +228,8 @@
 </head>
 
 
+
+
 <body>
 
 
@@ -239,6 +239,7 @@
 
 
 <div th:replace="~{fragments/banner.html :: banner}"></div>
+
 
 
 <div class="container">
@@ -270,7 +271,7 @@
             <div class="ChatHead">
                 <li class="group">
                     <div class="avatar"><img src="/img/farmaceutico.png"></div>
-                    <p class="GroupName" th:text="${farmacista.getNombres() + ' ' + farmacista.getApellidos()}"></p>
+                    <p class="GroupName" th:text="${ 'Farmacista: ' +   farmacista.getNombres() + ' ' + farmacista.getApellidos()}"></p>
 
                 </li>
                 <div class="callGroup">
@@ -279,18 +280,19 @@
             </div>
             <div class="MessageContainer">
 
-                <div class="messageSeperator">Hoy</div>
 
-                <div class="message you">
-                    <p class="messageContent">Buenas noches</p>
-                    <div class="messageDetails">
-                        <div class="messageTime">6:21 PM</div>
-                        <i class="fa-solid fa-check"></i>
-                    </div>
-                </div>
+                <div th:each="mensaje, index : ${mensajes}">
 
 
-                <div th:each="mensaje : ${mensajes}">
+                    <th:block th:with="currentDate=${mensaje.getFormattedDate()}">
+                        <!-- Mostrar fecha solo si es el primer mensaje o si la fecha es diferente al mensaje anterior -->
+                        <th:block th:if="${index.index == 0 or mensajes[index.index - 1].getFormattedDate() != currentDate}">
+                            <div class="message-date">
+                                <div class="messageSeperator" th:text="${currentDate}"></div>
+                            </div>
+                        </th:block>
+                    </th:block>
+
 
                     <div th:switch="${mensaje.getIdRol()}">
 
@@ -320,6 +322,10 @@
                     </div>
 
                 </div>
+
+
+
+
 
                 <div id="messageArea">
 
@@ -532,16 +538,21 @@
 
     socket.onmessage = function (event) {
 
-            let messageArea = document.getElementById("messageArea");
-            var fechaActual = new Date();
-            var horaActual = fechaActual.getHours();
-            var minutosActuales = fechaActual.getMinutes();
+        let messageArea = document.getElementById("messageArea");
+        var fechaActual = new Date();
+        var horaActual = fechaActual.getHours();
+        var minutosActuales = fechaActual.getMinutes();
+        var periodo = horaActual >= 12 ? 'p.m.' : 'a.m.';
+        if (horaActual > 12) {
+            horaActual -= 12;
+        } else if (horaActual === 0) {
+            horaActual = 12;
+        }
+        var minutosFormateados = minutosActuales < 10 ? '0' + minutosActuales : minutosActuales;
 
-            if (minutosActuales<10){
-                var tiempoActual = horaActual + ':0' + minutosActuales;
-            }else{
-                var tiempoActual = horaActual + ':' + minutosActuales;
-            }
+
+        var tiempoActual = horaActual + ':' + minutosFormateados + ' ' + periodo;
+
 
         // Parsear el mensaje JSON recibido
         var messageData = JSON.parse(event.data);

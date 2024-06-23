@@ -272,18 +272,21 @@
             </div>
             <div class="MessageContainer">
 
-                <div class="messageSeperator">Hoy</div>
+
+                <div th:each="mensaje, index : ${mensajes}">
 
 
-                <div class="message me">
-                    <p class="messageContent">Buenas noches</p>
-                    <div class="messageDetails">
-                        <div class="messageTime">6:25 PM</div>
-                    </div>
-                </div>
+
+                    <th:block th:with="currentDate=${mensaje.getFormattedDate()}">
+                        <!-- Mostrar fecha solo si es el primer mensaje o si la fecha es diferente al mensaje anterior -->
+                        <th:block th:if="${index.index == 0 or mensajes[index.index - 1].getFormattedDate() != currentDate}">
+                            <div class="message-date">
+                                <div class="messageSeperator" th:text="${currentDate}"></div>
+                            </div>
+                        </th:block>
+                    </th:block>
 
 
-                <div th:each="mensaje : ${mensajes}">
 
                     <div th:switch="${mensaje.getIdRol()}">
 
@@ -519,12 +522,16 @@
         var fechaActual = new Date();
         var horaActual = fechaActual.getHours();
         var minutosActuales = fechaActual.getMinutes();
-
-        if (minutosActuales<10){
-            var tiempoActual = horaActual + ':0' + minutosActuales;
-        }else{
-            var tiempoActual = horaActual + ':' + minutosActuales;
+        var periodo = horaActual >= 12 ? 'p.m.' : 'a.m.';
+        if (horaActual > 12) {
+            horaActual -= 12;
+        } else if (horaActual === 0) {
+            horaActual = 12;
         }
+        var minutosFormateados = minutosActuales < 10 ? '0' + minutosActuales : minutosActuales;
+
+
+        var tiempoActual = horaActual + ':' + minutosFormateados + ' ' + periodo;
 
         // Parsear el mensaje JSON recibido
         var messageData = JSON.parse(event.data);

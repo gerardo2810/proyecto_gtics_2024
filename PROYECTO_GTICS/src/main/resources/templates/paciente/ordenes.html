@@ -54,11 +54,19 @@
 
 <body>
 
+
+<body>
+
+
+
+
 <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Ordenes Web')}"></nav>
 </header>
 
+
 <div th:replace="~{fragments/banner.html :: banner}"></div>
+
 
 <script th:if="${msg != null}">
     Swal.fire({

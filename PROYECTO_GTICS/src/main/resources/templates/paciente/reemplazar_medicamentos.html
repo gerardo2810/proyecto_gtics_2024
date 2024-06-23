@@ -32,9 +32,7 @@
     <title>Mensajería | Bienestar San Miguel</title>
 
     <style>
-        body {
-            padding-top: 80px;
-        }
+
         .container3 {
             text-align: center;
             margin-top: 50px; /* Ajusta el margen superior según sea necesario */
@@ -93,15 +91,18 @@
 
 <body>
 
-<header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Boleta')}"></nav>
-</header>
+
+
 
 
 
 <div th:replace="~{fragments/banner.html :: banner}"></div>
 
+<header class="header-topbar">
+    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Boleta')}"></nav>
+</header>
 
+<div th:replace="~{fragments/banner.html :: banner}"></div>
 
 
 
