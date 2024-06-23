@@ -158,7 +158,6 @@
                 position: fixed;
                 z-index: 1;
                 left: 0;
-                top: 0;
                 width: 100%;
                 height: 100%;
                 overflow: auto;
@@ -168,7 +167,7 @@
 
             .modal-content {
                 background-color: white;
-                margin: 5% auto;
+                margin: 18% auto;
                 padding: 20px;
                 border: 1px solid #888;
                 width: 90%;
@@ -495,6 +494,10 @@
                             <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
                             <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Unidad</th>
                             <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Categorias</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">asa</th>
+                            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">assa</th>
+
+
 
                         </tr>
                         </thead>
@@ -503,6 +506,11 @@
                             <td th:text="${medicamento.getNombre()}"></td>
                             <td th:text="${ medicamento.getUnidad()}"></td>
                             <td th:text="${medicamento.getCategorias()}"></td>
+                            <td th:text="${medicamento.getIdMedicamento()}"></td>
+                            <td th:text="${medicamento.getPrecioCompra()}"></td>
+
+
+
                         </tr>
                         </tbody>
                     </table>

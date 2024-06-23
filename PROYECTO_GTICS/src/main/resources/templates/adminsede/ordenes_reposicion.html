@@ -45,6 +45,47 @@
         <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
 
         <style>
+
+
+            .btn-p {
+                font-size: 17px;
+                padding: 12px 20px;
+                background-color: #2191FD; /* Color de fondo del botón */
+                color: white; /* Color del texto del botón */
+                border: none; /* Sin borde */
+                border-radius: 5px; /* Bordes redondeados */
+                cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+                margin: 0 10px; /* Espaciado horizontal */
+            }
+
+            .btn-p:hover {
+                background-color: #0d6efd; /* Color de fondo del botón al pasar el cursor */
+            }
+
+            #searchInput {
+                padding: 12px 20px;
+                font-size: 17px;
+                width: 350px;
+                border: 3px solid rgba(33, 145, 253, 0.75);
+                border-radius: 5px; /* Bordes redondeados */
+                margin: 0 10px; /* Espaciado horizontal */
+            }
+
+            .container3 {
+                display: flex;
+                align-items: center; /* Centra verticalmente los elementos */
+                justify-content: space-between; /* Espacia los elementos horizontalmente */
+                margin: 20px; /* Margen alrededor del contenedor */
+            }
+
+            .left {
+                display: flex;
+                align-items: center; /* Centra verticalmente los elementos */
+            }
+
+            .right {
+                margin-left: auto; /* Empuja el botón a la derecha */
+            }
             .btn-c {
                 display: inline-block;
                 padding: 12px 20px;
@@ -148,12 +189,16 @@
                 <div style="padding-right: 0; padding-left: 0"> </div>
             </div>
             <br/>
-            <div style="display: flex">
-                <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/medicamentos'" style="margin-left: 30px; font-size: 17px; padding: 12px 20px">Generar nueva orden</button>
-                <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/ver_ordenes_entregadas'" style="margin-left: 64%; font-size: 17px; padding: 12px 20px">Ver órdenes entregadas</button>
+        <div class="container3">
+            <div class="left">
+                <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/medicamentos'">Generar nueva orden</button>
+                <input type="text" id="searchInput" placeholder="Buscar por número de orden">
             </div>
+            <div class="right">
+                <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/ver_ordenes_entregadas'">Ver órdenes entregadas</button>
+            </div>
+        </div>
             <br/>
-            <input type="text" id="searchInput" placeholder="Buscar por número de orden" style="margin-left: 30px; margin-right: 30px; padding: 12px 20px; font-size: 17px;width: 350px;border: 3px solid rgba(33,145,253,0.75)">
             <br/>
             <br>
             <div class="hola">
