@@ -242,18 +242,21 @@
             </div>
             <div class="MessageContainer">
 
-                <div class="messageSeperator">Hoy</div>
+
+                <div th:each="mensaje, index : ${mensajes}">
 
 
-                <div class="message me">
-                    <p class="messageContent">Buenas noches</p>
-                    <div class="messageDetails">
-                        <div class="messageTime">6:25 PM</div>
-                    </div>
-                </div>
+
+                    <th:block th:with="currentDate=${mensaje.getFormattedDate()}">
+                        <!-- Mostrar fecha solo si es el primer mensaje o si la fecha es diferente al mensaje anterior -->
+                        <th:block th:if="${index.index == 0 or mensajes[index.index - 1].getFormattedDate() != currentDate}">
+                            <div class="message-date">
+                                <div class="messageSeperator" th:text="${currentDate}"></div>
+                            </div>
+                        </th:block>
+                    </th:block>
 
 
-                <div th:each="mensaje : ${mensajes}">
 
                     <div th:switch="${mensaje.getIdRol()}">
 

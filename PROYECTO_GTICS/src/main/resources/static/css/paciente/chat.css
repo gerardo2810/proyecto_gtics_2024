@@ -76,7 +76,7 @@ section {
 }
 
 .ChatHead .group {
-    width: 300px;
+    width: 600px;
     display: flex;
     align-items: center;
 }
@@ -227,7 +227,7 @@ section {
 .me{
     margin-left: 523px;
     background-color: #1b85ff;
-    text-align: right;
+    text-align: left;
     color: white;
     padding-top: 14px;
     padding-left: 22px;

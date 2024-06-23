@@ -236,7 +236,7 @@
             <div class="ChatHead">
                 <li class="group">
                     <div class="avatar"><img src="/img/farmaceutico.png"></div>
-                    <p class="GroupName" th:text="${farmacista.getNombres() + ' ' + farmacista.getApellidos()}"></p>
+                    <p class="GroupName" th:text="${ 'Farmacista: ' +   farmacista.getNombres() + ' ' + farmacista.getApellidos()}"></p>
 
                 </li>
                 <div class="callGroup">
@@ -245,18 +245,19 @@
             </div>
             <div class="MessageContainer">
 
-                <div class="messageSeperator">Hoy</div>
 
-                <div class="message you">
-                    <p class="messageContent">Buenas noches</p>
-                    <div class="messageDetails">
-                        <div class="messageTime">6:21 PM</div>
-                        <i class="fa-solid fa-check"></i>
-                    </div>
-                </div>
+                <div th:each="mensaje, index : ${mensajes}">
 
 
-                <div th:each="mensaje : ${mensajes}">
+                    <th:block th:with="currentDate=${mensaje.getFormattedDate()}">
+                        <!-- Mostrar fecha solo si es el primer mensaje o si la fecha es diferente al mensaje anterior -->
+                        <th:block th:if="${index.index == 0 or mensajes[index.index - 1].getFormattedDate() != currentDate}">
+                            <div class="message-date">
+                                <div class="messageSeperator" th:text="${currentDate}"></div>
+                            </div>
+                        </th:block>
+                    </th:block>
+
 
                     <div th:switch="${mensaje.getIdRol()}">
 
@@ -286,6 +287,10 @@
                     </div>
 
                 </div>
+
+
+
+
 
                 <div id="messageArea">
 
