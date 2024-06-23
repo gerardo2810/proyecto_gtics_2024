@@ -409,7 +409,6 @@ public class ExporterPDF {
 
         documento.add(espacio);
         documento.add(espacio);
-        documento.add(espacio);
 
         // Crear un Chunk con subrayado
         Chunk tituloChunk4 = new Chunk("Medicamentos más vendidos en Sede Sur", fuente);
@@ -469,7 +468,7 @@ public class ExporterPDF {
 
         espacio.setSpacingBefore(20);
         documento.add(espacio);
-        documento.add(espacio);
+        documento.add(imagen);
         documento.add(espacio);
 
         // Crear un Chunk con subrayado
