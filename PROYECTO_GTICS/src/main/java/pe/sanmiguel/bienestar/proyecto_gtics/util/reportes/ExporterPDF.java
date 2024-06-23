@@ -379,8 +379,6 @@ public class ExporterPDF {
 
         documento.add(imagen);
         espacio.setSpacingBefore(20);
-        documento.add(espacio);
-        documento.add(espacio);
 
         // Crear un Chunk con subrayado
         Chunk tituloChunk3 = new Chunk("Medicamentos más vendidos en Sede Norte", fuente);
@@ -410,6 +408,8 @@ public class ExporterPDF {
         agregarFilaTotal(documento, "Ganancia total", String.valueOf(gananciaTotalsede2));
 
         documento.add(espacio);
+        documento.add(espacio);
+        documento.add(espacio);
 
         // Crear un Chunk con subrayado
         Chunk tituloChunk4 = new Chunk("Medicamentos más vendidos en Sede Sur", fuente);
@@ -435,12 +435,10 @@ public class ExporterPDF {
         espacio.setSpacingBefore(20);
         documento.add(espacio);
         agregarFilaTotal(documento, "Ganancia total", String.valueOf(gananciaTotalsede3));
-        espacio.setSpacingBefore(80);
+        espacio.setSpacingBefore(60);
         documento.add(espacio);
         documento.add(imagen);
         espacio.setSpacingBefore(20);
-        documento.add(espacio);
-        documento.add(espacio);
 
         // Crear un Chunk con subrayado
         Chunk tituloChunk5 = new Chunk("Medicamentos más vendidos en Sede Este", fuente);
@@ -470,6 +468,8 @@ public class ExporterPDF {
         agregarFilaTotal(documento, "Ganancia total", String.valueOf(gananciaTotalsede4));
 
         espacio.setSpacingBefore(20);
+        documento.add(espacio);
+        documento.add(espacio);
         documento.add(espacio);
 
         // Crear un Chunk con subrayado
