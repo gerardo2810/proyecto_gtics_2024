@@ -150,12 +150,13 @@ public class PacienteController {
 
 
 
-    @GetMapping(value = "/chat/{userId1}/{userId2}")
-    public String chat(HttpSession session, @PathVariable String userId1, @PathVariable String userId2, Model model) {
+    @GetMapping(value = "/chat/{idOrden}/{userId1}/{userId2}")
+    public String chat(HttpSession session, @PathVariable String userId1, @PathVariable String userId2,@PathVariable String idOrden, Model model) {
         model.addAttribute("userId1", userId1);
         model.addAttribute("userId2", userId2);
+        model.addAttribute("idOrden", idOrden);
 
-        Chat chatActual  = chatRepository.buscarChat(Integer.parseInt(userId1),Integer.parseInt(userId2));
+        Chat chatActual  = chatRepository.buscarChat(Integer.parseInt(userId1),Integer.parseInt(userId2), Integer.parseInt(idOrden));
 
         /*----------------------IP LOCAL-------------------------*/
         try {InetAddress localhost = InetAddress.getLocalHost();

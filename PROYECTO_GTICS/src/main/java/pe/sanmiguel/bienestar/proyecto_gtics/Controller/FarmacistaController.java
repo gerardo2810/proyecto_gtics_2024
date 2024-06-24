@@ -785,19 +785,19 @@ public class FarmacistaController {
         System.out.println("idFarmacista:" + idFarmacista);
         System.out.println("idOrden:" + idOrden);
 
-        Chat verificarChat = chatRepository.buscarChat(idPaciente, idFarmacista);
+        Chat verificarChat = chatRepository.buscarChat(idPaciente, idFarmacista,idOrden);
 
 
         if(verificarChat == null){
 
             Integer lastId = chatRepository.findLastChatId();
             if(lastId != null){
-                chatRepository.crearChat(lastId+1, idPaciente, idFarmacista);
+                chatRepository.crearChat(lastId+1, idPaciente, idFarmacista, idOrden);
             }else if (lastId == null){
-                chatRepository.crearChat(1, idPaciente, idFarmacista);
+                chatRepository.crearChat(1, idPaciente, idFarmacista, idOrden);
             }
 
-            return "redirect:/farmacista/chat/" + idFarmacista+ "/" + idPaciente;
+            return "redirect:/farmacista/chat/" + idOrden + "/" +  idFarmacista+ "/" + idPaciente;
 
         } else{
             return "redirect:/farmacista/mensajeria";
@@ -819,22 +819,20 @@ public class FarmacistaController {
 
 
 
-    @GetMapping(value = "/farmacista/chat/{userId1}/{userId2}")
-    public String chat(HttpSession session, @PathVariable String userId1, @PathVariable String userId2, Model model) {
+    @GetMapping(value = "/farmacista/chat/{idOrden}/{userId1}/{userId2}")
+    public String chat(HttpSession session, @PathVariable String userId1, @PathVariable String userId2, @PathVariable String idOrden, Model model) {
         model.addAttribute("userId1", userId1);
         model.addAttribute("userId2", userId2);
-
-        Chat chatActual  = chatRepository.buscarChat(Integer.parseInt(userId2),Integer.parseInt(userId1));
-
+        model.addAttribute("idOrden",idOrden);
 
 
         /*----------------------IP LOCAL-------------------------*/
-        try {InetAddress localhost = InetAddress.getLocalHost();
-            System.out.println("Mi dirección IP local es: " + localhost.getHostAddress());
-            model.addAttribute("iplocal", localhost.getHostAddress());} catch (UnknownHostException e) {
-            System.out.println("Error obteniendo la dirección IP local");
-            e.printStackTrace();}
+        try {InetAddress localhost = InetAddress.getLocalHost();model.addAttribute("iplocal", localhost.getHostAddress());} catch (UnknownHostException e) {e.printStackTrace();}
         /*------------------------------------------------------*/
+
+
+
+        Chat chatActual  = chatRepository.buscarChat(Integer.parseInt(userId2),Integer.parseInt(userId1),Integer.parseInt(idOrden));
 
         Usuario userSession = (Usuario) session.getAttribute("usuario");
 

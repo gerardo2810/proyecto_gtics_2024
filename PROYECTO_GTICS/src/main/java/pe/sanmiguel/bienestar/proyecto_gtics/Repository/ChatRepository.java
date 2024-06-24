@@ -38,13 +38,13 @@ public interface ChatRepository extends JpaRepository<Chat, Integer> {
     @Query(value="SELECT MAX(idChat) FROM chat", nativeQuery = true)
     Integer findLastChatId();
 
-    @Query(value="SELECT * FROM chat where idUser1=? and idUser2=?", nativeQuery = true)
-    Chat buscarChat(int idUser1, int idUser2);
+    @Query(value="SELECT * FROM chat where idUser1=? and idUser2=? and idOrden=?", nativeQuery = true)
+    Chat buscarChat(int idUser1, int idUser2, int idOrden);
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "INSERT INTO proyecto_gtics.chat VALUES (?1,?2,?3);")
-    void crearChat(int idChat, int idUser1, int idUser2);
+    @Query(nativeQuery = true, value = "INSERT INTO proyecto_gtics.chat VALUES (?1,?2,?3,?4);")
+    void crearChat(int idChat, int idUser1, int idUser2, int idOrden);
 
 
 
