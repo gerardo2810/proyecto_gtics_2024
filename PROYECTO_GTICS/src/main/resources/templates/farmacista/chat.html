@@ -20,6 +20,8 @@
     <link rel="stylesheet" th:href="@{/css/paciente/chat.css}">
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
+    <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+
 
 
 
@@ -660,7 +662,20 @@
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <!------>
 
+<script>
+    function toggleNotifi() {
+        var box = document.getElementById('box');
+        var isVisible = box.style.opacity !== '0';
 
+        if (isVisible) {
+            box.style.opacity = '0';
+            box.style.height = '0px'; // Ajusta la altura según tu diseño
+        } else {
+            box.style.opacity = '1';
+            box.style.height = 'auto'; // Ajusta la altura según el contenido
+        }
+    }
+</script>
 <script>
     // Seleccionar todos los elementos p dentro de la clase bar
     var emojis = document.querySelectorAll(".bar p");
