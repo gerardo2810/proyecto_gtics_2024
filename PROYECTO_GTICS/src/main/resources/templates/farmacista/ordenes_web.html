@@ -21,6 +21,7 @@
   <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
   <link th:href="@{/css/footer.css}" rel="stylesheet" />
   <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+  <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
 
   <link rel="stylesheet" th:href="@{/css/styles.css}">
   <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
@@ -249,7 +250,20 @@
     });
   });
 </script>
+<script>
+  function toggleNotifi() {
+    var box = document.getElementById('box');
+    var isVisible = box.style.opacity !== '0';
 
+    if (isVisible) {
+      box.style.opacity = '0';
+      box.style.height = '0px'; // Ajusta la altura según tu diseño
+    } else {
+      box.style.opacity = '1';
+      box.style.height = 'auto'; // Ajusta la altura según el contenido
+    }
+  }
+</script>
 <script>
   window.onload = function () {
     $('#onload').fadeOut();

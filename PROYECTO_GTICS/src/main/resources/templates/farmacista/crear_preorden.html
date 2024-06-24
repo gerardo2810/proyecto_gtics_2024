@@ -24,6 +24,8 @@
     <link rel="stylesheet" th:href="@{/css/topbar.css}">
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/perfil.css}">
+    <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+
 
 
     <!--=============== FONT AWESOME ===============-->
@@ -364,6 +366,20 @@
         }
 
     });
+</script>
+<script>
+    function toggleNotifi() {
+        var box = document.getElementById('box');
+        var isVisible = box.style.opacity !== '0';
+
+        if (isVisible) {
+            box.style.opacity = '0';
+            box.style.height = '0px'; // Ajusta la altura según tu diseño
+        } else {
+            box.style.opacity = '1';
+            box.style.height = 'auto'; // Ajusta la altura según el contenido
+        }
+    }
 </script>
 
 

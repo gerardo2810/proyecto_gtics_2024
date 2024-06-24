@@ -34,6 +34,8 @@
     <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <script th:href="@{/js/pagination.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+
 
 
 
@@ -1063,6 +1065,20 @@
             table.search(searchTerm).draw();
         });
     });
+</script>
+<script>
+    function toggleNotifi() {
+        var box = document.getElementById('box');
+        var isVisible = box.style.opacity !== '0';
+
+        if (isVisible) {
+            box.style.opacity = '0';
+            box.style.height = '0px'; // Ajusta la altura según tu diseño
+        } else {
+            box.style.opacity = '1';
+            box.style.height = 'auto'; // Ajusta la altura según el contenido
+        }
+    }
 </script>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>

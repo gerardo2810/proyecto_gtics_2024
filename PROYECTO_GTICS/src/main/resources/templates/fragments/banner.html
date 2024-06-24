@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="${title}"></title>
+    <link th:href="@{/css/notificaciones.css}" rel="stylesheet" />
 
 </head>
 <body>
@@ -50,16 +51,24 @@
                         </div>
 
                         <!-- Configurar Notificaciones FARMACISTA -->
-                        <div th:if="${session.usuario.getRol() == 3}" >
-                            <a style="color: white" th:href="@{/farmacista/perfil}" sec:authorize="hasAnyAuthority('FARMACISTA')">
-                                <div class="banner-btn bell-btn">
+                        <div th:if="${session.usuario.getRol() == 3}">
+                            <nav4>
+                                <div class="logo"></div>
+                                <div class="banner-btn bell-btn" onclick="toggleNotifi()">
                                     <i class="fa-regular fa-bell"></i>
+                                    <span>17</span>
                                 </div>
-
-                                <div th:if="${session.usuario.getRol() == null}" class="banner-btn bell-btn">
-                                    <i class="fa-solid fa-bell"></i>
+                                <div class="notifi-box" id="box">
+                                    <h2>Notifications <span>17</span></h2>
+                                    <div class="notifi-item">
+                                        <img class="image--cover" th:src="@{/img/default_profile.png}">
+                                        <div class="text">
+                                            <h4>Elias Abdurrahman</h4>
+                                            <p>@lorem ipsum dolor sit amet</p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </a>
+                            </nav4>
                         </div>
 
                         <!-- Configurar Notificaciones PACIENTE -->
@@ -105,7 +114,6 @@
                             </form>
                         </div>
 
-
                     </div>
                     <img class="image--cover" th:src="@{/img/default_profile.png}">
                 </div>
@@ -135,6 +143,21 @@
         </ul>
     </div >
 </div>
+<script>
+    function toggleNotifi() {
+        var box = document.getElementById('box');
+        var isVisible = box.style.opacity !== '0';
+
+        if (isVisible) {
+            box.style.opacity = '0';
+            box.style.height = '0px'; // Ajusta la altura según tu diseño
+        } else {
+            box.style.opacity = '1';
+            box.style.height = 'auto'; // Ajusta la altura según el contenido
+        }
+    }
+</script>
+
 
 </body>
 </html>
