@@ -23,5 +23,9 @@ public class Chat {
     @JoinColumn(name="idUser2")
     private Usuario idUser2;
 
+    @ManyToOne
+    @JoinColumn(name="idOrden")
+    private Orden orden;
+
 
 }
