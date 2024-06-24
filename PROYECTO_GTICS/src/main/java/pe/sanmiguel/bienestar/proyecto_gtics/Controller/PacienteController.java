@@ -425,7 +425,7 @@ public class PacienteController {
             LocalDateTime fechaIni = LocalDateTime.now();
             LocalDateTime fechaFin = LocalDateTime.now();
             Integer idFarmacista = new Integer(120); //el id del Farmacista
-            Sede s = sedeRepository.getById(1); //el id de la Sede
+            Sede s = sedeRepository.getById(5); //el id de la Sede
             Doctor doc = doctorRepository.getById(idDoctor); //el id del doctor
 
 
