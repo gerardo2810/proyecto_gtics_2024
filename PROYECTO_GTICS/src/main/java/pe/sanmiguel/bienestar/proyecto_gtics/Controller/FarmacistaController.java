@@ -84,6 +84,7 @@ public class FarmacistaController {
     List<Medicamento> medicamentosConStock = new ArrayList<>();
     List<String> cantidadesFaltantes = new ArrayList<>();
     List<String> cantidadesExistentes = new ArrayList<>();
+    List<String> idsSelectedJS = new ArrayList<>();
     Orden ordenSaved = new Orden();
 
     Usuario pacienteOnStore = new Usuario();
@@ -549,15 +550,22 @@ public class FarmacistaController {
             }
         }
     }
+
+    @PostMapping("/farmacista/crear_new_preorden")
+    public String postCreatePreOrden(@RequestParam("listaIds") List<String> listaSelectedIds){
+        idsSelectedJS = listaSelectedIds;
+        return "redirect:/farmacista/crear_preorden";
+    }
+
     @GetMapping("/farmacista/crear_preorden")
-    public String createPreOrden(Model model, @RequestParam("listaIds") List<String> listaSelectedIds) {
+    public String createPreOrden(Model model) {
 
         if (medicamentosSinStock.isEmpty()){
             return "redirect:/farmacista";
         }
 
-        medicamentosSeleccionados = getMedicamentosFromLista(listaSelectedIds);
-        listaCantidades = getCantidadesFromLista(listaSelectedIds);
+        medicamentosSeleccionados = getMedicamentosFromLista(idsSelectedJS);
+        listaCantidades = getCantidadesFromLista(idsSelectedJS);
 
         verificationStock verificationStock = new verificationStock(medicamentosSeleccionados, listaCantidades);
 
