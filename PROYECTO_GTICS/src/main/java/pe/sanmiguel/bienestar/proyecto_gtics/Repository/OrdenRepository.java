@@ -49,7 +49,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE orden.id = :idOrden")
     Orden findPreordenById(@Param("idOrden") Integer idOrden);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE orden.id = :idOrden")
+    @Query(nativeQuery = true, value = "SELECT o2.* FROM orden o1 LEFT JOIN orden o2 ON o1.id = o2.idOrden WHERE o1.id = :idOrden")
     Orden findPreordenByOrdenId(@Param("idOrden") Integer idOrden);
 
 
