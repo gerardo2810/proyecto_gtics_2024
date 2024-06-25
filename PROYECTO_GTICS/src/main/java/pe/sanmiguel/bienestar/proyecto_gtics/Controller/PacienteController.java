@@ -258,12 +258,6 @@ public class PacienteController {
         return "paciente/mensajeria";}
 
 
-
-    @GetMapping(value = "/orden_paciente_stock")
-    public String ordenPacienteStock(){
-        return "paciente/orden_paciente_stock";
-    }
-
     @GetMapping(value = "/reemplazar_medicamentos")
     public String ordenReemplazoMedicamentos(){
         return "paciente/reemplazar_medicamentos";

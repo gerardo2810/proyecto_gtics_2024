@@ -139,7 +139,7 @@
 
 
 
-<form id="form"  method="post" th:action="@{'/paciente/guardarOrden'}"  th:object="${usuario}"  enctype="multipart/form-data">
+<form  method="post" th:action="@{'/paciente/guardarOrden'}"  th:object="${usuario}"  enctype="multipart/form-data">
 
     <div class="container-form">
 
@@ -611,39 +611,7 @@
 
 </style>
 
-<script >
 
-    // Obtener el elemento input de tipo file
-    const img = document.getElementById("file");
-    console.log(img.files.length);
-
-
-
-    const form = document.getElementById("form");
-
-    form.addEventListener("submit", e =>{
-        e.preventDefault();
-
-        Swal.fire({
-            title: '¿Estás seguro de generar esta nueva orden de compra?',
-            icon: 'warning',
-            iconColor: '#DC3545',
-            showCancelButton: true,
-            cancelButtonColor: '#DC3545',
-            cancelButtonText: 'Cancelar',
-            confirmButtonColor: '#0D6EFD',
-            confirmButtonText: 'Confirmar',
-            footer: '<a href="">Volver a ingresar los datos</a>'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit();
-            }
-        });
-
-
-    })
-
-</script>
 
 
 

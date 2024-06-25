@@ -1022,8 +1022,24 @@ public class FarmacistaController {
             System.out.println(chats);
             /*------------------------------------------------------*/
 
-
             Usuario paciente = usuarioRepository.getById(Integer.parseInt(userId2));
+
+            List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+            List<OrdenContenido> medicamentosEnStock = new ArrayList<>();
+            List<OrdenContenido> medicamentosSinStock = new ArrayList<>();
+            for(OrdenContenido oc : lista){
+                if(oc.getCantidad() > sedeStockRepository.verificarCantidadStockPorSede(  ordenRepository.getOrdenByIdOrden(Integer.parseInt(idOrden)).getSede().getIdSede(), oc.getIdMedicamento().getIdMedicamento())    ){
+                    medicamentosSinStock.add(oc);
+                }else{
+                    medicamentosEnStock.add(oc);
+                }
+            }
+
+            List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
+
+            model.addAttribute("listaMedicamentos", listaMedicamentos);
+            model.addAttribute("medicamentosSinStock", medicamentosSinStock);
+            model.addAttribute("medicamentosEnStock", medicamentosEnStock);
             model.addAttribute("idChat", chatActual.getIdChat());
             model.addAttribute("idUser", userSession.getIdUsuario());
             model.addAttribute("paciente", paciente);
