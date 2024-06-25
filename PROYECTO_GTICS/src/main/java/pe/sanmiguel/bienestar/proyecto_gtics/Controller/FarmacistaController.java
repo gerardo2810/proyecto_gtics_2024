@@ -470,6 +470,7 @@ public class FarmacistaController {
 
                 Orden newOrden = new Orden();
                 newOrden.setFechaIni(now);
+                priceTotal = priceTotal.replace(",", "");
                 newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
                 newOrden.setIdFarmacista(usuarioSession.getIdUsuario());
                 newOrden.setPaciente(pacienteOnStore);
@@ -523,6 +524,7 @@ public class FarmacistaController {
 
                 Orden newOrden = new Orden();
                 newOrden.setFechaIni(now);
+                priceTotal = priceTotal.replace(",", "");
                 newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
                 newOrden.setIdFarmacista(usuarioSession.getIdUsuario());
                 newOrden.setPaciente(pacienteOnStore);
@@ -551,6 +553,8 @@ public class FarmacistaController {
             }
         }
     }
+
+
     @GetMapping("/farmacista/crear_preorden")
     public String createPreOrden(Model model) {
 
@@ -641,6 +645,7 @@ public class FarmacistaController {
         newPreOrden.setSede(sedeSession);
         newPreOrden.setSeguroUsado(ordenPadre.getSeguroUsado());
         newPreOrden.setDoctor(ordenPadre.getDoctor());
+        newPreOrden.setTracking(TokenRandomGenerator.generator());
 
         ordenRepository.save(newPreOrden);
         System.out.println("Orden guardada: " + newPreOrden);
@@ -788,7 +793,7 @@ public class FarmacistaController {
 
         sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
 
-        Orden preOrden = ordenRepository.findPreordenByOrdenId(Integer.valueOf(idPreOrden));
+        Orden preOrden = ordenRepository.findPreordenById(Integer.valueOf(idPreOrden));
         String idOrdenParent = String.valueOf(preOrden.getOrdenParent());
 
         return "redirect:/farmacista/ver_orden_tracking?id=" + idOrdenParent;
@@ -824,6 +829,8 @@ public class FarmacistaController {
                     containsPreOrden = true;
                     contenidoPreOrden = (ArrayList<OrdenContenido>) ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(preOrdenChild.getIdOrden()));
                 }
+
+                System.out.println(containsPreOrden);
 
                 model.addAttribute("containsPreOrden", containsPreOrden);
 
