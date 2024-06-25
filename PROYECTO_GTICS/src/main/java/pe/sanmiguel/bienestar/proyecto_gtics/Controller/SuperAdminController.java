@@ -1489,6 +1489,7 @@ public class SuperAdminController {
                                           @RequestParam(value = "tipounidad", required = false) String tipounidad,
                                           @RequestParam(value = "numunidad", required = false) String numunidad,
                                           @RequestParam(value = "nombre", required = false) String nombre,
+                                          @RequestParam(value = "categorias", required = false) String categorias,
                                           @RequestParam(value = "file", required = false) Part file,
                                           RedirectAttributes attr, Model model) throws IOException {
 
@@ -1524,7 +1525,7 @@ public class SuperAdminController {
             byte[] bytes = inputStream.readAllBytes();
 
             System.out.println("NO HAY ERROR");
-            medicamento.setCategorias("NNUL");
+            medicamento.setCategorias(categorias);
             medicamento.setEstado(1);
             medicamento.setImagen(bytes);
             String unidad = presentacion + ' ' + numunidad + ' ' + tipounidad;
