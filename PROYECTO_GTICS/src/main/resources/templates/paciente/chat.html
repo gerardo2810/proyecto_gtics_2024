@@ -367,50 +367,32 @@
                 </tr>
                 </thead>
 
-
                 <tbody>
-                <tr>
-                    <td>Paracetamol 100 mg</td>
-                    <td><img id="imagen" class="medicamento" src="/img/paracetamol.jpg" style="width: 75px ; height: 75px"></td>
-                    <td>5</td>
-                    <td>S/. 6</td>
-                    <td>S/. 30</td>
-                </tr>
-                <tr>
-                    <td>Neurobion 100 mg</td>
-                    <td><img class="medicamento" src="/img/neurobion.jpg" style="width: 75px ; height: 75px"></td>
-                    <td>5</td>
-                    <td>S/. 6</td>
-                    <td>S/. 30</td>
-                </tr>
-                <tr>
-                    <td>Nastzol 100 mg</td>
-                    <td><img class="medicamento" src="/img/nastzol.jpg" style="width: 75px ; height: 75px"></td>
-                    <td>5</td>
-                    <td>S/. 6</td>
-                    <td>S/. 30</td>
-                </tr>
-                <tr>
-                    <td>Panadol 100 mg</td>
-                    <td><img class="medicamento"  src="/img/panadol.jpg" style="width: 75px ; height: 75px"></td>
-                    <td>5</td>
-                    <td>S/. 6</td>
-                    <td>S/. 30</td>
-                </tr>
-                <tr>
-                    <td>Apronax 100 mg</td>
-                    <td><img class="medicamento"  src="/img/apronax.jpg" style="width: 75px ; height: 75px"></td>
-                    <td>5</td>
-                    <td>S/. 6</td>
-                    <td>S/. 30</td>
-                </tr>
-                <tr>
-                    <td>Doloral 100 mg</td>
-                    <td><img class="medicamento"  src="/img/doloral.jpg" style="width: 75px ; height: 75px"></td>
-                    <td>5</td>
-                    <td>S/. 6</td>
-                    <td>S/. 30</td>
-                </tr>
+
+                    <tr th:each="itemDeLaOrden: ${medicamentosEnStock}">
+                        <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
+                        <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" class="medicamento"/></td>
+                        <td th:text="${itemDeLaOrden.getCantidad()}"></td>
+                        <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
+
+                        <td class="resultado"></td>
+
+                        <script th:inline="javascript">
+                            function limitarDigitos(numero) {
+                                var numeroStr = numero.toString();
+                                // Obtener los primeros 4 dígitos
+                                var primerosCuatroDigitos = numeroStr.substring(0, 4);
+                                var numeroLimitado = parseFloat(primerosCuatroDigitos);
+                                return numeroLimitado;
+                            }
+                            var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
+                            var cantidad = [[${itemDeLaOrden.getCantidad()}]];
+                            var resultado = precioVenta * cantidad;
+                            var resultadoLimitado = limitarDigitos(resultado);
+                            document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
+                        </script>
+
+                    </tr>
 
 
                 </tbody>
@@ -434,32 +416,38 @@
 
 
                 <tbody>
-                <tr>
-                    <td>Paracetamol 100 mg</td>
-                    <td><img id="imagen" class="medicamento" src="/img/paracetamol.jpg" style="width: 75px ; height: 75px"></td>
-                    <td>5</td>
-                    <td>S/. 6</td>
-                    <td>S/. 30</td>
-                </tr>
-                <tr>
-                    <td>Neurobion 100 mg</td>
-                    <td><img class="medicamento" src="/img/neurobion.jpg" style="width: 75px ; height: 75px"></td>
-                    <td>5</td>
-                    <td>S/. 6</td>
-                    <td>S/. 30</td>
-                </tr>
 
+                    <tr th:each="itemDeLaOrden: ${medicamentosSinStock}">
+                        <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
+                        <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" class="medicamento"/></td>
+                        <td th:text="${itemDeLaOrden.getCantidad()}"></td>
+                        <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
 
+                        <td class="resultado"></td>
 
+                        <script th:inline="javascript">
+                            function limitarDigitos(numero) {
+                                var numeroStr = numero.toString();
+                                // Obtener los primeros 4 dígitos
+                                var primerosCuatroDigitos = numeroStr.substring(0, 4);
+                                var numeroLimitado = parseFloat(primerosCuatroDigitos);
+                                return numeroLimitado;
+                            }
+                            var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
+                            var cantidad = [[${itemDeLaOrden.getCantidad()}]];
+                            var resultado = precioVenta * cantidad;
+                            var resultadoLimitado = limitarDigitos(resultado);
+                            document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
+                        </script>
 
+                    </tr>
 
                 </tbody>
             </table>
             <br>
             <br>
             <br>
-            <a class="btn-p" href="/paciente">Generar Pre Orden</a>
-            <a class="btn-p" href="/paciente/reemplazar_medicamentos">Reemplazar medicamento</a>
+
         </div>
 
     </div>
@@ -625,8 +613,21 @@
                 },
                 "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
             },
+            "drawCallback": function(settings) {
+                var api = this.api();
+                var pages = api.page.info().pages;
+
+                if (pages <= 1) {
+                    $('.dataTables_paginate').hide();
+                } else {
+                    $('.dataTables_paginate').show();
+                }
+            }
 
         });
+
+
+
         var table = $('#miTabla3').DataTable({
             "pageLength":3,
             "lengthChange": false,
@@ -643,6 +644,16 @@
                 },
                 "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
             },
+            "drawCallback": function(settings) {
+                var api = this.api();
+                var pages = api.page.info().pages;
+
+                if (pages <= 1) {
+                    $('.dataTables_paginate').hide();
+                } else {
+                    $('.dataTables_paginate').show();
+                }
+            }
 
         });
 
