@@ -793,7 +793,7 @@ public class FarmacistaController {
 
         sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
 
-        Orden preOrden = ordenRepository.findPreordenByOrdenId(Integer.valueOf(idPreOrden));
+        Orden preOrden = ordenRepository.findPreordenById(Integer.valueOf(idPreOrden));
         String idOrdenParent = String.valueOf(preOrden.getOrdenParent());
 
         return "redirect:/farmacista/ver_orden_tracking?id=" + idOrdenParent;
@@ -829,6 +829,8 @@ public class FarmacistaController {
                     containsPreOrden = true;
                     contenidoPreOrden = (ArrayList<OrdenContenido>) ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(preOrdenChild.getIdOrden()));
                 }
+
+                System.out.println(containsPreOrden);
 
                 model.addAttribute("containsPreOrden", containsPreOrden);
 
