@@ -64,7 +64,7 @@ const deleteComment = (commentObject) => {
 };
 
 const promptDel = (commentObject) => {
-    const modalWrp = document.querySelector(".modal-wrp");
+    const modalWrp = document.querySelector(".modal2-wrp");
     modalWrp.classList.remove("invisible");
     modalWrp.querySelector(".yes").addEventListener("click", () => {
         deleteComment(commentObject);

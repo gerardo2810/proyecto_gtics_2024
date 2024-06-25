@@ -238,7 +238,7 @@ button:hover{
 }
 
 
-.modal-wrp{
+.modal2-wrp{
     position: fixed;
     top: 0;
     left: 0;
@@ -250,7 +250,7 @@ button:hover{
     background-color: rgba(0,0,0,.3);
 }
 
-.modal{
+.modal2{
     padding: 1.5rem;
     max-width: 32ch;
     display: grid;
@@ -265,23 +265,23 @@ button:hover{
     display: none;
 }
 
-.modal h3{
+.modal2 h3{
     grid-area: heading;
     color: var(--Dark-blue);
 }
-.modal button{
+.modal2 button{
     color: var(--White);
     padding: .75rem;
     border-radius: 8px;
     border: none;
     font-weight: 500;
 }
-.modal p{
+.modal2 p{
     grid-area: body;
     color: var(--Grayish-Blue);
     line-height: 1.5;
 }
-.modal .yes{
+.modal2 .yes{
     grid-area: yes;
     background-color: var(--Soft-Red);
 }
