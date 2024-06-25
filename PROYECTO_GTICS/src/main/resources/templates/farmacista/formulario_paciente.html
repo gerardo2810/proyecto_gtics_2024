@@ -294,9 +294,58 @@
                 return result;
             }
 
-
-
             const form = document.getElementById('finalizar');
+
+            if (hayProblemaConStock){
+
+                Swal.fire({
+                    title: 'Existen problemas por Stock',
+                    text: "Recuerde que al elegir crear una preorden no podrá volver a este formulario",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    showDenyButton: true,
+                    confirmButtonColor: '#3085d6',
+                    denyButtonColor: '#3085d6',
+                    confirmButtonText: hayProblemaConStock ? 'Nueva Preorden' : 'Continuar',
+                    denyButtonText: hayProblemaConStock ? 'Cambiar Medicinas' : 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        event.preventDefault();
+                        form.submit();
+                    } else if (result.isDismissed) {
+
+                    } else if (result.isDenied && hayProblemaConStock && verificarCamposLlenos(form)){
+                        window.location.href = '/farmacista/cambiar_medicamentos';
+                    } else {
+                        Swal.fire({
+                            title: 'Faltan Datos',
+                            text: 'Por favor, completa todos los campos antes de enviar el formulario.',
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Continuar',
+                        });
+                    }
+                });
+
+            } else {
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Continuar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        event.preventDefault();
+                        form.submit();
+                    } else if (result.isDismissed) {
+
+                    }
+                });
+            }
 
             Swal.fire({
                 title: hayProblemaConStock ? 'Existen problemas por Stock' : '¿Estás seguro?',
