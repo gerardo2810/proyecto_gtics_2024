@@ -470,6 +470,7 @@ public class FarmacistaController {
 
                 Orden newOrden = new Orden();
                 newOrden.setFechaIni(now);
+                priceTotal = priceTotal.replace(",", "");
                 newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
                 newOrden.setIdFarmacista(usuarioSession.getIdUsuario());
                 newOrden.setPaciente(pacienteOnStore);
@@ -523,6 +524,7 @@ public class FarmacistaController {
 
                 Orden newOrden = new Orden();
                 newOrden.setFechaIni(now);
+                priceTotal = priceTotal.replace(",", "");
                 newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
                 newOrden.setIdFarmacista(usuarioSession.getIdUsuario());
                 newOrden.setPaciente(pacienteOnStore);
