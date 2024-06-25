@@ -101,7 +101,7 @@
         <div class="interface">
 
 
-            <div class="filtros" style="height: 350px; width: 240px">
+            <div class="filtros" style="height: 350px; width: 260px">
 
 
                 <div class="container-filters">
@@ -116,9 +116,9 @@
 
                     <div class="list-categorias">
 
-                        <div class="categoria-div"><a class="categoria" href="/superadmin/medicamentos">Todas las Sedes</a></div>
+                        <div class="categoria-div" style="font-size: 18px"><a class="categoria" href="/superadmin/medicamentos">Todas las Sedes</a></div>
                         <div  th:each="sede : ${sedes}">
-                            <div class="categoria-div"><a class="categoria" th:href="@{'/superadmin/medicamentos' + '?state=' + ${sede.getNombre()}}" th:text="${sede.getNombre()}">Problemas Generales</a></div>
+                            <div class="categoria-div" style="font-size: 18px"><a class="categoria" th:href="@{'/superadmin/medicamentos' + '?state=' + ${sede.getNombre()}}" th:text="${sede.getNombre()}">Problemas Generales</a></div>
                         </div>
 
                     </div>

@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
@@ -35,8 +36,14 @@ import pe.sanmiguel.bienestar.proyecto_gtics.util.reportes.ExporterExcel;
 import pe.sanmiguel.bienestar.proyecto_gtics.util.reportes.ExporterPDF;
 
 
+import javax.naming.Context;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.InitialDirContext;
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -421,6 +428,36 @@ public class SuperAdminController {
         return "superAdmin/crearAdministrador";
     }
 
+    private static final String EMAIL_REGEX = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+    private static final List<String> RESERVED_DOMAINS = Arrays.asList("example.com", "example.net", "example.org", "invalid", "localhost", "test");
+
+    public static boolean isValidEmail(String email) {
+        Pattern pattern = Pattern.compile(EMAIL_REGEX);
+        Matcher matcher = pattern.matcher(email);
+
+        if (!matcher.matches()) {
+            return false;
+        }
+
+        String domain = email.substring(email.indexOf("@") + 1);
+        return !RESERVED_DOMAINS.contains(domain);
+    }
+
+    public static boolean isDomainValid(String email) {
+        String domain = email.substring(email.indexOf("@") + 1);
+
+        try {
+            Hashtable<String, String> env = new Hashtable<>();
+            env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.dns.DnsContextFactory");
+            DirContext ictx = new InitialDirContext(env);
+
+            Attributes attrs = ictx.getAttributes(domain, new String[] {"MX"});
+            return attrs.get("MX") != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
     @PostMapping("/form_administrador")
     public String dniApi(@ModelAttribute("administrador") @Validated(DniApiValidationGroup.class) Usuario administrador,
@@ -532,9 +569,7 @@ public class SuperAdminController {
             }
             List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
             model.addAttribute("sedeDisponibleList", sedeDisponibleList);
-            model.addAttribute("nombres", "");
-            model.addAttribute("apellidos", "");
-            model.addAttribute("dni", "");
+
             return "superAdmin/crearAdministrador";
         }else{
             List<String> dnisUsados = usuarioRepository.listarDNIsUsados();
@@ -548,6 +583,18 @@ public class SuperAdminController {
             if (correosUsados.contains(correo)) {
                 System.out.println("El correo está en la lista.");
                 bindingResult.rejectValue("correo", "error.correo", "El correo ya se encuentra registrado.");
+                return "superAdmin/crearAdministrador";
+            }
+
+            if (!(isValidEmail(correo) || isDomainValid(correo))) {
+                System.out.println("Email is valid and domain is valid.");
+                bindingResult.rejectValue("correo", "error.correo", "El correo electrónico ingresado no es válido.");
+                System.out.println("HAY ERRORES DE VALIDACIÓN:");
+                for (ObjectError error : bindingResult.getAllErrors()) {
+                    System.out.println("- " + error.getDefaultMessage());
+                }
+                List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
                 return "superAdmin/crearAdministrador";
             }
 
@@ -575,14 +622,21 @@ public class SuperAdminController {
 
                 administrador.setRol(2);
                 administrador.setEstadoUsuario(5);
-                usuarioRepository.save(administrador);
 
                 try {
                     sendTemporaryPasswordEmail(administrador.getCorreo(), temporaryPassword);
+                } catch (MailSendException e) {
+                    bindingResult.rejectValue("correo", "error.correo", "El correo ingresado no existe y/o no es válido.");
+                    List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
+                    model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+
+                    return "superAdmin/crearAdministrador";
                 } catch (MessagingException e) {
                     System.err.println("Error al enviar o recibir correo: " + e.getMessage());
                     e.printStackTrace();
                 }
+
+                usuarioRepository.save(administrador);
                 String hashedPassword = SHA256.cipherPassword(temporaryPassword);
                 usuarioRepository.actualizarContrasenaFarmacista(hashedPassword, idUsuario);
                 usuarioRepository.actualizarEstadoFarmacista(idUsuario);
@@ -617,15 +671,23 @@ public class SuperAdminController {
 
                     administrador.setRol(2);
                     administrador.setEstadoUsuario(1);
-                    usuarioRepository.save(administrador);
-                    sedeRepository.asignarAdministradorSede(administrador.getIdUsuario(), idsede);
+
 
                     try {
+                        sedeRepository.asignarAdministradorSede(administrador.getIdUsuario(), idsede);
                         sendTemporaryPasswordEmail(administrador.getCorreo(), temporaryPassword);
+                    } catch (MailSendException e) {
+                        bindingResult.rejectValue("correo", "error.correo", "El correo ingresado no existe y/o no es válido.");
+                        List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
+                        model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+
+                        return "superAdmin/crearAdministrador";
                     } catch (MessagingException e) {
                         System.err.println("Error al enviar o recibir correo: " + e.getMessage());
                         e.printStackTrace();
                     }
+
+                    usuarioRepository.save(administrador);
                     String hashedPassword = SHA256.cipherPassword(temporaryPassword);
                     usuarioRepository.actualizarContrasenaFarmacista(hashedPassword, idUsuario);
                     usuarioRepository.actualizarEstadoFarmacista(idUsuario);
@@ -658,14 +720,21 @@ public class SuperAdminController {
 
                     administrador.setRol(2);
                     administrador.setEstadoUsuario(5);
-                    usuarioRepository.save(administrador);
 
                     try {
                         sendTemporaryPasswordEmail(administrador.getCorreo(), temporaryPassword);
+                    } catch (MailSendException e) {
+                        bindingResult.rejectValue("correo", "error.correo", "El correo ingresado no existe y/o no es válido.");
+                        List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
+                        model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+
+                        return "superAdmin/crearAdministrador";
                     } catch (MessagingException e) {
                         System.err.println("Error al enviar o recibir correo: " + e.getMessage());
                         e.printStackTrace();
                     }
+
+                    usuarioRepository.save(administrador);
                     String hashedPassword = SHA256.cipherPassword(temporaryPassword);
                     usuarioRepository.actualizarContrasenaFarmacista(hashedPassword, idUsuario);
                     usuarioRepository.actualizarEstadoFarmacista(idUsuario);
@@ -698,6 +767,8 @@ public class SuperAdminController {
         }
     }
 
+
+
     private void sendTemporaryPasswordEmail(String to, String temporaryPassword) throws MessagingException {
 
         MimeMessage message = mailSender.createMimeMessage();
@@ -725,7 +796,10 @@ public class SuperAdminController {
 
         helper.setText(emailContent, true);
         mailSender.send(message);
+
     }
+
+
 
     private void sendTemporaryPasswordEmailFarmacista(String to, String temporaryPassword) throws MessagingException {
 
