@@ -316,9 +316,9 @@
                 <tr>
                     <th class="text-start" style="max-width: 90px;">No.</th>
                     <th class="text-start" style="max-width: 200px;">Artículo</th>
-                    <th class="text-center">Precio</th>
+                    <th class="text-center">Precio Unitario</th>
                     <th class="text-center">Cantidad</th>
-                    <th class="text-end" style="width: 120px;">Total</th>
+                    <th class="text-end" style="width: 120px;">Precio</th>
                 </tr>
                 </thead>
 
@@ -328,27 +328,13 @@
                     <td>
                         <div class="name-unit-item">
                             <div class="text-truncate font-size-14 mb-1" th:text="${m.getIdMedicamento().getNombre()}">Panadol</div>
-                            <div class="text-muted mb-0" th:text="${m.getIdMedicamento().getUnidad()}">asdasd</div>
+                            <div class="text-muted mb-0" th:text="${m.getIdMedicamento().getUnidad()}">Unidad</div>
                         </div>
                     </td>
-                    <td class="text-center" th:text="${'S/. ' + m.getIdMedicamento().getPrecioVenta()}"></td>
+                    <td class="text-center" th:text="${'S/. ' + #numbers.formatDecimal(m.getIdMedicamento().getPrecioVenta(), 1, 'COMMA', 2, 'POINT')}"></td>
                     <td class="text-center" th:text="${m.getCantidad()}">1</td>
-                    <td class="text-end" th:text="${'S/. ' + m.getCantidad() * m.getIdMedicamento().getPrecioVenta()}"></td>
+                    <td class="text-center" th:text="${'S/. ' + #numbers.formatDecimal((m.getIdMedicamento().getPrecioVenta()*m.getCantidad()), 1, 'COMMA', 2, 'POINT')}"></td>
 
-                    <script th:inline="javascript">
-                        function limitarDigitos(numero) {
-                            var numeroStr = numero.toString();
-                            // Obtener los primeros 4 dígitos
-                            var primerosCuatroDigitos = numeroStr.substring(0, 4);
-                            var numeroLimitado = parseFloat(primerosCuatroDigitos);
-                            return numeroLimitado;
-                        }
-                        var precioVenta = [[${m.getIdMedicamento().precioVenta}]];
-                        var cantidad = [[${m.getCantidad()}]];
-                        var resultado = precioVenta * cantidad;
-                        var resultadoLimitado = limitarDigitos(resultado);
-                        document.currentScript.parentElement.querySelector(".text-end").textContent = resultadoLimitado;
-                    </script>
                 </tr>
                 </tbody>
 
@@ -357,7 +343,7 @@
 
         <div class="full-total">
             <div class="roboto-regular data-label" style="padding-top: 20px">Total</div>
-            <div class="title roboto-medium data-label" th:text="${'S/. ' + orden.getPrecioTotal()}"></div>
+            <div class="title roboto-medium data-label" th:text="${'S/. ' + #numbers.formatDecimal(orden.getPrecioTotal(), 1, 'COMMA', 2, 'POINT') }"></div>
         </div>
 
 
