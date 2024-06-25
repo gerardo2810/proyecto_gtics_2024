@@ -554,7 +554,7 @@ public class FarmacistaController {
         }
     }
 
-    
+
     @GetMapping("/farmacista/crear_preorden")
     public String createPreOrden(Model model) {
 
@@ -645,6 +645,7 @@ public class FarmacistaController {
         newPreOrden.setSede(sedeSession);
         newPreOrden.setSeguroUsado(ordenPadre.getSeguroUsado());
         newPreOrden.setDoctor(ordenPadre.getDoctor());
+        newPreOrden.setTracking(TokenRandomGenerator.generator());
 
         ordenRepository.save(newPreOrden);
         System.out.println("Orden guardada: " + newPreOrden);
