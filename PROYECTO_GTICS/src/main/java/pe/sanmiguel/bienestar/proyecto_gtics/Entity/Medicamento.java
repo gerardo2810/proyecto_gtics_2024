@@ -18,6 +18,7 @@ public class Medicamento {
     private Integer idMedicamento;
     @Column
     @NotBlank(message = "Debe ingresar un nombre")
+    @Pattern(regexp = "^(?=.*[A-Za-zÀ-ÿ])[A-Za-zÀ-ÿ0-9 ]+$", message = "El nombre debe contener letras (incluidas letras con tilde) y no puede incluir caracteres especiales")
     private String nombre;
 
     @Pattern(regexp="\\d+", message="La unidad debe contener solo número")

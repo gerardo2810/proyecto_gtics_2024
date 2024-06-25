@@ -44,6 +44,7 @@ import javax.naming.directory.InitialDirContext;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -1571,6 +1572,8 @@ public class SuperAdminController {
                                           @RequestParam(value = "tipounidad", required = false) String tipounidad,
                                           @RequestParam(value = "numunidad", required = false) String numunidad,
                                           @RequestParam(value = "nombre", required = false) String nombre,
+                                          @RequestParam(value = "precioCompra", required = false) BigDecimal precioCompra,
+                                          @RequestParam(value = "precioVenta", required = false) BigDecimal precioVenta,
                                           @RequestParam(value = "categorias", required = false) String categorias,
                                           @RequestParam(value = "file", required = false) Part file,
                                           RedirectAttributes attr, Model model) throws IOException {
@@ -1595,9 +1598,20 @@ public class SuperAdminController {
                 return "superAdmin/crearMedicamento";
             }
 
+            if (Pattern.matches("\\d+", nombre)) {
+                bindingResul.rejectValue("nombre", "error.nombre", "El nombre no puede contener solo números.");
+            }
+
             String contentType = file.getContentType();
             if (!contentType.equals("image/png") && !contentType.equals("image/jpeg")) {
                 binding2.rejectValue("file", "error.file", "Solo se aceptan archivos PNG o JPEG.");
+                List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                return "superAdmin/crearMedicamento";
+            }
+
+            if(precioVenta.compareTo(precioCompra) < 0){
+                bindingResul.rejectValue("precioCompra", "error.precioCompra", "El precio de compra no puede ser mayor al precio de venta.");
                 List<Sede> sedeDisponibleList = sedeRepository.findAll();
                 model.addAttribute("sedeDisponibleList", sedeDisponibleList);
                 return "superAdmin/crearMedicamento";

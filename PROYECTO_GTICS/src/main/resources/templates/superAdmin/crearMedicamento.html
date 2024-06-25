@@ -131,6 +131,38 @@
              height: 80px; /* Altura del cuadro de texto */
              resize: none;  /* Deshabilitar redimensionamiento */
         }
+        .input-form1{
+            margin-top:6px;
+            padding-left: 15px;
+            outline: none;
+            width: 610px;
+            height: 42px;
+            border: 1px solid #DFDFDF;
+            border-radius: 5px;
+            font-size: 17px;
+        }
+        .input-form2{
+            margin-top:6px;
+            padding-left: 15px;
+            outline: none;
+            width: 350px;
+            height: 42px;
+            border: 1px solid #DFDFDF;
+            border-radius: 5px;
+            font-size: 17px;
+        }
+        .select-form {
+            width: 260px !important;
+            height: 45px;
+            margin-top:4px;
+            padding: 10px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background-color: transparent;
+            font-size: 15px;
+            outline: none;
+
+        }
 
 
 
@@ -312,20 +344,50 @@
                                 <div class="column">
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Nombre del medicamento:</label>
-                                        <input class="input-form" type="text" th:field="*{nombre}"  name="nombre" placeholder="Ingrese nombre" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" REQUIRED>
-                                        <div style="width: 300px" class="invalid-feedback"
+                                        <input class="input-form1" type="text" th:field="*{nombre}"  name="nombre" placeholder="Ingrese nombre" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" REQUIRED>
+                                        <div style="width: 600px" class="invalid-feedback"
                                               th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
                                             No puede estar vacío
                                         </div>
                                     </div>
 
+                                </div>
+
+                                <div class="column">
+
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Componente:</label>
-                                        <input th:field="*{componente}" class="input-form" name="componente" type="text" placeholder="Ingrese componentes" th:classappend="${#fields.hasErrors('componente')?'is-invalid':''}" REQUIRED>
+                                        <input th:field="*{componente}" class="input-form2" name="componente" type="text" placeholder="Ingrese componentes" th:classappend="${#fields.hasErrors('componente')?'is-invalid':''}" REQUIRED>
                                         <div  class="invalid-feedback"
                                               th:if="${#fields.hasErrors('componente')}" th:errors="*{componente}">
                                             No puede estar vacío
                                         </div>
+                                    </div>
+
+                                    <div class="input-label-box">
+                                        <label style="font-weight: bold; color:dimgray; width: 200px">Categorias:</label>
+                                        <select style="width: 200px" class="select-form" name="categorias">
+                                            <option value="Analgesicos">Analgesicos</option>
+                                            <option value="Antiácidos/Antiulcerosos">Antiácidos/Antiulcerosos</option>
+                                            <option value="Antialérgicos">Antialérgicos</option>
+                                            <option value="Antidiarreicos">Antidiarreicos</option>
+                                            <option value="Laxantes">Laxantes</option>
+                                            <option value="Antiinflamatorios">Antiinflamatorios</option>
+                                            <option value="Antiinfecciosos">Antiinfecciosos</option>
+                                            <option value="Antipiréticos">Antipiréticos</option>
+                                            <option value="Mucolíticos">Mucolíticos</option>
+                                            <option value="Antitusivos">Antitusivos</option>
+                                            <option value="Antieméticos">Antieméticos</option>
+                                            <option value="Antihipertensivos">Antihipertensivos</option>
+                                            <option value="Hipoglucemiantes">Hipoglucemiantes</option>
+                                            <option value="Antidepresivos">Antidepresivos</option>
+                                            <option value="Ansiolíticos">Ansiolíticos</option>
+                                            <option value="Anticonceptivos">Anticonceptivos</option>
+                                            <option value="Vitaminas y Suplementos">Vitaminas y Suplementos</option>
+                                            <option value="Cuidado Bucal">Cuidado Bucal</option>
+                                            <option value="Salud de la Mujer">Salud de la Mujer</option>
+                                            <option value="Protección Sexual">Protección Sexual</option>
+                                        </select>
                                     </div>
 
                                 </div>
@@ -386,32 +448,6 @@
                                               th:if="${#fields.hasErrors('precioVenta')}" th:errors="*{precioVenta}">
                                             No puede estar vacío
                                         </div>
-                                    </div>
-
-                                    <div class="input-label-box">
-                                        <label style="font-weight: bold; color:dimgray; width: 200px">Categorias:</label>
-                                        <select style="width: 200px" class="input-form" name="categorias">
-                                            <option value="Analgesicos">Analgesicos</option>
-                                            <option value="Antiácidos/Antiulcerosos">Antiácidos/Antiulcerosos</option>
-                                            <option value="Antialérgicos">Antialérgicos</option>
-                                            <option value="Antidiarreicos">Antidiarreicos</option>
-                                            <option value="Laxantes">Laxantes</option>
-                                            <option value="Antiinflamatorios">Antiinflamatorios</option>
-                                            <option value="Antiinfecciosos">Antiinfecciosos</option>
-                                            <option value="Antipiréticos">Antipiréticos</option>
-                                            <option value="Mucolíticos">Mucolíticos</option>
-                                            <option value="Antitusivos">Antitusivos</option>
-                                            <option value="Antieméticos">Antieméticos</option>
-                                            <option value="Antihipertensivos">Antihipertensivos</option>
-                                            <option value="Hipoglucemiantes">Hipoglucemiantes</option>
-                                            <option value="Antidepresivos">Antidepresivos</option>
-                                            <option value="Ansiolíticos">Ansiolíticos</option>
-                                            <option value="Anticonceptivos">Anticonceptivos</option>
-                                            <option value="Vitaminas y Suplementos">Vitaminas y Suplementos</option>
-                                            <option value="Cuidado Bucal">Cuidado Bucal</option>
-                                            <option value="Salud de la Mujer">Salud de la Mujer</option>
-                                            <option value="Protección Sexual">Protección Sexual</option>
-                                        </select>
                                     </div>
 
                                 </div>
