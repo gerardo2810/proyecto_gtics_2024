@@ -1,14 +1,17 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -23,6 +26,10 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.AdminSedeValidationsGroup;
 
+import javax.naming.Context;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.InitialDirContext;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
@@ -599,6 +606,18 @@ public class AdminSedeController {
             int idUsuario = usuarioRepository.findLastUsuarioId() + 1;
             int aprobado = 2; //El farmacista no está aprobado
             int idSede = 1; //Cambiar
+
+            if (!(isValidEmail(correo) || isDomainValid(correo))) {
+                System.out.println("Email is valid and domain is valid.");
+                bindingResult.rejectValue("correo", "error.correo", "El correo electrónico ingresado no es válido.");
+                System.out.println("HAY ERRORES DE VALIDACIÓN:");
+                for (ObjectError error : bindingResult.getAllErrors()) {
+                    System.out.println("- " + error.getDefaultMessage());
+                }
+                System.out.println(bindingResult.getAllErrors());
+                return "adminsede/solicitud_agregar_farmacista";
+            }
+
             usuarioFarmacista.setIdUsuario(idUsuario);
             usuarioFarmacista.setRol(idRol);
             usuarioFarmacista.setEstadoUsuario(estadoUsuario);
@@ -691,6 +710,36 @@ public class AdminSedeController {
 
 
 
+    }
+
+    private static final String EMAIL_REGEX = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+    private static final List<String> RESERVED_DOMAINS = Arrays.asList("example.com", "example.net", "example.org", "invalid", "localhost", "test");
+
+    public static boolean isValidEmail(String email) {
+        Pattern pattern = Pattern.compile(EMAIL_REGEX);
+        Matcher matcher = pattern.matcher(email);
+
+        if (!matcher.matches()) {
+            return false;
+        }
+
+        String domain = email.substring(email.indexOf("@") + 1);
+        return !RESERVED_DOMAINS.contains(domain);
+    }
+
+    public static boolean isDomainValid(String email) {
+        String domain = email.substring(email.indexOf("@") + 1);
+
+        try {
+            Hashtable<String, String> env = new Hashtable<>();
+            env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.dns.DnsContextFactory");
+            DirContext ictx = new InitialDirContext(env);
+
+            Attributes attrs = ictx.getAttributes(domain, new String[] {"MX"});
+            return attrs.get("MX") != null;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @PostMapping("/generar_orden")

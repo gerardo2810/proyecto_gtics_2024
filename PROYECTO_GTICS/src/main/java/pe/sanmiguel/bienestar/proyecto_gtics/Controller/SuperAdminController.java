@@ -208,14 +208,20 @@ public class SuperAdminController {
         String contrasena = usuarioRepository.contraAdmin(idUsuario);
 
         if(idEstadoSolicitud==1){
-            sedeFarmacistaRepository.aprobarSolicitud(idUsuario);
-            attr.addFlashAttribute("msg", "Solicitud aceptada exitosamente");
+
             try {
                 sendTemporaryPasswordEmailFarmacista(correoSolicitud, contrasena);
+            } catch (MailSendException e) {
+                sedeFarmacistaRepository.denegarSolicitud(idUsuario);
+                attr.addFlashAttribute("msg1", "Correo no enviado, solicitar al Administrador de Sede que verifique la validez del correo. Farmacista rechazado");
+                return "redirect:/superadmin/solicitudes";
             } catch (MessagingException e) {
                 System.err.println("Error al enviar o recibir correo: " + e.getMessage());
                 e.printStackTrace();
             }
+
+            sedeFarmacistaRepository.aprobarSolicitud(idUsuario);
+            attr.addFlashAttribute("msg", "Solicitud aceptada exitosamente");
             String hashedPassword = SHA256.cipherPassword(contrasena);
             usuarioRepository.actualizarContrasenaFarmacista(hashedPassword, idUsuario);
             usuarioRepository.actualizarEstadoFarmacista(idUsuario);
