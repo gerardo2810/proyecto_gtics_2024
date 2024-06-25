@@ -229,7 +229,7 @@
                             </div>
 
                             <div style="min-width: 100px; display: flex; align-items: center; justify-content: center">
-                                <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${med.getIdMedicamento().getPrecioVenta()}"></span>
+                                <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${#numbers.formatDecimal(med.getIdMedicamento().getPrecioVenta(), 1, 'COMMA', 2, 'POINT')}"></span>
                             </div>
 
                             <div style="min-width: 100px; display: flex; align-items: end; justify-content: center">
@@ -239,7 +239,7 @@
                         </div>
                     </div>
 
-                    <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; gap: 15px;">
+                    <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; align-items: center; gap: 15px;">
                         <input type="hidden" name="priceTotal" value="">
                         TOTAL <span class="price-total" th:text="${'S/.   ' + #numbers.formatDecimal(orden.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}">S/0.00</span>
                     </div>
@@ -323,7 +323,7 @@
                         </div>
                     </div>
 
-                    <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; gap: 15px;">
+                    <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; align-items: center; gap: 15px;">
                         <input type="hidden" name="priceTotal" value="">
                         TOTAL <span class="price-total" th:text="${'S/.   ' + #numbers.formatDecimal(orden.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}">S/0.00</span>
                     </div>
@@ -408,7 +408,7 @@
                                 </div>
                             </div>
 
-                            <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; gap: 15px;">
+                            <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; align-items: center; gap: 15px;">
                                 <input type="hidden" name="priceTotal" value="">
                                 TOTAL <span class="price-total" th:text="${'S/.   ' + #numbers.formatDecimal(orden.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}">S/0.00</span>
                             </div>
