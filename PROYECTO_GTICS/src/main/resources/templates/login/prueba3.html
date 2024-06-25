@@ -77,7 +77,7 @@
                 <form method="post" th:action="@{/DNIapi}" th:object="${usuario}">
                     <div style="display: flex; flex-direction: row; justify-content: start; gap: 10px">
                         <div class="input-control2">
-                            <label style="font-weight: bold; color:dimgray">Ingrese el DNI del Paciente:</label>
+                            <label style="font-weight: bold; color:dimgray">Ingrese su DNI:</label>
                             <input class="input-field2" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del paciente"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
                             <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
                         </div>
@@ -96,13 +96,13 @@
                         <div class="column">
                             <div class="input-control2">
                                 <label style="font-weight: bold; color:dimgray">DNI del paciente</label>
-                                <input placeholder="DNI" th:field="*{dni}"  id="dni" class="input-field2" type="text" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}" readonly>
+                                <input placeholder="DNI" th:field="*{dni}"  id="dni" class="input-field22" type="text" th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}" readonly>
                                 <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
                             </div>
 
                             <div class="input-control2">
                                 <label style="font-weight: bold; color:dimgray">Nombres</label>
-                                <input placeholder="Nombres del paciente" th:value="${nombres}" name="nombres" class="input-field2" type="text" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}" readonly>
+                                <input placeholder="Nombres del paciente" th:value="${nombres}" name="nombres" class="input-field22" type="text" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}" readonly>
                                 <div  class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
                             </div>
 
@@ -112,7 +112,7 @@
 
                             <div class="input-control2">
                                 <label style="font-weight: bold; color:dimgray">Apellidos</label>
-                                <input placeholder="Apellidos del paciente" th:value="${apellidos}" name="apellidos" class="input-field2" type="text" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}" readonly>
+                                <input placeholder="Apellidos del paciente" th:value="${apellidos}" name="apellidos" class="input-field22" type="text" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}" readonly>
                                 <div  class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
                             </div>
 
