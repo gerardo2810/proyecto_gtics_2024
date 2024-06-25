@@ -262,10 +262,8 @@ public class FarmacistaController {
                 }
             }
 
-            ArrayList<Usuario> listaUsuarios = (ArrayList<Usuario>) usuarioRepository.listarUsuariosSegunRol(4);
             ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) doctorRepository.findAll();
 
-            model.addAttribute("listaUsuarios", listaUsuarios);
             model.addAttribute("listaDoctores", listaDoctores);
             model.addAttribute("stockSeleccionados", stockSeleccionados);
             model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
@@ -309,6 +307,14 @@ public class FarmacistaController {
                     model.addAttribute("dni", apiDni);
                     model.addAttribute("nombres", apiNombres);
                     model.addAttribute("apellidos", apiApellidos);
+
+                    Optional<Usuario> usuarioOptional = usuarioRepository.findPacienteByDni(apiDni);
+                    Usuario userExisting = new Usuario();
+                    if (usuarioOptional.isPresent()){
+                        userExisting = usuarioOptional.get();
+
+                        model.addAttribute("usuario", userExisting);
+                    }
 
                     System.out.println(values);
                     return "farmacista/formulario_paciente";

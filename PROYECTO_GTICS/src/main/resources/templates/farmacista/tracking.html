@@ -681,13 +681,9 @@
                         <br>
                         <div class="float-right botones-tracking">
 
-                            <button class="print" onclick="goBack()">REGRESAR</button>
-
-                            <script>
-                                function goBack() {
-                                    window.history.back();
-                                }
-                            </script>
+                           <a th:href="@{'/farmacista/ordenes_venta'}">
+                               <button class="print">REGRESAR</button>
+                           </a>
 
 
                             <a th:if="${orden.getEstadoOrden() != 1 && orden.getEstadoOrden() != 2} " th:href="@{'/farmacista/ver_boleta?id=' + ${orden.getIdOrden()}}" >
