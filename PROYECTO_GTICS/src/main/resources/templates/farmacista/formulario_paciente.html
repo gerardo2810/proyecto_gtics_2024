@@ -239,59 +239,8 @@
     <div th:replace="~{fragments/navbar.html :: footer}">
     </div>
 
-
-
 </body>
 
-
-<script>
-    const frameworks = [
-        { value: "sveltekit", label: "SvelteKit" },
-        { value: "next.js", label: "Next.js" },
-        { value: "nuxt.js", label: "Nuxt.js" },
-        { value: "remix", label: "Remix" },
-        { value: "astro", label: "Astro" }
-    ];
-
-    let open = false;
-    let value = "";
-
-    $(document).ready(function() {
-        document.getElementById("trigger").addEventListener("click", () => {
-            open = !open;
-            document.getElementById("content").style.display = open ? "block" : "none";
-        });
-
-        document.getElementById("search-input").addEventListener("input", () => {
-            const searchValue = document.getElementById("search-input").value.toLowerCase();
-            const filteredFrameworks = frameworks.filter(framework => framework.label.toLowerCase().includes(searchValue));
-            const frameworksContainer = document.getElementById("frameworks");
-            frameworksContainer.innerHTML = "";
-            if (filteredFrameworks.length > 0) {
-                filteredFrameworks.forEach(framework => {
-                    const item = document.createElement("div");
-                    item.textContent = framework.label;
-                    item.addEventListener("click", () => {
-                        value = framework.value;
-                        document.getElementById("trigger").textContent = framework.label;
-                        closePopover();
-                    });
-                    frameworksContainer.appendChild(item);
-                });
-            } else {
-                const emptyMessage = document.createElement("div");
-                emptyMessage.textContent = "No framework found.";
-                frameworksContainer.appendChild(emptyMessage);
-            }
-        });
-
-        function closePopover() {
-            open = false;
-            document.getElementById("content").style.display = "none";
-        }
-    });
-
-</script>
 
 <script th:inline="javascript">
 
