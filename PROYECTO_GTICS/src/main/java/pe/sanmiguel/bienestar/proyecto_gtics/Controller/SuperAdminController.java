@@ -1669,6 +1669,8 @@ public class SuperAdminController {
                                         @RequestParam(value = "nombre", required = false) String nombre,
                                         @RequestParam(value = "sedeid", required = false) List<Integer> idSedesSeleccionadas,
                                         @RequestParam(value = "file", required = false) Part file,
+                                        @RequestParam(value = "precioCompra", required = false) BigDecimal precioCompra,
+                                        @RequestParam(value = "precioVenta", required = false) BigDecimal precioVenta,
                                         RedirectAttributes attr, Model model) throws IOException {
         if(bindingResult.hasErrors() || binding2.hasErrors()){
             System.out.println("HAY ERRORES DE VALIDACIÓN:");
@@ -1696,6 +1698,27 @@ public class SuperAdminController {
                 model.addAttribute("medicamentosVisiblesSede", sedeStockList);
 
                 bindingResult.rejectValue("nombre", "error.nombre", "El nombre del medicamento ya se encuentra registrado.");
+                return "superAdmin/editarMedicamento";
+            }
+
+            if (Pattern.matches("\\d+", nombre)) {
+                bindingResult.rejectValue("nombre", "error.nombre", "El nombre no puede contener solo números.");
+                List<SedeStock> sedeStockList = sedeStockRepository.medicamentoPresenteSedes(medicamento.getIdMedicamento());
+                List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                List<Integer> idsSede = sedeStockRepository.listarMedicamentosEnSedePorId(medicamento.getIdMedicamento());
+                model.addAttribute("idsSede", idsSede);
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                model.addAttribute("medicamentosVisiblesSede", sedeStockList);
+            }
+
+            if(precioVenta.compareTo(precioCompra) < 0){
+                bindingResult.rejectValue("precioCompra", "error.precioCompra", "El precio de compra no puede ser mayor al precio de venta.");
+                List<SedeStock> sedeStockList = sedeStockRepository.medicamentoPresenteSedes(medicamento.getIdMedicamento());
+                List<Sede> sedeDisponibleList = sedeRepository.findAll();
+                List<Integer> idsSede = sedeStockRepository.listarMedicamentosEnSedePorId(medicamento.getIdMedicamento());
+                model.addAttribute("idsSede", idsSede);
+                model.addAttribute("sedeDisponibleList", sedeDisponibleList);
+                model.addAttribute("medicamentosVisiblesSede", sedeStockList);
                 return "superAdmin/editarMedicamento";
             }
 
