@@ -46,6 +46,8 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
 
     Orden getOrdenByIdOrden(Integer idOrden);
 
+    @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE orden.id = :idOrden")
+    Orden findPreordenById(@Param("idOrden") Integer idOrden);
 
     @Query(nativeQuery = true, value = "SELECT * FROM orden WHERE orden.id = :idOrden")
     Orden findPreordenByOrdenId(@Param("idOrden") Integer idOrden);
