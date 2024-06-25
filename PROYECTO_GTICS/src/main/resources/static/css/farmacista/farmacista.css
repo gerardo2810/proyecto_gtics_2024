@@ -1203,6 +1203,14 @@ body{
     display: block; /* Asegura que el div se muestre como bloque */
 }
 
+.valid-feedback {
+    color: #2288d3; /* Rojo */
+    font-size: 0.875em; /* Tamaño de fuente más pequeño */
+    margin-top: 0.25rem; /* Espacio arriba del mensaje */
+    display: block; /* Asegura que el div se muestre como bloque */
+}
+
+
 
 .cancel{
     padding: 9px;

@@ -308,17 +308,25 @@ public class FarmacistaController {
                     model.addAttribute("nombres", apiNombres);
                     model.addAttribute("apellidos", apiApellidos);
 
+                    boolean founded = false;
+
                     Optional<Usuario> usuarioOptional = usuarioRepository.findPacienteByDni(apiDni);
                     Usuario userExisting = new Usuario();
                     if (usuarioOptional.isPresent()){
                         userExisting = usuarioOptional.get();
 
                         model.addAttribute("usuario", userExisting);
+                        founded = true;
                     }
 
+                    model.addAttribute("foundedNotification", founded);
+
                     System.out.println(values);
+                    System.out.println("El usuario fue encontrado en DB?" + founded);
                     return "farmacista/formulario_paciente";
+
                 } else {
+
                     // Caso cuando el dni no existe
                     String dniError = "error";
                     model.addAttribute("dniError", dniError);

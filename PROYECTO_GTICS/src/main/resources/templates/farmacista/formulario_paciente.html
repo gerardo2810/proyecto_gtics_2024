@@ -71,6 +71,7 @@
                                     <input class="input-form-dni" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del paciente"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
                                     <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
                                     <div  class="invalid-feedback" th:if="${dniError}">El DNI ingresado no existe.</div>
+                                    <div  class="invalid-feedback" th:if="${foundedNotification}">El paciente fue encontrado en los registros.</div>
                                 </div>
 
                                 <div style="margin-top: 37px">
