@@ -122,11 +122,13 @@ public class SuperAdminController {
         session.setAttribute("usuario", usuario);
 
         List<Sede> adminSedelist = sedeRepository.listarAdministroresSede();
+        List<Sede> sedesDisp = sedeRepository.listarSedesDisponibles();
         List<Usuario> adminSinSede = usuarioRepository.listarAdministradoresSinSede();
         List<Usuario> adminBaneados = usuarioRepository.listarAdministradoresBaneados();
         List<Sede> sedeList = sedeRepository.findAll();
         model.addAttribute("adminSedelist", adminSedelist);
         model.addAttribute("sedeList", sedeList);
+        model.addAttribute("sedesDisp", sedesDisp);
         model.addAttribute("adminSinSede", adminSinSede);
         model.addAttribute("adminBaneados", adminBaneados);
         return "superAdmin/listaAdministSede";

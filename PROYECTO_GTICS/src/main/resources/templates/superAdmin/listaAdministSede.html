@@ -100,8 +100,8 @@
     </div>
 
     <div class="container">
-        <div style="padding-top:1px; display:flex; justify-content: end ; margin-left: 20px">
-            <a class="btn-c" href="/superadmin/crearAdministrador">Crear nuevo administrador</a>
+        <div style="padding-top:1px; display:flex; justify-content: end ; margin-left: 20px" th:if="${!(sedesDisp.isEmpty())}"  >
+            <button class="btn-c" type="button" onclick="window.location.href = '/superadmin/crearAdministrador'" style="margin-left: 20px; font-size: 17px; padding: 12px 20px"> Crear nuevo administrador</button>
         </div>
         <br>
         <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
@@ -237,7 +237,7 @@
             </div>
 
             <div class="container" style="flex: 1;">
-                <table id="miTabla3" class="table table-striped">
+                <table id="miTabla4" class="table table-striped">
                     <h3>ADMINISTRADORES BANEADOS</h3>
                     <thead>
                     <tr style="background-color: #378fff">
@@ -297,7 +297,7 @@
 
 <script>
     $(document).ready(function() {
-        var table = $('#miTabla, #miTabla2, #miTabla3, #miTabla4').DataTable({
+        var table = $('#miTabla2').DataTable({
             "pageLength":5,
             "lengthChange": false,
             "language": {
@@ -313,6 +313,106 @@
                 },
                 "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
             },
+            "drawCallback": function(settings) {
+                var api = this.api();
+                var pages = api.page.info().pages;
+
+                if (pages === 1) {
+                    $('.dataTables_paginate').hide();
+                } else {
+                    $('.dataTables_paginate').show();
+                }
+            }
+
+        });
+
+        $('#filtroEstado').on('change', function() {
+            var estado = $(this).val();
+            table.column(2).search(estado).draw();
+
+        });
+
+        $('#limpiarFiltros').on('click', function() {
+            $('#filtroEstado').val('');
+            table.search('').columns().search('').draw();
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        var table = $('#miTabla4').DataTable({
+            "pageLength":5,
+            "lengthChange": false,
+            "language": {
+                "emptyTable": "No hay registros disponibles",
+                "zeroRecords": "No se encontraron registros coincidentes",
+                "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                "search" : "Buscar:",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+            },
+            "drawCallback": function(settings) {
+                var api = this.api();
+                var pages = api.page.info().pages;
+
+                if (pages <= 1) {
+                    $('.dataTables_paginate').hide();
+                } else {
+                    $('.dataTables_paginate').show();
+                }
+            }
+
+        });
+
+        $('#filtroEstado').on('change', function() {
+            var estado = $(this).val();
+            table.column(2).search(estado).draw();
+
+        });
+
+        $('#limpiarFiltros').on('click', function() {
+            $('#filtroEstado').val('');
+            table.search('').columns().search('').draw();
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        var table = $('#miTabla3').DataTable({
+            "pageLength":5,
+            "lengthChange": false,
+            "language": {
+                "emptyTable": "No hay registros disponibles",
+                "zeroRecords": "No se encontraron registros coincidentes",
+                "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                "search" : "Buscar:",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+            },
+            "drawCallback": function(settings) {
+                var api = this.api();
+                var pages = api.page.info().pages;
+
+                if (pages <= 1) {
+                    $('.dataTables_paginate').hide();
+                } else {
+                    $('.dataTables_paginate').show();
+                }
+            }
 
         });
 
