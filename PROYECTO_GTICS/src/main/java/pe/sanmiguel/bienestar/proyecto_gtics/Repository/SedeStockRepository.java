@@ -32,4 +32,8 @@ public interface SedeStockRepository extends JpaRepository<SedeStock, SedeStockI
     @Query(nativeQuery = true, value = "SELECT s.*, m.nombre, se.nombre FROM proyecto_gtics.sede_stock s, proyecto_gtics.medicamento m, proyecto_gtics.sede se WHERE s.idMedicamento = m.idMedicamento and s.idSede = se.id and s.idMedicamento = ?")
     List<SedeStock> medicamentoPresenteSedes(int idMedicamento);
 
+
+    @Query(nativeQuery = true, value = "SELECT cantidad FROM proyecto_gtics.sede_stock where idSede =?1 and idMedicamento = ?2")
+    Integer verificarCantidadStockPorSede(int idSede, int idMedicamento);
+
 }

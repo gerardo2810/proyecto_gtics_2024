@@ -70,10 +70,11 @@ public class PacienteController {
     final DoctorRepository doctorRepository;
     final EstadoPreOrdenRepository estadoPreOrdenRepository;
     final OrdenContenidoRepository ordenContenidoRepository;
+    final SedeStockRepository sedeStockRepository;
 
     final ChatRepository chatRepository;
 
-    public PacienteController(ChatRepository chatRepository, OrdenContenidoRepository ordenContenidoRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository,EstadoOrdenRepository estadoOrdenRepository,TipoOrdenRepository tipoOrdenRepository,SedeRepository sedeRepository, MedicamentoRepository medicamentoRepository, UsuarioRepository usuarioRepository, OrdenRepository ordenRepository){
+    public PacienteController(ChatRepository chatRepository, SedeStockRepository sedeStockRepository, OrdenContenidoRepository ordenContenidoRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository,EstadoOrdenRepository estadoOrdenRepository,TipoOrdenRepository tipoOrdenRepository,SedeRepository sedeRepository, MedicamentoRepository medicamentoRepository, UsuarioRepository usuarioRepository, OrdenRepository ordenRepository){
         this.medicamentoRepository = medicamentoRepository;
         this.usuarioRepository = usuarioRepository;
         this.ordenRepository = ordenRepository;
@@ -84,6 +85,7 @@ public class PacienteController {
         this.estadoPreOrdenRepository = estadoPreOrdenRepository;
         this.ordenContenidoRepository = ordenContenidoRepository;
         this.chatRepository = chatRepository;
+        this.sedeStockRepository = sedeStockRepository;
     }
 
 
@@ -182,7 +184,21 @@ public class PacienteController {
 
             Usuario farmacista = usuarioRepository.getById(Integer.parseInt(userId2));
 
+            List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+            List<OrdenContenido> medicamentosEnStock = new ArrayList<>();
+            List<OrdenContenido> medicamentosSinStock = new ArrayList<>();
+            for(OrdenContenido oc : lista){
 
+                if(oc.getCantidad() > sedeStockRepository.verificarCantidadStockPorSede(  ordenRepository.getOrdenByIdOrden(Integer.parseInt(idOrden)).getSede().getIdSede(), oc.getIdMedicamento().getIdMedicamento())    ){
+                    medicamentosSinStock.add(oc);
+                }else{
+                    medicamentosEnStock.add(oc);
+                }
+
+            }
+
+            model.addAttribute("medicamentosSinStock", medicamentosSinStock);
+            model.addAttribute("medicamentosEnStock", medicamentosEnStock);
             model.addAttribute("idChat", chatActual.getIdChat());
             model.addAttribute("idUser", userSession.getIdUsuario());
             model.addAttribute("farmacista", farmacista);
@@ -203,7 +219,6 @@ public class PacienteController {
         Integer idInteger = Integer.parseInt(idOrden);
         Orden orden = ordenRepository.getById(idInteger);
         Integer cantProductos = ordenContenidoRepository.cantProductos(idOrden);
-
         List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
 
         model.addAttribute("cantProductos", cantProductos);
