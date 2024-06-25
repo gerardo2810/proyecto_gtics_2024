@@ -166,7 +166,7 @@
 
           <div class="inside-items-list">
               <div class="preview-title roboto-regular">
-                  Nueva Pre Orden
+                  Nueva PreOrden
               </div>
 
               <div class="preorder-items">
@@ -207,18 +207,21 @@
 
       </section>
 
-          <div style="display: flex; flex-direction: row; ">
+          <div style="display: flex; flex-direction: row; justify-content: space-between; padding-top: 15px">
+              <a href="/farmacista"><button class="return-button montserrat-medium" id="cancel">Cancelar</button></a>
 
+              <button type="submit" id="continue" class="continue-button montserrat-medium">Generar PreOrden</button>
           </div>
 
-      <a href="/farmacista"><button class="return-button montserrat-medium" id="cancel">Cancelar</button></a>
 
-      <button type="submit" id="continue" class="continue-button montserrat-medium">Generar Boleta</button>
 
 
       </form>
     </div>
 
+
+  <div th:replace="~{fragments/navbar.html :: footer}">
+  </div>
 
   <script>
 
