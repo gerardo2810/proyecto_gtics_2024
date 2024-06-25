@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec = "http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+    <!--=============== CSS ===============-->
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/fonts.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+    <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/fonts.css}">
+    <link rel="stylesheet" th:href="@{/css/topbar.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
+    <link rel="stylesheet" th:href="@{/css/perfil.css}">
+    <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+
+    <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
+
+    <script th:href="@{/js/pagination.js}"></script>
+
+
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
+
+    <!--=============== JQUERY ===============-->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <!--=============== SWEETALERT ===============-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <!--=============== TOASTIFY ===============-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <!--=============== FONT AWESOME ===============-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAce4klBZuD60aEQidMVIbsoaiitxxQFpo"></script>
+    <script scr="/js/map.js"></script>
+
+    <!--=============== DataTable ===============-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
+    <!--  Bootstrap-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
+    <!--==========================================-->
+
+    <style>
+
+        #filtroEstado:focus {
+
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        .medicamento{
+            max-width: 120px; max-height: 120px;
+        }
+
+        #map {
+            height: 400px;
+            width: auto;
+            border: 4px solid #0d6efd;
+            border-radius: 6px;
+        }
+
+        .botones-tracking {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .container-progress{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 20vh !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter {
+            text-align: right;
+            display: none !important;
+        }
+
+        .area {
+            height: 19vh !important;
+        }
+
+        .circles {
+            height: 19vh !important;
+        }
+
+        .banner-btn {
+            color: #fff !important;
+            border: solid 1px #fff !important;
+            border-radius: 5px !important;
+            cursor: pointer !important;
+            align-items: center !important;
+            display: flex !important;
+            background: none !important;
+        }
+
+        .bell-btn {
+            padding: 14px 14px 14px 14px;
+            font-size: 1.1rem !important;
+        }
+
+        .user-btn {
+            padding: 10px 12px 10px 12px;
+            font-size: 1.1rem !important;
+        }
+
+        .exit-btn {
+            padding: 14px 12px 14px 12px;
+            font-size: 1.1rem !important;
+        }
+
+
+
+    </style>
+
+    <title>Tracking | Bienestar San Miguel</title>
+
+</head>
+
+
+<script>
+
+    // Inicializar mapa
+    function initMap() {
+        var ubicacion = {lat: -12.069964, lng: -77.076211};
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 16,
+            center: ubicacion
+        });
+        var marker = new google.maps.Marker({
+            position: ubicacion,
+            map: map,
+            title: 'Ubicación marcada'
+        });
+    }
+
+</script>
+
+<body class="loader-hidden">
+
+    <div class="container-loader loader-hidden" id="onload">
+        <div class="loader"></div>
+    </div>
+
+    <header class="header-topbar">
+        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Tracking')}"></nav>
+    </header>
+
+    <div th:replace="~{fragments/banner.html :: banner}"></div>
+
+
+    <div style="padding-top: 40px"></div>
+
+    <!--ESTA PARTE ES PARA ORDENES FISICAS PAGADAS O ANULADAS -->
+
+    <div class="container" th:if="${(orden.getTipoOrden() == 1)}">
+        <section class="items-list-trk">
+
+            <div class="inside-items-list-trk">
+
+                <div class="preview-title roboto-regular" style="font-size: 1.3rem"  th:if="${orden.getEstadoOrden() == 8}">
+                    Contenido de la Orden Física<span style="font-weight: bold" th:text="${orden.getIdOrden() + 10000}"></span>
+                </div>
+
+                <div class="preview-title roboto-regular" style="font-size: 1.3rem"  th:if="${orden.getEstadoOrden() == 9}">
+                    Contenido de la Orden Física Anulada<span style="font-weight: bold" th:text="${orden.getIdOrden() + 10000}"></span>
+                </div>
+
+                <div class="preview-title-trk roboto-regular">
+                    <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between">
+
+                        <div style="min-width: 180px; display: flex; align-items: center; justify-content: center">
+                            Imagen
+                        </div>
+
+                        <div style="min-width: 400px; display: flex; align-items: center; justify-content: center">
+                            Descripción
+                        </div>
+
+                        <div style="min-width: 100px; display: flex; align-items: center; justify-content: center">
+                            Cantidad
+                        </div>
+
+                        <div style="min-width: 100px; display: flex; align-items: center; justify-content: center">
+                            Precio Unitario
+                        </div>
+
+                        <div style="min-width: 100px; display: flex; align-items: center; justify-content: center">
+                            Precio
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="order-items-trk">
+                    <div th:each="med : ${contenidoOrden}">
+
+
+                        <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between !important; padding: 15px; border-bottom:solid 1px #d3d3d3;">
+
+                            <div style="min-width: 100px; display: flex; align-items: center; justify-content: center">
+                                <img th:src="'data:image/jpeg;base64,' + ${med.getIdMedicamento().imagenBase64}" width="180px" height="auto" th:alt="${med.getIdMedicamento().getNombre()}">
+                            </div>
+
+                            <div style="min-width: 400px; display: flex; align-items: center; justify-content: start">
+                                <div style="display: flex; flex-direction: column; gap: 10px">
+                                    <span style="font-size: 1.2rem; max-width: 400px" class="item-title-clicked" th:text="${med.getIdMedicamento().getNombre()}">Medicamento</span>
+                                    <span style="font-size: 0.8rem; max-width: 400px" class="item-title-clicked" th:text="${med.getIdMedicamento().getDescripcion()}">Medicamento</span>
+                                </div>
+                            </div>
+
+                            <div style="min-width: 100px; display: flex; align-items: center; justify-content: center">
+                                <span type="text" th:text="${med.getCantidad()}" class="item-quantity-clicked"></span>
+                            </div>
+
+                            <div style="min-width: 100px; display: flex; align-items: center; justify-content: center">
+                                <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${med.getIdMedicamento().getPrecioVenta()}"></span>
+                            </div>
+
+                            <div style="min-width: 100px; display: flex; align-items: end; justify-content: center">
+                                <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${ #numbers.formatDecimal((med.getIdMedicamento().getPrecioVenta()*med.getCantidad()), 1, 'COMMA', 2, 'POINT')}"></span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; gap: 15px;">
+                        <input type="hidden" name="priceTotal" value="">
+                        TOTAL <span class="price-total" th:text="${'S/.   ' + #numbers.formatDecimal(orden.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}">S/0.00</span>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+
+
+
+
+
+    <!--ESTA PARTE ES PARA ORDENES WEB PENDIENTES O POR PAGAR-->
+
+    <div class="container" th:if="${(orden.getTipoOrden() == 2 && (orden.getEstadoOrden() == 1 || orden.getEstadoOrden() == 2))}">
+        <section class="items-list-trk">
+
+            <div class="inside-items-list-trk">
+                <div class="preview-title roboto-regular" style="font-size: 1.3rem">
+                    Contenido de la Orden Web <span style="font-weight: bold" th:text="${orden.getIdOrden() + 10000}"></span>
+                </div>
+
+                <div class="preview-title-trk roboto-regular">
+                    <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between">
+
+                        <div style="min-width: 180px; display: flex; align-items: center; justify-content: center">
+                            Imagen
+                        </div>
+
+                        <div style="min-width: 400px; display: flex; align-items: center; justify-content: center">
+                            Descripción
+                        </div>
+
+                        <div style="min-width: 100px; display: flex; align-items: center; justify-content: center">
+                            Cantidad
+                        </div>
+
+                        <div style="min-width: 100px; display: flex; align-items: center; justify-content: center">
+                            Precio Unitario
+                        </div>
+
+                        <div style="min-width: 100px; display: flex; align-items: center; justify-content: center">
+                            Precio
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="order-items-trk">
+                    <div th:each="med : ${contenidoOrden}">
+
+
+                        <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between !important; padding: 15px; border-bottom:solid 1px #d3d3d3;">
+
+                            <div style="min-width: 100px; display: flex; align-items: center; justify-content: center">
+                                <img th:src="'data:image/jpeg;base64,' + ${med.getIdMedicamento().imagenBase64}" width="180px" height="auto" th:alt="${med.getIdMedicamento().getNombre()}">
+                            </div>
+
+                            <div style="min-width: 400px; display: flex; align-items: center; justify-content: start">
+                                <div style="display: flex; flex-direction: column; gap: 10px">
+                                    <span style="font-size: 1.2rem; max-width: 400px" class="item-title-clicked" th:text="${med.getIdMedicamento().getNombre()}">Medicamento</span>
+                                    <span style="font-size: 0.8rem; max-width: 400px" class="item-title-clicked" th:text="${med.getIdMedicamento().getDescripcion()}">Medicamento</span>
+                                </div>
+                            </div>
+
+                            <div style="min-width: 100px; display: flex; align-items: center; justify-content: center">
+                                <span type="text" th:text="${med.getCantidad()}" class="item-quantity-clicked"></span>
+                            </div>
+
+                            <div style="min-width: 100px; display: flex; align-items: center; justify-content: center">
+                                <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${med.getIdMedicamento().getPrecioVenta()}"></span>
+                            </div>
+
+                            <div style="min-width: 100px; display: flex; align-items: end; justify-content: center">
+                                <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${ #numbers.formatDecimal((med.getIdMedicamento().getPrecioVenta()*med.getCantidad()), 1, 'COMMA', 2, 'POINT')}"></span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; gap: 15px;">
+                        <input type="hidden" name="priceTotal" value="">
+                        TOTAL <span class="price-total" th:text="${'S/.   ' + #numbers.formatDecimal(orden.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}">S/0.00</span>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+
+
+    <!--ESTA PARTE ES PARA ORDENES WEB CON EL PROCESO ACTIVO-->
+
+    <div class="container" th:if="${orden.getTipoOrden() == 2 && (orden.getEstadoOrden() != 1 && orden.getEstadoOrden() != 2)}">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr">
+            <div>
+                <section class="items-list-trk">
+
+                    <div class="inside-items-list-trk">
+                        <div class="preview-title roboto-regular" style="font-size: 1.3rem">
+                            Contenido de la Orden <span style="font-weight: bold" th:text="${orden.getIdOrden() + 10000}"></span>
+                        </div>
+
+                        <div class="order-items">
+                            <div class="selected-item" th:each="med : ${contenidoOrden}">
+
+                                <img th:src="'data:image/jpeg;base64,' + ${med.getIdMedicamento().imagenBase64}" width="120px" height="auto" th:alt="${med.getIdMedicamento().getNombre()}">
+
+                                <div style="display: flex; flex-direction: column; gap: 10px">
+                                    <span style="font-size: 1.2rem" class="item-title-clicked" th:text="${med.getIdMedicamento().getNombre()}">Medicamento</span>
+                                    <span style="font-size: 0.8rem; max-width: 200px" class="item-title-clicked" th:text="${med.getIdMedicamento().getDescripcion()}">Medicamento</span>
+                                </div>
+                                <div class="item-on-list">
+                                    <div class="item-details">
+                                        <div class="selector-cantidad" style="min-width: 80px">
+                                            <input type="text" th:value="${med.getCantidad()}" class="item-quantity-clicked">
+                                        </div>
+
+                                        <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                                            <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${med.getIdMedicamento().getPrecioVenta()}"></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="preview-title roboto-regular" style="padding-top: 20px">
+
+
+
+                            <div class="price-total-div roboto-medium">
+                                <input type="hidden" name="priceTotal" id="priceTotal" value="">
+                                TOTAL <span class="price-total" th:text="${'S/.   ' + #numbers.formatDecimal(orden.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}">S/0.00</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <div>
+                <div style="max-width: 1536px;margin-inline: auto;padding: 20px 30px 0 30px;" th:if="${orden.getTipoOrden() == 2}" th:switch="${orden.getEstadoOrden()}">
+
+                    <div th:case="3" style="display: flex;flex-direction: column;justify-content: center;column-gap: 20px">
+
+
+                        <div id="map"></div>
+
+                        <div class="container-progress">
+                            <div class="wrapper">
+                                <div class="progress-container">
+
+                                    <div class="barra"  style="width: 0%"></div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-file-text active"></i>Recibido
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-refresh"></i>En proceso
+                                    </div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-archive"></i>Empaquetando
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-truck"></i>En ruta
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-check-square"></i>Entregado
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                    <div th:case="4" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+
+
+                        <div class="container-progress">
+                            <div class="wrapper">
+                                <div class="progress-container">
+
+                                    <div class="barra"  style="width: 25%"></div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-file-text active"></i>Recibido
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-refresh active" ></i>En proceso
+                                    </div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-archive"></i>Empaquetando
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-truck"></i>En ruta
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-check-square"></i>Entregado
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="map"></div>
+
+                    </div>
+
+                    <div th:case="5" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+
+
+                        <div class="container-progress">
+                            <div class="wrapper">
+                                <div class="progress-container">
+
+                                    <div class="barra"  style="width: 50%"></div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-file-text active"></i>Recibido
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-refresh active" ></i>En proceso
+                                    </div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-archive active"></i>Empaquetando
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-truck"></i>En ruta
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-check-square"></i>Entregado
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="map"></div>
+
+                    </div>
+
+                    <div th:case="6" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+
+
+                        <div class="container-progress">
+                            <div class="wrapper">
+                                <div class="progress-container">
+
+                                    <div class="barra"  style="width: 70%"></div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-file-text active"></i>Recibido
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-refresh active" ></i>En proceso
+                                    </div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-archive active"></i>Empaquetando
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-truck active"></i>En ruta
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-check-square"></i>Entregado
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="map"></div>
+
+                    </div>
+
+                    <div th:case="7" style="display: flex;flex-direction: column;row-gap: 15px">
+
+                        <div class="container-progress" style="min-height: 18vh">
+                            <div class="wrapper">
+                                <div class="progress-container">
+
+                                    <div class="barra"  style="width: 90%"></div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-file-text active"></i>Recibido
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-refresh active" ></i>En proceso
+                                    </div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-archive active"></i>Empaquetando
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-truck active"></i>En ruta
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-check-square active"></i>Entregado
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div style="display: flex; flex-direction: row; justify-content: center">
+                            <p style="font-size: 30px;color:#0d6efd ">!Su orden ha sido entregada exitosamente!</p>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="container" style="padding-top: 15px">
+        <div class="float-right botones-tracking">
+
+            <a th:href="@{'/farmacista/ordenes_venta'}">
+                <button class="print">REGRESAR</button>
+            </a>
+
+            <a th:if="${orden.getEstadoOrden() != 1 && orden.getEstadoOrden() != 2} " th:href="@{'/farmacista/ver_boleta?id=' + ${orden.getIdOrden()}}" >
+                <button class="print">VER BOLETA</button>
+            </a>
+
+            <div th:if="${orden.getTipoOrden() == 2}" th:switch="${orden.getEstadoOrden()}">
+                <div th:case="1">
+                    <a th:href="@{'/farmacista/aprobar_orden_web?id=' + ${orden.getIdOrden()}}">
+                        <button class="print">APROBAR ORDEN</button>
+                    </a>
+                </div>
+            </div>
+
+            <div th:if="${orden.getTipoOrden() == 2}" th:switch="${orden.getEstadoOrden()}">
+                <div th:case="1">
+
+                    <form method="post" th:action="@{'/farmacista/crear_chat'}" >
+                        <input type="hidden" name="idOrden" th:value="${orden.getIdOrden()}">
+                        <input type="hidden" name="idPaciente" th:value="${orden.getPaciente().getIdUsuario()}" >
+                        <input type="hidden" name="idFarmacista" th:value="${session.usuario.getIdUsuario()}">
+                        <button type="submit" class="print" style="width: 300px !important;">Iniciar conversación con el paciente</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/navbar.html :: footer}">
+    </div>
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script th:src="@{/js/topbar.js}"></script>
+
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.onload = function () {
+            $('#onload').fadeOut();
+            $('body').removeClass('loader-hidden');
+        }
+
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            let opened = false;
+
+            $('#menu-small').hide();
+
+            $('#nav-toggle').click(function (e) {
+                e.stopPropagation();
+                if (opened) {
+                    $('#menu-small').hide();
+                } else {
+                    $('#menu-small').show();
+                }
+                opened = !opened;
+            });
+        });
+    </script>
+    <script>
+        function toggleNotifi() {
+            var box = document.getElementById('box');
+            var isVisible = box.style.opacity !== '0';
+
+            if (isVisible) {
+                box.style.opacity = '0';
+                box.style.height = '0px'; // Ajusta la altura según tu diseño
+            } else {
+                box.style.opacity = '1';
+                box.style.height = 'auto'; // Ajusta la altura según el contenido
+            }
+        }
+    </script>
+</body>
+
+
+</html>

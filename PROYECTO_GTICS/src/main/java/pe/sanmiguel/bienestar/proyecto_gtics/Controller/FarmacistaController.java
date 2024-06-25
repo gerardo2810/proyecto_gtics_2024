@@ -822,7 +822,6 @@ public class FarmacistaController {
                 boolean containsPreOrden = false;
                 Orden preOrdenChild = ordenRepository.findPreordenByOrdenId(Integer.valueOf(idOrden));
 
-
                 ArrayList<OrdenContenido> contenidoPreOrden = new ArrayList<>();
 
                 if (preOrdenChild != null) {
@@ -841,7 +840,7 @@ public class FarmacistaController {
                 model.addAttribute("idOrden", idOrden);
                 model.addAttribute("contenidoOrden", contenidoOrden);
                 model.addAttribute("orden", ordenComprobada);
-                return "farmacista/tracking";
+                return "farmacista/tracking-2";
             } else {
                 attr.addFlashAttribute("msg", "La orden buscada no ha sido encontrada.");
                 return "redirect:/farmacista/ordenes_venta";
@@ -851,6 +850,7 @@ public class FarmacistaController {
             return "redirect:/farmacista/ordenes_venta";
         }
     }
+
 
     @GetMapping("/farmacista/ver_boleta")
     public String verBoleta(Model model, @RequestParam("id") String idOrden,
@@ -871,9 +871,14 @@ public class FarmacistaController {
 
             if (ordenComprobada.getSede().getIdSede() == sedeSession.getIdSede()){
 
-                model.addAttribute("orden",ordenComprobada);
-                model.addAttribute("contenidoOrden", contenidoOrden);
-                return "farmacista/boleta";
+                if (ordenComprobada.getEstadoOrden() == 1 || ordenComprobada.getEstadoOrden() == 2){
+                    attr.addFlashAttribute("msg", "Esta orden todavía no ha sido pagada o procesada.");
+                    return "redirect:/farmacista/ordenes_venta";
+                } else {
+                    model.addAttribute("orden",ordenComprobada);
+                    model.addAttribute("contenidoOrden", contenidoOrden);
+                    return "farmacista/boleta";
+                }
 
             } else {
                 attr.addFlashAttribute("msg", "La orden buscada no ha sido encontrada.");

@@ -906,6 +906,15 @@ hr.style-one {
     padding-bottom: 15px;
 }
 
+.preview-title-trk {
+    color: var(--color-text-1);
+    border-bottom: solid 1px #d3d3d3;
+    padding-top: 10px;
+    font-size: 1rem;
+    text-align: start;
+    padding-bottom: 10px;
+}
+
 .input-label-box{
     display: flex;
     flex-direction: column;
@@ -1095,8 +1104,20 @@ hr.style-one {
     border: 1px solid #dedede;
 }
 
+.items-list-trk {
+    margin-top: 20px;
+    border-radius: 0.25rem;
+    color: var(--color-black);
+    background: #ffffff;
+    border: 1px solid #dedede;
+}
+
 .inside-items-list {
     padding: 20px;
+}
+
+.inside-items-list-trk {
+    padding: 10px 20px 10px 20px;
 }
 
 .inside-items-list-2 {
@@ -1105,6 +1126,12 @@ hr.style-one {
 
 .order-items {
     min-height: 440px;
+    max-height: 440px;
+    overflow: auto;
+}
+
+.order-items-trk {
+    min-height: 100px;
     max-height: 440px;
     overflow: auto;
 }

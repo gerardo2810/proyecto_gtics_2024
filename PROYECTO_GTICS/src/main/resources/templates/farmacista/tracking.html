@@ -17,8 +17,7 @@
 
     <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
 
-    <link th:href="@{/css/styles.css}" rel="stylesheet" />
-    <link th:href="@{/css/fonts.css}" rel="stylesheet" />
+
     <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
     <link rel="stylesheet" th:href="@{/css/farmacista/ver_productos.css}">
     <link rel="stylesheet" th:href="@{/css/farmacista/comentarios.css}">
@@ -30,11 +29,13 @@
     <link rel="stylesheet" th:href="@{/css/topbar.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
-    <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
-    <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
+
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <script th:href="@{/js/pagination.js}"></script>
     <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+
+    <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
 
 
 
@@ -167,11 +168,123 @@
 
 <div th:replace="~{fragments/banner.html :: banner}"></div>
 
+
+
 <div class="container">
 
+    <div style="padding-top: 30px; padding-bottom: 20px">
+        <div class="main-title montserrat-bold"> Ver Orden de Venta </div>
+        <div class="main-subtitle montserrat-regular"> Esta orden es una venta física </div>
+    </div>
 
-    <div style="max-width: 1536px;margin-inline: auto;padding: 0 30px 0 30px;" th:if="${orden.getTipoOrden() == 1}" th:switch="${orden.getEstadoOrden()}">
+    <hr class="style-one">
 
+    <div style="max-width: 1530px;margin-inline: auto;padding: 0 30px 0 30px;" th:if="${orden.getTipoOrden() == 1}" th:switch="${orden.getEstadoOrden()}">
+        <div class="container px-3 my-5 clearfix">
+            <div id="content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 th:text="${orden.getEstadoOrden() != 9 ? 'Contenido de la Orden: Tracking ' + orden.getTracking() : 'Contenido de la Orden Anulada: Tracking ' + orden.getTracking()}"></h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered m-0">
+                                <thead>
+                                <tr>
+
+                                    <th class="text-center py-3 px-4" style="min-width: 400px;">Medicamento &amp; Details</th>
+                                    <th class="text-right py-3 px-4" style="min-width: 100px;">Imagen</th>
+                                    <th class="text-center py-3 px-4" style="min-width: 100px;">Cantidad</th>
+                                    <th class="text-right py-3 px-4" style="min-width: 100px;">Precio unitario</th>
+                                    <th class="text-right py-3 px-4" style="min-width: 100px;">Precio total</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="itemDeLaOrden: ${contenidoOrden}">
+                                    <td th:text="${itemDeLaOrden.getIdMedicamento().nombre} + ': ' + ${itemDeLaOrden.getIdMedicamento().descripcion}"></td>
+                                    <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" width="120px" height="auto" ></td>
+                                    <td th:text="${itemDeLaOrden.getCantidad()}"></td>
+                                    <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
+
+                                    <td class="resultado"></td>
+                                    <script th:inline="javascript">
+                                        function limitarDigitos(numero) {
+                                            var numeroStr = numero.toString();
+                                            // Obtener los primeros 4 dígitos
+                                            var primerosCuatroDigitos = numeroStr.substring(0, 4);
+                                            var numeroLimitado = parseFloat(primerosCuatroDigitos);
+                                            return numeroLimitado;
+                                        }
+                                        var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
+                                        var cantidad = [[${itemDeLaOrden.getCantidad()}]];
+                                        var resultado = precioVenta * cantidad;
+                                        console.log(resultado)
+                                        var resultadoLimitado = limitarDigitos(resultado);
+                                        document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
+                                    </script>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!--div class="d-flex flex-wrap justify-content-between align-items-center pb-4">
+                            <div class="d-flex">
+                                <div class="text-right mt-4 mr-5">
+                                    <label class="text-muted font-weight-normal m-0">Discount</label>
+                                    <div class="text-large"><strong>$20</strong></div>
+                                </div>
+                                <div class="text-right mt-4">
+                                    <label class="text-muted font-weight-normal m-0">Total price</label>
+                                    <div class="text-large"><strong>$1164.65</strong></div>
+                                </div>
+                            </div>
+                        </div-->
+                        <br>
+                        <br>
+                        <div class="float-right botones-tracking">
+
+                            <a th:href="@{'/farmacista/ordenes_venta'}">
+                                <button class="print">REGRESAR</button>
+                            </a>
+
+
+                            <a th:if="${orden.getEstadoOrden() != 1 && orden.getEstadoOrden() != 2} " th:href="@{'/farmacista/ver_boleta?id=' + ${orden.getIdOrden()}}" >
+                                <button class="print">VER BOLETA</button>
+                            </a>
+
+                            <div th:if="${orden.getTipoOrden() == 2}" th:switch="${orden.getEstadoOrden()}">
+                                <div th:case="1" >
+                                    <a  th:href="@{'/farmacista/aprobar_orden_web?id=' + ${orden.getIdOrden()}}">
+                                        <button class="print">APROBAR ORDEN</button>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div th:if="${orden.getTipoOrden() == 2}" th:switch="${orden.getEstadoOrden()}">
+                                <div th:case="1" >
+
+                                    <form method="post" th:action="@{'/farmacista/crear_chat'}" >
+                                        <input type="hidden" name="idOrden" th:value="${orden.getIdOrden()}">
+                                        <input type="hidden" name="idPaciente" th:value="${orden.getPaciente().getIdUsuario()}" >
+                                        <input type="hidden" name="idFarmacista" th:value="${session.usuario.getIdUsuario()}">
+                                        <button type="submit" class="print" >Iniciar conversación con el paciente</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="pagination" id="pagination">
+                    <!-- Aquí se añadirán los botones de paginación -->
+                </div>
+            </div>
+        </div>
+
+        <div style="padding-bottom: 20px"></div>
     </div>
 
 
