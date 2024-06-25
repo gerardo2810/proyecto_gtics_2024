@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -83,6 +84,7 @@ public class FarmacistaController {
     List<Medicamento> medicamentosConStock = new ArrayList<>();
     List<String> cantidadesFaltantes = new ArrayList<>();
     List<String> cantidadesExistentes = new ArrayList<>();
+    Orden ordenSaved = new Orden();
 
     Usuario pacienteOnStore = new Usuario();
 
@@ -318,6 +320,7 @@ public class FarmacistaController {
 
                         model.addAttribute("usuario", userExisting);
                         founded = true;
+                        pacienteOnStore = userExisting;
                     }
 
                     model.addAttribute("foundedNotification", founded);
@@ -412,9 +415,12 @@ public class FarmacistaController {
                 if (usuarioToComp.getDni().equals(dni)){
                     verificationUser verificationUser = new verificationUser(name,lastname,dni,distrito,direccion,seguro,correo,celular);
                     this.pacienteOnStore = verificationUser.getUser();
+
                 } else {
+
                     if(medicamentosSeleccionados.isEmpty()){
                         return "redirect:/farmacista";
+
                     } else {
 
                         List<Integer> stockSeleccionados = new ArrayList<>();
@@ -513,6 +519,29 @@ public class FarmacistaController {
 
             } else {
 
+                LocalDateTime now = LocalDateTime.now();
+
+                Orden newOrden = new Orden();
+                newOrden.setFechaIni(now);
+                newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
+                newOrden.setIdFarmacista(usuarioSession.getIdUsuario());
+                newOrden.setPaciente(pacienteOnStore);
+                newOrden.setTipoOrden(1);
+                newOrden.setEstadoOrden(8);
+                newOrden.setSede(sedeSession);
+                System.out.println(pacienteOnStore);
+                newOrden.setSeguroUsado(Objects.requireNonNullElse(seguro, "false"));
+                System.out.println(pacienteOnStore);
+
+                if (!(doctor == null)) {
+                    if (!doctor.isEmpty() && !doctor.equals("no-doctor")) {
+                        newOrden.setDoctor(doctorRepository.getByIdDoctor(Integer.valueOf(doctor)));
+                    }
+                }
+
+                System.out.println("Orden antes de guardar: " + newOrden);
+
+                this.ordenSaved = newOrden;
                 this.medicamentosSinStock = verificationStock.getMedicamentosSinStock();
                 this.medicamentosConStock = verificationStock.getMedicamentosConStock();
                 this.cantidadesFaltantes = verificationStock.getCantidadesFaltantes();
@@ -563,9 +592,75 @@ public class FarmacistaController {
     @PostMapping("/farmacista/finalizar_preorden")
     public String finalizarPreOrden(@RequestParam("listaIds") List<String> listaSelectedIds){
 
-        System.out.println(listaSelectedIds);
+        medicamentosSinStock = getMedicamentosFromLista(listaSelectedIds);
+        cantidadesFaltantes = getCantidadesFromLista(listaSelectedIds);
 
-        return "redirect:/farmacista/ver_orden_tracking?id=" + idVerOrdenCreada;
+        Orden ordenPadre = ordenSaved;
+
+        ordenRepository.save(ordenPadre);
+        System.out.println("Orden guardada: " + ordenPadre);
+
+        int i = 0;
+        for (Medicamento med : medicamentosConStock){
+
+            OrdenContenidoId contenidoId = new OrdenContenidoId();
+            contenidoId.setIdOrden(ordenPadre.getIdOrden());
+            contenidoId.setIdMedicamento(med.getIdMedicamento());
+
+            OrdenContenido contenido = new OrdenContenido();
+            contenido.setId(contenidoId);
+            contenido.setIdOrden(ordenPadre);
+            contenido.setIdMedicamento(med);
+            contenido.setCantidad(Integer.parseInt(cantidadesExistentes.get(i)));
+
+            ordenContenidoRepository.save(contenido);
+            i++;
+        }
+
+        Orden newPreOrden = new Orden();
+
+        newPreOrden.setFechaIni(ordenPadre.getFechaIni());
+
+        BigDecimal montoTotalPreOrden = new BigDecimal(0);
+
+        for (int j = 0; j < medicamentosSinStock.size(); j++) {
+            BigDecimal precio = medicamentosSinStock.get(j).getPrecioVenta();
+            int cant = Integer.parseInt(cantidadesFaltantes.get(j));
+            montoTotalPreOrden = montoTotalPreOrden.add(precio.multiply(BigDecimal.valueOf(cant)));
+        }
+        System.out.println(montoTotalPreOrden);
+
+        newPreOrden.setPrecioTotal(Float.parseFloat(String.valueOf(montoTotalPreOrden)));
+        newPreOrden.setIdFarmacista(usuarioSession.getIdUsuario());
+        newPreOrden.setPaciente(pacienteOnStore);
+        newPreOrden.setTipoOrden(3);
+        newPreOrden.setEstadoOrden(8);
+        newPreOrden.setEstadoPreOrden(1);
+        newPreOrden.setSede(sedeSession);
+        newPreOrden.setSeguroUsado(ordenPadre.getSeguroUsado());
+
+        ordenRepository.save(newPreOrden);
+        System.out.println("Orden guardada: " + newPreOrden);
+
+
+        int k = 0;
+        for (Medicamento med : medicamentosSinStock){
+
+            OrdenContenidoId contenidoId = new OrdenContenidoId();
+            contenidoId.setIdOrden(newPreOrden.getIdOrden());
+            contenidoId.setIdMedicamento(med.getIdMedicamento());
+
+            OrdenContenido contenido = new OrdenContenido();
+            contenido.setId(contenidoId);
+            contenido.setIdOrden(newPreOrden);
+            contenido.setIdMedicamento(med);
+            contenido.setCantidad(Integer.parseInt(cantidadesFaltantes.get(k)));
+
+            ordenContenidoRepository.save(contenido);
+            i++;
+        }
+
+        return "redirect:/farmacista/ver_orden_tracking?id=" + ordenPadre.getIdOrden();
     }
 
 
