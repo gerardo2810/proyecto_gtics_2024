@@ -91,6 +91,7 @@
             <select class="select-p" id="filtroEstado" >
               <option value="">Mostrar Todos</option>
               <option value="PENDIENTE">Pendiente</option>
+              <option value="POR PAGAR">Por Pagar</option>
               <option value="RECIBIDO">Recibido</option>
               <option value="EN PROCESO">En proceso</option>
               <option value="EMPAQUETANDO">Empaquetando</option>
@@ -132,7 +133,7 @@
           <td style="text-align: center" th:text="${orden.getPaciente().getNombres()} + ' ' + ${orden.getPaciente().getApellidos()}" ></td>
           <td th:switch="${orden.getEstadoOrden()}">
             <button class="btn-pend montserrat-medium"          th:case="1">PENDIENTE</button>
-            <button class="btn-pend montserrat-medium"          th:case="2">PENDIENTE</button>
+            <button class="btn-pend montserrat-medium"          th:case="2">POR PAGAR</button>
             <button class="btn-rcb montserrat-medium"           th:case="3">RECIBIDO</button>
             <button class="btn-pro montserrat-medium"           th:case="4">EN PROCESO</button>
             <button class="btn-empa montserrat-medium"          th:case="5">EMPAQUETANDO</button>
