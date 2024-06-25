@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.FarmacistaValidatio
 
 import javax.print.attribute.standard.PresentationDirection;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
@@ -82,6 +84,8 @@ public class FarmacistaController {
     List<Medicamento> medicamentosConStock = new ArrayList<>();
     List<String> cantidadesFaltantes = new ArrayList<>();
     List<String> cantidadesExistentes = new ArrayList<>();
+    List<String> idsSelectedJS = new ArrayList<>();
+    Orden ordenSaved = new Orden();
 
     Usuario pacienteOnStore = new Usuario();
 
@@ -262,10 +266,8 @@ public class FarmacistaController {
                 }
             }
 
-            ArrayList<Usuario> listaUsuarios = (ArrayList<Usuario>) usuarioRepository.listarUsuariosSegunRol(4);
             ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) doctorRepository.findAll();
 
-            model.addAttribute("listaUsuarios", listaUsuarios);
             model.addAttribute("listaDoctores", listaDoctores);
             model.addAttribute("stockSeleccionados", stockSeleccionados);
             model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
@@ -310,9 +312,26 @@ public class FarmacistaController {
                     model.addAttribute("nombres", apiNombres);
                     model.addAttribute("apellidos", apiApellidos);
 
+                    boolean founded = false;
+
+                    Optional<Usuario> usuarioOptional = usuarioRepository.findPacienteByDni(apiDni);
+                    Usuario userExisting = new Usuario();
+                    if (usuarioOptional.isPresent()){
+                        userExisting = usuarioOptional.get();
+
+                        model.addAttribute("usuario", userExisting);
+                        founded = true;
+                        pacienteOnStore = userExisting;
+                    }
+
+                    model.addAttribute("foundedNotification", founded);
+
                     System.out.println(values);
+                    System.out.println("El usuario fue encontrado en DB?" + founded);
                     return "farmacista/formulario_paciente";
+
                 } else {
+
                     // Caso cuando el dni no existe
                     String dniError = "error";
                     model.addAttribute("dniError", dniError);
@@ -397,9 +416,12 @@ public class FarmacistaController {
                 if (usuarioToComp.getDni().equals(dni)){
                     verificationUser verificationUser = new verificationUser(name,lastname,dni,distrito,direccion,seguro,correo,celular);
                     this.pacienteOnStore = verificationUser.getUser();
+
                 } else {
+
                     if(medicamentosSeleccionados.isEmpty()){
                         return "redirect:/farmacista";
+
                     } else {
 
                         List<Integer> stockSeleccionados = new ArrayList<>();
@@ -449,6 +471,7 @@ public class FarmacistaController {
 
                 Orden newOrden = new Orden();
                 newOrden.setFechaIni(now);
+                priceTotal = priceTotal.replace(",", "");
                 newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
                 newOrden.setIdFarmacista(usuarioSession.getIdUsuario());
                 newOrden.setPaciente(pacienteOnStore);
@@ -498,29 +521,190 @@ public class FarmacistaController {
 
             } else {
 
-                this.medicamentosSinStock = verificationStock.getMedicamentosSinStock();
-                this.medicamentosConStock = verificationStock.getMedicamentosConStock();
-                this.cantidadesFaltantes = verificationStock.getCantidadesFaltantes();
-                this.cantidadesExistentes = verificationStock.getCantidadesExistentes();
+                LocalDateTime now = LocalDateTime.now();
+
+                Orden newOrden = new Orden();
+                newOrden.setFechaIni(now);
+                priceTotal = priceTotal.replace(",", "");
+                newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
+                newOrden.setIdFarmacista(usuarioSession.getIdUsuario());
+                newOrden.setPaciente(pacienteOnStore);
+                newOrden.setTipoOrden(1);
+                newOrden.setEstadoOrden(8);
+                newOrden.setSede(sedeSession);
+                System.out.println(pacienteOnStore);
+                newOrden.setSeguroUsado(Objects.requireNonNullElse(seguro, "false"));
+                System.out.println(pacienteOnStore);
+
+                if (!(doctor == null)) {
+                    if (!doctor.isEmpty() && !doctor.equals("no-doctor")) {
+                        newOrden.setDoctor(doctorRepository.getByIdDoctor(Integer.valueOf(doctor)));
+                    }
+                }
+
+                System.out.println("Orden antes de guardar: " + newOrden);
+
+                this.ordenSaved = newOrden;
 
                 return "redirect:/farmacista/crear_preorden";
             }
         }
     }
 
-
-
+    @PostMapping("/farmacista/crear_new_preorden")
+    public String postCreatePreOrden(@RequestParam("listaIds") List<String> listaSelectedIds){
+        idsSelectedJS = listaSelectedIds;
+        return "redirect:/farmacista/crear_preorden";
+    }
 
     @GetMapping("/farmacista/crear_preorden")
     public String createPreOrden(Model model) {
+
+        if (medicamentosSinStock.isEmpty()){
+            return "redirect:/farmacista";
+        }
+
+        medicamentosSeleccionados = getMedicamentosFromLista(idsSelectedJS);
+        listaCantidades = getCantidadesFromLista(idsSelectedJS);
+
+        verificationStock verificationStock = new verificationStock(medicamentosSeleccionados, listaCantidades);
+
+        this.medicamentosSinStock = verificationStock.getMedicamentosSinStock();
+        this.medicamentosConStock = verificationStock.getMedicamentosConStock();
+        this.cantidadesFaltantes = verificationStock.getCantidadesFaltantes();
+        this.cantidadesExistentes = verificationStock.getCantidadesExistentes();
+
+        System.out.println(cantidadesFaltantes);
+        int j = 0;
+        for (String cant: cantidadesFaltantes) {
+            if (Integer.parseInt(cant) > 10){
+                cantidadesFaltantes.set(j,"10");
+            }
+            j++;
+        }
 
         model.addAttribute("medicamentosSinStock", medicamentosSinStock);
         model.addAttribute("medicamentosConStock", medicamentosConStock);
         model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
         model.addAttribute("cantidadesExistentes", cantidadesExistentes);
 
-        return "farmacista/crear_preorden";
+        System.out.println(medicamentosConStock);
+        System.out.println(cantidadesExistentes);
+
+        BigDecimal montoTotalOrden = new BigDecimal(0);
+
+        for (int i = 0; i < medicamentosConStock.size(); i++) {
+            BigDecimal precio = medicamentosConStock.get(i).getPrecioVenta();
+            int cant = Integer.parseInt(cantidadesExistentes.get(i));
+            montoTotalOrden = montoTotalOrden.add(precio.multiply(BigDecimal.valueOf(cant)));
+        }
+        System.out.println(montoTotalOrden);
+
+        model.addAttribute("montoTotalOrden", montoTotalOrden);
+
+        return "farmacista/crear_pre_orden";
     }
+
+    @PostMapping("/farmacista/finalizar_preorden")
+    public String finalizarPreOrden(@RequestParam("listaIds") List<String> listaSelectedIds){
+
+        medicamentosSinStock = getMedicamentosFromLista(listaSelectedIds);
+        cantidadesFaltantes = getCantidadesFromLista(listaSelectedIds);
+
+        Orden ordenPadre = ordenSaved;
+
+        ordenRepository.save(ordenPadre);
+        System.out.println("Orden guardada: " + ordenPadre);
+
+
+        int i = 0;
+        for (Medicamento med : medicamentosConStock){
+
+            OrdenContenidoId contenidoId = new OrdenContenidoId();
+            contenidoId.setIdOrden(ordenPadre.getIdOrden());
+            contenidoId.setIdMedicamento(med.getIdMedicamento());
+
+            OrdenContenido contenido = new OrdenContenido();
+            contenido.setId(contenidoId);
+            contenido.setIdOrden(ordenPadre);
+            contenido.setIdMedicamento(med);
+            contenido.setCantidad(Integer.parseInt(cantidadesExistentes.get(i)));
+
+            ordenContenidoRepository.save(contenido);
+            i++;
+        }
+
+        Orden newPreOrden = new Orden();
+
+        newPreOrden.setFechaIni(ordenPadre.getFechaIni());
+
+        BigDecimal montoTotalPreOrden = new BigDecimal(0);
+
+        for (int j = 0; j < medicamentosSinStock.size(); j++) {
+            BigDecimal precio = medicamentosSinStock.get(j).getPrecioVenta();
+            int cant = Integer.parseInt(cantidadesFaltantes.get(j));
+            montoTotalPreOrden = montoTotalPreOrden.add(precio.multiply(BigDecimal.valueOf(cant)));
+        }
+        System.out.println(montoTotalPreOrden);
+
+        newPreOrden.setPrecioTotal(Float.parseFloat(String.valueOf(montoTotalPreOrden)));
+        newPreOrden.setIdFarmacista(usuarioSession.getIdUsuario());
+        newPreOrden.setPaciente(pacienteOnStore);
+        newPreOrden.setTipoOrden(3);
+        newPreOrden.setEstadoOrden(8);
+        newPreOrden.setOrdenParent(ordenPadre.getIdOrden());
+        newPreOrden.setEstadoPreOrden(1);
+        newPreOrden.setSede(sedeSession);
+        newPreOrden.setSeguroUsado(ordenPadre.getSeguroUsado());
+        newPreOrden.setDoctor(ordenPadre.getDoctor());
+
+        ordenRepository.save(newPreOrden);
+        System.out.println("Orden guardada: " + newPreOrden);
+
+
+        int k = 0;
+        for (Medicamento med : medicamentosSinStock){
+
+            OrdenContenidoId contenidoId = new OrdenContenidoId();
+            contenidoId.setIdOrden(newPreOrden.getIdOrden());
+            contenidoId.setIdMedicamento(med.getIdMedicamento());
+
+            OrdenContenido contenido = new OrdenContenido();
+            contenido.setId(contenidoId);
+            contenido.setIdOrden(newPreOrden);
+            contenido.setIdMedicamento(med);
+            contenido.setCantidad(Integer.parseInt(cantidadesFaltantes.get(k)));
+
+            ordenContenidoRepository.save(contenido);
+            i++;
+        }
+
+        return "redirect:/farmacista/ver_orden_tracking?id=" + ordenPadre.getIdOrden();
+    }
+
+
+    //BOLETA DE PRE ORDNES//
+    @GetMapping("/farmacista/deprecated/ver_pre_orden")
+    public String verPreOrden(Model model,
+                              HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        /*model.addAttribute("medicamentosSinStock", medicamentosSinStock);
+        model.addAttribute("medicamentosConStock", medicamentosConStock);
+        model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
+        model.addAttribute("cantidadesExistentes", cantidadesExistentes);*/
+
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
+        List<Orden> listaOrdenesVenta = ordenRepository.findAllOrdenesPorSede(sedeSession.getIdSede());
+        model.addAttribute("listaOrdenesVenta", listaOrdenesVenta);
+        return "/farmacista/deprecated/ver_pre_orden";
+    }
+
+
 
     @GetMapping("/farmacista/cambiar_medicamentos")
     public String changeMedicamentos(Model model) {

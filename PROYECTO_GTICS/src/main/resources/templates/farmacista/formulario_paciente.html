@@ -71,6 +71,7 @@
                                     <input class="input-form-dni" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del paciente"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
                                     <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
                                     <div  class="invalid-feedback" th:if="${dniError}">El DNI ingresado no existe.</div>
+                                    <div  class="valid-feedback" th:if="${foundedNotification}">El paciente fue encontrado en los registros.</div>
                                 </div>
 
                                 <div style="margin-top: 37px">
@@ -238,59 +239,8 @@
     <div th:replace="~{fragments/navbar.html :: footer}">
     </div>
 
-
-
 </body>
 
-
-<script>
-    const frameworks = [
-        { value: "sveltekit", label: "SvelteKit" },
-        { value: "next.js", label: "Next.js" },
-        { value: "nuxt.js", label: "Nuxt.js" },
-        { value: "remix", label: "Remix" },
-        { value: "astro", label: "Astro" }
-    ];
-
-    let open = false;
-    let value = "";
-
-    $(document).ready(function() {
-        document.getElementById("trigger").addEventListener("click", () => {
-            open = !open;
-            document.getElementById("content").style.display = open ? "block" : "none";
-        });
-
-        document.getElementById("search-input").addEventListener("input", () => {
-            const searchValue = document.getElementById("search-input").value.toLowerCase();
-            const filteredFrameworks = frameworks.filter(framework => framework.label.toLowerCase().includes(searchValue));
-            const frameworksContainer = document.getElementById("frameworks");
-            frameworksContainer.innerHTML = "";
-            if (filteredFrameworks.length > 0) {
-                filteredFrameworks.forEach(framework => {
-                    const item = document.createElement("div");
-                    item.textContent = framework.label;
-                    item.addEventListener("click", () => {
-                        value = framework.value;
-                        document.getElementById("trigger").textContent = framework.label;
-                        closePopover();
-                    });
-                    frameworksContainer.appendChild(item);
-                });
-            } else {
-                const emptyMessage = document.createElement("div");
-                emptyMessage.textContent = "No framework found.";
-                frameworksContainer.appendChild(emptyMessage);
-            }
-        });
-
-        function closePopover() {
-            open = false;
-            document.getElementById("content").style.display = "none";
-        }
-    });
-
-</script>
 
 <script th:inline="javascript">
 
@@ -345,30 +295,58 @@
             }
 
             const form = document.getElementById('finalizar');
-            Swal.fire({
-                title: hayProblemaConStock ? 'Existen problemas por Stock' : '¿Estás seguro?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: hayProblemaConStock ? 'Nueva Preorden' : 'Continuar',
-                cancelButtonText: hayProblemaConStock ? 'Cambiar Medicinas' : 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    event.preventDefault();
-                    form.submit();
-                } else if (result.isDismissed && hayProblemaConStock && verificarCamposLlenos(form)) {
-                    window.location.href = '/farmacista/cambiar_medicamentos';
-                } else {
-                    Swal.fire({
-                        title: 'Faltan Datos',
-                        text: 'Por favor, completa todos los campos antes de enviar el formulario.',
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Continuar',
-                    });
-                }
-            });
+
+            if (hayProblemaConStock){
+
+                Swal.fire({
+                    title: 'Existen problemas por Stock',
+                    text: "Recuerde que al elegir crear una preorden no podrá volver a este formulario",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    showDenyButton: true,
+                    confirmButtonColor: '#3085d6',
+                    denyButtonColor: '#3085d6',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonText: 'Nueva Preorden',
+                    denyButtonText: 'Cambiar Medicinas'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        event.preventDefault();
+                        form.submit();
+                    } else if (result.isDismissed) {
+
+                    } else if (result.isDenied && hayProblemaConStock && verificarCamposLlenos(form)){
+                        window.location.href = '/farmacista/cambiar_medicamentos';
+                    } else {
+                        Swal.fire({
+                            title: 'Faltan Datos',
+                            text: 'Por favor, completa todos los campos antes de enviar el formulario.',
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Continuar',
+                        });
+                    }
+                });
+
+            } else {
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Continuar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        event.preventDefault();
+                        form.submit();
+                    } else if (result.isDismissed) {
+
+                    }
+                });
+            }
         });
 
 
