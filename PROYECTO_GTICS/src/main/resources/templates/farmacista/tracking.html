@@ -155,7 +155,8 @@
     }
 
 </script>
-</head>
+
+
 <body>
 
 
@@ -168,16 +169,8 @@
 
 <div class="container">
 
-    <div class="container" th:if="${orden.getTipoOrden() == 2 && orden.getEstadoOrden() != 9}" >
 
-        <div style="padding-top: 20px; padding-bottom: 20px">
-            <!--div class="main-title open-sans-bold" style="font-size: 2.2rem" th:text="${'Estado de la Orden #' + (orden.getIdOrden() + 10000)}"> Estado de la Orden </div-->
-            <!--div class="main-subtitle montserrat-regular" th:text="${'Tracking: ' + orden.getTracking()}"> Tracking </-->
-        </div>
-
-        <hr class="style-one">
-
-        <div style="margin-bottom: 40px"></div>
+    <div style="max-width: 1536px;margin-inline: auto;padding: 0 30px 0 30px;" th:if="${orden.getTipoOrden() == 1}" th:switch="${orden.getEstadoOrden()}">
 
     </div>
 
@@ -910,10 +903,18 @@
 <div th:replace="~{fragments/navbar.html :: footer}">
 </div>
 
+
+
+
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <script th:src="@{/js/topbar.js}"></script>
+
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const itemsPerPage = 10; // Número de medicamentos por página
