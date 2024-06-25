@@ -544,21 +544,27 @@ public class FarmacistaController {
                 System.out.println("Orden antes de guardar: " + newOrden);
 
                 this.ordenSaved = newOrden;
-                this.medicamentosSinStock = verificationStock.getMedicamentosSinStock();
-                this.medicamentosConStock = verificationStock.getMedicamentosConStock();
-                this.cantidadesFaltantes = verificationStock.getCantidadesFaltantes();
-                this.cantidadesExistentes = verificationStock.getCantidadesExistentes();
 
                 return "redirect:/farmacista/crear_preorden";
             }
         }
     }
     @GetMapping("/farmacista/crear_preorden")
-    public String createPreOrden(Model model) {
+    public String createPreOrden(Model model, @RequestParam("listaIds") List<String> listaSelectedIds) {
 
         if (medicamentosSinStock.isEmpty()){
             return "redirect:/farmacista";
         }
+
+        medicamentosSeleccionados = getMedicamentosFromLista(listaSelectedIds);
+        listaCantidades = getCantidadesFromLista(listaSelectedIds);
+
+        verificationStock verificationStock = new verificationStock(medicamentosSeleccionados, listaCantidades);
+
+        this.medicamentosSinStock = verificationStock.getMedicamentosSinStock();
+        this.medicamentosConStock = verificationStock.getMedicamentosConStock();
+        this.cantidadesFaltantes = verificationStock.getCantidadesFaltantes();
+        this.cantidadesExistentes = verificationStock.getCantidadesExistentes();
 
         System.out.println(cantidadesFaltantes);
         int j = 0;
