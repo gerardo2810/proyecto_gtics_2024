@@ -245,7 +245,7 @@
 <div class="container">
 
     <div style="margin-bottom: 50px"></div>
-    <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Orden XYZWXZ</strong></h2>
+    <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px" >Orden XYZWXZ</strong></h2>
     <div style="margin-bottom: 20px"></div>
     <hr style="border-top: 1px solid #DFDFDF;">
     <div style="margin-bottom: 40px"></div>
@@ -509,6 +509,7 @@
     let idUserOnpage = /*[[${idUser}]]*/ '';
     let userId1 = /*[[${userId1}]]*/ '';
     let userId2 = /*[[${userId2}]]*/ '';
+    let ordenId = /*[[${idOrden}]]*/ '';
     var ipLocal = /*[[${iplocal}]]*/ '';
 
 
@@ -517,8 +518,8 @@
     console.log('userId1:', userId1);
     console.log('userId2:', userId2);
 
-    let socket = new WebSocket("ws://34.121.204.43:8080/chat/" + userId1 + "/" + userId2);
-    //let socket = new WebSocket("ws://" + ipLocal + ":8080/chat/" + userId1 + "/" + userId2);
+    //let socket = new WebSocket("ws://34.121.204.43:8080/chat/" + ordenId + '/' + userId1 + "/" + userId2);
+    let socket = new WebSocket("ws://" + ipLocal + ":8080/chat/" + ordenId + '/' + + userId1 + "/" + userId2);
 
     socket.onmessage = function (event) {
 
