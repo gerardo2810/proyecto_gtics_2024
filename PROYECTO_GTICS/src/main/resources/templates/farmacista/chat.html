@@ -478,7 +478,7 @@
     <div id="replacementDiv" class="hidden">
 
         <div style="display: flex;flex-direction: row; justify-content: end;padding-right: 20px">
-            <button id="returnButton" class="btn-cancel">Regresar</button>
+            <button id="returnButton" class="btn-back">Regresar</button>
         </div>
         <br>
         <br>
@@ -510,7 +510,7 @@
                     <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
                     <td class="resultado"></td>
                     <td>
-                        <button class="btn-popup" type="button" style="width: 180px">Seleccionar</button>
+                        <button class="btn-replace-med" type="button" style="width: 150px; cursor: pointer">Seleccionar</button>
                     </td>
 
                     <script th:inline="javascript">
@@ -604,7 +604,7 @@
 
 <script>
 
-    const showPopup = document.querySelector('.btn-popup');
+    const showPopup = document.querySelector('.btn-replace-med');
     const popupContainer = document.querySelector('.popup-container');
     const closePopup = document.getElementById('closePopup');
 

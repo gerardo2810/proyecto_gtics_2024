@@ -111,6 +111,28 @@
 }
 
 
+.btn-replace-med {
+    display: inline-block;
+    padding: 12px 18px;
+    color:white;
+    background-color: rgb(234 179 8);
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+    font-size: 15px;
+}
+
+
+.btn-replace-med:hover {
+    background-color: white;
+    color: rgb(234 179 8);
+    border:2px solid rgb(234 179 8);
+    padding: 10px 16px;
+}
+
+
 
 
 
