@@ -151,7 +151,10 @@ public class AdminSedeController {
 
         }else {
             List<Reposicion> listaReposicionNoEntregadasUltimas = new ArrayList<>(); //incializando en size 0
+            Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
             model.addAttribute("listaReposicionNoEntregadasUltimas", listaReposicionNoEntregadasUltimas);
+            model.addAttribute("usuario",usuario);
+            model.addAttribute("sedesesion",sedeSession);
             return "adminsede/inicio";
 
         }
