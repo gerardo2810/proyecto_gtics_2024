@@ -507,10 +507,6 @@ public class FarmacistaController {
             }
         }
     }
-
-
-
-
     @GetMapping("/farmacista/crear_preorden")
     public String createPreOrden(Model model) {
 
@@ -520,6 +516,39 @@ public class FarmacistaController {
         model.addAttribute("cantidadesExistentes", cantidadesExistentes);
 
         return "farmacista/crear_preorden";
+    }
+
+    //BOLETA DE PRE ORDNES//
+    @GetMapping("/farmacista/deprecated/ver_pre_orden")
+    public String verPreOrden(Model model,
+                              HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        /*model.addAttribute("medicamentosSinStock", medicamentosSinStock);
+        model.addAttribute("medicamentosConStock", medicamentosConStock);
+        model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
+        model.addAttribute("cantidadesExistentes", cantidadesExistentes);*/
+
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
+        List<Orden> listaOrdenesVenta = ordenRepository.findAllOrdenesPorSede(sedeSession.getIdSede());
+        model.addAttribute("listaOrdenesVenta", listaOrdenesVenta);
+        return "/farmacista/deprecated/ver_pre_orden";
+    }
+
+    //creamos pre orden
+    @GetMapping("/farmacista/crear_pre_orden")
+    public String crearPreOrden(Model model,
+                              HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        model.addAttribute("medicamentosSinStock", medicamentoRepository.findAll());
+        model.addAttribute("medicamentosConStock", medicamentoRepository.findAll());
+        model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
+        model.addAttribute("cantidadesExistentes", cantidadesExistentes);
+
+        return "/farmacista/crear_pre_orden";
     }
 
     @GetMapping("/farmacista/cambiar_medicamentos")

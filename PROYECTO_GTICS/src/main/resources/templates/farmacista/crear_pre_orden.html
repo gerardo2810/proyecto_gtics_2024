@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en"><html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
+    <title>Bienestar San Miguel | Crear Pre-Orden</title>
+
+    <!--================CSS============-->
+    <link rel="stylesheet" th:href="@{/css/farmacista/crear_pre_orden.css}">
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
+    <!--=============== CSS ===============-->
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/fonts.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+    <link th:href="@{/css/footer.css}" rel="stylesheet" />
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/fonts.css}">
+    <link rel="stylesheet" th:href="@{/css/topbar.css}">
+    <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
+    <link rel="stylesheet" th:href="@{/css/perfil.css}">
+    <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+
+    <!--=============== FONT AWESOME ===============-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <!--=============== JQUERY ===============-->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <!--=============== SWEETALERT ===============-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <header class="header-topbar">
+    <nav th:replace="~{fragments/navbar.html :: navbar( active = '')}"></nav>
+  </header>
+
+  <div th:replace="~{fragments/banner.html :: banner}"></div>
+
+
+  <div class="container">
+          <br>
+          <br>
+          <br>
+          <br>
+            <!-- modal -->
+            <div class="modal" id="todo_form">
+                <div class="header">
+                    <div class="title">Add Todo</div>
+                    <button class="btn close-modal">&times;</button>
+                </div>
+                <div class="body">
+                  <input type="text" id="todo_input" />
+                  <input type="submit" value="Add Todo" id="todo_submit" />
+                </div>
+            </div>
+            <!-- todo -->
+            <div class="todo-container">
+                  <div class="status" id="no_status">
+                      <h1>Medicamentos Sin Stock</h1>
+                      <button id="add_btn" data-target-modal="#todo_form">+ Add Todo</button>
+                      <div th:each="medicamento : ${medicamentosSinStock}" class="todo" draggable="true">
+                        <span th:text="${medicamento.nombre}">Nombre del Medicamento</span>
+                        <span class="close">&times;</span>
+                      </div>
+                  </div>
+
+                  <div class="status">
+                      <h1>Todos los Medicamentos disponibles</h1>
+                      <div th:each="medicamento : ${medicamentosConStock}" class="todo" draggable="true">
+                        <span th:text="${medicamento.nombre}">Nombre del Medicamento</span>
+                        <span class="close">&times;</span>
+                      </div>
+                  </div>
+
+            </div>
+
+  </div>
+
+  <div id="overlay"></div>
+
+  <!--==========MODAL JS============-->
+  <script>
+    const todos = document.querySelectorAll(".todo");
+    const all_status = document.querySelectorAll(".status");
+    let draggableTodo = null;
+
+    todos.forEach((todo) => {
+      todo.addEventListener("dragstart", dragStart);
+      todo.addEventListener("dragend", dragEnd);
+    });
+
+    function dragStart() {
+      draggableTodo = this;
+      setTimeout(() => {
+        this.style.display = "none";
+      }, 0);
+      console.log("dragStart");
+    }
+
+    function dragEnd() {
+      draggableTodo = null;
+      setTimeout(() => {
+        this.style.display = "block";
+      }, 0);
+      console.log("dragEnd");
+    }
+
+    all_status.forEach((status) => {
+      status.addEventListener("dragover", dragOver);
+      status.addEventListener("dragenter", dragEnter);
+      status.addEventListener("dragleave", dragLeave);
+      status.addEventListener("drop", dragDrop);
+    });
+
+    function dragOver(e) {
+      e.preventDefault();
+      //   console.log("dragOver");
+    }
+
+    function dragEnter() {
+      this.style.border = "1px dashed #ccc";
+      console.log("dragEnter");
+    }
+
+    function dragLeave() {
+      this.style.border = "none";
+      console.log("dragLeave");
+    }
+
+    function dragDrop() {
+      this.style.border = "none";
+      this.appendChild(draggableTodo);
+      console.log("dropped");
+    }
+
+    /* modal */
+    const btns = document.querySelectorAll("[data-target-modal]");
+    const close_modals = document.querySelectorAll(".close-modal");
+    const overlay = document.getElementById("overlay");
+
+    btns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelector(btn.dataset.targetModal).classList.add("active");
+        overlay.classList.add("active");
+      });
+    });
+
+    close_modals.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const modal = btn.closest(".modal");
+        modal.classList.remove("active");
+        overlay.classList.remove("active");
+      });
+    });
+
+    window.onclick = (event) => {
+      if (event.target == overlay) {
+        const modals = document.querySelectorAll(".modal");
+        modals.forEach((modal) => modal.classList.remove("active"));
+        overlay.classList.remove("active");
+      }
+    };
+
+    /* create todo  */
+    const todo_submit = document.getElementById("todo_submit");
+
+    todo_submit.addEventListener("click", createTodo);
+
+    function createTodo() {
+      const todo_div = document.createElement("div");
+      const input_val = document.getElementById("todo_input").value;
+      const txt = document.createTextNode(input_val);
+
+      todo_div.appendChild(txt);
+      todo_div.classList.add("todo");
+      todo_div.setAttribute("draggable", "true");
+
+      /* create span */
+      const span = document.createElement("span");
+      const span_txt = document.createTextNode("\u00D7");
+      span.classList.add("close");
+      span.appendChild(span_txt);
+
+      todo_div.appendChild(span);
+
+      no_status.appendChild(todo_div);
+
+      span.addEventListener("click", () => {
+        span.parentElement.style.display = "none";
+      });
+      //   console.log(todo_div);
+
+      todo_div.addEventListener("dragstart", dragStart);
+      todo_div.addEventListener("dragend", dragEnd);
+
+      document.getElementById("todo_input").value = "";
+      todo_form.classList.remove("active");
+      overlay.classList.remove("active");
+    }
+
+    const close_btns = document.querySelectorAll(".close");
+
+    close_btns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        btn.parentElement.style.display = "none";
+      });
+    });
+
+  </script>
+</body>
+</html>
