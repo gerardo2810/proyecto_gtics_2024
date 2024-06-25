@@ -1123,7 +1123,7 @@ hr.style-one {
 }
 
 .preorder-items {
-    min-height: 200px;
+    min-height: 100px;
     max-height: 480px;
     overflow: auto;
 }
