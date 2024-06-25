@@ -600,6 +600,7 @@ public class FarmacistaController {
         ordenRepository.save(ordenPadre);
         System.out.println("Orden guardada: " + ordenPadre);
 
+
         int i = 0;
         for (Medicamento med : medicamentosConStock){
 
@@ -635,9 +636,11 @@ public class FarmacistaController {
         newPreOrden.setPaciente(pacienteOnStore);
         newPreOrden.setTipoOrden(3);
         newPreOrden.setEstadoOrden(8);
+        newPreOrden.setOrdenParent(ordenPadre.getIdOrden());
         newPreOrden.setEstadoPreOrden(1);
         newPreOrden.setSede(sedeSession);
         newPreOrden.setSeguroUsado(ordenPadre.getSeguroUsado());
+        newPreOrden.setDoctor(ordenPadre.getDoctor());
 
         ordenRepository.save(newPreOrden);
         System.out.println("Orden guardada: " + newPreOrden);
