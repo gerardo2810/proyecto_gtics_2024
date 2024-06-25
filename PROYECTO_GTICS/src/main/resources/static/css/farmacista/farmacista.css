@@ -407,7 +407,24 @@ hr.style-one {
     padding: 15px;
 }
 
+.selected-item-2 {
+    border-bottom: solid 1px #d3d3d3;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+}
+
 .item-on-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.item-on-list-2 {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -455,6 +472,17 @@ hr.style-one {
     width: 55px;
 }
 
+.item-quantity-clicked-2 {
+    background-color: white;
+    padding: 2px;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #0c0808;
+    border: solid 1px #d3d3d3;
+    border-radius: 10px;
+    width: 55px;
+}
+
 .item-details {
     text-align: center;
     display: flex;
@@ -462,7 +490,19 @@ hr.style-one {
     column-gap: 20px;
 }
 
+
+.item-details-2 {
+    text-align: center;
+    display: flex;
+    flex-direction: row-reverse;
+    column-gap: 20px;
+}
+
 .item-price-clicked {
+    padding-top: 5px;
+}
+
+.item-price-clicked-2 {
     padding-top: 5px;
 }
 
@@ -854,6 +894,18 @@ hr.style-one {
     padding-bottom: 15px;
 }
 
+.preview-title-2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: var(--color-text-1);
+    border-bottom: solid 1px #d3d3d3;
+    padding-top: 5px;
+    font-size: 1.2rem;
+    text-align: start;
+    padding-bottom: 15px;
+}
+
 .input-label-box{
     display: flex;
     flex-direction: column;
@@ -1035,7 +1087,19 @@ hr.style-one {
     border: 1px solid #dedede;
 }
 
+.items-list-2 {
+    margin-top: 20px;
+    border-radius: 0.25rem;
+    color: var(--color-black);
+    background: #ffffff;
+    border: 1px solid #dedede;
+}
+
 .inside-items-list {
+    padding: 20px;
+}
+
+.inside-items-list-2 {
     padding: 20px;
 }
 
@@ -1059,11 +1123,16 @@ hr.style-one {
 }
 
 .preorder-items {
-    min-height: 480px;
+    min-height: 200px;
     max-height: 480px;
     overflow: auto;
 }
 
+.order-items-2 {
+    min-height: 200px;
+    max-height: 440px;
+    overflow: auto;
+}
 
 
 

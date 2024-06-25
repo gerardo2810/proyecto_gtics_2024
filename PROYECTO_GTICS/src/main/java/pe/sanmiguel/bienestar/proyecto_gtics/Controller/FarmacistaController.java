@@ -23,6 +23,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.FarmacistaValidatio
 
 import javax.print.attribute.standard.PresentationDirection;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
@@ -524,13 +525,49 @@ public class FarmacistaController {
     @GetMapping("/farmacista/crear_preorden")
     public String createPreOrden(Model model) {
 
+        if (medicamentosSinStock.isEmpty()){
+            return "redirect:/farmacista";
+        }
+
+        System.out.println(cantidadesFaltantes);
+        int j = 0;
+        for (String cant: cantidadesFaltantes) {
+            if (Integer.parseInt(cant) > 10){
+                cantidadesFaltantes.set(j,"10");
+            }
+            j++;
+        }
+
         model.addAttribute("medicamentosSinStock", medicamentosSinStock);
         model.addAttribute("medicamentosConStock", medicamentosConStock);
         model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
         model.addAttribute("cantidadesExistentes", cantidadesExistentes);
 
-        return "farmacista/crear_preorden";
+        System.out.println(medicamentosConStock);
+        System.out.println(cantidadesExistentes);
+
+        BigDecimal montoTotalOrden = new BigDecimal(0);
+
+        for (int i = 0; i < medicamentosConStock.size(); i++) {
+            BigDecimal precio = medicamentosConStock.get(i).getPrecioVenta();
+            int cant = Integer.parseInt(cantidadesExistentes.get(i));
+            montoTotalOrden = montoTotalOrden.add(precio.multiply(BigDecimal.valueOf(cant)));
+        }
+        System.out.println(montoTotalOrden);
+
+        model.addAttribute("montoTotalOrden", montoTotalOrden);
+
+        return "farmacista/crear_pre_orden";
     }
+
+    @PostMapping("/farmacista/finalizar_preorden")
+    public String finalizarPreOrden(@RequestParam("listaIds") List<String> listaSelectedIds){
+
+        System.out.println(listaSelectedIds);
+
+        return "redirect:/farmacista/ver_orden_tracking?id=" + idVerOrdenCreada;
+    }
+
 
     //BOLETA DE PRE ORDNES//
     @GetMapping("/farmacista/deprecated/ver_pre_orden")
@@ -553,17 +590,7 @@ public class FarmacistaController {
         return "/farmacista/deprecated/ver_pre_orden";
     }
 
-    //creamos pre orden
-    @GetMapping("/farmacista/crear_pre_orden")
-    public String crearPreOrden(Model model,
-                              HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        model.addAttribute("medicamentosSinStock", medicamentoRepository.findAll());
-        model.addAttribute("medicamentosConStock", medicamentoRepository.findAll());
-        model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
-        model.addAttribute("cantidadesExistentes", cantidadesExistentes);
 
-        return "/farmacista/crear_pre_orden";
-    }
 
     @GetMapping("/farmacista/cambiar_medicamentos")
     public String changeMedicamentos(Model model) {

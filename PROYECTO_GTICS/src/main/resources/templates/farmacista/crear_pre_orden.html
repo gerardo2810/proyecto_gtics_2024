@@ -24,7 +24,6 @@
     <link rel="stylesheet" th:href="@{/css/fonts.css}">
     <link rel="stylesheet" th:href="@{/css/topbar.css}">
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
-    <link rel="stylesheet" th:href="@{/css/perfil.css}">
     <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
 
     <!--=============== FONT AWESOME ===============-->
@@ -36,6 +35,59 @@
     <!--=============== SWEETALERT ===============-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <style>
+        .area {
+            height: 19vh !important;
+        }
+
+        .circles {
+            height: 19vh !important;
+        }
+
+        .banner-btn {
+            color: #fff !important;
+            border: solid 1px #fff !important;
+            border-radius: 5px !important;
+            cursor: pointer !important;
+            align-items: center !important;
+            display: flex !important;
+            background: none !important;
+        }
+
+        .bell-btn {
+            padding: 14px 14px 14px 14px;
+            font-size: 1.1rem !important;
+        }
+
+        .user-btn {
+            padding: 10px 12px 10px 12px;
+            font-size: 1.1rem !important;
+        }
+
+        .exit-btn {
+            padding: 14px 12px 14px 12px;
+            font-size: 1.1rem !important;
+        }
+
+        .btn {
+            cursor: pointer;
+            padding: 5px 20px;
+            color: white;
+            background-color: green;
+            border: none;
+            border-radius: 5px;
+        }
+        .btn-success {
+            background-color: #28a745;
+        }
+
+
+
+        #order-items {
+            display: none; /* Iniciar oculto */
+        }
+    </style>
 
 </head>
 
@@ -49,174 +101,278 @@
 
 
   <div class="container">
-          <br>
-          <br>
-          <br>
-          <br>
-            <!-- modal -->
-            <div class="modal" id="todo_form">
-                <div class="header">
-                    <div class="title">Add Todo</div>
-                    <button class="btn close-modal">&times;</button>
-                </div>
-                <div class="body">
-                  <input type="text" id="todo_input" />
-                  <input type="submit" value="Add Todo" id="todo_submit" />
-                </div>
-            </div>
-            <!-- todo -->
-            <div class="todo-container">
-                  <div class="status" id="no_status">
-                      <h1>Medicamentos Sin Stock</h1>
-                      <button id="add_btn" data-target-modal="#todo_form">+ Add Todo</button>
-                      <div th:each="medicamento : ${medicamentosSinStock}" class="todo" draggable="true">
-                        <span th:text="${medicamento.nombre}">Nombre del Medicamento</span>
-                        <span class="close">&times;</span>
+
+      <section class="items-list-2">
+
+          <div class="inside-items-list-2">
+              <div class="preview-title-2 roboto-regular" style="display: flex; flex-direction: row; justify-content: space-between">
+                  <div>Productos de la Orden (Stock Disponible)</div>
+
+                  <div class="btn success btn-success" id="toggle-button">Mostrar</div>
+              </div>
+
+              <script>
+                  document.getElementById('toggle-button').addEventListener('click', function() {
+                      var orderItems = document.getElementById('order-items');
+
+                      if (orderItems.style.display === 'none') {
+                          orderItems.style.display = 'block';
+                          this.textContent = 'Ocultar';
+                      } else {
+                          orderItems.style.display = 'none';
+                          this.textContent = 'Mostrar';
+                      }
+                  });
+              </script>
+
+              <div class="order-items-2" id="order-items">
+                  <div class="selected-item-2" th:each="medicamento, iterIndex : ${medicamentosConStock}" th:data-item-id="${medicamento.idMedicamento}">
+
+                      <img th:src="${medicamento.imagen}" width="40px" height="auto" th:alt="${medicamento.nombre}">
+                      <span class="item-title-clicked-2" th:text="${medicamento.nombre}">Medicamento</span>
+                      <div class="item-on-list-2">
+                          <div class="item-details-2">
+                              <div class="selector-cantidad-2">
+                                  <input type="text" disabled th:value="${cantidadesExistentes.get(iterIndex.index)}" class="item-quantity-clicked-2" th:data-item-id="${medicamento.idMedicamento}">
+                              </div>
+
+                              <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                                  <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked-2" th:text="${medicamento.precioVenta}"></span>
+                              </div>
+                          </div>
                       </div>
                   </div>
+              </div>
 
-                  <div class="status">
-                      <h1>Todos los Medicamentos disponibles</h1>
-                      <div th:each="medicamento : ${medicamentosConStock}" class="todo" draggable="true">
-                        <span th:text="${medicamento.nombre}">Nombre del Medicamento</span>
-                        <span class="close">&times;</span>
+
+
+
+              <div class="preview-title-2 roboto-regular" style="padding-top: 20px">
+
+
+                  <div class="price-total-div-2 roboto-medium">
+                      <input type="hidden" name="priceTotal" id="priceTotalOrden" value="">
+                      TOTAL <span class="price-total-2" th:text="${'S/' + montoTotalOrden}">S/0.00</span>
+                  </div>
+              </div>
+
+          </div>
+
+      </section>
+
+      <form method="post" th:action="@{/farmacista/finalizar_preorden}">
+
+      <section class="items-list">
+
+          <div class="inside-items-list">
+              <div class="preview-title roboto-regular">
+                  Nueva Pre Orden
+              </div>
+
+              <div class="preorder-items">
+                  <div class="selected-item" th:each="medicamento, iterIndex : ${medicamentosSinStock}" th:data-item-id="${medicamento.idMedicamento}">
+
+                      <img th:src="${medicamento.imagen}" width="40px" height="auto" th:alt="${medicamento.nombre}">
+                      <span class="item-title-clicked" th:text="${medicamento.nombre}">Medicamento</span>
+                      <div class="item-on-list">
+                          <div class="item-details">
+                              <div class="selector-cantidad">
+                                  <i class="fa-solid fa-minus restar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
+                                  <input type="text" th:value="${cantidadesFaltantes.get(iterIndex.index)}" class="item-quantity-clicked" th:data-item-id="${medicamento.idMedicamento}">
+                                  <i class="fa-solid fa-plus sumar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
+                              </div>
+
+                              <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                                  <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${medicamento.precioVenta}"></span>
+                              </div>
+                          </div>
+
                       </div>
                   </div>
+              </div>
 
-            </div>
+              <div class="preview-title roboto-regular" style="padding-top: 20px">
 
-  </div>
 
-  <div id="overlay"></div>
 
-  <!--==========MODAL JS============-->
+                  <div class="price-total-div roboto-medium">
+                      <input type="hidden" name="priceTotal" id="priceTotalPreOrden" value="">
+                      TOTAL <span class="price-total">S/0.00</span>
+                  </div>
+
+                  <input type="hidden" name="listaIds" id="listaIds"  value=""/>
+              </div>
+
+          </div>
+
+      </section>
+
+      <a href="/farmacista"><button class="return-button montserrat-medium" id="cancel">Cancelar</button></a>
+
+      <button type="submit" id="continue" class="continue-button montserrat-medium">Generar Boleta</button>
+
+
+      </form>
+    </div>
+
+
   <script>
-    const todos = document.querySelectorAll(".todo");
-    const all_status = document.querySelectorAll(".status");
-    let draggableTodo = null;
 
-    todos.forEach((todo) => {
-      todo.addEventListener("dragstart", dragStart);
-      todo.addEventListener("dragend", dragEnd);
-    });
+      let listaSelectedIds = [];
+      let precioTotal;
 
-    function dragStart() {
-      draggableTodo = this;
-      setTimeout(() => {
-        this.style.display = "none";
-      }, 0);
-      console.log("dragStart");
-    }
+      $(document).ready(function() {
 
-    function dragEnd() {
-      draggableTodo = null;
-      setTimeout(() => {
-        this.style.display = "block";
-      }, 0);
-      console.log("dragEnd");
-    }
+          setListaIds();
+          actualizarMontoTotal();
 
-    all_status.forEach((status) => {
-      status.addEventListener("dragover", dragOver);
-      status.addEventListener("dragenter", dragEnter);
-      status.addEventListener("dragleave", dragLeave);
-      status.addEventListener("drop", dragDrop);
-    });
+          document.getElementById('cancel').addEventListener('click', function(event) {
+              event.preventDefault(); // Evita que el enlace se ejecute de inmediato
+              const Swal = window.Swal;
+              // Mostrar la alerta con SweetAlert
+              Swal.fire({
+                  title: '¿Estás seguro?',
+                  text: '¿Quieres cancelar y volver atrás? Esto eliminará los datos de la orden',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Sí, cancelar',
+                  cancelButtonText: 'No, continuar'
+              }).then((result) => {
+                  // Si el usuario confirma, redirige al usuario
+                  if (result.isConfirmed) {
+                      window.location.href = '/farmacista';
+                  }
+              });
+          });
 
-    function dragOver(e) {
-      e.preventDefault();
-      //   console.log("dragOver");
-    }
 
-    function dragEnter() {
-      this.style.border = "1px dashed #ccc";
-      console.log("dragEnter");
-    }
+          var botonesSumarCantidad = document.getElementsByClassName('sumar-cantidad');
+          for(var i=0;i<botonesSumarCantidad.length; i++){
+              const buttonSumar = botonesSumarCantidad[i];
+              buttonSumar.addEventListener('click',sumarCantidad);
+          }
 
-    function dragLeave() {
-      this.style.border = "none";
-      console.log("dragLeave");
-    }
+          var botonesRestarCantidad = document.getElementsByClassName('restar-cantidad');
+          for(var i=0;i<botonesRestarCantidad.length; i++){
+              const buttonRestar = botonesRestarCantidad[i];
+              buttonRestar.addEventListener('click',restarCantidad);
+          }
 
-    function dragDrop() {
-      this.style.border = "none";
-      this.appendChild(draggableTodo);
-      console.log("dropped");
-    }
+          const inputCantidad = document.getElementsByClassName('item-quantity-clicked')[0];
+          inputCantidad.addEventListener('change', setearCantidad);
+          inputCantidad.addEventListener('focus', function(event) {
+              event.target.dataset.previousValue = event.target.value;
+          });
 
-    /* modal */
-    const btns = document.querySelectorAll("[data-target-modal]");
-    const close_modals = document.querySelectorAll(".close-modal");
-    const overlay = document.getElementById("overlay");
+          function sumarCantidad(event){
+              const buttonClicked = event.target;
+              const idAddQuantity = buttonClicked.dataset.itemId;
+              const selector = buttonClicked.parentElement;
+              let cantidadActual = selector.getElementsByClassName('item-quantity-clicked')[0].value;
 
-    btns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        document.querySelector(btn.dataset.targetModal).classList.add("active");
-        overlay.classList.add("active");
+              if (cantidadActual < 10) {
+                  cantidadActual++;
+                  selector.getElementsByClassName('item-quantity-clicked')[0].value = cantidadActual;
+
+                  const toPlus = listaSelectedIds.indexOf(idAddQuantity);
+
+                  listaSelectedIds[toPlus+1] = cantidadActual;
+              } else {
+
+                  const Swal = window.Swal;
+
+                  Swal.fire({
+                      title: 'Cantida Máxima Alcanzada',
+                      text: 'Solo puede solicitar hasta 10 cantidades de cada medicamento en una PreOrden',
+                      icon: 'warning',
+                      confirmButtonColor: '#3085d6',
+                      confirmButtonText: 'Continuar',
+                  });
+              }
+              actualizarMontoTotal();
+          }
+
+          function restarCantidad(event){
+              const buttonClicked = event.target;
+              const idQuitQuantity = buttonClicked.dataset.itemId;
+              const selector = buttonClicked.parentElement;
+
+              let cantidadActual = selector.getElementsByClassName('item-quantity-clicked')[0].value;
+              cantidadActual--;
+              if(cantidadActual>=1){
+                  selector.getElementsByClassName('item-quantity-clicked')[0].value = cantidadActual;
+
+                  const toMinus = listaSelectedIds.indexOf(idQuitQuantity);
+
+                  listaSelectedIds[toMinus+1] = cantidadActual;
+
+                  actualizarMontoTotal();
+              }
+          }
+
+          function setearCantidad(event){
+              const inputFilled = event.target;
+              const idSetQuantity = inputFilled.dataset.itemId;
+              const valor = inputFilled.value;
+              const cantidadActual = parseInt(valor); // Convertir a número entero
+
+              // Verificar si el valor es un número válido
+              if (!isNaN(cantidadActual) && cantidadActual >= 1) {
+                  // Actualizar el valor del input y el monto total
+
+                  const toSet = listaSelectedIds.indexOf(idSetQuantity);
+
+                  listaSelectedIds[toSet+1] = cantidadActual;
+
+                  actualizarMontoTotal();
+              } else {
+                  // Restaurar el valor anterior si no es válido
+                  inputFilled.value = inputFilled.dataset.previousValue;
+              }
+          }
+
+          function setListaIds(){
+              const listItems = document.getElementsByClassName('preorder-items')[0];
+              const selectedItems = listItems.getElementsByClassName('selected-item');
+              const listaCantidades = listItems.getElementsByClassName('item-quantity-clicked');
+
+
+              for (let i = 0; i < selectedItems.length; i++) {
+                  let itemId = selectedItems[i].dataset.itemId;
+                  let itemCant = listaCantidades[i].value;
+                  listaSelectedIds.push(itemId);
+                  listaSelectedIds.push(itemCant);
+              }
+          }
+
+          function actualizarMontoTotal() {
+              const listItems = document.getElementsByClassName('preorder-items')[0];
+              const selectedItems = listItems.getElementsByClassName('selected-item');
+              console.log(selectedItems)
+              let totalCentavos = 0;
+
+              for (let i = 0; i < selectedItems.length; i++) {
+                  const item = selectedItems[i];
+                  const precioItem = Math.round(parseFloat(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/', '').replace(/,/g, '')) * 100);
+                  const cantidadItem = item.getElementsByClassName('item-quantity-clicked')[0].value;
+                  totalCentavos += precioItem * cantidadItem;
+              }
+              const totalSoles = totalCentavos / 100;
+              document.getElementsByClassName('price-total')[0].innerText = 'S/' + totalSoles.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+              const listaIdsInput = document.getElementById('listaIds');
+              listaIdsInput.value = listaSelectedIds.join(',');
+
+              precioTotal = document.getElementsByClassName('price-total')[0].innerText.split('/')[1];
+              const precioTotalInput = document.getElementById('priceTotalPreOrden');
+              precioTotalInput.value = precioTotal;
+
+          }
+
       });
-    });
-
-    close_modals.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const modal = btn.closest(".modal");
-        modal.classList.remove("active");
-        overlay.classList.remove("active");
-      });
-    });
-
-    window.onclick = (event) => {
-      if (event.target == overlay) {
-        const modals = document.querySelectorAll(".modal");
-        modals.forEach((modal) => modal.classList.remove("active"));
-        overlay.classList.remove("active");
-      }
-    };
-
-    /* create todo  */
-    const todo_submit = document.getElementById("todo_submit");
-
-    todo_submit.addEventListener("click", createTodo);
-
-    function createTodo() {
-      const todo_div = document.createElement("div");
-      const input_val = document.getElementById("todo_input").value;
-      const txt = document.createTextNode(input_val);
-
-      todo_div.appendChild(txt);
-      todo_div.classList.add("todo");
-      todo_div.setAttribute("draggable", "true");
-
-      /* create span */
-      const span = document.createElement("span");
-      const span_txt = document.createTextNode("\u00D7");
-      span.classList.add("close");
-      span.appendChild(span_txt);
-
-      todo_div.appendChild(span);
-
-      no_status.appendChild(todo_div);
-
-      span.addEventListener("click", () => {
-        span.parentElement.style.display = "none";
-      });
-      //   console.log(todo_div);
-
-      todo_div.addEventListener("dragstart", dragStart);
-      todo_div.addEventListener("dragend", dragEnd);
-
-      document.getElementById("todo_input").value = "";
-      todo_form.classList.remove("active");
-      overlay.classList.remove("active");
-    }
-
-    const close_btns = document.querySelectorAll(".close");
-
-    close_btns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        btn.parentElement.style.display = "none";
-      });
-    });
-
   </script>
-</body>
+
+    </body>
 </html>
