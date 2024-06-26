@@ -978,29 +978,60 @@
 
     <!--ESTA PARTE ES PARA ANULAR, SOLO VÁLIDO PARA ORDEN O PREORDEN ANTES DE ESTADO EMPAQUETADO Y PARA CUALQUIER ORDEN DE VENTA FÍSICA-->
 
-    <div class="container" th:if="${(orden.getEstadoOrden() == 1 || orden.getEstadoOrden() == 2 || orden.getEstadoOrden() == 3 || orden.getEstadoOrden() == 4 || orden.getEstadoOrden() == 8) && (preOrden.getEstadoPreOrden() == 1 || preOrden.getEstadoPreOrden() == 2 || preOrden.getEstadoPreOrden() == 3  || preOrden.getEstadoPreOrden() == 4 || preOrden.getEstadoPreOrden() == 8 || preOrden.getEstadoPreOrden() == null)}">
+    <div th:if="${containsPreOrden}">
+        <div class="container" th:if="${(orden.getEstadoOrden() == 1 || orden.getEstadoOrden() == 2 || orden.getEstadoOrden() == 3 || orden.getEstadoOrden() == 4 || orden.getEstadoOrden() == 8) && (preOrden.getEstadoPreOrden() == 1 || preOrden.getEstadoPreOrden() == 2 || preOrden.getEstadoPreOrden() == 3  || preOrden.getEstadoPreOrden() == 4 || preOrden.getEstadoPreOrden() == 8 || preOrden.getEstadoPreOrden() == null)}">
 
-        <div style="padding-top: 20px; padding-bottom: 20px">
-            <div class="main-subtitle helvetica-medium"> Puede anular esta orden, recuerde comentar el motivo de anulación. </div>
+            <div style="padding-top: 20px; padding-bottom: 20px">
+                <div class="main-subtitle helvetica-medium"> Puede anular esta orden, recuerde comentar el motivo de anulación. </div>
+            </div>
+
+            <hr class="style-one">
+
+            <form method="post" id="form-anular" th:action="@{/farmacista/anular_orden}">
+
+                <label>
+                    <input name="id" hidden="true" th:value="${idOrden}">
+                </label>
+
+                <label>
+                    <textarea name="motivo" id="motivoAnulado" style="width: 100%; min-height: 100px; padding: 15px; max-height: 200px; box-sizing: border-box; resize: vertical;"  maxlength="400" placeholder="Máximo 400 carácteres."></textarea>
+                </label>
+
+                <button type="submit" class="print">
+                    ANULAR ORDEN
+                </button>
+            </form>
         </div>
 
-        <hr class="style-one">
-
-        <form method="post" id="form-anular" th:action="@{/farmacista/anular_orden}">
-
-            <label>
-                <input name="id" hidden="true" th:value="${idOrden}">
-            </label>
-
-            <label>
-                <textarea name="motivo" id="motivoAnulado" style="width: 100%; min-height: 100px; padding: 15px; max-height: 200px; box-sizing: border-box; resize: vertical;"  maxlength="400" placeholder="Máximo 400 carácteres."></textarea>
-            </label>
-
-            <button type="submit" class="print">
-                ANULAR ORDEN
-            </button>
-        </form>
     </div>
+
+    <div th:if="${!containsPreOrden}">
+        <div class="container" th:if="${(orden.getEstadoOrden() == 1 || orden.getEstadoOrden() == 2 || orden.getEstadoOrden() == 3 || orden.getEstadoOrden() == 4 || orden.getEstadoOrden() == 8)}">
+
+            <div style="padding-top: 20px; padding-bottom: 20px">
+                <div class="main-subtitle helvetica-medium"> Puede anular esta orden, recuerde comentar el motivo de anulación. </div>
+            </div>
+
+            <hr class="style-one">
+
+            <form method="post" id="form-anular" th:action="@{/farmacista/anular_orden}">
+
+                <label>
+                    <input name="id" hidden="true" th:value="${idOrden}">
+                </label>
+
+                <label>
+                    <textarea name="motivo" id="motivoAnulado" style="width: 100%; min-height: 100px; padding: 15px; max-height: 200px; box-sizing: border-box; resize: vertical;"  maxlength="400" placeholder="Máximo 400 carácteres."></textarea>
+                </label>
+
+                <button type="submit" class="print">
+                    ANULAR ORDEN
+                </button>
+            </form>
+        </div>
+
+    </div>
+
 
     <div th:replace="~{fragments/navbar.html :: footer}">
     </div>
