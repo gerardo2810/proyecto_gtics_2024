@@ -178,8 +178,12 @@
 
 <body>
 
-<header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Boleta')}"></nav>
+<header class="header-topbar" th:if="${ordenActual.getTipoOrden()==2}">
+    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Ordenes Web')}"></nav>
+</header>
+
+<header class="header-topbar" th:if="${ordenActual.getTipoOrden()==3}">
+    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Pre Ordenes')}"></nav>
 </header>
 
 <div th:replace="~{fragments/banner.html :: banner}"></div>
@@ -281,6 +285,26 @@
 
             </div>
 
+        <div style="display: flex;flex-direction: row; justify-content: space-between; column-gap: 30px">
+
+
+            <a th:if="${ordenActual.getTipoOrden()==2}"  th:href="@{/paciente/ordenes}" >
+                <button class="print">REGRESAR</button>
+            </a>
+
+            <a th:if="${ordenActual.getTipoOrden()==3}"  th:href="@{/paciente}" >
+                <button class="print">REGRESAR</button>
+            </a>
+
+            <a th:if="${ordenActual.getEstadoOrden() != 1 && ordenActual.getEstadoOrden() != 2} " th:href="@{'/paciente/boleta_pago?id=' + ${ordenActual.getIdOrden()}}" >
+                <button class="print">VER BOLETA</button>
+            </a>
+
+
+
+        </div>
+
+
 
 
 
@@ -298,13 +322,13 @@
 
 
 
-    <div th:case="1" style="display: flex;justify-content: center">
+    <div th:case="1" style="display: flex;justify-content: center;align-items: center">
 
         <p style="font-size: 30px;color:#0d6efd ">!Para empezar con el seguimiento del pedido su orden aún debe ser aprobada!</p>
 
     </div>
 
-    <div th:case="3" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+    <div th:case="3" style="display: flex;flex-direction: column;justify-content: center;column-gap: 10px">
         <div id="map"></div>
         <div class="preview-title roboto-regular" style="font-size: 1.3rem; padding-top: 20px;">
             Código único de Tracking:<span style="font-weight: bold" th:text="${'  TRK-' + ordenActual.getTracking()}"></span>
@@ -371,7 +395,7 @@
 
     </div>
 
-    <div th:case="5" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+    <div th:case="5" style="display: flex;flex-direction: column;justify-content: center;column-gap: 10px">
 
         <div id="map"></div>
         <div class="preview-title roboto-regular" style="font-size: 1.3rem; padding-top: 20px;">
@@ -410,7 +434,7 @@
 
     </div>
 
-    <div th:case="6" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+    <div th:case="6" style="display: flex;flex-direction: column;justify-content: center;column-gap: 10px">
         <div id="map"></div>
         <div class="preview-title roboto-regular" style="font-size: 1.3rem; padding-top: 20px;">
             Código único de Tracking:<span style="font-weight: bold" th:text="${'  TRK-' + ordenActual.getTracking()}"></span>
@@ -442,7 +466,7 @@
         </div>
     </div>
 
-    <div th:case="7" style="display: flex;flex-direction: column;row-gap: 15px">
+    <div th:case="7" style="display: flex;flex-direction: column;justify-content: center;column-gap: 10px">
 
         <div style="display: flex; flex-direction: row; justify-content: center">
             <p style="font-size: 30px;color:#0d6efd ">!Su orden ha sido entregada exitosamente!</p>

@@ -35,7 +35,7 @@ public class Tarjeta {
     private String anio;
 
     @NotBlank(message = "Debe colocar el código CVV")
-    @Size(min=4, max = 4, message = "Debe tener 4 dígitos")
+    @Size(min=3, max = 3, message = "Debe tener 3 dígitos")
     @Pattern(regexp="\\d+", message="Debe contener solo números")
     private String cvv;
 

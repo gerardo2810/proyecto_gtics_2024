@@ -157,6 +157,7 @@ public class PacienteController {
         model.addAttribute("userId1", userId1);
         model.addAttribute("userId2", userId2);
         model.addAttribute("idOrden", idOrden);
+        model.addAttribute("idOrdenInteger", Integer.parseInt(idOrden) + 10000);
 
         Chat chatActual  = chatRepository.buscarChat(Integer.parseInt(userId1),Integer.parseInt(userId2), Integer.parseInt(idOrden));
 
@@ -257,11 +258,6 @@ public class PacienteController {
 
         return "paciente/mensajeria";}
 
-
-    @GetMapping(value = "/reemplazar_medicamentos")
-    public String ordenReemplazoMedicamentos(){
-        return "paciente/reemplazar_medicamentos";
-    }
 
     @GetMapping(value = "/perfil")
     public String perfil(){
@@ -390,7 +386,7 @@ public class PacienteController {
                                @RequestParam(value = "file", required = false) Part file,
                                @RequestParam(value = "listaIds", required = false) List<Integer> lista,
                                @RequestParam(value = "idDoctor", required = false) Integer idDoctor,
-                               @RequestParam(value = "priceTotal", required = false) Float total,
+                               @RequestParam(value = "priceTotal", required = false) String total,
                                @RequestParam(value = "seguro", required = false) String seguro,
                                Model model, RedirectAttributes redirectAttributes,
                                HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -400,7 +396,7 @@ public class PacienteController {
         Usuario usuario1 = (Usuario) session.getAttribute("usuario");
 
 
-        System.out.println(total);
+        System.out.println("El precio total es:" + total);
 
         if(bindingResult.hasErrors() || bin2.hasErrors()){
 
@@ -447,7 +443,8 @@ public class PacienteController {
             orden.setTracking(tracking);
             orden.setFechaIni(fechaIni);
             orden.setFechaFin(fechaFin);
-            orden.setPrecioTotal(total);
+            total = total.replace(",", "");
+            orden.setPrecioTotal(Float.parseFloat(total));
             orden.setIdFarmacista(idFarmacista);
             orden.setPaciente(usuario1);
             orden.setTipoOrden(2);

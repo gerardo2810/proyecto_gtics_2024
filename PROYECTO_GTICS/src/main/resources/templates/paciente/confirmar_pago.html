@@ -137,24 +137,8 @@
                     <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
                     <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" class="medicamento"/></td>
                     <td th:text="${itemDeLaOrden.getCantidad()}"></td>
-                    <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
-
-                    <td class="resultado"></td>
-
-                    <script th:inline="javascript">
-                        function limitarDigitos(numero) {
-                            var numeroStr = numero.toString();
-                            // Obtener los primeros 4 dígitos
-                            var primerosCuatroDigitos = numeroStr.substring(0, 4);
-                            var numeroLimitado = parseFloat(primerosCuatroDigitos);
-                            return numeroLimitado;
-                        }
-                        var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
-                        var cantidad = [[${itemDeLaOrden.getCantidad()}]];
-                        var resultado = precioVenta * cantidad;
-                        var resultadoLimitado = limitarDigitos(resultado);
-                        document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
-                    </script>
+                    <td th:text="${ 'S/.' + itemDeLaOrden.getIdMedicamento().getPrecioVenta()}"></td>
+                    <td th:text="${'S/.' + #numbers.formatDecimal((itemDeLaOrden.getIdMedicamento().getPrecioVenta()*itemDeLaOrden.getCantidad()), 1, 'COMMA', 2, 'POINT')}"></td>
 
                 </tr>
 
@@ -336,6 +320,16 @@
                 },
                 "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
             },
+            "drawCallback": function(settings) {
+                var api = this.api();
+                var pages = api.page.info().pages;
+
+                if (pages <= 1) {
+                    $('.dataTables_paginate').hide();
+                } else {
+                    $('.dataTables_paginate').show();
+                }
+            }
 
         });
 

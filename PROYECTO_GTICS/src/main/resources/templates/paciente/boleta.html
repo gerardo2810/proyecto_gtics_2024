@@ -108,8 +108,12 @@
 <body style="background-color: white;">
 
 
-<header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Boleta')}"></nav>
+<header class="header-topbar" th:if="${orden.getTipoOrden() == 2}">
+    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Ordenes Web')}"></nav>
+</header>
+
+<header class="header-topbar" th:if="${orden.getTipoOrden() == 3}">
+    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Pre Ordenes')}"></nav>
 </header>
 
 <div th:replace="~{fragments/banner.html :: banner}"></div>
@@ -287,22 +291,7 @@
                        </td>
                        <td class="text-center" th:text="${'S/. ' + m.getIdMedicamento().getPrecioVenta()}"></td>
                        <td class="text-center" th:text="${m.getCantidad()}">1</td>
-                       <td class="text-end" th:text="${'S/. ' + m.getCantidad() * m.getIdMedicamento().getPrecioVenta()}"></td>
-
-                       <script th:inline="javascript">
-                           function limitarDigitos(numero) {
-                               var numeroStr = numero.toString();
-                               // Obtener los primeros 4 dígitos
-                               var primerosCuatroDigitos = numeroStr.substring(0, 4);
-                               var numeroLimitado = parseFloat(primerosCuatroDigitos);
-                               return numeroLimitado;
-                           }
-                           var precioVenta = [[${m.getIdMedicamento().precioVenta}]];
-                           var cantidad = [[${m.getCantidad()}]];
-                           var resultado = precioVenta * cantidad;
-                           var resultadoLimitado = limitarDigitos(resultado);
-                           document.currentScript.parentElement.querySelector(".text-end").textContent = resultadoLimitado;
-                       </script>
+                       <td class="text-end" th:text="${'S/.' + #numbers.formatDecimal((m.getIdMedicamento().getPrecioVenta()*m.getCantidad()), 1, 'COMMA', 2, 'POINT')}"></td>
                    </tr>
                    </tbody>
 

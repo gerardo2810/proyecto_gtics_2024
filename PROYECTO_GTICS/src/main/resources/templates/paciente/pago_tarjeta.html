@@ -192,7 +192,7 @@
                     <div style="display: flex; flex-direction: column; justify-content: end;">
                         <div class="inputBox" style="margin-top: 0;">
                             <div style="position: relative;">
-                                <input type="text"  maxlength="4" class="cvv-input"  th:field="*{cvv}" th:classappend="${#fields.hasErrors('cvv') ? 'error' : ''}">
+                                <input type="text"  maxlength="3" class="cvv-input"  th:field="*{cvv}" th:classappend="${#fields.hasErrors('cvv') ? 'error' : ''}">
                                 <i th:if="${#fields.hasErrors('cvv')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
                             </div>
                         </div>
