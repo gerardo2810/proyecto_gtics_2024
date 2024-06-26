@@ -208,7 +208,7 @@
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Correo:</label>
-                                <input class="input-form" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid': ''}" type="text" placeholder="Ingrese el correo">
+                                <input class="input-form-2" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid': ''}" type="text" placeholder="Ingrese el correo">
                                 <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" id="validationServer03Feedback" class="invalid-feedback">
                                     Mensaje de error de nombres
                                 </div>
@@ -216,7 +216,7 @@
 
                             <div class="input-label-box" th:object="${sedeFarmacista}">
                                 <label style="font-weight: bold; color:dimgray">Código (colegio médico):</label>
-                                <input class="input-form" th:field="*{codigoMed}" th:classappend="${#fields.hasErrors('codigoMed') ? 'is-invalid': ''}" name="codigoMed" type="text" placeholder="Ingrese el código de colegiatura">
+                                <input class="input-form-2" th:field="*{codigoMed}" th:classappend="${#fields.hasErrors('codigoMed') ? 'is-invalid': ''}" name="codigoMed" type="text" placeholder="Ingrese el código de colegiatura">
                                 <div th:if="${#fields.hasErrors('codigoMed')}" th:errors="*{codigoMed}" id="validationServer03Feedback" class="invalid-feedback">
                                     Mensaje de error de codigoMed
                                 </div>
@@ -228,7 +228,7 @@
                         <div class="column" style="justify-content: center">
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Dirección:</label>
-                                <input class="input-form" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion') ? 'is-invalid': ''}" type="text" placeholder="Ingrese la dirección">
+                                <input class="input-form-2" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion') ? 'is-invalid': ''}" type="text" placeholder="Ingrese la dirección">
                                 <div th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}" id="validationServer03Feedback" class="invalid-feedback">
                                     Mensaje de error de direccion
                                 </div>
@@ -236,7 +236,7 @@
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Celular:</label>
-                                <input class="input-form" th:field="*{celular}" th:classappend="${#fields.hasErrors('celular') ? 'is-invalid': ''}" type="text" placeholder="Ingrese el celular">
+                                <input class="input-form-2" th:field="*{celular}" th:classappend="${#fields.hasErrors('celular') ? 'is-invalid': ''}" type="text" placeholder="Ingrese el celular">
                                 <div th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}" id="validationServer03Feedback" class="invalid-feedback">
                                     Mensaje de error de nombres
                                 </div>
@@ -253,7 +253,7 @@
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Distrito de residencia:</label>
-                                <input class="input-form" th:field="*{distrito}" th:classappend="${#fields.hasErrors('distrito') ? 'is-invalid': ''}" type="text" placeholder="Ingrese su distrito">
+                                <input class="input-form-2" th:field="*{distrito}" th:classappend="${#fields.hasErrors('distrito') ? 'is-invalid': ''}" type="text" placeholder="Ingrese su distrito">
                                 <div th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}" id="validationServer03Feedback" class="invalid-feedback">
                                     Mensaje de error de nombres
                                 </div>
