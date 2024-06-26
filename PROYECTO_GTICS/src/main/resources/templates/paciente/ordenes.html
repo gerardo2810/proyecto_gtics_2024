@@ -226,6 +226,16 @@
                 },
                 "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
             },
+            "drawCallback": function(settings) {
+                var api = this.api();
+                var pages = api.page.info().pages;
+
+                if (pages <= 1) {
+                    $('.dataTables_paginate').hide();
+                } else {
+                    $('.dataTables_paginate').show();
+                }
+            }
 
         });
 

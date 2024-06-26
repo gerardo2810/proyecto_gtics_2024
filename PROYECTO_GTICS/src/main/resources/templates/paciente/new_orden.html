@@ -141,7 +141,7 @@
 
 
 
-<form  method="post" th:action="@{'/paciente/guardarOrden'}"  th:object="${usuario}"  enctype="multipart/form-data">
+<form id="form" method="post" th:action="@{'/paciente/guardarOrden'}"  th:object="${usuario}"  enctype="multipart/form-data">
 
     <div class="container-form">
 
@@ -614,7 +614,29 @@
 </style>
 
 
+<script>
+    const form = document.getElementById("form");
 
+    form.addEventListener("submit", e => {
+        e.preventDefault(); // Evita que el formulario se envíe de inmediato
+
+        Swal.fire({
+            title: '¿Estás seguro de crear esta orden web?',
+            icon: 'warning',
+            iconColor: '#DC3545',
+            showCancelButton: true,
+            cancelButtonColor: '#DC3545',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#0D6EFD',
+            confirmButtonText: 'Aplicar cambios',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // El usuario ha confirmado, ahora puedes enviar el formulario
+                form.submit();
+            }
+        });
+    });
+</script>
 
 
 <!---------Medicamentos---------->
