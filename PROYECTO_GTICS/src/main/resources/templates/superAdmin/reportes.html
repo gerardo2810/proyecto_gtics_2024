@@ -119,7 +119,7 @@
                         <tr  th:each="ordenes, info : ${listaOrdenes}">
                             <td style="text-align: center" th:text="${ordenes.nombres}" ></td>
                             <td style="text-align: center" th:text="${ordenes.apellidos}" ></td>
-                            <td style="text-align: center" th:text="${ordenes.getFechaIni()}"></td>
+                            <td style="text-align: center" th:text="${#dates.format(ordenes.getFechaIni(), 'dd/MM/yyyy - HH:mm')}"></td>
                             <td style="text-align: center" th:if="${ordenes.getIdTipo() == 1}" th:text="'Física'"></td>
                             <td style="text-align: center" th:if="${ordenes.getIdTipo() == 2}" th:text="'Web'"></td>
                             <td style="text-align: center" th:if="${ordenes.getIdTipo() == 3}" th:text="'Pre orden'"></td>
