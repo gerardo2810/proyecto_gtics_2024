@@ -941,6 +941,44 @@
 
     </div>
 
+    <style>
+        .alert {
+            position: relative;
+            padding: .75rem 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: .25rem;
+        }
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .alert-warning {
+            color: #58151C;
+            background-color: #F8D7DA;
+            border-color: #f1aeb5;
+        }
+    </style>
+
+    <div th:if="${(orden.getTipoOrden() == 2 && !hayProblemasStock) && orden.getEstadoOrden() == 1}" class="container" style="padding-top: 15px">
+
+        <div class="alert alert-success" role="alert">
+            <p class="main-subtitle" style="color: #155724 !important;">¡La orden web no presenta problemas de Stock!</p>
+            <p>No hay inconvenientes para procesar la orden, puede aprobarla para que el paciente pueda pagarla e iniciar el proceso de envío. Recuerde que podrá anular esta orden solo antes de que sea empaquetada.</p>
+        </div>
+
+    </div>
+
+    <div th:if="${(orden.getTipoOrden() == 2 && hayProblemasStock) && orden.getEstadoOrden() == 1}" class="container" style="padding-top: 15px">
+
+        <div class="alert alert-warning" role="alert">
+            <p class="main-subtitle" style="color: #58151C !important;">La orden web presenta problemas de Stock</p>
+            <p>Hay inconvenientes para procesar la orden, no puede aprobarla hasta solucionar los problemas de Stock con el cliente. Por favor comuníquese con el cliente para poder aprobar la orden y que pueda ser procesado el envío.</p>
+        </div>
+
+    </div>
+
     <div class="container" style="padding-top: 15px">
         <div class="float-right botones-tracking">
 
@@ -960,7 +998,7 @@
                 </div>
             </div>
 
-            <div th:if="${orden.getTipoOrden() == 2}" th:switch="${orden.getEstadoOrden()}">
+            <div th:if="${orden.getTipoOrden() == 2 && hayProblemasStock}" th:switch="${orden.getEstadoOrden()}">
                 <div th:case="1">
 
                     <form method="post" th:action="@{'/farmacista/crear_chat'}" >
