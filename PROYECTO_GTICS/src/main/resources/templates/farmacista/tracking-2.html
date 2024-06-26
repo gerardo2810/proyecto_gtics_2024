@@ -640,6 +640,306 @@
 
     </div>
 
+
+
+    <!--ESTA PARTE ES PARA PRE ORDENES CON EL PROCESO ACTIVO-->
+
+    <div class="container" th:if="${containsPreOrden}">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr">
+            <div>
+                <section class="items-list-trk">
+
+                    <div class="inside-items-list-trk">
+
+                        <div class="preview-title roboto-regular" style="font-size: 1.3rem">
+                            Contenido de la PreOrden<span style="font-weight: bold" th:text="${orden.getIdOrden() + 10000}"></span>
+                        </div>
+
+                        <div class="preview-title-trk roboto-regular">
+                            <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between">
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    Imagen
+                                </div>
+
+                                <div style="min-width: 180px; display: flex; align-items: center; justify-content: center">
+                                    Descripción
+                                </div>
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    Cantidad
+                                </div>
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    P. Uni.
+                                </div>
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    Precio
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="order-items-trk">
+                            <div th:each="med : ${contenidoPreOrden}">
+
+
+                                <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between !important; padding: 15px; border-bottom:solid 1px #d3d3d3;">
+
+                                    <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                        <img th:src="'data:image/jpeg;base64,' + ${med.getIdMedicamento().imagenBase64}" width="80px" height="auto" th:alt="${med.getIdMedicamento().getNombre()}">
+                                    </div>
+
+                                    <div style="min-width: 180px; display: flex; align-items: center; justify-content: start">
+                                        <div style="display: flex; flex-direction: column; gap: 10px">
+                                            <span style="font-size: 1.2rem; max-width: 180px" class="item-title-clicked" th:text="${med.getIdMedicamento().getNombre()}">Medicamento</span>
+                                            <span style="font-size: 0.8rem; max-width: 180px" class="item-title-clicked" th:text="${med.getIdMedicamento().getDescripcion()}">Medicamento</span>
+                                        </div>
+                                    </div>
+
+                                    <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                        <span type="text" th:text="${med.getCantidad()}" class="item-quantity-clicked"></span>
+                                    </div>
+
+                                    <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                        <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${med.getIdMedicamento().getPrecioVenta()}"></span>
+                                    </div>
+
+                                    <div style="min-width: 80px; display: flex; align-items: end; justify-content: center">
+                                        <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${ #numbers.formatDecimal((med.getIdMedicamento().getPrecioVenta()*med.getCantidad()), 1, 'COMMA', 2, 'POINT')}"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; align-items: center; gap: 15px;">
+                                <input type="hidden" name="priceTotal" value="">
+                                TOTAL <span class="price-total" th:text="${'S/.   ' + #numbers.formatDecimal(orden.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}">S/0.00</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <div>
+                <div style="max-width: 1536px;margin-inline: auto;padding: 20px 30px 0 30px;" th:if="${containsPreOrden}" th:switch="${preOrden.getEstadoPreOrden()}">
+
+
+                    <div th:case="3" style="display: flex;flex-direction: column;justify-content: center;column-gap: 20px">
+
+
+                        <div id="map"></div>
+
+                        <div class="preview-title roboto-regular" style="font-size: 1.3rem; padding-top: 20px;">
+                            Código único de Tracking<span style="font-weight: bold" th:text="${'TRK-' + preOrden.getTracking()}"></span>
+                        </div>
+
+                        <div class="container-progress">
+                            <div class="wrapper">
+                                <div class="progress-container">
+
+                                    <div class="barra"  style="width: 0%"></div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-file-text active"></i>Recibido
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-refresh"></i>En proceso
+                                    </div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-archive"></i>Empaquetando
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-truck"></i>En ruta
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-check-square"></i>Entregado
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                    <div th:case="4" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+
+
+                        <div id="map"></div>
+
+                        <div class="preview-title roboto-regular" style="font-size: 1.3rem; padding-top: 20px;">
+                            Código único de Tracking<span style="font-weight: bold" th:text="${'TRK-' + preOrden.getTracking()}"></span>
+                        </div>
+
+                        <div class="container-progress">
+                            <div class="wrapper">
+                                <div class="progress-container">
+
+                                    <div class="barra"  style="width: 25%"></div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-file-text active"></i>Recibido
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-refresh active" ></i>En proceso
+                                    </div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-archive"></i>Empaquetando
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-truck"></i>En ruta
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-check-square"></i>Entregado
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div th:case="5" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+
+                        <div id="map"></div>
+
+                        <div class="preview-title roboto-regular" style="font-size: 1.3rem; padding-top: 20px;">
+                            Código único de Tracking<span style="font-weight: bold" th:text="${'TRK-' + preOrden.getTracking()}"></span>
+                        </div>
+
+                        <div class="container-progress">
+                            <div class="wrapper">
+                                <div class="progress-container">
+
+                                    <div class="barra"  style="width: 50%"></div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-file-text active"></i>Recibido
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-refresh active" ></i>En proceso
+                                    </div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-archive active"></i>Empaquetando
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-truck"></i>En ruta
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-check-square"></i>Entregado
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div th:case="6" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+
+                        <div id="map"></div>
+
+                        <div class="preview-title roboto-regular" style="font-size: 1.3rem; padding-top: 20px;">
+                            Código único de Tracking<span style="font-weight: bold" th:text="${'TRK-' + preOrden.getTracking()}"></span>
+                        </div>
+
+                        <div class="container-progress">
+                            <div class="wrapper">
+                                <div class="progress-container">
+
+                                    <div class="barra"  style="width: 70%"></div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-file-text active"></i>Recibido
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-refresh active" ></i>En proceso
+                                    </div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-archive active"></i>Empaquetando
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-truck active"></i>En ruta
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-check-square"></i>Entregado
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div th:case="7" style="display: flex;flex-direction: column;row-gap: 15px">
+
+                        <div id="map"></div>
+
+                        <div class="preview-title roboto-regular" style="font-size: 1.3rem; padding-top: 20px;">
+                            Código único de Tracking<span style="font-weight: bold" th:text="${'TRK-' + preOrden.getTracking()}"></span>
+                        </div>
+
+                        <div class="container-progress" style="min-height: 18vh">
+                            <div class="wrapper">
+                                <div class="progress-container">
+
+                                    <div class="barra"  style="width: 90%"></div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-file-text active"></i>Recibido
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-refresh active" ></i>En proceso
+                                    </div>
+
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-archive active"></i>Empaquetando
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa fa-truck active"></i>En ruta
+                                    </div>
+                                    <div class="progress-step">
+                                        <i class="fa-solid fa-check-square active"></i>Entregado
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
     <div class="container" style="padding-top: 15px">
         <div class="float-right botones-tracking">
 
@@ -674,6 +974,8 @@
         </div>
     </div>
 
+
+    <!--ESTA PARTE ES PARA ANULAR, SOLO VÁLIDO PARA ORDEN O PREORDEN ANTES DE ESTADO EMPAQUETADO Y PARA CUALQUIER ORDEN DE VENTA FÍSICA-->
 
     <div class="container" th:if="${(orden.getEstadoOrden() == 1 || orden.getEstadoOrden() == 2 || orden.getEstadoOrden() == 3 || orden.getEstadoOrden() == 4 || orden.getEstadoOrden() == 8) && (orden.getEstadoPreOrden() == 1 || orden.getEstadoPreOrden() == 2 || orden.getEstadoPreOrden() == 3  || orden.getEstadoPreOrden() == 4 || orden.getEstadoPreOrden() == 8 || orden.getEstadoPreOrden() == null)}">
 
