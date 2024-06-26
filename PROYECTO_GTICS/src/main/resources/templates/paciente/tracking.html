@@ -24,10 +24,10 @@
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
     <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/lista_medicamentos.css}">
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
-
-
-
+    <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+    <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
 
 
 
@@ -47,6 +47,58 @@
 
     <style>
 
+        .items-list {
+            margin-top: 20px;
+            border-radius: 0.25rem;
+            color: var(--color-black);
+            background: #ffffff;
+            border: 1px solid #dedede;
+        }
+
+        .items-list-2 {
+            margin-top: 20px;
+            border-radius: 0.25rem;
+            color: var(--color-black);
+            background: #ffffff;
+            border: 1px solid #dedede;
+        }
+
+        .items-list-trk {
+            margin-top: 20px;
+            border-radius: 0.25rem;
+            color: var(--color-black);
+            background: #ffffff;
+            border: 1px solid #dedede;
+        }
+
+        .inside-items-list {
+            padding: 20px;
+        }
+
+        .inside-items-list-trk {
+            padding: 10px 20px 10px 20px;
+        }
+
+        .inside-items-list-2 {
+            padding: 20px;
+        }
+
+        .order-items {
+            min-height: 440px;
+            max-height: 440px;
+            overflow: auto;
+        }
+
+        .order-items-trk {
+            min-height: 100px;
+            max-height: 440px;
+            overflow: auto;
+        }
+
+    </style>
+
+    <style>
+
         #filtroEstado:focus {
 
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
@@ -56,8 +108,8 @@
         }
 
          #map {
-             height: 600px;
-             width: 46%;
+             height: 500px;
+             width: 100%;
              border: 4px solid #0d6efd;
              border-radius: 6px;
          }
@@ -135,32 +187,128 @@
 
 
 <div class="container" style="margin-top:90px;">
-
-    <div style="margin-bottom: 30px"></div>
-    <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px" th:text="${'Tracking: ' + ordenActual.getTracking()}"></strong></h2>
-    <div style="margin-bottom: 20px"></div>
-    <hr style="border-top: 1px solid #DFDFDF;">
-    <div style="margin-bottom: 40px"></div>
-
-    <div style="padding-right: 0; padding-left: 0"> </div>
 </div>
 
 
-<div style="max-width: 1536px;margin-inline: auto;padding: 0 30px 0 30px;" th:switch="${ordenActual.getEstadoOrden()}">
+
+
+
+<div style="max-width: 1536px;margin-inline: auto;padding: 0 30px 0 30px; display: flex;flex-direction: row;column-gap: 40px" th:switch="${ordenActual.getEstadoOrden()}">
+
+
+
+    <div style="display: flex;flex-direction: column;row-gap: 20px;justify-content: start;align-items: start">
+
+
+            <div style="width: 700px">
+
+                <section class="items-list-trk">
+
+                    <div class="inside-items-list-trk">
+
+                        <div class="preview-title roboto-regular" style="font-size: 1.3rem">
+                            Contenido de la Orden Web<span style="font-weight: bold" th:text="${ordenActual.getIdOrden() + 10000}"></span>
+                        </div>
+
+                        <div class="preview-title-trk roboto-regular">
+                            <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between">
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    Imagen
+                                </div>
+
+                                <div style="min-width: 180px; display: flex; align-items: center; justify-content: center">
+                                    Descripción
+                                </div>
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    Cantidad
+                                </div>
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    P. Uni.
+                                </div>
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    Precio
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="order-items-trk">
+                            <div th:each="med : ${lista}">
+
+
+                                <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between !important; padding: 15px; border-bottom:solid 1px #d3d3d3;">
+
+                                    <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                        <img th:src="'data:image/jpeg;base64,' + ${med.getIdMedicamento().imagenBase64}" width="80px" height="auto" th:alt="${med.getIdMedicamento().getNombre()}">
+                                    </div>
+
+                                    <div style="min-width: 180px; display: flex; align-items: center; justify-content: start">
+                                        <div style="display: flex; flex-direction: column; gap: 10px">
+                                            <span style="font-size: 1.2rem; max-width: 180px" class="item-title-clicked" th:text="${med.getIdMedicamento().getNombre()}">Medicamento</span>
+                                            <span style="font-size: 0.8rem; max-width: 180px" class="item-title-clicked" th:text="${med.getIdMedicamento().getDescripcion()}">Medicamento</span>
+                                        </div>
+                                    </div>
+
+                                    <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                        <span type="text" th:text="${med.getCantidad()}" class="item-quantity-clicked"></span>
+                                    </div>
+
+                                    <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                        <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${med.getIdMedicamento().getPrecioVenta()}"></span>
+                                    </div>
+
+                                    <div style="min-width: 80px; display: flex; align-items: end; justify-content: center">
+                                        <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${ #numbers.formatDecimal((med.getIdMedicamento().getPrecioVenta()*med.getCantidad()), 1, 'COMMA', 2, 'POINT')}"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; align-items: center; gap: 15px;">
+                                <input type="hidden" name="priceTotal" value="">
+                                TOTAL <span class="price-total" th:text="${'S/.   ' + #numbers.formatDecimal(ordenActual.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}">S/0.00</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </section>
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
 
     <div th:case="1" style="display: flex;justify-content: center">
 
         <p style="font-size: 30px;color:#0d6efd ">!Para empezar con el seguimiento del pedido su orden aún debe ser aprobada!</p>
 
-       <!-- <h2>Imagen de la Orden</h2>
-        <img th:src="'data:image/jpeg;base64,' + ${imagen}"/> -->
-
     </div>
 
-
     <div th:case="3" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
-
-
+        <div id="map"></div>
+        <div class="preview-title roboto-regular" style="font-size: 1.3rem; padding-top: 20px;">
+            Código único de Tracking:<span style="font-weight: bold" th:text="${'  TRK-' + ordenActual.getTracking()}"></span>
+        </div>
         <div class="container-progress">
             <div class="wrapper">
                 <div class="progress-container">
@@ -183,24 +331,21 @@
                     <div class="progress-step">
                         <i class="fa-solid fa-check-square"></i>Entregado
                     </div>
-
-
                 </div>
             </div>
 
         </div>
 
-        <div id="map"></div>
-
     </div>
 
-    <div th:case="4" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
-
-
+    <div th:case="4" style="display: flex;flex-direction: column;justify-content: center;column-gap: 10px">
+        <div id="map"></div>
+        <div class="preview-title roboto-regular" style="font-size: 1.3rem; padding-top: 20px;">
+            Código único de Tracking:<span style="font-weight: bold" th:text="${'  TRK-' + ordenActual.getTracking()}"></span>
+        </div>
         <div class="container-progress">
             <div class="wrapper">
                 <div class="progress-container">
-
                     <div class="barra"  style="width: 25%"></div>
 
                     <div class="progress-step">
@@ -219,20 +364,19 @@
                     <div class="progress-step">
                         <i class="fa-solid fa-check-square"></i>Entregado
                     </div>
-
-
                 </div>
             </div>
-
         </div>
 
-        <div id="map"></div>
 
     </div>
 
     <div th:case="5" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
 
-
+        <div id="map"></div>
+        <div class="preview-title roboto-regular" style="font-size: 1.3rem; padding-top: 20px;">
+            Código único de Tracking:<span style="font-weight: bold" th:text="${'  TRK-' + ordenActual.getTracking()}"></span>
+        </div>
         <div class="container-progress">
             <div class="wrapper">
                 <div class="progress-container">
@@ -262,13 +406,15 @@
 
         </div>
 
-        <div id="map"></div>
+
 
     </div>
 
     <div th:case="6" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
-
-
+        <div id="map"></div>
+        <div class="preview-title roboto-regular" style="font-size: 1.3rem; padding-top: 20px;">
+            Código único de Tracking:<span style="font-weight: bold" th:text="${'  TRK-' + ordenActual.getTracking()}"></span>
+        </div>
         <div class="container-progress">
             <div class="wrapper">
                 <div class="progress-container">
@@ -291,19 +437,19 @@
                     <div class="progress-step">
                         <i class="fa-solid fa-check-square"></i>Entregado
                     </div>
-
-
                 </div>
             </div>
-
         </div>
-
-        <div id="map"></div>
-
     </div>
 
     <div th:case="7" style="display: flex;flex-direction: column;row-gap: 15px">
 
+        <div style="display: flex; flex-direction: row; justify-content: center">
+            <p style="font-size: 30px;color:#0d6efd ">!Su orden ha sido entregada exitosamente!</p>
+        </div>
+        <div class="preview-title roboto-regular" style="font-size: 1.3rem; padding-top: 20px;">
+            Código único de Tracking:<span style="font-weight: bold" th:text="${'  TRK-' + ordenActual.getTracking()}"></span>
+        </div>
         <div class="container-progress" style="min-height: 18vh">
             <div class="wrapper">
                 <div class="progress-container">
@@ -333,14 +479,8 @@
 
         </div>
 
-        <div style="display: flex; flex-direction: row; justify-content: center">
-            <p style="font-size: 30px;color:#0d6efd ">!Su orden ha sido entregada exitosamente!</p>
-        </div>
+
     </div>
-
-
-
-
 
 
 </div>
@@ -350,145 +490,7 @@
 
 
 
-
-
-
 <br>
-<br>
-
-<div class="container">
-
-    <div style="margin-bottom: 50px"></div>
-    <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Contenido de la Orden:</strong></h2>
-    <div style="margin-bottom: 20px"></div>
-    <hr style="border-top: 1px solid #DFDFDF;">
-    <div style="margin-bottom: 40px"></div>
-
-    <div style="padding-right: 0; padding-left: 0"> </div>
-</div>
-
-
-<div style="display: flex;flex-direction: row;column-gap: 20px;justify-content: center">
-
-    <div style="width: 1000px">
-        <div style="display: flex; flex-direction: column; justify-content: start">
-
-            <input id="searchInput" type="text" class="input-form" style="margin-top: 4px;width: 370px;height: 40px;font-size: 15px" placeholder="Buscar por nombre del medicamente">
-
-        </div>
-
-        <br>
-
-        <table id="miTabla" class="table table-striped">
-
-            <thead>
-            <tr style="background-color: #378fff">
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio unitario</th>
-                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio total</th>
-            </tr>
-            </thead>
-
-
-            <tbody>
-            <tr th:each="itemDeLaOrden: ${lista}">
-                <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
-                <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" class="medicamento"/></td>
-                <td th:text="${itemDeLaOrden.getCantidad()}"></td>
-                <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
-
-                <td class="resultado"></td>
-
-                <script th:inline="javascript">
-                    function limitarDigitos(numero) {
-                        var numeroStr = numero.toString();
-                        // Obtener los primeros 4 dígitos
-                        var primerosCuatroDigitos = numeroStr.substring(0, 4);
-                        var numeroLimitado = parseFloat(primerosCuatroDigitos);
-                        return numeroLimitado;
-                    }
-                    var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
-                    var cantidad = [[${itemDeLaOrden.getCantidad()}]];
-                    var resultado = precioVenta * cantidad;
-                    var resultadoLimitado = limitarDigitos(resultado);
-                    document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
-                </script>
-
-            </tr>
-
-
-            </tbody>
-        </table>
-
-        <br>
-        <br>
-        <br>
-        <br>
-
-
-
-
-    </div>
-
-
-    <div>
-
-        <div style="display: flex; flex-direction: row; justify-content: end">
-            <a th:if="${ordenActual.getEstadoOrden() != 1} " th:href="@{'/paciente/boleta_pago?id=' + ${ordenActual.getIdOrden()}}" ><button class="btn-back">Ver Boleta de Pago</button></a>
-        </div>
-
-
-        <div th:style="${ordenActual.getEstadoOrden()!=1? 'margin-top: 30px;background-color: white;border-radius: 10px;padding:20px 20px 0 20px; width: 400px;height: 180px' : 'margin-top: 72px;background-color: white;border-radius: 10px;padding:20px 20px 0 20px; width: 400px;height: 180px' }">
-
-
-
-            <div style="display: flex;flex-direction: row;justify-content: start">
-                <p style="font-size: 26px;font-weight: 500">Resumen:</p>
-            </div>
-
-
-            <div style="display: flex;flex-direction: row;justify-content: space-between;padding-top: 15px">
-                <p style="font-size: 18px">Cantidad de Productos:</p>
-                <p style="font-size: 18px" th:text="${cantProductos}"></p>
-            </div>
-
-
-            <div style="display: flex;flex-direction: row;justify-content: space-between;padding-top: 15px">
-                <p style="font-size: 18px">Total a pagar:</p>
-                <p style="font-size: 18px" th:text=" 'S/. ' +  ${ordenActual.getPrecioTotal()}"></p>
-            </div>
-
-
-
-
-        </div>
-
-
-    </div>
-
-
-
-
-
-</div>
-
-
-
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
-
-<br>
-<br>
-
 <div th:replace="~{fragments/navbar.html :: footer}">
 </div>
 

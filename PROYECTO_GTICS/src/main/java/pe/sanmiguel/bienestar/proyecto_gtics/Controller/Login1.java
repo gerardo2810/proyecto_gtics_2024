@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
@@ -33,10 +34,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Controller
@@ -83,6 +81,8 @@ final UsuarioRepository usuarioRepository;
     private EmailService emailService;
 
 
+
+
     @PostMapping("/DNIapi")
     public String dniApi(@ModelAttribute("usuario") @Validated(DniApiValidationGroup.class) Usuario usuario,
                          BindingResult bindingResult,
@@ -93,19 +93,41 @@ final UsuarioRepository usuarioRepository;
             System.out.println(bindingResult.getAllErrors());
             return "login/prueba3";
         } else {
-            List<String> values = DniAPI.getDni(dni);
+            try {
+                List<String> values = DniAPI.getDni(dni);
 
-            String apiDni = values.get(3);
-            String apiNombres = values.get(0);
-            String apiApellidos = (values.get(1) + " " + values.get(2));
+                if (values != null && values.size() >= 4 && !values.get(0).isEmpty()) {
+                    String apiDni = values.get(3);
+                    String apiNombres = values.get(0);
+                    String apiApellidos = values.get(1) + " " + values.get(2);
 
-            model.addAttribute("dni", apiDni);
-            model.addAttribute("nombres", apiNombres);
-            model.addAttribute("apellidos", apiApellidos);
-            model.addAttribute("dniApi", apiDni);
+                    model.addAttribute("dni", apiDni);
+                    model.addAttribute("nombres", apiNombres);
+                    model.addAttribute("apellidos", apiApellidos);
 
-            System.out.println(values);
-            return "login/prueba3";
+                    boolean founded = false;
+
+                    Optional<Usuario> usuarioOptional = usuarioRepository.findPacienteByDni(apiDni);
+                    if (usuarioOptional.isPresent()) {
+                        Usuario userExisting = usuarioOptional.get();
+                        model.addAttribute("usuario", userExisting);
+                        founded = true;
+                    }
+
+                    model.addAttribute("foundedNotification", founded);
+                    System.out.println(values);
+                    System.out.println("El usuario fue encontrado en DB? " + founded);
+                    return "login/prueba3";
+                } else {
+                    // Caso cuando el DNI no existe o no se encuentran datos suficientes
+                    bindingResult.rejectValue("dni", "error.usuario", "DNI no existente.");
+                    return "login/prueba3";
+                }
+            } catch (Exception e) {
+                // Manejar posibles errores del API
+                bindingResult.rejectValue("dni", "error.usuario", "Error al consultar el API del DNI.");
+                return "login/prueba3";
+            }
         }
     }
 
@@ -123,32 +145,46 @@ final UsuarioRepository usuarioRepository;
             String encodedPassword = passwordEncoder.encode(temporaryPassword);
             usuario.setContrasena(encodedPassword);
             System.out.println(encodedPassword);
-            usuarioRepository.save(usuario);
-            System.out.println(temporaryPassword);
-            System.out.println(encodedPassword);
-
-            // Enviar el correo de bienvenida
-            String subject = "Bienvenido(a) a Bienestar San Miguel";
-            Map<String, Object> variables = new HashMap<>();
-            Map<String, Object> variables2 = new HashMap<>();
-
-            variables.put("nombre", usuario.getNombres());
-            variables2.put("contra", temporaryPassword);
 
             try {
-                emailService.sendHtmlEmail2(usuario.getCorreo(), subject,"login/correo", variables, variables2);
-                attributes.addFlashAttribute("mensaje", "Usuario creado correctamente y correo enviado.");
-                return "redirect:/";
-            } catch (MessagingException e) {
-                e.printStackTrace();
-                attributes.addFlashAttribute("mensaje", "Usuario creado, pero hubo un error al enviar el correo: " + e.getMessage());
-            }
+                usuarioRepository.save(usuario);
+                System.out.println(temporaryPassword);
+                System.out.println(encodedPassword);
 
-            return "redirect:/";
-        } else {
-            model.addAttribute("usuario", usuario);
-            return "login/prueba3";
+                // Enviar el correo de bienvenida
+                String subject = "Bienvenido(a) a Bienestar San Miguel";
+                Map<String, Object> variables = new HashMap<>();
+                Map<String, Object> variables2 = new HashMap<>();
+
+                variables.put("nombre", usuario.getNombres());
+                variables2.put("contra", temporaryPassword);
+
+                try {
+                    emailService.sendHtmlEmail2(usuario.getCorreo(), subject,"login/correo", variables, variables2);
+                    attributes.addFlashAttribute("mensaje", "Usuario creado correctamente y correo enviado.");
+                    return "redirect:/";
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                    attributes.addFlashAttribute("mensaje", "Usuario creado, pero hubo un error al enviar el correo: " + e.getMessage());
+                }
+
+                return "redirect:/";
+            } catch (DataIntegrityViolationException e) {
+                // Verificar el mensaje de la excepción para determinar el tipo de duplicidad
+                String errorMessage = e.getMostSpecificCause().getMessage();
+                if (errorMessage.contains("usuario.correo_UNIQUE")) {
+                    bindingResult.rejectValue("correo", "error.usuario", "El correo ya está registrado.");
+                } else if (errorMessage.contains("usuario.dni_UNIQUE")) {
+                    bindingResult.rejectValue("dni", "error.usuario", "El DNI ya está registrado.");
+                } else {
+                    bindingResult.reject("error.usuario", "Error de integridad de datos.");
+                }
+            }
         }
+
+        // Si hay errores en el binding o se capturó una excepción
+        model.addAttribute("usuario", usuario);
+        return "login/prueba3";
     }
 
   @GetMapping("/recuperarContra")
