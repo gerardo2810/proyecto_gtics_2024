@@ -66,11 +66,12 @@
         }
 
         #map {
-            height: 280px;
+            height: 300px;
             width: auto;
             border: 4px solid #0d6efd;
             border-radius: 6px;
         }
+
 
         .botones-tracking {
             display: flex;
@@ -83,7 +84,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 10vh !important;
+            min-height: 15vh !important;
         }
 
         div.dataTables_wrapper div.dataTables_filter {
@@ -473,7 +474,7 @@
 
                     </div>
 
-                    <div th:case="4" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+                    <div th:case="4" style="display: flex;flex-direction: column;justify-content: center;column-gap: 20px">
 
 
                         <div id="map"></div>
@@ -513,7 +514,7 @@
 
                     </div>
 
-                    <div th:case="5" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+                    <div th:case="5" style="display: flex;flex-direction: column;justify-content: center;column-gap: 20px">
 
                         <div id="map"></div>
 
@@ -552,7 +553,7 @@
 
                     </div>
 
-                    <div th:case="6" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+                    <div th:case="6" style="display: flex;flex-direction: column;justify-content: center;column-gap: 20px">
 
                         <div id="map"></div>
 
@@ -773,7 +774,7 @@
 
                     </div>
 
-                    <div th:case="4" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+                    <div th:case="4" style="display: flex;flex-direction: column;justify-content: center;column-gap: 20px">
 
 
                         <div id="map"></div>
@@ -813,7 +814,7 @@
 
                     </div>
 
-                    <div th:case="5" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+                    <div th:case="5" style="display: flex;flex-direction: column;justify-content: center;column-gap: 20px">
 
                         <div id="map"></div>
 
@@ -852,7 +853,7 @@
 
                     </div>
 
-                    <div th:case="6" style="display: flex;flex-direction: row;justify-content: center;column-gap: 20px">
+                    <div th:case="6" style="display: flex;flex-direction: column;justify-content: center;column-gap: 20px">
 
                         <div id="map"></div>
 
@@ -891,7 +892,7 @@
 
                     </div>
 
-                    <div th:case="7" style="display: flex;flex-direction: column;row-gap: 15px">
+                    <div th:case="7" style="display: flex;flex-direction: column;justify-content: center;column-gap: 20px">
 
                         <div id="map"></div>
 
@@ -977,7 +978,7 @@
 
     <!--ESTA PARTE ES PARA ANULAR, SOLO VÁLIDO PARA ORDEN O PREORDEN ANTES DE ESTADO EMPAQUETADO Y PARA CUALQUIER ORDEN DE VENTA FÍSICA-->
 
-    <div class="container" th:if="${(orden.getEstadoOrden() == 1 || orden.getEstadoOrden() == 2 || orden.getEstadoOrden() == 3 || orden.getEstadoOrden() == 4 || orden.getEstadoOrden() == 8) && (orden.getEstadoPreOrden() == 1 || orden.getEstadoPreOrden() == 2 || orden.getEstadoPreOrden() == 3  || orden.getEstadoPreOrden() == 4 || orden.getEstadoPreOrden() == 8 || orden.getEstadoPreOrden() == null)}">
+    <div class="container" th:if="${(orden.getEstadoOrden() == 1 || orden.getEstadoOrden() == 2 || orden.getEstadoOrden() == 3 || orden.getEstadoOrden() == 4 || orden.getEstadoOrden() == 8) && (preOrden.getEstadoPreOrden() == 1 || preOrden.getEstadoPreOrden() == 2 || preOrden.getEstadoPreOrden() == 3  || preOrden.getEstadoPreOrden() == 4 || preOrden.getEstadoPreOrden() == 8 || preOrden.getEstadoPreOrden() == null)}">
 
         <div style="padding-top: 20px; padding-bottom: 20px">
             <div class="main-subtitle helvetica-medium"> Puede anular esta orden, recuerde comentar el motivo de anulación. </div>
