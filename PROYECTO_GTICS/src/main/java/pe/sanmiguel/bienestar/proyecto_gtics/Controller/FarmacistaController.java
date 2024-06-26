@@ -641,7 +641,7 @@ public class FarmacistaController {
         newPreOrden.setTipoOrden(3);
         newPreOrden.setEstadoOrden(8);
         newPreOrden.setOrdenParent(ordenPadre.getIdOrden());
-        newPreOrden.setEstadoPreOrden(1);
+        newPreOrden.setEstadoPreOrden(3);
         newPreOrden.setSede(sedeSession);
         newPreOrden.setSeguroUsado(ordenPadre.getSeguroUsado());
         newPreOrden.setDoctor(ordenPadre.getDoctor());
@@ -670,29 +670,6 @@ public class FarmacistaController {
 
         return "redirect:/farmacista/ver_orden_tracking?id=" + ordenPadre.getIdOrden();
     }
-
-
-    //BOLETA DE PRE ORDNES//
-    @GetMapping("/farmacista/deprecated/ver_pre_orden")
-    public String verPreOrden(Model model,
-                              HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        /*model.addAttribute("medicamentosSinStock", medicamentosSinStock);
-        model.addAttribute("medicamentosConStock", medicamentosConStock);
-        model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
-        model.addAttribute("cantidadesExistentes", cantidadesExistentes);*/
-
-        HttpSession session = request.getSession();
-        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
-        session.setAttribute("usuario", usuarioSession);
-
-        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
-
-        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
-        List<Orden> listaOrdenesVenta = ordenRepository.findAllOrdenesPorSede(sedeSession.getIdSede());
-        model.addAttribute("listaOrdenesVenta", listaOrdenesVenta);
-        return "/farmacista/deprecated/ver_pre_orden";
-    }
-
 
 
     @GetMapping("/farmacista/cambiar_medicamentos")
@@ -831,6 +808,23 @@ public class FarmacistaController {
 
                 System.out.println(containsPreOrden);
 
+                // Falta detectar y enviar si la orden tiene problemas de Stock
+
+                List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+                List<OrdenContenido> medsConStock = new ArrayList<>();
+                List<OrdenContenido> medsSinStock = new ArrayList<>();
+                for(OrdenContenido oc : lista){
+
+                    if (oc.getCantidad() > sedeStockRepository.verificarCantidadStockPorSede(sedeSession.getIdSede(), oc.getIdMedicamento().getIdMedicamento()) ){
+                        medsSinStock.add(oc);
+                    } else {
+                        medsConStock.add(oc);
+                    }
+                }
+
+                model.addAttribute("medsConStock", medsConStock);
+                model.addAttribute("medsSinStock", medsSinStock);
+
                 model.addAttribute("containsPreOrden", containsPreOrden);
 
                 model.addAttribute("preOrden", preOrdenChild);
@@ -840,6 +834,9 @@ public class FarmacistaController {
                 model.addAttribute("idOrden", idOrden);
                 model.addAttribute("contenidoOrden", contenidoOrden);
                 model.addAttribute("orden", ordenComprobada);
+
+
+
                 return "farmacista/tracking-2";
             } else {
                 attr.addFlashAttribute("msg", "La orden buscada no ha sido encontrada.");
@@ -847,6 +844,43 @@ public class FarmacistaController {
             }
         } else {
             attr.addFlashAttribute("msg", "La orden buscada no ha sido encontrada.");
+            return "redirect:/farmacista/ordenes_venta";
+        }
+    }
+
+
+    @PostMapping("/farmacista/anular_orden")
+    public String anularBoleta(@RequestParam("id") String idOrden,
+                               @RequestParam("motivo") String motivo,
+                               HttpServletRequest request, HttpServletResponse response, Authentication authentication,
+                               RedirectAttributes attr){
+
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
+
+        Optional<Orden> ordenOptional = ordenRepository.findById(Integer.valueOf(idOrden));
+
+        if (ordenOptional.isPresent()){
+            Orden ordenComprobada = ordenOptional.get();
+
+            ordenComprobada.setEstadoOrden(9);
+            ordenComprobada.setMotivoAnulado(motivo);
+
+            Orden preOrdenChild = ordenRepository.findPreordenByOrdenId(Integer.valueOf(idOrden));
+
+            if (preOrdenChild != null) {
+                preOrdenChild.setEstadoPreOrden(9);
+                preOrdenChild.setMotivoAnulado(motivo);
+            }
+
+            attr.addFlashAttribute("msg", "La orden ha sido anulada exitosamente.");
+            return "redirect:/farmacista/ver_orden_tracking?id=" + idOrden;
+
+        } else {
+            attr.addFlashAttribute("msg", "Ha ocurrido un error al tratar de anular una orden.");
             return "redirect:/farmacista/ordenes_venta";
         }
     }
@@ -1137,6 +1171,8 @@ public class FarmacistaController {
             this.user = user;
         }
     }
+
+
 
     @Getter
     public class verificationStock{

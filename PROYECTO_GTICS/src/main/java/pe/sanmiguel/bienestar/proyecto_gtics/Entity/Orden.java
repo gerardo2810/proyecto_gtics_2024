@@ -48,5 +48,6 @@ public class Orden {
     private Integer estadoPreOrden;
     @Column(name = "seguroUsado")
     private String seguroUsado;
-
+    @Column(name = "motivoAnulado")
+    private String motivoAnulado;
 }
