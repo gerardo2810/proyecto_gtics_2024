@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Reposicion;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.SedeFarmacista;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,8 +37,8 @@ public interface ReposicionRepository extends JpaRepository<Reposicion, Integer>
     // Crear reposicion
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "insert into reposicion set id = ?1, tracking = ?2, fechaIni = now(), pagado = 0, precioTotal = ?3, idEstado = ?4, idSede = ?5, numero = ?6")
-    void crearOrdenReposicion(int idReposicion, String tracking, Float precioTotal, int idEstado, int idSede, int newNumber);
+    @Query(nativeQuery = true, value = "insert into reposicion set id = ?1, tracking = ?2, fechaIni = ?7, fechaFin = ?8, pagado = 0, precioTotal = ?3, idEstado = ?4, idSede = ?5, numero = ?6")
+    void crearOrdenReposicion(int idReposicion, String tracking, Float precioTotal, int idEstado, int idSede, int newNumber, LocalDateTime fechaIni, LocalDateTime fechaFin);
 
     @Query(nativeQuery = true, value = "select * from reposicion where id = ?1")
     Reposicion encontrarReposicionporId(int id);

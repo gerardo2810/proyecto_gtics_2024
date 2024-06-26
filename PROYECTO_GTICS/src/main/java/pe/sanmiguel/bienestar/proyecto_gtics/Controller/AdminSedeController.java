@@ -32,6 +32,8 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -833,8 +835,10 @@ public class AdminSedeController {
 
         Integer newNumber = lastNumber + 1;
 
+        LocalDateTime fechaIni = LocalDateTime.now();
+        LocalDateTime fechaFin = LocalDateTime.now().plus(5, ChronoUnit.DAYS);
 
-        reposicionRepository.crearOrdenReposicion(idReposicion, tracking, priceTotal, idEstado, idSede,newNumber);
+        reposicionRepository.crearOrdenReposicion(idReposicion, tracking, priceTotal, idEstado, idSede,newNumber, fechaIni, fechaFin);
 
         List<Medicamento> listaMedicamentosReposicion = new ArrayList<>();
 
