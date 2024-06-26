@@ -641,7 +641,7 @@ public class FarmacistaController {
         newPreOrden.setTipoOrden(3);
         newPreOrden.setEstadoOrden(8);
         newPreOrden.setOrdenParent(ordenPadre.getIdOrden());
-        newPreOrden.setEstadoPreOrden(1);
+        newPreOrden.setEstadoPreOrden(3);
         newPreOrden.setSede(sedeSession);
         newPreOrden.setSeguroUsado(ordenPadre.getSeguroUsado());
         newPreOrden.setDoctor(ordenPadre.getDoctor());
@@ -872,7 +872,7 @@ public class FarmacistaController {
             Orden preOrdenChild = ordenRepository.findPreordenByOrdenId(Integer.valueOf(idOrden));
 
             if (preOrdenChild != null) {
-                preOrdenChild.setEstadoPreOrden(7);
+                preOrdenChild.setEstadoPreOrden(9);
                 preOrdenChild.setMotivoAnulado(motivo);
             }
 
