@@ -668,10 +668,60 @@
         </div>
     </div>
 
+
+    <div class="container" th:if="${orden.getEstadoOrden() == 1 || orden.getEstadoOrden() == 2 || orden.getEstadoOrden() == 3 || orden.getEstadoOrden() == 4 || orden.getEstadoOrden() == 8}">
+
+        <form method="post" id="form-anular" th:action="@{/farmacista/anular_orden}">
+
+            <label>
+                <input name="id" hidden="true" th:value="${idOrden}">
+            </label>
+
+            <label>
+                <textarea name="motivo" id="motivoAnulado" style="width: 100%; min-height: 100px; padding: 15px; max-height: 200px; box-sizing: border-box; resize: vertical;"  maxlength="400" placeholder="Máximo 400 carácteres."></textarea>
+            </label>
+
+            <button type="submit" class="print">
+                ANULAR ORDEN
+            </button>
+        </form>
+    </div>
+
     <div th:replace="~{fragments/navbar.html :: footer}">
     </div>
 
+    <script>
 
+
+        // Obtener referencia al formulario y textarea
+        var formulario = document.getElementById('form-anular');
+        var textarea = document.getElementById('motivoAnulado');
+        const Swal = window.Swal;
+        // Escuchar el evento de entrada de texto
+        textarea.addEventListener('input', function() {
+            // Verificar si se excede el límite de caracteres
+            if (textarea.value.length > 400) {
+                textarea.value = textarea.value.slice(0, 400); // Cortar el texto excedente
+            }
+        });
+
+        // Escuchar el evento submit del formulario
+        formulario.addEventListener('submit', function(event) {
+            // Verificar si el textarea está vacío
+            if (textarea.value.trim() === '') {
+                // Evitar el envío del formulario
+                event.preventDefault();
+
+                // Mostrar SweetAlert indicando que el textarea está vacío
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Debe ingresar un motivo para anular la orden.',
+                    confirmButtonText: 'Entendido'
+                });
+            }
+        });
+    </script>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -720,6 +770,8 @@
             }
         }
     </script>
+
+
 </body>
 
 
