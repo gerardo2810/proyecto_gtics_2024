@@ -164,7 +164,13 @@
     <div th:replace="~{fragments/banner.html :: banner}"></div>
 
 
-    <div style="padding-top: 40px"></div>
+    <div style="padding-top: 20px"></div>
+
+
+    <div class="container">
+        <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert" style="margin-top: 30px; background-color: #cce5ff; color: #004085; border-color: #b8daff"></div>
+
+    </div>
 
     <!--ESTA PARTE ES PARA ORDENES FISICAS PAGADAS O ANULADAS -->
 
@@ -669,7 +675,13 @@
     </div>
 
 
-    <div class="container" th:if="${orden.getEstadoOrden() == 1 || orden.getEstadoOrden() == 2 || orden.getEstadoOrden() == 3 || orden.getEstadoOrden() == 4 || orden.getEstadoOrden() == 8}">
+    <div class="container" th:if="${(orden.getEstadoOrden() == 1 || orden.getEstadoOrden() == 2 || orden.getEstadoOrden() == 3 || orden.getEstadoOrden() == 4 || orden.getEstadoOrden() == 8) && (orden.getEstadoPreOrden() == 1 || orden.getEstadoPreOrden() == 2 || orden.getEstadoPreOrden() == 6 || orden.getEstadoPreOrden() == null)}">
+
+        <div style="padding-top: 20px; padding-bottom: 20px">
+            <div class="main-subtitle helvetica-medium"> Puede anular esta orden, recuerde comentar el motivo de anulación. </div>
+        </div>
+
+        <hr class="style-one">
 
         <form method="post" id="form-anular" th:action="@{/farmacista/anular_orden}">
 

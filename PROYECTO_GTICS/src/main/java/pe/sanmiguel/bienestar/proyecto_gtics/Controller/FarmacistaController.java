@@ -851,12 +851,38 @@ public class FarmacistaController {
 
     @PostMapping("/farmacista/anular_orden")
     public String anularBoleta(@RequestParam("id") String idOrden,
-                               @RequestParam("motivo") String motivo){
+                               @RequestParam("motivo") String motivo,
+                               HttpServletRequest request, HttpServletResponse response, Authentication authentication,
+                               RedirectAttributes attr){
 
-        System.out.println(idOrden);
-        System.out.println(motivo);
+        HttpSession session = request.getSession();
+        usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
 
-        return "redirect:/farmacista/ver_orden_tracking?id=" + idOrden;
+        sedeSession = sedeFarmacistaRepository.buscarFarmacistaSede(usuarioSession.getIdUsuario()).getIdSede();
+
+        Optional<Orden> ordenOptional = ordenRepository.findById(Integer.valueOf(idOrden));
+
+        if (ordenOptional.isPresent()){
+            Orden ordenComprobada = ordenOptional.get();
+
+            ordenComprobada.setEstadoOrden(9);
+            ordenComprobada.setMotivoAnulado(motivo);
+
+            Orden preOrdenChild = ordenRepository.findPreordenByOrdenId(Integer.valueOf(idOrden));
+
+            if (preOrdenChild != null) {
+                preOrdenChild.setEstadoPreOrden(7);
+                preOrdenChild.setMotivoAnulado(motivo);
+            }
+
+            attr.addFlashAttribute("msg", "La orden ha sido anulada exitosamente.");
+            return "redirect:/farmacista/ver_orden_tracking?id=" + idOrden;
+
+        } else {
+            attr.addFlashAttribute("msg", "Ha ocurrido un error al tratar de anular una orden.");
+            return "redirect:/farmacista/ordenes_venta";
+        }
     }
 
 
