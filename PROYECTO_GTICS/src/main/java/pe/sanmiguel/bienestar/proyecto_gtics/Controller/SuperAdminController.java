@@ -1931,6 +1931,7 @@ public class SuperAdminController {
     public String verReportes(Model model){
 
         List<OrdenesExporterDto> listaOrdenesReportes = ordenRepository.listarOrdenesExporter();
+
         model.addAttribute("listaOrdenes", listaOrdenesReportes);
         return "superAdmin/reportes";
     }
