@@ -383,7 +383,7 @@ public class AdminSedeController {
                                       @ModelAttribute("sedeFarmacista") SedeFarmacista sedeFarmacista,
                                       Model model){
         //Sacamos todas los codigos
-        List<String> listaCodigos = codigoColegiaturaRepository.listarCodigos();
+        List<CodigoColegiatura> listaCodigos = codigoColegiaturaRepository.listarCodigos();
         model.addAttribute("listaCodigos", listaCodigos);
         return "adminsede/solicitud_agregar_farmacista";
     }
@@ -564,7 +564,7 @@ public class AdminSedeController {
                                       @RequestParam(value = "dni") String dni,
                                       Model model){
 
-        List<String> listaCodigos = codigoColegiaturaRepository.listarCodigos();
+        List<CodigoColegiatura> listaCodigos = codigoColegiaturaRepository.listarCodigos();
         model.addAttribute("listaCodigos", listaCodigos);
 
         List<String> values = DniAPI.getDni(dni);

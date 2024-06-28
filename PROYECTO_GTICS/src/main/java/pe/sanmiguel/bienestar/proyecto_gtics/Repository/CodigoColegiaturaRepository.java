@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CodigoColegiaturaRepository extends JpaRepository<CodigoColegiatura, Integer> {
 
-    @Query(nativeQuery = true, value = "SELECT codigo FROM proyecto_gtics.codigo_colegiatura")
-    List<String> listarCodigos();
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.codigo_colegiatura")
+    List<CodigoColegiatura> listarCodigos();
 
 }

@@ -383,44 +383,52 @@
 
 
     <script th:inline="javascript">
-        const form = document.getElementById("form");
-        let ids = /*[[${listaCodigos}]]*/ [];
-        var codMed = document.getElementById("codigoMed");
+        // Obtén el arreglo desde el modelo de Thymeleaf
+        const listaCodigos = /*[[${listaCodigos}]]*/ [];
+        console.log("Lista de Códigos:", listaCodigos);
 
-        console.log(ids)
+        const form = document.getElementById("form");
+        const dniInput = document.getElementById("dni");
+        const codigoInput = document.getElementById("codigoMed");
 
         form.addEventListener("submit", e => {
             e.preventDefault();
-            let codMedValue = codMed.value.trim();
-            let idsAsStrings = ids.map(id => id.toString());
-            console.log(idsAsStrings)
 
-            if (idsAsStrings.includes(codMedValue)) {
-                console.log("El codigo ya existe en DB");
+            const dniValue = dniInput.value.trim();
+            const codigoValue = codigoInput.value.trim();
+
+            // Buscar coincidencia en el mismo índice
+            let match = false;
+            for (let i = 0; i < listaCodigos.length; i++) {
+                if (listaCodigos[i].dni === dniValue && listaCodigos[i].codigo === codigoValue) {
+                    match = true;
+                    break;
+                }
+            }
+
+            if (match) {
+                console.log("El DNI y el Código coinciden con un registro en la lista");
+                // Aquí puedes continuar con la lógica si los valores son correctos.
                 Swal.fire({
-                    icon: "error",
-                    iconColor: '#DC3545',
+                    icon: "success",
+                    iconColor: '#0D6EFD',
                     title: "ERROR",
-                    text: "El código de colegiatura ingresa ya ha sido registrado",
+                    text: "El DNI y el Código COINCIEN EN LA LISTA.",
                     confirmButtonText: "OK",
                     confirmButtonColor: '#0D6EFD',
                     width: 500,
                 });
+                //form.submit();
             } else {
-                console.log("El codigo no existe en DB");
+                console.log("El DNI y el Código no coinciden con ningún registro en la lista");
                 Swal.fire({
-                    title: '¿Estás seguro de generar esta nueva solicitud?',
-                    icon: 'warning',
+                    icon: "error",
                     iconColor: '#DC3545',
-                    showCancelButton: true,
-                    cancelButtonColor: '#DC3545',
-                    cancelButtonText: 'Cancelar',
+                    title: "ERROR",
+                    text: "El DNI y el Código no coinciden con ningún registro en la lista.",
+                    confirmButtonText: "OK",
                     confirmButtonColor: '#0D6EFD',
-                    confirmButtonText: 'Aplicar cambios',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
+                    width: 500,
                 });
             }
         });
