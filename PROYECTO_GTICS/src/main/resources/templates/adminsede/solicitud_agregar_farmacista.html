@@ -382,22 +382,18 @@
         </div>
 
 
-
-
-
-
-
-
-
     <script th:inline="javascript">
         const form = document.getElementById("form");
         let ids = /*[[${listaCodigos}]]*/ [];
         var codMed = document.getElementById("codigoMed");
 
+        console.log(ids)
+
         form.addEventListener("submit", e => {
             e.preventDefault();
             let codMedValue = codMed.value.trim();
             let idsAsStrings = ids.map(id => id.toString());
+            console.log(idsAsStrings)
 
             if (idsAsStrings.includes(codMedValue)) {
                 console.log("El codigo ya existe en DB");
