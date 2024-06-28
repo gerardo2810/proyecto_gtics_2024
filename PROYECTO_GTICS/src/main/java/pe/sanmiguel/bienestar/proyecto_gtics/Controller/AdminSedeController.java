@@ -383,7 +383,7 @@ public class AdminSedeController {
                                       @ModelAttribute("sedeFarmacista") SedeFarmacista sedeFarmacista,
                                       Model model){
         //Sacamos todas los codigos
-        List<CodigoColegiatura> listaCodigos = codigoColegiaturaRepository.listarCodigos();
+        List<Integer> listaCodigos = codigoColegiaturaRepository.listarCodigos();
         model.addAttribute("listaCodigos", listaCodigos);
         return "adminsede/solicitud_agregar_farmacista";
     }
