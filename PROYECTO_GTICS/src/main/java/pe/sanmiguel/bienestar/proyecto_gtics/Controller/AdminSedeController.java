@@ -382,6 +382,9 @@ public class AdminSedeController {
     public String solicitudFarmacista(@ModelAttribute("usuarioFarmacista") Usuario usuarioFarmacista, //model attribute del farmacista
                                       @ModelAttribute("sedeFarmacista") SedeFarmacista sedeFarmacista,
                                       Model model){
+        //Sacamos todas los codigos
+        List<CodigoColegiatura> listaCodigos = codigoColegiaturaRepository.listarCodigos();
+        model.addAttribute("listaCodigos", listaCodigos);
         return "adminsede/solicitud_agregar_farmacista";
     }
 
@@ -603,11 +606,14 @@ public class AdminSedeController {
                                              @RequestParam(value = "celular") String celular,
                                              RedirectAttributes attr){
 
+
+
         if(!bindingResult.hasErrors() && !bindingResult1.hasErrors()){
             int estadoUsuario = 2;
             int idRol = 3;
             int idUsuario = usuarioRepository.findLastUsuarioId() + 1;
             int aprobado = 2; //El farmacista no está aprobado
+
             int idSede = 1; //Cambiar
 
             if (!(isValidEmail(correo) || isDomainValid(correo))) {
@@ -796,7 +802,7 @@ public class AdminSedeController {
                                     @RequestParam("direccionSede") String direccionSede,
                                     @RequestParam("correo") String correo,
                                     @RequestParam("nombreSede") String nombreSede,
-                                    @RequestParam("priceTotal") Float priceTotal,
+                                    @RequestParam("priceTotal") String priceTotal,
                                     @RequestParam("listaIds") List<String> listaIds,
                                     RedirectAttributes attr,
                                     HttpServletRequest request, HttpServletResponse response, Authentication authentication){
@@ -809,6 +815,10 @@ public class AdminSedeController {
 
         //Sacamos la sede del adminsede
         Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+        //Cambiamos el string del precioTotal
+        priceTotal = priceTotal.replace(",", "");
+        Float priceTotalF = Float.parseFloat(priceTotal);
 
 
         // Crear orden de reposición
@@ -840,7 +850,7 @@ public class AdminSedeController {
         LocalDateTime fechaFin = LocalDateTime.now().plus(5, ChronoUnit.DAYS);
         //Prueba
 
-        reposicionRepository.crearOrdenReposicion(idReposicion, tracking, priceTotal, idEstado, idSede,newNumber, fechaIni, fechaFin);
+        reposicionRepository.crearOrdenReposicion(idReposicion, tracking, priceTotalF, idEstado, idSede,newNumber, fechaIni, fechaFin);
 
         List<Medicamento> listaMedicamentosReposicion = new ArrayList<>();
 
