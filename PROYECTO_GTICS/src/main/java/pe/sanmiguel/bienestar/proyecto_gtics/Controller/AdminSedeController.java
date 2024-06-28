@@ -564,6 +564,9 @@ public class AdminSedeController {
                                       @RequestParam(value = "dni") String dni,
                                       Model model){
 
+        List<Integer> listaCodigos = codigoColegiaturaRepository.listarCodigos();
+        model.addAttribute("listaCodigos", listaCodigos);
+
         List<String> values = DniAPI.getDni(dni);
 
         if (!(values.isEmpty())){
