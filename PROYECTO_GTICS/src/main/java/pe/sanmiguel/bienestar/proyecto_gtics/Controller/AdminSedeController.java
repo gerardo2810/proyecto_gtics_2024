@@ -851,6 +851,10 @@ public class AdminSedeController {
             Integer idMedicamento = Integer.parseInt(listaIds.get(m));
             Integer cantidadMedicamento = Integer.parseInt(listaIds.get(m+1));
             reposicionContenidoRepository.guardarContenidoReposicion(idMedicamento, idReposicion, cantidadMedicamento);
+
+            //Aumentamos el stock que hay en la sede
+            sedeStockRepository.actualizarSedeStock(idSede, idMedicamento, cantidadMedicamento);
+
             m = m + 2;
         }
 
