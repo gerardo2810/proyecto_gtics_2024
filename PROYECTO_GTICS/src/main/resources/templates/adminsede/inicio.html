@@ -104,9 +104,7 @@
             .mail {
                 grid-column: span 2;
             }
-            .notifi{
-                grid-column: span 2;
-            }
+
             .drive {
                 grid-column: span 2;
                 height: 400px;
@@ -114,7 +112,8 @@
             }
             .notes {
                 grid-column: span 1;
-                margin-top: -350px; /* Ajusta este valor según sea necesario */
+                height: 750px; /* Ajusta altura */
+                margin-top: -350px; /* subir o bsjar */
             }
 
             .avatar {
@@ -188,26 +187,6 @@
                 color: black;
                 text-decoration: none;
                 cursor: pointer;
-            }
-            .pdf{
-                padding: 9px;
-                width: 190px;
-                border: none;
-                border-radius: 6px;
-                background-color: #dc3545;
-                color:white;
-                transition: background-color 0.3s, border-color 0.3s;
-                font-size: 12px;
-                cursor: pointer;
-            }
-
-            .pdf:hover{
-                padding: 7px;
-                width: 190px;
-                border: 2px solid #dc3545;
-                border-radius: 6px;
-                background-color: white;
-                color:#dc3545;
             }
 
             .print{
@@ -295,9 +274,9 @@
     <div class="container">
         <div class="cont">
             <div class="profile">
-                <div class="avatar">ML</div>
+                <div class="avatar" th:text="${usuario.getNombres().charAt(0)} + ${usuario.getApellidos().charAt(0)}"></div>
                 <div class="info">
-                    <h2 class="fw-bold" th:text="'Bienvenid@, ' + ${usuario.getNombres()} + ' ' + ${usuario.getApellidos()}"></h2>
+                    <h2 class="fw-bold" th:text="'AdminSede-' + ${usuario.getNombres()} + ' ' + ${usuario.getApellidos()}"></h2>
                     <p class="fw-medium" th:text="${usuario.getCorreo()}"></p>
                     <p th:text="'Bienestar San Miguel - ' + ${sedesesion.getNombre()}"></p>
                     <button id="reportButton" class="aprobar" style="font-size: 1rem;">Ver reportes</button>
