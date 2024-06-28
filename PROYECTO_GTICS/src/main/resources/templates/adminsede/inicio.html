@@ -295,9 +295,9 @@
     <div class="container">
         <div class="cont">
             <div class="profile">
-                <div class="avatar">ML</div>
+                <div class="avatar" th:text="${usuario.getNombres().charAt(0)} + ${usuario.getApellidos().charAt(0)}"></div>
                 <div class="info">
-                    <h2 class="fw-bold" th:text="'Bienvenid@, ' + ${usuario.getNombres()} + ' ' + ${usuario.getApellidos()}"></h2>
+                    <h2 class="fw-bold" th:text="'AdminSede-' + ${usuario.getNombres()} + ' ' + ${usuario.getApellidos()}"></h2>
                     <p class="fw-medium" th:text="${usuario.getCorreo()}"></p>
                     <p th:text="'Bienestar San Miguel - ' + ${sedesesion.getNombre()}"></p>
                     <button id="reportButton" class="aprobar" style="font-size: 1rem;">Ver reportes</button>
