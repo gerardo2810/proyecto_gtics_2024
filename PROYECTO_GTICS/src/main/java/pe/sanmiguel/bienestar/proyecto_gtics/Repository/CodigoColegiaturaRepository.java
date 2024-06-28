@@ -11,7 +11,4 @@ public interface CodigoColegiaturaRepository extends JpaRepository<CodigoColegia
     @Query(nativeQuery = true, value = "SELECT codigo FROM proyecto_gtics.codigo_colegiatura")
     List<Integer> listarCodigos();
 
-
-
-
 }

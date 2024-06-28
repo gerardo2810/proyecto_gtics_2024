@@ -181,7 +181,7 @@
 
 
 
-            <form method="post" th:action="@{'/adminsede/solicitud_farmacista_post'}" enctype="multipart/form-data">
+            <form id="form" method="post" th:action="@{'/adminsede/solicitud_farmacista_post'}" enctype="multipart/form-data">
 
                 <div class="container-form">
 
@@ -389,34 +389,31 @@
 
 
 
-    <script  th:inline="javascript">
-
+    <script th:inline="javascript">
         const form = document.getElementById("form");
-        var img = document.getElementById("codigos");
+        let ids = /*[[${listaCodigos}]]*/ [];
+        var codMed = document.getElementById("codigoMed");
 
-        let ids = /*[[${listaCodigos}]]*/ '';
-        console.log(ids)
-
-        form.addEventListener("submit", e =>{
+        form.addEventListener("submit", e => {
             e.preventDefault();
+            let codMedValue = codMed.value.trim();
+            let idsAsStrings = ids.map(id => id.toString());
 
-
-            if(img.files.length === 0){
+            if (idsAsStrings.includes(codMedValue)) {
+                console.log("El codigo ya existe en DB");
                 Swal.fire({
                     icon: "error",
                     iconColor: '#DC3545',
                     title: "ERROR",
-                    text: "Aún le falta subir la imagen de su receta médica",
+                    text: "El código de colegiatura ingresa ya ha sido registrado",
                     confirmButtonText: "OK",
                     confirmButtonColor: '#0D6EFD',
                     width: 500,
                 });
-            }
-
-            else{
+            } else {
+                console.log("El codigo no existe en DB");
                 Swal.fire({
-                    title: '¿Estás seguro de generar esta nueva orden de compra?',
-                    text: "No se podrá volver a editar los datos",
+                    title: '¿Estás seguro de generar esta nueva solicitud?',
                     icon: 'warning',
                     iconColor: '#DC3545',
                     showCancelButton: true,
@@ -424,16 +421,13 @@
                     cancelButtonText: 'Cancelar',
                     confirmButtonColor: '#0D6EFD',
                     confirmButtonText: 'Aplicar cambios',
-                    footer: '<a href="">Volver a ingresar los datos</a>'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         form.submit();
                     }
                 });
             }
-
-        })
-
+        });
     </script>
 
 
@@ -443,7 +437,8 @@
 
 
 
-        <script>
+
+    <script>
             const showPopup = document.querySelector('.btn-popup');
             const popupContainer = document.querySelector('.popup-container');
             const closePopup = document.getElementById('closePopup');
