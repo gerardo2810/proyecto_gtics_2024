@@ -45,6 +45,7 @@
 
 
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
         <title>Bienestar San Miguel | Agregar Farmacistas</title>
@@ -379,6 +380,68 @@
 
         <div th:replace="~{fragments/navbar.html :: footer}">
         </div>
+
+
+
+
+
+
+
+
+
+    <script  th:inline="javascript">
+
+        const form = document.getElementById("form");
+        var img = document.getElementById("codigos");
+
+        let ids = /*[[${listaCodigos}]]*/ '';
+        console.log(ids)
+
+        form.addEventListener("submit", e =>{
+            e.preventDefault();
+
+
+            if(img.files.length === 0){
+                Swal.fire({
+                    icon: "error",
+                    iconColor: '#DC3545',
+                    title: "ERROR",
+                    text: "Aún le falta subir la imagen de su receta médica",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: '#0D6EFD',
+                    width: 500,
+                });
+            }
+
+            else{
+                Swal.fire({
+                    title: '¿Estás seguro de generar esta nueva orden de compra?',
+                    text: "No se podrá volver a editar los datos",
+                    icon: 'warning',
+                    iconColor: '#DC3545',
+                    showCancelButton: true,
+                    cancelButtonColor: '#DC3545',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#0D6EFD',
+                    confirmButtonText: 'Aplicar cambios',
+                    footer: '<a href="">Volver a ingresar los datos</a>'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            }
+
+        })
+
+    </script>
+
+
+
+
+
+
+
 
         <script>
             const showPopup = document.querySelector('.btn-popup');
