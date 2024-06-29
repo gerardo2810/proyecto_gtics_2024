@@ -607,8 +607,10 @@ public class AdminSedeController {
                                              @RequestParam(value = "direccion") String direccion,
                                              @RequestParam(value = "correo") String correo,
                                              @RequestParam(value = "celular") String celular,
-                                             RedirectAttributes attr){
+                                             RedirectAttributes attr, Model model){
 
+        List<CodigoColegiatura> listaCodigos = codigoColegiaturaRepository.listarCodigos();
+        model.addAttribute("listaCodigos", listaCodigos);
 
 
         if(!bindingResult.hasErrors() && !bindingResult1.hasErrors()){
@@ -627,6 +629,9 @@ public class AdminSedeController {
                     System.out.println("- " + error.getDefaultMessage());
                 }
                 System.out.println(bindingResult.getAllErrors());
+
+
+
                 return "adminsede/solicitud_agregar_farmacista";
             }
 

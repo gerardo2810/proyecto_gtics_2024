@@ -410,15 +410,19 @@
                 console.log("El DNI y el Código coinciden con un registro en la lista");
                 // Aquí puedes continuar con la lógica si los valores son correctos.
                 Swal.fire({
-                    icon: "success",
-                    iconColor: '#0D6EFD',
-                    title: "ERROR",
-                    text: "El DNI y el Código COINCIEN EN LA LISTA.",
-                    confirmButtonText: "OK",
+                    title: '¿Estás seguro de generar esta nueva solicitud',
+                    icon: 'warning',
+                    iconColor: '#DC3545',
+                    showCancelButton: true,
+                    cancelButtonColor: '#DC3545',
+                    cancelButtonText: 'Cancelar',
                     confirmButtonColor: '#0D6EFD',
-                    width: 500,
+                    confirmButtonText: 'Aplicar cambios',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
                 });
-                form.submit();
             } else {
                 console.log("El DNI y el Código no coinciden con ningún registro en la lista");
                 Swal.fire({
