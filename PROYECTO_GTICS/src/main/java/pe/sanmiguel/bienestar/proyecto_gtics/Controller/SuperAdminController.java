@@ -110,7 +110,29 @@ public class SuperAdminController {
         model.addAttribute("farmacistlist", farmacistaList);
         model.addAttribute("pacientelist", pacientelist);
         model.addAttribute("doctorList", doctorList);
+        model.addAttribute("usuario",usuarioSession);
+
         return "superAdmin/paginaInicio";
+    }
+    @GetMapping(value = {"/hola"})
+    public String hola(Model model,
+                                      HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        usuarioSession  = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuarioSession);
+
+        List<Sede> adminSedelist = sedeRepository.listarAdministroresSede();
+        List<SedeFarmacista> farmacistaList = sedeFarmacistaRepository.listarFarmacistasPorSede();
+        List<Usuario> pacientelist = usuarioRepository.listarUsuariosSegunRol(4);
+        List<Doctor> doctorList = doctorRepository.findAll();
+        model.addAttribute("adminSedelist", adminSedelist);
+        model.addAttribute("farmacistlist", farmacistaList);
+        model.addAttribute("pacientelist", pacientelist);
+        model.addAttribute("doctorList", doctorList);
+        model.addAttribute("usuario",usuarioSession);
+        return "superAdmin/hola";
     }
 
     @GetMapping(value = {"/administradoresSede"})
