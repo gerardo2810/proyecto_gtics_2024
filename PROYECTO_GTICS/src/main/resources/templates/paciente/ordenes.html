@@ -162,6 +162,8 @@
                 <button class="btn-empa"          th:case="5">EMPAQUETANDO</button>
                 <button class="btn-ruta"          th:case="6">EN RUTA</button>
                 <button class="btn-listo"         th:case="7">ENTREGADO</button>
+                <button class="btn-anulado"        th:case="9">ANULADO</button>
+
             </td>
             <td class="action" th:switch="${orden.getEstadoOrden()}">
 

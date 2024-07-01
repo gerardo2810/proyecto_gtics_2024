@@ -45,6 +45,7 @@
 
 
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
         <title>Bienestar San Miguel | Agregar Farmacistas</title>
@@ -180,7 +181,7 @@
 
 
 
-            <form method="post" th:action="@{'/adminsede/solicitud_farmacista_post'}" enctype="multipart/form-data">
+            <form id="form" method="post" th:action="@{'/adminsede/solicitud_farmacista_post'}" enctype="multipart/form-data">
 
                 <div class="container-form">
 
@@ -380,7 +381,72 @@
         <div th:replace="~{fragments/navbar.html :: footer}">
         </div>
 
-        <script>
+
+    <script th:inline="javascript">
+        // Obtén el arreglo desde el modelo de Thymeleaf
+        const listaCodigos = /*[[${listaCodigos}]]*/ [];
+        console.log("Lista de Códigos:", listaCodigos);
+
+        const form = document.getElementById("form");
+        const dniInput = document.getElementById("dni");
+        const codigoInput = document.getElementById("codigoMed");
+
+        form.addEventListener("submit", e => {
+            e.preventDefault();
+
+            const dniValue = dniInput.value.trim();
+            const codigoValue = codigoInput.value.trim();
+
+            // Buscar coincidencia en el mismo índice
+            let match = false;
+            for (let i = 0; i < listaCodigos.length; i++) {
+                if (listaCodigos[i].dni === dniValue && listaCodigos[i].codigo === codigoValue) {
+                    match = true;
+                    break;
+                }
+            }
+
+            if (match) {
+                console.log("El DNI y el Código coinciden con un registro en la lista");
+                // Aquí puedes continuar con la lógica si los valores son correctos.
+                Swal.fire({
+                    title: '¿Estás seguro de generar esta nueva solicitud',
+                    icon: 'warning',
+                    iconColor: '#DC3545',
+                    showCancelButton: true,
+                    cancelButtonColor: '#DC3545',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#0D6EFD',
+                    confirmButtonText: 'Aplicar cambios',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            } else {
+                console.log("El DNI y el Código no coinciden con ningún registro en la lista");
+                Swal.fire({
+                    icon: "error",
+                    iconColor: '#DC3545',
+                    title: "ERROR",
+                    text: "El DNI y el Código no coinciden con ningún registro en la lista.",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: '#0D6EFD',
+                    width: 500,
+                });
+            }
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+    <script>
             const showPopup = document.querySelector('.btn-popup');
             const popupContainer = document.querySelector('.popup-container');
             const closePopup = document.getElementById('closePopup');

@@ -36,4 +36,12 @@ public interface SedeStockRepository extends JpaRepository<SedeStock, SedeStockI
     @Query(nativeQuery = true, value = "SELECT cantidad FROM proyecto_gtics.sede_stock where idSede =?1 and idMedicamento = ?2")
     Integer verificarCantidadStockPorSede(int idSede, int idMedicamento);
 
+    //Aumentamos la cantidad de stock en la sede
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE sede_stock SET cantidad = cantidad + ?3 WHERE idSede = ?1 and idMedicamento = ?2")
+    void actualizarSedeStock(int idSede, int idMedicamento, Integer cantidadAumentada);
+
+
 }
