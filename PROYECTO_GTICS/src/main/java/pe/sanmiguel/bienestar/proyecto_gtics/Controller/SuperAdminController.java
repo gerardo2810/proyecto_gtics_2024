@@ -106,6 +106,9 @@ public class SuperAdminController {
         List<SedeFarmacista> farmacistaList = sedeFarmacistaRepository.listarFarmacistasPorSede();
         List<Usuario> pacientelist = usuarioRepository.listarUsuariosSegunRol(4);
         List<Doctor> doctorList = doctorRepository.findAll();
+        List<OrdenesExporterDto> listaOrdenesReportes = ordenRepository.listarOrdenesExporter();
+
+        model.addAttribute("listaOrdenes", listaOrdenesReportes);
         model.addAttribute("adminSedelist", adminSedelist);
         model.addAttribute("farmacistlist", farmacistaList);
         model.addAttribute("pacientelist", pacientelist);
