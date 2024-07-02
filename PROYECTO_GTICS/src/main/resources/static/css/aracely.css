@@ -1,313 +1,223 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-
-:root {
-    --light: #f6f6f9;
-    --primary: #1976D2;
-    --light-primary: #CFE8FF;
-    --grey: #eee;
-    --dark-grey: #fcf9fc;
-    --dark: #363949;
-    --danger: #D32F2F;
-    --light-danger: #FECDD3;
-    --warning: #FBC02D;
-    --light-warning: #FFF2C6;
-    --success: #388E3C;
-    --light-success: #BBF7D0;
-}
-
-*{
-    margin: 0;
-    padding: 0;
+* {
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: Arial, sans-serif;
 }
 
-.bx{
-    font-size: 1.7rem;
+.cont {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
 }
-
-a{
-    text-decoration: none;
-}
-
-li{
-    list-style: none;
-}
-
-.content main{
-    width: 100%;
-    padding: 36px 24px;
-    max-height: calc(100vh - 56px);
-}
-
-.content main .header{
+.contai {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    grid-gap: 16px;
-    flex-wrap: wrap;
+    padding: 20px;
 }
 
-.content main .left h1{
-    font-size: 36px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: var(--dark);
+.profile, .mail, .drive, .notes,card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 400ms ease;
+}
+.profile:hover, .mail:hover, .drive:hover, .notes:hover, card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+.card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    width: 48%; /* Ajustar al 50% con espacio entre las tarjetas */
+    transition: all 400ms ease;
 }
 
-.content main .header .left .breadcrumb{
+.profile {
+    background: linear-gradient(135deg, #e0f7fa 0%, #f1f8e9 100%);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
-    grid-gap: 16px;
+    grid-column: span 1;
+    height: 300px;
+}
+.mail {
+    grid-column: span 2;
 }
 
+.drive {
+    grid-column: span 2;
+    height: 570px;
 
-
-.content main .header .left .breadcrumb li a{
-    pointer-events: none;
+}
+.notes {
+    grid-column: span 1;
+    height: 800px; /* Ajusta altura */
+    margin-top: -240px; /* subir o bsjar */
 }
 
-.content main .header .left .breadcrumb li a.active{
-    color: var(--primary);
-    pointer-events: none;
-}
-
-.content main .header .report{
-    height: 36px;
-    padding: 0 16px;
-    border-radius: 36px;
-    background: var(--primary);
-    color: var(--white);
+.avatar {
+    background-color: #34c759;
+    border-radius: 50%;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    grid-gap: 10px;
+    font-size: 24px;
+    height: 80px;
+    width: 80px;
+    margin-right: 20px;
+}
+
+.info {
+    justify-content: center;
+}
+
+.info h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.info p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #666;
+}
+.fw-bold {
+    font-weight: bold;
+}
+
+.fw-medium {
     font-weight: 500;
 }
-
-.content main .insights{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    grid-gap: 24px;
-    margin-top: 36px;
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 130%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
-.content main .insights li{
-    padding: 24px;
-    background: var(--light);
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    grid-gap: 24px;
-    cursor: pointer;
-}
-
-.content main .insights li .bx{
-    width: 80px;
-    height: 80px;
+.modal-content {
+    background-color: white;
+    margin: 20% auto;  /* Adjusts the top margin for vertical centering */
+    padding: 50px;
+    border: 1px solid #888;
+    width: 90%;  /* Increase this value to make the modal wider */
+    max-width: 1000px;  /* Increase this value to set a larger maximum width */
     border-radius: 10px;
-    font-size: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-.content main .insights li:nth-child(1) .bx{
-    background: var(--light-primary);
-    color: var(--primary);
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
 }
 
-.content main .insights li:nth-child(2) .bx{
-    background: var(--light-warning);
-    color: var(--warning);
-}
-
-.content main .insights li:nth-child(3) .bx{
-    background: var(--light-success);
-    color: var(--success);
-}
-
-.content main .insights li:nth-child(4) .bx{
-    background: var(--light-danger);
-    color: var(--danger);
-}
-
-.content main .insights li .info h3{
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--dark);
-}
-
-.content main .insights li .info p{
-    color: var(--dark);
-}
-
-.content main .bottom-data{
-    display: flex;
-    flex-wrap: wrap;
-    grid-gap: 24px;
-    margin-top: 24px;
-    width: 100%;
-    color: var(--dark);
-}
-
-.content main .bottom-data>div{
-    border-radius: 20px;
-    background: var(--light);
-    padding: 24px;
-    overflow-x: auto;
-}
-
-.content main .bottom-data .header{
-    display: flex;
-    align-items: center;
-    grid-gap: 16px;
-    margin-bottom: 24px;
-}
-
-.content main .bottom-data .header h3{
-    margin-right: auto;
-    font-size: 24px;
-    font-weight: 600;
-}
-
-.content main .bottom-data .header .bx{
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
     cursor: pointer;
 }
 
-.content main .bottom-data .orders{
-    flex-grow: 1;
-    flex-basis: 500px;
-}
 
-.content main .bottom-data .orders table{
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.content main .bottom-data .orders table th{
-    padding-bottom: 12px;
-    font-size: 13px;
-    text-align: left;
-    border-bottom: 1px solid var(--white);
-}
-
-.content main .bottom-data .orders table td{
-    padding: 16px 0;
-}
-
-.content main .bottom-data .orders table tr td:first-child{
-    display: flex;
-    align-items: center;
-    grid-gap: 12px;
-    padding-left: 6px;
-}
-
-.content main .bottom-data .orders table td img{
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.content main .bottom-data .orders table tbody tr{
+.print{
+    padding: 9px;
+    width: 190px;
+    border: none;
+    border-radius: 6px;
+    background-color: #918989;
+    color:white;
+    transition: background-color 0.3s, border-color 0.3s;
     cursor: pointer;
-    transition: all 0.3s ease;
 }
 
-.content main .bottom-data .orders table tbody tr:hover{
-    background: var(--white);
+.print:hover{
+    padding: 7px;
+    width: 190px;
+    border: 2px solid #918989;
+    border-radius: 6px;
+    background-color: white;
+    color: #918989;
+}
+@media screen and (max-width:800px) {
+    .content-modal{
+        width: 90%;
+    }
+}
+.context{
+    color: #e9ecef !important;
+
+}
+.area {
+    height: 19vh !important;
 }
 
-.content main .bottom-data .orders table tr td .status{
-    font-size: 10px;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-weight: 700;
+.circles {
+    height: 19vh !important;
 }
 
-.content main .bottom-data .orders table tr td .status.completed{
-    background: var(--success);
+.banner-btn {
+    color: #fff !important;
+    border: solid 1px #fff !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    display: flex !important;
+    background: none !important;
 }
 
-.content main .bottom-data .orders table tr td .status.process{
-    background: var(--primary);
+.banner-btn:hover {
+    border: solid 1px #a5c3e7;
+}
+.main-subtitle-banner {
+    color: #e9ecef !important;
 }
 
-.content main .bottom-data .orders table tr td .status.pending{
-    background: var(--warning);
-}
-
-.content main .bottom-data .reminders{
-    flex-grow: 1;
-    flex-basis: 300px;
-}
-
-.content main .bottom-data .reminders .task-list{
-    width: 100%;
-}
-
-.content main .bottom-data .reminders .task-list li{
-    width: 100%;
-    margin-bottom: 16px;
-    background: var(--white);
-    padding: 14px 10px;
-    border-radius: 10px;
+.row {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 20px;
 }
 
-.content main .bottom-data .reminders .task-list li .task-title{
+.col {
     display: flex;
     align-items: center;
 }
 
-.content main .bottom-data .reminders .task-list li .task-title p{
-    margin-left: 6px;
+.image {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
 }
 
-.content main .bottom-data .reminders .task-list li .bx{
+.btn {
+    background-color: #4CAF50; /* Color del botón */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-.content main .bottom-data .reminders .task-list li.completed{
-    border-left: 10px solid var(--success);
-}
-
-.content main .bottom-data .reminders .task-list li.not-completed{
-    border-left: 10px solid var(--danger);
-}
-
-.content main .bottom-data .reminders .task-list li:last-child{
-    margin-bottom: 0;
-}
-
-@media screen and (max-width: 768px) {
-
-    .content{
-        width: calc(100% - 60px);
-        left: 200px;
-    }
-
-}
-
-@media screen and (max-width: 576px) {
-
-    .content main .insights {
-        grid-template-columns: 1fr;
-    }
-
-    .content main .bottom-data .header{
-        min-width: 340px;
-    }
-
-    .content main .bottom-data .orders table{
-        min-width: 340px;
-    }
-
-    .content main .bottom-data .reminders .task-list{
-        min-width: 340px;
-    }
-
+.btn:hover {
+    background-color: #45a049; /* Color al pasar el mouse */
 }

@@ -23,6 +23,8 @@
     <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
+    <link rel="stylesheet" th:href="@{/css/aracely.css}">
+
 
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -230,7 +232,40 @@
             color: #e9ecef !important;
         }
 
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
 
+        .col {
+            display: flex;
+            align-items: center;
+        }
+
+        .image {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        .btn {
+            background-color: #4CAF50; /* Color del botón */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #45a049; /* Color al pasar el mouse */
+        }
     </style>
 
     <title>Bienestar San Miguel | Administrador de Sede | Reporte de ventas</title>
@@ -270,7 +305,8 @@
                 <br/>
                 <p class="fw-medium" th:text="${usuario.getCorreo()}"></p>
                 <p>Bienestar San Miguel</p>
-                <button id="reportButton" class="aprobar" style="font-size: 1rem;">Ver reportes</button>
+                <br/>
+                <button id="reportButton" class="aprobar" style="font-size: 1rem;">Ver reportes de ordenes</button>
             </div>
         </div>
         <div class="mail">
@@ -302,7 +338,39 @@
             </table>
         </div>
         <div class="notes">
+            <h2  style=" align-items: center; justify-content: center;">Leyenda</h2>
+            <br>
+            <div class="row">
+                <div class="info" style=" align-items: center; justify-content: center;">
+                    <p>1. Administradores de Sede</p>
+                    <img th:src="@{/img/3135768.png}" alt="Doctor" class="image">
+                    <button class="aprobar" style="font-size: 1rem;">Ver AdminSede</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="info">
+                    <p>2. Farmacistas</p>
+
+                    <img th:src="@{/img/farmaceutico.png}" alt="Farmacista" class="image">
+                    <button class="aprobar" style="font-size: 1rem;">Ver Farmacistas</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="info">
+                    <p>3. Pacientes</p>
+                    <img th:src="@{/img/paciente.png}" alt="Paciente" class="image">
+                    <button class="aprobar" style="font-size: 1rem;">Ver Pacientes</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="info">
+                    <p>4. Doctores</p>
+                    <img th:src="@{/img/doctor2.png}" alt="Doctor" class="image">
+                    <button class="aprobar" style="font-size: 1rem;">Ver Doctores</button>
+                </div>
+            </div>
         </div>
+
         <div class="drive">
             <table id="miTabla2" class="table table-striped" style="padding-top: 10px">
                 <thead>
