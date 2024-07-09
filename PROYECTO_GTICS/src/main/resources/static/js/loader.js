@@ -7,4 +7,4 @@ setTimeout(function() {
     var content = document.getElementById('content-show');
     content.classList.remove('hidden')
 
-}, 3000);
+}, 2000);

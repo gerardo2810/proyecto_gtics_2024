@@ -83,11 +83,11 @@
 
 .menu-item.active:hover {
     color: rgb(200, 214, 255);
-    border-bottom: 3px solid rgb(200, 214, 255);
+    border-bottom: 2px solid rgb(200, 214, 255);
 }
 
 .menu-item.active {
-    border-bottom: 3px solid white;
+    border-bottom: 2px solid white;
 }
 
 

@@ -6,8 +6,9 @@ display: none !important;
 }
 
  body {
-	 background-color: #55c1fa !important;
+	 background-color:#0d6efd  !important;
 }
+ /*#55c1fa*/
  .loader-wrapper {
 	 width: 148px;
 	 height: 100px;
