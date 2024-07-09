@@ -21,6 +21,7 @@
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
     <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+    <link rel="stylesheet" th:href="@{/css/loader.css}">
 
 
     <!--=============== DataTable ===============-->
@@ -31,175 +32,237 @@
     <!--==========================================-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
+    <style>
+        @keyframes rotateContinuous {
+            0% {
+                transform: rotate(0deg);
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            }
+            25% {
+                transform: rotate(4deg);
+                box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                transform: rotate(0deg);
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            }
+            75% {
+                transform: rotate(-4deg);
+                box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.3);
+            }
+            100% {
+                transform: rotate(0deg);
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        .animationButtonContinuous {
+            animation: rotateContinuous 1.5s infinite;
+            transition: transform 0.3s ease;
+            width: 188px; height: 48px; margin-top: 10px; cursor: pointer; background-color: #0d6efd; color:white;
+            border:none;border-radius: 6px; font-size: 16px; font-weight: bold;
+        }
+    </style>
 
     <title>Pre Ordenes | Bienestar San Miguel</title>
 
 </head>
 
 <body>
+<div id="loader-container"  style="display: flex;flex-direction: column;">
 
-<header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Pre Ordenes')}"></nav>
-</header>
-
-<div th:replace="~{fragments/banner.html :: banner}"></div>
-
-<div style="display: flex; flex-direction: row; justify-content: center">
-    <div class="carousel">
-        <button class="arrow back-arrow"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLWxlZnQiPjxwYXRoIGQ9Im0xNSAxOC02LTYgNi02Ii8+PC9zdmc+" /></button>
-        <div class="slide left">
-            <div class="overlay"></div>
-            <div class="slide-info">
-                <img style="width: 70px" src="/favicon.png" />
-                <br>
-                <strong>Inicia con tu primera Orden Web</strong>
-            </div>
-            <img class="slide-bg" src="/img/Delivery.png" />
-        </div>
-
-        <div class="slide showcase">
-            <div class="overlay"></div>
-            <div class="slide-info">
-                <img src="/media/logo_large_2.png" />
-                <p>Po, now a spiritual leader, seeks a successor and unravels mysteries with a witty fox thief.</p>
-            </div>
-            <img class="slide-bg" src="" />
-        </div>
-
-        <div class="slide left">
-            <div class="overlay"></div>
-            <div class="slide-info">
-                <img src="/media/logo_large_2.png" />
-            </div>
-            <video class="slide-bg" src="/img/descuento.mp4" />
-        </div>
-
-        <button class="arrow next-arrow"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLXJpZ2h0Ij48cGF0aCBkPSJtOSAxOCA2LTYtNi02Ii8+PC9zdmc+" /></button>
+    <div style="display: flex; justify-content: center;margin-top: 250px;">
+        <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
     </div>
+
+    <div id="loader-wrapper"  class="loader-wrapper">
+
+        <div class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader2" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader3" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+    </div>
+
 </div>
 
+<div id="content-show" class="hidden">
+    <header class="header-topbar">
+        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Pre Ordenes')}"></nav>
+    </header>
 
-<br>
-<br>
-<br>
-<div class="container">
+    <div th:replace="~{fragments/banner.html :: banner}"></div>
 
-    <div style="margin-bottom: 50px"></div>
-    <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Pre Ordenes:</strong></h2>
-    <div style="margin-bottom: 20px"></div>
-    <hr style="border-top: 1px solid #DFDFDF;">
-    <div style="margin-bottom: 40px"></div>
+    <div style="display: flex; flex-direction: row; justify-content: center">
+        <div class="carousel">
+            <button class="arrow back-arrow"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLWxlZnQiPjxwYXRoIGQ9Im0xNSAxOC02LTYgNi02Ii8+PC9zdmc+" /></button>
 
-    <div style="padding-right: 0; padding-left: 0"> </div>
-</div>
-
-
-
-
-<div class="container">
-
-    <div class="column-start" style="padding-bottom: 1px">
-
-        <div style="display: flex;flex-direction: row;column-gap: 8px">
-
-            <div style="display: flex; flex-direction: column; justify-content: center">
-
-                <label style="color:dimgray;font-weight: bold; margin-left: 2px; margin-bottom:4px">Filtrar por Estado:</label>
-
+            <div class="slide left">
+                <div class="overlay"></div>
+                <div class="slide-info" style="display: flex;flex-direction: row; column-gap: 30px">
+                    <img style="width: 70px" th:src="@{/favicon.png}" />
+                    <a th:href="@{/paciente/new_orden}"><button class="animationButtonContinuous" >Realizar Orden Web</button></a>
+                </div>
+                <img class="slide-bg" th:src="@{/img/crs_delivery.png}" />
             </div>
+
+
+            <div class="slide showcase">
+                <div class="overlay"></div>
+                <div class="slide-info">
+                    <img style="margin-bottom: 10px;width: 260px" th:src="@{/media/logo_large_2.png}" />
+                </div>
+                <img class="slide-bg" th:src="@{/img/crs_precios.png}" />
+            </div>
+
+
+            <div class="slide left">
+                <div class="overlay"></div>
+                <div class="slide-info">
+                    <img style="width: 70px" th:src="@{/favicon.png}" />
+                </div>
+                <img class="slide-bg" th:src="@{/img/crs_descuento.png}" />
+            </div>
+
+
+
+            <button class="arrow next-arrow"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLXJpZ2h0Ij48cGF0aCBkPSJtOSAxOCA2LTYtNi02Ii8+PC9zdmc+" /></button>
+        </div>
+    </div>
+
+
+    <br>
+    <br>
+    <br>
+    <div class="container">
+
+        <div style="margin-bottom: 50px"></div>
+        <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Pre Ordenes:</strong></h2>
+        <div style="margin-bottom: 20px"></div>
+        <hr style="border-top: 1px solid #DFDFDF;">
+        <div style="margin-bottom: 40px"></div>
+
+        <div style="padding-right: 0; padding-left: 0"> </div>
+    </div>
+
+
+
+
+    <div class="container">
+
+        <div class="column-start" style="padding-bottom: 1px">
+
+            <div style="display: flex;flex-direction: row;column-gap: 8px">
+
+                <div style="display: flex; flex-direction: column; justify-content: center">
+
+                    <label style="color:dimgray;font-weight: bold; margin-left: 2px; margin-bottom:4px">Filtrar por Estado:</label>
+
+                </div>
+
+                <div style="display: flex; flex-direction: column; justify-content: start">
+
+
+
+                    <select class="select-p" id="filtroEstado">
+                        <option value="">Mostrar Todos</option>
+                        <option value="RECIBIDO">Recibido</option>
+                        <option value="EN PROCESO">En proceso</option>
+                        <option value="EMPAQUETANDO">Empaquetando</option>
+                        <option value="EN RUTA">En ruta</option>
+                        <option value="ENTREGADO">Entregado</option>
+                    </select>
+
+                </div>
+            </div>
+
 
             <div style="display: flex; flex-direction: column; justify-content: start">
 
-
-
-                <select class="select-p" id="filtroEstado">
-                    <option value="">Mostrar Todos</option>
-                    <option value="RECIBIDO">Recibido</option>
-                    <option value="EN PROCESO">En proceso</option>
-                    <option value="EMPAQUETANDO">Empaquetando</option>
-                    <option value="EN RUTA">En ruta</option>
-                    <option value="ENTREGADO">Entregado</option>
-                </select>
+                <input id="searchInput" class="input-form" style="margin-top: 4px;width: 300px;height: 40px" placeholder="Buscar">
 
             </div>
-        </div>
 
-
-        <div style="display: flex; flex-direction: column; justify-content: start">
-
-            <input id="searchInput" class="input-form" style="margin-top: 4px;width: 300px;height: 40px" placeholder="Buscar">
-
-        </div>
 
 
 
+        </div>
+        <br>
+
+        <table id="miTabla" class="table table-striped">
+            <thead>
+            <tr style="background-color: #378fff">
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Número de Tracking</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha de registro</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Estado</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+
+
+            <tr th:each="orden : ${lista}">
+                <td th:text="${orden.getTracking()}"></td>
+                <td style="text-align: center" th:text="${#temporals.format(orden.getFechaIni(), 'dd/MM/yyyy   -   HH:mm')}"></td>
+                <td th:switch="${orden.getEstadoOrden()}">
+                    <button class="animationButton22" th:case="2">PAGO DISPONIBLE</button>
+                    <button class="btn-rcb"           th:case="3">RECIBIDO</button>
+                    <button class="btn-pro"           th:case="4">EN PROCESO</button>
+                    <button class="btn-empa"          th:case="5">EMPAQUETANDO</button>
+                    <button class="btn-ruta"          th:case="6">EN RUTA</button>
+                    <button class="btn-listo"         th:case="7">ENTREGADO</button>
+                </td>
+                <td class="action" th:switch="${orden.getEstadoOrden()}">
+
+                    <a th:case="1"  th:href="@{'/paciente/tracking' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
+                    <a th:case="2"  th:href="@{'/paciente/confirmar_pago' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info" style="background-color: #3F71EA;border:none"><i class="fa-regular fa-credit-card"></i></button></a>
+                    <a th:case="*"  th:href="@{'/paciente/tracking' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
+
+
+                </td>
+            </tr>
+
+
+
+
+
+            </tbody>
+        </table>
 
     </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <br>
 
-    <table id="miTabla" class="table table-striped">
-        <thead>
-        <tr style="background-color: #378fff">
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Número de Tracking</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha de registro</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Estado</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
 
 
-        <tr th:each="orden : ${lista}">
-            <td th:text="${orden.getTracking()}"></td>
-            <td style="text-align: center" th:text="${#temporals.format(orden.getFechaIni(), 'dd/MM/yyyy   -   HH:mm')}"></td>
-            <td th:switch="${orden.getEstadoOrden()}">
-                <button class="animationButton22" th:case="2">PAGO DISPONIBLE</button>
-                <button class="btn-rcb"           th:case="3">RECIBIDO</button>
-                <button class="btn-pro"           th:case="4">EN PROCESO</button>
-                <button class="btn-empa"          th:case="5">EMPAQUETANDO</button>
-                <button class="btn-ruta"          th:case="6">EN RUTA</button>
-                <button class="btn-listo"         th:case="7">ENTREGADO</button>
-            </td>
-            <td class="action" th:switch="${orden.getEstadoOrden()}">
-
-                <a th:case="1"  th:href="@{'/paciente/tracking' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-                <a th:case="2"  th:href="@{'/paciente/confirmar_pago' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info" style="background-color: #3F71EA;border:none"><i class="fa-regular fa-credit-card"></i></button></a>
-                <a th:case="*"  th:href="@{'/paciente/tracking' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-
-
-            </td>
-        </tr>
-
-
-
-
-
-        </tbody>
-    </table>
-
+    <div th:replace="~{fragments/navbar.html :: footer}">
+    </div>
 </div>
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
-
-<div th:replace="~{fragments/navbar.html :: footer}">
-</div>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -207,6 +270,8 @@
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <script th:src="@{/js/topbar.js}"></script>
 <script th:src="@{/js/carousel.js}"></script>
+<script th:src="@{/js/loader.js}"></script>
+
 
 <script>
     $(document).ready(function() {
@@ -279,6 +344,18 @@
             table.search(searchTerm).draw();
         });
     });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const button = document.getElementById("shakeButton");
+
+        setInterval(() => {
+            button.classList.add("shake");
+            setTimeout(() => {
+                button.classList.remove("shake");
+            }, 500);
+        }, 1000);
+    });
+
 </script>
 
 
