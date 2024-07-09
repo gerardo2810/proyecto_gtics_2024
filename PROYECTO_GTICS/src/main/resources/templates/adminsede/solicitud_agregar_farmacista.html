@@ -45,6 +45,7 @@
 
 
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
         <title>Bienestar San Miguel | Agregar Farmacistas</title>
@@ -180,7 +181,7 @@
 
 
 
-            <form method="post" th:action="@{'/adminsede/solicitud_farmacista_post'}" enctype="multipart/form-data">
+            <form id="form" method="post" th:action="@{'/adminsede/solicitud_farmacista_post'}" enctype="multipart/form-data">
 
                 <div class="container-form">
 
@@ -208,7 +209,7 @@
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Correo:</label>
-                                <input class="input-form" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid': ''}" type="text" placeholder="Ingrese el correo">
+                                <input class="input-form-2" th:field="*{correo}" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid': ''}" type="text" placeholder="Ingrese el correo">
                                 <div th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" id="validationServer03Feedback" class="invalid-feedback">
                                     Mensaje de error de nombres
                                 </div>
@@ -216,7 +217,7 @@
 
                             <div class="input-label-box" th:object="${sedeFarmacista}">
                                 <label style="font-weight: bold; color:dimgray">Código (colegio médico):</label>
-                                <input class="input-form" th:field="*{codigoMed}" th:classappend="${#fields.hasErrors('codigoMed') ? 'is-invalid': ''}" name="codigoMed" type="text" placeholder="Ingrese el código de colegiatura">
+                                <input class="input-form-2" th:field="*{codigoMed}" th:classappend="${#fields.hasErrors('codigoMed') ? 'is-invalid': ''}" name="codigoMed" type="text" placeholder="Ingrese el código de colegiatura">
                                 <div th:if="${#fields.hasErrors('codigoMed')}" th:errors="*{codigoMed}" id="validationServer03Feedback" class="invalid-feedback">
                                     Mensaje de error de codigoMed
                                 </div>
@@ -228,7 +229,7 @@
                         <div class="column" style="justify-content: center">
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Dirección:</label>
-                                <input class="input-form" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion') ? 'is-invalid': ''}" type="text" placeholder="Ingrese la dirección">
+                                <input class="input-form-2" th:field="*{direccion}" th:classappend="${#fields.hasErrors('direccion') ? 'is-invalid': ''}" type="text" placeholder="Ingrese la dirección">
                                 <div th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}" id="validationServer03Feedback" class="invalid-feedback">
                                     Mensaje de error de direccion
                                 </div>
@@ -236,7 +237,7 @@
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Celular:</label>
-                                <input class="input-form" th:field="*{celular}" th:classappend="${#fields.hasErrors('celular') ? 'is-invalid': ''}" type="text" placeholder="Ingrese el celular">
+                                <input class="input-form-2" th:field="*{celular}" th:classappend="${#fields.hasErrors('celular') ? 'is-invalid': ''}" type="text" placeholder="Ingrese el celular">
                                 <div th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}" id="validationServer03Feedback" class="invalid-feedback">
                                     Mensaje de error de nombres
                                 </div>
@@ -253,7 +254,7 @@
 
                             <div class="input-label-box">
                                 <label style="font-weight: bold; color:dimgray">Distrito de residencia:</label>
-                                <input class="input-form" th:field="*{distrito}" th:classappend="${#fields.hasErrors('distrito') ? 'is-invalid': ''}" type="text" placeholder="Ingrese su distrito">
+                                <input class="input-form-2" th:field="*{distrito}" th:classappend="${#fields.hasErrors('distrito') ? 'is-invalid': ''}" type="text" placeholder="Ingrese su distrito">
                                 <div th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}" id="validationServer03Feedback" class="invalid-feedback">
                                     Mensaje de error de nombres
                                 </div>
@@ -380,7 +381,72 @@
         <div th:replace="~{fragments/navbar.html :: footer}">
         </div>
 
-        <script>
+
+    <script th:inline="javascript">
+        // Obtén el arreglo desde el modelo de Thymeleaf
+        const listaCodigos = /*[[${listaCodigos}]]*/ [];
+        console.log("Lista de Códigos:", listaCodigos);
+
+        const form = document.getElementById("form");
+        const dniInput = document.getElementById("dni");
+        const codigoInput = document.getElementById("codigoMed");
+
+        form.addEventListener("submit", e => {
+            e.preventDefault();
+
+            const dniValue = dniInput.value.trim();
+            const codigoValue = codigoInput.value.trim();
+
+            // Buscar coincidencia en el mismo índice
+            let match = false;
+            for (let i = 0; i < listaCodigos.length; i++) {
+                if (listaCodigos[i].dni === dniValue && listaCodigos[i].codigo === codigoValue) {
+                    match = true;
+                    break;
+                }
+            }
+
+            if (match) {
+                console.log("El DNI y el Código coinciden con un registro en la lista");
+                // Aquí puedes continuar con la lógica si los valores son correctos.
+                Swal.fire({
+                    title: '¿Estás seguro de generar esta nueva solicitud',
+                    icon: 'warning',
+                    iconColor: '#DC3545',
+                    showCancelButton: true,
+                    cancelButtonColor: '#DC3545',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#0D6EFD',
+                    confirmButtonText: 'Aplicar cambios',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            } else {
+                console.log("El DNI y el Código no coinciden con ningún registro en la lista");
+                Swal.fire({
+                    icon: "error",
+                    iconColor: '#DC3545',
+                    title: "ERROR",
+                    text: "El DNI y el Código no coinciden con ningún registro en la lista.",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: '#0D6EFD',
+                    width: 500,
+                });
+            }
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+    <script>
             const showPopup = document.querySelector('.btn-popup');
             const popupContainer = document.querySelector('.popup-container');
             const closePopup = document.getElementById('closePopup');

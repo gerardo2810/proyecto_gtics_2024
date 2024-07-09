@@ -23,6 +23,7 @@
         <link rel="stylesheet" th:href="@{/css/fonts.css}">
         <link rel="stylesheet" th:href="@{/css/topbar.css}">
         <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
+        <link th:href="@{/css/notificaciones.css}" rel="stylesheet" />
 
         <!--=============== FONT AWESOME ===============-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -244,42 +245,28 @@
                     const result = inputs.every(input => input.value.trim() !== '');
                     return result;
                 }
-
-                const form = document.getElementById('finalizar');
-                Swal.fire({
-                    title: hayProblemaConStock ? 'Existen problemas por Stock' : '¿Estás seguro?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: hayProblemaConStock ? 'Continuar' : 'Continuar',
-                    cancelButtonText: hayProblemaConStock ? 'Cancelar' : 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        if (verificarCamposLlenos(form)) {
+                document.getElementById('finalizar').addEventListener('click', function(event) {
+                    event.preventDefault(); // Evita que el enlace se ejecute de inmediato
+                    const Swal = window.Swal;
+                    // Mostrar la alerta con SweetAlert
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: 'Hacer clic en continuar para confirmar la orden de reposición',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, continuar',
+                        cancelButtonText: 'No, cancelar'
+                    }).then((result) => {
+                        // Si el usuario confirma, continua
+                        if (result.isConfirmed) {
                             event.preventDefault();
                             form.submit();
-                        } else {
-                            Swal.fire({
-                                title: 'Faltan Datos',
-                                text: 'Por favor, completa todos los campos antes de enviar el formulario.',
-                                icon: 'warning',
-                                confirmButtonColor: '#3085d6',
-                                confirmButtonText: 'Continuar',
-                            });
                         }
-                    } else if (result.isDismissed && hayProblemaConStock && verificarCamposLlenos(form)) {
-                        window.location.href = '/farmacista/cambiar_medicamentos';
-                    } else {
-                        Swal.fire({
-                            title: 'Faltan Datos',
-                            text: 'Por favor, completa todos los campos antes de enviar el formulario.',
-                            icon: 'warning',
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'Continuar',
-                        });
-                    }
+                    });
                 });
+
             });
 
 

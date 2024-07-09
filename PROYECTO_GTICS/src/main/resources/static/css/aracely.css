@@ -1,0 +1,223 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.cont {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+.contai {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.profile, .mail, .drive, .notes,card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 400ms ease;
+}
+.profile:hover, .mail:hover, .drive:hover, .notes:hover, card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+.card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    width: 48%; /* Ajustar al 50% con espacio entre las tarjetas */
+    transition: all 400ms ease;
+}
+
+.profile {
+    background: linear-gradient(135deg, #e0f7fa 0%, #f1f8e9 100%);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    grid-column: span 1;
+    height: 300px;
+}
+.mail {
+    grid-column: span 2;
+}
+
+.drive {
+    grid-column: span 2;
+    height: 570px;
+
+}
+.notes {
+    grid-column: span 1;
+    height: 800px; /* Ajusta altura */
+    margin-top: -240px; /* subir o bsjar */
+}
+
+.avatar {
+    background-color: #34c759;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    height: 80px;
+    width: 80px;
+    margin-right: 20px;
+}
+
+.info {
+    justify-content: center;
+}
+
+.info h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.info p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #666;
+}
+.fw-bold {
+    font-weight: bold;
+}
+
+.fw-medium {
+    font-weight: 500;
+}
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 130%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 20% auto;  /* Adjusts the top margin for vertical centering */
+    padding: 50px;
+    border: 1px solid #888;
+    width: 90%;  /* Increase this value to make the modal wider */
+    max-width: 1000px;  /* Increase this value to set a larger maximum width */
+    border-radius: 10px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.print{
+    padding: 9px;
+    width: 190px;
+    border: none;
+    border-radius: 6px;
+    background-color: #918989;
+    color:white;
+    transition: background-color 0.3s, border-color 0.3s;
+    cursor: pointer;
+}
+
+.print:hover{
+    padding: 7px;
+    width: 190px;
+    border: 2px solid #918989;
+    border-radius: 6px;
+    background-color: white;
+    color: #918989;
+}
+@media screen and (max-width:800px) {
+    .content-modal{
+        width: 90%;
+    }
+}
+.context{
+    color: #e9ecef !important;
+
+}
+.area {
+    height: 19vh !important;
+}
+
+.circles {
+    height: 19vh !important;
+}
+
+.banner-btn {
+    color: #fff !important;
+    border: solid 1px #fff !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    display: flex !important;
+    background: none !important;
+}
+
+.banner-btn:hover {
+    border: solid 1px #a5c3e7;
+}
+.main-subtitle-banner {
+    color: #e9ecef !important;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.col {
+    display: flex;
+    align-items: center;
+}
+
+.image {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+}
+
+.btn {
+    background-color: #4CAF50; /* Color del botón */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #45a049; /* Color al pasar el mouse */
+}

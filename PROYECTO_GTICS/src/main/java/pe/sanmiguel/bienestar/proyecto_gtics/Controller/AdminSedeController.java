@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -32,6 +33,8 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -379,6 +382,9 @@ public class AdminSedeController {
     public String solicitudFarmacista(@ModelAttribute("usuarioFarmacista") Usuario usuarioFarmacista, //model attribute del farmacista
                                       @ModelAttribute("sedeFarmacista") SedeFarmacista sedeFarmacista,
                                       Model model){
+        //Sacamos todas los codigos
+        List<CodigoColegiatura> listaCodigos = codigoColegiaturaRepository.listarCodigos();
+        model.addAttribute("listaCodigos", listaCodigos);
         return "adminsede/solicitud_agregar_farmacista";
     }
 
@@ -558,6 +564,9 @@ public class AdminSedeController {
                                       @RequestParam(value = "dni") String dni,
                                       Model model){
 
+        List<CodigoColegiatura> listaCodigos = codigoColegiaturaRepository.listarCodigos();
+        model.addAttribute("listaCodigos", listaCodigos);
+
         List<String> values = DniAPI.getDni(dni);
 
         if (!(values.isEmpty())){
@@ -598,13 +607,18 @@ public class AdminSedeController {
                                              @RequestParam(value = "direccion") String direccion,
                                              @RequestParam(value = "correo") String correo,
                                              @RequestParam(value = "celular") String celular,
-                                             RedirectAttributes attr){
+                                             RedirectAttributes attr, Model model){
+
+        List<CodigoColegiatura> listaCodigos = codigoColegiaturaRepository.listarCodigos();
+        model.addAttribute("listaCodigos", listaCodigos);
+
 
         if(!bindingResult.hasErrors() && !bindingResult1.hasErrors()){
             int estadoUsuario = 2;
             int idRol = 3;
             int idUsuario = usuarioRepository.findLastUsuarioId() + 1;
             int aprobado = 2; //El farmacista no está aprobado
+
             int idSede = 1; //Cambiar
 
             if (!(isValidEmail(correo) || isDomainValid(correo))) {
@@ -615,6 +629,9 @@ public class AdminSedeController {
                     System.out.println("- " + error.getDefaultMessage());
                 }
                 System.out.println(bindingResult.getAllErrors());
+
+
+
                 return "adminsede/solicitud_agregar_farmacista";
             }
 
@@ -793,7 +810,7 @@ public class AdminSedeController {
                                     @RequestParam("direccionSede") String direccionSede,
                                     @RequestParam("correo") String correo,
                                     @RequestParam("nombreSede") String nombreSede,
-                                    @RequestParam("priceTotal") Float priceTotal,
+                                    @RequestParam("priceTotal") String priceTotal,
                                     @RequestParam("listaIds") List<String> listaIds,
                                     RedirectAttributes attr,
                                     HttpServletRequest request, HttpServletResponse response, Authentication authentication){
@@ -806,6 +823,10 @@ public class AdminSedeController {
 
         //Sacamos la sede del adminsede
         Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+        //Cambiamos el string del precioTotal
+        priceTotal = priceTotal.replace(",", "");
+        Float priceTotalF = Float.parseFloat(priceTotal);
 
 
         // Crear orden de reposición
@@ -833,8 +854,11 @@ public class AdminSedeController {
 
         Integer newNumber = lastNumber + 1;
 
+        LocalDateTime fechaIni = LocalDateTime.now();
+        LocalDateTime fechaFin = LocalDateTime.now().plus(5, ChronoUnit.DAYS);
+        //Prueba
 
-        reposicionRepository.crearOrdenReposicion(idReposicion, tracking, priceTotal, idEstado, idSede,newNumber);
+        reposicionRepository.crearOrdenReposicion(idReposicion, tracking, priceTotalF, idEstado, idSede,newNumber, fechaIni, fechaFin);
 
         List<Medicamento> listaMedicamentosReposicion = new ArrayList<>();
 
@@ -845,6 +869,10 @@ public class AdminSedeController {
             Integer idMedicamento = Integer.parseInt(listaIds.get(m));
             Integer cantidadMedicamento = Integer.parseInt(listaIds.get(m+1));
             reposicionContenidoRepository.guardarContenidoReposicion(idMedicamento, idReposicion, cantidadMedicamento);
+
+            //Aumentamos el stock que hay en la sede
+            sedeStockRepository.actualizarSedeStock(idSede, idMedicamento, cantidadMedicamento);
+
             m = m + 2;
         }
 

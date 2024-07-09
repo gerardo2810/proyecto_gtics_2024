@@ -24,6 +24,11 @@
     <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
+    <link th:href="@{/css/aracely1.css}" rel="stylesheet" />
+
+    <script th:href="@{/js/pagination.js}"></script>
+
+
 
     <!--=============== JAVASCRIPT ===============-->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
@@ -51,7 +56,6 @@
 </header>
 
 <div th:replace="~{fragments/banner.html :: banner}"></div>
-
 <div class="container">
     <div class="container" >
         <div style="padding-top: 20px; padding-bottom: 20px">
@@ -110,6 +114,27 @@
         </div>
     </div>
 </div>
+<!--div class="container">
+    <div th:each="reposicion : ${reposicionList}">
+        <div class="container5">
+            <div class="card5__container5">
+                <article class="card5__article">
+                    <img th:src="@{/img/aplicacion-de-seguimiento.png}" alt="image" class="card5__img">
+                    <div class="card5__data">
+                        <span class="card5__description" th:text="${reposicion.idSede.admin.nombres} + ' ' + ${reposicion.idSede.admin.apellidos} + ',' + ${reposicion.idSede.nombre}"></span>
+                        <h2 class="card5__title" th:text="${'TRK'+ (reposicion.idReposicion + 1000)} + '&' + ${reposicion.fechaIni}"></h2>
+                        <form th:action="@{'/superadmin/verOrdenReposicionId'}" method="post">
+                            <a name="idReposicion" th:value="${reposicion.idReposicion}" class="card5__button">Read More</a>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+    </div>
+    <div class="pagination" id="pagination">
+    </div>
+</div-->
 <br>
 <br>
 <br>
@@ -193,6 +218,7 @@
 
 
 </script>
+
 <script>
     $(document).ready(function() {
         var opened = false;
@@ -210,6 +236,44 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const itemsPerPage = 10;
+        let currentPage = 1;
+        const items = document.querySelectorAll('.card5__container5');
+        const totalItems = items.length;
+
+        function showItems() {
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            items.forEach((item, index) => {
+                item.style.display = (index >= start && index < end) ? 'block' : 'none';
+            });
+            showPagination();
+        }
+
+        function showPagination() {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.addEventListener('click', function() {
+                    currentPage = i;
+                    showItems();
+                });
+                if (i === currentPage) {
+                    button.classList.add('active');
+                }
+                pagination.appendChild(button);
+            }
+        }
+        showItems();
+    });
+
+</script>
+
 <script>
     window.onload = function () {
         $('#onload').fadeOut();

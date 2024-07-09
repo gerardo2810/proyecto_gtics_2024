@@ -178,9 +178,9 @@
                                         <div class="text-muted mb-0" th:text="${compra.getUnidad()}">TABLETAS 50 U.</div>
                                     </div>
                                 </td>
-                                <td class="text-center" th:text="${'S/. ' + compra.getPrecioCompra()}">$ 245.50</td>
+                                <td class="text-center" th:text="${'S/. ' + #numbers.formatDecimal(compra.getPrecioCompra(), 1, 'COMMA', 2, 'POINT')}">$ 245.50</td>
                                 <td class="text-center" th:text="${compra.getCantidad()}">1</td>
-                                <td class="text-end" th:text="${'S/. ' + compra.getCantidad() * compra.getPrecioCompra()}">$ 245.50</td>
+                                <td class="text-end" th:text="${'S/. ' + #numbers.formatDecimal(compra.getCantidad() * compra.getPrecioCompra(), 1, 'COMMA', 2, 'POINT')}">$ 245.50</td>
                             </tr>
                         </tbody>
 
@@ -189,7 +189,7 @@
 
                 <div class="full-total">
                     <div class="roboto-regular data-label" style="padding-top: 20px">Total</div>
-                    <div class="title roboto-medium data-label" th:text="${'S/. ' + reposicion.getPrecioTotal()}">S/. 750.00</div>
+                    <div class="title roboto-medium data-label" th:text="${'S/. ' + #numbers.formatDecimal(reposicion.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}">S/. 750.00</div>
                 </div>
 
                 <div class="container-graph-circular">

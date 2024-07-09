@@ -806,7 +806,7 @@ public class FarmacistaController {
                     contenidoPreOrden = (ArrayList<OrdenContenido>) ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(preOrdenChild.getIdOrden()));
                 }
 
-                System.out.println(containsPreOrden);
+                System.out.println("La orden tiene preorden?" + containsPreOrden);
 
                 // Falta detectar y enviar si la orden tiene problemas de Stock
 
@@ -821,6 +821,16 @@ public class FarmacistaController {
                         medsConStock.add(oc);
                     }
                 }
+
+                boolean hayProblemasStock = false;
+
+                if (!medsSinStock.isEmpty()){
+                    hayProblemasStock = true;
+                }
+
+                System.out.println("Hay problemas con Stock?" + hayProblemasStock);
+
+                model.addAttribute("hayProblemasStock", hayProblemasStock);
 
                 model.addAttribute("medsConStock", medsConStock);
                 model.addAttribute("medsSinStock", medsSinStock);
