@@ -17,6 +17,7 @@
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/carousel.css}">
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
     <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
@@ -43,8 +44,44 @@
 
 <div th:replace="~{fragments/banner.html :: banner}"></div>
 
+<div style="display: flex; flex-direction: row; justify-content: center">
+    <div class="carousel">
+        <button class="arrow back-arrow"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLWxlZnQiPjxwYXRoIGQ9Im0xNSAxOC02LTYgNi02Ii8+PC9zdmc+" /></button>
+        <div class="slide left">
+            <div class="overlay"></div>
+            <div class="slide-info">
+                <img style="width: 70px" src="/favicon.png" />
+                <br>
+                <strong>Inicia con tu primera Orden Web</strong>
+            </div>
+            <img class="slide-bg" src="/img/Delivery.png" />
+        </div>
+
+        <div class="slide showcase">
+            <div class="overlay"></div>
+            <div class="slide-info">
+                <img src="/media/logo_large_2.png" />
+                <p>Po, now a spiritual leader, seeks a successor and unravels mysteries with a witty fox thief.</p>
+            </div>
+            <img class="slide-bg" src="" />
+        </div>
+
+        <div class="slide left">
+            <div class="overlay"></div>
+            <div class="slide-info">
+                <img src="/media/logo_large_2.png" />
+            </div>
+            <video class="slide-bg" src="/img/descuento.mp4" />
+        </div>
+
+        <button class="arrow next-arrow"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLXJpZ2h0Ij48cGF0aCBkPSJtOSAxOCA2LTYtNi02Ii8+PC9zdmc+" /></button>
+    </div>
+</div>
 
 
+<br>
+<br>
+<br>
 <div class="container">
 
     <div style="margin-bottom: 50px"></div>
@@ -169,7 +206,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <script th:src="@{/js/topbar.js}"></script>
-
+<script th:src="@{/js/carousel.js}"></script>
 
 <script>
     $(document).ready(function() {
