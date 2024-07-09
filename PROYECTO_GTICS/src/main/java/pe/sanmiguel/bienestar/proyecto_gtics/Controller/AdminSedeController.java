@@ -607,11 +607,20 @@ public class AdminSedeController {
                                              @RequestParam(value = "direccion") String direccion,
                                              @RequestParam(value = "correo") String correo,
                                              @RequestParam(value = "celular") String celular,
-                                             RedirectAttributes attr, Model model){
+                                             RedirectAttributes attr, Model model,
+                                             HttpServletRequest request, HttpServletResponse response, Authentication authentication){
 
         List<CodigoColegiatura> listaCodigos = codigoColegiaturaRepository.listarCodigos();
         model.addAttribute("listaCodigos", listaCodigos);
 
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
 
         if(!bindingResult.hasErrors() && !bindingResult1.hasErrors()){
             int estadoUsuario = 2;
@@ -619,7 +628,7 @@ public class AdminSedeController {
             int idUsuario = usuarioRepository.findLastUsuarioId() + 1;
             int aprobado = 2; //El farmacista no está aprobado
 
-            int idSede = 1; //Cambiar
+            int idSede = sedeSession.getIdSede();
 
             if (!(isValidEmail(correo) || isDomainValid(correo))) {
                 System.out.println("Email is valid and domain is valid.");
@@ -672,8 +681,8 @@ public class AdminSedeController {
 
             List<Usuario> listaUsuarios = usuarioRepository.findAll();
 
-            for (Usuario usuario : listaUsuarios){
-                if(usuarioFarmacista.getDni().equals(usuario.getDni())){
+            for (Usuario usuario1 : listaUsuarios){
+                if(usuarioFarmacista.getDni().equals(usuario1.getDni())){
                     //no se crea el farmacista debido a que es repetido el codigo medico
                     attr.addFlashAttribute("msgred", "DNI ya existente en el sistema, por favor ingrese uno nuevamente");
                     dniNoExistente  = false;
@@ -684,8 +693,8 @@ public class AdminSedeController {
             }
 
             //validamos correo
-            for (Usuario usuario : listaUsuarios){
-                if(usuarioFarmacista.getCorreo().equals(usuario.getCorreo())){
+            for (Usuario usuario2 : listaUsuarios){
+                if(usuarioFarmacista.getCorreo().equals(usuario2.getCorreo())){
                     //no se crea el farmacista debido a que es repetido el codigo medico
                     attr.addFlashAttribute("msgred", "Correo ya existente en el sistema, por favor ingrese uno nuevamente");
                     dniNoExistente  = false;
@@ -1049,6 +1058,7 @@ public class AdminSedeController {
 
                 if (isValidPassword(newContrasena)){
                     usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
+                    usuarioRepository.actualizarEstadoContra(usuarioSession.getIdUsuario());
                     attr.addFlashAttribute("msgSuccess", "Contraseña actualizada correctamente.");
                 } else {
                     attr.addFlashAttribute("msg", "Ingrese una contraseña válida. De más de 8 carácteres, con dígitos y carácteres especiales.");

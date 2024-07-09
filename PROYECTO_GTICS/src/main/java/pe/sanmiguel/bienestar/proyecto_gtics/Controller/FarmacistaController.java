@@ -986,6 +986,7 @@ public class FarmacistaController {
 
                 if (isValidPassword(newContrasena)){
                     usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
+                    usuarioRepository.actualizarEstadoContra(usuarioSession.getIdUsuario());
                     attr.addFlashAttribute("msgSuccess", "Contraseña actualizada correctamente.");
                 } else {
                     attr.addFlashAttribute("msg", "Ingrese una contraseña válida. De más de 8 carácteres, con dígitos y carácteres especiales.");

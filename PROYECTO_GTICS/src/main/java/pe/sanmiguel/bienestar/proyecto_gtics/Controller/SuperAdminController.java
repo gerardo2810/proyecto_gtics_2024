@@ -252,10 +252,10 @@ public class SuperAdminController {
             usuarioRepository.actualizarContrasenaFarmacista(hashedPassword, idUsuario);
             usuarioRepository.actualizarEstadoFarmacista(idUsuario);
 
-            //Se le envía el correo con la contraseña, luego de eso necesita de un timer de 5 minutos para cambiarla
+            //Se le envía el correo con la contraseña, luego de eso necesita de un timer de 3 minutos para cambiarla
             long tiempoEnvio = System.currentTimeMillis(); //tiempo donde se envía
 
-            //Por temas de presentación lo pongo en 1 minuto nomás
+            //Por temas de presentación lo pongo en 3 minuto nomás
 
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
@@ -263,15 +263,15 @@ public class SuperAdminController {
                 public void run() {
                     Usuario usuario = usuarioRepository.encontrarFarmacistaporId(idUsuario);
                     long currentTime = System.currentTimeMillis();
-                    if (currentTime - tiempoEnvio >= 1 * 60 * 1000 && usuario.getEstadoContra() == 0) {
-                        // Si han pasado 1 minutos y la contraseña no ha sido cambiada
+                    if (currentTime - tiempoEnvio >= 3 * 60 * 1000 && usuario.getEstadoContra() == 0) {
+                        // Si han pasado 3 minutos y la contraseña no ha sido cambiada
                         String expiredPassword = "noRegistrado";
                         String passwordHashNoRegistrado = SHA256.cipherPassword(expiredPassword);
                         usuarioRepository.actualizarContrasenaFarmacista(passwordHashNoRegistrado, idUsuario);
                         System.out.println("La contraseña ha expirado para " + usuario.getCorreo());
                     }
                 }
-            }, 1 * 60 * 1000); //Se ejecuta esta funcion luego de 1 minuto
+            }, 3 * 60 * 1000); //Se ejecuta esta funcion luego de 1 minuto
 
 
 
@@ -678,7 +678,7 @@ public class SuperAdminController {
                 //Se le envía el correo con la contraseña, luego de eso necesita de un timer de 5 minutos para cambiarla
                 long tiempoEnvio = System.currentTimeMillis(); //tiempo donde se envía
 
-                //Por temas de presentación lo pongo en 1 minuto nomás
+                //Por temas de presentación lo pongo en 3 minuto nomás
 
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
@@ -686,15 +686,15 @@ public class SuperAdminController {
                     public void run() {
                         Usuario usuario = usuarioRepository.encontrarFarmacistaporId(idUsuario);
                         long currentTime = System.currentTimeMillis();
-                        if (currentTime - tiempoEnvio >= 1 * 60 * 1000 && usuario.getEstadoContra() == 0) {
-                            // Si han pasado 1 minutos y la contraseña no ha sido cambiada
+                        if (currentTime - tiempoEnvio >= 3 * 60 * 1000 && usuario.getEstadoContra() == 0) {
+                            // Si han pasado 3 minutos y la contraseña no ha sido cambiada y su estado contra es 0
                             String expiredPassword = "noRegistrado";
                             String passwordHashNoRegistrado = SHA256.cipherPassword(expiredPassword);
                             usuarioRepository.actualizarContrasenaFarmacista(passwordHashNoRegistrado, idUsuario);
                             System.out.println("La contraseña ha expirado para " + usuario.getCorreo());
                         }
                     }
-                }, 1 * 60 * 1000); //Se ejecuta esta funcion luego de 1 minuto
+                }, 3 * 60 * 1000); //Se ejecuta esta funcion luego de 3 minutos
 
                 attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
                 return "redirect:/superadmin/administradoresSede";
@@ -729,7 +729,7 @@ public class SuperAdminController {
                     //Se le envía el correo con la contraseña, luego de eso necesita de un timer de 5 minutos para cambiarla
                     long tiempoEnvio = System.currentTimeMillis(); //tiempo donde se envía
 
-                    //Por temas de presentación lo pongo en 1 minuto nomás
+                    //Por temas de presentación lo pongo en 3 minuto nomás
 
                     Timer timer = new Timer();
                     timer.schedule(new TimerTask() {
@@ -737,15 +737,15 @@ public class SuperAdminController {
                         public void run() {
                             Usuario usuario = usuarioRepository.encontrarFarmacistaporId(idUsuario);
                             long currentTime = System.currentTimeMillis();
-                            if (currentTime - tiempoEnvio >= 1 * 60 * 1000 && usuario.getEstadoContra() == 0) {
-                                // Si han pasado 1 minutos y la contraseña no ha sido cambiada
+                            if (currentTime - tiempoEnvio >= 3 * 60 * 1000 && usuario.getEstadoContra() == 0) {
+                                // Si han pasado 3 minutos y la contraseña no ha sido cambiada
                                 String expiredPassword = "noRegistrado";
                                 String passwordHashNoRegistrado = SHA256.cipherPassword(expiredPassword);
                                 usuarioRepository.actualizarContrasenaFarmacista(passwordHashNoRegistrado, idUsuario);
                                 System.out.println("La contraseña ha expirado para " + usuario.getCorreo());
                             }
                         }
-                    }, 1 * 60 * 1000); //Se ejecuta esta funcion luego de 1 minuto
+                    }, 3 * 60 * 1000); //Se ejecuta esta funcion luego de 1 minuto
 
                     attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
                     return "redirect:/superadmin/administradoresSede";
@@ -776,7 +776,7 @@ public class SuperAdminController {
                     //Se le envía el correo con la contraseña, luego de eso necesita de un timer de 5 minutos para cambiarla
                     long tiempoEnvio = System.currentTimeMillis(); //tiempo donde se envía
 
-                    //Por temas de presentación lo pongo en 1 minuto nomás
+                    //Por temas de presentación lo pongo en 3 minuto nomás
 
                     Timer timer = new Timer();
                     timer.schedule(new TimerTask() {
@@ -784,15 +784,15 @@ public class SuperAdminController {
                         public void run() {
                             Usuario usuario = usuarioRepository.encontrarFarmacistaporId(idUsuario);
                             long currentTime = System.currentTimeMillis();
-                            if (currentTime - tiempoEnvio >= 1 * 60 * 1000 && usuario.getEstadoContra() == 0) {
-                                // Si han pasado 1 minutos y la contraseña no ha sido cambiada
+                            if (currentTime - tiempoEnvio >= 3 * 60 * 1000 && usuario.getEstadoContra() == 0) {
+                                // Si han pasado 3 minutos y la contraseña no ha sido cambiada
                                 String expiredPassword = "noRegistrado";
                                 String passwordHashNoRegistrado = SHA256.cipherPassword(expiredPassword);
                                 usuarioRepository.actualizarContrasenaFarmacista(passwordHashNoRegistrado, idUsuario);
                                 System.out.println("La contraseña ha expirado para " + usuario.getCorreo());
                             }
                         }
-                    }, 1 * 60 * 1000); //Se ejecuta esta funcion luego de 1 minuto
+                    }, 3 * 60 * 1000); //Se ejecuta esta funcion luego de 3 minuto
 
                     attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
                     return "redirect:/superadmin/administradoresSede";

@@ -168,6 +168,15 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_usuario = 1 WHERE id = ?")
     void actualizarEstadoFarmacista(int id);
 
+    //Estado contrasena
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_contra = 1 WHERE id = ?")
+    void actualizarEstadoContra(int idUsuario);
+
+
+
 
 
 
