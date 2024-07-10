@@ -554,7 +554,6 @@ public class FarmacistaController {
         }
     }
 
-
     @GetMapping("/farmacista/crear_preorden")
     public String createPreOrden(Model model) {
 
@@ -676,7 +675,8 @@ public class FarmacistaController {
     public String changeMedicamentos(Model model) {
 
         model.addAttribute("medicamentosSinStock", medicamentosSinStock);
-        model.addAttribute("medicamentosConStock", medicamentosConStock);
+        model.addAttribute("medicamentosConStock1", medicamentosConStock);
+        model.addAttribute("medicamentosConStock", medicamentoRepository.findAll());
         model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
         model.addAttribute("cantidadesExistentes", cantidadesExistentes);
 

@@ -1,10 +1,273 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec = "http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="icon" type="image/x-icon" th:href="@{/media/favicon.png}">
+
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+
+    <!--=============== CSS ===============-->
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/fonts.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
+
+    <link th:href="@{/css/footer.css}" rel="stylesheet" />
+    <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/fonts.css}">
+    <link rel="stylesheet" th:href="@{/css/topbar.css}">
+    <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
+
+
+    <!--=============== JAVASCRIPT ===============-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- DataTable -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.3/css/buttons.bootstrap5.min.css"/>
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.3/css/buttons.bootstrap5.min.css"/>
+
+    <!--=============== FONT AWESOME ===============-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <title>Bienestar San Miguel | Pre Ordenes</title>
+    <style>
+        .container5 {
+            display: flex;
+            border: 2px solid #1f56bd;
+            width: 80%;
+            background-color: #fff;
+        }
+
+        .column5 {
+            flex: 1;
+            padding: 10px;
+            border-right: 2px solid #1f56bd;
+            min-height: 500px;
+        }
+
+        .column5:last-child {
+            border-right: none;
+        }
+
+        .header5 {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-family: 'Arial', sans-serif; /* Cambia la fuente a Arial */
+            font-size: 24px; /* Ajusta el tamaño de la fuente */
+            color: #333; /* Cambia el color del texto */
+        }
+
+
+        .item {
+            border: 1px solid #000;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #ffffff;
+            cursor: move;
+        }
+
+        .details p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+    </style>
+
 </head>
-<body>
+
+<body class="loader-hidden">
+
+<div class="container-loader loader-hidden" id="onload">
+    <div class="loader"></div>
+</div>
+
+<header class="header-topbar">
+    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Pre Ordenes')}"></nav>
+</header>
+
+<div th:replace="~{fragments/banner.html :: banner}"></div>
+<br>
+<div class="container">
+    <div style="padding-top: 30px; padding-bottom: 20px">
+        <div class="main-title montserrat-bold"> Cambio de medicamneto </div>
+        <div class="main-subtitle montserrat-regular"> Sugerencia sobre medicamentos similares </div>
+    </div>
+    <hr class="style-one">
+</div>
+<br>
+<br>
+
+<div class="container">
+    <div class="container5">
+        <div class="column5" id="reemplazo" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div class="header5">Reemplazo</div>
+            <div class="med-container">
+                <div class="item" th:each="medicamento : ${medicamentosConStock}"  draggable="true" ondragstart="drag(event)" id="item1">
+                    <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" th:alt="${medicamento.nombre}" class="img-item" style="width: 200px; height: 200px;">
+                    <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
+                        <div>
+                            <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
+                            <div class="item-title roboto-medium" th:text="${medicamento.nombre}">Medicamento</div>
+                        </div>
+
+                    </div>
+                    <div style="display: flex; flex-direction: row; gap: 3px; align-items: end;">
+                        <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add more items as needed -->
+        </div>
+        <div class="column5" id="cambio" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div class="header5">Cambio de medicamentos</div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/navbar.html :: footer}">
+</div>
+
+<script>
+
+    $(document).ready(function() {
+        var table = $('#preOrders, #ordersWeb, #Orders').DataTable({
+            dom: 'Bfrtilp',
+            buttons: [
+
+            ],
+            columnDefs: [
+                { className: 'centered', targets: [0, 1, 2, 3, 4] },
+                { orderable: false, targets: [4] },
+            ],
+            "pageLength":5,
+            "lengthChange": false,
+            "searching": true,
+            "order": [
+                [3, "desc"] // Ordenar por la segunda columna de forma descendente
+            ],
+            "language": {
+                "emptyTable": "No hay registros disponibles",
+                "zeroRecords": "No se encontraron registros coincidentes",
+                "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+            },
+
+        });
+
+        $('#search').keypress(function(event) {
+            if (event.keyCode === 13) {
+                $('#preOrders, #ordersWeb, #Orders').DataTable().search($(this).val()).draw();
+            }
+        });
+
+        $('#filtroEstado').on('change', function() {
+            var estado = $(this).val();
+            table.column(3).search(estado).draw();
+
+        });
+
+        $('#limpiarFiltros').on('click', function() {
+            $('#filtroEstado').val('');
+            table.search('').columns().search('').draw();
+        });
+    });
+
+
+</script>
+
+<script>
+    $(document).ready(function() {
+        var opened = false;
+
+        $('#menu-small').hide();
+
+        $('#nav-toggle').click(function (e) {
+            e.stopPropagation();
+            if (opened) {
+                $('#menu-small').hide();
+            } else {
+                $('#menu-small').show();
+            }
+            opened = !opened;
+        });
+    });
+</script>
+<script>
+    function toggleNotifi() {
+        var box = document.getElementById('box');
+        var isVisible = box.style.opacity !== '0';
+
+        if (isVisible) {
+            box.style.opacity = '0';
+            box.style.height = '0px'; // Ajusta la altura según tu diseño
+        } else {
+            box.style.opacity = '1';
+            box.style.height = 'auto'; // Ajusta la altura según el contenido
+        }
+    }
+</script>
+
+<script>
+    window.onload = function () {
+        $('#onload').fadeOut();
+        $('body').removeClass('loader-hidden');
+    }
+
+</script>
+<script>
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        var target = ev.target;
+
+        // Find the closest column container or an item within the column
+        while (!target.classList.contains('column5') && !target.classList.contains('item')) {
+            target = target.parentElement;
+        }
+
+        // Append the dragged element if the target is a column or an item within the column
+        if (target.classList.contains('column5') || target.classList.contains('item')) {
+            if (target.classList.contains('item')) {
+                target.parentNode.insertBefore(document.getElementById(data), target.nextSibling);
+            } else {
+                target.appendChild(document.getElementById(data));
+            }
+        }
+    }
+
+</script>
 
 </body>
+
 </html>
