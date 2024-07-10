@@ -33,13 +33,6 @@
     <!--=============== JAVASCRIPT ===============-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <!-- DataTable -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.3/css/buttons.bootstrap5.min.css"/>
-    <!-- Bootstrap-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.3/css/buttons.bootstrap5.min.css"/>
 
     <!--=============== FONT AWESOME ===============-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -86,6 +79,42 @@
             margin: 0;
             font-size: 14px;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000; /* Asegúrate de que este valor sea alto */
+            left: 0;
+            top: 0; /* Asegura que el modal cubre toda la pantalla */
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto; /* Ajusta según sea necesario */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 1000px;
+            border-radius: 10px;
+            z-index: 1001; /* Asegúrate de que el contenido del modal esté por encima del fondo */
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
     </style>
 
@@ -105,98 +134,140 @@
 <br>
 <div class="container">
     <div style="padding-top: 30px; padding-bottom: 20px">
-        <div class="main-title montserrat-bold"> Cambio de medicamneto </div>
-        <div class="main-subtitle montserrat-regular"> Sugerencia sobre medicamentos similares </div>
+        <div class="main-title montserrat-bold"> Cambio de medicamnetos sin stock </div>
+        <div class="main-subtitle montserrat-regular"> Sugerencia para reemplazar medicamentos agotados </div>
     </div>
     <hr class="style-one">
 </div>
 <br>
 <br>
-
 <div class="container">
-    <div class="container5">
-        <div class="column5" id="reemplazo" ondrop="drop(event)" ondragover="allowDrop(event)">
-            <div class="header5">Reemplazo</div>
-            <div class="med-container">
-                <div class="item" th:each="medicamento : ${medicamentosConStock}"  draggable="true" ondragstart="drag(event)" id="item1">
-                    <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" th:alt="${medicamento.nombre}" class="img-item" style="width: 200px; height: 200px;">
-                    <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
-                        <div>
-                            <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
-                            <div class="item-title roboto-medium" th:text="${medicamento.nombre}">Medicamento</div>
+    <div style=" grid-template-columns: 1fr 1fr; grid-template-rows: 1fr">
+        <div>
+            <section class="items-list-trk">
+
+                <div class="inside-items-list-trk">
+
+                    <div class="preview-title roboto-regular" style="font-size: 1.3rem">
+                        Contenido de la Orden Web<span style="font-weight: bold" ></span>
+                    </div>
+
+                    <div class="preview-title-trk roboto-regular">
+                        <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between">
+
+                            <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                Imagen
+                            </div>
+
+                            <div style="min-width: 180px; display: flex; align-items: center; justify-content: center">
+                                Descripción
+                            </div>
+
+                            <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                Cantidad
+                            </div>
+
+                            <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                P. Uni.
+                            </div>
+
+                            <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                Precio
+                            </div>
+
+                            <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                Cambio
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="order-items-trk">
+                        <div  th:each="medicamento : ${medicamentosConStock}">
+                            <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between !important; padding: 15px; border-bottom:solid 1px #d3d3d3;">
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" th:alt="${medicamento.nombre}" width="180px" height="auto">
+                                </div>
+
+                                <div style="min-width: 180px; display: flex; align-items: center; justify-content: start">
+                                    <div style="display: flex; flex-direction: column; gap: 10px">
+                                        <span style="font-size: 1.2rem; max-width: 180px" class="item-title-clicked" th:text="${medicamento.nombre}">Medicamento</span>
+                                        <span style="font-size: 0.8rem; max-width: 180px" class="item-title-clicked" th:text="${medicamento.descripcion}">Medicamento</span>
+                                    </div>
+                                </div>
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    <span type="text"  th:text="${medicamento.precioCompra}"class="item-quantity-clicked"></span>
+                                </div>
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    <span style="padding-top: 5px;" th:text="${medicamento.unidad}">S/. </span><span class="item-price-clicked" ></span>
+                                </div>
+
+                                <div style="min-width: 80px; display: flex; align-items: end; justify-content: center">
+                                    <span style="padding-top: 5px;" th:text="${medicamento.estado}">S/. </span><span class="item-price-clicked" ></span>
+                                </div>
+
+                                <div style="min-width: 80px; display: flex; align-items: end; justify-content: center">
+                                    <button id="reportButton" class="aprobar" style="font-size: 1rem;">Ver sugerencias</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; align-items: center; gap: 15px;">
+                            <input type="hidden" name="priceTotal" value="">
+                            TOTAL <span class="price-total" >S/0.0</span>
                         </div>
 
                     </div>
-                    <div style="display: flex; flex-direction: row; gap: 3px; align-items: end;">
-                        <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
-                    </div>
                 </div>
-            </div>
 
-            <!-- Add more items as needed -->
-        </div>
-        <div class="column5" id="cambio" ondrop="drop(event)" ondragover="allowDrop(event)">
-            <div class="header5">Cambio de medicamentos</div>
+            </section>
+
         </div>
     </div>
 </div>
 
+
+<div id="myModal" class="modal">
+    <div class="modal-content" >
+        <span class="close">&times;</span>
+        <div class="container">
+        <div class="container5">
+            <div class="column5" id="reemplazo" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="header5">Reemplazo</div>
+                <div class="med-container">
+                    <div class="item" th:each="medicamento : ${medicamentosConStock}"  draggable="true" ondragstart="drag(event)" id="item1">
+                        <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" th:alt="${medicamento.nombre}" class="img-item" style="width: 200px; height: 200px;">
+                        <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
+                            <div>
+                                <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
+                                <div class="item-title roboto-medium" th:text="${medicamento.nombre}">Medicamento</div>
+                            </div>
+
+                        </div>
+                        <div style="display: flex; flex-direction: row; gap: 3px; align-items: end;">
+                            <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="column5" id="cambio" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="header5">Cambio de medicamentos</div>
+            </div>
+        </div>
+        </div>
+        <br>
+    </div>
+</div>
+
+
 <div th:replace="~{fragments/navbar.html :: footer}">
 </div>
 
-<script>
-
-    $(document).ready(function() {
-        var table = $('#preOrders, #ordersWeb, #Orders').DataTable({
-            dom: 'Bfrtilp',
-            buttons: [
-
-            ],
-            columnDefs: [
-                { className: 'centered', targets: [0, 1, 2, 3, 4] },
-                { orderable: false, targets: [4] },
-            ],
-            "pageLength":5,
-            "lengthChange": false,
-            "searching": true,
-            "order": [
-                [3, "desc"] // Ordenar por la segunda columna de forma descendente
-            ],
-            "language": {
-                "emptyTable": "No hay registros disponibles",
-                "zeroRecords": "No se encontraron registros coincidentes",
-                "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-                "paginate": {
-                    "first": "Primero",
-                    "last": "Último",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                },
-                "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
-            },
-
-        });
-
-        $('#search').keypress(function(event) {
-            if (event.keyCode === 13) {
-                $('#preOrders, #ordersWeb, #Orders').DataTable().search($(this).val()).draw();
-            }
-        });
-
-        $('#filtroEstado').on('change', function() {
-            var estado = $(this).val();
-            table.column(3).search(estado).draw();
-
-        });
-
-        $('#limpiarFiltros').on('click', function() {
-            $('#filtroEstado').val('');
-            table.search('').columns().search('').draw();
-        });
-    });
-
-
-</script>
 
 <script>
     $(document).ready(function() {
@@ -229,14 +300,29 @@
         }
     }
 </script>
-
 <script>
-    window.onload = function () {
-        $('#onload').fadeOut();
-        $('body').removeClass('loader-hidden');
-    }
+    document.addEventListener("DOMContentLoaded", function () {
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementById("reportButton");
+        var span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    });
 
 </script>
+
 <script>
     function allowDrop(ev) {
         ev.preventDefault();
@@ -264,6 +350,14 @@
                 target.appendChild(document.getElementById(data));
             }
         }
+    }
+
+</script>
+
+<script>
+    window.onload = function () {
+        $('#onload').fadeOut();
+        $('body').removeClass('loader-hidden');
     }
 
 </script>
