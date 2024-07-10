@@ -314,7 +314,7 @@ public class PacienteController {
         } else {
             attr.addFlashAttribute("msg", "Introduzca su contraseña actual.");
         }
-        return "redirect:/farmacista/perfil";
+        return "redirect:/paciente/perfil";
     }
 
     @GetMapping(value = "/confirmar_pago")

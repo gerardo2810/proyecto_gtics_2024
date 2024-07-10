@@ -319,7 +319,7 @@
             <div class="footer-left">
                 <img class="logo" th:src="@{/media/logo_large_2.png}" alt="Logo" style="width: 400px; height: auto;">
 
-                <div class="footer-links">
+                <div th:if="${session.usuario.getRol() == 3}" class="footer-links">
                     <a th:href="@{/farmacista}" sec:authorize="hasAnyAuthority('FARMACISTA')"
                        class="menu-item roboto-light">Inicio</a>
                     <div style="align-self: center">|</div>
@@ -332,6 +332,19 @@
                     <a th:href="@{/farmacista/pre_ordenes}" sec:authorize="hasAnyAuthority('FARMACISTA')"
                        class="menu-item roboto-light">Pre Ordenes</a>
                 </div>
+
+                <div th:if="${session.usuario.getRol() == 4}" class="footer-links">
+                    <a th:href="@{/paciente}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                       class="menu-item roboto-light">Pre Ordenes</a>
+                    <div style="align-self: center">|</div>
+                    <a th:href="@{/paciente/ordenes}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                       class="menu-item roboto-light">Ordenes Web</a>
+                    <div style="align-self: center">|</div>
+                    <a th:href="@{/paciente/mensajeria}" sec:authorize="hasAnyAuthority('PACIENTE')"
+                       class="menu-item roboto-light">Mensajería</a>
+                </div>
+
+
                 <p class="footer-company-name">Copyright © 2024 <strong>Pontificia Universidad Catolica del Perú</strong> Todos los derechos reservados</p>
             </div>
 
