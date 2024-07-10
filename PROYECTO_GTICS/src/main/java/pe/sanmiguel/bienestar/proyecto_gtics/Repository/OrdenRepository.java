@@ -66,6 +66,15 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Query(value = "SELECT * FROM orden WHERE idEstado NOT IN (8, 9) AND idTipo = 3 AND idPaciente = ?1", nativeQuery = true)
     List<Orden> listarPreOrdenes(Integer idPaciente);
 
+    @Query(value = "SELECT * FROM orden WHERE id=?1 AND idPaciente = ?2", nativeQuery = true)
+    Orden ordenXusuario(Integer idOrden, Integer idPaciente);
+
+    @Query(value = "SELECT * FROM orden WHERE id=?1 AND idPaciente = ?2 and idEstado not in(1,2)", nativeQuery = true)
+    Orden ordenesPagadas(Integer idOrden, Integer idPaciente);
+
+    @Query(value = "SELECT * FROM orden WHERE id=?1 AND idPaciente = ?2 AND idEstado= 2", nativeQuery = true)
+    Orden ordenFaltaPago(Integer idOrden, Integer idPaciente);
+
 
 
 

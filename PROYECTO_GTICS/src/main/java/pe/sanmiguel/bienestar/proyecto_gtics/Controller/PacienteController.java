@@ -53,13 +53,6 @@ import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 public class PacienteController {
 
 
-
-
-
-
-
-
-
     /*----------------- Repositories -----------------*/
     final MedicamentoRepository medicamentoRepository;
     final OrdenRepository ordenRepository;
@@ -141,15 +134,19 @@ public class PacienteController {
 
 
     @GetMapping(value="/pago_tarjeta")
-    public String pago_tarjeta(Model model, @RequestParam(value="id") Integer id,  @ModelAttribute("tarjeta") Tarjeta tarjeta){
+    public String pago_tarjeta(HttpSession session, Model model, @RequestParam(value="id") Integer id,  @ModelAttribute("tarjeta") Tarjeta tarjeta){
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
 
-        Orden orden = ordenRepository.getOrdenByIdOrden(id);
+        Optional<Orden> orden = Optional.ofNullable(ordenRepository.ordenFaltaPago(id, userSession.getIdUsuario()));
 
-        model.addAttribute("idOrden", orden.getIdOrden());
+        if(orden.isPresent()){
+            model.addAttribute("idOrden", orden.get().getIdOrden());
+            return "paciente/pago_tarjeta";
+        }else{
+            return "redirect:/paciente/ordenes";
+        }
 
-        return "paciente/pago_tarjeta";
     }
-
 
 
     @GetMapping(value = "/chat/{idOrden}/{userId1}/{userId2}")
@@ -215,18 +212,25 @@ public class PacienteController {
 
 
     @GetMapping(value="/tracking")
-    public String tracking(Model model, @RequestParam("id") String idOrden){
+    public String tracking(Model model, @RequestParam("id") String idOrden, HttpSession session){
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
 
         Integer idInteger = Integer.parseInt(idOrden);
-        Orden orden = ordenRepository.getById(idInteger);
-        Integer cantProductos = ordenContenidoRepository.cantProductos(idOrden);
-        List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+        Optional<Orden> orden = Optional.ofNullable(ordenRepository.ordenXusuario(idInteger, userSession.getIdUsuario()));
 
-        model.addAttribute("cantProductos", cantProductos);
-        model.addAttribute("lista", lista);
-        model.addAttribute("ordenActual", orden);
+        if(orden.isPresent()){
+            Integer cantProductos = ordenContenidoRepository.cantProductos(idOrden);
+            List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
 
-        return "paciente/tracking";
+            model.addAttribute("cantProductos", cantProductos);
+            model.addAttribute("lista", lista);
+            model.addAttribute("ordenActual", orden.get());
+
+            return "paciente/tracking";
+        }else{
+            return "redirect:/paciente";
+        }
+
     }
 
 
@@ -314,32 +318,43 @@ public class PacienteController {
     }
 
     @GetMapping(value = "/confirmar_pago")
-    public String confirmarPago(Model model, @RequestParam("id") String idOrden){
-
-        Integer cantProductos = ordenContenidoRepository.cantProductos(idOrden);
+    public String confirmarPago(Model model, HttpSession session, @RequestParam("id") String idOrden){
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
 
         Integer idInteger = Integer.parseInt(idOrden);
-        Orden orden = ordenRepository.getById(idInteger);
+        Optional<Orden> orden = Optional.ofNullable(ordenRepository.ordenFaltaPago(idInteger, userSession.getIdUsuario()));
 
-        List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+        if(orden.isPresent()){
 
-        model.addAttribute("lista", lista);
-        model.addAttribute("cantProductos", cantProductos);
-        model.addAttribute("ordenActual", orden);
+            Integer cantProductos = ordenContenidoRepository.cantProductos(idOrden);
+            List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+            model.addAttribute("lista", lista);
+            model.addAttribute("cantProductos", cantProductos);
+            model.addAttribute("ordenActual", orden.get());
 
-        return "paciente/confirmar_pago";
+            return "paciente/confirmar_pago";
+
+        }else{
+            return "redirect:/paciente/ordenes";
+        }
     }
 
     @GetMapping(value="/boleta_pago")
-    public String boletaPago(Model model, @RequestParam(value="id") Integer idOrden){
+    public String boletaPago(Model model, @RequestParam(value="id") Integer idOrden, HttpSession session){
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
+        Optional<Orden> orden = Optional.ofNullable(ordenRepository.ordenesPagadas(idOrden, userSession.getIdUsuario()));
 
-        List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(idOrden));
+        if(orden.isPresent()){
+            List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(idOrden));
+            model.addAttribute("orden", ordenRepository.getOrdenByIdOrden(idOrden));
+            model.addAttribute("medicamentos", lista);
+
+            return "paciente/boleta";
+        }else{
+            return "redirect:/paciente/ordenes";
+        }
 
 
-        model.addAttribute("orden", ordenRepository.getOrdenByIdOrden(idOrden));
-        model.addAttribute("medicamentos", lista);
-
-        return "paciente/boleta";
     }
 
     /*----------------- Foto de medicamentos-----------------*/
