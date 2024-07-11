@@ -79,6 +79,7 @@ public interface MedicamentoRepository extends JpaRepository<Medicamento, Intege
             "WHERE s.idMedicamento = m.idMedicamento and p.id=s.idSede and p.nombre=?")
     List<Medicamento> listarMedicamentoSede(String nombreMedicamento);
 
+    List<Medicamento> findByCategorias(String categoria);
 
 
 

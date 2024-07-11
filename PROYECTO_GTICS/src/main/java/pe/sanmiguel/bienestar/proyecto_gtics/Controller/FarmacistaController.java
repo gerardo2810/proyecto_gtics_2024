@@ -673,12 +673,27 @@ public class FarmacistaController {
 
     @GetMapping("/farmacista/cambiar_medicamentos")
     public String changeMedicamentos(Model model) {
+        if (medicamentosSeleccionados.isEmpty()) {
+            return "redirect:/farmacista";
+        } else {
+            // Obtener todas las categorías de los medicamentos seleccionados
+            Set<String> categoriasMedicamentos = new HashSet<>();
+            for (Medicamento medicamento : medicamentosSeleccionados) {
+                categoriasMedicamentos.add(medicamento.getCategorias());
+            }
 
-        model.addAttribute("medicamentosSinStock", medicamentosSinStock);
-        model.addAttribute("medicamentosConStock1", medicamentosConStock);
-        model.addAttribute("medicamentosConStock", medicamentoRepository.findAll());
-        model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
-        model.addAttribute("cantidadesExistentes", cantidadesExistentes);
+            // Crear una lista de listas de medicamentos agrupados por categoría
+            List<List<Medicamento>> medicamentosAgrupados = new ArrayList<>();
+            for (String categoria : categoriasMedicamentos) {
+                List<Medicamento> medicamentosPorCategoria = medicamentoRepository.findByCategorias(categoria);
+                medicamentosAgrupados.add(medicamentosPorCategoria);
+            }
+
+            model.addAttribute("medicamentosSeleccionados",medicamentosSeleccionados);
+            model.addAttribute("medicamentosAgrupados", medicamentosAgrupados);
+            model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
+            model.addAttribute("cantidadesExistentes", cantidadesExistentes);
+        }
 
         return "farmacista/cambiar_medicamentos";
     }
