@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentoBajoStockDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.VentasMedicamentosTotalDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.VentasMedicamentosporSedeDto;
@@ -80,6 +81,9 @@ public interface MedicamentoRepository extends JpaRepository<Medicamento, Intege
     List<Medicamento> listarMedicamentoSede(String nombreMedicamento);
 
     List<Medicamento> findByCategorias(String categoria);
+
+    @Query(nativeQuery = true, value = "SELECT ss.idSede, ss.idMedicamento, ss.cantidad, m.nombre FROM proyecto_gtics.sede_stock ss inner join medicamento m on ss.idMedicamento = m.idMedicamento where ss.idSede = ? and cantidad < 25 limit 0, 6")
+    List<MedicamentoBajoStockDto> listarMedicamentosBajoStockxSede(int idSede);
 
 
 
