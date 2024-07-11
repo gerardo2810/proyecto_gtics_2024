@@ -107,13 +107,13 @@
 
             .drive {
                 grid-column: span 2;
-                height: 400px;
+                height: 500px;
 
             }
             .notes {
                 grid-column: span 1;
-                height: 750px; /* Ajusta altura */
-                margin-top: -350px; /* subir o bsjar */
+                height: 700px; /* Ajusta altura */
+                margin-top: -200px; /* subir o bsjar */
             }
 
             .avatar {
@@ -156,23 +156,25 @@
             .modal {
                 display: none;
                 position: fixed;
-                z-index: 1;
+                z-index: 1000; /* Asegúrate de que este valor sea alto */
                 left: 0;
+                top: 0; /* Asegura que el modal cubre toda la pantalla */
                 width: 100%;
                 height: 100%;
                 overflow: auto;
-                background-color: rgb(0, 0, 0);
                 background-color: rgba(0, 0, 0, 0.4);
             }
 
             .modal-content {
                 background-color: white;
-                margin: 18% auto;
+                margin: 16% auto; /* Ajusta según sea necesario */
                 padding: 20px;
                 border: 1px solid #888;
-                width: 90%;
+                width: 100%;
                 max-width: 1000px;
+                height: 500px; /* Ajusta según sea necesario */
                 border-radius: 10px;
+                z-index: 1001; /* Asegúrate de que el contenido del modal esté por encima del fondo */
             }
 
             .close {
@@ -244,7 +246,6 @@
             }
 
         </style>
-
         <title>Bienestar San Miguel | Administrador de Sede | Reporte de ventas</title>
     </head>
 
@@ -336,7 +337,7 @@
                         var myChart = new Chart(ctx, {
                             type: 'pie', // Tipo de gráfica: pie (circular)
                             data: {
-                                labels: ['Sede A', 'Sede B', 'Sede C', 'Sede D', 'Sede E'], // Nombres de las sedes
+                                labels: ['Sede Norte', 'Sede Sur', 'Sede Este', 'Sede Oeste', 'Sede Central'], // Nombres de las sedes
                                 datasets: [{
                                     label: 'Cantidad de Transacciones',
                                     data: [120, 90, 60, 150, 80], // Cantidades de transacciones para cada sede
@@ -376,7 +377,6 @@
                             }
                         });
                     </script>
-
                 </div>
             </div>
 
@@ -620,10 +620,31 @@
             <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/ordenes'" style="margin-left: 20px">Ver más</button>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var modal = document.getElementById("myModal");
+            var btn = document.getElementById("reportButton");
+            var span = document.getElementsByClassName("close")[0];
+
+            btn.onclick = function () {
+                modal.style.display = "block";
+            }
+
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        });
+    </script>
 
 
 
-        <!--Footer -->
+    <!--Footer -->
         <br/>
         <div th:replace="~{fragments/navbar.html :: footer}">
         </div>
@@ -645,15 +666,7 @@
                 });
             });
         </script>
-        <!-- Para lista1 -->
-        <div th:each="item : ${lista1}" class="lista1-item">
-            <!-- Contenido de la lista -->
-        </div>
 
-        <!-- Para lista2 -->
-        <div th:each="item : ${lista2}" class="lista2-item">
-            <!-- Contenido de la lista -->
-        </div>
     <script>
         $(document).ready(function() {
             var table = $('#miTabla').DataTable({
@@ -737,55 +750,11 @@
         });
     </script>
 
-        <!--script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Obtener el número de elementos en las listas
-                var lista1Count = document.querySelectorAll('.lista1-item').length;
-                var lista2Count = document.querySelectorAll('.lista2-item').length;
-
-                // Verificar si alguna de las listas tiene elementos
-                if (lista1Count > 0 || lista2Count > 0) {
-                    // Mostrar la alerta
-                    Swal.fire({
-                        title: '¡Atención!',
-                        text: 'Su inventario de medicamentos se está agotando. Por favor, revise su stock y realice los pedidos necesarios para evitar interrupciones en el servicio.',
-                        icon: 'warning',
-                        confirmButtonText: 'Entendido',
-                        showCancelButton: true,
-                        cancelButtonText: 'Ir a revisar',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // El usuario hizo clic en 'Entendido'
-                            // Puedes agregar acciones adicionales aquí si es necesario
-                        } else if (result.dismiss === Swal.DismissReason.cancel) {
-                            // El usuario hizo clic en 'Ir a revisar'
-                            // Redirigir a otra vista
-                            window.location.href = '/adminsede/notificaciones_adminsede';
-                        }
-                    });
-                }
-            });
-
-        </script-->
-
 
         <!--JS y archvios para graficas de adminsede-->
         <script th:src="@{/js/topbar.js}"></script>
 
-        <script th:src="@{/js/global/global.min.js}"></script>
-        <script th:src="@{/js/chart.js/Chart.bundle.min.js}"></script>
 
-
-        <!-- Apex Chart -->
-        <script th:src="@{/js/apexchart/apexchart.js}"></script>
-
-        <!-- Chart piety plugin files -->
-        <script th:src="@{/js/peity/jquery.peity.min.js}"></script>
-
-        <!-- Dashboard 1 -->
-        <script th:src="@{/js/dashboard/dashboard-1.js}"></script>
-
-        <script th:src="@{/js/custom.min.js}"></script>
         <script>
             function cardsCenter() {
 
@@ -822,28 +791,6 @@
                 })
             }
         </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var modal = document.getElementById("myModal");
-            var btn = document.getElementById("reportButton");
-            var span = document.getElementsByClassName("close")[0];
-
-            btn.onclick = function () {
-                modal.style.display = "block";
-            }
-
-            span.onclick = function () {
-                modal.style.display = "none";
-            }
-
-            window.onclick = function (event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            }
-        });
-
-    </script>
     <script>
         function imprimir() {
             var contenido = document.getElementById('boleta').innerHTML;
