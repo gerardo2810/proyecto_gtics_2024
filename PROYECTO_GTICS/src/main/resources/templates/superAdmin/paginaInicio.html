@@ -337,36 +337,44 @@
                 </tbody>
             </table>
         </div>
-        <div class="notes">
+        <div class="notes" style="margin-left: 20px; margin-right: 20px">
             <h2  style=" align-items: center; justify-content: center;">Leyenda</h2>
             <br>
-            <div class="row">
+            <div class="row" style="margin-left: 40px">
                 <div class="info" style=" align-items: center; justify-content: center;">
                     <p>1. Administradores de Sede</p>
                     <img th:src="@{/img/3135768.png}" alt="Doctor" class="image">
-                    <button class="aprobar" style="font-size: 1rem;">Ver AdminSede</button>
+                    <a th:href="@{/superadmin/administradoresSede}">
+                        <button class="aprobar" style="font-size: 1rem;">Ver AdminSede</button>
+                    </a>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="margin-left: 40px">
                 <div class="info">
                     <p>2. Farmacistas</p>
-
                     <img th:src="@{/img/farmaceutico.png}" alt="Farmacista" class="image">
-                    <button class="aprobar" style="font-size: 1rem;">Ver Farmacistas</button>
+                    <a th:href="@{/superadmin/farmacistas}" >
+                        <button class="aprobar" style="font-size: 1rem;">Ver Farmacistas</button>
+                    </a>
+
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="margin-left: 40px">
                 <div class="info">
                     <p>3. Pacientes</p>
                     <img th:src="@{/img/paciente.png}" alt="Paciente" class="image">
-                    <button class="aprobar" style="font-size: 1rem;">Ver Pacientes</button>
+                    <a th:href="@{/superadmin/pacientes}">
+                        <button class="aprobar" style="font-size: 1rem;">Ver Pacientes</button>
+                    </a>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="margin-left: 40px">
                 <div class="info">
                     <p>4. Doctores</p>
                     <img th:src="@{/img/doctor2.png}" alt="Doctor" class="image">
-                    <button class="aprobar" style="font-size: 1rem;">Ver Doctores</button>
+                    <a  th:href="@{/superadmin/doctores}">
+                        <button class="aprobar" style="font-size: 1rem;">Ver Doctores</button>
+                    </a>
                 </div>
             </div>
         </div>
