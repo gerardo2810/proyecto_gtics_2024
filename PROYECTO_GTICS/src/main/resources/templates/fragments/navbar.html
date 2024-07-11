@@ -61,8 +61,6 @@
                     <li th:if="${session.usuario.getRol() == 1}" ><a th:href="@{/superadmin/medicamentos}" sec:authorize="hasAnyAuthority('SUPERADMIN')"
                            class="menu-item roboto-light" th:classappend="${active == 'Inventario'?'active':''}">Inventario</a></li>
 
-                    <li th:if="${session.usuario.getRol() == 1}" ><a th:href="@{/superadmin/reportes}" sec:authorize="hasAnyAuthority('SUPERADMIN')"
-                                                                     class="menu-item roboto-light" th:classappend="${active == 'Reporte de órdenes'?'active':''}">Reporte de órdenes</a></li>
 
                     <li th:if="${session.usuario.getRol() == 1}" class="dropdown-item">
                         <div class="menu-item roboto-regular"  sec:authorize="hasAnyAuthority('SUPERADMIN')">
