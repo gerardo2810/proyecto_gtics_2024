@@ -107,13 +107,13 @@
 
             .drive {
                 grid-column: span 2;
-                height: 400px;
+                height: 450px;
 
             }
             .notes {
                 grid-column: span 1;
-                height: 750px; /* Ajusta altura */
-                margin-top: -350px; /* subir o bsjar */
+                height: 650px; /* Ajusta altura */
+                margin-top: -200px; /* subir o bsjar */
             }
 
             .avatar {
@@ -244,7 +244,6 @@
             }
 
         </style>
-
         <title>Bienestar San Miguel | Administrador de Sede | Reporte de ventas</title>
     </head>
 
@@ -376,7 +375,6 @@
                             }
                         });
                     </script>
-
                 </div>
             </div>
 
@@ -645,15 +643,7 @@
                 });
             });
         </script>
-        <!-- Para lista1 -->
-        <div th:each="item : ${lista1}" class="lista1-item">
-            <!-- Contenido de la lista -->
-        </div>
-
-        <!-- Para lista2 -->
-        <div th:each="item : ${lista2}" class="lista2-item">
-            <!-- Contenido de la lista -->
-        </div>
+        
     <script>
         $(document).ready(function() {
             var table = $('#miTabla').DataTable({
@@ -737,55 +727,11 @@
         });
     </script>
 
-        <!--script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Obtener el número de elementos en las listas
-                var lista1Count = document.querySelectorAll('.lista1-item').length;
-                var lista2Count = document.querySelectorAll('.lista2-item').length;
-
-                // Verificar si alguna de las listas tiene elementos
-                if (lista1Count > 0 || lista2Count > 0) {
-                    // Mostrar la alerta
-                    Swal.fire({
-                        title: '¡Atención!',
-                        text: 'Su inventario de medicamentos se está agotando. Por favor, revise su stock y realice los pedidos necesarios para evitar interrupciones en el servicio.',
-                        icon: 'warning',
-                        confirmButtonText: 'Entendido',
-                        showCancelButton: true,
-                        cancelButtonText: 'Ir a revisar',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // El usuario hizo clic en 'Entendido'
-                            // Puedes agregar acciones adicionales aquí si es necesario
-                        } else if (result.dismiss === Swal.DismissReason.cancel) {
-                            // El usuario hizo clic en 'Ir a revisar'
-                            // Redirigir a otra vista
-                            window.location.href = '/adminsede/notificaciones_adminsede';
-                        }
-                    });
-                }
-            });
-
-        </script-->
-
 
         <!--JS y archvios para graficas de adminsede-->
         <script th:src="@{/js/topbar.js}"></script>
 
-        <script th:src="@{/js/global/global.min.js}"></script>
-        <script th:src="@{/js/chart.js/Chart.bundle.min.js}"></script>
 
-
-        <!-- Apex Chart -->
-        <script th:src="@{/js/apexchart/apexchart.js}"></script>
-
-        <!-- Chart piety plugin files -->
-        <script th:src="@{/js/peity/jquery.peity.min.js}"></script>
-
-        <!-- Dashboard 1 -->
-        <script th:src="@{/js/dashboard/dashboard-1.js}"></script>
-
-        <script th:src="@{/js/custom.min.js}"></script>
         <script>
             function cardsCenter() {
 
