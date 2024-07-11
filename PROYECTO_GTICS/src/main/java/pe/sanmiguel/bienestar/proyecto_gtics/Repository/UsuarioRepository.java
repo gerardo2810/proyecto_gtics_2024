@@ -17,6 +17,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     Optional<Usuario> findByCorreoAndDni(String correo, String dni);
 
+
+    /* QUERYS PARA EL CHATBOT - WEBHOOK */
+
+    @Query(nativeQuery = true, value="SELECT * FROM proyecto_gtics.usuario u WHERE u.dni = ?1")
+    Optional<Usuario> verifyDNI(String dni);
+
+    /* FIN QUERYS PARA EL CHATBOT - WEBHOOK */
+
     @Query(nativeQuery = true, value="SELECT * FROM proyecto_gtics.usuario u WHERE u.dni = ?1")
     Optional<Usuario> findPacienteByDni(String dni);
 

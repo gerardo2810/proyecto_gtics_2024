@@ -103,6 +103,9 @@
 
             .mail {
                 grid-column: span 2;
+                position: relative;
+                width: 100%;
+                height: 500px;
             }
 
             .drive {
@@ -244,6 +247,47 @@
             .main-subtitle-banner {
                 color: #e9ecef !important;
             }
+            .slider-container {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                overflow: hidden; /* Para que no sobresalgan las diapositivas */
+            }
+
+            .slider {
+                display: flex;
+                transition: transform 0.5s ease-in-out;
+                width: 300%;
+                height: 100%;
+            }
+
+            .slide {
+                width: 100%;
+                flex: 1 0 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            button.prev, button.next {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: rgba(0, 0, 0, 0.5);
+                color: white;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                border-radius: 50%;
+            }
+
+            button.prev {
+                left: 10px;
+            }
+
+            button.next {
+                right: 10px;
+            }
 
         </style>
         <title>Bienestar San Miguel | Administrador de Sede | Reporte de ventas</title>
@@ -285,52 +329,162 @@
             </div>
             <div class="mail">
                 <h4 class="fs-20 font-w700 mb-2">Medicamentos Favoritos</h4>
-                <canvas id="graficoMedicamentos" width="400" height="200"></canvas>
-                <script>
-                    var ctx = document.getElementById('graficoMedicamentos').getContext('2d');
-                    var myChart = new Chart(ctx, {
-                        type: 'bar', // Tipo de gráfica
-                        data: {
-                            labels: ['Paracetamol', 'Ibuprofeno', 'Amoxicilina', 'Diclofenaco', 'Loratadina'],
-                            datasets: [
-                                {
-                                    label: 'Últimos 7 días',
-                                    data: [25, 30, 20, 15, 10], // Cantidades en los últimos 7 días
-                                    backgroundColor: 'rgba(255, 99, 132, 0.2)', // Color de fondo de las barras
-                                    borderColor: 'rgba(255, 99, 132, 1)', // Color del borde de las barras
-                                    borderWidth: 1 // Ancho del borde de las barras
-                                },
-                                {
-                                    label: 'Últimos 15 días',
-                                    data: [35, 40, 30, 20, 15], // Cantidades en los últimos 15 días
-                                    backgroundColor: 'rgba(54, 162, 235, 0.2)', // Color de fondo de las barras
-                                    borderColor: 'rgba(54, 162, 235, 1)', // Color del borde de las barras
-                                    borderWidth: 1 // Ancho del borde de las barras
-                                },
-                                {
-                                    label: 'Últimos 3 meses',
-                                    data: [50, 55, 45, 30, 25], // Cantidades en los últimos 3 meses
-                                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Color de fondo de las barras
-                                    borderColor: 'rgba(75, 192, 192, 1)', // Color del borde de las barras
-                                    borderWidth: 1 // Ancho del borde de las barras
-                                }
-                            ]
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true // Empieza el eje Y en cero
-                                }
-                            }
-                        }
-                    });
-                </script>
-
+                <div class="slider-container">
+                    <div class="slider">
+                        <div class="slide">
+                            <canvas id="graficoMedicamentos" width="400" height="200"></canvas>
+                            <script>
+                                var ctx = document.getElementById('graficoMedicamentos').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: ['Paracetamol', 'Ibuprofeno', 'Amoxicilina', 'Diclofenaco', 'Loratadina'],
+                                        datasets: [
+                                            {
+                                                label: 'Últimos 7 días',
+                                                data: [25, 30, 20, 15, 10],
+                                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                                borderColor: 'rgba(255, 99, 132, 1)',
+                                                borderWidth: 1
+                                            },
+                                            {
+                                                label: 'Últimos 15 días',
+                                                data: [35, 40, 30, 20, 15],
+                                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                                borderColor: 'rgba(54, 162, 235, 1)',
+                                                borderWidth: 1
+                                            },
+                                            {
+                                                label: 'Últimos 3 meses',
+                                                data: [50, 55, 45, 30, 25],
+                                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                                borderColor: 'rgba(75, 192, 192, 1)',
+                                                borderWidth: 1
+                                            }
+                                        ]
+                                    },
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
+                        </div>
+                        <div class="slide">
+                            <canvas id="graficoMedicamentos2" width="400" height="200"></canvas>
+                            <script>
+                                var ctx = document.getElementById('graficoMedicamentos2').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: ['Paracetamol', 'Ibuprofeno', 'Amoxicilina', 'Diclofenaco', 'Loratadina'],
+                                        datasets: [
+                                            {
+                                                label: 'Últimos 7 días',
+                                                data: [25, 30, 20, 15, 10],
+                                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                                borderColor: 'rgba(255, 99, 132, 1)',
+                                                borderWidth: 1
+                                            },
+                                            {
+                                                label: 'Últimos 15 días',
+                                                data: [35, 40, 30, 20, 15],
+                                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                                borderColor: 'rgba(54, 162, 235, 1)',
+                                                borderWidth: 1
+                                            },
+                                            {
+                                                label: 'Últimos 3 meses',
+                                                data: [50, 55, 45, 30, 25],
+                                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                                borderColor: 'rgba(75, 192, 192, 1)',
+                                                borderWidth: 1
+                                            }
+                                        ]
+                                    },
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
+                        </div>
+                        <div class="slide">
+                            <canvas id="graficoMedicamentos3" width="400" height="200"></canvas>
+                            <script>
+                                var ctx = document.getElementById('graficoMedicamentos3').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: ['Paracetamol', 'Ibuprofeno', 'Amoxicilina', 'Diclofenaco', 'Loratadina'],
+                                        datasets: [
+                                            {
+                                                label: 'Últimos 7 días',
+                                                data: [25, 30, 20, 15, 10],
+                                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                                borderColor: 'rgba(255, 99, 132, 1)',
+                                                borderWidth: 1
+                                            },
+                                            {
+                                                label: 'Últimos 15 días',
+                                                data: [35, 40, 30, 20, 15],
+                                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                                borderColor: 'rgba(54, 162, 235, 1)',
+                                                borderWidth: 1
+                                            },
+                                            {
+                                                label: 'Últimos 3 meses',
+                                                data: [50, 55, 45, 30, 25],
+                                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                                borderColor: 'rgba(75, 192, 192, 1)',
+                                                borderWidth: 1
+                                            }
+                                        ]
+                                    },
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
+                        </div>
+                    </div>
+                    <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+                    <button class="next" onclick="moveSlide(1)">&#10095;</button>
+                </div>
             </div>
-            <div class="notes">
-                <div>
-                    <h4 class="fs-20 font-w700">Top en ventas</h4>
-                    <span class="fs-14 font-w400 d-block">Sede con mayor cantidad de transacciones </span>
+
+            <script>
+                var slideIndex = 1;
+                showSlide(slideIndex);
+
+                function moveSlide(n) {
+                    showSlide(slideIndex += n);
+                }
+
+                function showSlide(n) {
+                    var slides = document.getElementsByClassName("slide");
+                    if (n > slides.length) { slideIndex = 1 }
+                    if (n < 1) { slideIndex = slides.length }
+                    for (var i = 0; i < slides.length; i++) {
+                        slides[i].style.display = "none";
+                    }
+                    slides[slideIndex - 1].style.display = "block";
+                }
+            </script>
+            <div class="notes" style="padding-top: 20px;">
+                <h4 class="fs-20 font-w700" style="margin-bottom: 10px;">Top en ventas</h4>
+                <span class="fs-14 font-w400 d-block" style="margin-bottom: 20px;">Sede con mayor cantidad de transacciones</span>
+                <div style="margin-top: 40px;">
                     <canvas id="graficoSedes" width="400" height="400"></canvas>
                     <script>
                         var ctx = document.getElementById('graficoSedes').getContext('2d');
@@ -360,9 +514,13 @@
                             },
                             options: {
                                 responsive: true, // La gráfica es responsiva
+                                maintainAspectRatio: false, // Mantener el tamaño del gráfico constante
                                 plugins: {
                                     legend: {
-                                        position: 'top', // Posición de la leyenda
+                                        position: 'bottom', // Cambiar posición de la leyenda a abajo
+                                        labels: {
+                                            padding: 30 // Ajustar el espacio entre la leyenda y el gráfico
+                                        }
                                     },
                                     tooltip: {
                                         callbacks: {
@@ -379,18 +537,18 @@
                     </script>
                 </div>
             </div>
-
             <div class="drive">
                 <div class="card1-header border-0 pb-0">
                     <h4 class="fs-20 font-w700 mb-0">Medicamentos con poco stock</h4>
-
                 </div>
+                <br/>
+                <br/>
                 <div class="card1-body pb-0">
-                    <canvas id="miGrafico" width="400" height="200"></canvas>
+                    <canvas id="miGrafico" width="400" height="400"></canvas>
                     <script>
                         var ctx = document.getElementById('miGrafico').getContext('2d');
                         var myChart = new Chart(ctx, {
-                            type: 'bar', // tipos: bar, line, pie, etc.
+                            type: 'bar', // Tipo de gráfica: bar, line, pie, etc.
                             data: {
                                 labels: ['Rojo', 'Azul', 'Amarillo', 'Verde', 'Púrpura', 'Naranja'],
                                 datasets: [{
@@ -416,6 +574,8 @@
                                 }]
                             },
                             options: {
+                                responsive: true, // La gráfica es responsiva
+                                maintainAspectRatio: false, // Mantener el tamaño del gráfico constante
                                 scales: {
                                     y: {
                                         beginAtZero: true
@@ -423,10 +583,9 @@
                                 }
                             }
                         });
-                    </script>                </div>
+                    </script>
+                </div>
             </div>
-
-        </div>
 
     </div>
 
@@ -641,7 +800,6 @@
             }
         });
     </script>
-
 
 
     <!--Footer -->
