@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.OrdenCantidadVentasDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.OrdenOrdenContenidoSedeDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.OrdenesExporterDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Orden;
@@ -129,5 +130,13 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
 
     @Query(nativeQuery = true, value = "SELECT o.id, o.fechaIni, o.fechaFin, o.precioTotal, u.nombres, u.apellidos, s.nombre as nombreSede, o.idTipo FROM orden o inner join usuario u on o.idPaciente = u.id inner join sede s on o.idSede = s.id;")
     List<OrdenesExporterDto> listarOrdenesExporter();
+
+    @Query(nativeQuery = true, value = "SELECT idSede, count(*) as cantidadOrdenes FROM orden group by idSede")
+    List<OrdenCantidadVentasDto> listarCantidadVentasEnSedes();
+
+
+
+
+
 
 }
