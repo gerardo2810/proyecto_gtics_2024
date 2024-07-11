@@ -66,6 +66,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/farmacista", "/farmacista/**").authenticated()
                 .requestMatchers("/paciente", "/paciente/**").authenticated()*/
                 //Autenticación por rol
+                .requestMatchers("/chatbot-gtics/**").permitAll()
                 .requestMatchers("/superadmin", "/superadmin/**").hasAnyAuthority("SUPERADMIN")
                 .requestMatchers("/adminsede", "/adminsede/**").hasAnyAuthority("SUPERADMIN", "ADMINSEDE")
                 .requestMatchers("/farmacista", "/farmacista/**").hasAnyAuthority("SUPERADMIN", "FARMACISTA")
