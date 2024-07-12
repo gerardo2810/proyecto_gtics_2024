@@ -1,5 +1,7 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,38 +12,32 @@ import java.util.HashMap;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin /* Por si se desea utilizar de IPs externas */
 @RequestMapping("/chatbot_gtics")
 public class ChatBotController {
 
-    private static final String SECURITY_TOKEN = "acceso123ah";
-
-    public boolean isValidToken(String token) {
-        return SECURITY_TOKEN.equals(token);
+    @Getter
+    @Setter
+    public static class DniRequest {
+        private String dni;
     }
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @GetMapping(value = "/valida_dni/{dni}")
-    public ResponseEntity<HashMap<String, Object>> validaDni(@RequestHeader("Authorization") String token, @PathVariable("dni") String dni)  {
-        if (!isValidToken(token)) {
-            return ResponseEntity.status(403).body(null); // Forbidden if token is not valid
-        }
-
+    @PostMapping(value = "/valida_dni")
+    public ResponseEntity<Object> validarDni(@RequestBody DniRequest dniRequest) {
         try {
-            Optional<Usuario> userDNI = usuarioRepository.verifyDNI(dni);
+            String dni = dniRequest.getDni();
+            Usuario usuario = usuarioRepository.verifyDNI(dni).orElse(null);
 
-            HashMap<String, Object> respuesta = new HashMap<>();
-
-            if (userDNI.isPresent()) {
-                respuesta.put("result", "ok");
-                respuesta.put("usuario", userDNI.get());
+            if (usuario != null) {
+                return ResponseEntity.ok(usuario);
             } else {
-                respuesta.put("result", "no existe");
+                return ResponseEntity.ok("Usuario no encontrado");
             }
-            return ResponseEntity.ok(respuesta);
         } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body("Error en el formato del DNI");
         }
     }
 }
