@@ -381,7 +381,7 @@
                                 var myChart = new Chart(ctx, {
                                     type: 'bar',
                                     data: {
-                                        labels: ['Paracetamol', 'Ibuprofeno', 'Amoxicilina', 'Diclofenaco', 'Loratadina'],
+                                        labels: ['Paracetamolaaa', 'Ibuprofeno', 'Amoxicilina', 'Diclofenaco', 'Loratadina'],
                                         datasets: [
                                             {
                                                 label: 'Últimos 7 días',
@@ -423,7 +423,7 @@
                                 var myChart = new Chart(ctx, {
                                     type: 'bar',
                                     data: {
-                                        labels: ['Paracetamol', 'Ibuprofeno', 'Amoxicilina', 'Diclofenaco', 'Loratadina'],
+                                        labels: ['Paracetamol31', 'Ibuprofeno', 'Amoxicilina', 'Diclofenaco', 'Loratadina'],
                                         datasets: [
                                             {
                                                 label: 'Últimos 7 días',
@@ -489,98 +489,115 @@
                     <canvas id="graficoSedes" width="400" height="400"></canvas>
                     <script>
                         $(document).ready(function(){
-                            $.ajax({
-                                method: "GET",
-                                dataType: "json",
-                                crossDomain: true,
-                                url: "http://localhost:8080/service/listaVentas"
-                            }).done(function (data){
-                                console.log(data); // Muestra la lista de datos en la consola
+                            // Función para realizar la solicitud AJAX y actualizar los datos
+                            function actualizarDatos() {
+                                $.ajax({
+                                    method: "GET",
+                                    dataType: "json",
+                                    crossDomain: true,
+                                    url: "http://localhost:8080/service/listaVentas"
+                                }).done(function (data){
+                                    console.log(data); // Muestra la lista de datos en la consola
 
-                                // data es un array de objetos
-                                var contentHtml = "";
-                                var cantidadTotal = 0;
-                                var cantidadCentral = 0;
-                                var cantidadNorte = 0;
-                                var cantidadSur = 0;
-                                var cantidadEste = 0;
-                                var cantidadOeste = 0;
+                                    // data es un array de objetos
+                                    var contentHtml = "";
+                                    var cantidadTotal = 0;
+                                    var cantidadCentral = 0;
+                                    var cantidadNorte = 0;
+                                    var cantidadSur = 0;
+                                    var cantidadEste = 0;
+                                    var cantidadOeste = 0;
 
-                                $.each(data, function(index, item){
-                                    contentHtml += "<p>ID Sede: " + item.idSede + ", Cantidad de Órdenes: " + item.cantidadOrdenes + "</p>";
-                                    cantidadTotal += item.cantidadOrdenes;
+                                    $.each(data, function(index, item){
+                                        contentHtml += "<p>ID Sede: " + item.idSede + ", Cantidad de Órdenes: " + item.cantidadOrdenes + "</p>";
+                                        cantidadTotal += item.cantidadOrdenes;
 
-                                    if(item.idSede === 1){
-                                        cantidadCentral = item.cantidadOrdenes;
-                                    } else if(item.idSede === 2){
-                                        cantidadNorte = item.cantidadOrdenes;
-                                    } else if(item.idSede === 3){
-                                        cantidadSur = item.cantidadOrdenes;
-                                    } else if(item.idSede === 4){
-                                        cantidadEste = item.cantidadOrdenes;
-                                    } else if(item.idSede === 5){
-                                        cantidadOeste = item.cantidadOrdenes;
-                                    }
-                                });
-                                console.log(contentHtml);
-                                console.log(cantidadTotal); // cantidad total de ventas
-                                console.log(cantidadSur);
+                                        switch(item.idSede) {
+                                            case 1:
+                                                cantidadCentral = item.cantidadOrdenes;
+                                                break;
+                                            case 2:
+                                                cantidadNorte = item.cantidadOrdenes;
+                                                break;
+                                            case 3:
+                                                cantidadSur = item.cantidadOrdenes;
+                                                break;
+                                            case 4:
+                                                cantidadEste = item.cantidadOrdenes;
+                                                break;
+                                            case 5:
+                                                cantidadOeste = item.cantidadOrdenes;
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    });
 
-                                // Insertar el contenido HTML en el elemento con id "resultado"
-                                $("#resultado").html(contentHtml);
+                                    console.log(contentHtml);
+                                    console.log(cantidadTotal); // cantidad total de ventas
+                                    console.log(cantidadSur);
 
-                                // Crear gráfico después de obtener los datos
-                                var ctx = document.getElementById('graficoSedes').getContext('2d');
-                                var myChart = new Chart(ctx, {
-                                    type: 'pie', // Tipo de gráfica: pie (circular)
-                                    data: {
-                                        labels: ['Sede Norte', 'Sede Sur', 'Sede Este', 'Sede Oeste', 'Sede Central'], // Nombres de las sedes
-                                        datasets: [{
-                                            label: 'Cantidad de Transacciones',
-                                            data: [cantidadNorte, cantidadSur, cantidadEste, cantidadOeste, cantidadCentral], // Cantidades de transacciones para cada sede
-                                            backgroundColor: [
-                                                'rgba(255, 99, 132, 0.2)', // Color de la primera porción
-                                                'rgba(54, 162, 235, 0.2)', // Color de la segunda porción
-                                                'rgba(255, 206, 86, 0.2)', // Color de la tercera porción
-                                                'rgba(75, 192, 192, 0.2)', // Color de la cuarta porción
-                                                'rgba(153, 102, 255, 0.2)'  // Color de la quinta porción
-                                            ],
-                                            borderColor: [
-                                                'rgba(255, 99, 132, 1)', // Color del borde de la primera porción
-                                                'rgba(54, 162, 235, 1)', // Color del borde de la segunda porción
-                                                'rgba(255, 206, 86, 1)', // Color del borde de la tercera porción
-                                                'rgba(75, 192, 192, 1)', // Color del borde de la cuarta porción
-                                                'rgba(153, 102, 255, 1)'  // Color del borde de la quinta porción
-                                            ],
-                                            borderWidth: 1 // Ancho del borde de las porciones
-                                        }]
-                                    },
-                                    options: {
-                                        responsive: true, // La gráfica es responsiva
-                                        maintainAspectRatio: false, // Mantener el tamaño del gráfico constante
-                                        plugins: {
-                                            legend: {
-                                                position: 'bottom', // Cambiar posición de la leyenda a abajo
-                                                labels: {
-                                                    padding: 30 // Ajustar el espacio entre la leyenda y el gráfico
-                                                }
-                                            },
-                                            tooltip: {
-                                                callbacks: {
-                                                    label: function(context) {
-                                                        var label = context.label || '';
-                                                        var value = context.raw || 0;
-                                                        return label + ': ' + value + ' transacciones';
+                                    // Insertar el contenido HTML en el elemento con id "resultado"
+                                    $("#resultado").html(contentHtml);
+
+                                    // Crear gráfico después de obtener los datos
+                                    var ctx = document.getElementById('graficoSedes').getContext('2d');
+                                    var myChart = new Chart(ctx, {
+                                        type: 'pie', // Tipo de gráfica: pie (circular)
+                                        data: {
+                                            labels: ['Sede Norte', 'Sede Sur', 'Sede Este', 'Sede Oeste', 'Sede Central'], // Nombres de las sedes
+                                            datasets: [{
+                                                label: 'Cantidad de Transacciones',
+                                                data: [cantidadNorte, cantidadSur, cantidadEste, cantidadOeste, cantidadCentral], // Cantidades de transacciones para cada sede
+                                                backgroundColor: [
+                                                    'rgba(255, 99, 132, 0.2)', // Color de la primera porción
+                                                    'rgba(54, 162, 235, 0.2)', // Color de la segunda porción
+                                                    'rgba(255, 206, 86, 0.2)', // Color de la tercera porción
+                                                    'rgba(75, 192, 192, 0.2)', // Color de la cuarta porción
+                                                    'rgba(153, 102, 255, 0.2)'  // Color de la quinta porción
+                                                ],
+                                                borderColor: [
+                                                    'rgba(255, 99, 132, 1)', // Color del borde de la primera porción
+                                                    'rgba(54, 162, 235, 1)', // Color del borde de la segunda porción
+                                                    'rgba(255, 206, 86, 1)', // Color del borde de la tercera porción
+                                                    'rgba(75, 192, 192, 1)', // Color del borde de la cuarta porción
+                                                    'rgba(153, 102, 255, 1)'  // Color del borde de la quinta porción
+                                                ],
+                                                borderWidth: 1 // Ancho del borde de las porciones
+                                            }]
+                                        },
+                                        options: {
+                                            responsive: true, // La gráfica es responsiva
+                                            maintainAspectRatio: false, // Mantener el tamaño del gráfico constante
+                                            plugins: {
+                                                legend: {
+                                                    position: 'bottom', // Cambiar posición de la leyenda a abajo
+                                                    labels: {
+                                                        padding: 30 // Ajustar el espacio entre la leyenda y el gráfico
+                                                    }
+                                                },
+                                                tooltip: {
+                                                    callbacks: {
+                                                        label: function(context) {
+                                                            var label = context.label || '';
+                                                            var value = context.raw || 0;
+                                                            return label + ': ' + value + ' transacciones';
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
+                                    });
+                                }).fail(function (jqXHR, textStatus, errorThrown) {
+                                    console.error("Error en la consulta AJAX: " + textStatus, errorThrown);
                                 });
+                            }
 
-                            }).fail(function (jqXHR, textStatus, errorThrown) {
-                                console.error("Error en la consulta AJAX: " + textStatus, errorThrown);
-                            });
+                            // Llamar a la función inicialmente al cargar la página
+                            actualizarDatos();
+
+                            // Actualizar los datos cada 10 segundos (10000 milisegundos)
+                            setInterval(actualizarDatos, 10000); // Cambia el intervalo según sea necesario
                         });
                     </script>
                 </div>
@@ -953,7 +970,7 @@
                             }else{
                                 dataArray.push(item)
                             }
-                            
+
                         })
 
                         var ctx = document.getElementById('miGrafico').getContext('2d');
@@ -991,12 +1008,6 @@
                                 }
                             }
                         });
-
-
-
-
-
-
 
                     }else{
                         console.log(data.message);
