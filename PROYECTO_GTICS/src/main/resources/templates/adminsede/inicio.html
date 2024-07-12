@@ -416,10 +416,6 @@
                                         }
                                     });
 
-                                    console.log(contentHtml);
-                                    console.log(cantidadTotal); // cantidad total de ventas
-                                    console.log(cantidadSur);
-
                                     // Insertar el contenido HTML en el elemento con id "resultado"
                                     $("#resultado").html(contentHtml);
 
@@ -478,6 +474,9 @@
 
                             // Llamar a la función inicialmente al cargar la página
                             actualizarDatos();
+
+                            //Comparo con la data que se transfirió en un inicio:
+
 
                             // Actualizar los datos cada 10 segundos (10000 milisegundos)
                             setInterval(actualizarDatos, 10000); // Cambia el intervalo según sea necesario
@@ -964,10 +963,6 @@
                     }else {
                         console.log(data.message);
                     }
-
-
-
-
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     console.error("Error en la consulta AJAX: " + textStatus, errorThrown);
                 });
