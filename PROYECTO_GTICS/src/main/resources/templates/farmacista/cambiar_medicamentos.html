@@ -39,46 +39,7 @@
 
     <title>Bienestar San Miguel | Pre Ordenes</title>
     <style>
-        .container5 {
-            display: flex;
-            border: 2px solid #1f56bd;
-            width: 80%;
-            background-color: #fff;
-        }
 
-        .column5 {
-            flex: 1;
-            padding: 10px;
-            border-right: 2px solid #1f56bd;
-            min-height: 500px;
-        }
-
-        .column5:last-child {
-            border-right: none;
-        }
-
-        .header5 {
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 20px;
-            font-family: 'Arial', sans-serif; /* Cambia la fuente a Arial */
-            font-size: 24px; /* Ajusta el tamaño de la fuente */
-            color: #333; /* Cambia el color del texto */
-        }
-
-
-        .item {
-            border: 1px solid #000;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: #ffffff;
-            cursor: move;
-        }
-
-        .details p {
-            margin: 0;
-            font-size: 14px;
-        }
         .modal {
             display: none;
             position: fixed;
@@ -93,11 +54,11 @@
 
         .modal-content {
             background-color: white;
-            margin: 16% auto; /* Ajusta según sea necesario */
+            margin: 10% auto; /* Ajusta según sea necesario */
             padding: 20px;
             border: 1px solid #888;
             width: 100%;
-            max-width: 1600px;
+            max-width: 900px;
             border-radius: 10px;
             z-index: 1001; /* Asegúrate de que el contenido del modal esté por encima del fondo */
         }
@@ -116,6 +77,159 @@
             cursor: pointer;
         }
 
+    </style>
+    <style>
+
+        p {
+            margin: 0rem 0rem 2.4rem 0rem;
+            line-height: 150%;
+            text-align: center;
+        }
+
+        ul,
+        ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+            line-height: 150%;
+        }
+        /*clearfixes*/
+
+        .cf:before,
+        .cf:after {
+            content: " ";
+            display: table;
+        }
+
+        .cf:after {
+            clear: both;
+        }
+
+        *,
+        *:before,
+        *:after {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        article,
+        aside,
+        details,
+        figcaption,
+        figure,
+        footer,
+        header,
+        hgroup,
+        menu,
+        nav,
+        section,
+        div {
+            margin: 0;
+        }
+
+        div {
+            margin: 0rem;
+        }
+
+        .page5 {
+            max-width: 690px;
+            margin: 0px auto;
+        }
+
+
+        /*drag and drop styles*/
+        .dnd-image-drag .container5 {
+            float: left;
+            margin: 0 10px 20px 10px;
+        }
+
+        .dnd-image-drag .gallery-list {
+            width: 320px;
+            min-height: 317px;
+            background: #eee;
+            border: solid 1px #ccc;
+            padding: 5px 0 5px 5px;
+        }
+
+        .dnd-image-drag .gallery-list .drag {
+            width: 150px;
+            display: inline-block;
+            height: 150px;
+            border: solid 1px #ccc;
+            cursor: -webkit-grab;
+            cursor: -moz-grab;
+            border: solid 1px transparent;
+        }
+
+        .dnd-image-drag .gallery-list .drag.drag-active {
+            border: solid 1px #2c3e50;
+        }
+
+        .dnd-image-drag .gallery-painting {
+            width: 320px;
+            background: #eee;
+            background-position: center center;
+            background-size: cover;
+            border: solid 1px #ccc;
+            padding: 5px 0 5px 5px;
+        }
+
+        .dnd-image-drag .gallery-painting .drop {
+            position: relative;
+            height: 150px;
+            width: 150px;
+            display: inline-block;
+            background: rgba(50, 50, 50, 0.7);
+            border: solid 1px transparent;
+            overflow: hidden;
+        }
+
+        .dnd-image-drag .gallery-painting .drop.drop-active {
+            border: solid 1px #f1c40f;
+        }
+
+        .dnd-image-drag .gallery-painting .drop.correct {
+            border: solid 1px #32ce74;
+        }
+
+        .dnd-image-drag .gallery-painting .drop.incorrect {
+            border: solid 1px #c0392b;
+        }
+
+        .dnd-image-drag .gallery-painting .drop img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .reset-button {
+            background: #eee;
+            border: solid 1px #ccc;
+            padding: 12px 15px;
+            display: block;
+            cursor: pointer;
+            margin: 0 auto;
+            min-width: 100px;
+            clear: both;
+        }
+
+        .message-container5 {
+            clear: both;
+        }
+
+        .ie-message {
+            display: none;
+            padding: 15px;
+            background: #e74c3c;
+            color: #fff;
+            border: dashed 2px #c0392b;
+            margin-bottom: 15px;
+        }
+
+        .p {
+            font-size: 15px;
+            padding-top: 150px;
+            clear: both;
+        }
     </style>
 
 </head>
@@ -255,34 +369,35 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <div class="container">
-                <div class="container5">
-                    <!-- Iterar sobre cada categoría -->
-                    <th:block th:each="categoria, categoriaIndex : ${medicamentosAgrupados}">
-                        <div class="column5" id="reemplazo" ondrop="drop(event)" ondragover="allowDrop(event)">
-                            <div class="header5" th:text="${'Categoria: ' + categoria.get(0).getCategorias()}"></div>
-                            <div class="med-container">
-                                <!-- Iterar sobre los medicamentos de esta categoría -->
-                                <th:block th:each="medicamento : ${categoria}">
-                                    <div class="item" draggable="true" ondragstart="drag(event)" id="item1">
-                                        <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" th:alt="${medicamento.nombre}" class="img-item" style="width: 200px; height: 200px;">
-                                        <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
-                                            <div>
-                                                <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}">Unidad</div>
-                                                <div class="item-title roboto-medium" th:text="${medicamento.nombre}">Medicamento</div>
-                                            </div>
-                                        </div>
-                                        <div style="display: flex; flex-direction: row; gap: 3px; align-items: end;">
-                                            <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
-                                        </div>
-                                    </div>
-                                </th:block>
+                <article class="page5">
+                    <article class="main">
+
+                        <article class="dnd-image-drag cf">
+                            <div class="container5">
+                                <h3>Sugerencia de medicamentos</h3>
+                                <div class="inner gallery-list cf">
+                                    <img draggable="true" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/123941/ie_big_image_2.jpg" class="drag" value="2" />
+                                    <img draggable="true" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/123941/ie_big_image_3.jpg" class="drag" value="3" />
+                                    <img draggable="true" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/123941/ie_big_image_1.jpg" class="drag" value="1" />
+                                    <img draggable="true" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/123941/ie_big_image_4.jpg" class="drag" value="4" />
+                                </div>
                             </div>
-                        </div>
-                    </th:block>
-                    <div class="column5" id="cambio" ondrop="drop(event)" ondragover="allowDrop(event)">
-                        <div class="header5">Cambio de medicamentos</div>
-                    </div>
-                </div>
+
+                            <div class="container5">
+                                <h3>Medicamentos seleccionados</h3>
+                                <div class="inner gallery-painting cf">
+                                    <div class="drop" value="1"></div>
+                                    <div class="drop" value="2"></div>
+                                    <div class="drop" value="3"></div>
+                                    <div class="drop" value="4"></div>
+                                </div>
+                            </div>
+
+                            <div class="message-container5"></div>
+
+                        </article>
+                    </article>
+                </article>
             </div>
             <br>
         </div>
@@ -323,6 +438,199 @@
             }
             opened = !opened;
         });
+    });
+</script>
+<script>
+    jQuery(document).ready(function($) {
+
+        var drag_items = $('.dnd-image-drag .drag');
+        var drop_items = $('.dnd-image-drag').find('.drop');
+
+        //set up drag and drop event listeners
+        function setUpEventListeners() {
+
+            drag_items.each(function() {
+                var thisDrag = $(this);
+                thisDrag[0].addEventListener('dragstart', dragStart);
+                thisDrag[0].addEventListener('drag', drag);
+                thisDrag[0].addEventListener('dragend', dragEnd);
+            });
+
+            drop_items.each(function() {
+                var thisDrop = $(this);
+
+                thisDrop[0].addEventListener('dragenter', dragEnter);
+                thisDrop[0].addEventListener('dragover', dragOver);
+                thisDrop[0].addEventListener('dragleave', dragLeave);
+                thisDrop[0].addEventListener('drop', drop);
+
+            });
+
+        }
+        setUpEventListeners();
+
+        var dragItem;
+
+        //called as soon as the draggable starts being dragged
+        //used to set up data and options
+        function dragStart(event) {
+
+            drag = event.target;
+            dragItem = event.target;
+
+            //set the effectAllowed for the drag item
+            event.dataTransfer.effectAllowed = 'copy';
+
+            var imageSrc = $(dragItem).prop('src');
+            var imageHTML = $(dragItem).prop('outerHTML');
+
+            //check for IE (it supports only 'text' or 'URL')
+            try {
+                event.dataTransfer.setData('text/uri-list', imageSrc);
+                event.dataTransfer.setData('text/html', imageHTML);
+            } catch (e) {
+                event.dataTransfer.setData('text', imageSrc);
+            }
+
+            $(drag).addClass('drag-active');
+
+        }
+
+        //called as the draggable enters a droppable
+        //needs to return false to make droppable area valid
+        function dragEnter(event) {
+
+            var drop = this;
+
+            //set the drop effect for this zone
+            event.dataTransfer.dropEffect = 'copy';
+            $(drop).addClass('drop-active');
+
+            event.preventDefault();
+            event.stopPropagation();
+
+        }
+
+        //called continually while the draggable is over a droppable
+        //needs to return false to make droppable area valid
+        function dragOver(event) {
+            var drop = this;
+
+            //set the drop effect for this zone
+            event.dataTransfer.dropEffect = 'copy';
+            $(drop).addClass('drop-active');
+
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        //called when the draggable was inside a droppable but then left
+        function dragLeave(event) {
+            var drop = this;
+            $(drop).removeClass('drop-active');
+        }
+
+        //called continually as the draggable is dragged
+        function drag(event) {
+
+        }
+
+        //called when the draggable has been released (either on droppable or not)
+        //may be called on invalid or valid drop
+        function dragEnd(event) {
+
+            var drag = this;
+            $(drag).removeClass('drag-active');
+
+        }
+
+        //called when draggable is dropped on droppable
+        //final process, used to copy data or update UI on successful drop
+        function drop(event) {
+
+            drop = this;
+            $(drop).removeClass('drop-active');
+
+            var dataList, dataHTML, dataText;
+
+            //collect our data (based on what browser support we have)
+            try {
+                dataList = event.dataTransfer.getData('text/uri-list');
+                dataHTML = event.dataTransfer.getData('text/html');
+            } catch (e) {;
+                dataText = event.dataTransfer.getData('text');
+            }
+
+            //we have access to the HTML
+            if (dataHTML) {
+                $(drop).empty();
+                $(drop).prepend(dataHTML);
+                var drag = $(drop).find('.drag');
+            }
+            //only have access to text (old browsers + IE)
+            else {
+                $(drop).empty();
+                $(drop).prepend($(dragItem).clone());
+                var drag = $(drop).find('.drag');
+            }
+
+            //check if this element is in the right spot
+            checkCorrectDrop(drop, drag);
+            //see if the final image is complete
+            checkCorrectFinalImage();
+
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        //check to see if this dropped item is in the correct spot
+        function checkCorrectDrop(drop, drag) {
+
+            //check if this drop is correct
+            var imageValue = $(drag).attr('value');
+            var dropValue = $(drop).attr('value');
+
+            if (imageValue == dropValue) {
+                $(drop).removeClass('incorrect').addClass('correct');
+                //make the dropped item no longer draggable (removing the attr)
+                $(drag).attr('draggable', 'false');
+
+                //hide the original drag item (set during dragStart), we don't need it anymore
+                $(dragItem).hide();
+
+            } else {
+                $(drop).removeClass('correct').addClass('incorrect');
+            }
+
+        }
+
+        //checks to see if the dropped images are in the correct locations
+        function checkCorrectFinalImage() {
+
+            var correctItems = drop_items.filter('.correct');
+            if (correctItems.length == drop_items.length) {
+                $('.message-container5').empty();
+                $('.message-container5').append('<h3>You solved the puzzle!</h3>');
+                $('.message-container5').append('<p>Thanks for putting Internet Explorer back together again!</p>');
+            } else {
+                $('.message-container5').empty();
+            }
+        }
+
+        //Reset the drop containers
+        $('.reset-button').on('click', function() {
+            $('.dnd-image-drag').find('.drop').children('img').remove();
+            $('.dnd-image-drag').find('.drop').removeClass('correct incorrect');
+            $('.message-container5').empty();
+            $('.dnd-image-drag .drag').show();
+        });
+
+        // check for ie
+        var userAgent = window.navigator.userAgent;
+        if (userAgent.indexOf('MSIE') != -1) {
+            $('.ie-message').show();
+        }
+
     });
 </script>
 <script>
