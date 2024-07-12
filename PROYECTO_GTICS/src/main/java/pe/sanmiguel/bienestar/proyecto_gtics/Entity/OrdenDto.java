@@ -34,7 +34,6 @@ public class OrdenDto {
 
     @NotEmpty(message = "Debe seleccionar la imagen de su receta")
     @Lob
-    @Size(max = 2000000, message = "El tamaño máximo de la imagen debe ser menor a 2 MB")
     private byte[] file;
 
 

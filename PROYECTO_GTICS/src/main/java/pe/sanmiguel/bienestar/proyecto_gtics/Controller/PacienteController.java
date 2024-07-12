@@ -407,10 +407,12 @@ public class PacienteController {
                                @RequestParam(value = "seguro", required = false) String seguro,
                                Model model, RedirectAttributes redirectAttributes,
                                HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-
         HttpSession session = request.getSession();
         Usuario usuario1 = (Usuario) session.getAttribute("usuario");
 
+
+
+        //-----------IMAGEN DEBE SER PNG O JPG------------------//
         String fileName = file.getSubmittedFileName();
         String[] partes = fileName.split("\\.");
         System.out.println(partes);
@@ -419,12 +421,19 @@ public class PacienteController {
             extension = partes[partes.length - 1];  // Obtener la última parte como extensión
             System.out.printf("La Extensión es: " + extension);
         } else {
-            System.out.println("No se pudo determinar la extensión del archivo.");
-        }
+            System.out.println("No se pudo determinar la extensión del archivo.");}
+        //---------------------------------------------------------------//
 
 
+        //-----------IMAGEN DEBE SER MENOR A 2MB------------------//
+        long size = file.getSize();
+        long maxSize = 3 * 1024 * 1024;
 
-        if(bindingResult.hasErrors() || bin2.hasErrors() || (extension != null && !extension.equals("png") && !extension.equals("jpg")) ){
+        System.out.println("\n EL tamaño del archivo es: " + size + "| el maximo es: "+maxSize);
+        //---------------------------------------------------------------//
+
+
+        if(bindingResult.hasErrors() || bin2.hasErrors() || (extension != null && !extension.equals("png") && !extension.equals("jpg")) || (size > maxSize) ){
             System.out.println(bindingResult.getAllErrors());
             System.out.printf(String.valueOf(file));
 
@@ -440,7 +449,9 @@ public class PacienteController {
             }
             if(extension != null && (!extension.equals("png") && !extension.equals("jpg") && !extension.equals("jpeg")) ){
                 model.addAttribute("extensionIncorrecta", 0);
-                System.out.println("no es una imagen : " + extension);
+            }
+            if(size > maxSize){
+                model.addAttribute("archivoPesado",0);
             }
 
 
