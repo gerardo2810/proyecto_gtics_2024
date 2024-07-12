@@ -183,7 +183,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_contra = 1 WHERE id = ?")
     void actualizarEstadoContra(int idUsuario);
 
-
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET contrasena = ?1 WHERE correo = ?2")
+    void actualizarRecupearContra(String contrasena, String correo);
 
 
 

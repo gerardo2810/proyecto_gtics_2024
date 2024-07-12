@@ -22,8 +22,8 @@ public class Usuario implements Serializable {
     private Integer rol;
 
     @Column
-    @NotBlank(message = "Debe ingresar un correo", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, OptionalValidationsGroup.class, LoginValidationsGroup.class, AdminSedeValidationsGroup.class, SuperAdminValidationsGroup.class})
-    @Email(regexp = ".+@.+\\..+", message = "Debe ingresar un correo válido", groups = {RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, OptionalValidationsGroup.class,LoginValidationsGroup.class, AdminSedeValidationsGroup.class, SuperAdminValidationsGroup.class })
+    @NotBlank(message = "Debe ingresar un correo", groups = {CambioContraValidationGroup.class, RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, OptionalValidationsGroup.class, LoginValidationsGroup.class, AdminSedeValidationsGroup.class, SuperAdminValidationsGroup.class})
+    @Email(regexp = ".+@.+\\..+", message = "Debe ingresar un correo válido", groups = {CambioContraValidationGroup.class, RegisterValidationsGroup.class, FarmacistaValidationsGroup.class, OptionalValidationsGroup.class,LoginValidationsGroup.class, AdminSedeValidationsGroup.class, SuperAdminValidationsGroup.class })
     private String correo;
 
     @Column

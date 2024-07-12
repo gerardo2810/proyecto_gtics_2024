@@ -21,6 +21,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
 import pe.sanmiguel.bienestar.proyecto_gtics.PasswordService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
 import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.CambioContraValidationGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.DniApiValidationGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.LoginValidationsGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.RegisterValidationsGroup;
@@ -188,7 +189,45 @@ final UsuarioRepository usuarioRepository;
     }
 
   @GetMapping("/recuperarContra")
-    public String recuperarContra() {return "login/recuperarContrasena";}
+    public String recuperarContra(Model model) {
+      model.addAttribute("usuario", new Usuario());
+
+      return "login/recuperarContrasena";}
+
+    @PostMapping("/recuperarContraPost")
+    public String procesarRecuperarContra(@ModelAttribute("usuario") @Validated(CambioContraValidationGroup.class) Usuario usuario,
+                                          @RequestParam("correo") String correo, BindingResult bindingResult, RedirectAttributes attributes, Model model) throws MessagingException {
+        String subject = "Recuperación de Contraseña";
+        Map<String, Object> variables = new HashMap<>();
+        Map<String, Object> variables2 = new HashMap<>();
+
+        if (!bindingResult.hasErrors()) {
+            String temporaryPassword = passwordService.generateTemporaryPassword();
+            System.out.println(temporaryPassword);
+
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+            String encodedPassword = passwordEncoder.encode(temporaryPassword);
+            usuario.setContrasena(encodedPassword);
+            usuarioRepository.actualizarRecupearContra(encodedPassword, correo);
+            System.out.println(encodedPassword);
+            System.out.println(usuario.getContrasena());
+
+            variables.put("correo", correo);
+            variables2.put("contra", temporaryPassword);
+
+            try {
+                emailService.sendHtmlEmail2(correo, subject,"login/correo", variables, variables2);
+                attributes.addFlashAttribute("mensaje", "Correo enviado.");
+                return "redirect:/";
+            } catch (MessagingException e) {
+                e.printStackTrace();
+                attributes.addFlashAttribute("mensaje", "Hubo un error al enviar el correo: " + e.getMessage());
+            }
+        }
+        model.addAttribute("usuario", usuario);
+        return "login/prueba3";
+
+    }
 
     @GetMapping("/access-denied")
     public String accessDenied() {
