@@ -10,6 +10,7 @@ import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
 import jakarta.websocket.SessionException;
 import org.apache.catalina.Session;
+import org.apache.poi.ddf.EscherPictBlip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -407,31 +408,46 @@ public class PacienteController {
                                Model model, RedirectAttributes redirectAttributes,
                                HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 
-
         HttpSession session = request.getSession();
         Usuario usuario1 = (Usuario) session.getAttribute("usuario");
 
+        String fileName = file.getSubmittedFileName();
+        String[] partes = fileName.split("\\.");
+        String extension = null;
+        if (partes.length > 1) {
+            extension = partes[partes.length - 1];  // Obtener la última parte como extensión
+            System.out.println("Extensión: " + extension);
 
-        System.out.println("El precio total es:" + total);
+        } else {
+            System.out.println("No se pudo determinar la extensión del archivo.");
+        }
 
-        if(bindingResult.hasErrors() || bin2.hasErrors()){
 
 
+        if(bindingResult.hasErrors() || bin2.hasErrors() || (extension != null && (!extension.equals("png") || !extension.equals("jpg")) )){
             System.out.println(bindingResult.getAllErrors());
             System.out.printf(String.valueOf(file));
+
+
+
+
 
             List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
             List<Doctor> listaDoctores = doctorRepository.findAll();
             model.addAttribute("listaDoctores", listaDoctores);
             model.addAttribute("listaMedicamentos", listaMedicamentos);
-
             if(!lista.isEmpty()){
                 List<Medicamento> medicamentosSeleccionados = getMedicamentosFromLista(lista);
                 List<String> listaCantidades = getCantidadesFromLista(lista);
-
                 model.addAttribute("currentMed", medicamentosSeleccionados);
                 model.addAttribute("currentCant", listaCantidades);
             }
+            if(extension != null && (!extension.equals("png") || !extension.equals("jpg") || !extension.equals("jpeg")) ){
+                model.addAttribute("extensionIncorrecta", 0);
+                System.out.println(extension);
+            }
+
+
 
             return "paciente/new_orden";
 
