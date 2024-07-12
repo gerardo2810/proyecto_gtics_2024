@@ -324,6 +324,7 @@
                     <h2 class="fw-bold" th:text="'AdminSede-' + ${usuario.getNombres()} + ' ' + ${usuario.getApellidos()}"></h2>
                     <p class="fw-medium" th:text="${usuario.getCorreo()}"></p>
                     <p th:text="'Bienestar San Miguel - ' + ${sedesesion.getNombre()}"></p>
+                    <input type="hidden" id="sedeId" th:value="${sedesesion.getIdSede()}" />
                     <button id="reportButton" class="aprobar" style="font-size: 1rem;">Ver reportes</button>
                 </div>
             </div>
@@ -487,52 +488,99 @@
                 <div style="margin-top: 40px;">
                     <canvas id="graficoSedes" width="400" height="400"></canvas>
                     <script>
-                        var ctx = document.getElementById('graficoSedes').getContext('2d');
-                        var myChart = new Chart(ctx, {
-                            type: 'pie', // Tipo de gráfica: pie (circular)
-                            data: {
-                                labels: ['Sede Norte', 'Sede Sur', 'Sede Este', 'Sede Oeste', 'Sede Central'], // Nombres de las sedes
-                                datasets: [{
-                                    label: 'Cantidad de Transacciones',
-                                    data: [120, 90, 60, 150, 80], // Cantidades de transacciones para cada sede
-                                    backgroundColor: [
-                                        'rgba(255, 99, 132, 0.2)', // Color de la primera porción
-                                        'rgba(54, 162, 235, 0.2)', // Color de la segunda porción
-                                        'rgba(255, 206, 86, 0.2)', // Color de la tercera porción
-                                        'rgba(75, 192, 192, 0.2)', // Color de la cuarta porción
-                                        'rgba(153, 102, 255, 0.2)'  // Color de la quinta porción
-                                    ],
-                                    borderColor: [
-                                        'rgba(255, 99, 132, 1)', // Color del borde de la primera porción
-                                        'rgba(54, 162, 235, 1)', // Color del borde de la segunda porción
-                                        'rgba(255, 206, 86, 1)', // Color del borde de la tercera porción
-                                        'rgba(75, 192, 192, 1)', // Color del borde de la cuarta porción
-                                        'rgba(153, 102, 255, 1)'  // Color del borde de la quinta porción
-                                    ],
-                                    borderWidth: 1 // Ancho del borde de las porciones
-                                }]
-                            },
-                            options: {
-                                responsive: true, // La gráfica es responsiva
-                                maintainAspectRatio: false, // Mantener el tamaño del gráfico constante
-                                plugins: {
-                                    legend: {
-                                        position: 'bottom', // Cambiar posición de la leyenda a abajo
-                                        labels: {
-                                            padding: 30 // Ajustar el espacio entre la leyenda y el gráfico
-                                        }
+                        $(document).ready(function(){
+                            $.ajax({
+                                method: "GET",
+                                dataType: "json",
+                                crossDomain: true,
+                                url: "http://localhost:8080/service/listaVentas"
+                            }).done(function (data){
+                                console.log(data); // Muestra la lista de datos en la consola
+
+                                // data es un array de objetos
+                                var contentHtml = "";
+                                var cantidadTotal = 0;
+                                var cantidadCentral = 0;
+                                var cantidadNorte = 0;
+                                var cantidadSur = 0;
+                                var cantidadEste = 0;
+                                var cantidadOeste = 0;
+
+                                $.each(data, function(index, item){
+                                    contentHtml += "<p>ID Sede: " + item.idSede + ", Cantidad de Órdenes: " + item.cantidadOrdenes + "</p>";
+                                    cantidadTotal += item.cantidadOrdenes;
+
+                                    if(item.idSede === 1){
+                                        cantidadCentral = item.cantidadOrdenes;
+                                    } else if(item.idSede === 2){
+                                        cantidadNorte = item.cantidadOrdenes;
+                                    } else if(item.idSede === 3){
+                                        cantidadSur = item.cantidadOrdenes;
+                                    } else if(item.idSede === 4){
+                                        cantidadEste = item.cantidadOrdenes;
+                                    } else if(item.idSede === 5){
+                                        cantidadOeste = item.cantidadOrdenes;
+                                    }
+                                });
+                                console.log(contentHtml);
+                                console.log(cantidadTotal); // cantidad total de ventas
+                                console.log(cantidadSur);
+
+                                // Insertar el contenido HTML en el elemento con id "resultado"
+                                $("#resultado").html(contentHtml);
+
+                                // Crear gráfico después de obtener los datos
+                                var ctx = document.getElementById('graficoSedes').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'pie', // Tipo de gráfica: pie (circular)
+                                    data: {
+                                        labels: ['Sede Norte', 'Sede Sur', 'Sede Este', 'Sede Oeste', 'Sede Central'], // Nombres de las sedes
+                                        datasets: [{
+                                            label: 'Cantidad de Transacciones',
+                                            data: [cantidadNorte, cantidadSur, cantidadEste, cantidadOeste, cantidadCentral], // Cantidades de transacciones para cada sede
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.2)', // Color de la primera porción
+                                                'rgba(54, 162, 235, 0.2)', // Color de la segunda porción
+                                                'rgba(255, 206, 86, 0.2)', // Color de la tercera porción
+                                                'rgba(75, 192, 192, 0.2)', // Color de la cuarta porción
+                                                'rgba(153, 102, 255, 0.2)'  // Color de la quinta porción
+                                            ],
+                                            borderColor: [
+                                                'rgba(255, 99, 132, 1)', // Color del borde de la primera porción
+                                                'rgba(54, 162, 235, 1)', // Color del borde de la segunda porción
+                                                'rgba(255, 206, 86, 1)', // Color del borde de la tercera porción
+                                                'rgba(75, 192, 192, 1)', // Color del borde de la cuarta porción
+                                                'rgba(153, 102, 255, 1)'  // Color del borde de la quinta porción
+                                            ],
+                                            borderWidth: 1 // Ancho del borde de las porciones
+                                        }]
                                     },
-                                    tooltip: {
-                                        callbacks: {
-                                            label: function(context) {
-                                                var label = context.label || '';
-                                                var value = context.raw || 0;
-                                                return label + ': ' + value + ' transacciones';
+                                    options: {
+                                        responsive: true, // La gráfica es responsiva
+                                        maintainAspectRatio: false, // Mantener el tamaño del gráfico constante
+                                        plugins: {
+                                            legend: {
+                                                position: 'bottom', // Cambiar posición de la leyenda a abajo
+                                                labels: {
+                                                    padding: 30 // Ajustar el espacio entre la leyenda y el gráfico
+                                                }
+                                            },
+                                            tooltip: {
+                                                callbacks: {
+                                                    label: function(context) {
+                                                        var label = context.label || '';
+                                                        var value = context.raw || 0;
+                                                        return label + ': ' + value + ' transacciones';
+                                                    }
+                                                }
                                             }
                                         }
                                     }
-                                }
-                            }
+                                });
+
+                            }).fail(function (jqXHR, textStatus, errorThrown) {
+                                console.error("Error en la consulta AJAX: " + textStatus, errorThrown);
+                            });
                         });
                     </script>
                 </div>
@@ -545,45 +593,6 @@
                 <br/>
                 <div class="card1-body pb-0">
                     <canvas id="miGrafico" width="400" height="400"></canvas>
-                    <script>
-                        var ctx = document.getElementById('miGrafico').getContext('2d');
-                        var myChart = new Chart(ctx, {
-                            type: 'bar', // Tipo de gráfica: bar, line, pie, etc.
-                            data: {
-                                labels: ['Rojo', 'Azul', 'Amarillo', 'Verde', 'Púrpura', 'Naranja'],
-                                datasets: [{
-                                    label: '# de votos',
-                                    data: [12, 19, 3, 5, 2, 3],
-                                    backgroundColor: [
-                                        'rgba(255, 99, 132, 0.2)',
-                                        'rgba(54, 162, 235, 0.2)',
-                                        'rgba(255, 206, 86, 0.2)',
-                                        'rgba(75, 192, 192, 0.2)',
-                                        'rgba(153, 102, 255, 0.2)',
-                                        'rgba(255, 159, 64, 0.2)'
-                                    ],
-                                    borderColor: [
-                                        'rgba(255, 99, 132, 1)',
-                                        'rgba(54, 162, 235, 1)',
-                                        'rgba(255, 206, 86, 1)',
-                                        'rgba(75, 192, 192, 1)',
-                                        'rgba(153, 102, 255, 1)',
-                                        'rgba(255, 159, 64, 1)'
-                                    ],
-                                    borderWidth: 1
-                                }]
-                            },
-                            options: {
-                                responsive: true, // La gráfica es responsiva
-                                maintainAspectRatio: false, // Mantener el tamaño del gráfico constante
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
-                                }
-                            }
-                        });
-                    </script>
                 </div>
             </div>
 
@@ -825,88 +834,180 @@
             });
         </script>
 
-    <script>
-        $(document).ready(function() {
-            var table = $('#miTabla').DataTable({
-                "pageLength":5,
-                "lengthChange": false,
-                "language": {
-                    "emptyTable": "No hay registros disponibles",
-                    "zeroRecords": "No se encontraron registros coincidentes",
-                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-                    "search" : "Buscar:",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Último",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
+        <script>
+            $(document).ready(function() {
+                var table = $('#miTabla').DataTable({
+                    "pageLength":5,
+                    "lengthChange": false,
+                    "language": {
+                        "emptyTable": "No hay registros disponibles",
+                        "zeroRecords": "No se encontraron registros coincidentes",
+                        "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                        "search" : "Buscar:",
+                        "paginate": {
+                            "first": "Primero",
+                            "last": "Último",
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+                        },
+                        "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
                     },
-                    "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
-                },
-                dom: "Bfrtip",
-                buttons:{
-                    dom:{
-                        button:{
-                            className: 'btn-p',
-                            tag: 'button',
-                            style: 'background-color: #689F38'
-                        }
-                    },
-                    buttons:[
-                        {
-                            extend:"excel",
-                            text:'Exportar tabla en Excel',
-                            className: 'btn-p',
-                            excelStyles:{
-                                template:'blue_medium'
-                            },
-                            init: function(api, node, config) {
-                                $(node).css('background-color', '#689F38');
+                    dom: "Bfrtip",
+                    buttons:{
+                        dom:{
+                            button:{
+                                className: 'btn-p',
+                                tag: 'button',
+                                style: 'background-color: #689F38'
                             }
-                        }
-                    ]
-                }
+                        },
+                        buttons:[
+                            {
+                                extend:"excel",
+                                text:'Exportar tabla en Excel',
+                                className: 'btn-p',
+                                excelStyles:{
+                                    template:'blue_medium'
+                                },
+                                init: function(api, node, config) {
+                                    $(node).css('background-color', '#689F38');
+                                }
+                            }
+                        ]
+                    }
 
+                });
+
+                table.buttons().container().appendTo('#botonesExportacion');
+
+                $('#filtroEstado').on('change', function() {
+                    var estado = $(this).val();
+                    table.column(2).search(estado).draw();
+
+                });
+
+                $('#limpiarFiltros').on('click', function() {
+                    $('#filtroEstado').val('');
+                    table.search('').columns().search('').draw();
+                });
             });
+        </script>
+        <!-- DataTable -->
+        <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+        <!------>
+        <style>
+            div.dataTables_wrapper div.dataTables_filter {
+                text-align: right;
+                display: none !important;
+            }
+        </style>
 
-            table.buttons().container().appendTo('#botonesExportacion');
+        <script>
+            $(document).ready(function() {
+                var table = $('#miTabla').DataTable();
 
-            $('#filtroEstado').on('change', function() {
-                var estado = $(this).val();
-                table.column(2).search(estado).draw();
-
+                $('#searchInput').on('input', function() {
+                    var searchTerm = $(this).val().trim().toLowerCase();
+                    if (searchTerm === "") {
+                        table.search("").draw();
+                        return;
+                    }
+                    table.search(searchTerm).draw();
+                });
             });
+        </script>
 
-            $('#limpiarFiltros').on('click', function() {
-                $('#filtroEstado').val('');
-                table.search('').columns().search('').draw();
+        <script>
+            $(document).ready(function(){
+                var sedeId = $("#sedeId").val(); // Obtén el ID de la sede desde el input oculto
+                $.ajax({
+                    method: "GET",
+                    dataType: "json",
+                    crossDomain: true,
+                    url: "http://localhost:8080/service/listaMedicamentosBajoStock/" + sedeId
+                }).done(function (data){
+                    console.log(data); // Muestra la lista de datos en la consola
+
+                    if(data.result === "ok"){
+
+                        var listaMedicamentosBajoStock = data.ListaMedicamentosBajoStock;
+                        var contentHtml = "";
+                        var lista = [];
+                        //extraemos los datos
+                        $.each(listaMedicamentosBajoStock, function (index, item) {
+
+                            lista.push(item.nombre);
+                            lista.push(item.cantidad);
+                        });
+
+                        console.log(lista); //mostramos lista en consola
+
+                        //Arreglos dinamicos de labels y data
+                        var labels = [];
+                        var dataArray = [];
+
+                        $.each(lista, function (index, item) {
+
+                            if(index == 0 || (index % 2 === 0)){
+                                labels.push(item)
+                            }else{
+                                dataArray.push(item)
+                            }
+                            
+                        })
+
+                        var ctx = document.getElementById('miGrafico').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'bar', // Tipo de gráfica: bar, line, pie, etc.
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Número de medicamentos',
+                                    data: dataArray,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(255, 206, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                responsive: true, // La gráfica es responsiva
+                                maintainAspectRatio: false, // Mantener el tamaño del gráfico constante
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+
+
+
+
+
+
+
+                    }else{
+                        console.log(data.message);
+                    }
+
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error("Error en la consulta AJAX: " + textStatus, errorThrown);
+                });
             });
-        });
-    </script>
-    <!-- DataTable -->
-    <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
-    <!------>
-    <style>
-        div.dataTables_wrapper div.dataTables_filter {
-            text-align: right;
-            display: none !important;
-        }
-    </style>
-
-    <script>
-        $(document).ready(function() {
-            var table = $('#miTabla').DataTable();
-
-            $('#searchInput').on('input', function() {
-                var searchTerm = $(this).val().trim().toLowerCase();
-                if (searchTerm === "") {
-                    table.search("").draw();
-                    return;
-                }
-                table.search(searchTerm).draw();
-            });
-        });
-    </script>
+        </script>
 
 
         <!--JS y archvios para graficas de adminsede-->
@@ -949,58 +1050,58 @@
                 })
             }
         </script>
-    <script>
-        function imprimir() {
-            var contenido = document.getElementById('boleta').innerHTML;
-            var originalBody = document.body.innerHTML;
-            document.body.innerHTML = contenido;
-            window.print();
-            document.body.innerHTML = originalBody;
-            location.reload(); // Para recargar la página y restaurar el contenido original
+        <script>
+            function imprimir() {
+                var contenido = document.getElementById('boleta').innerHTML;
+                var originalBody = document.body.innerHTML;
+                document.body.innerHTML = contenido;
+                window.print();
+                document.body.innerHTML = originalBody;
+                location.reload(); // Para recargar la página y restaurar el contenido original
 
-        }
+            }
 
-        window.onload = function () {
-            document.getElementById("download").addEventListener("click", () => {
-                const invoice = this.document.getElementById("boleta");
-                var opt = {
-                    margin: 0.2,
-                    filename: 'boleta_orden_web.pdf',
-                    html2canvas: {
-                        scale: 2,
-                    },
-                    jsPDF: {
-                        unit: 'in',
-                        format: [20, 15],
-                        orientation: 'landscape',
-                    }
-                };
-                html2pdf().from(invoice).set(opt).save();
-            });
-        }
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-    <!-- DataTable -->
-    <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+            window.onload = function () {
+                document.getElementById("download").addEventListener("click", () => {
+                    const invoice = this.document.getElementById("boleta");
+                    var opt = {
+                        margin: 0.2,
+                        filename: 'boleta_orden_web.pdf',
+                        html2canvas: {
+                            scale: 2,
+                        },
+                        jsPDF: {
+                            unit: 'in',
+                            format: [20, 15],
+                            orientation: 'landscape',
+                        }
+                    };
+                    html2pdf().from(invoice).set(opt).save();
+                });
+            }
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+        <!-- DataTable -->
+        <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 
-    <!-- Para usar los botones-->
-    <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
+        <!-- Para usar los botones-->
+        <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
 
 
-    <!-- Para los estilos en Excel-->
-    <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.templates.min.js"></script>
+        <!-- Para los estilos en Excel-->
+        <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.templates.min.js"></script>
 
-    <script>
-        window.onload = function () {
-            $('#onload').fadeOut();
-            $('body').removeClass('loader-hidden');
-        }
-    </script>
+        <script>
+            window.onload = function () {
+                $('#onload').fadeOut();
+                $('body').removeClass('loader-hidden');
+            }
+        </script>
 
     </body>
 </html>
