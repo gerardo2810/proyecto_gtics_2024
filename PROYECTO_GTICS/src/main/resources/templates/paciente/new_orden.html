@@ -342,6 +342,20 @@
                             </div>
 
 
+                            <div th:if="${extensionIncorrecta != null}" style="display: flex;flex-direction: row; column-gap: 4px">
+                                <i style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                                <div class="error-message"  style="margin-bottom: 9px">El formato de imagen debe ser PNG o JPG</div>
+
+                            </div>
+
+                            <div th:if="${archivoPesado != null}" style="display: flex;flex-direction: row; column-gap: 4px">
+                                <i style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                                <div class="error-message"  style="margin-bottom: 9px">El archivo subido es muy pesado</div>
+
+                            </div>
+
+
+
 
 
                             <div id="upload" class="modal" data-state="0" data-ready="false">

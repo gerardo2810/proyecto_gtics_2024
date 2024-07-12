@@ -10,6 +10,7 @@ import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
 import jakarta.websocket.SessionException;
 import org.apache.catalina.Session;
+import org.apache.poi.ddf.EscherPictBlip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -406,17 +407,33 @@ public class PacienteController {
                                @RequestParam(value = "seguro", required = false) String seguro,
                                Model model, RedirectAttributes redirectAttributes,
                                HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-
-
         HttpSession session = request.getSession();
         Usuario usuario1 = (Usuario) session.getAttribute("usuario");
 
 
-        System.out.println("El precio total es:" + total);
 
-        if(bindingResult.hasErrors() || bin2.hasErrors()){
+        //-----------IMAGEN DEBE SER PNG O JPG------------------//
+        String fileName = file.getSubmittedFileName();
+        String[] partes = fileName.split("\\.");
+        System.out.println(partes);
+        String extension = null;
+        if (partes.length > 1) {
+            extension = partes[partes.length - 1];  // Obtener la última parte como extensión
+            System.out.printf("La Extensión es: " + extension);
+        } else {
+            System.out.println("No se pudo determinar la extensión del archivo.");}
+        //---------------------------------------------------------------//
 
 
+        //-----------IMAGEN DEBE SER MENOR A 2MB------------------//
+        long size = file.getSize();
+        long maxSize = 3 * 1024 * 1024;
+
+        System.out.println("\n EL tamaño del archivo es: " + size + "| el maximo es: "+maxSize);
+        //---------------------------------------------------------------//
+
+
+        if(bindingResult.hasErrors() || bin2.hasErrors() || (extension != null && !extension.equals("png") && !extension.equals("jpg")) || (size > maxSize) ){
             System.out.println(bindingResult.getAllErrors());
             System.out.printf(String.valueOf(file));
 
@@ -424,14 +441,20 @@ public class PacienteController {
             List<Doctor> listaDoctores = doctorRepository.findAll();
             model.addAttribute("listaDoctores", listaDoctores);
             model.addAttribute("listaMedicamentos", listaMedicamentos);
-
             if(!lista.isEmpty()){
                 List<Medicamento> medicamentosSeleccionados = getMedicamentosFromLista(lista);
                 List<String> listaCantidades = getCantidadesFromLista(lista);
-
                 model.addAttribute("currentMed", medicamentosSeleccionados);
                 model.addAttribute("currentCant", listaCantidades);
             }
+            if(extension != null && (!extension.equals("png") && !extension.equals("jpg") && !extension.equals("jpeg")) ){
+                model.addAttribute("extensionIncorrecta", 0);
+            }
+            if(size > maxSize){
+                model.addAttribute("archivoPesado",0);
+            }
+
+
 
             return "paciente/new_orden";
 

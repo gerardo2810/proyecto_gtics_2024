@@ -61,12 +61,7 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests() //Autenticación por roles
                 //Rutas para autenticación
-                /*.requestMatchers("/superadmin", "/superadmin/**").authenticated()
-                .requestMatchers("/adminsede", "/adminsede/**").authenticated()
-                .requestMatchers("/farmacista", "/farmacista/**").authenticated()
-                .requestMatchers("/paciente", "/paciente/**").authenticated()*/
-                //Autenticación por rol
-                .requestMatchers("/chatbot-gtics/**").permitAll()
+                .requestMatchers("/chatbot_gtics/**").permitAll()
                 .requestMatchers("/superadmin", "/superadmin/**").hasAnyAuthority("SUPERADMIN")
                 .requestMatchers("/adminsede", "/adminsede/**").hasAnyAuthority("SUPERADMIN", "ADMINSEDE")
                 .requestMatchers("/farmacista", "/farmacista/**").hasAnyAuthority("SUPERADMIN", "FARMACISTA")

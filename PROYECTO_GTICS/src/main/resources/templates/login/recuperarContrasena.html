@@ -37,12 +37,14 @@
    <div class="login-container">
 
       <div class="wrapper3">
-         <div class="login-title montserrat-bold">Recuperación de contraseña</div>
-         <form class="login-form" action="#">
+         <div class="login-title montserrat-bold">Recupera tu cuenta</div>
+         <div class="_9nq2 marginBottom16px">Ingresa tu correo electrónico para restablecer tu contraseña.</div>
+         <form class="login-form" th:action="@{/recuperarContraPost}" method="post" th:object="${usuario}">
             <div class="input-control3">
-               <label class="input-label" style="margin-left: 10px">Correo electronico</label>
-               <input type="text" required class="input-field" placeholder="Ingrese su correo electrónico">
+               <input th:field="*{correo}" type="email" name="email" required class="input-field" placeholder="Ingrese su correo electrónico" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid' : ''}">
+               <div  class="invalid-feedback" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></div>
             </div>
+            <input type="submit" name="submit" class="input-submit" value="Enviar">
          </form>
 
       </div>
@@ -51,6 +53,7 @@
 </div>
 
 </body>
+
 
 </html>
 

@@ -62,6 +62,77 @@
             width: 188px; height: 48px; margin-top: 10px; cursor: pointer; background-color: #0d6efd; color:white;
             border:none;border-radius: 6px; font-size: 16px; font-weight: bold;
         }
+
+        [class^="item"]{
+            text-decoration: none;
+            margin-right: 20px;
+            background: transparent;
+            box-shadow: none;
+            border: none;
+            box-sizing: border-box;
+            cursor: pointer;
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+
+        .item-4 {
+            width: 30px;
+            height: 30px;
+            position: relative;
+            border-radius: 50%;
+            background-color: red;
+            opacity: 0.8;
+            transition: 0.3s ease-out;
+            &:before,
+            &:after {
+                content: "";
+                position: absolute;
+                width: 80%;
+                height: 2px;
+                background-color: white;
+                left: 50%;
+                top: 50%;
+            }
+            &:after {
+                transform: translate(-50%, -50%) rotate(45deg);
+            }
+            &:before {
+                transform: translate(-50%, -50%) rotate(-45deg);
+            }
+            &:hover,
+            &:focus {
+                transform: scale(1.15);
+                opacity: 1;
+            }
+        }
+
+
+        .popup-box{
+            transform: translateY(-100vh) translateX(-50vw) rotate(45deg);
+            animation: drop 2s ease-in-out forwards;
+        }
+        @keyframes drop {
+            0% {
+                transform: translateY(-100vh) translateX(-50vw) rotate(45deg);
+                opacity: 0;
+            }
+            50% {
+                transform: translateY(15vh) translateX(5vw) rotate(2deg);
+                opacity: 1;
+            }
+            65% {
+                transform: translateY(-10vh) translateX(-2.5vw) rotate(0deg);
+            }
+            80% {
+                transform: translateY(5vh) translateX(1.25vw);
+            }
+            100% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
     </style>
 
     <title>Pre Ordenes | Bienestar San Miguel</title>
@@ -102,6 +173,7 @@
 
     <div th:replace="~{fragments/banner.html :: banner}"></div>
 
+    <br>
     <div style="display: flex; flex-direction: row; justify-content: center">
         <div class="carousel">
             <button class="arrow back-arrow"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGV2cm9uLWxlZnQiPjxwYXRoIGQ9Im0xNSAxOC02LTYgNi02Ii8+PC9zdmc+" /></button>
@@ -258,7 +330,20 @@
     <br>
     <br>
 
+    <div class="popup-container" >
 
+        <div id="popup-box" class="popup-box" style="width: 600px;padding: 0;background-color: transparent !important;">
+
+            <div style="background-color:white; padding-top: 6px;display: flex; flex-direction: row; justify-content: end; height: 36px">
+                <button style="margin-right: 10px;" id="closePopup"  class="item-4"></button>
+            </div>
+            <img style="width: 600px" th:src="@{/img/fiestas_patrias.png}">
+            <br>
+
+
+
+        </div>
+    </div>
 
     <div th:replace="~{fragments/navbar.html :: footer}">
     </div>
@@ -330,6 +415,23 @@
     }
 </style>
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const popupContainer = document.querySelector('.popup-container');
+        const popupbox = document.getElementById('popup-box');
+        popupContainer.classList.add('active');
+        popupbox.style.animationPlayState = 'running';
+
+    });
+
+    const closePopup = document.getElementById('closePopup');
+
+    closePopup.onclick = () => {
+        document.querySelector('.popup-container').classList.remove('active');
+    };
+
+</script>
 
 
 <script>
