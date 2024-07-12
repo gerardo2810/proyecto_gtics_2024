@@ -334,129 +334,12 @@
                     <div class="slider">
                         <div class="slide">
                             <canvas id="graficoMedicamentos" width="400" height="200"></canvas>
-                            <script>
-                                var ctx = document.getElementById('graficoMedicamentos').getContext('2d');
-                                var myChart = new Chart(ctx, {
-                                    type: 'bar',
-                                    data: {
-                                        labels: ['Paracetamol', 'Ibuprofeno', 'Amoxicilina', 'Diclofenaco', 'Loratadina'],
-                                        datasets: [
-                                            {
-                                                label: 'Últimos 7 días',
-                                                data: [25, 30, 20, 15, 10],
-                                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                                borderColor: 'rgba(255, 99, 132, 1)',
-                                                borderWidth: 1
-                                            },
-                                            {
-                                                label: 'Últimos 15 días',
-                                                data: [35, 40, 30, 20, 15],
-                                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                                borderColor: 'rgba(54, 162, 235, 1)',
-                                                borderWidth: 1
-                                            },
-                                            {
-                                                label: 'Últimos 3 meses',
-                                                data: [50, 55, 45, 30, 25],
-                                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                                borderColor: 'rgba(75, 192, 192, 1)',
-                                                borderWidth: 1
-                                            }
-                                        ]
-                                    },
-                                    options: {
-                                        scales: {
-                                            y: {
-                                                beginAtZero: true
-                                            }
-                                        }
-                                    }
-                                });
-                            </script>
                         </div>
                         <div class="slide">
                             <canvas id="graficoMedicamentos2" width="400" height="200"></canvas>
-                            <script>
-                                var ctx = document.getElementById('graficoMedicamentos2').getContext('2d');
-                                var myChart = new Chart(ctx, {
-                                    type: 'bar',
-                                    data: {
-                                        labels: ['Paracetamolaaa', 'Ibuprofeno', 'Amoxicilina', 'Diclofenaco', 'Loratadina'],
-                                        datasets: [
-                                            {
-                                                label: 'Últimos 7 días',
-                                                data: [25, 30, 20, 15, 10],
-                                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                                borderColor: 'rgba(255, 99, 132, 1)',
-                                                borderWidth: 1
-                                            },
-                                            {
-                                                label: 'Últimos 15 días',
-                                                data: [35, 40, 30, 20, 15],
-                                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                                borderColor: 'rgba(54, 162, 235, 1)',
-                                                borderWidth: 1
-                                            },
-                                            {
-                                                label: 'Últimos 3 meses',
-                                                data: [50, 55, 45, 30, 25],
-                                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                                borderColor: 'rgba(75, 192, 192, 1)',
-                                                borderWidth: 1
-                                            }
-                                        ]
-                                    },
-                                    options: {
-                                        scales: {
-                                            y: {
-                                                beginAtZero: true
-                                            }
-                                        }
-                                    }
-                                });
-                            </script>
                         </div>
                         <div class="slide">
                             <canvas id="graficoMedicamentos3" width="400" height="200"></canvas>
-                            <script>
-                                var ctx = document.getElementById('graficoMedicamentos3').getContext('2d');
-                                var myChart = new Chart(ctx, {
-                                    type: 'bar',
-                                    data: {
-                                        labels: ['Paracetamol31', 'Ibuprofeno', 'Amoxicilina', 'Diclofenaco', 'Loratadina'],
-                                        datasets: [
-                                            {
-                                                label: 'Últimos 7 días',
-                                                data: [25, 30, 20, 15, 10],
-                                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                                borderColor: 'rgba(255, 99, 132, 1)',
-                                                borderWidth: 1
-                                            },
-                                            {
-                                                label: 'Últimos 15 días',
-                                                data: [35, 40, 30, 20, 15],
-                                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                                borderColor: 'rgba(54, 162, 235, 1)',
-                                                borderWidth: 1
-                                            },
-                                            {
-                                                label: 'Últimos 3 meses',
-                                                data: [50, 55, 45, 30, 25],
-                                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                                borderColor: 'rgba(75, 192, 192, 1)',
-                                                borderWidth: 1
-                                            }
-                                        ]
-                                    },
-                                    options: {
-                                        scales: {
-                                            y: {
-                                                beginAtZero: true
-                                            }
-                                        }
-                                    }
-                                });
-                            </script>
                         </div>
                     </div>
                     <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
@@ -971,7 +854,7 @@
                                 dataArray.push(item)
                             }
 
-                        })
+                        });
 
                         var ctx = document.getElementById('miGrafico').getContext('2d');
                         var myChart = new Chart(ctx, {
@@ -1017,6 +900,219 @@
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     console.error("Error en la consulta AJAX: " + textStatus, errorThrown);
                 });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                var sedeId = $("#sedeId").val(); // Obtén el ID de la sede desde el input oculto
+                var numero = 3;
+                var url = "http://localhost:8080/service/listaVentasPreferidasxFecha/" + sedeId + "/" + numero;
+
+                $.ajax({
+                    method: "GET",
+                    dataType: "json",
+                    crossDomain: true,
+                    url: url
+                }).done(function (data){
+
+                    if(data.result === "ok"){
+                        var listaMedicamentosBajoStock = data.ListaMedicamentosBajoStock;
+                        var lista = [];
+                        //extraemos los datos
+                        $.each(listaMedicamentosBajoStock, function (index, item) {
+                            lista.push(item.nombre);
+                            lista.push(item.cantidad);
+                        });
+
+                        var labels = [];
+                        var data = [];
+
+                        $.each(lista, function (index, item){
+                            if(index === 0 || (index % 2 === 0)){
+                                labels.push(item);
+                            }else{
+                                data.push(item);
+                            }
+
+                        });
+
+                        var ctx = document.getElementById('graficoMedicamentos3').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [
+                                    {
+                                        label: 'Últimos 3 meses',
+                                        data: data,
+                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        borderWidth: 1
+                                    }
+                                ]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+
+                    }else {
+                        console.log(data.message);
+                    }
+
+
+
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error("Error en la consulta AJAX: " + textStatus, errorThrown);
+                });
+
+                
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                var sedeId = $("#sedeId").val(); // Obtén el ID de la sede desde el input oculto
+                var numero = 7;
+                var url = "http://localhost:8080/service/listaVentasPreferidasxFecha/" + sedeId + "/" + numero;
+
+                $.ajax({
+                    method: "GET",
+                    dataType: "json",
+                    crossDomain: true,
+                    url: url
+                }).done(function (data){
+
+                    if(data.result === "ok"){
+                        var listaMedicamentosBajoStock = data.ListaMedicamentosBajoStock;
+                        var lista = [];
+                        //extraemos los datos
+                        $.each(listaMedicamentosBajoStock, function (index, item) {
+                            lista.push(item.nombre);
+                            lista.push(item.cantidad);
+                        });
+
+                        var labels = [];
+                        var data = [];
+
+                        $.each(lista, function (index, item){
+                            if(index === 0 || (index % 2 === 0)){
+                                labels.push(item);
+                            }else{
+                                data.push(item);
+                            }
+
+                        });
+
+                        var ctx = document.getElementById('graficoMedicamentos').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [
+                                    {
+                                        label: 'Últimos 7 días',
+                                        data: data,
+                                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                        borderColor: 'rgba(255, 99, 132, 1)',
+                                        borderWidth: 1
+                                    }
+                                ]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+
+                    }else {
+                        console.log(data.message);
+                    }
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error("Error en la consulta AJAX: " + textStatus, errorThrown);
+                });
+
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                var sedeId = $("#sedeId").val(); // Obtén el ID de la sede desde el input oculto
+                var numero = 15;
+                var url = "http://localhost:8080/service/listaVentasPreferidasxFecha/" + sedeId + "/" + numero;
+
+                $.ajax({
+                    method: "GET",
+                    dataType: "json",
+                    crossDomain: true,
+                    url: url
+                }).done(function (data){
+
+                    if(data.result === "ok"){
+                        var listaMedicamentosBajoStock = data.ListaMedicamentosBajoStock;
+                        var lista = [];
+                        //extraemos los datos
+                        $.each(listaMedicamentosBajoStock, function (index, item) {
+                            lista.push(item.nombre);
+                            lista.push(item.cantidad);
+                        });
+
+                        var labels = [];
+                        var data = [];
+
+                        $.each(lista, function (index, item){
+                            if(index === 0 || (index % 2 === 0)){
+                                labels.push(item);
+                            }else{
+                                data.push(item);
+                            }
+
+                        });
+
+                        var ctx = document.getElementById('graficoMedicamentos2').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [
+                                    {
+                                        label: 'Últimos 15 días',
+                                        data: data,
+                                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        borderWidth: 1
+                                    }
+                                ]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+
+
+
+                    }else {
+                        console.log(data.message);
+                    }
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error("Error en la consulta AJAX: " + textStatus, errorThrown);
+                });
+
             });
         </script>
 
