@@ -413,24 +413,20 @@ public class PacienteController {
 
         String fileName = file.getSubmittedFileName();
         String[] partes = fileName.split("\\.");
+        System.out.println(partes);
         String extension = null;
         if (partes.length > 1) {
             extension = partes[partes.length - 1];  // Obtener la última parte como extensión
-            System.out.println("Extensión: " + extension);
-
+            System.out.printf("La Extensión es: " + extension);
         } else {
             System.out.println("No se pudo determinar la extensión del archivo.");
         }
 
 
 
-        if(bindingResult.hasErrors() || bin2.hasErrors() || (extension != null && (!extension.equals("png") || !extension.equals("jpg")) )){
+        if(bindingResult.hasErrors() || bin2.hasErrors() || (extension != null && !extension.equals("png") && !extension.equals("jpg")) ){
             System.out.println(bindingResult.getAllErrors());
             System.out.printf(String.valueOf(file));
-
-
-
-
 
             List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
             List<Doctor> listaDoctores = doctorRepository.findAll();
@@ -442,9 +438,9 @@ public class PacienteController {
                 model.addAttribute("currentMed", medicamentosSeleccionados);
                 model.addAttribute("currentCant", listaCantidades);
             }
-            if(extension != null && (!extension.equals("png") || !extension.equals("jpg") || !extension.equals("jpeg")) ){
+            if(extension != null && (!extension.equals("png") && !extension.equals("jpg") && !extension.equals("jpeg")) ){
                 model.addAttribute("extensionIncorrecta", 0);
-                System.out.println(extension);
+                System.out.println("no es una imagen : " + extension);
             }
 
 
