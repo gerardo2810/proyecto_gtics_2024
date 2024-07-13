@@ -72,12 +72,16 @@ public class ImpersonationController {
 
             switch (usuario.getRol()) {
                 case 1:
+                    usuarioRepository.actualizarEstadoLogueoSuperadmin(usuario.getIdUsuario());
                     return "redirect:/superadmin";
                 case 2:
+                    usuarioRepository.actualizarEstadoLogueo(usuario.getIdUsuario());
                     return "redirect:/adminsede";
                 case 3:
+                    usuarioRepository.actualizarEstadoLogueo(usuario.getIdUsuario());
                     return "redirect:/farmacista";
                 case 4:
+                    usuarioRepository.actualizarEstadoLogueo(usuario.getIdUsuario());
                     return "redirect:/paciente";
                 default:
                     return "redirect:/";
