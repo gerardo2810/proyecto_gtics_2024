@@ -697,12 +697,13 @@ public class FarmacistaController {
 
             // Crear una lista de listas de medicamentos agrupados por categoría
             List<List<Medicamento>> medicamentosAgrupados = new ArrayList<>();
-            for (String categoria : categoriasMedicamentos) {
-                List<Medicamento> medicamentosPorCategoria = medicamentoRepository.findByCategorias(categoria);
+            for (Medicamento medicamento : medicamentosSeleccionados) {
+                String categoriaMedicamento = medicamento.getCategorias();
+                List<Medicamento> medicamentosPorCategoria = medicamentoRepository.findByCategorias(categoriaMedicamento);
                 medicamentosAgrupados.add(medicamentosPorCategoria);
             }
 
-            model.addAttribute("medicamentosSeleccionados",medicamentosSeleccionados);
+            model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
             model.addAttribute("medicamentosAgrupados", medicamentosAgrupados);
             model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
             model.addAttribute("cantidadesExistentes", cantidadesExistentes);

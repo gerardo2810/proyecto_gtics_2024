@@ -18,6 +18,9 @@ public class Usuario implements Serializable {
     @Column(name="id")
     private Integer idUsuario;
 
+    @Column(name = "estado_logueo")
+    private Integer estadologueo;
+
     @Column(name = "idRol")
     private Integer rol;
 

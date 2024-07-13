@@ -188,10 +188,19 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET contrasena = ?1 WHERE correo = ?2")
     void actualizarRecupearContra(String contrasena, String correo);
 
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.usuario where idRol = 2 and id = ?1")
+    Usuario encontrarAdministradorId(int id);
 
+    @Query(nativeQuery = true, value = "SELECT u.correo FROM proyecto_gtics.usuario u where idRol = 2 and id = ?1")
+    String encontrarCorreoAdministrador(int id);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_logueo = 1 WHERE id = ?")
+    void actualizarEstadoLogueo(int idUsuario);
 
-
-
-
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_logueo = 0 WHERE id = ?")
+    void actualizarEstadoLogueoSuperadmin(int idUsuario);
 }
