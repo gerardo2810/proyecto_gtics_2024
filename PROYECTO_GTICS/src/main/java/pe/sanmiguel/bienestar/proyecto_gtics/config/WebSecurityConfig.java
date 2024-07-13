@@ -133,6 +133,14 @@ public class WebSecurityConfig {
                 .logoutSuccessHandler(new SimpleUrlLogoutSuccessHandler() {
                     @Override
                     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                        if (authentication != null) {
+                            String userEmail = authentication.getName();
+                            Usuario usuario = usuarioRepository.findByCorreo(userEmail);
+                            if (usuario != null) {
+                                usuarioRepository.actualizarEstadoDeslogueo(usuario.getIdUsuario());
+                            }
+                        }
+
                         logger.info("Logout successful. Adding logout message to session.");
                         request.getSession().setAttribute("logoutMessage", "Se cerró sesión exitosamente");
                         setDefaultTargetUrl("/");
