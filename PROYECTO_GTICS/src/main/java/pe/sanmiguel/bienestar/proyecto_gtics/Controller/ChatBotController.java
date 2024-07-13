@@ -38,7 +38,7 @@ public class ChatBotController {
 
             if (usuarioOptional.isPresent()){
                 responseJson.put("OK", usuarioOptional.get());
-                return ResponseEntity.status(HttpStatus.SC_ACCEPTED).body(responseJson);
+                return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
             } else {
                 responseJson.put("ERROR", null);
                 return ResponseEntity.badRequest().body(responseJson);
