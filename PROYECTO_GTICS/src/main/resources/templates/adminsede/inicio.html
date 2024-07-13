@@ -325,6 +325,9 @@
                     <p class="fw-medium" th:text="${usuario.getCorreo()}"></p>
                     <p th:text="'Bienestar San Miguel - ' + ${sedesesion.getNombre()}"></p>
                     <input type="hidden" id="sedeId" th:value="${sedesesion.getIdSede()}" />
+                    <input type="hidden" id="token1" th:value="${lista.get(0).getValor()}" />
+                    <input type="hidden" id="token2" th:value="${lista.get(1).getValor()}" />
+                    <input type="hidden" id="token3" th:value="${lista.get(2).getValor()}" />
                     <button id="reportButton" class="aprobar" style="font-size: 1rem;">Ver reportes</button>
                 </div>
             </div>
@@ -372,21 +375,19 @@
                     <canvas id="graficoSedes" width="400" height="400"></canvas>
                     <script>
                         $(document).ready(function(){
-                            var myChart; // Variable para almacenar la referencia al gráfico
-
-                            // Función para realizar la solicitud AJAX y actualizar los datos
+                            var myChart;
+                            var token1 = $("#token1").val();
                             function actualizarDatos() {
                                 $.ajax({
                                     method: "GET",
                                     dataType: "json",
                                     crossDomain: true,
-                                    headers: {"Authorization": "$2a$12$Nh4/rs/LRSJqvoGvtxN4Iuv4hMWlP9RGHFQGbFYalzUGnigPmouR6"},
+                                    headers: {"Authorization": token1},
                                     url: "http://localhost:8080/service/listaVentas"
                                 }).done(function (data){
                                     console.log(data)
 
                                     if(data.result === "ok"){
-                                        // data es un array de objetos
                                         var contentHtml = "";
                                         var cantidadTotal = 0;
                                         var cantidadCentral = 0;
@@ -422,48 +423,44 @@
                                             }
                                         });
 
-                                        // Insertar el contenido HTML en el elemento con id "resultado"
                                         $("#resultado").html(contentHtml);
 
-                                        // Destruir el gráfico anterior si existe
                                         if (myChart) {
                                             myChart.destroy();
                                         }
-
-                                        // Crear gráfico después de obtener los datos
                                         var ctx = document.getElementById('graficoSedes').getContext('2d');
                                         myChart = new Chart(ctx, {
-                                            type: 'pie', // Tipo de gráfica: pie (circular)
+                                            type: 'pie',
                                             data: {
-                                                labels: ['Sede Norte', 'Sede Sur', 'Sede Este', 'Sede Oeste', 'Sede Central'], // Nombres de las sedes
+                                                labels: ['Sede Norte', 'Sede Sur', 'Sede Este', 'Sede Oeste', 'Sede Central'],
                                                 datasets: [{
                                                     label: 'Cantidad de Transacciones',
-                                                    data: [cantidadNorte, cantidadSur, cantidadEste, cantidadOeste, cantidadCentral], // Cantidades de transacciones para cada sede
+                                                    data: [cantidadNorte, cantidadSur, cantidadEste, cantidadOeste, cantidadCentral],
                                                     backgroundColor: [
-                                                        'rgba(255, 99, 132, 0.2)', // Color de la primera porción
-                                                        'rgba(54, 162, 235, 0.2)', // Color de la segunda porción
-                                                        'rgba(255, 206, 86, 0.2)', // Color de la tercera porción
-                                                        'rgba(75, 192, 192, 0.2)', // Color de la cuarta porción
-                                                        'rgba(153, 102, 255, 0.2)'  // Color de la quinta porción
+                                                        'rgba(255, 99, 132, 0.2)',
+                                                        'rgba(54, 162, 235, 0.2)',
+                                                        'rgba(255, 206, 86, 0.2)',
+                                                        'rgba(75, 192, 192, 0.2)',
+                                                        'rgba(153, 102, 255, 0.2)'
                                                     ],
                                                     borderColor: [
-                                                        'rgba(255, 99, 132, 1)', // Color del borde de la primera porción
-                                                        'rgba(54, 162, 235, 1)', // Color del borde de la segunda porción
-                                                        'rgba(255, 206, 86, 1)', // Color del borde de la tercera porción
-                                                        'rgba(75, 192, 192, 1)', // Color del borde de la cuarta porción
-                                                        'rgba(153, 102, 255, 1)'  // Color del borde de la quinta porción
+                                                        'rgba(255, 99, 132, 1)',
+                                                        'rgba(54, 162, 235, 1)',
+                                                        'rgba(255, 206, 86, 1)',
+                                                        'rgba(75, 192, 192, 1)',
+                                                        'rgba(153, 102, 255, 1)'
                                                     ],
-                                                    borderWidth: 1 // Ancho del borde de las porciones
+                                                    borderWidth: 1
                                                 }]
                                             },
                                             options: {
-                                                responsive: true, // La gráfica es responsiva
-                                                maintainAspectRatio: false, // Mantener el tamaño del gráfico constante
+                                                responsive: true,
+                                                maintainAspectRatio: false,
                                                 plugins: {
                                                     legend: {
-                                                        position: 'bottom', // Cambiar posición de la leyenda a abajo
+                                                        position: 'bottom',
                                                         labels: {
-                                                            padding: 30 // Ajustar el espacio entre la leyenda y el gráfico
+                                                            padding: 30
                                                         }
                                                     },
                                                     tooltip: {
@@ -489,14 +486,8 @@
                                     console.error("Error en la consulta AJAX: " + textStatus, errorThrown);
                                 });
                             }
-
-                            //MAIN
-
-                            // Llamar a la función inicialmente al cargar la página
                             actualizarDatos();
-
-                            // Actualizar los datos cada 60 segundos (60000 milisegundos)
-                            setInterval(actualizarDatos, 60000); // Cambia el intervalo según sea necesario
+                            setInterval(actualizarDatos, 60000);
                         });
                     </script>
 
@@ -836,15 +827,16 @@
 
         <script>
             $(document).ready(function(){
-                var myChart; // Variable global para almacenar la referencia al gráfico
+                var myChart;
 
                 function actualizarDatos() {
-                    var sedeId = $("#sedeId").val(); // Obtén el ID de la sede desde el input oculto
+                    var sedeId = $("#sedeId").val();
+                    var token2 = $("#token2").val();
                     $.ajax({
                         method: "GET",
                         dataType: "json",
                         crossDomain: true,
-                        headers: {"Authorization": "$2a$12$o1IkPmmQ0N8BLGKlyCjtAujLPTjQJAFCQS0IDdOqgeE5jY5z2ECQu"},
+                        headers: {"Authorization": token2},
                         url: "http://localhost:8080/service/listaMedicamentosBajoStock/" + sedeId
                     }).done(function (data){
 
@@ -853,13 +845,11 @@
                             var listaMedicamentosBajoStock = data.ListaMedicamentosBajoStock;
                             var contentHtml = "";
                             var lista = [];
-                            //extraemos los datos
                             $.each(listaMedicamentosBajoStock, function (index, item) {
                                 lista.push(item.nombre);
                                 lista.push(item.cantidad);
                             });
 
-                            //Arreglos dinamicos de labels y data
                             var labels = [];
                             var dataArray = [];
 
@@ -871,14 +861,13 @@
                                 }
                             });
 
-                            // Destruir el gráfico anterior si existe
                             if (myChart) {
                                 myChart.destroy();
                             }
 
                             var ctx = document.getElementById('miGrafico').getContext('2d');
                             myChart = new Chart(ctx, {
-                                type: 'bar', // Tipo de gráfica: bar, line, pie, etc.
+                                type: 'bar',
                                 data: {
                                     labels: labels,
                                     datasets: [{
@@ -902,8 +891,8 @@
                                     }]
                                 },
                                 options: {
-                                    responsive: true, // La gráfica es responsiva
-                                    maintainAspectRatio: false, // Mantener el tamaño del gráfico constante
+                                    responsive: true,
+                                    maintainAspectRatio: false,
                                     scales: {
                                         y: {
                                             beginAtZero: true
@@ -920,12 +909,8 @@
                         console.error("Error en la consulta AJAX: " + textStatus, errorThrown);
                     });
                 }
-
-                // Llamar a la función inicialmente al cargar la página
                 actualizarDatos();
-
-                // Actualizar los datos cada 60 segundos (60000 milisegundos)
-                setInterval(actualizarDatos, 60000); // Cambia el intervalo según sea necesario
+                setInterval(actualizarDatos, 60000);
             });
         </script>
 
@@ -935,7 +920,8 @@
                 var myChart;
                 function actualizarDatos() {
 
-                    var sedeId = $("#sedeId").val(); // Obtén el ID de la sede desde el input oculto
+                    var sedeId = $("#sedeId").val();
+                    var token3 = $("#token3").val();
                     var numero = 3;
                     var url = "http://localhost:8080/service/listaVentasPreferidasxFecha/" + sedeId + "/" + numero;
 
@@ -943,14 +929,13 @@
                         method: "GET",
                         dataType: "json",
                         crossDomain: true,
-                        headers: {"Authorization": "$2a$12$zotoyRrJ4O6wIx.Fue.Y9Oko6loVWWrKYQOIEHoH8hmKdbLYUzX8y"},
+                        headers: {"Authorization": token3},
                         url: url
                     }).done(function (data){
 
                         if(data.result === "ok"){
                             var listaMedicamentosBajoStock = data.ListaMedicamentosBajoStock;
                             var lista = [];
-                            //extraemos los datos
                             $.each(listaMedicamentosBajoStock, function (index, item) {
                                 lista.push(item.nombre);
                                 lista.push(item.cantidad);
@@ -968,7 +953,6 @@
 
                             });
 
-                            // Destruir el gráfico anterior si existe
                             if (myChart) {
                                 myChart.destroy();
                             }
@@ -1004,21 +988,20 @@
                         console.error("Error en la consulta AJAX: " + textStatus, errorThrown);
                     });
                 }
-                // Llamar a la función inicialmente al cargar la página
                 actualizarDatos();
 
-                // Actualizar los datos cada 60 segundos (60000 milisegundos)
-                setInterval(actualizarDatos, 60000); // Cambia el intervalo según sea necesario
+                setInterval(actualizarDatos, 60000);
                 
             });
         </script>
 
         <script>
             $(document).ready(function () {
-                var myChart; // Variable global para almacenar la referencia al gráfico
+                var myChart;
 
                 function actualizarDatos() {
-                    var sedeId = $("#sedeId").val(); // Obtén el ID de la sede desde el input oculto
+                    var sedeId = $("#sedeId").val();
+                    var token3 = $("#token3").val();
                     var numero = 7;
                     var url = "http://localhost:8080/service/listaVentasPreferidasxFecha/" + sedeId + "/" + numero;
 
@@ -1026,14 +1009,14 @@
                         method: "GET",
                         dataType: "json",
                         crossDomain: true,
-                        headers: {"Authorization": "$2a$12$zotoyRrJ4O6wIx.Fue.Y9Oko6loVWWrKYQOIEHoH8hmKdbLYUzX8y"},
+                        headers: {"Authorization": token3},
                         url: url
                     }).done(function (data) {
 
                         if (data.result === "ok") {
                             var listaMedicamentosBajoStock = data.ListaMedicamentosBajoStock;
                             var lista = [];
-                            //extraemos los datos
+
                             $.each(listaMedicamentosBajoStock, function (index, item) {
                                 lista.push(item.nombre);
                                 lista.push(item.cantidad);
@@ -1051,7 +1034,7 @@
 
                             });
 
-                            // Destruir el gráfico anterior si existe
+
                             if (myChart) {
                                 myChart.destroy();
                             }
@@ -1089,12 +1072,8 @@
                     });
 
                 }
-
-                // Llamar a la función inicialmente al cargar la página
                 actualizarDatos();
-
-                // Actualizar los datos cada 60 segundos (60000 milisegundos)
-                setInterval(actualizarDatos, 60000); // Cambia el intervalo según sea necesario
+                setInterval(actualizarDatos, 60000);
             });
         </script>
 
@@ -1103,7 +1082,8 @@
             $(document).ready(function () {
                 var myChart;
                 function actualizarDatos() {
-                    var sedeId = $("#sedeId").val(); // Obtén el ID de la sede desde el input oculto
+                    var sedeId = $("#sedeId").val();
+                    var token3 = $("#token3").val();
                     var numero = 15;
                     var url = "http://localhost:8080/service/listaVentasPreferidasxFecha/" + sedeId + "/" + numero;
 
@@ -1111,14 +1091,14 @@
                         method: "GET",
                         dataType: "json",
                         crossDomain: true,
-                        headers: {"Authorization": "$2a$12$zotoyRrJ4O6wIx.Fue.Y9Oko6loVWWrKYQOIEHoH8hmKdbLYUzX8y"},
+                        headers: {"Authorization": token3},
                         url: url
                     }).done(function (data){
 
                         if(data.result === "ok"){
                             var listaMedicamentosBajoStock = data.ListaMedicamentosBajoStock;
                             var lista = [];
-                            //extraemos los datos
+
                             $.each(listaMedicamentosBajoStock, function (index, item) {
                                 lista.push(item.nombre);
                                 lista.push(item.cantidad);
@@ -1174,12 +1154,10 @@
                         console.error("Error en la consulta AJAX: " + textStatus, errorThrown);
                     });
                 }
-
-                // Llamar a la función inicialmente al cargar la página
                 actualizarDatos();
 
-                // Actualizar los datos cada 60 segundos (60000 milisegundos)
-                setInterval(actualizarDatos, 60000); // Cambia el intervalo según sea necesario
+
+                setInterval(actualizarDatos, 60000);
 
             });
         </script>
@@ -1232,7 +1210,7 @@
                 document.body.innerHTML = contenido;
                 window.print();
                 document.body.innerHTML = originalBody;
-                location.reload(); // Para recargar la página y restaurar el contenido original
+                location.reload(); 
 
             }
 
