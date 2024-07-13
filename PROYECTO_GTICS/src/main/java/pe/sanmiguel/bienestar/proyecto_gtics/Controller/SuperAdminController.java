@@ -686,7 +686,7 @@ public class SuperAdminController {
                     public void run() {
                         Usuario usuario = usuarioRepository.encontrarFarmacistaporId(idUsuario);
                         long currentTime = System.currentTimeMillis();
-                        if (currentTime - tiempoEnvio >= 3 * 60 * 1000 && usuario.getEstadoContra() == 0) {
+                        if (currentTime - tiempoEnvio >= 1 * 60 * 1000 && usuario.getEstadoContra() == 0) {
                             // Si han pasado 3 minutos y la contraseña no ha sido cambiada y su estado contra es 0
                             String expiredPassword = "noRegistrado";
                             String passwordHashNoRegistrado = SHA256.cipherPassword(expiredPassword);
@@ -694,7 +694,7 @@ public class SuperAdminController {
                             System.out.println("La contraseña ha expirado para " + usuario.getCorreo());
                         }
                     }
-                }, 3 * 60 * 1000); //Se ejecuta esta funcion luego de 3 minutos
+                }, 1 * 60 * 1000); //Se ejecuta esta funcion luego de 3 minutos
 
                 attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
                 return "redirect:/superadmin/administradoresSede";
@@ -1170,7 +1170,7 @@ public class SuperAdminController {
 
 
     @PostMapping("/asignandoAdministrador")
-    public String asignaraNuevoAdministrador(@ModelAttribute("administrador") Usuario administrador, @RequestParam(value = "sedeid", required = false) String idSede, RedirectAttributes attr, Model model) throws IOException {
+    public String asignaraNuevoAdministrador(Usuario administrador, @RequestParam(value = "sedeid", required = false) String idSede, RedirectAttributes attr, Model model) throws IOException {
 
         if(idSede == null || idSede.isEmpty()){
             System.out.println("ID ADMIN: " + administrador.getIdUsuario());
@@ -1183,6 +1183,51 @@ public class SuperAdminController {
                 int idsede = Integer.parseInt(idSede);
                 usuarioRepository.activarAdministrador(administrador.getIdUsuario());
                 sedeRepository.asignarAdministradorSede(administrador.getIdUsuario(), idsede);
+
+                // Generar contraseña temporal
+                String temporaryPassword = passwordService.generateTemporaryPassword();
+                System.out.println("Contraseña temporal." + temporaryPassword);
+                String hashedPassword1 = SHA256.cipherPassword(temporaryPassword);
+                administrador.setContrasena(hashedPassword1);
+                // Indicar que el usuario debe cambiar la contraseña en el primer inicio de sesión
+
+                String correoUser = usuarioRepository.encontrarCorreoAdministrador(administrador.getIdUsuario());
+                System.out.println("Correo: " + usuarioRepository.encontrarCorreoAdministrador(administrador.getIdUsuario()));
+
+                try {
+                    sendTemporaryPasswordEmail(correoUser, temporaryPassword);
+                } catch (MailSendException | MessagingException e) {
+                    System.err.println("Error al enviar o recibir correo: " + e.getMessage());
+                    e.printStackTrace();
+                }
+
+                usuarioRepository.save(administrador);
+                String hashedPassword = SHA256.cipherPassword(temporaryPassword);
+                usuarioRepository.actualizarContrasenaFarmacista(hashedPassword, idUsuario);
+                usuarioRepository.actualizarEstadoFarmacista(idUsuario);
+
+                //Se le envía el correo con la contraseña, luego de eso necesita de un timer de 5 minutos para cambiarla
+                long tiempoEnvio = System.currentTimeMillis(); //tiempo donde se envía
+
+                //Por temas de presentación lo pongo en 3 minuto nomás
+
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Usuario usuario = usuarioRepository.encontrarAdministradorId(administrador.getIdUsuario());
+                        long currentTime = System.currentTimeMillis();
+                        if (currentTime - tiempoEnvio >= 1 * 60 * 1000 && usuario.getEstadoContra() == 0) {
+                            // Si han pasado 3 minutos y la contraseña no ha sido cambiada
+                            String expiredPassword = "noRegistrado";
+                            String passwordHashNoRegistrado = SHA256.cipherPassword(expiredPassword);
+                            usuarioRepository.actualizarContrasenaFarmacista(passwordHashNoRegistrado, idUsuario);
+                            System.out.println("La contraseña ha expirado para " + usuario.getCorreo());
+                        }
+                    }
+                }, 1 * 60 * 1000); //Se ejecuta esta funcion luego de 1 minuto
+
+
                 attr.addFlashAttribute("msg", "El administrador fue asignado a una sede correctamente");
                 return "redirect:/superadmin/administradoresSede";
             }else{

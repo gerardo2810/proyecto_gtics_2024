@@ -83,7 +83,7 @@
 
                 <tbody>
                     <tr th:each="orden, iterador: ${listaOrdenesEntregadas}">
-                        <td th:text="${orden.getIdReposicion()}"></td>
+                        <td th:text="${orden.getNumero()}"></td>
                         <td th:text="${orden.getFechaIni()}"></td>
                         <td th:text="${orden.getFechaFin()}"></td>
                         <td style="text-align: center; display: flex; flex-direction: row; justify-content: center; gap: 5px;">
