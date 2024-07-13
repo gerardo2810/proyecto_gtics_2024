@@ -380,99 +380,110 @@
                                     method: "GET",
                                     dataType: "json",
                                     crossDomain: true,
+                                    headers: {"Authorization": "$2a$12$Nh4/rs/LRSJqvoGvtxN4Iuv4hMWlP9RGHFQGbFYalzUGnigPmouR6"},
                                     url: "http://localhost:8080/service/listaVentas"
                                 }).done(function (data){
+                                    console.log(data)
 
-                                    // data es un array de objetos
-                                    var contentHtml = "";
-                                    var cantidadTotal = 0;
-                                    var cantidadCentral = 0;
-                                    var cantidadNorte = 0;
-                                    var cantidadSur = 0;
-                                    var cantidadEste = 0;
-                                    var cantidadOeste = 0;
+                                    if(data.result === "ok"){
+                                        // data es un array de objetos
+                                        var contentHtml = "";
+                                        var cantidadTotal = 0;
+                                        var cantidadCentral = 0;
+                                        var cantidadNorte = 0;
+                                        var cantidadSur = 0;
+                                        var cantidadEste = 0;
+                                        var cantidadOeste = 0;
 
-                                    $.each(data, function(index, item){
-                                        contentHtml += "<p>ID Sede: " + item.idSede + ", Cantidad de Órdenes: " + item.cantidadOrdenes + "</p>";
-                                        cantidadTotal += item.cantidadOrdenes;
+                                        var lista = data.lista;
 
-                                        switch(item.idSede) {
-                                            case 1:
-                                                cantidadCentral = item.cantidadOrdenes;
-                                                break;
-                                            case 2:
-                                                cantidadNorte = item.cantidadOrdenes;
-                                                break;
-                                            case 3:
-                                                cantidadSur = item.cantidadOrdenes;
-                                                break;
-                                            case 4:
-                                                cantidadEste = item.cantidadOrdenes;
-                                                break;
-                                            case 5:
-                                                cantidadOeste = item.cantidadOrdenes;
-                                                break;
-                                            default:
-                                                break;
+                                        $.each(lista, function(index, item){
+                                            contentHtml += "<p>ID Sede: " + item.idSede + ", Cantidad de Órdenes: " + item.cantidadOrdenes + "</p>";
+                                            cantidadTotal += item.cantidadOrdenes;
+
+                                            switch(item.idSede) {
+                                                case 1:
+                                                    cantidadCentral = item.cantidadOrdenes;
+                                                    break;
+                                                case 2:
+                                                    cantidadNorte = item.cantidadOrdenes;
+                                                    break;
+                                                case 3:
+                                                    cantidadSur = item.cantidadOrdenes;
+                                                    break;
+                                                case 4:
+                                                    cantidadEste = item.cantidadOrdenes;
+                                                    break;
+                                                case 5:
+                                                    cantidadOeste = item.cantidadOrdenes;
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        });
+
+                                        // Insertar el contenido HTML en el elemento con id "resultado"
+                                        $("#resultado").html(contentHtml);
+
+                                        // Destruir el gráfico anterior si existe
+                                        if (myChart) {
+                                            myChart.destroy();
                                         }
-                                    });
 
-                                    // Insertar el contenido HTML en el elemento con id "resultado"
-                                    $("#resultado").html(contentHtml);
-
-                                    // Destruir el gráfico anterior si existe
-                                    if (myChart) {
-                                        myChart.destroy();
-                                    }
-
-                                    // Crear gráfico después de obtener los datos
-                                    var ctx = document.getElementById('graficoSedes').getContext('2d');
-                                    myChart = new Chart(ctx, {
-                                        type: 'pie', // Tipo de gráfica: pie (circular)
-                                        data: {
-                                            labels: ['Sede Norte', 'Sede Sur', 'Sede Este', 'Sede Oeste', 'Sede Central'], // Nombres de las sedes
-                                            datasets: [{
-                                                label: 'Cantidad de Transacciones',
-                                                data: [cantidadNorte, cantidadSur, cantidadEste, cantidadOeste, cantidadCentral], // Cantidades de transacciones para cada sede
-                                                backgroundColor: [
-                                                    'rgba(255, 99, 132, 0.2)', // Color de la primera porción
-                                                    'rgba(54, 162, 235, 0.2)', // Color de la segunda porción
-                                                    'rgba(255, 206, 86, 0.2)', // Color de la tercera porción
-                                                    'rgba(75, 192, 192, 0.2)', // Color de la cuarta porción
-                                                    'rgba(153, 102, 255, 0.2)'  // Color de la quinta porción
-                                                ],
-                                                borderColor: [
-                                                    'rgba(255, 99, 132, 1)', // Color del borde de la primera porción
-                                                    'rgba(54, 162, 235, 1)', // Color del borde de la segunda porción
-                                                    'rgba(255, 206, 86, 1)', // Color del borde de la tercera porción
-                                                    'rgba(75, 192, 192, 1)', // Color del borde de la cuarta porción
-                                                    'rgba(153, 102, 255, 1)'  // Color del borde de la quinta porción
-                                                ],
-                                                borderWidth: 1 // Ancho del borde de las porciones
-                                            }]
-                                        },
-                                        options: {
-                                            responsive: true, // La gráfica es responsiva
-                                            maintainAspectRatio: false, // Mantener el tamaño del gráfico constante
-                                            plugins: {
-                                                legend: {
-                                                    position: 'bottom', // Cambiar posición de la leyenda a abajo
-                                                    labels: {
-                                                        padding: 30 // Ajustar el espacio entre la leyenda y el gráfico
-                                                    }
-                                                },
-                                                tooltip: {
-                                                    callbacks: {
-                                                        label: function(context) {
-                                                            var label = context.label || '';
-                                                            var value = context.raw || 0;
-                                                            return label + ': ' + value + ' transacciones';
+                                        // Crear gráfico después de obtener los datos
+                                        var ctx = document.getElementById('graficoSedes').getContext('2d');
+                                        myChart = new Chart(ctx, {
+                                            type: 'pie', // Tipo de gráfica: pie (circular)
+                                            data: {
+                                                labels: ['Sede Norte', 'Sede Sur', 'Sede Este', 'Sede Oeste', 'Sede Central'], // Nombres de las sedes
+                                                datasets: [{
+                                                    label: 'Cantidad de Transacciones',
+                                                    data: [cantidadNorte, cantidadSur, cantidadEste, cantidadOeste, cantidadCentral], // Cantidades de transacciones para cada sede
+                                                    backgroundColor: [
+                                                        'rgba(255, 99, 132, 0.2)', // Color de la primera porción
+                                                        'rgba(54, 162, 235, 0.2)', // Color de la segunda porción
+                                                        'rgba(255, 206, 86, 0.2)', // Color de la tercera porción
+                                                        'rgba(75, 192, 192, 0.2)', // Color de la cuarta porción
+                                                        'rgba(153, 102, 255, 0.2)'  // Color de la quinta porción
+                                                    ],
+                                                    borderColor: [
+                                                        'rgba(255, 99, 132, 1)', // Color del borde de la primera porción
+                                                        'rgba(54, 162, 235, 1)', // Color del borde de la segunda porción
+                                                        'rgba(255, 206, 86, 1)', // Color del borde de la tercera porción
+                                                        'rgba(75, 192, 192, 1)', // Color del borde de la cuarta porción
+                                                        'rgba(153, 102, 255, 1)'  // Color del borde de la quinta porción
+                                                    ],
+                                                    borderWidth: 1 // Ancho del borde de las porciones
+                                                }]
+                                            },
+                                            options: {
+                                                responsive: true, // La gráfica es responsiva
+                                                maintainAspectRatio: false, // Mantener el tamaño del gráfico constante
+                                                plugins: {
+                                                    legend: {
+                                                        position: 'bottom', // Cambiar posición de la leyenda a abajo
+                                                        labels: {
+                                                            padding: 30 // Ajustar el espacio entre la leyenda y el gráfico
+                                                        }
+                                                    },
+                                                    tooltip: {
+                                                        callbacks: {
+                                                            label: function(context) {
+                                                                var label = context.label || '';
+                                                                var value = context.raw || 0;
+                                                                return label + ': ' + value + ' transacciones';
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
-                                        }
-                                    });
+                                        });
+
+                                    } else {
+                                        console.log(data.message);
+                                    }
+
+
 
                                 }).fail(function (jqXHR, textStatus, errorThrown) {
                                     console.error("Error en la consulta AJAX: " + textStatus, errorThrown);
@@ -833,6 +844,7 @@
                         method: "GET",
                         dataType: "json",
                         crossDomain: true,
+                        headers: {"Authorization": "$2a$12$o1IkPmmQ0N8BLGKlyCjtAujLPTjQJAFCQS0IDdOqgeE5jY5z2ECQu"},
                         url: "http://localhost:8080/service/listaMedicamentosBajoStock/" + sedeId
                     }).done(function (data){
 
@@ -931,6 +943,7 @@
                         method: "GET",
                         dataType: "json",
                         crossDomain: true,
+                        headers: {"Authorization": "$2a$12$zotoyRrJ4O6wIx.Fue.Y9Oko6loVWWrKYQOIEHoH8hmKdbLYUzX8y"},
                         url: url
                     }).done(function (data){
 
@@ -1013,6 +1026,7 @@
                         method: "GET",
                         dataType: "json",
                         crossDomain: true,
+                        headers: {"Authorization": "$2a$12$zotoyRrJ4O6wIx.Fue.Y9Oko6loVWWrKYQOIEHoH8hmKdbLYUzX8y"},
                         url: url
                     }).done(function (data) {
 
@@ -1097,6 +1111,7 @@
                         method: "GET",
                         dataType: "json",
                         crossDomain: true,
+                        headers: {"Authorization": "$2a$12$zotoyRrJ4O6wIx.Fue.Y9Oko6loVWWrKYQOIEHoH8hmKdbLYUzX8y"},
                         url: url
                     }).done(function (data){
 
