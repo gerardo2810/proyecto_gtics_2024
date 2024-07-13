@@ -28,6 +28,9 @@ public interface MedicamentosSedeStockDto {
     int getIdSede();
 
     int getCantidad();
+    default String getImagenBase64() {
+        return (getImagen() != null) ? Base64.getEncoder().encodeToString(getImagen()) : null;
+    }
 
 
 }

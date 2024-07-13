@@ -43,5 +43,20 @@ public interface SedeStockRepository extends JpaRepository<SedeStock, SedeStockI
     @Query(nativeQuery = true, value = "UPDATE sede_stock SET cantidad = cantidad + ?3 WHERE idSede = ?1 and idMedicamento = ?2")
     void actualizarSedeStock(int idSede, int idMedicamento, Integer cantidadAumentada);
 
+    @Query("SELECT m.idMedicamento AS idMedicamento, m.nombre AS nombre, m.unidad AS unidad, m.descripcion AS descripcion, m.categorias AS categorias, m.componente AS componente, m.precioCompra AS precioCompra, m.precioVenta AS precioVenta, m.recetable AS recetable, m.imagen AS imagen, SUM(s.cantidad) AS cantidad " +
+            "FROM SedeStock s " +
+            "JOIN s.idMedicamento m " +
+            "GROUP BY m.idMedicamento, m.nombre, m.unidad, m.descripcion, m.categorias, m.componente, m.precioCompra, m.precioVenta, m.recetable, m.imagen")
+    List<MedicamentosSedeStockDto> findMedicamentosConStock();
+    @Query("SELECT m.idMedicamento AS idMedicamento, m.nombre AS nombre, m.unidad AS unidad, m.descripcion AS descripcion, " +
+            "m.categorias AS categorias, m.componente AS componente, m.precioCompra AS precioCompra, m.precioVenta AS precioVenta, " +
+            "m.recetable AS recetable, m.imagen AS imagen, SUM(s.cantidad) AS cantidad " +
+            "FROM SedeStock s " +
+            "JOIN s.idMedicamento m " +
+            "WHERE m.categorias = :categoria " + // Filtrar por categoría
+            "GROUP BY m.idMedicamento, m.nombre, m.unidad, m.descripcion, m.categorias, m.componente, m.precioCompra, m.precioVenta, m.recetable, m.imagen")
+    List<MedicamentosSedeStockDto> findMedicamentosConStockByCategoria(String categoria);
+
+
 
 }

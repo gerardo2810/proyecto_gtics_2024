@@ -172,12 +172,12 @@ public class FarmacistaController {
         System.out.println("Categoría recibida: " + categoria);
 
         //Obtener la lista de medicamentos según la categoría seleccionada
-        List<Medicamento> listaMedicamentos;
+        List<MedicamentosSedeStockDto> listaMedicamentos;
         if (categoria != null && !categoria.isEmpty()) {
-            listaMedicamentos = medicamentoRepository.findByCategorias(categoria);
+            listaMedicamentos = sedeStockRepository.findMedicamentosConStockByCategoria(categoria);
             System.out.println(listaMedicamentos);
         } else {
-            listaMedicamentos = medicamentoRepository.findAll();
+            listaMedicamentos = sedeStockRepository.findMedicamentosConStock();
         }
         System.out.println(listaMedicamentos);
 
@@ -186,6 +186,8 @@ public class FarmacistaController {
         model.addAttribute("listaMedicamentos", listaMedicamentos);
         model.addAttribute("numeroOrdenesPendientes", numeroOrdenesPendientes);
         model.addAttribute("categoriaSeleccionada", categoria);
+        model.addAttribute("lista1",listaMedicamentos);
+
 
         return "farmacista/inicio";
     }
