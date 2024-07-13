@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -59,9 +60,12 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests() //Autenticación por roles
+        http
+                .csrf().disable()
+                .authorizeHttpRequests() //Autenticación por roles
                 //Rutas para autenticación
-                .requestMatchers("/chatbot_gtics/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/service/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/chatbot_gtics/**").permitAll()
                 .requestMatchers("/superadmin", "/superadmin/**").hasAnyAuthority("SUPERADMIN")
                 .requestMatchers("/adminsede", "/adminsede/**").hasAnyAuthority("SUPERADMIN", "ADMINSEDE")
                 .requestMatchers("/farmacista", "/farmacista/**").hasAnyAuthority("SUPERADMIN", "FARMACISTA")
