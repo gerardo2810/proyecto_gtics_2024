@@ -337,16 +337,13 @@
                     denyButtonColor: '#3085d6',
                     cancelButtonText: 'Cancelar',
                     confirmButtonText: 'Nueva Preorden',
-                    denyButtonText: 'Cambiar Medicinas'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         event.preventDefault();
                         form.submit();
                     } else if (result.isDismissed) {
 
-                    } else if (result.isDenied && hayProblemaConStock && verificarCamposLlenos(form)){
-                        window.location.href = '/farmacista/cambiar_medicamentos';
-                    } else {
+                    }  else {
                         Swal.fire({
                             title: 'Faltan Datos',
                             text: 'Por favor, completa todos los campos antes de enviar el formulario.',
