@@ -2,6 +2,7 @@ package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
 
 import java.util.HashMap;
 import java.util.Optional;
+
 
 @RestController
 @CrossOrigin /* Por si se desea utilizar de IPs externas */
@@ -25,19 +27,25 @@ public class ChatBotController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @PostMapping(value = "/valida_dni")
-    public ResponseEntity<Object> validarDni(@RequestBody DniRequest dniRequest) {
-        try {
-            String dni = dniRequest.getDni();
-            Usuario usuario = usuarioRepository.verifyDNI(dni).orElse(null);
+    @PostMapping(value = {"/valida_dni", "/valida_dni/"})
+    public ResponseEntity<HashMap<String, Object>> validarDNI(@RequestBody DniRequest dniRequest) {
 
-            if (usuario != null) {
-                return ResponseEntity.ok(usuario);
+        String dni = dniRequest.getDni();
+        HashMap<String, Object> responseJson = new HashMap<>();
+
+        try {
+            Optional<Usuario> usuarioOptional = usuarioRepository.verifyDNI(dni);
+
+            if (usuarioOptional.isPresent()){
+                responseJson.put("OK", usuarioOptional.get());
+                return ResponseEntity.status(HttpStatus.SC_ACCEPTED).body(responseJson);
             } else {
-                return ResponseEntity.ok("Usuario no encontrado");
+                responseJson.put("ERROR", null);
+                return ResponseEntity.badRequest().body(responseJson);
             }
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().body("Error en el formato del DNI");
+        } catch (Exception e){
+            responseJson.put("ERROR", null);
+            return ResponseEntity.badRequest().body(responseJson);
         }
     }
 }
