@@ -311,7 +311,7 @@
                             </div>
                         </div>
                         <div class="order-items-trk">
-                            <div th:each="medicamento : ${medicamentosSeleccionados}">
+                            <div th:each="medicamento,hola : ${medicamentosSeleccionados}">
                                 <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between !important; padding: 15px; border-bottom: solid 1px #d3d3d3;">
                                     <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
                                         <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" th:alt="${medicamento.nombre}" width="180px" height="auto">
@@ -345,32 +345,42 @@
                                             <article class="page5">
                                                 <article class="main">
                                                     <article class="dnd-image-drag cf">
+                                                        <!-- Sección de Sugerencia de medicamentos -->
                                                         <div class="container5">
                                                             <h3>Sugerencia de medicamentos</h3>
                                                             <div class="inner gallery-list cf">
                                                                 <div th:each="categoriaMedicamentos : ${medicamentosAgrupados}">
                                                                     <div th:each="sugerencia : ${categoriaMedicamentos}">
+                                                                        <!-- Imagen arrastrable -->
                                                                         <img draggable="true" th:src="'data:image/jpeg;base64,' + ${sugerencia.imagenBase64}" th:alt="${sugerencia.nombre}" class="drag" />
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
+
+                                                        <!-- Sección de Medicamentos seleccionados -->
                                                         <div class="container5">
                                                             <h3>Medicamentos seleccionados</h3>
                                                             <div class="inner gallery-painting cf">
+                                                                <!-- Contenedores donde se pueden soltar los medicamentos seleccionados -->
                                                                 <div class="drop" value="1"></div>
                                                                 <div class="drop" value="2"></div>
                                                                 <div class="drop" value="3"></div>
                                                                 <div class="drop" value="4"></div>
                                                             </div>
                                                         </div>
+
+                                                        <!-- Contenedor para mensajes o notificaciones -->
                                                         <div class="message-container5"></div>
+
+                                                        <!-- Botones de restablecer y guardar elección -->
                                                         <button class="reset-button">Restablecer</button>
                                                         <button class="reset-button">Guardar Eleccion</button>
                                                     </article>
                                                 </article>
                                             </article>
                                         </div>
+
                                         <br>
                                     </div>
                                 </div>
@@ -429,7 +439,76 @@
     <div th:replace="~{fragments/navbar.html :: footer}"></div>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const draggables = document.querySelectorAll(".drag");
+        const containers = document.querySelectorAll(".drop");
+        const resetButton = document.querySelector(".reset-button");
 
+        let draggedItem = null;
+
+        // Event listeners for draggable items
+        draggables.forEach(draggable => {
+            draggable.addEventListener("dragstart", dragStart);
+            draggable.addEventListener("dragend", dragEnd);
+        });
+
+        // Event listeners for droppable containers
+        containers.forEach(container => {
+            container.addEventListener("dragover", dragOver);
+            container.addEventListener("dragenter", dragEnter);
+            container.addEventListener("dragleave", dragLeave);
+            container.addEventListener("drop", drop);
+        });
+
+        // Event listener for reset button
+        resetButton.addEventListener("click", resetSelection);
+
+        function dragStart() {
+            draggedItem = this;
+            setTimeout(() => {
+                this.style.opacity = "0.5"; // Opacity while dragging
+            }, 0);
+        }
+
+        function dragEnd() {
+            setTimeout(() => {
+                draggedItem.style.opacity = "1"; // Reset opacity
+                draggedItem = null;
+            }, 0);
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+        }
+
+        function dragEnter(e) {
+            e.preventDefault();
+            this.classList.add("hovered");
+        }
+
+        function dragLeave() {
+            this.classList.remove("hovered");
+        }
+
+        function drop() {
+            this.classList.remove("hovered");
+            this.appendChild(draggedItem);
+        }
+
+        function resetSelection() {
+            // Restablecer la selección moviendo todos los elementos a la sección de sugerencias
+            const sugerenciasContainer = document.querySelector(".gallery-list");
+            const seleccionadosContainer = document.querySelector(".gallery-painting");
+
+            // Mover todos los elementos de Medicamentos seleccionados a Sugerencias de medicamentos
+            seleccionadosContainer.querySelectorAll(".drag").forEach(item => {
+                sugerenciasContainer.appendChild(item);
+            });
+        }
+    });
+
+</script>
 <script>
     $(document).ready(function() {
         var opened = false;
@@ -447,244 +526,8 @@
         });
     });
 </script>
-<script>
-    jQuery(document).ready(function($) {
 
-        var drag_items = $('.dnd-image-drag .drag');
-        var drop_items = $('.dnd-image-drag').find('.drop');
 
-        //set up drag and drop event listeners
-        function setUpEventListeners() {
-
-            drag_items.each(function() {
-                var thisDrag = $(this);
-                thisDrag[0].addEventListener('dragstart', dragStart);
-                thisDrag[0].addEventListener('drag', drag);
-                thisDrag[0].addEventListener('dragend', dragEnd);
-            });
-
-            drop_items.each(function() {
-                var thisDrop = $(this);
-
-                thisDrop[0].addEventListener('dragenter', dragEnter);
-                thisDrop[0].addEventListener('dragover', dragOver);
-                thisDrop[0].addEventListener('dragleave', dragLeave);
-                thisDrop[0].addEventListener('drop', drop);
-
-            });
-
-        }
-        setUpEventListeners();
-
-        var dragItem;
-
-        //called as soon as the draggable starts being dragged
-        //used to set up data and options
-        function dragStart(event) {
-
-            drag = event.target;
-            dragItem = event.target;
-
-            //set the effectAllowed for the drag item
-            event.dataTransfer.effectAllowed = 'copy';
-
-            var imageSrc = $(dragItem).prop('src');
-            var imageHTML = $(dragItem).prop('outerHTML');
-
-            //check for IE (it supports only 'text' or 'URL')
-            try {
-                event.dataTransfer.setData('text/uri-list', imageSrc);
-                event.dataTransfer.setData('text/html', imageHTML);
-            } catch (e) {
-                event.dataTransfer.setData('text', imageSrc);
-            }
-
-            $(drag).addClass('drag-active');
-
-        }
-
-        //called as the draggable enters a droppable
-        //needs to return false to make droppable area valid
-        function dragEnter(event) {
-
-            var drop = this;
-
-            //set the drop effect for this zone
-            event.dataTransfer.dropEffect = 'copy';
-            $(drop).addClass('drop-active');
-
-            event.preventDefault();
-            event.stopPropagation();
-
-        }
-
-        //called continually while the draggable is over a droppable
-        //needs to return false to make droppable area valid
-        function dragOver(event) {
-            var drop = this;
-
-            //set the drop effect for this zone
-            event.dataTransfer.dropEffect = 'copy';
-            $(drop).addClass('drop-active');
-
-            event.preventDefault();
-            event.stopPropagation();
-        }
-
-        //called when the draggable was inside a droppable but then left
-        function dragLeave(event) {
-            var drop = this;
-            $(drop).removeClass('drop-active');
-        }
-
-        //called continually as the draggable is dragged
-        function drag(event) {
-
-        }
-
-        //called when the draggable has been released (either on droppable or not)
-        //may be called on invalid or valid drop
-        function dragEnd(event) {
-
-            var drag = this;
-            $(drag).removeClass('drag-active');
-
-        }
-
-        //called when draggable is dropped on droppable
-        //final process, used to copy data or update UI on successful drop
-        function drop(event) {
-
-            drop = this;
-            $(drop).removeClass('drop-active');
-
-            var dataList, dataHTML, dataText;
-
-            //collect our data (based on what browser support we have)
-            try {
-                dataList = event.dataTransfer.getData('text/uri-list');
-                dataHTML = event.dataTransfer.getData('text/html');
-            } catch (e) {;
-                dataText = event.dataTransfer.getData('text');
-            }
-
-            //we have access to the HTML
-            if (dataHTML) {
-                $(drop).empty();
-                $(drop).prepend(dataHTML);
-                var drag = $(drop).find('.drag');
-            }
-            //only have access to text (old browsers + IE)
-            else {
-                $(drop).empty();
-                $(drop).prepend($(dragItem).clone());
-                var drag = $(drop).find('.drag');
-            }
-
-            //check if this element is in the right spot
-            checkCorrectDrop(drop, drag);
-            //see if the final image is complete
-            checkCorrectFinalImage();
-
-            event.preventDefault();
-            event.stopPropagation();
-        }
-
-        //check to see if this dropped item is in the correct spot
-        function checkCorrectDrop(drop, drag) {
-
-            //check if this drop is correct
-            var imageValue = $(drag).attr('value');
-            var dropValue = $(drop).attr('value');
-
-            if (imageValue == dropValue) {
-                $(drop).removeClass('incorrect').addClass('correct');
-                //make the dropped item no longer draggable (removing the attr)
-                $(drag).attr('draggable', 'false');
-
-                //hide the original drag item (set during dragStart), we don't need it anymore
-                $(dragItem).hide();
-
-            } else {
-                $(drop).removeClass('correct').addClass('incorrect');
-            }
-
-        }
-
-        //checks to see if the dropped images are in the correct locations
-        function checkCorrectFinalImage() {
-
-            var correctItems = drop_items.filter('.correct');
-            if (correctItems.length == drop_items.length) {
-                $('.message-container5').empty();
-                $('.message-container5').append('<h3>You solved the puzzle!</h3>');
-                $('.message-container5').append('<p>Thanks for putting Internet Explorer back together again!</p>');
-            } else {
-                $('.message-container5').empty();
-            }
-        }
-
-        //Reset the drop containers
-        $('.reset-button').on('click', function() {
-            $('.dnd-image-drag').find('.drop').children('img').remove();
-            $('.dnd-image-drag').find('.drop').removeClass('correct incorrect');
-            $('.message-container5').empty();
-            $('.dnd-image-drag .drag').show();
-        });
-
-        // check for ie
-        var userAgent = window.navigator.userAgent;
-        if (userAgent.indexOf('MSIE') != -1) {
-            $('.ie-message').show();
-        }
-
-    });
-</script>
-<script>
-    function toggleNotifi() {
-        var box = document.getElementById('box');
-        var isVisible = box.style.opacity !== '0';
-
-        if (isVisible) {
-            box.style.opacity = '0';
-            box.style.height = '0px'; // Ajusta la altura según tu diseño
-        } else {
-            box.style.opacity = '1';
-            box.style.height = 'auto'; // Ajusta la altura según el contenido
-        }
-    }
-</script>
-
-<script>
-    function allowDrop(ev) {
-        ev.preventDefault();
-    }
-
-    function drag(ev) {
-        ev.dataTransfer.setData("text", ev.target.id);
-    }
-
-    function drop(ev) {
-        ev.preventDefault();
-        var data = ev.dataTransfer.getData("text");
-        var target = ev.target;
-
-        // Find the closest column container or an item within the column
-        while (!target.classList.contains('column5') && !target.classList.contains('item')) {
-            target = target.parentElement;
-        }
-
-        // Append the dragged element if the target is a column or an item within the column
-        if (target.classList.contains('column5') || target.classList.contains('item')) {
-            if (target.classList.contains('item')) {
-                target.parentNode.insertBefore(document.getElementById(data), target.nextSibling);
-            } else {
-                target.appendChild(document.getElementById(data));
-            }
-        }
-    }
-
-</script>
 
 <script th:src="@{/js/loader.js}"></script>
 
