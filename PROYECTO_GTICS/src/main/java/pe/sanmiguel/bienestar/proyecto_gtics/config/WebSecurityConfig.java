@@ -71,7 +71,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/farmacista", "/farmacista/**").hasAnyAuthority("SUPERADMIN", "FARMACISTA")
                 .requestMatchers("/paciente", "/paciente/**").hasAnyAuthority("SUPERADMIN", "PACIENTE")
                 .requestMatchers("/cambiarcontra").hasAnyAuthority("TEMPORAL")
-                .requestMatchers("/impersonate").hasAuthority("SUPERADMIN")
+                .requestMatchers("/impersonate").hasAnyAuthority("SUPERADMIN", "ADMINSEDE","FARMACISTA", "PACIENTE")
                 .anyRequest().permitAll()
                 .and()
                 .exceptionHandling()
