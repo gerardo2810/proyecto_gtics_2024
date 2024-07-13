@@ -338,75 +338,7 @@
                                         <button class="reportButton aprobar" style="font-size: 1rem;">Ver sugerencias</button>
                                     </div>
                                 </div>
-                                <div id="myModal" class="modal">
-                                    <div class="modal-content">
-                                        <span class="close">&times;</span>
-                                        <div class="container">
-                                            <article class="page5">
-                                                <article class="main">
-                                                    <article class="dnd-image-drag cf">
-                                                        <!-- Sección de Sugerencia de medicamentos -->
-                                                        <div class="container5">
-                                                            <h3>Sugerencia de medicamentos</h3>
-                                                            <div class="inner gallery-list cf">
-                                                                <div th:each="categoriaMedicamentos : ${medicamentosAgrupados}">
-                                                                    <div th:each="sugerencia : ${categoriaMedicamentos}">
-                                                                        <!-- Imagen arrastrable -->
-                                                                        <img draggable="true" th:src="'data:image/jpeg;base64,' + ${sugerencia.imagenBase64}" th:alt="${sugerencia.nombre}" class="drag" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
 
-                                                        <!-- Sección de Medicamentos seleccionados -->
-                                                        <div class="container5">
-                                                            <h3>Medicamentos seleccionados</h3>
-                                                            <div class="inner gallery-painting cf">
-                                                                <!-- Contenedores donde se pueden soltar los medicamentos seleccionados -->
-                                                                <div class="drop" value="1"></div>
-                                                                <div class="drop" value="2"></div>
-                                                                <div class="drop" value="3"></div>
-                                                                <div class="drop" value="4"></div>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Contenedor para mensajes o notificaciones -->
-                                                        <div class="message-container5"></div>
-
-                                                        <!-- Botones de restablecer y guardar elección -->
-                                                        <button class="reset-button">Restablecer</button>
-                                                        <button class="reset-button">Guardar Eleccion</button>
-                                                    </article>
-                                                </article>
-                                            </article>
-                                        </div>
-
-                                        <br>
-                                    </div>
-                                </div>
-                                <script>
-                                    document.addEventListener("DOMContentLoaded", function () {
-                                        var modal = document.getElementById("myModal");
-                                        var buttons = document.getElementsByClassName("reportButton");
-                                        var span = document.getElementsByClassName("close")[0];
-
-                                        for (var i = 0; i < buttons.length; i++) {
-                                            buttons[i].onclick = function () {
-                                                modal.style.display = "block";
-                                            }
-                                        }
-
-                                        span.onclick = function () {
-                                            modal.style.display = "none";
-                                        }
-
-                                        window.onclick = function (event) {
-                                            if (event.target == modal) {
-                                                modal.style.display = "none";
-                                            }
-                                        }
-                                    });
-                                </script>
                             </div>
                             <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; align-items: center; gap: 15px;">
                                 <input type="hidden" name="priceTotal" value="">
@@ -419,6 +351,74 @@
         </div>
 
     </div>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="container">
+                <article class="page5">
+                    <article class="main">
+                        <article class="dnd-image-drag cf">
+                            <!-- Sección de Sugerencia de medicamentos -->
+                            <div class="container5">
+                                <h3>Sugerencia de medicamentos</h3>
+                                <div id="suggestions" class="inner gallery-list cf">
+                                    <div th:each="categoriaMedicamentos : ${medicamentosAgrupados}">
+                                        <div th:each="sugerencia : ${categoriaMedicamentos}">
+                                            <!-- Imagen arrastrable -->
+                                            <img draggable="true" th:src="'data:image/jpeg;base64,' + ${sugerencia.imagenBase64}" th:alt="${sugerencia.nombre}" class="drag" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sección de Medicamentos seleccionados -->
+                            <div class="container5">
+                                <h3>Medicamentos seleccionados</h3>
+                                <div id="selected" class="inner gallery-painting cf">
+                                    <!-- Contenedores donde se pueden soltar los medicamentos seleccionados -->
+                                    <div class="drop" value="1"></div>
+                                    <div class="drop" value="2"></div>
+                                    <div class="drop" value="3"></div>
+                                    <div class="drop" value="4"></div>
+                                </div>
+                            </div>
+
+                            <!-- Contenedor para mensajes o notificaciones -->
+                            <div class="message-container5"></div>
+
+                            <!-- Botones de restablecer y guardar elección -->
+                            <button class="reset-button" id="resetBtn">Restablecer</button>
+                            <button class="reset-button">Guardar Eleccion</button>
+                        </article>
+                    </article>
+                </article>
+            </div>
+            <br>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var modal = document.getElementById("myModal");
+            var buttons = document.getElementsByClassName("reportButton");
+            var span = document.getElementsByClassName("close")[0];
+
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].onclick = function () {
+                    modal.style.display = "block";
+                }
+            }
+
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        });
+    </script>
 
     <div class="container" style="padding-top: 15px">
         <div class="float-right botones-tracking">
@@ -430,8 +430,6 @@
             <a  >
                 <button class="print">VER BOLETA</button>
             </a>
-
-
         </div>
     </div>
 
@@ -440,72 +438,39 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const draggables = document.querySelectorAll(".drag");
-        const containers = document.querySelectorAll(".drop");
-        const resetButton = document.querySelector(".reset-button");
+    document.addEventListener("DOMContentLoaded", function () {
+        const draggables = document.querySelectorAll('.drag');
+        const dropzones = document.querySelectorAll('.drop');
+        const suggestions = document.getElementById('suggestions');
+        const selected = document.getElementById('selected');
+        const resetBtn = document.getElementById('resetBtn');
 
-        let draggedItem = null;
-
-        // Event listeners for draggable items
         draggables.forEach(draggable => {
-            draggable.addEventListener("dragstart", dragStart);
-            draggable.addEventListener("dragend", dragEnd);
-        });
-
-        // Event listeners for droppable containers
-        containers.forEach(container => {
-            container.addEventListener("dragover", dragOver);
-            container.addEventListener("dragenter", dragEnter);
-            container.addEventListener("dragleave", dragLeave);
-            container.addEventListener("drop", drop);
-        });
-
-        // Event listener for reset button
-        resetButton.addEventListener("click", resetSelection);
-
-        function dragStart() {
-            draggedItem = this;
-            setTimeout(() => {
-                this.style.opacity = "0.5"; // Opacity while dragging
-            }, 0);
-        }
-
-        function dragEnd() {
-            setTimeout(() => {
-                draggedItem.style.opacity = "1"; // Reset opacity
-                draggedItem = null;
-            }, 0);
-        }
-
-        function dragOver(e) {
-            e.preventDefault();
-        }
-
-        function dragEnter(e) {
-            e.preventDefault();
-            this.classList.add("hovered");
-        }
-
-        function dragLeave() {
-            this.classList.remove("hovered");
-        }
-
-        function drop() {
-            this.classList.remove("hovered");
-            this.appendChild(draggedItem);
-        }
-
-        function resetSelection() {
-            // Restablecer la selección moviendo todos los elementos a la sección de sugerencias
-            const sugerenciasContainer = document.querySelector(".gallery-list");
-            const seleccionadosContainer = document.querySelector(".gallery-painting");
-
-            // Mover todos los elementos de Medicamentos seleccionados a Sugerencias de medicamentos
-            seleccionadosContainer.querySelectorAll(".drag").forEach(item => {
-                sugerenciasContainer.appendChild(item);
+            draggable.addEventListener('dragstart', () => {
+                draggable.classList.add('dragging');
             });
-        }
+
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('dragging');
+            });
+        });
+
+        dropzones.forEach(dropzone => {
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const draggable = document.querySelector('.dragging');
+                if (draggable) {
+                    dropzone.appendChild(draggable);
+                }
+            });
+        });
+
+        resetBtn.addEventListener('click', () => {
+            const allItems = selected.querySelectorAll('.drag');
+            allItems.forEach(item => {
+                suggestions.appendChild(item);
+            });
+        });
     });
 
 </script>
@@ -526,9 +491,6 @@
         });
     });
 </script>
-
-
-
 <script th:src="@{/js/loader.js}"></script>
 
 

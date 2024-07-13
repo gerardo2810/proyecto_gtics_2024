@@ -185,6 +185,8 @@ public class FarmacistaController {
         model.addAttribute("sedeSession", sedeSession);
         model.addAttribute("listaMedicamentos", listaMedicamentos);
         model.addAttribute("numeroOrdenesPendientes", numeroOrdenesPendientes);
+        model.addAttribute("categoriaSeleccionada", categoria);
+
         return "farmacista/inicio";
     }
     @GetMapping("/farmacista/ver_detalles")
