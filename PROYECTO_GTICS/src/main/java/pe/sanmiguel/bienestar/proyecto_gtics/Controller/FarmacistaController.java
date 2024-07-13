@@ -141,7 +141,9 @@ public class FarmacistaController {
 
     @GetMapping(value = {"/farmacista", "/farmacista/"})
     public String farmacistaInicio(Model model,
-                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+                                   HttpServletRequest request, HttpServletResponse response,
+                                   Authentication authentication,
+                                   @RequestParam(name = "categoria", required = false) String categoria) {
 
         //SESSION
         //Iniciamos la sesión
@@ -166,8 +168,19 @@ public class FarmacistaController {
                 return "errorPage"; // O alguna página de error apropiada
             }
         }
+        // Log para verificar si el parámetro categoria llega correctamente
+        System.out.println("Categoría recibida: " + categoria);
 
-        List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
+        //Obtener la lista de medicamentos según la categoría seleccionada
+        List<Medicamento> listaMedicamentos;
+        if (categoria != null && !categoria.isEmpty()) {
+            listaMedicamentos = medicamentoRepository.findByCategorias(categoria);
+            System.out.println(listaMedicamentos);
+        } else {
+            listaMedicamentos = medicamentoRepository.findAll();
+        }
+        System.out.println(listaMedicamentos);
+
         int numeroOrdenesPendientes = 0;
         model.addAttribute("sedeSession", sedeSession);
         model.addAttribute("listaMedicamentos", listaMedicamentos);
