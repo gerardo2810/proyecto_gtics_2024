@@ -64,6 +64,9 @@ public class AdminSedeController {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Autowired
+    private TokenRepository tokenRepository;
+
     final DniAPI dniAPI;
 
     public AdminSedeController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, SedeStockRepository sedeStockRepository, MedicamentoRepository medicamentoRepository, OrdenRepository ordenRepository, OrdenContenidoRepository ordenContenidoRepository, ReposicionRepository reposicionRepository, EstadoPreOrdenRepository estadoPreOrdenRepository, DoctorRepository doctorRepository, SedeFarmacistaRepository sedeFarmacistaRepository, ReposicionContenidoRepository reposicionContenidoRepository, DniAPI dniAPI) {
@@ -139,14 +142,14 @@ public class AdminSedeController {
 
         Optional<Integer> optFinalNumReposicion = reposicionRepository.findLastNumeroporSede(idSede);
 
+        List<Token> listaTokens = tokenRepository.listarTokens();
+
         if(optFinalNumReposicion.isPresent()){
             int finalNumReposicion = optFinalNumReposicion.get();
             int preFinalNumReposicion = finalNumReposicion - 1;
 
             List<Reposicion> listaReposicionNoEntregadasUltimas = reposicionRepository.listarOrdenesReposicionNoEntregadasUltimas(idSede, finalNumReposicion, preFinalNumReposicion);
-            if(listaReposicionNoEntregadasUltimas.size() == 0){
-                return "adminsede/inicio";
-            }
+
             Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
 
             model.addAttribute("listaMedicamentos",medicamentoRepository.listarVentasMedicamentosporSede(idSede));
@@ -155,6 +158,7 @@ public class AdminSedeController {
             model.addAttribute("listaReposicionNoEntregadasUltimas", listaReposicionNoEntregadasUltimas);
             model.addAttribute("lista1", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
             model.addAttribute("lista2", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
+            model.addAttribute("lista", listaTokens);
 
             return "adminsede/inicio";
 
@@ -164,6 +168,7 @@ public class AdminSedeController {
             model.addAttribute("listaReposicionNoEntregadasUltimas", listaReposicionNoEntregadasUltimas);
             model.addAttribute("usuario",usuario);
             model.addAttribute("sedesesion",sedeSession);
+            model.addAttribute("lista", listaTokens);
             return "adminsede/inicio";
 
         }

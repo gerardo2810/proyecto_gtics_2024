@@ -141,7 +141,9 @@ public class FarmacistaController {
 
     @GetMapping(value = {"/farmacista", "/farmacista/"})
     public String farmacistaInicio(Model model,
-                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+                                   HttpServletRequest request, HttpServletResponse response,
+                                   Authentication authentication,
+                                   @RequestParam(name = "categoria", required = false) String categoria) {
 
         //SESSION
         //Iniciamos la sesión
@@ -166,12 +168,25 @@ public class FarmacistaController {
                 return "errorPage"; // O alguna página de error apropiada
             }
         }
+        // Log para verificar si el parámetro categoria llega correctamente
+        System.out.println("Categoría recibida: " + categoria);
 
-        List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
+        //Obtener la lista de medicamentos según la categoría seleccionada
+        List<Medicamento> listaMedicamentos;
+        if (categoria != null && !categoria.isEmpty()) {
+            listaMedicamentos = medicamentoRepository.findByCategorias(categoria);
+            System.out.println(listaMedicamentos);
+        } else {
+            listaMedicamentos = medicamentoRepository.findAll();
+        }
+        System.out.println(listaMedicamentos);
+
         int numeroOrdenesPendientes = 0;
         model.addAttribute("sedeSession", sedeSession);
         model.addAttribute("listaMedicamentos", listaMedicamentos);
         model.addAttribute("numeroOrdenesPendientes", numeroOrdenesPendientes);
+        model.addAttribute("categoriaSeleccionada", categoria);
+
         return "farmacista/inicio";
     }
     @GetMapping("/farmacista/ver_detalles")
@@ -684,12 +699,13 @@ public class FarmacistaController {
 
             // Crear una lista de listas de medicamentos agrupados por categoría
             List<List<Medicamento>> medicamentosAgrupados = new ArrayList<>();
-            for (String categoria : categoriasMedicamentos) {
-                List<Medicamento> medicamentosPorCategoria = medicamentoRepository.findByCategorias(categoria);
+            for (Medicamento medicamento : medicamentosSeleccionados) {
+                String categoriaMedicamento = medicamento.getCategorias();
+                List<Medicamento> medicamentosPorCategoria = medicamentoRepository.findByCategorias(categoriaMedicamento);
                 medicamentosAgrupados.add(medicamentosPorCategoria);
             }
 
-            model.addAttribute("medicamentosSeleccionados",medicamentosSeleccionados);
+            model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
             model.addAttribute("medicamentosAgrupados", medicamentosAgrupados);
             model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
             model.addAttribute("cantidadesExistentes", cantidadesExistentes);

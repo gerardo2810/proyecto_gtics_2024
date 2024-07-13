@@ -82,7 +82,7 @@ public interface MedicamentoRepository extends JpaRepository<Medicamento, Intege
 
     List<Medicamento> findByCategorias(String categoria);
 
-    @Query(nativeQuery = true, value = "SELECT ss.idSede, ss.idMedicamento, ss.cantidad, m.nombre FROM proyecto_gtics.sede_stock ss inner join medicamento m on ss.idMedicamento = m.idMedicamento where ss.idSede = ? and cantidad < 25 limit 0, 6")
+    @Query(nativeQuery = true, value = "SELECT ss.idSede, ss.idMedicamento, ss.cantidad, m.nombre FROM proyecto_gtics.sede_stock ss inner join medicamento m on ss.idMedicamento = m.idMedicamento where ss.idSede = ? and cantidad < 25")
     List<MedicamentoBajoStockDto> listarMedicamentosBajoStockxSede(int idSede);
 
 

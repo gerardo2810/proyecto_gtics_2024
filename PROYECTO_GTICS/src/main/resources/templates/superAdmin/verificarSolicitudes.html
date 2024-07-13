@@ -14,7 +14,7 @@
     <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
 
     <!--=============== CSS ===============-->
-    <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+    <link th:href="@{/css/loader.css}" rel="stylesheet" />
 
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
     <link th:href="@{/css/fonts.css}" rel="stylesheet" />
@@ -169,11 +169,35 @@
 </head>
 
 
-<body class="loader-hidden">
+<body>
 
-<div class="container-loader loader-hidden" id="onload">
-    <div class="loader"></div>
+<div id="loader-container"  style="display: flex;flex-direction: column;">
+
+    <div style="display: flex; justify-content: center;margin-top: 250px;">
+        <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
+    </div>
+
+    <div id="loader-wrapper"  class="loader-wrapper">
+
+        <div class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader2" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader3" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+    </div>
+
 </div>
+<div id="content-show" class="hidden">
+
 <!--=============== HEADER ===============-->
 <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = '')}"></nav>
@@ -313,6 +337,7 @@
 <br><br><br>
 
 <div th:replace="~{fragments/navbar.html :: footer}">
+</div>
 </div>
 
 <!-- JQuery -->
@@ -484,13 +509,8 @@
 <script th:src="@{/js/topbar.js}"></script>
 
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
-<script>
-    window.onload = function () {
-        $('#onload').fadeOut();
-        $('body').removeClass('loader-hidden');
-    }
+<script th:src="@{/js/loader.js}"></script>
 
-</script>
 </body>
 
 </html>

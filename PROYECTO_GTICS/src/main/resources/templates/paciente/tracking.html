@@ -296,7 +296,7 @@
                 <button class="print">REGRESAR</button>
             </a>
 
-            <a th:if="${ordenActual.getEstadoOrden() != 1 && ordenActual.getEstadoOrden() != 2} " th:href="@{'/paciente/boleta_pago?id=' + ${ordenActual.getIdOrden()}}" >
+            <a th:if="${ordenActual.getEstadoOrden() != 1 && ordenActual.getEstadoOrden() != 2 && ordenActual.getEstadoOrden() != 9} " th:href="@{'/paciente/boleta_pago?id=' + ${ordenActual.getIdOrden()}}" >
                 <button class="print">VER BOLETA</button>
             </a>
 
