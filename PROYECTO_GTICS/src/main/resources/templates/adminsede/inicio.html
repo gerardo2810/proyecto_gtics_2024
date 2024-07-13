@@ -383,7 +383,7 @@
                                     dataType: "json",
                                     crossDomain: true,
                                     headers: {"Authorization": token1},
-                                    url: "https://bienestarsanmiguel.xyz/service/listaVentas"
+                                    url: "http://bienestarsanmiguel.xyz/service/listaVentas"
                                 }).done(function (data){
                                     console.log(data)
 
@@ -837,7 +837,7 @@
                         dataType: "json",
                         crossDomain: true,
                         headers: {"Authorization": token2},
-                        url: "https://bienestarsanmiguel.xyz/service/listaMedicamentosBajoStock/" + sedeId
+                        url: "http://bienestarsanmiguel.xyz/service/listaMedicamentosBajoStock/" + sedeId
                     }).done(function (data){
 
                         if(data.result === "ok"){
@@ -923,7 +923,7 @@
                     var sedeId = $("#sedeId").val();
                     var token3 = $("#token3").val();
                     var numero = 3;
-                    var url = "https://bienestarsanmiguel.xyz/service/listaVentasPreferidasxFecha/" + sedeId + "/" + numero;
+                    var url = "http://bienestarsanmiguel.xyz/service/listaVentasPreferidasxFecha/" + sedeId + "/" + numero;
 
                     $.ajax({
                         method: "GET",
@@ -1003,7 +1003,7 @@
                     var sedeId = $("#sedeId").val();
                     var token3 = $("#token3").val();
                     var numero = 7;
-                    var url = "https://bienestarsanmiguel.xyz/service/listaVentasPreferidasxFecha/" + sedeId + "/" + numero;
+                    var url = "http://bienestarsanmiguel.xyz/service/listaVentasPreferidasxFecha/" + sedeId + "/" + numero;
 
                     $.ajax({
                         method: "GET",
@@ -1085,7 +1085,7 @@
                     var sedeId = $("#sedeId").val();
                     var token3 = $("#token3").val();
                     var numero = 15;
-                    var url = "https://bienestarsanmiguel.xyz/service/listaVentasPreferidasxFecha/" + sedeId + "/" + numero;
+                    var url = "http://bienestarsanmiguel.xyz/service/listaVentasPreferidasxFecha/" + sedeId + "/" + numero;
 
                     $.ajax({
                         method: "GET",
