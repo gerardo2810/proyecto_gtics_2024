@@ -21,6 +21,7 @@
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
     <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+    <link rel="stylesheet" th:href="@{/css/loader.css}">
 
 
 
@@ -42,79 +43,108 @@
 
 
 <body>
+<div id="loader-container"  style="display: flex;flex-direction: column;">
 
+    <div style="display: flex; justify-content: center;margin-top: 250px;">
+        <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
+    </div>
 
-<header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Mensajeria')}"></nav>
-</header>
+    <div id="loader-wrapper"  class="loader-wrapper">
 
+        <div class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
 
-<div th:replace="~{fragments/banner.html :: banner}"></div>
+        <div id="loader2" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
 
-
-
-<div class="container">
-
-    <div style="margin-bottom: 50px"></div>
-    <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Lista de chats</strong></h2>
-    <div style="margin-bottom: 20px"></div>
-    <hr style="border-top: 1px solid #DFDFDF;">
-    <div style="margin-bottom: 40px"></div>
-
-    <div style="padding-right: 0; padding-left: 0"> </div>
-</div>
-
-
-
-
-<div class="container">
-
-
-
-    <table id="miTabla" class="table table-striped">
-        <thead>
-        <tr style="background-color: #378fff">
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Orden de compra</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Farmacista</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Chat</th>
-        </tr>
-        </thead>
-        <tbody>
-
-        <tr th:each="chat : ${listaChats}">
-            <td th:text="${10000 + chat.getOrden().getIdOrden()}"></td>
-            <td th:text="${chat.getIdUser2().getNombres() + ' ' + chat.getIdUser2().getApellidos()}"></td>
-            <td class="action" >
-                <a th:href="@{'/paciente/chat/' + ${ chat.getOrden().getIdOrden() +   '/' + chat.getIdUser1()+'/'+chat.getIdUser2()}  }"><button class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button></a>
-            </td>
-        </tr>
-
-        </tbody>
-    </table>
+        <div id="loader3" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+    </div>
 
 </div>
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+<div id="content-show" class="hidden">
+    <header class="header-topbar">
+        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Mensajeria')}"></nav>
+    </header>
+
+
+    <div th:replace="~{fragments/banner.html :: banner}"></div>
 
 
 
-<div th:replace="~{fragments/navbar.html :: footer}">
+    <div class="container">
+
+        <div style="margin-bottom: 50px"></div>
+        <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Lista de chats</strong></h2>
+        <div style="margin-bottom: 20px"></div>
+        <hr style="border-top: 1px solid #DFDFDF;">
+        <div style="margin-bottom: 40px"></div>
+
+        <div style="padding-right: 0; padding-left: 0"> </div>
+    </div>
+
+
+
+
+    <div class="container">
+
+
+
+        <table id="miTabla" class="table table-striped">
+            <thead>
+            <tr style="background-color: #378fff">
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Orden de compra</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Farmacista</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Chat</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="chat : ${listaChats}">
+                <td th:text="${10000 + chat.getOrden().getIdOrden()}"></td>
+                <td th:text="${chat.getIdUser2().getNombres() + ' ' + chat.getIdUser2().getApellidos()}"></td>
+                <td class="action" >
+                    <a th:href="@{'/paciente/chat/' + ${ chat.getOrden().getIdOrden() +   '/' + chat.getIdUser1()+'/'+chat.getIdUser2()}  }"><button class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button></a>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+
+    <div th:replace="~{fragments/navbar.html :: footer}">
+    </div>
+
 </div>
+
+
 
 
 
@@ -122,6 +152,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <script th:src="@{/js/topbar.js}"></script>
+<script th:src="@{/js/loader.js}"></script>
 <script>
     $(document).ready(function() {
         var table = $('#miTabla').DataTable({
