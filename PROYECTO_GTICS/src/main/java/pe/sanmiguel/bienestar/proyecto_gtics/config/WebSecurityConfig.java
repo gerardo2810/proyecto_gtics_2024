@@ -64,6 +64,7 @@ public class WebSecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests() //Autenticación por roles
                 //Rutas para autenticación
+                .requestMatchers(HttpMethod.GET, "/service/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/chatbot_gtics/**").permitAll()
                 .requestMatchers("/superadmin", "/superadmin/**").hasAnyAuthority("SUPERADMIN")
                 .requestMatchers("/adminsede", "/adminsede/**").hasAnyAuthority("SUPERADMIN", "ADMINSEDE")

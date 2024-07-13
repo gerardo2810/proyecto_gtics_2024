@@ -64,37 +64,62 @@ public class ServiceController {
     //Listar cantidad de ventas en sedes
     @ResponseBody
     @GetMapping(value = {"/listaVentas"})
-    public List<OrdenCantidadVentasDto> listarCantidadVentas(){
-        return ordenRepository.listarCantidadVentasEnSedes();
+    public ResponseEntity<HashMap<String, Object>> listarCantidadVentas(@RequestHeader(value = "Authorization") String authorizationHeader){
+        String tokenApi = "$2a$12$Nh4/rs/LRSJqvoGvtxN4Iuv4hMWlP9RGHFQGbFYalzUGnigPmouR6";
+        HashMap<String, Object> respuesta = new HashMap();
+        if (authorizationHeader.equals(tokenApi)) {
+            List<OrdenCantidadVentasDto> listaCantidadVentas = ordenRepository.listarCantidadVentasEnSedes();
+            if (listaCantidadVentas.size() != 0) {
+                respuesta.put("result", "ok");
+                respuesta.put("lista", listaCantidadVentas);
+            } else {
+                respuesta.put("result", "no existe");
+            }
+            return ResponseEntity.ok(respuesta);
+
+        }else {
+            respuesta.put("ERROR", "Unauthorized");
+            return ResponseEntity.status(401).body(respuesta);
+        }
     }
 
     //Listar Medicamentos Bajo en Stock x Sede
 
     @ResponseBody
     @GetMapping(value = {"/listaMedicamentosBajoStock/{idSede}"})
-    public ResponseEntity<HashMap<String, Object>> buscarProducto(@PathVariable("idSede") String idSede) {
+    public ResponseEntity<HashMap<String, Object>> buscarProducto(@PathVariable("idSede") String idSede,
+                                                                  @RequestHeader(value = "Authorization") String authorizationHeader) {
+        String tokenApi = "$2a$12$o1IkPmmQ0N8BLGKlyCjtAujLPTjQJAFCQS0IDdOqgeE5jY5z2ECQu";
         HashMap<String, Object> respuesta = new HashMap<>();
 
-        try {
-            int id = Integer.parseInt(idSede);
-            List<MedicamentoBajoStockDto> medicamentos = medicamentoRepository.listarMedicamentosBajoStockxSede(id);
+        if (authorizationHeader.equals(tokenApi)) {
+            try {
+                int id = Integer.parseInt(idSede);
+                List<MedicamentoBajoStockDto> medicamentos = medicamentoRepository.listarMedicamentosBajoStockxSede(id);
 
-            if (!medicamentos.isEmpty()) {
-                respuesta.put("result", "ok");
-                respuesta.put("ListaMedicamentosBajoStock", medicamentos);
-            } else {
-                respuesta.put("result", "no existe");
+                if (!medicamentos.isEmpty()) {
+                    respuesta.put("result", "ok");
+                    respuesta.put("ListaMedicamentosBajoStock", medicamentos);
+                } else {
+                    respuesta.put("result", "no existe");
+                }
+                return ResponseEntity.ok(respuesta);
+            } catch (NumberFormatException e) {
+                respuesta.put("result", "error");
+                respuesta.put("message", "ID de sede no es un número válido");
+                return ResponseEntity.badRequest().body(respuesta);
+            } catch (Exception e) {
+                respuesta.put("result", "error");
+                respuesta.put("message", "Ocurrió un error al buscar los medicamentos");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuesta);
             }
-            return ResponseEntity.ok(respuesta);
-        } catch (NumberFormatException e) {
-            respuesta.put("result", "error");
-            respuesta.put("message", "ID de sede no es un número válido");
-            return ResponseEntity.badRequest().body(respuesta);
-        } catch (Exception e) {
-            respuesta.put("result", "error");
-            respuesta.put("message", "Ocurrió un error al buscar los medicamentos");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuesta);
+
+        }else {
+            respuesta.put("ERROR", "Unauthorized");
+            return ResponseEntity.status(401).body(respuesta);
         }
+
+
     }
 
     //Listar Venta de Medicamentos por fecha (7 días, 15 días y 3 meses)
@@ -102,42 +127,52 @@ public class ServiceController {
     @ResponseBody
     @GetMapping(value = {"/listaVentasPreferidasxFecha/{idSede}/{typeLista}"})
     public ResponseEntity<HashMap<String, Object>> listarVentaMedicamentoxFecha(@PathVariable("idSede") String idSede,
-                                                                                @PathVariable("typeLista") String typeLista) {
+                                                                                @PathVariable("typeLista") String typeLista,
+                                                                                @RequestHeader(value = "Authorization") String authorizationHeader) {
 
         HashMap<String, Object> respuesta = new HashMap<>();
         List<OrdenContenidoMedicamentoFechaDto> listaVentaMedicamentosxFecha = new ArrayList<>();
+        String tokenApi = "$2a$12$zotoyRrJ4O6wIx.Fue.Y9Oko6loVWWrKYQOIEHoH8hmKdbLYUzX8y";
 
-        try {
-            int id = Integer.parseInt(idSede);
+        if (authorizationHeader.equals(tokenApi)) {
+            try {
+                int id = Integer.parseInt(idSede);
 
-            //Dependiendo del tipo de lista: "7", "15" o "3"
+                //Dependiendo del tipo de lista: "7", "15" o "3"
 
-            if(typeLista.equals("7")){
-                listaVentaMedicamentosxFecha = ordenContenidoRepository.listarMedicamentos7dias(id);
-                
-            } else if (typeLista.equals("15")) {
-                listaVentaMedicamentosxFecha = ordenContenidoRepository.listarMedicamentos15dias(id);
-            } else if (typeLista.equals("3")) {
-                listaVentaMedicamentosxFecha = ordenContenidoRepository.listarMedicamentos3meses(id);
+                if(typeLista.equals("7")){
+                    listaVentaMedicamentosxFecha = ordenContenidoRepository.listarMedicamentos7dias(id);
+
+                } else if (typeLista.equals("15")) {
+                    listaVentaMedicamentosxFecha = ordenContenidoRepository.listarMedicamentos15dias(id);
+                } else if (typeLista.equals("3")) {
+                    listaVentaMedicamentosxFecha = ordenContenidoRepository.listarMedicamentos3meses(id);
+                }
+
+
+                if (!listaVentaMedicamentosxFecha.isEmpty()) {
+                    respuesta.put("result", "ok");
+                    respuesta.put("ListaMedicamentosBajoStock", listaVentaMedicamentosxFecha);
+                } else {
+                    respuesta.put("result", "no existe");
+                }
+                return ResponseEntity.ok(respuesta);
+            } catch (NumberFormatException e) {
+                respuesta.put("result", "error");
+                respuesta.put("message", "ID de sede no es un número válido");
+                return ResponseEntity.badRequest().body(respuesta);
+            } catch (Exception e) {
+                respuesta.put("result", "error");
+                respuesta.put("message", "Ocurrió un error al buscar los medicamentos");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuesta);
             }
 
-
-            if (!listaVentaMedicamentosxFecha.isEmpty()) {
-                respuesta.put("result", "ok");
-                respuesta.put("ListaMedicamentosBajoStock", listaVentaMedicamentosxFecha);
-            } else {
-                respuesta.put("result", "no existe");
-            }
-            return ResponseEntity.ok(respuesta);
-        } catch (NumberFormatException e) {
-            respuesta.put("result", "error");
-            respuesta.put("message", "ID de sede no es un número válido");
-            return ResponseEntity.badRequest().body(respuesta);
-        } catch (Exception e) {
-            respuesta.put("result", "error");
-            respuesta.put("message", "Ocurrió un error al buscar los medicamentos");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuesta);
+        }else {
+            respuesta.put("ERROR", "Unauthorized");
+            return ResponseEntity.status(401).body(respuesta);
         }
+
+
     }
 
 
