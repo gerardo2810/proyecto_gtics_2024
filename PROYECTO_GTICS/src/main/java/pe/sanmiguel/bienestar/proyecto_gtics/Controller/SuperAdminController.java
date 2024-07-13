@@ -100,8 +100,10 @@ public class SuperAdminController {
         //Iniciamos la sesión
         HttpSession session = request.getSession();
         usuarioSession  = usuarioRepository.findByCorreo(authentication.getName());
-        session.setAttribute("usuario", usuarioSession);
-
+        if (usuarioSession == null) {
+            usuarioSession = usuarioRepository.findByCorreo(authentication.getName());
+            session.setAttribute("usuario", usuarioSession);
+        }
         List<Sede> adminSedelist = sedeRepository.listarAdministroresSede();
         List<SedeFarmacista> farmacistaList = sedeFarmacistaRepository.listarFarmacistasPorSede();
         List<Usuario> pacientelist = usuarioRepository.listarUsuariosSegunRol(4);
