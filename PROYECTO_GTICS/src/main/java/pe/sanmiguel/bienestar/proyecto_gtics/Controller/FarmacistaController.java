@@ -556,8 +556,15 @@ public class FarmacistaController {
 
                 LocalDateTime now = LocalDateTime.now();
 
+                // Convertir la hora actual a la zona horaria de Perú
+                ZoneId peruZoneId = ZoneId.of("America/Lima");
+                ZonedDateTime peruTime = now.atZone(ZoneId.systemDefault()).withZoneSameInstant(peruZoneId);
+
+                // Si solo necesitas LocalDateTime, puedes convertirlo de nuevo
+                LocalDateTime peruLocalDateTime = peruTime.toLocalDateTime();
+
                 Orden newOrden = new Orden();
-                newOrden.setFechaIni(now);
+                newOrden.setFechaIni(peruLocalDateTime);
                 priceTotal = priceTotal.replace(",", "");
                 newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
                 newOrden.setIdFarmacista(usuarioSession.getIdUsuario());
