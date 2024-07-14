@@ -537,6 +537,14 @@ public class FarmacistaController {
                     contenido.setIdMedicamento(med);
                     contenido.setCantidad(Integer.parseInt(listaCantidades.get(i)));
 
+                    //----VERIFICAR Y REDUCIR EL STOCK DE UN MEDICAMENTO POR SU ID Y SU SEDE----//
+                    if(Integer.parseInt(listaCantidades.get(i)) <= sedeStockRepository.verificarCantidadStockPorSede(sedeSession.getIdSede(), med.getIdMedicamento())){
+                        sedeStockRepository.reducirStockPorSede(sedeSession.getIdSede(),med.getIdMedicamento(), Integer.parseInt(listaCantidades.get(i)));
+                    }
+                    //-------------------------------------------------------------------------//
+
+
+
                     ordenContenidoRepository.save(contenido);
                     i++;
                 }

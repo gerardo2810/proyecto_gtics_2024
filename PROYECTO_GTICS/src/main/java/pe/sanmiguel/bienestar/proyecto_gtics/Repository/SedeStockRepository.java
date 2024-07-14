@@ -43,6 +43,21 @@ public interface SedeStockRepository extends JpaRepository<SedeStock, SedeStockI
     @Query(nativeQuery = true, value = "UPDATE sede_stock SET cantidad = cantidad + ?3 WHERE idSede = ?1 and idMedicamento = ?2")
     void actualizarSedeStock(int idSede, int idMedicamento, Integer cantidadAumentada);
 
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE sede_stock SET cantidad = cantidad - ?3 WHERE idSede = ?1 and idMedicamento = ?2")
+    void reducirStockPorSede(int idSede, int idMedicamento, Integer cantidad);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE sede_stock SET cantidad = cantidad + ?3 WHERE idSede = ?1 and idMedicamento = ?2")
+    void aumentarStockPorSede(int idSede, int idMedicamento, Integer cantidad);
+
+
+
+
+
     @Query("SELECT m.idMedicamento AS idMedicamento, m.nombre AS nombre, m.unidad AS unidad, m.descripcion AS descripcion, m.categorias AS categorias, m.componente AS componente, m.precioCompra AS precioCompra, m.precioVenta AS precioVenta, m.recetable AS recetable, m.imagen AS imagen, SUM(s.cantidad) AS cantidad " +
             "FROM SedeStock s " +
             "JOIN s.idMedicamento m " +

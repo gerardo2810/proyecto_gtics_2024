@@ -509,10 +509,19 @@ public class PacienteController {
             ordenContenido.setIdOrden(orden);
             oid.setIdOrden(orden.getIdOrden());
 
+            //0  1  2  3
+            //m1 c1 m2 c2
+
             while(i < lista.size()){
 
                 Medicamento medicamento = medicamentoRepository.getById(lista.get(i));
                 cantidad = lista.get(i+1);
+
+                //VERIFICAR Y REDUCIR EL STOCK DE UN MEDICAMENTO POR SU ID Y SU SEDE
+                if(cantidad <= sedeStockRepository.verificarCantidadStockPorSede(5, medicamento.getIdMedicamento())){
+                    sedeStockRepository.reducirStockPorSede(5,medicamento.getIdMedicamento(), cantidad);
+                }
+
 
                 oid.setIdMedicamento(medicamento.getIdMedicamento());
                 ordenContenido.setId(oid);
