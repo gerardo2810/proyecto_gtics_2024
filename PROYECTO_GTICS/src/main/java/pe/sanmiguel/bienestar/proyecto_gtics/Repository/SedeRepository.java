@@ -44,4 +44,7 @@ public interface SedeRepository extends JpaRepository<Sede, Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.sede WHERE idAdmin = ?1")
     Sede sedeAdminID(int idAdmin);
 
+    @Query(nativeQuery = true, value = "SELECT s.nombre FROM proyecto_gtics.sede s WHERE id = ?")
+    String nombreSede(int idSede);
+
 }

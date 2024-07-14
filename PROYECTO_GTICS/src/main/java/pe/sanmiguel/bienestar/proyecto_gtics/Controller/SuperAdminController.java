@@ -659,44 +659,10 @@ public class SuperAdminController {
                 administrador.setRol(2);
                 administrador.setEstadoUsuario(5);
 
-                try {
-                    sendTemporaryPasswordEmail(administrador.getCorreo(), temporaryPassword);
-                } catch (MailSendException e) {
-                    bindingResult.rejectValue("correo", "error.correo", "El correo ingresado no existe y/o no es válido.");
-                    List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
-                    model.addAttribute("sedeDisponibleList", sedeDisponibleList);
-
-                    return "superAdmin/crearAdministrador";
-                } catch (MessagingException e) {
-                    System.err.println("Error al enviar o recibir correo: " + e.getMessage());
-                    e.printStackTrace();
-                }
-
                 usuarioRepository.save(administrador);
                 String hashedPassword = SHA256.cipherPassword(temporaryPassword);
                 usuarioRepository.actualizarContrasenaFarmacista(hashedPassword, idUsuario);
                 usuarioRepository.actualizarEstadoFarmacista(idUsuario);
-
-                //Se le envía el correo con la contraseña, luego de eso necesita de un timer de 5 minutos para cambiarla
-                long tiempoEnvio = System.currentTimeMillis(); //tiempo donde se envía
-
-                //Por temas de presentación lo pongo en 3 minuto nomás
-
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        Usuario usuario = usuarioRepository.encontrarFarmacistaporId(idUsuario);
-                        long currentTime = System.currentTimeMillis();
-                        if (currentTime - tiempoEnvio >= 1 * 60 * 1000 && usuario.getEstadoContra() == 0) {
-                            // Si han pasado 3 minutos y la contraseña no ha sido cambiada y su estado contra es 0
-                            String expiredPassword = "noRegistrado";
-                            String passwordHashNoRegistrado = SHA256.cipherPassword(expiredPassword);
-                            usuarioRepository.actualizarContrasenaFarmacista(passwordHashNoRegistrado, idUsuario);
-                            System.out.println("La contraseña ha expirado para " + usuario.getCorreo());
-                        }
-                    }
-                }, 1 * 60 * 1000); //Se ejecuta esta funcion luego de 3 minutos
 
                 attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
                 return "redirect:/superadmin/administradoresSede";
@@ -708,46 +674,10 @@ public class SuperAdminController {
                     administrador.setRol(2);
                     administrador.setEstadoUsuario(1);
 
-
-                    try {
-                        sedeRepository.asignarAdministradorSede(administrador.getIdUsuario(), idsede);
-                        sendTemporaryPasswordEmail(administrador.getCorreo(), temporaryPassword);
-                    } catch (MailSendException e) {
-                        bindingResult.rejectValue("correo", "error.correo", "El correo ingresado no existe y/o no es válido.");
-                        List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
-                        model.addAttribute("sedeDisponibleList", sedeDisponibleList);
-
-                        return "superAdmin/crearAdministrador";
-                    } catch (MessagingException e) {
-                        System.err.println("Error al enviar o recibir correo: " + e.getMessage());
-                        e.printStackTrace();
-                    }
-
                     usuarioRepository.save(administrador);
                     String hashedPassword = SHA256.cipherPassword(temporaryPassword);
                     usuarioRepository.actualizarContrasenaFarmacista(hashedPassword, idUsuario);
                     usuarioRepository.actualizarEstadoFarmacista(idUsuario);
-
-                    //Se le envía el correo con la contraseña, luego de eso necesita de un timer de 5 minutos para cambiarla
-                    long tiempoEnvio = System.currentTimeMillis(); //tiempo donde se envía
-
-                    //Por temas de presentación lo pongo en 3 minuto nomás
-
-                    Timer timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            Usuario usuario = usuarioRepository.encontrarFarmacistaporId(idUsuario);
-                            long currentTime = System.currentTimeMillis();
-                            if (currentTime - tiempoEnvio >= 3 * 60 * 1000 && usuario.getEstadoContra() == 0) {
-                                // Si han pasado 3 minutos y la contraseña no ha sido cambiada
-                                String expiredPassword = "noRegistrado";
-                                String passwordHashNoRegistrado = SHA256.cipherPassword(expiredPassword);
-                                usuarioRepository.actualizarContrasenaFarmacista(passwordHashNoRegistrado, idUsuario);
-                                System.out.println("La contraseña ha expirado para " + usuario.getCorreo());
-                            }
-                        }
-                    }, 3 * 60 * 1000); //Se ejecuta esta funcion luego de 1 minuto
 
                     attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
                     return "redirect:/superadmin/administradoresSede";
@@ -757,44 +687,10 @@ public class SuperAdminController {
                     administrador.setRol(2);
                     administrador.setEstadoUsuario(5);
 
-                    try {
-                        sendTemporaryPasswordEmail(administrador.getCorreo(), temporaryPassword);
-                    } catch (MailSendException e) {
-                        bindingResult.rejectValue("correo", "error.correo", "El correo ingresado no existe y/o no es válido.");
-                        List<Sede> sedeDisponibleList = sedeRepository.listarSedesDisponibles();
-                        model.addAttribute("sedeDisponibleList", sedeDisponibleList);
-
-                        return "superAdmin/crearAdministrador";
-                    } catch (MessagingException e) {
-                        System.err.println("Error al enviar o recibir correo: " + e.getMessage());
-                        e.printStackTrace();
-                    }
-
                     usuarioRepository.save(administrador);
                     String hashedPassword = SHA256.cipherPassword(temporaryPassword);
                     usuarioRepository.actualizarContrasenaFarmacista(hashedPassword, idUsuario);
                     usuarioRepository.actualizarEstadoFarmacista(idUsuario);
-
-                    //Se le envía el correo con la contraseña, luego de eso necesita de un timer de 5 minutos para cambiarla
-                    long tiempoEnvio = System.currentTimeMillis(); //tiempo donde se envía
-
-                    //Por temas de presentación lo pongo en 3 minuto nomás
-
-                    Timer timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            Usuario usuario = usuarioRepository.encontrarFarmacistaporId(idUsuario);
-                            long currentTime = System.currentTimeMillis();
-                            if (currentTime - tiempoEnvio >= 3 * 60 * 1000 && usuario.getEstadoContra() == 0) {
-                                // Si han pasado 3 minutos y la contraseña no ha sido cambiada
-                                String expiredPassword = "noRegistrado";
-                                String passwordHashNoRegistrado = SHA256.cipherPassword(expiredPassword);
-                                usuarioRepository.actualizarContrasenaFarmacista(passwordHashNoRegistrado, idUsuario);
-                                System.out.println("La contraseña ha expirado para " + usuario.getCorreo());
-                            }
-                        }
-                    }, 3 * 60 * 1000); //Se ejecuta esta funcion luego de 3 minuto
 
                     attr.addFlashAttribute("msg", "Nuevo administrador creado exitosamente");
                     return "redirect:/superadmin/administradoresSede";
@@ -805,36 +701,58 @@ public class SuperAdminController {
 
 
 
-    private void sendTemporaryPasswordEmail(String to, String temporaryPassword) throws MessagingException {
-
+    private void sendTemporaryPasswordEmail(String to, String temporaryPassword, String sedeName) throws MessagingException {
+        Usuario datosAdmin = usuarioRepository.findByCorreo(to);
+        String nombreAdmin = datosAdmin.getNombres();
+        String apellidoAdmin = datosAdmin.getApellidos();
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         helper.setFrom("bienestar.sanmiguel1@outlook.com");
         helper.setTo(to);
-        helper.setSubject("Contraseña Temporal para Nuevo Administrador");
-
+        helper.setSubject("Bienvenido a Bienestar San Miguel - Credenciales de Administrador");
 
         String emailContent = "<html>" +
-                "<body style='font-family: Arial, sans-serif; margin: 0; padding: 0;'>" +
-                "<div style='background-color: #007BFF; padding: 20px; text-align: center;'>" +
-                "<h1 style='color: #1B4F72; margin: 0;'>Bienestar <span style='color: #FFFFFF;'>San Miguel</span></h1>" +
+                "<head>" +
+                "<style>" +
+                "body { font-family: 'Trebuchet MS', sans-serif; margin: 0; padding: 0; }" +
+                ".header { background-color: #007BFF; padding: 20px; text-align: center; }" +
+                ".header h1 { color: #1B4F72; margin: 0; }" +
+                ".header h1 span { color: #FFFFFF; }" +
+                ".content { border: 2px solid #007BFF; border-radius: 10px; padding: 20px; margin: 20px; }" +
+                ".content h2 { color: #007BFF; }" +
+                ".content p { margin: 10px 0; }" +
+                ".credentials { background-color: #f9f9f9; padding: 10px; border-radius: 5px; }" +
+                ".credentials p { margin: 5px 0; }" +
+                "a { color: #007BFF; text-decoration: none; }" +
+                "a:hover { text-decoration: underline; }" +
+                ".center { text-align: center; }" +
+                "</style>" +
+                "</head>" +
+                "<body>" +
+                "<div class='header'>" +
+                "<h1>Bienestar <span>San Miguel</span></h1>" +
                 "</div>" +
-                "<div style='border: 2px solid #007BFF; border-radius: 10px; padding: 20px; margin: 20px;'>" +
-                "<h2 style='color: #007BFF;'>Hola,</h2>" +
-                "<p>Tu cuenta de administrador ha sido creada. Por favor, usa la siguiente contraseña temporal para iniciar sesión:</p>" +
-                "<p style='font-size: 20px; color: #007BFF; font-weight: bold; text-align: center;'>" + temporaryPassword + "</p>" +
-                "<p>Debes cambiar esta contraseña inmediatamente después de tu primer inicio de sesión. La contraseña temporal es válida por 24 horas. Si no cambias tu contraseña en este tiempo, tendrás que solicitar una nueva.</p>" +
-                "<p>Gracias.</p>" +
+                "<div class='content'>" +
+                "<h3 style='font-size: 18px; color: #1B4F72'>¡Bienvenido a la familia <strong>Bienestar San Miguel</strong>!</h3>" +
+                "<h4 style='font-size: 16px; color: #007BFF'>Hola, " + nombreAdmin + " " + apellidoAdmin + ": </h4>" +
+                "<p style='font-size: 14px;'>Nos complace informarte que has sido asignado como administrador de la <strong>" + sedeName + "</strong>.</p>" +
+                "<p style='font-size: 14px;'>Por favor, utiliza las siguientes credenciales para iniciar sesión:</p>" +
+                "<div class='credentials'>" +
+                "<p style='font-size: 16px;color: #1B4F72'><strong>Usuario:</strong><strong style='font-size: 16px;color: #007BFF'> " + to + "</strong></p>" +
+                "<p style='font-size: 16px;color: #1B4F72'><strong>Contraseña:</strong><strong style='font-size: 16px;color: #007BFF'> " + temporaryPassword + "</strong></p>" +
+                "</div>" +
+                "<p style='font-size: 14px;'>Debes cambiar esta contraseña inmediatamente después de tu primer inicio de sesión. La contraseña temporal es válida por 24 horas. Si no cambias tu contraseña en este tiempo, tendrás que solicitar una nueva.</p>" +
+                "<p style='font-size: 14px;'>Puedes acceder a la plataforma a través del siguiente enlace:</p>" +
+                "<p class='center' style='font-size: 16px'><a href='https://bienestarsanmiguel.xyz'>https://bienestarsanmiguel.xyz</a></p>" +
+                "<p style='font-size: 14px;'>Gracias.</p>" +
                 "</div>" +
                 "</body>" +
                 "</html>";
 
         helper.setText(emailContent, true);
         mailSender.send(message);
-
     }
-
 
 
     private void sendTemporaryPasswordEmailFarmacista(String to, String temporaryPassword) throws MessagingException {
@@ -1144,14 +1062,19 @@ public class SuperAdminController {
     }
 
     @GetMapping(value = {"/editarAsignarAdministrador"})
-    public String asignarNuevaSedeAdministrador(Usuario administrador,
-                                                Model model, @RequestParam("id") String id, RedirectAttributes attr,
+    public String asignarNuevaSedeAdministrador(Model model, @RequestParam("id") String id, RedirectAttributes attr,
                                                 HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
         int idAdmin = Integer.parseInt(id);
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(idAdmin);
         System.out.println("Valor Dentro de editar de optional usuario: " + optionalUsuario.get().getIdUsuario());
         if(optionalUsuario.isPresent()){
-            administrador = optionalUsuario.get();
+            Usuario administrador = optionalUsuario.get();
             List<Sede> sedeList = sedeRepository.listarSedesDisponibles();
 
             String passwordHash = administrador.getContrasena(); // Obtener el hash de la contraseña desde la base de datos
@@ -1172,8 +1095,13 @@ public class SuperAdminController {
 
 
     @PostMapping("/asignandoAdministrador")
-    public String asignaraNuevoAdministrador(Usuario administrador, @RequestParam(value = "sedeid", required = false) String idSede, RedirectAttributes attr, Model model) throws IOException {
+    public String asignaraNuevoAdministrador(@RequestParam(value = "idUsuario", required = false) String idUsuario,
+                                             @RequestParam(value = "correo", required = false) String correo,
+                                             @RequestParam(value = "sedeid", required = false) String idSede, RedirectAttributes attr, Model model) throws IOException {
 
+
+        int idAdmin = Integer.parseInt(idUsuario);
+        Usuario administrador = usuarioRepository.administradorSede(idAdmin);
         if(idSede == null || idSede.isEmpty()){
             System.out.println("ID ADMIN: " + administrador.getIdUsuario());
             usuarioRepository.administradorSinSede(administrador.getIdUsuario());
@@ -1184,7 +1112,6 @@ public class SuperAdminController {
                 System.out.println("ID ADMIN si no es vacio: " + administrador.getIdUsuario());
                 int idsede = Integer.parseInt(idSede);
                 usuarioRepository.activarAdministrador(administrador.getIdUsuario());
-                sedeRepository.asignarAdministradorSede(administrador.getIdUsuario(), idsede);
 
                 // Generar contraseña temporal
                 String temporaryPassword = passwordService.generateTemporaryPassword();
@@ -1194,19 +1121,34 @@ public class SuperAdminController {
                 // Indicar que el usuario debe cambiar la contraseña en el primer inicio de sesión
 
                 String correoUser = usuarioRepository.encontrarCorreoAdministrador(administrador.getIdUsuario());
-                System.out.println("Correo: " + usuarioRepository.encontrarCorreoAdministrador(administrador.getIdUsuario()));
 
+                if(!(correo.equals(correoUser))){
+                    administrador.setCorreo(correo);
+                    usuarioRepository.save(administrador);
+                    correoUser = administrador.getCorreo();
+                    System.out.println("Correo modificado: " + correoUser);
+                }
+
+                System.out.println("Correo: " + usuarioRepository.encontrarCorreoAdministrador(administrador.getIdUsuario()));
+                int sedeID = Integer.parseInt(idSede);
+                String nameSede = sedeRepository.nombreSede(sedeID);
                 try {
-                    sendTemporaryPasswordEmail(correoUser, temporaryPassword);
-                } catch (MailSendException | MessagingException e) {
+
+                    sendTemporaryPasswordEmail(correoUser, temporaryPassword, nameSede);
+                } catch (MailSendException e) {
+                    usuarioRepository.administradorSinSede(idAdmin);
+                    attr.addFlashAttribute("msg1", "Correo no enviado, verifique la validez del correo. El Administrador no fue asignado a ninguna sede");
+                    return "redirect:/superadmin/administradoresSede";
+                } catch (MessagingException e) {
                     System.err.println("Error al enviar o recibir correo: " + e.getMessage());
                     e.printStackTrace();
                 }
 
+                sedeRepository.asignarAdministradorSede(administrador.getIdUsuario(), idsede);
                 usuarioRepository.save(administrador);
                 String hashedPassword = SHA256.cipherPassword(temporaryPassword);
-                usuarioRepository.actualizarContrasenaFarmacista(hashedPassword, idUsuario);
-                usuarioRepository.actualizarEstadoFarmacista(idUsuario);
+                usuarioRepository.actualizarContrasenaFarmacista(hashedPassword, idAdmin);
+                usuarioRepository.actualizarEstadoFarmacista(idAdmin);
 
                 //Se le envía el correo con la contraseña, luego de eso necesita de un timer de 5 minutos para cambiarla
                 long tiempoEnvio = System.currentTimeMillis(); //tiempo donde se envía
@@ -1223,7 +1165,7 @@ public class SuperAdminController {
                             // Si han pasado 3 minutos y la contraseña no ha sido cambiada
                             String expiredPassword = "noRegistrado";
                             String passwordHashNoRegistrado = SHA256.cipherPassword(expiredPassword);
-                            usuarioRepository.actualizarContrasenaFarmacista(passwordHashNoRegistrado, idUsuario);
+                            usuarioRepository.actualizarContrasenaFarmacista(passwordHashNoRegistrado, idAdmin);
                             System.out.println("La contraseña ha expirado para " + usuario.getCorreo());
                         }
                     }
