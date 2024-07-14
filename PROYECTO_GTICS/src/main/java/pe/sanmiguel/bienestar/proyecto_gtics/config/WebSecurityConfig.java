@@ -66,6 +66,7 @@ public class WebSecurityConfig {
                 //Rutas para autenticación
                 .requestMatchers(HttpMethod.GET, "/service/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/chatbot_gtics/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/chatbot_gtics/**").permitAll()
                 .requestMatchers("/superadmin", "/superadmin/**").hasAnyAuthority("SUPERADMIN")
                 .requestMatchers("/adminsede", "/adminsede/**").hasAnyAuthority("SUPERADMIN", "ADMINSEDE")
                 .requestMatchers("/farmacista", "/farmacista/**").hasAnyAuthority("SUPERADMIN", "FARMACISTA")
