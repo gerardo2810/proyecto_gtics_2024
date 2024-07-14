@@ -12,10 +12,7 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Repository.MedicamentoRepository;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @RestController
@@ -27,6 +24,18 @@ public class ChatBotController {
     @Setter
     public static class DniRequest {
         private String dni;
+    }
+
+    @Getter
+    @Setter
+    public class ItemsRequest {
+        private Map<String, Item> items;
+    }
+    @Getter
+    @Setter
+    public static class Item {
+        private String med;
+        private String cant;
     }
 
     @Getter
@@ -77,6 +86,16 @@ public class ChatBotController {
             responseJson.put("ERROR", null);
             return ResponseEntity.badRequest().body(responseJson);
         }
+    }
+
+    @PostMapping(value = {"/valida_orden", "/valida_orden/"})
+    public String receiveItems(@RequestBody Map<String, Item> items) {
+        // Procesar los datos recibidos
+        for (Map.Entry<String, Item> entry : items.entrySet()) {
+            System.out.println("Key: " + entry.getKey() + ", Med: " + entry.getValue().getMed() + ", Cant: " + entry.getValue().getCant());
+        }
+
+        return "Items received successfully!";
     }
 
 
