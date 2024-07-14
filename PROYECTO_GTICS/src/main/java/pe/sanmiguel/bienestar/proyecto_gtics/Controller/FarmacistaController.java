@@ -167,7 +167,7 @@ public class FarmacistaController {
                 session.setAttribute("idSede", idSede);
             } else {
                 // Manejar el caso cuando sedeSession es nulo
-                return "errorPage"; // O alguna página de error apropiada
+                return "login/error"; // O alguna página de error apropiada
             }
         }
         // Log para verificar si el parámetro categoria llega correctamente
