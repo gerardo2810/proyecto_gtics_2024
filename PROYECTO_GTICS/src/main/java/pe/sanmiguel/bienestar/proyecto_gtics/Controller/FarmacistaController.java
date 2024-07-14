@@ -598,8 +598,8 @@ public class FarmacistaController {
         System.out.println(cantidadesFaltantes);
         int j = 0;
         for (String cant: cantidadesFaltantes) {
-            if (Integer.parseInt(cant) > 10){
-                cantidadesFaltantes.set(j,"10");
+            if (Integer.parseInt(cant) > 30){
+                cantidadesFaltantes.set(j,"30");
             }
             j++;
         }
