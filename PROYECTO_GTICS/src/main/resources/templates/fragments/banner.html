@@ -157,7 +157,18 @@
                         </div>
 
                     </div>
-                    <img class="image--cover" th:src="@{/img/default_profile.png}">
+                    <div th:if="${session.usuario.getRol() == 1}">
+                        <img class="image--cover" style="background-color: #34c759" th:src="@{/img/logoSuper.png}">
+                    </div>
+                    <div th:if="${session.usuario.getRol() == 2}">
+                        <img class="image--cover" th:src="@{/img/logoSuper.png}">
+                    </div>
+                    <div th:if="${session.usuario.getRol() == 3}">
+                        <img class="image--cover" th:src="@{/img/logoSuper.png}">
+                    </div>
+                    <div th:if="${session.usuario.getRol() == 4}">
+                        <img class="image--cover" th:src="@{/img/logoSuper.png}">
+                    </div>
                 </div>
 
             </div>
