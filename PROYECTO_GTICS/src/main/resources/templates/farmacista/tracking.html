@@ -295,7 +295,7 @@
 
                                     <form method="post" th:action="@{'/farmacista/crear_chat'}" >
                                         <input type="hidden" name="idOrden" th:value="${orden.getIdOrden()}">
-                                        <input type="hidden" name="idPaciente" th:value="${orden.getPaciente().getIdUsuario()}" >
+                                        <input type="hidden" name="idPaciente" th:value="${orden.getPaciente().getIdUsuario()}">
                                         <input type="hidden" name="idFarmacista" th:value="${session.usuario.getIdUsuario()}">
                                         <button type="submit" class="print" >Iniciar conversación con el paciente</button>
                                     </form>

@@ -943,6 +943,19 @@ public class FarmacistaController {
                 preOrdenChild.setMotivoAnulado(motivo);
             }
 
+            //---------RESTABLECER EL STOCK-----------------//
+            List<OrdenContenido> medicamentosPedidos = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+            Integer idSede = ordenComprobada.getSede().getIdSede();
+
+            for(OrdenContenido oc : medicamentosPedidos){
+                sedeStockRepository.aumentarStockPorSede(idSede, oc.getIdMedicamento().getIdMedicamento(),oc.getCantidad());
+            }
+            //---------------------------------------------//
+
+
+
+
+
             attr.addFlashAttribute("msg", "La orden ha sido anulada exitosamente.");
             return "redirect:/farmacista/ver_orden_tracking?id=" + idOrden;
 
