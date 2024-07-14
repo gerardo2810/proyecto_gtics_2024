@@ -48,11 +48,11 @@
             transition: background-color 0.3s, border-color 0.3s;
             font-size: 17px;
         }
-        .btn-n {
+        .btn-p {
             display: inline-block;
             padding: 12px 20px;
             color:white;
-            background-color: #1a72e7;
+            background-color: #378fff;
             text-decoration: none;
             border: none;
             border-radius: 5px;
@@ -120,17 +120,14 @@
         <div style="margin-bottom: 30px"></div>
         <div class="titulo"><b>ADMINISTRADORES DE SEDE</b></div>
         <div style="margin-bottom: 20px"></div>
-        <br>
     </div>
 
     <div class="container">
         <div style="padding-top:1px; display:flex; justify-content: end ; margin-left: 20px" th:if="${!(sedesDisp.isEmpty())}"  >
-            <button class="btn-c" type="button" onclick="window.location.href = '/superadmin/crearAdministrador'" style="margin-left: 20px; font-size: 17px; padding: 12px 20px"> Crear nuevo administrador</button>
+            <button class="btn-p" type="button" onclick="window.location.href = '/superadmin/crearAdministrador'" style="margin-left: 20px; font-size: 17px; padding: 12px 20px"> Crear nuevo administrador</button>
         </div>
         <br>
         <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
-        <br>
-        <br>
         <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert" style="background-color: #f8d7da; color: #6a1a21; border-color: #ffedf0 "></div>
         <br>
         <div style="display: flex; flex-direction: row; justify-content: space-between">
@@ -290,7 +287,7 @@
                             <form id="formDesbanear" th:action="@{'/superadmin/desbanearAdministrador'}" method="post">
                                 <input type="hidden" name="idAdministrador" th:value="${adminBaneado.idUsuario}">
                                 <button type="submit" style="background: none; border: none;">
-                                    <img width="24" height="24" src="https://img.icons8.com/?size=256&id=K4jLy6sZ7yfc&format=png" alt="Desbanear"/>
+                                    <img width="24" height="24" src="https://cdn-icons-png.flaticon.com/256/12701/12701517.png" alt="Desbanear"/>
                                 </button>
                             </form>
                         </td>

@@ -256,7 +256,7 @@
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Nombre del administrador:</label>
-                                    <input  th:field="*{nombres}" class="input-form" type="text" name="nombres" th:classappend="${#fields.hasErrors('nombres')?'is-invalid':''}" readonly>
+                                    <input  style="background-color: #d9dbe0" th:field="*{nombres}" class="input-form" type="text" name="nombres" th:classappend="${#fields.hasErrors('nombres')?'is-invalid':''}" disabled>
                                     <div style="width: 300px" class="invalid-feedback"
                                           th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}">
                                         No puede estar vacío
@@ -265,7 +265,7 @@
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">Apellidos del administrador:</label>
-                                    <input  th:field="*{apellidos}" class="input-form" type="text" name="apellidos" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}"  readonly>
+                                    <input style="background-color: #d9dbe0" th:field="*{apellidos}" class="input-form" type="text" name="apellidos" th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}"  disabled>
                                     <div style="width: 300px" class="invalid-feedback"
                                           th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}">
                                         No puede estar vacío
@@ -278,7 +278,7 @@
 
                                 <div class="input-label-box">
                                     <label style="font-weight: bold; color:dimgray">DNI:</label>
-                                    <input th:field="*{dni}" class="input-form" type="text" name="dni" placeholder="Ingrese su DNI" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" readonly>
+                                    <input style="background-color: #d9dbe0" th:field="*{dni}" class="input-form" type="text" name="dni" placeholder="Ingrese su DNI" th:classappend="${#fields.hasErrors('dni')?'is-invalid':''}" disabled>
                                     <div style="width: 300px" class="invalid-feedback"
                                           th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">
                                         No puede estar vacío

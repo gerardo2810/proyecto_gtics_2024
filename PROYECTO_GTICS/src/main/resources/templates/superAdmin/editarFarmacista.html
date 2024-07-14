@@ -220,7 +220,7 @@
                         <div class="input-label-box" style="display:flex; flex-direction:column; align-items:center;">
                             <label style="font-weight: bold; color:dimgray; margin-bottom:8px;"  th:text="${'Farmacista de ' + datosFarmacistaSede.idSede.nombre}"></label>
                             <div class="profile-picture-container" style="display:flex; justify-content:center;" >
-                                <div class="profile-picture"></div>
+                                <img th:src="@{/img/farmaceutico5.png}" alt="" style="width: 350px; height: 350px;">
                             </div>
                         </div>
                         <label style="font-weight: bold; color:dimgray; ; font-size: large ">Cambiar contraseña:</label>
@@ -253,7 +253,7 @@
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Nombre del farmacista:</label>
-                                        <input th:field="*{nombres}" class="input-form" type="text" name="nombres" th:classappend="${#fields.hasErrors('nombres')?'is-invalid':''}" >
+                                        <input style="background-color: #d9dbe0" th:field="*{nombres}" class="input-form" type="text" name="nombres" th:classappend="${#fields.hasErrors('nombres')?'is-invalid':''}" disabled>
                                         <div style="width: 300px" class="invalid-feedback"
                                               th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}">
                                             No puede estar vacío
@@ -262,7 +262,7 @@
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Apellidos del farmacista:</label>
-                                        <input th:field="*{apellidos}" class="input-form" type="text" name="apellidos"  th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}" >
+                                        <input style="background-color: #d9dbe0" th:field="*{apellidos}" class="input-form" type="text" name="apellidos"  th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}" disabled>
                                         <div style="width: 300px" class="invalid-feedback"
                                               th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}">
                                             No puede estar vacío

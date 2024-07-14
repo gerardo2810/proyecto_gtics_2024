@@ -1095,7 +1095,7 @@ public class SuperAdminController {
 
 
     @PostMapping("/asignandoAdministrador")
-    public String asignaraNuevoAdministrador(@RequestParam(value = "idUsuario", required = false) String idUsuario,
+    public String asignaraNuevoAdministrador(@RequestParam(value = "idUsuario", required = false) String idUsuario, BindingResult bindingResult,
                                              @RequestParam(value = "correo", required = false) String correo,
                                              @RequestParam(value = "sedeid", required = false) String idSede, RedirectAttributes attr, Model model) throws IOException {
 
@@ -1119,6 +1119,13 @@ public class SuperAdminController {
                 String hashedPassword1 = SHA256.cipherPassword(temporaryPassword);
                 administrador.setContrasena(hashedPassword1);
                 // Indicar que el usuario debe cambiar la contraseña en el primer inicio de sesión
+
+                List<String> correosUsados = usuarioRepository.listarCorreosUsados();
+                if (correosUsados.contains(correo)) {
+                    System.out.println("El correo está en la lista.");
+                    bindingResult.rejectValue("correo", "error.correo", "El correo ya se encuentra registrado.");
+                    return "superAdmin/crearAdministrador";
+                }
 
                 String correoUser = usuarioRepository.encontrarCorreoAdministrador(administrador.getIdUsuario());
 

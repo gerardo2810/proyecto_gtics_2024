@@ -48,11 +48,11 @@
             transition: background-color 0.3s, border-color 0.3s;
             font-size: 17px;
         }
-        .btn-n {
+        .btn-p {
             display: inline-block;
             padding: 12px 20px;
             color:white;
-            background-color: #1a72e7;
+            background-color: #378fff;
             text-decoration: none;
             border: none;
             border-radius: 5px;
@@ -71,6 +71,15 @@
             color: #155724;
             background-color: #d4edda;
             border-color: #c3e6cb;
+        }
+        .btn-empa{
+            padding: 8px;
+            background-color: rgb(100 116 139);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            width: 155px;
+
         }
         @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
     </style>
@@ -112,8 +121,12 @@
 <div th:replace="~{fragments/banner.html :: banner}"></div>
 
 <main style="margin-left: 20px; margin-right: 20px">
-    <br><br><br>
+    <br><br>
+    <br>
     <div class="container">
+        <div style="display:flex; justify-content: start;flex-direction: column" >
+            <a class="btn-empa" style="text-align: center" href="/superadmin/farmacistas">REGRESAR</a>
+        </div>
         <div style="margin-bottom: 20px"></div>
         <div style="margin-bottom: 30px"></div>
         <div class="titulo"><b>SOLICITUDES PENDIENTES</b></div>
@@ -134,19 +147,17 @@
             </div>
 
             <div style="display:flex; justify-content: end;flex-direction: column" >
-                <a class="btn-c" href="/superadmin/historialSolicitudes">Ver historial de solicitudes</a>
-
+                <a class="btn-p" href="/superadmin/historialSolicitudes">Ver historial de solicitudes</a>
             </div>
 
         </div>
         <br>
         <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
         <br>
-        <br>
         <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert" style="background-color: #f8d7da; color: #6a1a21; border-color: #ffedf0 "></div>
         <br>
 
-        <table id="miTabla" class="table table-striped" style="padding-top: 10px">
+        <table id="miTabla" class="table table-striped">
             <thead >
             <tr style="background-color: #378fff" >
                 <th style="text-align: center; color: #ffffff; font-weight: normal !important;"></th>

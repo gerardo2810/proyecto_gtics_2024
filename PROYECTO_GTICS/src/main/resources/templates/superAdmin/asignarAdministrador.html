@@ -240,13 +240,13 @@
                                         <input th:field="*{rol}" name="rol" type="hidden"/>
                                         <div class="input-label-box" style="padding-left:50px ">
                                             <label style="font-weight: bold; color:dimgray">Nombre del administrador:</label>
-                                            <input  th:field="*{nombres}" class="input-form" type="text" name="nombres"  placeholder="Ingrese el nombre" disabled>
+                                            <input style="background-color: #e7e9ec" th:field="*{nombres}" class="input-form" type="text" name="nombres"  placeholder="Ingrese el nombre" disabled>
 
                                         </div>
 
                                         <div class="input-label-box" style="padding-left:50px ">
                                             <label style="font-weight: bold; color:dimgray">Apellidos del administrador:</label>
-                                            <input  th:field="*{apellidos}" class="input-form" type="text" name="apellidos"  placeholder="Ingrese el apellido" disabled>
+                                            <input  style="background-color: #e7e9ec" th:field="*{apellidos}" class="input-form" type="text" name="apellidos"  placeholder="Ingrese el apellido" disabled>
                                         </div>
 
                                     </div>
@@ -255,13 +255,13 @@
 
                                         <div class="input-label-box" style="padding-left:50px ">
                                             <label style="font-weight: bold; color:dimgray">DNI:</label>
-                                            <input th:field="*{dni}" class="input-form" type="text" name="dni" placeholder="Ingrese su DNI"  disabled>
+                                            <input style="background-color: #e7e9ec" th:field="*{dni}" class="input-form" type="text" name="dni" placeholder="Ingrese su DNI"  disabled>
 
                                         </div>
 
                                         <div class="input-label-box" style="padding-left:50px ">
                                             <label style="font-weight: bold; color:dimgray">Dirección:</label>
-                                            <input th:field="*{direccion}" class="input-form" type="text" name="direccion" placeholder="Ingrese su dirección"  disabled>
+                                            <input style="background-color: #e7e9ec" th:field="*{direccion}" class="input-form" type="text" name="direccion" placeholder="Ingrese su dirección"  disabled>
 
                                         </div>
 
@@ -271,7 +271,7 @@
 
                                         <div class="input-label-box" style="padding-left:50px ">
                                             <label style="font-weight: bold; color:dimgray">Distrito:</label>
-                                            <input th:field="*{distrito}" class="input-form" name="distrito" type="text" placeholder="Ingrese el distrito donde reside"  disabled>
+                                            <input style="background-color: #e7e9ec" th:field="*{distrito}" class="input-form" name="distrito" type="text" placeholder="Ingrese el distrito donde reside"  disabled>
 
                                         </div>
 
@@ -292,14 +292,16 @@
                                     <div class="column" style="padding-left:30px ">
                                         <div class="input-label-box" style="padding-left:50px ">
                                             <label style="font-weight: bold; color:dimgray">Teléfono:</label>
-                                            <input th:field="*{celular}" class="input-form" type="text" name="celular" placeholder="Ingrese su teléfono"  disabled>
+                                            <input style="background-color: #e7e9ec" th:field="*{celular}" class="input-form" type="text" name="celular" placeholder="Ingrese su teléfono" disabled>
 
                                         </div>
 
                                         <div class="input-label-box" style="padding-left:50px ">
                                             <label style="font-weight: bold; color:dimgray">Correo electrónico:</label>
-                                            <input th:field="*{correo}" name="correo" class="input-form" type="text">
-
+                                            <input th:field="*{correo}" name="correo" class="input-form" type="text" th:classappend="${#fields.hasErrors('correo') ? 'is-invalid' : ''}">
+                                            <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
+                                                No puede estar vacío
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
