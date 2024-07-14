@@ -261,13 +261,13 @@
                                     <div class="column">
                                         <div class="input-label-box">
                                             <label style="font-weight: bold; color:dimgray">Nombre del doctor:</label>
-                                            <input style="width: 300px" placeholder="Ingrese el nombre" th:value="${nombres}" name="nombres" class="input-form" type="text" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}" readonly>
+                                            <input style="width: 300px;background-color: #d9dbe0" placeholder="Ingrese el nombre" th:value="${nombres}" name="nombres" class="input-form" type="text" th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}" readonly>
                                             <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
                                         </div>
 
                                         <div class="input-label-box">
                                             <label style="font-weight: bold; color:dimgray">Apellidos del doctor:</label>
-                                            <input style="width: 300px" placeholder="Ingrese el apellido" th:value="${apellidos}" name="apellidos" class="input-form" type="text" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}" readonly>
+                                            <input style="width: 300px;background-color: #d9dbe0" placeholder="Ingrese el apellido" th:value="${apellidos}" name="apellidos" class="input-form" type="text" th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}" readonly>
                                             <div style="width: 300px" class="invalid-feedback" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
                                         </div>
 
@@ -277,7 +277,7 @@
 
                                         <div class="input-label-box">
                                             <label style="font-weight: bold; color:dimgray">DNI:</label>
-                                            <input placeholder="Ingrese el DNI" th:value="${dni}" name="dni" class="input-form" type="text" readonly>
+                                            <input style="width: 300px;background-color: #d9dbe0" placeholder="Ingrese el DNI" th:value="${dni}" name="dni" class="input-form" type="text" readonly>
 
                                         </div>
 

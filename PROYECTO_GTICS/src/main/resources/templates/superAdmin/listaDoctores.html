@@ -48,16 +48,15 @@
             transition: background-color 0.3s, border-color 0.3s;
             font-size: 17px;
         }
-        .btn-n {
+        .btn-p {
             display: inline-block;
             padding: 12px 20px;
             color:white;
-            background-color: #1a72e7;
+            background-color: #378fff;
             text-decoration: none;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s, border-color 0.3s;
             font-size: 17px;
         }
         .alert {
@@ -121,12 +120,11 @@
         <div style="margin-bottom: 30px"></div>
         <div class="titulo"><b>DOCTORES</b></div>
         <div style="margin-bottom: 20px"></div>
-        <br>
     </div>
     <div class="container">
 
         <div style="padding-top:1px; display:flex; justify-content: end ; margin-left: 20px">
-            <a class="btn-c" href="/superadmin/crearDoctor">Agregar doctor</a>
+            <a class="btn-p" href="/superadmin/crearDoctor">Crear nuevo doctor</a>
         </div>
         <br>
         <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
