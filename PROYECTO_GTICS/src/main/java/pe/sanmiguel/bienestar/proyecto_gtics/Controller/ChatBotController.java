@@ -288,7 +288,14 @@ public class ChatBotController {
 
 
     @PostMapping(value = {"/generate_order", "/generate_order/"})
-    public ResponseEntity<HashMap<String, Object>> generateOrder(@RequestBody GenerateRequest generateRequest) {
+    public ResponseEntity<HashMap<String, Object>> generateOrder(@RequestBody GenerateRequest generateRequest,
+                                                                 @RequestHeader(value = "TOKEN") String SecretToken) {
+
+        if (!SecretToken.equals("1869c2798e4c841d696c448e324cbd8b")){
+            HashMap<String, Object> responseJson = new HashMap<>();
+            responseJson.put("ERROR", null);
+            return ResponseEntity.badRequest().body(responseJson);
+        }
 
         Map<String, String> items = generateRequest.getItems();
         String idPaciente = generateRequest.getIdPaciente();
@@ -600,32 +607,58 @@ public class ChatBotController {
     }
 
     @GetMapping(value = {"/obtain_meds", "/obtain_meds/"})
-    public ResponseEntity<HashMap<String, Object>> obtainMeds() {
+    public ResponseEntity<HashMap<String, Object>> obtainMeds(
+            @RequestHeader(value = "OPT", required = true) String option) {
 
         HashMap<String, Object> responseJson = new HashMap<>();
 
         try {
             List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
-            List<MedBrief> listMedBrief = new ArrayList<>();
 
-            for (Medicamento med : listaMedicamentos) {
-                MedBrief newMedBrief = new MedBrief(med.getIdMedicamento(), med.getNombre(), med.getCategorias(), med.getDescripcion(), med.getPrecioVenta(), med.getRecetable(), med.getEstado());
-                listMedBrief.add(newMedBrief);
-            }
+            if (option.equals("1")) {
+                StringBuilder medsDetailsBuilder = new StringBuilder();
 
+                for (Medicamento med : listaMedicamentos) {
+                    medsDetailsBuilder.append("Nombre: ").append(med.getNombre()).append("\n")
+                            .append("Descripción: ").append(med.getDescripcion()).append("\n")
+                            .append("Categoría: ").append(med.getCategorias()).append("\n\n");
+                }
 
-            if (!listaMedicamentos.isEmpty()){
-                responseJson.put("MedList", listMedBrief);
-                return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
+                if (!listaMedicamentos.isEmpty()) {
+                    responseJson.put("MedList", medsDetailsBuilder.toString());
+                    return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
+                } else {
+                    responseJson.put("ERROR", "No se encontraron medicamentos.");
+                    return ResponseEntity.badRequest().body(responseJson);
+                }
+
+            } else if (option.equals("2")) {
+                StringBuilder medsIdsAndNamesBuilder = new StringBuilder();
+
+                for (Medicamento med : listaMedicamentos) {
+                    medsIdsAndNamesBuilder.append("ID: ").append(med.getIdMedicamento()).append(", ")
+                            .append("Nombre: ").append(med.getNombre()).append("\n");
+                }
+
+                if (!listaMedicamentos.isEmpty()) {
+                    responseJson.put("MedList", medsIdsAndNamesBuilder.toString());
+                    return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
+                } else {
+                    responseJson.put("ERROR", "No se encontraron medicamentos.");
+                    return ResponseEntity.badRequest().body(responseJson);
+                }
             } else {
-                responseJson.put("ERROR", null);
+                responseJson.put("ERROR", "Opción no válida.");
                 return ResponseEntity.badRequest().body(responseJson);
             }
-        } catch (Exception e){
-            responseJson.put("ERROR", null);
+
+        } catch (Exception e) {
+            responseJson.put("ERROR", "Se produjo un error al obtener los medicamentos.");
             return ResponseEntity.badRequest().body(responseJson);
         }
     }
+
+
 
 
     @GetMapping(value = {"/inicio_orden", "/inicio_orden/"})
