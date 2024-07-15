@@ -144,7 +144,13 @@
 
                     <tr th:each="farmacista : ${listaFarmacistasNew}">
                         <td th:text="${farmacista.getNombres()} + '  ' +${farmacista.getApellidos()}"></td>
-                        <td><img class="medicamento" src="/img/doctor.png"></td>
+                        <td style="text-align: center">
+                            <div style="display: flex; align-items: center; justify-content: center;">
+                                <label>
+                                    <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
+                                </label>
+                            </div>
+                        </td>
                         <td th:text="${farmacista.getDistrito()}"></td>
                         <td th:text="${farmacista.getCodigoMed()}"></td>
                         <td th:text="${farmacista.getCorreo()}"></td>
