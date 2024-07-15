@@ -349,6 +349,7 @@ public class SuperAdminController {
                     List<Medicamento> listaMedicamentosSede = medicamentoRepository.listarMedicamentoSede(state);
                     model.addAttribute("listaMedicamentos", listaMedicamentosSede);
                     model.addAttribute("sedes", sedeList);
+                    model.addAttribute("estado", state);
                     return "superAdmin/medicamentos";
                 }
             }

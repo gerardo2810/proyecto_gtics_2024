@@ -196,7 +196,7 @@
 <div id="content-show" class="hidden">
 <!--=============== HEADER ===============-->
 <header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
+    <nav th:replace="~{fragments/navbar.html :: navbar( active = '')}"></nav>
 </header>
 
 <div th:replace="~{fragments/banner.html :: banner}"></div>
@@ -220,7 +220,7 @@
                         <div class="input-label-box" style="display:flex; flex-direction:column; align-items:center;">
                             <label style="font-weight: bold; color:dimgray; margin-bottom:8px;"  th:text="${'Administrador de ' + sedeAdministrador.nombre}"></label>
                             <div class="profile-picture-container" style="display:flex; justify-content:center;">
-                                <img th:src="@{/img/hombre-de-negocios.png}" alt="" style="width: 350px; height: 350px;">
+                                <img th:src="@{/img/3135768.png}" alt="" style="width: 350px; height: 350px;">
                             </div>
                         </div>
                         <label style="font-weight: bold; color:dimgray; ; font-size: large ">Cambiar contraseña:</label>
