@@ -19,8 +19,8 @@ public class OrdenDto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "Debe seleccionar un doctor")
-    private String idDoctor;
+    @NotNull(message = "Debe seleccionar un doctor")
+    private Integer idDoctor;
 
     @Pattern(regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$", message = "Formato de hora incorrecto")
     @NotBlank(message = "Debe seleccionar la hora de entrega")
@@ -31,6 +31,11 @@ public class OrdenDto {
 
     @NotBlank(message = "Debe seleccionar al menos un medicamento")
     private String priceTotal;
+
+    @Min(value = 1, message = "Debe seleccionar una sede")
+    @Max(value = 5, message = "Debe seleccionar una sede")
+    @NotNull(message = "Debe seleccionar una sede")
+    private Integer sedeId;
 
     @NotEmpty(message = "Debe seleccionar la imagen de su receta")
     @Lob

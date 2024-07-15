@@ -161,7 +161,7 @@
     <div class="container">
 
         <div style="margin-bottom: 50px"></div>
-        <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Generar nuevo orden:</strong></h2>
+        <h2 style="font-size: 30px"><strong style="padding-left: 10px">Generar nueva Orden Web:</strong></h2>
         <div style="margin-bottom: 20px"></div>
         <hr style="border-top: 1px solid #DFDFDF;">
         <div style="margin-bottom: 40px"></div>
@@ -184,7 +184,7 @@
                             <label style="font-weight: bold; color: dimgray">Nombre del paciente:</label>
 
                             <div style="position: relative;">
-                                <input class="input-form" type="text" th:field="*{nombres}" placeholder="Ingrese su nombre" th:classappend="${#fields.hasErrors('nombres') ? 'error' : ''}"  th:value="${session.usuario.getNombres()}" readonly>
+                                <input style="background-color: #dfdfdf" class="input-form" type="text" th:field="*{nombres}" placeholder="Ingrese su nombre" th:classappend="${#fields.hasErrors('nombres') ? 'error' : ''}"  th:value="${session.usuario.getNombres()}" readonly>
                                 <i th:if="${#fields.hasErrors('nombres')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
                             </div>
 
@@ -196,7 +196,7 @@
                             <label style="font-weight: bold; color:dimgray">Apellidos del paciente:</label>
 
                             <div style="position: relative;">
-                                <input class="input-form" type="text" th:field="*{apellidos}" placeholder="Ingrese su apellido" th:classappend="${#fields.hasErrors('apellidos') ? 'error' : ''}" readonly>
+                                <input style="background-color: #dfdfdf" class="input-form" type="text" th:field="*{apellidos}" placeholder="Ingrese su apellido" th:classappend="${#fields.hasErrors('apellidos') ? 'error' : ''}" readonly>
                                 <i th:if="${#fields.hasErrors('apellidos')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
                             </div>
 
@@ -213,7 +213,7 @@
                             <label style="font-weight: bold; color:dimgray">DNI:</label>
 
                             <div style="position: relative;">
-                                <input class="input-form" type="text" th:field="*{dni}" placeholder="Ingrese su DNI" th:classappend="${#fields.hasErrors('dni') ? 'error' : ''}" readonly>
+                                <input style="background-color: #dfdfdf" class="input-form" type="text" th:field="*{dni}" placeholder="Ingrese su DNI" th:classappend="${#fields.hasErrors('dni') ? 'error' : ''}" readonly>
                                 <i th:if="${#fields.hasErrors('dni')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
                             </div>
 
@@ -285,13 +285,12 @@
                         </div>
 
 
-
                         <div class="input-label-box">
                             <label style="font-weight: bold; color:dimgray">Teléfono:</label>
 
 
                             <div style="position: relative;">
-                                <input class="input-form" type="text" th:field="*{celular}"  placeholder="Ingrese su número de teléfono" th:classappend="${#fields.hasErrors('celular') ? 'error' : ''}" readonly>
+                                <input style="background-color: #dfdfdf" class="input-form" type="text" th:field="*{celular}"  placeholder="Ingrese su número de teléfono" th:classappend="${#fields.hasErrors('celular') ? 'error' : ''}" readonly>
                                 <i th:if="${#fields.hasErrors('celular')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
                             </div>
 
@@ -301,7 +300,7 @@
 
                     </div>
 
-                    <div class="column-start">
+                    <div class="column">
 
                         <div class="input-label-box">
                             <label style="font-weight: bold; color:dimgray">Seguro:</label>
@@ -321,6 +320,27 @@
                             </select>
 
                             <div class="error-message"  th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}"></div>
+
+
+
+
+
+                        </div>
+
+
+                        <div class="input-label-box" th:object="${ordenDto}">
+                            <label style="font-weight: bold; color:dimgray">Sede:</label>
+
+                            <select class="select-form" th:field="*{sedeId}" th:classappend="${#fields.hasErrors('sedeId') ? 'error' : ''}">
+                                <option value=""  selected>Seleccionar sede</option>
+                                <option value="1" >Sede Central</option>
+                                <option value="2" >Sede Norte</option>
+                                <option value="3" >Sede Sur</option>
+                                <option value="4" >Sede Este</option>
+                                <option value="5" >Sede Oeste</option>
+                            </select>
+
+                            <div class="error-message"  th:if="${#fields.hasErrors('sedeId')}" th:errors="*{sedeId}"></div>
 
 
 

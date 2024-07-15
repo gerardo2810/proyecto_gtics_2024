@@ -303,7 +303,7 @@ td{
     border-radius: 4px;
     font-size: 16px;
     outline: none;
-    color:dimgray;
+    color:black;
     background-color: white;
 }
 .select-form:focus{
