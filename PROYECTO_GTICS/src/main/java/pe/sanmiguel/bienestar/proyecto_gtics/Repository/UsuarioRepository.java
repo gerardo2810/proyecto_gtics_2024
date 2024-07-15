@@ -208,4 +208,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_logueo = 0")
     void actualizarEstadoLogueoSuperadmin();
+
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.usuario where id = ?1")
+    Usuario encontrarUsuario(int id);
 }

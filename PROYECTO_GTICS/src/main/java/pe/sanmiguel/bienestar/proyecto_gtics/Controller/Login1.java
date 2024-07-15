@@ -13,14 +13,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pe.sanmiguel.bienestar.proyecto_gtics.DniAPI;
-import pe.sanmiguel.bienestar.proyecto_gtics.EmailService;
+import pe.sanmiguel.bienestar.proyecto_gtics.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Doctor;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Medicamento;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
-import pe.sanmiguel.bienestar.proyecto_gtics.PasswordService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
-import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.CambioContraValidationGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.DniApiValidationGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.LoginValidationsGroup;
@@ -43,8 +40,13 @@ import java.util.*;
 public class Login1 {
 final UsuarioRepository usuarioRepository;
 
+    private int idUsuario;
+
     @Autowired
     private PasswordService passwordService;
+
+    @Autowired
+    private EmailRetryService emailRetryService;
 
     @Autowired
     private DniAPI dniAPI;
@@ -160,14 +162,10 @@ final UsuarioRepository usuarioRepository;
                 variables.put("nombre", usuario.getNombres());
                 variables2.put("contra", temporaryPassword);
 
-                try {
-                    emailService.sendHtmlEmail2(usuario.getCorreo(), subject,"login/correo", variables, variables2);
-                    attributes.addFlashAttribute("mensaje", "Usuario creado correctamente y correo enviado.");
-                    return "redirect:/";
-                } catch (MessagingException e) {
-                    e.printStackTrace();
-                    attributes.addFlashAttribute("mensaje", "Usuario creado, pero hubo un error al enviar el correo: " + e.getMessage());
-                }
+                //emailService.sendHtmlEmail2(usuario.getCorreo(), subject,"login/correo2", variables, variables2);
+                attributes.addFlashAttribute("mensaje", "Usuario creado correctamente y correo enviado.");
+                emailRetryService.scheduleEmailRetry(usuario);
+                System.out.println("olaasdas");
 
                 return "redirect:/";
             } catch (DataIntegrityViolationException e) {
@@ -216,7 +214,7 @@ final UsuarioRepository usuarioRepository;
             variables2.put("contra", temporaryPassword);
 
             try {
-                emailService.sendHtmlEmail2(correo, subject,"login/correo", variables, variables2);
+                emailService.sendHtmlEmail2(correo, subject,"login/correo2", variables, variables2);
                 attributes.addFlashAttribute("mensaje", "Correo enviado.");
                 return "redirect:/";
             } catch (MessagingException e) {
