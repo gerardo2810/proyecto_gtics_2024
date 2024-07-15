@@ -66,6 +66,42 @@
                 font-weight: 400;
                 font-style: normal;
             }
+            .sold-out-container {
+                position: absolute;
+                top: 0;
+                right: 0;
+                z-index: 10; /* Asegura que esté sobre el contenido de la tarjeta */
+            }
+
+            .sold-out-sign {
+                background-color: #d90b11; /* Color de fondo del cartel */
+                color: white; /* Color del texto */
+                font-size: 16px; /* Tamaño del texto */
+                font-weight: bold; /* Negrita para el texto */
+                padding: 5px 10px; /* Espaciado interno del cartel */
+                border-radius: 5px; /* Bordes redondeados */
+                position: relative;
+            }
+            .hola{
+                background-color: #289320; /* Color de fondo del cartel */
+                color: white; /* Color del texto */
+                font-size: 16px; /* Tamaño del texto */
+                font-weight: bold; /* Negrita para el texto */
+                padding: 5px 10px; /* Espaciado interno del cartel */
+                border-radius: 5px; /* Bordes redondeados */
+                position: relative;
+            }
+            .chau {
+                background-color: #d7c612; /* Color de fondo del cartel */
+                color: white; /* Color del texto */
+                font-size: 16px; /* Tamaño del texto */
+                font-weight: bold; /* Negrita para el texto */
+                padding: 5px 10px; /* Espaciado interno del cartel */
+                border-radius: 5px; /* Bordes redondeados */
+                position: relative;
+            }
+
+
         </style>
 
         <title>Bienestar San Miguel | Sede 1</title>
@@ -86,6 +122,9 @@
 
 
         <div th:replace="~{fragments/banner.html :: banner}"></div>
+        <div class="sold-out-container">
+            <div class="sold-out-sign">SOLD OUT</div>
+        </div>
 
         <div class="container">
 
@@ -177,22 +216,34 @@
                     <!-- Contenedor de elementos -->
                     <div class="med-container">
                         <div class="item" th:each="medicamento, info: ${listaMedicamentosSedeStock}">
+                            <div class="sold-out-container" th:if="${medicamento.getCantidad() == 0}">
+                                <div class="sold-out-sign">SOLD OUT</div>
+                            </div>
+                            <div class="sold-out-container" th:if="${medicamento.getCantidad() > 0}">
+                                <div class="chau" th:if="${medicamento.getCantidad() <= 25}">
+                                    POR AGOTAR
+                                </div>
+                                <div class="hola" th:if="${medicamento.getCantidad() > 25}">
+                                    STOCK ACEPTABLE
+                                </div>
+                            </div>
                             <img th:src="'data:image/jpeg;base64,' + ${listaFotosMedicamentos[info.index]}" class="img-item" style="width: 200px; height: 200px;"/>
                             <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
                                 <div>
                                     <div class="subtitulo-item roboto-bold" th:text="${medicamento.getUnidad()}" >Unidad</div>
                                     <div class="item-title roboto-medium" th:text="${medicamento.getNombre()}" style="margin-top: 5px; width: 181px; height: 36px; ">Medicamento</div><br/>
                                 </div>
+
                                 <div th:text="'Cantidad disponible: ' + ${medicamento.getCantidad()}" style="font-size: 18px"></div>
                                 <div style="display: flex; flex-direction: row; gap: 3px; align-items: end; margin-left: 2px">
                                     <span style="font-size: 18" th:text="'Precio:'"/>
                                     <span class="item-symbol" style="font-size: 18.4px">S/. </span><span class="item-price roboto-regular" th:text="${#numbers.formatDecimal(medicamento.getPrecioCompra(), 1, 'COMMA', 2, 'POINT')}">Precio</span>
                                 </div>
-                                <div style="align-items: center; background-color: #ffffff" class="add-item-button-ad open-sans-regular-ad">
+                                <!--div style="align-items: center; background-color: #ffffff" class="add-item-button-ad open-sans-regular-ad">
                                     <div th:if="${medicamento.getCantidad() > 25}" th:text="'Stock Aceptable'" class="btn-green" style="justify-content: center; text-align: center; align-content: center; align-items: center"></div>
                                     <div th:if="${medicamento.getCantidad() <= 25 && medicamento.getCantidad() != 0}" th:text="'Por Agotar'" class="btn-yellow" style="justify-content: center; text-align: center; align-content: center; align-items: center"></div>
                                     <div th:if="${medicamento.getCantidad() == 0}" th:text="'Agotado'" class="btn-red" style="justify-content: center; text-align: center; align-content: center; align-items: center"></div>
-                                </div>
+                                </div-->
                             </div>
 
                             <button class="add-item-button open-sans-regular" style="color: #ffffff" th:if="${medicamento.getCantidad() <= 25}" th:data-item-id="${medicamento.getIdMedicamento()}">Añadir Producto</button>

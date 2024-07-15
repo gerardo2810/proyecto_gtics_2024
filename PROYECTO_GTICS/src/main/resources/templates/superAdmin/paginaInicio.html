@@ -95,13 +95,13 @@
 
         .drive {
             grid-column: span 2;
-            height: 570px;
+            height: 700px;
 
         }
         .notes {
             grid-column: span 1;
-            height: 800px; /* Ajusta altura */
-            margin-top: -240px; /* subir o bsjar */
+            height: 1040px; /* Ajusta altura */
+            margin-top: -350px; /* subir o bsjar */
         }
 
         .avatar {
@@ -286,6 +286,21 @@
         .btn:hover {
             background-color: #45a049; /* Color al pasar el mouse */
         }
+        /*----------- CAJA ----------- */
+        .caja {
+            font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 400;
+            text-align: center;
+            background: #588ec9;
+            margin: 0 0 25px;
+            overflow: hidden;
+            padding: 20px;
+            border-radius: 35px 0px 35px 0px;
+            -moz-border-radius: 35px 0px 35px 0px;
+            -webkit-border-radius: 35px 0px 35px 0px;
+            border: 2px solid #588ec9;}
     </style>
 
     <title>Bienestar San Miguel | Administrador de Sede | Reporte de ventas</title>
@@ -329,8 +344,6 @@
 
 
 
-
-
 <div class="container">
     <div style="padding-top: 20px; padding-bottom: 20px">
         <div class="main-title open-sans-bold"> Registros </div>
@@ -355,6 +368,7 @@
             </div>
         </div>
         <div class="mail">
+            <div class="caja">Administradores de sede</div>
             <table id="miTabla" class="table table-striped" style="padding-top: 10px">
                 <thead>
                 <tr style="background-color: #378fff">
@@ -383,6 +397,25 @@
             </table>
         </div>
         <div class="notes" style="margin-left: 20px; margin-right: 20px">
+            <br>
+
+            <div class="superadmin-functions">
+                <h2 style="text-align: center;">Funciones Principales del SuperAdmin 🛡️</h2>
+                <br>
+
+                <ul style="list-style-type: none; padding: 0; text-align: left;">
+                    <li>👤 Gestión de usuarios: Registra y administra administradores de sede y doctores.</li>
+                    <li>🔑 Control de accesos: Cambia contraseñas, edita información y gestiona el estado de los usuarios.</li>
+                    <li>📊 Dashboard: Visualiza registros de administradores, farmacistas, pacientes y doctores.</li>
+                    <li>📦 Seguimiento de pedidos: Monitorea el estado de envíos de medicamentos.</li>
+                    <li>🏢 Gestión de sedes: Asigna y gestiona administradores de sede, y aprueba farmacistas.</li>
+                    <li>💊 Gestión de inventario: Ingresa nuevos medicamentos y controla su visibilidad por sede.</li>
+                    <li>🤖 Sin control sobre el chatbot.</li>
+                </ul>
+            </div>
+            <br>
+            <br>
+
             <h2  style=" align-items: center; justify-content: center;">Leyenda</h2>
             <br>
             <div class="row" style="margin-left: 40px">
@@ -425,6 +458,8 @@
         </div>
 
         <div class="drive">
+            <div class="caja">Farmacistas</div>
+
             <table id="miTabla2" class="table table-striped" style="padding-top: 10px">
                 <thead>
                 <tr style="background-color: #378fff">
@@ -491,6 +526,7 @@
 <div class="container">
     <div class="contai">
         <div class="card">
+            <div class="caja">Pacientes</div>
             <table id="miTabla3" class="display" style="padding-top: 10px">
                 <thead>
                 <tr style="background-color: #378fff">
@@ -520,6 +556,8 @@
 
         </div>
         <div class="card">
+            <div class="caja">Doctores</div>
+
             <table id="miTabla4" class="display" style="padding-top: 10px">
                 <thead>
                 <tr style="background-color: #378fff">
