@@ -83,8 +83,10 @@ public class ChatBotController {
         }
     }
 
+
+
     @PostMapping(value = {"/valida_orden", "/valida_orden/"})
-    public ResponseEntity<HashMap<String, Object>> receiveItems(@RequestBody Map<String, String> items) {
+    public ResponseEntity<HashMap<String, Object>> validateOrden(@RequestBody Map<String, String> items) {
 
         HashMap<String, Object> responseJson = new HashMap<>();
 
@@ -95,7 +97,7 @@ public class ChatBotController {
                 String cant = null;
 
                 // Parsear el valor de 'itemX' como un objeto 'Item'
-                String[] parts = value.split(",");
+                String[] parts = value.split(" - ");
                 for (String part : parts) {
                     String[] pair = part.split(":");
                     if (pair.length == 2) {
@@ -191,6 +193,120 @@ public class ChatBotController {
         }
     }
 
+
+    @GetMapping(value = {"/inicio_orden", "/inicio_orden/"})
+    public ResponseEntity<HashMap<String, Object>>  initOrden(@RequestHeader(value = "ID") String HeaderID) {
+
+        HashMap<String, Object> responseJson = new HashMap<>();
+
+        // Iniciar las variables de items
+        Map<String, String> item1 = Map.of(
+                "item2", "null",
+                "item3", "null",
+                "item4", "null",
+                "item5", "null",
+                "item6", "null",
+                "item7", "null",
+                "item8", "null",
+                "item9", "null",
+                "item10", "null"
+        );
+
+        Map<String, String> item2 = Map.of(
+                "item3", "null",
+                "item4", "null",
+                "item5", "null",
+                "item6", "null",
+                "item7", "null",
+                "item8", "null",
+                "item9", "null",
+                "item10", "null"
+        );
+
+        Map<String, String> item3 = Map.of(
+                "item4", "null",
+                "item5", "null",
+                "item6", "null",
+                "item7", "null",
+                "item8", "null",
+                "item9", "null",
+                "item10", "null"
+        );
+
+        Map<String, String> item4 = Map.of(
+                "item5", "null",
+                "item6", "null",
+                "item7", "null",
+                "item8", "null",
+                "item9", "null",
+                "item10", "null"
+        );
+
+        Map<String, String> item5 = Map.of(
+                "item6", "null",
+                "item7", "null",
+                "item8", "null",
+                "item9", "null",
+                "item10", "null"
+        );
+
+        Map<String, String> item6 = Map.of(
+                "item7", "null",
+                "item8", "null",
+                "item9", "null",
+                "item10", "null"
+        );
+
+        Map<String, String> item7 = Map.of(
+                "item8", "null",
+                "item9", "null",
+                "item10", "null"
+        );
+
+        Map<String, String> item8 = Map.of(
+                "item9", "null",
+                "item10", "null"
+        );
+
+        Map<String, String> item9 = Map.of(
+                "item10", "null"
+        );
+
+        switch (HeaderID) {
+
+            case "1":
+                responseJson.put("OK", item1);
+                return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
+            case "2":
+                responseJson.put("OK", item2);
+                return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
+            case "3":
+                responseJson.put("OK", item3);
+                return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
+            case "4":
+                responseJson.put("OK", item4);
+                return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
+            case "5":
+                responseJson.put("OK", item5);
+                return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
+            case "6":
+                responseJson.put("OK", item6);
+                return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
+            case "7":
+                responseJson.put("OK", item7);
+                return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
+            case "8":
+                responseJson.put("OK", item8);
+                return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
+            case "9":
+                responseJson.put("OK", item9);
+                return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
+            default:
+                responseJson.put("ERROR", null);
+                return ResponseEntity.badRequest().body(responseJson);
+
+        }
+    }
 
 
 
