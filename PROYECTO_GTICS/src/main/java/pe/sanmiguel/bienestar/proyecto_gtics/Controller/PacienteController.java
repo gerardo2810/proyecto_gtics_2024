@@ -410,6 +410,8 @@ public class PacienteController {
         HttpSession session = request.getSession();
         Usuario usuario1 = (Usuario) session.getAttribute("usuario");
 
+        System.out.println("\n LA SEDE ELEGIDA ES:" + ordenDto.getSedeId() );
+
 
 
         //-----------IMAGEN DEBE SER PNG O JPG------------------//
@@ -470,7 +472,7 @@ public class PacienteController {
             LocalDateTime fechaIni = LocalDateTime.now();
             LocalDateTime fechaFin = LocalDateTime.now();
             Integer idFarmacista = new Integer(120); //el id del Farmacista
-            Sede s = sedeRepository.getById(5); //el id de la Sede
+            Sede s = sedeRepository.getById(ordenDto.getSedeId()); //el id de la Sede
             Doctor doc = doctorRepository.getById(idDoctor); //el id del doctor
 
 
@@ -509,8 +511,7 @@ public class PacienteController {
             ordenContenido.setIdOrden(orden);
             oid.setIdOrden(orden.getIdOrden());
 
-            //0  1  2  3
-            //m1 c1 m2 c2
+
 
             while(i < lista.size()){
 
