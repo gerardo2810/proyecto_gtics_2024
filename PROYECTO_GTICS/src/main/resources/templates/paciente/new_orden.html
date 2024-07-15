@@ -365,17 +365,17 @@
                             <div th:if="${extensionIncorrecta != null}" style="display: flex;flex-direction: row; column-gap: 4px">
                                 <i style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
                                 <div class="error-message"  style="margin-bottom: 9px">El formato de imagen debe ser PNG o JPG</div>
-
                             </div>
 
                             <div th:if="${archivoPesado != null}" style="display: flex;flex-direction: row; column-gap: 4px">
                                 <i style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
-                                <div class="error-message"  style="margin-bottom: 9px">El archivo subido es muy pesado</div>
-
+                                <div class="error-message"  style="margin-bottom: 9px">El archivo subido es muy pesado (debe ser menor a 3MB)</div>
                             </div>
 
-
-
+                            <div th:if="${archivoSinExtension != null}" style="display: flex;flex-direction: row; column-gap: 4px">
+                                <i style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                                <div class="error-message"  style="margin-bottom: 9px">El formato de imagen debe ser PNG o JPG</div>
+                            </div>
 
 
                             <div id="upload" class="modal" data-state="0" data-ready="false">
@@ -520,12 +520,20 @@
 
 
 
-                        <div style="padding-bottom: 20px; padding-top: 20px; display: flex; flex-direction: column; row-gap:3px; align-items: start">
-                            <div>
+                        <div style="padding-bottom: 20px; padding-top: 20px; display: flex; flex-direction: row; column-gap:3px; justify-content: space-between">
 
-                                <input id="searchInput" type="text" class="input-form" style="outline: none" placeholder="Buscar medicamento" >
+                            <input id="searchInput" type="text" class="input-form" style="outline: none" placeholder="Buscar medicamento" >
+
+                            <div>
+                                <label for="filtroCategoria">Filtrar: </label>
+                                <select class="select-form" id="filtroCategoria">
+                                    <option value="">Todos</option>
+                                    <option value="Analgesicos">Analgesicos</option>
+                                    <option value="Antieméticos">Antieméticos</option>
+                                </select>
 
                             </div>
+
                         </div>
 
 
@@ -543,6 +551,7 @@
                                         <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" class="img-item"/>
                                         <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
                                         <div class="item-title roboto-regular" th:text="${medicamento.nombre}"   th:style="${medicamento.nombre.length()>=21 ? 'font-size:15px' : ''}"  >Medicamento</div>
+                                        <p class="categoria"  th:text="${medicamento.getCategorias()}"></p>
                                         <div style="display: flex; flex-direction: row; gap: 5px; align-items: end;">
                                             <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
                                         </div>
@@ -553,7 +562,6 @@
 
 
                                 <div class="pagination" id="pagination">
-                                    <!-- Aquí se añadirán los botones de paginación -->
                                 </div>
 
                                 <br>
@@ -570,15 +578,6 @@
 
 
             </div>
-
-
-
-
-
-
-
-
-
 
 
             <br>
@@ -607,72 +606,12 @@
 
 
 
-
-
-
-
-
-<!---------Pop up---------->
-<script>
-    const showPopup = document.querySelector('.btn-popup');
-    const popupContainer = document.querySelector('.popup-container');
-    const closePopup = document.getElementById('closePopup');
-
-    showPopup.onclick = () => {
-        popupContainer.classList.add('active');
-    }
-
-    closePopup.onclick = () =>{
-        popupContainer.classList.remove('active');
-    }
-</script>
-
-
 <script th:src="@{/js/upload_img.js}"></script>
 <script th:src="@{/js/topbar.js}"></script>
-
-
 <!---------Datatable---------->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        var table = $('#miTabla').DataTable({
-            "pageLength":4,
-            "lengthChange": false,
-            "language": {
-                "emptyTable": "No hay registros disponibles",
-                "zeroRecords": "No se encontraron registros coincidentes",
-                "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-                "Search" : "Buscar:",
-                "paginate": {
-                    "first": "Primero",
-                    "last": "Último",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                },
-                "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
-
-            },
-
-
-        });
-
-        $('#filtroEstado').on('change', function() {
-            var estado = $(this).val();
-            table.column(2).search(estado).draw();
-
-        });
-
-        $('#limpiarFiltros').on('click', function() {
-            $('#filtroEstado').val('');
-            table.search('').columns().search('').draw();
-        });
-    });
-</script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <script th:src="@{/js/loader.js}"></script>
-
-
 <!---------SweetAlert---------->
 <style>
     .swal2-title {
@@ -682,8 +621,6 @@
     }
 
 </style>
-
-
 <script>
     const form = document.getElementById("form");
 
@@ -707,12 +644,7 @@
         });
     });
 </script>
-
-
 <!---------Medicamentos---------->
-
-
-
 <script th:inline="javascript">
 
 
@@ -1062,79 +994,41 @@
 
 
 </script>
-
-
 <!-----Top bar ------------->
-<script>
-    $(document).ready(function() {
-
-
-        var opened = false;
-
-        $('#menu-small').hide();
-
-        $('#nav-toggle').click(function (e) {
-            e.stopPropagation();
-            if (opened) {
-                $('#menu-small').hide();
-            } else {
-                $('#menu-small').show();
-            }
-            opened = !opened;
-        });
-    });
-</script>
-
-
-
-
-
-
-<script>
-
-    $(document).ready(function() {
-        $('#searchInput').on('input', function() { // Escuchar el evento 'input'
-            var searchTerm = $(this).val().trim().toLowerCase();
-            $('.item').each(function() {
-                var itemName = $(this).find('.item-title').text().trim().toLowerCase();
-                if (itemName.includes(searchTerm)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        });
-
-    });
-
-</script>
-
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const itemsPerPage = 6; // Número de medicamentos por página
         let currentPage = 1; // Página actual
 
-        const medicamentos = document.querySelectorAll('.med-container .item');
-        const totalMedicamentos = medicamentos.length;
+        const filtroCategoria = document.getElementById("filtroCategoria");
+        const medicamentos = Array.from(document.querySelectorAll('.med-container .item'));
+
+        function getVisibleMedicamentos() {
+            const categoriaSeleccionada = filtroCategoria.value;
+            return medicamentos.filter(function(item) {
+                const categoriaItem = item.querySelector(".categoria").innerText.trim();
+                return categoriaSeleccionada === "" || categoriaItem === categoriaSeleccionada;
+            });
+        }
 
         function mostrarMedicamentos() {
+            const visibleMedicamentos = getVisibleMedicamentos();
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
 
-            medicamentos.forEach((medicamento, index) => {
+            medicamentos.forEach(medicamento => medicamento.style.display = 'none');
+
+            visibleMedicamentos.forEach((medicamento, index) => {
                 if (index >= startIndex && index < endIndex) {
                     medicamento.style.display = 'block';
-                } else {
-                    medicamento.style.display = 'none';
                 }
             });
 
-            mostrarPaginacion();
+            mostrarPaginacion(visibleMedicamentos.length);
         }
 
-        function mostrarPaginacion() {
-            const totalPages = Math.ceil(totalMedicamentos / itemsPerPage);
+        function mostrarPaginacion(totalVisible) {
+            const totalPages = Math.ceil(totalVisible / itemsPerPage);
             const pagination = document.getElementById('pagination');
             pagination.innerHTML = '';
 
@@ -1152,11 +1046,107 @@
 
                 pagination.appendChild(button);
             }
+
+            // Ocultar la paginación si no hay páginas
+            if (totalPages <= 1) {
+                pagination.style.display = 'none';
+            } else {
+                pagination.style.display = 'block';
+            }
         }
+
+        filtroCategoria.addEventListener("change", function() {
+            currentPage = 1; // Resetear a la primera página al filtrar
+            mostrarMedicamentos();
+        });
 
         // Mostrar la paginación y la primera página al cargar la página
         mostrarMedicamentos();
     });
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const itemsPerPage = 6; // Número de medicamentos por página
+        let currentPage = 1; // Página actual
+
+        const filtroCategoria = document.getElementById("filtroCategoria");
+        const searchInput = document.getElementById("searchInput");
+        const medicamentos = Array.from(document.querySelectorAll('.med-container .item'));
+
+        function getVisibleMedicamentos() {
+            const categoriaSeleccionada = filtroCategoria.value;
+            const searchTerm = searchInput.value.trim().toLowerCase();
+
+            return medicamentos.filter(function(item) {
+                const categoriaItem = item.querySelector(".categoria").innerText.trim();
+                const itemName = item.querySelector('.item-title').innerText.trim().toLowerCase();
+                const matchesCategoria = categoriaSeleccionada === "" || categoriaItem === categoriaSeleccionada;
+                const matchesSearch = itemName.includes(searchTerm);
+
+                return matchesCategoria && matchesSearch;
+            });
+        }
+
+        function mostrarMedicamentos() {
+            const visibleMedicamentos = getVisibleMedicamentos();
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+
+            medicamentos.forEach(medicamento => medicamento.style.display = 'none');
+
+            visibleMedicamentos.forEach((medicamento, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    medicamento.style.display = 'block';
+                }
+            });
+
+            mostrarPaginacion(visibleMedicamentos.length);
+        }
+
+        function mostrarPaginacion(totalVisible) {
+            const totalPages = Math.ceil(totalVisible / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.addEventListener('click', function() {
+                    currentPage = i;
+                    mostrarMedicamentos();
+                });
+
+                if (i === currentPage) {
+                    button.classList.add('active'); // Añadir clase 'active' al botón de la página actual
+                }
+
+                pagination.appendChild(button);
+            }
+
+            // Ocultar la paginación si no hay páginas
+            if (totalPages <= 1) {
+                pagination.style.display = 'none';
+            } else {
+                pagination.style.display = 'block';
+            }
+        }
+
+        filtroCategoria.addEventListener("change", function() {
+            currentPage = 1; // Resetear a la primera página al filtrar
+            mostrarMedicamentos();
+        });
+
+        searchInput.addEventListener("input", function() {
+            currentPage = 1; // Resetear a la primera página al buscar
+            mostrarMedicamentos();
+        });
+
+        // Mostrar la paginación y la primera página al cargar la página
+        mostrarMedicamentos();
+    });
+
 
 </script>
 

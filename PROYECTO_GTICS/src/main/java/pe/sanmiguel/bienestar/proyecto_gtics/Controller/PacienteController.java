@@ -427,7 +427,7 @@ public class PacienteController {
         //---------------------------------------------------------------//
 
 
-        //-----------IMAGEN DEBE SER MENOR A 2MB------------------//
+        //-----------IMAGEN DEBE SER MENOR A 3MB------------------//
         long size = file.getSize();
         long maxSize = 3 * 1024 * 1024;
 
@@ -435,7 +435,7 @@ public class PacienteController {
         //---------------------------------------------------------------//
 
 
-        if(bindingResult.hasErrors() || bin2.hasErrors() || (extension != null && !extension.equals("png") && !extension.equals("jpg")) || (size > maxSize) ){
+        if(bindingResult.hasErrors() || bin2.hasErrors() || (extension != null && !extension.equals("png") && !extension.equals("jpg")) || (size > maxSize) || extension==null){
             System.out.println(bindingResult.getAllErrors());
             System.out.printf(String.valueOf(file));
 
@@ -454,6 +454,9 @@ public class PacienteController {
             }
             if(size > maxSize){
                 model.addAttribute("archivoPesado",0);
+            }
+            if(extension==null){
+                model.addAttribute("archivoSinExtension",0);
             }
 
 
