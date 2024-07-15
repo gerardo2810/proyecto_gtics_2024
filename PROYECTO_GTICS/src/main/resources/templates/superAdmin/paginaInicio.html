@@ -614,13 +614,13 @@
 <script>
     $(document).ready(function() {
         var table = $('#miTabla, #miTabla2, #miTabla3, #miTabla4, #miTabla5').DataTable({
-            "pageLength":5,
+            "pageLength": 5,
             "lengthChange": false,
             "language": {
                 "emptyTable": "No hay registros disponibles",
                 "zeroRecords": "No se encontraron registros coincidentes",
                 "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-                "search" : "Buscar:",
+                "search": "Buscar:",
                 "paginate": {
                     "first": "Primero",
                     "last": "Último",
@@ -629,22 +629,22 @@
                 },
                 "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
             },
-            dom: "Bfrtip",
-            buttons:{
-                dom:{
-                    button:{
+            dom: '<"top"fB>rt<"bottom"ip><"clear">',
+            buttons: {
+                dom: {
+                    button: {
                         className: 'btn-p',
                         tag: 'button',
                         style: 'background-color: #689F38'
                     }
                 },
-                buttons:[
+                buttons: [
                     {
-                        extend:"excel",
-                        text:'Exportar tabla en Excel',
+                        extend: "excel",
+                        text: 'Exportar tabla en Excel',
                         className: 'btn-p',
-                        excelStyles:{
-                            template:'blue_medium'
+                        excelStyles: {
+                            template: 'blue_medium'
                         },
                         init: function(api, node, config) {
                             $(node).css('background-color', '#689F38');
@@ -652,17 +652,11 @@
                     }
                 ]
             }
-
         });
-
-        table.buttons().container().appendTo('#botonesExportacion');
-
-
 
         $('#filtroEstado').on('change', function() {
             var estado = $(this).val();
             table.column(2).search(estado).draw();
-
         });
 
         $('#limpiarFiltros').on('click', function() {
@@ -671,6 +665,14 @@
         });
     });
 </script>
+
+    <style>
+        .dataTables_wrapper .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
 <script>
     $(document).ready(function() {
         var opened = false;
