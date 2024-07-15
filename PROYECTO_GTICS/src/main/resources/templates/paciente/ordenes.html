@@ -55,6 +55,7 @@
 
 <body>
 
+
 <div id="loader-container"  style="display: flex;flex-direction: column;">
 
     <div style="display: flex; justify-content: center;margin-top: 250px;">
@@ -80,6 +81,32 @@
     </div>
 
 </div>
+
+<link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+<script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+<df-messenger
+        location="us-east1"
+        project-id="focal-baton-405905"
+        agent-id="67add3f9-fc2b-46b3-81fe-332970bf4670"
+        language-code="es"
+        max-query-length="-1">
+    <df-messenger-chat-bubble
+            chat-title="Asistente Virtual - Clínica Bienestar">
+    </df-messenger-chat-bubble>
+</df-messenger>
+<style>
+    df-messenger {
+        z-index: 999;
+        position: fixed;
+        --df-messenger-font-color: #000000;
+        --df-messenger-font-family: Lato;
+        --df-messenger-chat-background: #FFFFFF;
+        --df-messenger-message-user-background: #4285F4;
+        --df-messenger-message-bot-background: #fff;
+        bottom: 16px;
+        right: 16px;
+    }
+</style>
 
 <div id="content-show" class="hidden">
 
