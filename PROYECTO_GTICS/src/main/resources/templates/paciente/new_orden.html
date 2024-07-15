@@ -542,7 +542,7 @@
 
             <div id="step3" class="step" th:object="${ordenDto}">
                 <h2  style="color: #0d6efd">Carrito de Compras</h2>
-                <div style="display: flex;flex-direction: row; column-gap: 4px">
+                <div style="display: flex;flex-direction: row; column-gap: 4px;margin-top: 10px;margin-bottom: 6px">
                     <i th:if="${#fields.hasErrors('listaIds')}" style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
                     <div class="error-message"  th:if="${#fields.hasErrors('listaIds')}" th:errors="*{listaIds}"></div>
 
