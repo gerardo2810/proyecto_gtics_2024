@@ -32,7 +32,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
     <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
-
     <style>
         @keyframes rotateContinuous {
             0% {
@@ -139,10 +138,10 @@
         df-messenger {
             z-index: 999;
             position: fixed;
-            --df-messenger-font-color: #000;
-            --df-messenger-font-family: Google Sans;
-            --df-messenger-chat-background: #f3f6fc;
-            --df-messenger-message-user-background: #d3e3fd;
+            --df-messenger-font-color: #000000;
+            --df-messenger-font-family: Lato;
+            --df-messenger-chat-background: #FFFFFF;
+            --df-messenger-message-user-background: #4285F4;
             --df-messenger-message-bot-background: #fff;
             bottom: 16px;
             right: 16px;
@@ -181,6 +180,7 @@
 </div>
 
 <div id="content-show" class="hidden">
+
     <df-messenger
             location="us-east1"
             project-id="focal-baton-405905"
@@ -188,9 +188,11 @@
             language-code="es"
             max-query-length="-1">
         <df-messenger-chat-bubble
-                chat-title="chatbot-gtics">
+                chat-title="Asistente Virtual - Clínica Bienestar">
         </df-messenger-chat-bubble>
     </df-messenger>
+
+
     <header class="header-topbar">
         <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Pre Ordenes')}"></nav>
     </header>

@@ -48,8 +48,19 @@
 
 
     <style>
-
+        df-messenger {
+            z-index: 999;
+            position: fixed;
+            --df-messenger-font-color: #000000;
+            --df-messenger-font-family: Lato;
+            --df-messenger-chat-background: #FFFFFF;
+            --df-messenger-message-user-background: #4285F4;
+            --df-messenger-message-bot-background: #fff;
+            bottom: 16px;
+            right: 16px;
+        }
     </style>
+
 </head>
 
 <body>
@@ -94,19 +105,6 @@
                 chat-title="Asistente Virtual - Clínica Bienestar">
         </df-messenger-chat-bubble>
     </df-messenger>
-    <style>
-        df-messenger {
-            z-index: 999;
-            position: fixed;
-            --df-messenger-font-color: #000000;
-            --df-messenger-font-family: Lato;
-            --df-messenger-chat-background: #FFFFFF;
-            --df-messenger-message-user-background: #4285F4;
-            --df-messenger-message-bot-background: #fff;
-            bottom: 16px;
-            right: 16px;
-        }
-    </style>
 
     <header class="header-topbar">
         <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Ordenes Web')}"></nav>
