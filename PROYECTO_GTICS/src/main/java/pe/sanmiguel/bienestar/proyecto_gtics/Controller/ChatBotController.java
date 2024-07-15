@@ -12,10 +12,8 @@ import pe.sanmiguel.bienestar.proyecto_gtics.Repository.MedicamentoRepository;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -27,6 +25,12 @@ public class ChatBotController {
     @Setter
     public static class DniRequest {
         private String dni;
+    }
+
+    @Getter
+    @Setter
+    public class ItemsRequest {
+        private Map<String, String> items;
     }
 
     @Getter
@@ -79,6 +83,85 @@ public class ChatBotController {
         }
     }
 
+    @PostMapping(value = {"/valida_orden", "/valida_orden/"})
+    public ResponseEntity<HashMap<String, Object>> receiveItems(@RequestBody Map<String, String> items) {
+
+        HashMap<String, Object> responseJson = new HashMap<>();
+
+        try {
+            List<String> listaSelectedMeds = new ArrayList<>();
+            items.forEach((key, value) -> {
+                String med = null;
+                String cant = null;
+
+                // Parsear el valor de 'itemX' como un objeto 'Item'
+                String[] parts = value.split(",");
+                for (String part : parts) {
+                    String[] pair = part.split(":");
+                    if (pair.length == 2) {
+                        String field = pair[0].trim().replace("'", "");
+                        String fieldValue = pair[1].trim().replace("'", "");
+                        if (field.equals("med")) {
+                            med = fieldValue;
+                            listaSelectedMeds.add(med);
+                        } else if (field.equals("cant")) {
+                            cant = fieldValue;
+                            if (med != null){
+                                listaSelectedMeds.add(cant);
+                            }
+                        }
+
+                    }
+                }
+                System.out.println("Key: " + key + ", Med: " + med + ", Cant: " + cant);
+            });
+
+            if (!listaSelectedMeds.isEmpty()){
+
+                List<Medicamento> MedsSeleccionados = getMedicamentosFromLista(listaSelectedMeds);
+                List<String> cantidadesMeds = getCantidadesFromLista(listaSelectedMeds);
+                double precioTotal = 0.0;
+
+                StringBuilder ordenCompletaBuilder = new StringBuilder("Su orden es:\\n");
+                int cantMeds = MedsSeleccionados.size();
+
+                for (int i = 0; i<cantMeds; i++){
+
+                    String eachNombre = MedsSeleccionados.get(i).getNombre();
+                    String eachCantidad = cantidadesMeds.get(i);
+                    BigDecimal eachPrecio = MedsSeleccionados.get(i).getPrecioVenta();
+
+                    ordenCompletaBuilder.append(eachNombre)
+                            .append(" - ")
+                            .append(eachCantidad)
+                            .append(" - ")
+                            .append(eachPrecio)
+                            .append("\\n");
+
+                    BigDecimal subtotal = eachPrecio.multiply(new BigDecimal(eachCantidad));
+                    precioTotal += subtotal.doubleValue();
+                }
+
+                ordenCompletaBuilder.append("\\n Precio total: ").append(precioTotal);
+
+                String ordenCompleta = ordenCompletaBuilder.toString();
+
+                responseJson.put("Orden", ordenCompleta);
+                return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
+
+            } else {
+                responseJson.put("ERROR", null);
+                return ResponseEntity.badRequest().body(responseJson);
+            }
+        } catch (Exception e){
+            responseJson.put("ERROR", null);
+            return ResponseEntity.badRequest().body(responseJson);
+        }
+
+        // Procesar los datos recibidos
+
+    }
+
 
     @GetMapping(value = {"/obtain_meds", "/obtain_meds/"})
     public ResponseEntity<HashMap<String, Object>> obtainMeds() {
@@ -108,5 +191,26 @@ public class ChatBotController {
         }
     }
 
+
+
+
+    public List<Medicamento> getMedicamentosFromLista(List<String> listaSelectedIds) {
+        List<Optional<Medicamento>> optionals = new ArrayList<>();
+        List<Medicamento> seleccionados;
+        for (int i = 0; i < listaSelectedIds.size(); i += 2) {
+            optionals.add(medicamentoRepository.findById(Integer.valueOf(listaSelectedIds.get(i))));
+        }
+        seleccionados = optionals.stream().flatMap(Optional::stream).collect(Collectors.toList());
+
+        return seleccionados;
+    }
+
+    public List<String> getCantidadesFromLista(List<String> listaSelectedIds) {
+        List<String> cantidades = new ArrayList<>();
+        for (int i = 0; i + 1 < listaSelectedIds.size(); i += 2) {
+            cantidades.add(listaSelectedIds.get(i + 1));
+        }
+        return cantidades;
+    }
 
 }
