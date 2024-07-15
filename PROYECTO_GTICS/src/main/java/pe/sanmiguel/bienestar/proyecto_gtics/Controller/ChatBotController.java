@@ -29,13 +29,7 @@ public class ChatBotController {
     @Getter
     @Setter
     public class ItemsRequest {
-        private Map<String, Item> items;
-    }
-    @Getter
-    @Setter
-    public static class Item {
-        private String med;
-        private String cant;
+        private Map<String, String> items;
     }
 
     @Getter
@@ -88,12 +82,30 @@ public class ChatBotController {
         }
     }
 
-    @PostMapping(value = {"/valida_orden", "/valida_orden/"})
-    public String receiveItems(@RequestBody Map<String, Item> items) {
+    @PostMapping("/receiveItems")
+    public String receiveItems(@RequestBody Map<String, String> items) {
         // Procesar los datos recibidos
-        for (Map.Entry<String, Item> entry : items.entrySet()) {
-            System.out.println("Key: " + entry.getKey() + ", Med: " + entry.getValue().getMed() + ", Cant: " + entry.getValue().getCant());
-        }
+        items.forEach((key, value) -> {
+            String med = null;
+            String cant = null;
+
+            // Parsear el valor de 'itemX' como un objeto 'Item'
+            String[] parts = value.split(",");
+            for (String part : parts) {
+                String[] pair = part.split(":");
+                if (pair.length == 2) {
+                    String field = pair[0].trim().replace("'", "");
+                    String fieldValue = pair[1].trim().replace("'", "");
+                    if (field.equals("med")) {
+                        med = fieldValue;
+                    } else if (field.equals("cant")) {
+                        cant = fieldValue;
+                    }
+                }
+            }
+
+            System.out.println("Key: " + key + ", Med: " + med + ", Cant: " + cant);
+        });
 
         return "Items received successfully!";
     }
