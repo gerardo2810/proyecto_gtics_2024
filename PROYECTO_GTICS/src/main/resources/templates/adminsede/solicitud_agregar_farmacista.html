@@ -165,8 +165,8 @@
                 <form method="post" th:action="@{'/adminsede/solicitud_dni_farmacista'}" th:object="${usuarioFarmacista}">
                     <div style="display: flex; flex-direction: row; justify-content: start; gap: 10px">
                         <div class="input-label-box">
-                            <label style="font-weight: bold; color:dimgray">Ingrese el DNI del Farmacista</label>
-                            <input class="input-form-dni" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del paciente"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
+                            <label style="font-weight: bold; color:dimgray">DNI del Farmacista</label>
+                            <input class="input-form-dni" type="text"  th:field="*{dni}" placeholder="Ingrese el DNI del Farmacista"  th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}">
                             <div  class="invalid-feedback" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
                             <div  class="invalid-feedback" th:if="${dniError}">El DNI ingresado no existe.</div>
                         </div>

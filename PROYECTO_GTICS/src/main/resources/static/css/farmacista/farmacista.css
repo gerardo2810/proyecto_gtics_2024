@@ -549,6 +549,7 @@ hr.style-one {
     gap: 15px;
     width: 100%;
     transition: .3s;
+    position: relative; /* Añade posición relativa para tarjeta */
 }
 
 .item {
@@ -560,6 +561,7 @@ hr.style-one {
     border-radius: 5px;
     color: var(--color-black);
     background: #ffffff;
+    position: relative; /* Añade posición relativa para contenido de tarjeta */
 }
 
 

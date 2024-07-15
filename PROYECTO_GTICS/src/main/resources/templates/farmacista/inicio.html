@@ -47,6 +47,40 @@
     <style>.hide {
         display: none;
     }
+    .sold-out-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 10; /* Asegura que esté sobre el contenido de la tarjeta */
+    }
+
+    .sold-out-sign {
+        background-color: #d90b11; /* Color de fondo del cartel */
+        color: white; /* Color del texto */
+        font-size: 16px; /* Tamaño del texto */
+        font-weight: bold; /* Negrita para el texto */
+        padding: 5px 10px; /* Espaciado interno del cartel */
+        border-radius: 5px; /* Bordes redondeados */
+        position: relative;
+    }
+    .hola{
+        background-color: #289320; /* Color de fondo del cartel */
+        color: white; /* Color del texto */
+        font-size: 16px; /* Tamaño del texto */
+        font-weight: bold; /* Negrita para el texto */
+        padding: 5px 10px; /* Espaciado interno del cartel */
+        border-radius: 5px; /* Bordes redondeados */
+        position: relative;
+    }
+    .chau {
+        background-color: #d7c612; /* Color de fondo del cartel */
+        color: white; /* Color del texto */
+        font-size: 16px; /* Tamaño del texto */
+        font-weight: bold; /* Negrita para el texto */
+        padding: 5px 10px; /* Espaciado interno del cartel */
+        border-radius: 5px; /* Bordes redondeados */
+        position: relative;
+    }
     </style>
 
 </head>
@@ -189,6 +223,17 @@
                 <div id="content">
                     <div class="med-container">
                         <div class="item" th:each="medicamento : ${lista1}">
+                            <div class="sold-out-container" th:if="${medicamento.getCantidad() == 0}">
+                                <div class="sold-out-sign">SOLD OUT</div>
+                            </div>
+                            <div class="sold-out-container" th:if="${medicamento.getCantidad() > 0}">
+                                <!--div class="chau" th:if="${medicamento.getCantidad() <= 25}">
+                                    POR AGOTAR
+                                </div>
+                                <div class="hola" th:if="${medicamento.getCantidad() > 25}">
+                                    STOCK ACEPTABLE
+                                </div-->
+                            </div>
                             <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" th:alt="${medicamento.nombre}" class="img-item" style="width: 200px; height: 200px;">
                             <div style="display: grid; grid-template-rows: 1fr 0.2fr;">
                                 <div>
