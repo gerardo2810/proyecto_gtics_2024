@@ -56,6 +56,18 @@
             border: 1px solid transparent;
             border-radius: 4px;
         }
+        .btn-p {
+            display: inline-block;
+            padding: 12px 20px;
+            color:white;
+            background-color: #378fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+            font-size: 17px;
+        }
 
 
         .alert-success {
@@ -113,7 +125,7 @@
 
             <div style="display: flex; justify-content: space-between;">
                 <div class="main-title open-sans-bold"> Lista de Medicamentos </div>
-                <a class="btn-c" href="/superadmin/crearMedicamento" style="text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">Agregar medicamento</a>
+                <a class="btn-p" href="/superadmin/crearMedicamento" style="text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">Agregar medicamento</a>
             </div>
             <div class="main-subtitle helvetica-medium">  Interfaz de administracion de medicamentos. </div>
             <br>
@@ -143,25 +155,28 @@
 
                         <div class="categoria-div" style="font-size: 18px"><a class="categoria" href="/superadmin/medicamentos">Todas las Sedes</a></div>
                         <div  th:each="sede : ${sedes}">
-                            <div class="categoria-div" style="font-size: 18px"><a class="categoria" th:href="@{'/superadmin/medicamentos' + '?state=' + ${sede.getNombre()}}" th:text="${sede.getNombre()}">Problemas Generales</a></div>
+                            <div class="categoria-div" style="font-size: 18px">
+                                <a class="categoria" th:href="@{'/superadmin/medicamentos' + '?state=' + ${sede.getNombre()}}" th:text="${sede.getNombre()}"></a>
+                            </div>
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
 
 
             <section class="medicamentos">
                 <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+                <div  th:each="sede : ${sedes}">
+                    <div th:if="${estado == sede.getNombre()}">
+                        <p style="font-size: 20px; font-weight: bold; color: #163278; text-align: center; text-transform: uppercase; text-decoration: underline;" th:text="'Medicamentos en ' + ${sede.getNombre()}"></p>
+                    </div>
+                </div>
                 <div style="display: grid; justify-content: space-between; grid-template-columns: 1fr 0.2fr;">
                     <div>
                         <input id="searchInput" type="text" class="input-form" style="outline: none" placeholder="Buscar medicamento" >
                     </div>
 
                     <a href="/superadmin/medicamentos"><button class="add-item-button open-sans-regular">Borrar Filtros</button></a>
-
                 </div>
 
                 <!-- Contenedor de elementos -->

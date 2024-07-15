@@ -34,7 +34,8 @@
     <!--  Bootstrap-->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
     <!--==========================================-->
-
+    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
 
     <title>Confirmar Pago | Bienestar San Miguel</title>
 
@@ -78,6 +79,19 @@
              font-size: 1.1rem !important;
          }
     </style>
+    <style>
+        df-messenger {
+            z-index: 999;
+            position: fixed;
+            --df-messenger-font-color: #000000;
+            --df-messenger-font-family: Lato;
+            --df-messenger-chat-background: #FFFFFF;
+            --df-messenger-message-user-background: #4285F4;
+            --df-messenger-message-bot-background: #fff;
+            bottom: 16px;
+            right: 16px;
+        }
+    </style>
 
 </head>
 
@@ -110,6 +124,19 @@
 </div>
 
 <div id="content-show" class="hidden">
+
+    <df-messenger
+            location="us-east1"
+            project-id="focal-baton-405905"
+            agent-id="67add3f9-fc2b-46b3-81fe-332970bf4670"
+            language-code="es"
+            max-query-length="-1">
+        <df-messenger-chat-bubble
+                chat-title="Asistente Virtual - Clínica Bienestar">
+        </df-messenger-chat-bubble>
+    </df-messenger>
+
+
     <header class="header-topbar">
         <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Ordenes Web')}"></nav>
     </header>

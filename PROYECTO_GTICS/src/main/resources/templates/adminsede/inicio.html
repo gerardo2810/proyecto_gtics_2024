@@ -247,7 +247,7 @@
             .main-subtitle-banner {
                 color: #e9ecef !important;
             }
-            .slider-container {
+            .slider-container5 {
                 position: relative;
                 width: 100%;
                 height: 100%;
@@ -354,7 +354,7 @@
             </div>
             <div class="mail">
                 <h4 class="fs-20 font-w700 mb-2">Medicamentos Favoritos</h4>
-                <div class="slider-container">
+                <div class="slider-container5">
                     <div class="slider">
                         <div class="slide">
                             <canvas id="graficoMedicamentos" width="400" height="200"></canvas>
@@ -547,7 +547,7 @@
                         }
                     </script>
                 </div>
-                <br>
+                <br/>
                 <div id="boleta">
                     <table id="miTabla" class="table table-striped" >
                         <thead>
@@ -608,14 +608,10 @@
                             <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-check-double"></i>Entregado
                             </div>
-
                         </div>
-
-                    </div>
-
-                    <!--div class = "container-orden">
+                        <br/>
                         <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9729.08126190579!2d-77.08409606049462!3d-12.060642000613765!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c93f68568ff7%3A0xef4f31a29f1c0409!2sPerufarma%20SA!5e0!3m2!1ses!2spe!4v1715203570043!5m2!1ses!2spe" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div-->
+                    </div>
                 </div>
                 <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 2}">
                     <div class="wrapper">
@@ -642,11 +638,9 @@
                             </div>
 
                         </div>
-                    </div>
-
-                    <!--div class = "container-orden">
+                        <br/>
                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.575971232228!2d-77.07181742216821!3d-12.072669257653358!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91a6f8fbefb%3A0x408ed032eafa9864!2sMultilab%20Pueblo%20Libre!5e0!3m2!1ses!2spe!4v1712592591241!5m2!1ses!2spe" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div-->
+                    </div>
                 </div>
                 <div class="container-track1" style="margin-left: 30px" th:if="${orden.getEstado().getIdEstado() == 3}">
                     <div class="wrapper">
@@ -673,10 +667,7 @@
                             </div>
 
                         </div>
-
-                    </div>
-
-                    <div class = "container-orden">
+                        <br/>
                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.575971232228!2d-77.07181742216821!3d-12.072669257653358!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91a6f8fbefb%3A0x408ed032eafa9864!2sMultilab%20Pueblo%20Libre!5e0!3m2!1ses!2spe!4v1712592591241!5m2!1ses!2spe" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
@@ -705,11 +696,9 @@
                             </div>
 
                         </div>
-                    </div>
-
-                    <!--div class = "container-orden">
+                        <br/>
                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2510.0212800227946!2d-77.07316603547278!3d-12.071501581470043!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c9113be95ead%3A0x105200a1cc20f03b!2sAvenida%20Simon%20Bolivar!5e0!3m2!1ses!2spe!4v1715203288656!5m2!1ses!2spe" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div-->
+                    </div>
                 </div>
             </div>
         </div>
@@ -742,8 +731,7 @@
 
     <!--Footer -->
         <br/>
-        <div th:replace="~{fragments/navbar.html :: footer}">
-        </div>
+        <div th:replace="~{fragments/navbar.html :: footer}"></div>
 
         <script>
             $(document).ready(function() {

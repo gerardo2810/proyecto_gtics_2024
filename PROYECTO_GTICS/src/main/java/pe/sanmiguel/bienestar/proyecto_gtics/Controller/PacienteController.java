@@ -412,8 +412,6 @@ public class PacienteController {
 
         System.out.println("\n LA SEDE ELEGIDA ES:" + ordenDto.getSedeId() );
 
-
-
         //-----------IMAGEN DEBE SER PNG O JPG------------------//
         String fileName = file.getSubmittedFileName();
         String[] partes = fileName.split("\\.");
@@ -438,6 +436,7 @@ public class PacienteController {
         if(bindingResult.hasErrors() || bin2.hasErrors() || (extension != null && !extension.equals("png") && !extension.equals("jpg")) || (size > maxSize) || extension==null){
             System.out.println(bindingResult.getAllErrors());
             System.out.printf(String.valueOf(file));
+            model.addAttribute("errorGeneral", 0);
 
             List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
             List<Doctor> listaDoctores = doctorRepository.findAll();
@@ -448,6 +447,8 @@ public class PacienteController {
                 List<String> listaCantidades = getCantidadesFromLista(lista);
                 model.addAttribute("currentMed", medicamentosSeleccionados);
                 model.addAttribute("currentCant", listaCantidades);
+
+                model.addAttribute("carritoNumber",lista.size()/2);
             }
             if(extension != null && (!extension.equals("png") && !extension.equals("jpg") && !extension.equals("jpeg")) ){
                 model.addAttribute("extensionIncorrecta", 0);
@@ -458,7 +459,6 @@ public class PacienteController {
             if(extension==null){
                 model.addAttribute("archivoSinExtension",0);
             }
-
 
 
             return "paciente/new_orden";

@@ -106,7 +106,7 @@
             width: 300px;
             height: 300px;
             background-color: lightgray;
-            background-image: url('https://static.vecteezy.com/system/resources/previews/014/591/700/non_2x/office-manager-man-icon-outline-style-vector.jpg');
+            background-image: url('/img/farmaceuticologo3.png');
             background-size: cover;
             background-position: center;
             border: 2px solid lightgray;
@@ -196,7 +196,7 @@
 <div id="content-show" class="hidden">
 <!--=============== HEADER ===============-->
 <header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
+    <nav th:replace="~{fragments/navbar.html :: navbar( active = '')}"></nav>
 </header>
 
 <div th:replace="~{fragments/banner.html :: banner}"></div>
@@ -220,7 +220,7 @@
                         <div class="input-label-box" style="display:flex; flex-direction:column; align-items:center;">
                             <label style="font-weight: bold; color:dimgray; margin-bottom:8px;"  th:text="${'Farmacista de ' + datosFarmacistaSede.idSede.nombre}"></label>
                             <div class="profile-picture-container" style="display:flex; justify-content:center;" >
-                                <img th:src="@{/img/farmaceutico5.png}" alt="" style="width: 350px; height: 350px;">
+                                <img th:src="@{/img/farmaceuticologo3.png}" alt="" style="width: 350px; height: 350px;">
                             </div>
                         </div>
                         <label style="font-weight: bold; color:dimgray; ; font-size: large ">Cambiar contraseña:</label>

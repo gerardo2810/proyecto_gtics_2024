@@ -1,0 +1,65 @@
+.container-steps {
+    width: 100%;
+    max-width: 1540px;
+    margin: 30px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.step {
+    display: none;
+}
+
+.step.active {
+    display: block;
+}
+
+.steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.steps div {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-bottom: 2px solid #ccc;
+    cursor: pointer;
+}
+
+.steps div.active {
+    border-bottom: 2px solid #007bff;
+}
+
+.buttons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.buttons button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+@keyframes jump-diagonal {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(5px, -5px); } /* Salto diagonal */
+    100% { transform: translate(0, 0); }
+}
+
+.cart-jump {
+    animation: jump-diagonal 0.3s ease;
+}

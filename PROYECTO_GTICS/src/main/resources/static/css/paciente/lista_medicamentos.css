@@ -56,11 +56,11 @@
 
 .items-preview {
     margin-top: 20px;
-    max-height: 276px;
+    max-height: 412px;
     overflow: auto;
     border-radius: 0.25rem;
     color: var(--color-black);
-    background: var(--color-white);
+    background-color: #eeeeee;
 }
 
 .container-preview {
