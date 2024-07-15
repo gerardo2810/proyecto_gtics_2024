@@ -83,8 +83,31 @@ public class ChatBotController {
         }
     }
 
+    @GetMapping(value = {"/inicio_orden", "/inicio_orden/"})
+    public ResponseEntity<HashMap<String, Object>>  initOrden() {
+
+        HashMap<String, Object> responseJson = new HashMap<>();
+
+        // Iniciar las variables de items
+        Map<String, String> items = Map.of(
+                "item1", "null",
+                "item2", "null",
+                "item3", "null",
+                "item4", "null",
+                "item5", "null",
+                "item6", "null",
+                "item7", "null",
+                "item8", "null",
+                "item9", "null",
+                "item10", "null"
+        );
+
+        responseJson.put("OK", items);
+        return ResponseEntity.status(HttpStatus.SC_OK).body(responseJson);
+    }
+
     @PostMapping(value = {"/valida_orden", "/valida_orden/"})
-    public ResponseEntity<HashMap<String, Object>> receiveItems(@RequestBody Map<String, String> items) {
+    public ResponseEntity<HashMap<String, Object>> validateOrden(@RequestBody Map<String, String> items) {
 
         HashMap<String, Object> responseJson = new HashMap<>();
 
@@ -95,7 +118,7 @@ public class ChatBotController {
                 String cant = null;
 
                 // Parsear el valor de 'itemX' como un objeto 'Item'
-                String[] parts = value.split(",");
+                String[] parts = value.split(" - ");
                 for (String part : parts) {
                     String[] pair = part.split(":");
                     if (pair.length == 2) {
