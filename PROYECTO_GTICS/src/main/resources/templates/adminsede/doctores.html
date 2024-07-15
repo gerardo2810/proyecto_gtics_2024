@@ -93,7 +93,13 @@
                 <tbody>
                     <tr th:each="doctor : ${listaDoctoresD}">
                         <td th:text="${doctor.nombres} + '  ' + ${doctor.apellidos}"></td>
-                        <td><img class="medicamento" src="/img/doctor.png"></td>
+                        <td style="text-align: center">
+                            <div style="display: flex; align-items: center; justify-content: center;">
+                                <label>
+                                    <img th:src="@{/img/doctor2.png}" alt="" style="width: 45px; height: 45px;">
+                                </label>
+                            </div>
+                        </td>
                         <td th:text="${doctor.getDistrito()}"></td>
                         <td th:text="${doctor.getDireccion()}"></td>
                         <td th:text="${doctor.getEspecialidad()}"></td>
