@@ -509,8 +509,8 @@
     console.log('userId2:', userId2);
     console.log('idOrden:', ordenId)
 
-    //let socket = new WebSocket("ws://34.121.204.43:8080/chat/" + ordenId + "/" + userId1 + "/" + userId2);
-    let socket = new WebSocket("ws://" + ipLocal + ":8080/chat/" + ordenId + "/" + userId1 + "/" + userId2);
+    let socket = new WebSocket("ws://34.121.204.43:8080/chat/" + ordenId + "/" + userId1 + "/" + userId2);
+    //let socket = new WebSocket("ws://" + ipLocal + ":8080/chat/" + ordenId + "/" + userId1 + "/" + userId2);
 
     socket.onmessage = function (event) {
 
