@@ -294,7 +294,7 @@
 <div id="content-show" class="hidden">
 
     <header class="header-topbar">
-        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Boleta')}"></nav>
+        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Mensajeria')}"></nav>
     </header>
 
     <div th:replace="~{fragments/banner.html :: banner}"></div>
@@ -310,7 +310,7 @@
 
         <div style="padding-right: 0; padding-left: 0"> </div>
         <div style="padding-top:1px; display:flex; justify-content: end " >
-            <a class="btn-p" href="/paciente/mensajeria">Regresar a la lista de chats</a>
+            <a class="btn-p" href="/farmacista/mensajeria">Regresar a la lista de chats</a>
 
         </div>
     </div>
@@ -425,25 +425,8 @@
                         <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
                         <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" class="medicamento"/></td>
                         <td th:text="${itemDeLaOrden.getCantidad()}"></td>
-                        <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
-
-                        <td class="resultado"></td>
-
-                        <script th:inline="javascript">
-                            function limitarDigitos(numero) {
-                                var numeroStr = numero.toString();
-                                // Obtener los primeros 4 dígitos
-                                var primerosCuatroDigitos = numeroStr.substring(0, 4);
-                                var numeroLimitado = parseFloat(primerosCuatroDigitos);
-                                return numeroLimitado;
-                            }
-                            var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
-                            var cantidad = [[${itemDeLaOrden.getCantidad()}]];
-                            var resultado = precioVenta * cantidad;
-                            var resultadoLimitado = limitarDigitos(resultado);
-                            document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
-                        </script>
-
+                        <td th:text="${ 'S/.' + itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
+                        <td th:text="${ 'S/.' +  #numbers.formatDecimal((itemDeLaOrden.getIdMedicamento().getPrecioVenta()*itemDeLaOrden.getCantidad()), 1, 'COMMA', 2, 'POINT')}"></td>
                     </tr>
 
 
@@ -472,149 +455,17 @@
                             <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
                             <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" class="medicamento"/></td>
                             <td th:text="${itemDeLaOrden.getCantidad()}"></td>
-                            <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
-
-                            <td class="resultado"></td>
-
-                            <script th:inline="javascript">
-                                function limitarDigitos(numero) {
-                                    var numeroStr = numero.toString();
-                                    // Obtener los primeros 4 dígitos
-                                    var primerosCuatroDigitos = numeroStr.substring(0, 4);
-                                    var numeroLimitado = parseFloat(primerosCuatroDigitos);
-                                    return numeroLimitado;
-                                }
-                                var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
-                                var cantidad = [[${itemDeLaOrden.getCantidad()}]];
-                                var resultado = precioVenta * cantidad;
-                                var resultadoLimitado = limitarDigitos(resultado);
-                                document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
-                            </script>
+                            <td th:text="${ 'S/.' + itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
+                            <td th:text="${ 'S/.' +  #numbers.formatDecimal((itemDeLaOrden.getIdMedicamento().getPrecioVenta()*itemDeLaOrden.getCantidad()), 1, 'COMMA', 2, 'POINT')}"></td>
                         </tr>
                     </tbody>
                 </table>
                 <br>
                 <br>
                 <br>
-                <a class="btn-p" href="/paciente">Generar Pre Orden</a>
-                <button class="btn-p" id="replaceButton">Reemplazar medicamento</button>
+                <a class="btn-p" href="#">Generar Pre Orden</a>
+                <a class="btn-p" th:href="@{'/farmacista/reemplazar_medicamentos?id=' + ${idOrden}}">Reemplazar Medicamentos</a>
             </div>
-        </div>
-
-
-
-
-        <div id="replacementDiv" class="hidden">
-
-            <div style="display: flex;flex-direction: row; justify-content: end;padding-right: 20px">
-                <button id="returnButton" class="btn-back">Regresar</button>
-            </div>
-            <br>
-            <br>
-
-
-            <div style="width: 800px;">
-                <table id="miTabla" class="table table-striped">
-                    <h2>Medicamentos sin Stock</h2>
-                    <thead>
-                    <tr style="background-color: #378fff">
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio Unitario</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio Total</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Reemplazar por</th>
-                    </tr>
-                    </thead>
-
-
-                    <tbody>
-
-
-
-                    <tr th:each="itemDeLaOrden: ${medicamentosSinStock}">
-                        <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
-                        <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" class="medicamento"/></td>
-                        <td th:text="${itemDeLaOrden.getCantidad()}"></td>
-                        <td th:text="${itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
-                        <td class="resultado"></td>
-                        <td>
-                            <button class="btn-replace-med" type="button" style="width: 150px; cursor: pointer">Seleccionar</button>
-                        </td>
-
-                        <script th:inline="javascript">
-                            function limitarDigitos(numero) {
-                                var numeroStr = numero.toString();
-                                // Obtener los primeros 4 dígitos
-                                var primerosCuatroDigitos = numeroStr.substring(0, 4);
-                                var numeroLimitado = parseFloat(primerosCuatroDigitos);
-                                return numeroLimitado;
-                            }
-                            var precioVenta = [[${itemDeLaOrden.getIdMedicamento().precioVenta}]];
-                            var cantidad = [[${itemDeLaOrden.getCantidad()}]];
-                            var resultado = precioVenta * cantidad;
-                            var resultadoLimitado = limitarDigitos(resultado);
-                            document.currentScript.parentElement.querySelector(".resultado").textContent = resultadoLimitado;
-                        </script>
-                    </tr>
-
-
-                    </tbody>
-                </table>
-            </div>
-
-
-
-
-            <div class="popup-container" style="padding-top: 30px">
-
-                <div class="popup-box">
-
-                    <p style="font-size: 26px; font-weight: 500">Seleccione el medicamento: </p>
-                    <br>
-
-                    <div style="display: flex; flex-direction: row;column-gap: 70px;justify-content: center;padding-top: 20px">
-
-
-                        <div class="interface">
-
-                            <div class="medicamentos">
-                                <!-- Contenedor de elementos -->
-                                <div class="med-container">
-                                    <div class="item" th:each="medicamento : ${listaMedicamentos}">
-                                        <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" class="img-item"/>
-                                        <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
-                                        <div class="item-title roboto-regular" th:text="${medicamento.nombre}"   th:style="${medicamento.nombre.length()>=21 ? 'font-size:15px' : ''}"  >Medicamento</div>
-                                        <div style="display: flex; flex-direction: row; gap: 5px; align-items: end;">
-                                            <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
-                                        </div>
-
-                                        <button class="add-item-button montserrat-medium" type="button" th:data-item-id="${medicamento.idMedicamento}">Seleccionar</button>
-                                    </div>
-                                </div>
-
-                                <div class="pagination" id="pagination">
-                                </div>
-
-                                <br>
-                                <br>
-
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-                    <div style="display: flex; flex-direction: row;justify-content: center">
-                        <button class="btn-cancel" id="closePopup" type="button">Cancelar</button>
-                    </div>
-                </div>
-            </div>
-
-
-
-
         </div>
 
 
@@ -628,32 +479,6 @@
 
     <div th:replace="~{fragments/navbar.html :: footer}"></div>
 </div>
-<script>
-
-    const showPopup = document.querySelector('.btn-replace-med');
-    const popupContainer = document.querySelector('.popup-container');
-    const closePopup = document.getElementById('closePopup');
-
-    showPopup.onclick = () =>{
-        popupContainer.classList.add('active');
-    }
-
-    closePopup.onclick = () =>{
-        popupContainer.classList.remove('active');
-    }
-
-
-    document.getElementById('replaceButton').addEventListener('click', function() {
-        document.getElementById('medicamentosDiv').style.display = 'none';
-        document.getElementById('replacementDiv').style.display = 'block';
-    });
-
-    document.getElementById('returnButton').addEventListener('click', function() {
-        document.getElementById('replacementDiv').style.display = 'none';
-        document.getElementById('medicamentosDiv').style.display = 'flex';
-    });
-</script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>

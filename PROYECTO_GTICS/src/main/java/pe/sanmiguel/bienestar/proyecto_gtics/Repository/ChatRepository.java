@@ -41,6 +41,9 @@ public interface ChatRepository extends JpaRepository<Chat, Integer> {
     @Query(value="SELECT * FROM chat where idUser1=? and idUser2=? and idOrden=?", nativeQuery = true)
     Chat buscarChat(int idUser1, int idUser2, int idOrden);
 
+    @Query(value="SELECT * FROM chat where  idUser2=? and idOrden=?", nativeQuery = true)
+    Chat buscarChatReemplazarMed(int idUser2, int idOrden);
+
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO proyecto_gtics.chat VALUES (?1,?2,?3,?4);")
