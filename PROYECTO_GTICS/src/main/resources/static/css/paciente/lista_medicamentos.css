@@ -102,8 +102,8 @@
     border: none;
     background-color: var(--color-blue);
     color: #fff;
-    padding: 5px 20px;
-    border-radius: 20px;
+    padding: 8px 20px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color ease 0.2s;
 }
