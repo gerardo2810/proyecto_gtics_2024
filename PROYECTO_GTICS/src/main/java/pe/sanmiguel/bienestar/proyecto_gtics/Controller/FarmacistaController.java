@@ -759,7 +759,7 @@ public class FarmacistaController {
             }
             model.addAttribute("medicamentosSinStock",medicamentosSinStock);
 
-            List<MedicamentosSedeStockDto> listaMedicamentos = sedeStockRepository.findMedicamentosConStock();
+            List<MedicamentosSedeStockDto> listaMedicamentos = sedeStockRepository.findMedicamentosConStockBySede(1);
             model.addAttribute("listaMedicamentos",listaMedicamentos);
 
             return "farmacista/chat_reemplazar_medicamentos";
