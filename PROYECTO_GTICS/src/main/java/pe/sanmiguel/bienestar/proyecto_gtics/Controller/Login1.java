@@ -199,6 +199,13 @@ final UsuarioRepository usuarioRepository;
         Map<String, Object> variables = new HashMap<>();
         Map<String, Object> variables2 = new HashMap<>();
 
+        Usuario existingUsuario = usuarioRepository.findByCorreo(correo);
+        if (existingUsuario == null) {
+            bindingResult.rejectValue("correo", "error.usuario", "El correo no se encuentra registrado.");
+            model.addAttribute("usuario", usuario);
+            return "login/recuperarContrasena";
+        }
+
         if (!bindingResult.hasErrors()) {
             String temporaryPassword = passwordService.generateTemporaryPassword();
             System.out.println(temporaryPassword);
@@ -214,7 +221,7 @@ final UsuarioRepository usuarioRepository;
             variables2.put("contra", temporaryPassword);
 
             try {
-                emailService.sendHtmlEmail2(correo, subject,"login/correo2", variables, variables2);
+                emailService.sendHtmlEmail2(correo, subject,"login/correo3", variables, variables2);
                 attributes.addFlashAttribute("mensaje", "Correo enviado.");
                 return "redirect:/";
             } catch (MessagingException e) {
@@ -223,7 +230,7 @@ final UsuarioRepository usuarioRepository;
             }
         }
         model.addAttribute("usuario", usuario);
-        return "login/prueba3";
+        return "login/recuperarContrasena";
 
     }
 

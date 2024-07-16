@@ -83,7 +83,7 @@
                 position: relative;
             }
             .hola{
-                background-color: #289320; /* Color de fondo del cartel */
+                background-color: #28b761; /* Color de fondo del cartel */
                 color: white; /* Color del texto */
                 font-size: 16px; /* Tamaño del texto */
                 font-weight: bold; /* Negrita para el texto */
@@ -184,7 +184,7 @@
                         <div class="list-categorias">
 
                             <div class="categoria-div"><a class="categoria" href="/adminsede/medicamentos">Todas las Categorías</a></div><br/>
-                            <div class="categoria-div"><a class="categoria" href="/adminsede/medicamentos?state=disponible">Stock Aceptable</a></div><br/>
+                            <div class="categoria-div"><a class="categoria" href="/adminsede/medicamentos?state=disponible">Stock Disponible</a></div><br/>
                             <div class="categoria-div"><a class="categoria" href="/adminsede/medicamentos?state=agotado">Stock Agotado</a></div><br/>
                             <div class="categoria-div"><a class="categoria" href="/adminsede/medicamentos?state=poragotar">Stock por Agotar</a></div>
 
@@ -224,7 +224,7 @@
                                     POR AGOTAR
                                 </div>
                                 <div class="hola" th:if="${medicamento.getCantidad() > 25}">
-                                    STOCK ACEPTABLE
+                                    STOCK DISPONIBLE
                                 </div>
                             </div>
                             <img th:src="'data:image/jpeg;base64,' + ${listaFotosMedicamentos[info.index]}" class="img-item" style="width: 200px; height: 200px;"/>
