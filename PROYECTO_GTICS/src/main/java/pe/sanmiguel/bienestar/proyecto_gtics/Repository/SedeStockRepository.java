@@ -69,9 +69,10 @@ public interface SedeStockRepository extends JpaRepository<SedeStock, SedeStockI
             "m.recetable AS recetable, m.imagen AS imagen, SUM(s.cantidad) AS cantidad " +
             "FROM SedeStock s " +
             "JOIN s.idMedicamento m " +
-            "WHERE m.categorias = :categoria " + // Filtrar por categoría
+            "WHERE m.categorias LIKE %:categoria% " + // Filtrar por categoría usando LIKE
             "GROUP BY m.idMedicamento, m.nombre, m.unidad, m.descripcion, m.categorias, m.componente, m.precioCompra, m.precioVenta, m.recetable, m.imagen")
-    List<MedicamentosSedeStockDto> findMedicamentosConStockByCategoria(String categoria);
+    List<MedicamentosSedeStockDto> findMedicamentosConStockByCategoria(@Param("categoria") String categoria);
+
 
 
     @Query("SELECT m.idMedicamento AS idMedicamento, m.nombre AS nombre, m.unidad AS unidad, m.descripcion AS descripcion, " +
