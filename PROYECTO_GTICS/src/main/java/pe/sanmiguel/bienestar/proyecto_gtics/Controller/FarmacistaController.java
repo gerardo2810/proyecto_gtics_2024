@@ -32,6 +32,7 @@ import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
@@ -868,7 +869,6 @@ public class FarmacistaController {
 
             }
 
-
             //cambiar el estado a pago disponible
             ordenRepository.actualizarEstadoOrden(2, Integer.valueOf(idOrden));
 
@@ -876,9 +876,141 @@ public class FarmacistaController {
 
         }
 
+    }
+
+    @PostMapping("/farmacista/generar_preorden_chat")
+    public String preordenChat(Model model, HttpSession session, @RequestParam("idOrden") String idOrden, RedirectAttributes redirectAttributes){
+
+        System.out.println(idOrden);
+
+        List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+        List<OrdenContenido> medicamentosEnStock = new ArrayList<>();
+        List<OrdenContenido> medicamentosSinStock = new ArrayList<>();
+        for(OrdenContenido oc : lista){
+            if(oc.getCantidad() > sedeStockRepository.verificarCantidadStockPorSede(  ordenRepository.getOrdenByIdOrden(Integer.parseInt(idOrden)).getSede().getIdSede(), oc.getIdMedicamento().getIdMedicamento())    ){
+                medicamentosSinStock.add(oc);
+            }else{
+                medicamentosEnStock.add(oc);
+            }
+        }
+
+        Optional<Orden> ordenAntiguaOptional = ordenRepository.findById(Integer.valueOf(idOrden));
+
+        //Generar Pre Orden:
+        if(ordenAntiguaOptional.isPresent()){
+
+            Orden ordenAntigua = ordenAntiguaOptional.get();
+
+            String tracking = new String();
+            tracking= ordenRepository.findLastOrdenId()+1 + "-2024";
+
+            LocalDateTime fechaIni = LocalDateTime.now();
+            // Convertir la hora actual a la zona horaria de Perú
+            ZoneId peruZoneId = ZoneId.of("America/Lima");
+            ZonedDateTime peruTime = fechaIni.atZone(ZoneId.systemDefault()).withZoneSameInstant(peruZoneId);
+
+            // Si solo necesitas LocalDateTime, puedes convertirlo de nuevo
+            LocalDateTime peruLocalDateTime = peruTime.toLocalDateTime();
+            LocalDateTime fechaFin = peruLocalDateTime.plus(5, ChronoUnit.DAYS);
+            Integer idFarmacista = new Integer(120); //el id del Farmacista
+            Sede s = sedeRepository.getById(ordenAntigua.getSede().getIdSede()); //el id de la Sede
+            Doctor doc = doctorRepository.getById(ordenAntigua.getDoctor().getIdDoctor()); //el id del doctor
+
+            Orden orden = new Orden();
+            orden.setIdOrden(ordenRepository.findLastOrdenId()+1);
+            orden.setTracking(tracking);
+            orden.setFechaIni(peruLocalDateTime);
+            orden.setFechaFin(fechaFin);
+
+            Float priceTotal = 0.0F;
+
+            for (OrdenContenido ordenContenido : medicamentosSinStock) {
+                BigDecimal precioVenta = ordenContenido.getIdMedicamento().getPrecioVenta();
+                int cantidad = ordenContenido.getCantidad();
+
+                // Multiplicar BigDecimal por int y convertir el resultado a float
+                float precioVentaFloat = precioVenta.floatValue();
+                float subtotal = precioVentaFloat * cantidad;
+
+                // Acumular el resultado
+                priceTotal += subtotal;
+            }
+
+            System.out.println(priceTotal);
+
+            orden.setPrecioTotal(priceTotal);
+            orden.setIdFarmacista(idFarmacista);
+            orden.setPaciente(ordenAntigua.getPaciente());
+            orden.setTipoOrden(3);
+            orden.setEstadoOrden(2);
+            orden.setSede(s);
+            orden.setDoctor(doc);
+            orden.setEstadoPreOrden(1);
+            orden.setSeguroUsado(ordenAntigua.getSeguroUsado());
+            ordenRepository.save(orden);
+
+
+            //Contenido de la pre orden:
+            Integer cantidad = new Integer(0);
+            OrdenContenido ordenContenido = new OrdenContenido();
+            OrdenContenidoId oid = new OrdenContenidoId();
+            ordenContenido.setIdOrden(orden);
+            oid.setIdOrden(orden.getIdOrden());
+
+            for(OrdenContenido med : medicamentosSinStock){
+                oid.setIdMedicamento(med.getIdMedicamento().getIdMedicamento());
+                ordenContenido.setId(oid);
+                ordenContenido.setIdMedicamento(med.getIdMedicamento());
+                ordenContenido.setCantidad(med.getCantidad());
+                ordenContenidoRepository.save(ordenContenido);
+            }
+
+
+            //Eliminar los medicamentos de la orden antigua:
+            List<OrdenContenido> lista2 = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(idOrden));
+            for(OrdenContenido oc : lista2){
+                if(oc.getCantidad() > sedeStockRepository.verificarCantidadStockPorSede( ordenRepository.getOrdenByIdOrden(Integer.parseInt(String.valueOf(idOrden))).getSede().getIdSede(), oc.getIdMedicamento().getIdMedicamento())    ){
+                    ordenContenidoRepository.borrarContenidoOrden(oc.getIdMedicamento().getIdMedicamento(), idOrden);
+                }
+            }
+
+
+
+            if(medicamentosEnStock.size()==0){
+                System.out.println("La orden antigua se quedó vacia");
+                //eliminar la orden de frente ya que no tiene contenido
+            }else{
+                //Recalcular el precio total de la ordenAntigua
+                Float priceTotal2 = 0.0F;
+                for (OrdenContenido ordenContenido2 : medicamentosEnStock) {
+                    BigDecimal precioVenta = ordenContenido2.getIdMedicamento().getPrecioVenta();
+                    int cantidad2 = ordenContenido2.getCantidad();
+                    float precioVentaFloat = precioVenta.floatValue();
+                    float subtotal = precioVentaFloat * cantidad2;
+                    priceTotal2 += subtotal;
+                }
+                ordenAntigua.setPrecioTotal(priceTotal2);
+                ordenAntigua.setEstadoOrden(2);
+            }
+
+
+
+            redirectAttributes.addFlashAttribute("msg", "Orden Creada");
+
+
+            return "redirect:/farmacista/ordenes_web";
+        }else{
+            return "redirect:/farmacista/ordenes_web";
+        }
+
 
 
     }
+
+
+
+
+
 
 
     @GetMapping("/farmacista/ordenes_venta")

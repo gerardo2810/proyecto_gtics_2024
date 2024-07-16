@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
     <!--=============== CSS ===============-->
     <!-- Font Awesome -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
 
@@ -463,7 +464,10 @@
                 <br>
                 <br>
                 <br>
-                <a class="btn-p" href="#">Generar Pre Orden</a>
+                <form id="form" method="post" th:action="@{/farmacista/generar_preorden_chat}">
+                    <button class="btn-p" type="submit">Generar Pre Orden</button>
+                    <input type="hidden" name="idOrden" th:value="${idOrden}">
+                </form>
                 <a class="btn-p" th:href="@{'/farmacista/reemplazar_medicamentos?id=' + ${idOrden}}">Reemplazar Medicamentos</a>
             </div>
         </div>
@@ -490,7 +494,28 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <script th:src="@{/js/topbar.js}"></script>
+<script>
+    const form = document.getElementById("form");
 
+    form.addEventListener("submit", e => {
+        e.preventDefault();
+
+        Swal.fire({
+            title: '¿Estás seguro de generar esta Pre Orden?',
+            icon: 'warning',
+            iconColor: '#DC3545',
+            showCancelButton: true,
+            cancelButtonColor: '#DC3545',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#0D6EFD',
+            confirmButtonText: 'Aplicar cambios',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+</script>
 
 <script th:inline="javascript">
 
