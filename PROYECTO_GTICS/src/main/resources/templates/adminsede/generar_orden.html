@@ -16,14 +16,13 @@
         <link th:href="@{/css/fonts.css}" rel="stylesheet" />
         <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
         <link th:href="@{/css/footer.css}" rel="stylesheet" />
-        <link th:href="@{/css/preloader.css}" rel="stylesheet" />
-
-
         <link rel="stylesheet" th:href="@{/css/styles.css}">
         <link rel="stylesheet" th:href="@{/css/fonts.css}">
         <link rel="stylesheet" th:href="@{/css/topbar.css}">
         <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
         <link th:href="@{/css/notificaciones.css}" rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/loader.css}">
+        <script th:src="@{/js/loader.js}"></script>
 
         <!--=============== FONT AWESOME ===============-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -39,19 +38,48 @@
         <title>Bienestar San Miguel | Generar Orden de Reposición</title>
     </head>
 
-    <body style="background-color: white;" class="loader-hidden">
+    <body>
 
 
-    <header class="header-topbar">
-        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
-    </header>
+    <div id="loader-container"  style="display: flex;flex-direction: column;">
 
-    <div th:replace="~{fragments/banner.html :: banner}"></div>
+        <div style="display: flex; justify-content: center;margin-top: 250px;">
+            <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
+        </div>
 
+        <div id="loader-wrapper"  class="loader-wrapper">
 
-    <div class="container-loader loader-hidden" id="onload">
-        <div class="loader"></div>
+            <div class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+
+            <div id="loader2" class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+
+            <div id="loader3" class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+        </div>
+
     </div>
+
+
+    <div id="content-show" class="hidden">
+
+        <header class="header-topbar">
+            <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
+        </header>
+
+        <div th:replace="~{fragments/banner.html :: banner}"></div>
+
+
+        <div class="container-loader loader-hidden" id="onload">
+            <div class="loader"></div>
+        </div>
 
         <div class="container" >
 
@@ -67,107 +95,107 @@
 
                 <div class="container-form">
 
-                            <div style="display: flex;flex-direction: row; column-gap: 25px">
+                    <div style="display: flex;flex-direction: row; column-gap: 25px">
 
 
-                                <div>
-                                    <div class="column">
+                        <div>
+                            <div class="column">
 
-                                        <div class="input-label-box" style="display: flex; flex-direction: column;">
-                                            <label style="font-weight: bold; color:dimgray; margin-right: 108px">Nombre del Administrador:</label>
-                                            <input class="input-form-2" type="text" name="nombres" placeholder="Ingrese sus nombres" th:value="${usuario.getNombres()}" readonly>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="column">
-                                        <div class="input-label-box" style="display: flex; flex-direction: column;">
-                                            <label style="font-weight: bold; color:dimgray; margin-right: 96px">Apellidos del Administrador:</label>
-                                            <input class="input-form-2" type="text" name="apellidos" placeholder="Ingrese sus apellidos" th:value="${usuario.getApellidos()}" readonly>
-                                        </div>
-                                    </div>
-
-                                    <div class="column">
-                                        <div class="input-label-box" style="display: flex; flex-direction: column;">
-                                            <label style="font-weight: bold; color:dimgray; margin-right: 282px">DNI:</label>
-                                            <input class="input-form-2" type="text" name="dni" placeholder="Ingrese su DNI" th:value="${usuario.getDni()}" readonly>
-                                        </div>
-                                    </div>
-
-                                    <div class="column">
-                                        <div class="input-label-box" style="display: flex; flex-direction: column;">
-                                            <label style="font-weight: bold; color:dimgray; margin-right: 238px">Dirección:</label>
-                                            <input class="input-form-2" type="text" name="direccionSede" placeholder="Ingrese la dirección de la sede" th:value="${sedeSession.getDireccion()}" readonly>
-                                        </div>
-                                    </div>
-
-                                    <div class="column">
-                                        <div class="input-label-box" style="display: flex; flex-direction: column;">
-                                            <label style="font-weight: bold; color:dimgray; margin-right: 255px">Correo:</label>
-                                            <input class="input-form-2" type="email" name="correo" placeholder="Ingrese su correo" th:value="${usuario.getCorreo()}" readonly>
-                                        </div>
-                                    </div>
-
-                                    <div class="column">
-                                        <div class="input-label-box" style="display: flex; flex-direction: column;">
-                                            <label style="font-weight: bold; color:dimgray; margin-right: 273px">Sede:</label>
-                                            <input class="input-form-2" name="nombreSede" type="text" placeholder="Nombre de la sede" th:value="${sedeSession.getNombre()}" readonly>
-                                        </div>
-                                    </div>
-
-                                    <a href="adminsede/medicamentos"><button class="return-button montserrat-medium" id="cancel" >Cancelar</button></a>
+                                <div class="input-label-box" style="display: flex; flex-direction: column;">
+                                    <label style="font-weight: bold; color:dimgray; margin-right: 108px">Nombre del Administrador:</label>
+                                    <input class="input-form-2" type="text" name="nombres" placeholder="Ingrese sus nombres" th:value="${usuario.getNombres()}" readonly>
                                 </div>
-
-                                <div style="width: 80%;">
-                                    <section class="items-list">
-
-                                        <div class="inside-items-list">
-                                            <div class="preview-title roboto-regular">
-                                                Lista de Productos Seleccionados
-                                            </div>
-
-                                            <div class="order-items">
-                                                <div class="selected-item" th:each="medicamento, iterIndex : ${medicamentosSeleccionados}" th:data-item-id="${medicamento.idMedicamento}">
-
-                                                    <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" width="40px" height="auto" th:alt="${medicamento.nombre}">
-                                                    <span class="item-title-clicked" th:text="${medicamento.nombre}">Medicamento</span>
-                                                    <div class="item-on-list">
-                                                        <div class="item-details">
-                                                            <div class="selector-cantidad">
-                                                                <i class="fa-solid fa-minus restar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
-                                                                <input type="text" th:value="${listaCantidades.get(iterIndex.index)}" class="item-quantity-clicked" th:data-item-id="${medicamento.idMedicamento}">
-                                                                <i class="fa-solid fa-plus sumar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
-                                                            </div>
-
-                                                            <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
-                                                                <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${medicamento.precioCompra}"></span>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="preview-title roboto-regular" style="padding-top: 20px">
-
-
-
-                                                <div class="price-total-div roboto-medium">
-                                                    <input type="hidden" name="priceTotal" id="priceTotal" value="">
-                                                    TOTAL <span class="price-total">S/0.00</span>
-                                                </div>
-
-                                                <input type="hidden" name="listaIds" id="listaIds"  value=""/>
-                                                <button type="submit" id="continue" class="continue-button montserrat-medium">Generar Boleta</button>
-                                            </div>
-
-                                        </div>
-
-                                    </section>
-                                </div>
-
 
                             </div>
+
+                            <div class="column">
+                                <div class="input-label-box" style="display: flex; flex-direction: column;">
+                                    <label style="font-weight: bold; color:dimgray; margin-right: 96px">Apellidos del Administrador:</label>
+                                    <input class="input-form-2" type="text" name="apellidos" placeholder="Ingrese sus apellidos" th:value="${usuario.getApellidos()}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="column">
+                                <div class="input-label-box" style="display: flex; flex-direction: column;">
+                                    <label style="font-weight: bold; color:dimgray; margin-right: 282px">DNI:</label>
+                                    <input class="input-form-2" type="text" name="dni" placeholder="Ingrese su DNI" th:value="${usuario.getDni()}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="column">
+                                <div class="input-label-box" style="display: flex; flex-direction: column;">
+                                    <label style="font-weight: bold; color:dimgray; margin-right: 238px">Dirección:</label>
+                                    <input class="input-form-2" type="text" name="direccionSede" placeholder="Ingrese la dirección de la sede" th:value="${sedeSession.getDireccion()}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="column">
+                                <div class="input-label-box" style="display: flex; flex-direction: column;">
+                                    <label style="font-weight: bold; color:dimgray; margin-right: 255px">Correo:</label>
+                                    <input class="input-form-2" type="email" name="correo" placeholder="Ingrese su correo" th:value="${usuario.getCorreo()}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="column">
+                                <div class="input-label-box" style="display: flex; flex-direction: column;">
+                                    <label style="font-weight: bold; color:dimgray; margin-right: 273px">Sede:</label>
+                                    <input class="input-form-2" name="nombreSede" type="text" placeholder="Nombre de la sede" th:value="${sedeSession.getNombre()}" readonly>
+                                </div>
+                            </div>
+
+                            <a href="adminsede/medicamentos"><button class="return-button montserrat-medium" id="cancel" >Cancelar</button></a>
+                        </div>
+
+                        <div style="width: 80%;">
+                            <section class="items-list">
+
+                                <div class="inside-items-list">
+                                    <div class="preview-title roboto-regular">
+                                        Lista de Productos Seleccionados
+                                    </div>
+
+                                    <div class="order-items">
+                                        <div class="selected-item" th:each="medicamento, iterIndex : ${medicamentosSeleccionados}" th:data-item-id="${medicamento.idMedicamento}">
+
+                                            <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" width="40px" height="auto" th:alt="${medicamento.nombre}">
+                                            <span class="item-title-clicked" th:text="${medicamento.nombre}">Medicamento</span>
+                                            <div class="item-on-list">
+                                                <div class="item-details">
+                                                    <div class="selector-cantidad">
+                                                        <i class="fa-solid fa-minus restar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
+                                                        <input type="text" th:value="${listaCantidades.get(iterIndex.index)}" class="item-quantity-clicked" th:data-item-id="${medicamento.idMedicamento}">
+                                                        <i class="fa-solid fa-plus sumar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
+                                                    </div>
+
+                                                    <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                                                        <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${medicamento.precioCompra}"></span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="preview-title roboto-regular" style="padding-top: 20px">
+
+
+
+                                        <div class="price-total-div roboto-medium">
+                                            <input type="hidden" name="priceTotal" id="priceTotal" value="">
+                                            TOTAL <span class="price-total">S/0.00</span>
+                                        </div>
+
+                                        <input type="hidden" name="listaIds" id="listaIds"  value=""/>
+                                        <button type="submit" id="continue" class="continue-button montserrat-medium">Generar Boleta</button>
+                                    </div>
+
+                                </div>
+
+                            </section>
+                        </div>
+
+
+                    </div>
 
 
                 </div>
@@ -178,6 +206,10 @@
 
         <div th:replace="~{fragments/navbar.html :: footer}">
         </div>
+
+    </div>
+
+
 
     <script>
         // Obtener el formulario por su ID

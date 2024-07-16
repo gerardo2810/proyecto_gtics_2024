@@ -17,14 +17,13 @@
         <link rel="stylesheet" th:href="@{/css/topbar.css}">
         <link rel="stylesheet" th:href="@{/css/footer.css}">
         <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
-        <link th:href="@{/css/preloader.css}" rel="stylesheet" />
         <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
         <link rel="stylesheet" th:href="@{/css/paciente/progress-bar.css}">
         <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
-    <link th:href="@{/css/preloader.css}" rel="stylesheet" />
     <link th:href="@{/css/notificaciones.css}" rel="stylesheet" />
-
+    <link rel="stylesheet" th:href="@{/css/loader.css}">
+    <script th:src="@{/js/loader.js}"></script>
 
     <!--=============== JS ===============-->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -314,18 +313,44 @@
         <title>Bienestar San Miguel | Administrador de Sede | Reporte de ventas</title>
     </head>
 
-<body class="loader-hidden">
+<body>
+
+
+<div id="loader-container"  style="display: flex;flex-direction: column;">
+
+    <div style="display: flex; justify-content: center;margin-top: 250px;">
+        <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
+    </div>
+
+    <div id="loader-wrapper"  class="loader-wrapper">
+
+        <div class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader2" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader3" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="content-show" class="hidden">
 
     <header class="header-topbar">
         <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
     </header>
 
-
     <div th:replace="~{fragments/banner.html :: banner}"></div>
 
-    <div class="container-loader loader-hidden" id="onload">
-        <div class="loader"></div>
-    </div>
 
     <div class="container">
         <div style="padding-top: 20px; padding-bottom: 20px">
@@ -707,6 +732,19 @@
             <button class="btn-p" type="button" onclick="window.location.href = '/adminsede/ordenes'" style="margin-left: 20px">Ver más</button>
         </div>
     </div>
+    <!--Footer -->
+    <br/>
+    <div th:replace="~{fragments/navbar.html :: footer}"></div>
+
+
+
+</div>
+
+
+
+
+
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var modal = document.getElementById("myModal");
@@ -730,9 +768,6 @@
     </script>
 
 
-    <!--Footer -->
-        <br/>
-        <div th:replace="~{fragments/navbar.html :: footer}"></div>
 
         <script>
             $(document).ready(function() {
@@ -1267,4 +1302,7 @@
         </script>
 
     </body>
+
+
+
 </html>
