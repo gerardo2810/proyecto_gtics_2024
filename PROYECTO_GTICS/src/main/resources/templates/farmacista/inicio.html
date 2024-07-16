@@ -399,6 +399,7 @@
             const precio = item.getElementsByClassName('item-price')[0].innerText;
             const imagenSrc = item.getElementsByClassName('img-item')[0].src;
             const cantidad = parseInt(item.querySelector('span').innerText); // Obtener la cantidad de stock
+            console.log('la cantida es: ' + cantidad)
             const categoria = item.getElementsByClassName('subtitulo123-item')[0].innerText; // Obtener la categoría del medicamento
 
             // Verificar si hay stock disponible

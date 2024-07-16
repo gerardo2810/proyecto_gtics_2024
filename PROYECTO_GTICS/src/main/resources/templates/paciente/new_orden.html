@@ -186,7 +186,6 @@
                 <div style="font-weight: bold" id="step3-tab" onclick="goToStep(3)" th:if="${carritoNumber != null}">
                     Carrito de Compras<i id="cart-icon" class="fa fa-shopping-cart" style="font-size: 18px; margin-left: 5px; margin-right: 6px; color: #0d6efd;"></i><span style="color: #0d6efd;" id="cart-count" th:text="${carritoNumber}" name="carrito">asda</span>
                 </div>
-
             </div>
 
 
@@ -204,7 +203,24 @@
                                 <select class="select-form" id="filtroCategoria">
                                     <option value="">Todos</option>
                                     <option value="Analgesicos">Analgesicos</option>
-                                    <option value="Antieméticos">Antieméticos</option>
+                                    <option value="Antiácidos/Antiulcerosos">Antiácidos/Antiulcerosos</option>
+                                    <option value="Antialérgicos">Antialérgicos</option>
+                                    <option value="Antidiarreicos">Antidiarreicos</option>
+                                    <option value="Laxantes">Laxantes</option>
+                                    <option value="Antiinflamatorios">Antiinflamatorios</option>
+                                    <option value="Mucoliticos">Mucolíticos</option>
+                                    <option value="Antitusivos">Antitusivos</option>
+                                    <option value="Antiemeticos">Antieméticos</option>
+                                    <option value="Antihipertensivos">Antihipertensivos</option>
+                                    <option value="Hipoglucemiantes">Hipoglucemiantes</option>
+                                    <option value="Antidepresivos">Antidepresivos</option>
+                                    <option value="Ansioliticos">Ansiolíticos</option>
+                                    <option value="Anticonceptivos">Anticonceptivos</option>
+                                    <option value="Vitaminas y Suplementos">Vitaminas y Suplementos</option>
+                                    <option value="Cuidado Bucal">Cuidado Bucal</option>
+                                    <option value="Salud de la Mujer">Salud de la Mujer</option>
+                                    <option value="Proteccion Sexual">Protección Sexual</option>
+
                                 </select>
                             </div>
 
@@ -225,7 +241,7 @@
                                             <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
                                         </div>
 
-                                        <button class="add-item-button montserrat-medium" type="button" th:data-item-id="${medicamento.idMedicamento}">Añadir a la Orden</button>
+                                        <button class="add-item-button montserrat-medium" type="button" th:data-item-id="${medicamento.idMedicamento}">Seleccionar</button>
                                     </div>
                                 </div>
 
@@ -1053,78 +1069,7 @@
 
 
 </script>
-<!-----Top bar ------------->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const itemsPerPage = 6; // Número de medicamentos por página
-        let currentPage = 1; // Página actual
-
-        const filtroCategoria = document.getElementById("filtroCategoria");
-        const medicamentos = Array.from(document.querySelectorAll('.med-container .item'));
-
-        function getVisibleMedicamentos() {
-            const categoriaSeleccionada = filtroCategoria.value;
-            return medicamentos.filter(function(item) {
-                const categoriaItem = item.querySelector(".categoria").innerText.trim();
-                return categoriaSeleccionada === "" || categoriaItem === categoriaSeleccionada;
-            });
-        }
-
-        function mostrarMedicamentos() {
-            const visibleMedicamentos = getVisibleMedicamentos();
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-
-            medicamentos.forEach(medicamento => medicamento.style.display = 'none');
-
-            visibleMedicamentos.forEach((medicamento, index) => {
-                if (index >= startIndex && index < endIndex) {
-                    medicamento.style.display = 'block';
-                }
-            });
-
-            mostrarPaginacion(visibleMedicamentos.length);
-        }
-
-        function mostrarPaginacion(totalVisible) {
-            const totalPages = Math.ceil(totalVisible / itemsPerPage);
-            const pagination = document.getElementById('pagination');
-            pagination.innerHTML = '';
-
-            for (let i = 1; i <= totalPages; i++) {
-                const button = document.createElement('button');
-                button.textContent = i;
-                button.addEventListener('click', function() {
-                    currentPage = i;
-                    mostrarMedicamentos();
-                });
-
-                if (i === currentPage) {
-                    button.classList.add('active'); // Añadir clase 'active' al botón de la página actual
-                }
-
-                pagination.appendChild(button);
-            }
-
-            // Ocultar la paginación si no hay páginas
-            if (totalPages <= 1) {
-                pagination.style.display = 'none';
-            } else {
-                pagination.style.display = 'block';
-            }
-        }
-
-        filtroCategoria.addEventListener("change", function() {
-            currentPage = 1; // Resetear a la primera página al filtrar
-            mostrarMedicamentos();
-        });
-
-        // Mostrar la paginación y la primera página al cargar la página
-        mostrarMedicamentos();
-    });
-</script>
-
-
+<!-----Paginación y Filtros Medicamentos------------->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const itemsPerPage = 12; // Número de medicamentos por página

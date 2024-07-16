@@ -740,6 +740,34 @@ public class FarmacistaController {
         return "farmacista/cambiar_medicamentos";
     }
 
+    @GetMapping("/farmacista/reemplazar_medicamentos")
+    public String replace(Model model, @RequestParam(value="id") Integer idOrden, HttpSession session) {
+
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
+
+        if (chatRepository.buscarChatReemplazarMed(userSession.getIdUsuario(), idOrden) != null){
+
+            List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(idOrden));
+            List<OrdenContenido> medicamentosEnStock = new ArrayList<>();
+            List<OrdenContenido> medicamentosSinStock = new ArrayList<>();
+            for(OrdenContenido oc : lista){
+                if(oc.getCantidad() > sedeStockRepository.verificarCantidadStockPorSede(  ordenRepository.getOrdenByIdOrden(Integer.parseInt(String.valueOf(idOrden))).getSede().getIdSede(), oc.getIdMedicamento().getIdMedicamento())    ){
+                    medicamentosSinStock.add(oc);
+                }else{
+                    medicamentosEnStock.add(oc);
+                }
+            }
+            model.addAttribute("medicamentosSinStock",medicamentosSinStock);
+
+            List<MedicamentosSedeStockDto> listaMedicamentos = sedeStockRepository.findMedicamentosConStock();
+            model.addAttribute("listaMedicamentos",listaMedicamentos);
+
+            return "farmacista/chat_reemplazar_medicamentos";
+        }else{
+            return "redirect:/farmacista/mensajeria";
+        }
+    }
+
 
     @GetMapping("/farmacista/ordenes_venta")
     public String tablaOrdenesVenta(Model model,

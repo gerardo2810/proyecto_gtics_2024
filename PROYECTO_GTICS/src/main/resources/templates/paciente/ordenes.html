@@ -106,6 +106,32 @@
         </df-messenger-chat-bubble>
     </df-messenger>
 
+    <script>
+        function generateSessionId() {
+            // Generar un ID de sesión único
+            return 'session-' + Math.random().toString(36).substr(2, 16);
+        }
+
+        function initializeSession() {
+            // Siempre generar una nueva sesión cuando se carga la página
+            const sessionId = generateSessionId();
+            localStorage.setItem('dialogflowSessionId', sessionId);
+            return sessionId;
+        }
+
+        window.addEventListener('dfMessengerLoaded', function (event) {
+            const dfMessenger = document.querySelector('df-messenger');
+            const sessionId = generateSessionId();
+
+            // Configurar el ID de sesión único
+            dfMessenger.addEventListener('df-request-sent', function(event) {
+                const request = event.detail.requestPayload;
+                request.session = `projects/focal-baton-405905/locations/us-east1/agents/67add3f9-fc2b-46b3-81fe-332970bf4670/sessions/${sessionId}`;
+            });
+        });
+    </script>
+
+
     <header class="header-topbar">
         <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Ordenes Web')}"></nav>
     </header>

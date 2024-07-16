@@ -24,12 +24,21 @@
 
                     <div style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
 
+                        <!-- Configurar Regresar a SUPERADMIN from PACIENTE -->
+                        <div th:if="${session.usuario.getRol() == 4 && session.usuario.getEstadologueo() == 1}" >
+                            <nav4>
+                                <div class="logo"></div>
+                                <a th:href="@{'/impersonate?username=' + 'a20206456@pucp.edu.pe'}">
+                                    <div class="banner-btn bell-btn"><span>Volver</span></div>
+                                </a>
+                            </nav4>
+                        </div>
 
                         <!-- Configurar Regresar a SUPERADMIN from ADMINSEDE -->
                         <div th:if="${session.usuario.getRol() == 2 && session.usuario.getEstadologueo() == 1}" >
                             <nav4>
                                 <div class="logo"></div>
-                                <a th:href="@{'/impersonate?username=' + 'usuario1@example.com'}">
+                                <a th:href="@{'/impersonate?username=' + 'a20206456@pucp.edu.pe'}">
                                     <div class="banner-btn bell-btn"><span>Volver</span></div>
                                 </a>
                             </nav4>
@@ -39,22 +48,11 @@
                         <div th:if="${session.usuario.getRol() == 3 && session.usuario.getEstadologueo() == 1}" >
                             <nav4>
                                 <div class="logo"></div>
-                                <a th:href="@{'/impersonate?username=' + 'usuario1@example.com'}">
+                                <a th:href="@{'/impersonate?username=' + 'a20206456@pucp.edu.pe'}">
                                     <div class="banner-btn bell-btn"><span>Volver</span></div>
                                 </a>
                             </nav4>
                         </div>
-
-                        <!-- Configurar Regresar a SUPERADMIN from PACIENTE -->
-                        <div th:if="${session.usuario.getRol() == 4 && session.usuario.getEstadologueo() == 1}" >
-                            <nav4>
-                                <div class="logo"></div>
-                                <a th:href="@{'/impersonate?username=' + 'usuario1@example.com'}">
-                                    <div class="banner-btn bell-btn"><span>Volver</span></div>
-                                </a>
-                            </nav4>
-                        </div>
-
 
 
                         <!-- Configurar Notificaciones ADMINSEDE -->
