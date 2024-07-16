@@ -337,7 +337,7 @@
 
     <br/>
 
-    <div class="container">
+    <div class="container"> <!--HOLA -->
         <div class="cont">
             <div class="profile">
                 <div class="avatar" th:text="${usuario.getNombres().charAt(0)} + ${usuario.getApellidos().charAt(0)}"></div>
@@ -525,7 +525,7 @@
                 </div>
             </div>
 
-    </div>
+        </div>
 
 
         <!-- Modal -->
@@ -581,6 +581,7 @@
                 </div>
             </div>
         </div>
+    </div>
     <div class="container" th:if="${listaReposicionNoEntregadasUltimas.size() != 0}">
         <div class="contai">
             <div class="card" th:each="orden : ${listaReposicionNoEntregadasUltimas}">
@@ -605,7 +606,7 @@
                             <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-truck"></i>En ruta
                             </div>
-                            <div class="progress-step" style="margin-right: 50px">
+                            <div class="progress-step" style="margin-right: 40px">
                                 <i class="fa-solid fa-check-double"></i>Entregado
                             </div>
                         </div>
@@ -633,7 +634,7 @@
                             <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-truck"></i>En ruta
                             </div>
-                            <div class="progress-step" style="margin-right: 50px">
+                            <div class="progress-step" style="margin-right: 40px">
                                 <i class="fa-solid fa-check-double"></i>Entregado
                             </div>
 
@@ -662,7 +663,7 @@
                             <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-truck"></i>En ruta
                             </div>
-                            <div class="progress-step" style="margin-right: 50px">
+                            <div class="progress-step" style="margin-right: 40px">
                                 <i class="fa-solid fa-check-double"></i>Entregado
                             </div>
 
@@ -691,7 +692,7 @@
                             <div class="progress-step" style="margin-right: 50px">
                                 <i class="fa-solid fa-truck active"></i>En ruta
                             </div>
-                            <div class="progress-step" style="margin-right: 50px">
+                            <div class="progress-step" style="margin-right: 40px">
                                 <i class="fa-solid fa-check-double"></i>Entregado
                             </div>
 
