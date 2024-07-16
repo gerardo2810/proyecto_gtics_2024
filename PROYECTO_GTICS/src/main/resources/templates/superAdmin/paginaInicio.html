@@ -78,6 +78,11 @@
             width: 48%; /* Ajustar al 50% con espacio entre las tarjetas */
             transition: all 400ms ease;
         }
+        .mail {
+            grid-column: span 2;
+
+            height: 630px;     /* Establece una altura fija */
+        }
 
         .profile {
             background: linear-gradient(135deg, #e0f7fa 0%, #f1f8e9 100%);
@@ -87,7 +92,7 @@
             display: flex;
             align-items: center;
             grid-column: span 1;
-            height: 300px;
+            height: 250px;
         }
         .mail {
             grid-column: span 2;
@@ -627,7 +632,7 @@
                     "next": "Siguiente",
                     "previous": "Anterior"
                 },
-                "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+                "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas"
             },
             dom: '<"top"fB>rt<"bottom"ip><"clear">',
             buttons: {
@@ -651,6 +656,15 @@
                         }
                     }
                 ]
+            },
+            "drawCallback": function(settings) {
+                var api = this.api();
+                var info = api.page.info();
+                if (info.recordsTotal <= 5) {
+                    $(api.table().container()).find('.dataTables_paginate').hide();
+                } else {
+                    $(api.table().container()).find('.dataTables_paginate').show();
+                }
             }
         });
 
@@ -664,6 +678,8 @@
             table.search('').columns().search('').draw();
         });
     });
+
+
 </script>
 
     <style>
