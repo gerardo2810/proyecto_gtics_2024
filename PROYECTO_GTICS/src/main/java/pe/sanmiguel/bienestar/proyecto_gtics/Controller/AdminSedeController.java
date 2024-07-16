@@ -33,6 +33,8 @@ import javax.naming.directory.InitialDirContext;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -868,10 +870,20 @@ public class AdminSedeController {
         Integer newNumber = lastNumber + 1;
 
         LocalDateTime fechaIni = LocalDateTime.now();
-        LocalDateTime fechaFin = LocalDateTime.now().plus(5, ChronoUnit.DAYS);
+
+        // Convertir la hora actual a la zona horaria de Perú
+        ZoneId peruZoneId = ZoneId.of("America/Lima");
+        ZonedDateTime peruTime = fechaIni.atZone(ZoneId.systemDefault()).withZoneSameInstant(peruZoneId);
+
+        // Si solo necesitas LocalDateTime, puedes convertirlo de nuevo
+        LocalDateTime peruLocalDateTime = peruTime.toLocalDateTime();
+
+
+
+        LocalDateTime fechaFin = peruLocalDateTime.plus(5, ChronoUnit.DAYS);
         //Prueba
 
-        reposicionRepository.crearOrdenReposicion(idReposicion, tracking, priceTotalF, idEstado, idSede,newNumber, fechaIni, fechaFin);
+        reposicionRepository.crearOrdenReposicion(idReposicion, tracking, priceTotalF, idEstado, idSede,newNumber, peruLocalDateTime, fechaFin);
 
         List<Medicamento> listaMedicamentosReposicion = new ArrayList<>();
 
