@@ -627,7 +627,7 @@
                     "next": "Siguiente",
                     "previous": "Anterior"
                 },
-                "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+                "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas"
             },
             dom: '<"top"fB>rt<"bottom"ip><"clear">',
             buttons: {
@@ -651,6 +651,15 @@
                         }
                     }
                 ]
+            },
+            "drawCallback": function(settings) {
+                var api = this.api();
+                var info = api.page.info();
+                if (info.recordsTotal <= 5) {
+                    $(api.table().container()).find('.dataTables_paginate').hide();
+                } else {
+                    $(api.table().container()).find('.dataTables_paginate').show();
+                }
             }
         });
 
@@ -664,6 +673,8 @@
             table.search('').columns().search('').draw();
         });
     });
+
+
 </script>
 
     <style>
