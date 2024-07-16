@@ -1072,15 +1072,6 @@
         }
     </style>
 
-    <div th:if="${(orden.getTipoOrden() == 2 && !hayProblemasStock) && orden.getEstadoOrden() == 1}" class="container" style="padding-top: 15px">
-
-        <div class="alert alert-success" role="alert">
-            <p class="main-subtitle" style="color: #155724 !important;">¡La orden web no presenta problemas de Stock!</p>
-            <p>No hay inconvenientes para procesar la orden, puede aprobarla para que el paciente pueda pagarla e iniciar el proceso de envío. Recuerde que podrá anular esta orden solo antes de que sea empaquetada.</p>
-        </div>
-
-    </div>
-
     <div th:if="${(orden.getTipoOrden() == 2 && hayProblemasStock) && orden.getEstadoOrden() == 1}" class="container" style="padding-top: 15px">
 
         <div class="alert alert-warning" role="alert">
