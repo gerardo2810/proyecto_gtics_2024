@@ -1,6 +1,8 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Repository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.OrdenContenidoMedicamentoFechaDto;
@@ -22,7 +24,10 @@ public interface OrdenContenidoRepository extends JpaRepository<OrdenContenido, 
     @Query(value="select * from orden_contenido where idOrden = ?1", nativeQuery = true)
     List<OrdenContenido> findMedicamentosByOrdenId(String id);
 
-
+    @Transactional
+    @Modifying
+    @Query(value="delete from proyecto_gtics.orden_contenido where idMedicamento=?1 and idOrden=?2", nativeQuery = true)
+    void borrarContenidoOrden(Integer idMedicamento, String idOrden);
 
     @Query(value="SELECT SUM(cantidad) FROM proyecto_gtics.orden_contenido where idOrden = ?1", nativeQuery = true)
     Integer cantProductos(String id);

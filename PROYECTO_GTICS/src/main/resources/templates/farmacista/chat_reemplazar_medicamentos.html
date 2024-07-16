@@ -372,6 +372,10 @@
     <br>
     <div class="container">
             <h2 style="color: #0d6efd">Elegir Nuevo(s) Medicamentos : </h2>
+            <div th:if="${currentMed != null}" style="display: flex;flex-direction: row; column-gap: 4px;margin-top: 15px">
+                <i style=" color: #E72C2C; margin-top:2px" class="fas fa-exclamation-circle"></i>
+                <div class="error-message"  style="margin-bottom: 2px;font-size: 17px">Debe seleccionar una cantidad de medicamentos que tengan stock</div>
+            </div>
             <div style="width: 1500px">
                 <div class="container" style="margin-top: 20px; background-color: #EEEEEE; border-radius: 14px">
 
@@ -388,11 +392,17 @@
                                     <input type="text" name="priceTotal" id="priceTotal" value="" hidden>
                                     TOTAL <span class="price-total">S/0.00</span>
                                 </div>
-                                <div >
 
-                                    <input id="listaIds" type="text" name="listaIds"   hidden  />
+                                <div>
+
+                                    <form th:action="@{/farmacista/confirmar_cambio}" method="post">
+                                        <input id="listaIds" type="hidden" name="listaIds" value=""/>
+                                        <input name="idOrden" th:value="${idOrden}" type="hidden">
+                                        <button type="submit" class="continue-button montserrat-medium">Confirmar cambio de medicamentos</button>
+                                    </form>
 
                                 </div>
+
                             </div>
 
                             <div class="lista-items-clicked">
@@ -578,7 +588,7 @@
             return medicamento.idMedicamento;
         });
         var preciosVenta = medicamentos.map(function(medicamento) {
-            return medicamento.precioVenta;
+            return 'S/.' + medicamento.precioVenta;
         });
         var fotos = medicamentos.map(function(medicamento) {
             return medicamento.imagen;
@@ -767,7 +777,7 @@
                     </div>
 
                     <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
-                            <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked">${precio}</span>
+                            <span class="item-price-clicked">${precio}</span>
                     </div>
                 </div>
 
@@ -866,7 +876,13 @@
 
             for (let i = 0; i < selectedItems.length; i++) {
                 const item = selectedItems[i];
-                const precioItem = Math.round(parseFloat(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/', '').replace(/,/g, '')) * 100);
+                const precioItem = Math.round(parseFloat(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/.', '').replace(/,/g, '')) * 100);
+
+                console.log(item.getElementsByClassName('item-price-clicked')[0].innerText)
+                console.log(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/.', ''))
+                console.log(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/.', '').replace(/,/g, ''))
+                console.log(parseFloat(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/.', '').replace(/,/g, '')) * 100);
+
                 const cantidadItem = item.getElementsByClassName('item-quantity-clicked')[0].value;
                 totalCentavos += precioItem * cantidadItem;
             }

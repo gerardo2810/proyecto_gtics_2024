@@ -159,6 +159,8 @@ public class PacienteController {
         model.addAttribute("userId2", userId2);
         model.addAttribute("idOrden", idOrden);
         model.addAttribute("idOrdenInteger", Integer.parseInt(idOrden) + 10000);
+        model.addAttribute("orden",ordenRepository.getOrdenByIdOrden(Integer.valueOf(idOrden)));
+
 
         Chat chatActual  = chatRepository.buscarChat(Integer.parseInt(userId1),Integer.parseInt(userId2), Integer.parseInt(idOrden));
 
@@ -533,8 +535,8 @@ public class PacienteController {
                 cantidad = lista.get(i+1);
 
                 //VERIFICAR Y REDUCIR EL STOCK DE UN MEDICAMENTO POR SU ID Y SU SEDE
-                if(cantidad <= sedeStockRepository.verificarCantidadStockPorSede(5, medicamento.getIdMedicamento())){
-                    sedeStockRepository.reducirStockPorSede(5,medicamento.getIdMedicamento(), cantidad);
+                if(cantidad <= sedeStockRepository.verificarCantidadStockPorSede(ordenDto.getSedeId(), medicamento.getIdMedicamento())){
+                    sedeStockRepository.reducirStockPorSede(ordenDto.getSedeId(),medicamento.getIdMedicamento(), cantidad);
                 }
 
 
