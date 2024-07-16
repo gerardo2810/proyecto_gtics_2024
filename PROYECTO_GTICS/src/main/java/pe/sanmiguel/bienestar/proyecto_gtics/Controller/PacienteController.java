@@ -119,7 +119,7 @@ public class PacienteController {
         HttpSession session = request.getSession();
         Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-        List<Orden> lista =  ordenRepository.listarOrdenes(usuario.getIdUsuario());
+        List<Orden> lista =  ordenRepository.listarOrdenesPriceNoZero(usuario.getIdUsuario());
 
         if (usuario != null) {
             // Imprimir el nombre del usuario autenticado

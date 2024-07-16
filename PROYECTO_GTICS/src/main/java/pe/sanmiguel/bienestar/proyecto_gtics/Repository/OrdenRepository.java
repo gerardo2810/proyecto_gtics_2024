@@ -21,7 +21,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Query(value = "SELECT o.* FROM orden o JOIN tipo_orden t ON o.idTipo = t.id WHERE t.nombre = 'WEB'", nativeQuery = true)
     List<Orden> findAllOrdenesWeb();
 
-    @Query(value = "SELECT o.* FROM orden o JOIN tipo_orden t ON o.idTipo = t.id WHERE t.nombre = 'WEB' AND o.idSede = :idSede", nativeQuery = true)
+    @Query(value = "SELECT o.* FROM orden o JOIN tipo_orden t ON o.idTipo = t.id WHERE t.nombre = 'WEB' AND o.idSede = :idSede AND o.precioTotal != 0", nativeQuery = true)
     List<Orden> findAllOrdenesWebPorSede(@Param("idSede") Integer idSede);
 
     @Query(value = "SELECT o.* FROM orden o JOIN tipo_orden t ON o.idTipo = t.id WHERE t.nombre != 'PREORDEN'", nativeQuery = true)
@@ -64,6 +64,9 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Query(value = "SELECT * FROM orden WHERE idEstado NOT IN (8) AND idTipo = 2 AND idPaciente = ?1", nativeQuery = true)
     List<Orden> listarOrdenes(Integer idPaciente);
 
+    @Query(value = "SELECT * FROM orden WHERE idEstado NOT IN (8) AND idTipo = 2 AND idPaciente = ?1 AND precioTotal != 0", nativeQuery = true)
+    List<Orden> listarOrdenesPriceNoZero(Integer idPaciente);
+
     @Query(value = "SELECT * FROM orden WHERE idEstado NOT IN (8, 9) AND idTipo = 3 AND idPaciente = ?1", nativeQuery = true)
     List<Orden> listarPreOrdenes(Integer idPaciente);
 
@@ -84,6 +87,11 @@ public interface OrdenRepository extends JpaRepository<Orden, Integer> {
     @Modifying
     @Query(value = "SET GLOBAL event_scheduler = ON", nativeQuery = true)
     void enableEventScheduler();
+
+    @Transactional
+    @Modifying
+    @Query(value = "delete from orden where id=?", nativeQuery = true)
+    void eliminarOrden(String idOrden);
 
 
     /*Para Pre Ordenes*/

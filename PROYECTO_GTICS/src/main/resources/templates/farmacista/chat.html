@@ -466,6 +466,7 @@
                 <br>
                 <form id="form" method="post" th:action="@{/farmacista/generar_preorden_chat}">
                     <button class="btn-p" type="submit">Generar Pre Orden</button>
+                    <br>
                     <input type="hidden" name="idOrden" th:value="${idOrden}">
                 </form>
                 <a class="btn-p" th:href="@{'/farmacista/reemplazar_medicamentos?id=' + ${idOrden}}">Reemplazar Medicamentos</a>

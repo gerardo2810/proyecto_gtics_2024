@@ -978,7 +978,10 @@ public class FarmacistaController {
 
             if(medicamentosEnStock.size()==0){
                 System.out.println("La orden antigua se quedó vacia");
-                //eliminar la orden de frente ya que no tiene contenido
+                ordenAntigua.setPrecioTotal(0);
+                ordenAntigua.setEstadoOrden(9);
+                ordenAntigua.setMotivoAnulado("El contenido de esta orden pasó a una Pre Orden");
+
             }else{
                 //Recalcular el precio total de la ordenAntigua
                 Float priceTotal2 = 0.0F;
