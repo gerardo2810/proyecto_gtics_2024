@@ -60,7 +60,55 @@
             font-size: 17px;
         }
         @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@700&display=swap');
+
     </style>
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+
 </head>
 
 
@@ -142,9 +190,16 @@
                 <td style="text-align: center" th:text="${paciente.celular}"></td>
                 <td style="text-align: center" th:text="${paciente.seguro}"></td>
                 <td style="text-align: center">
-                    <div th:if="${paciente.estadoUsuario== 1}" class="disponible" style="margin-left: 35px"></div>
-                    <div th:if="${paciente.estadoUsuario== 2}" class="no_disponible" style="margin-left: 35px"></div>
+                    <label class="switch">
+                        <input type="checkbox" th:checked="${paciente.estadoUsuario == 1}"
+                               th:id="'estadoSwitch_' + ${paciente.idUsuario}"
+                               th:onclick="'toggleEstado(this, ' + ${paciente.idUsuario} + ')'">
+                        <span class="slider"></span>
+                    </label>
+                    <p th:id="'estadoText_' + ${paciente.idUsuario}" th:text="${paciente.estadoUsuario == 1 ? 'Disponible' : 'No disponible'}"></p>
                 </td>
+
+
                 <td style="text-align: center">
                     <a th:href="@{'/impersonate?username=' + ${paciente.correo}}">
                         <img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/>
@@ -217,6 +272,35 @@
             opened = !opened;
         });
     });
+</script>
+<script>
+
+    function toggleEstado(checkbox, idUsuario) {
+        var estado = checkbox.checked ? 1 : 2;
+
+        fetch(`/superadmin/actualizarEstado?idUsuario=${idUsuario}&estado=${estado}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'  // Aunque no estamos enviando un cuerpo, `Content-Type` es una buena práctica
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al actualizar el estado');
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log(data);
+                document.getElementById('estadoText_' + idUsuario).innerHTML = estado === 1 ? 'Disponible' : 'No disponible';
+            })
+            .catch(error => {
+                console.error('Error al actualizar el estado:', error);
+                // Revertir el cambio de estado en el interruptor en caso de error
+                checkbox.checked = !checkbox.checked;
+                document.getElementById('estadoText_' + idUsuario).innerHTML = checkbox.checked ? 'Disponible' : 'No disponible';
+            });
+    }
 </script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <script th:src="@{/js/loader.js}"></script>

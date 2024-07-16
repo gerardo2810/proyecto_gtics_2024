@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -14,4 +16,8 @@ public class EstadoUsuario {
     private Integer idEstadoUsuario;
     @Column
     private String nombre;
+
+    // Relación bidireccional con Usuario
+    @OneToMany(mappedBy = "estadoUsuario")
+    private Set<Usuario> usuarios;
 }
