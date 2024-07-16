@@ -34,7 +34,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
@@ -472,8 +475,16 @@ public class PacienteController {
 
             String tracking = new String();
             tracking= ordenRepository.findLastOrdenId()+1 + "-2024";
+
             LocalDateTime fechaIni = LocalDateTime.now();
-            LocalDateTime fechaFin = LocalDateTime.now();
+
+            // Convertir la hora actual a la zona horaria de Perú
+            ZoneId peruZoneId = ZoneId.of("America/Lima");
+            ZonedDateTime peruTime = fechaIni.atZone(ZoneId.systemDefault()).withZoneSameInstant(peruZoneId);
+
+            // Si solo necesitas LocalDateTime, puedes convertirlo de nuevo
+            LocalDateTime peruLocalDateTime = peruTime.toLocalDateTime();
+            LocalDateTime fechaFin = peruLocalDateTime.plus(5, ChronoUnit.DAYS);
             Integer idFarmacista = new Integer(120); //el id del Farmacista
             Sede s = sedeRepository.getById(ordenDto.getSedeId()); //el id de la Sede
             Doctor doc = doctorRepository.getById(idDoctor); //el id del doctor
@@ -485,7 +496,7 @@ public class PacienteController {
             orden.setIdOrden(ordenRepository.findLastOrdenId()+1);
             System.out.println("Ultimo id en db de orden: " + ordenRepository.findLastOrdenId());
             orden.setTracking(tracking);
-            orden.setFechaIni(fechaIni);
+            orden.setFechaIni(peruLocalDateTime);
             orden.setFechaFin(fechaFin);
             total = total.replace(",", "");
             orden.setPrecioTotal(Float.parseFloat(total));
