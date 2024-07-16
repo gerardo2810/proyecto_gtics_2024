@@ -951,7 +951,7 @@ public class FarmacistaController {
             model.addAttribute("idOrden", idOrden);
             model.addAttribute("contenidoOrden", contenidoOrdenWeb);
             model.addAttribute("orden",ordenWebComprobada);
-            return "farmacista/tracking";
+            return "farmacista/tracking-2";
         } else {
             return "farmacista/errorPages/no_existe_orden";
         }

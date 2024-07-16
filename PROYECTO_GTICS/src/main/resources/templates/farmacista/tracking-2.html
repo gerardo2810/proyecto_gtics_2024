@@ -765,7 +765,7 @@
                     <div class="inside-items-list-trk">
 
                         <div class="preview-title roboto-regular" style="font-size: 1.3rem">
-                            Contenido de la PreOrden<span style="font-weight: bold" th:text="${orden.getIdOrden() + 10000}"></span>
+                            Contenido de la PreOrden<span style="font-weight: bold" th:text="${preOrden.getIdOrden() + 10000}"></span>
                         </div>
 
                         <div class="preview-title-trk roboto-regular">
@@ -828,7 +828,7 @@
 
                             <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; align-items: center; gap: 15px;">
                                 <input type="hidden" name="priceTotal" value="">
-                                TOTAL <span class="price-total" th:text="${'S/.   ' + #numbers.formatDecimal(orden.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}">S/0.00</span>
+                                TOTAL <span class="price-total" th:text="${'S/.   ' + #numbers.formatDecimal(preOrden.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}">S/0.00</span>
                             </div>
 
                         </div>
