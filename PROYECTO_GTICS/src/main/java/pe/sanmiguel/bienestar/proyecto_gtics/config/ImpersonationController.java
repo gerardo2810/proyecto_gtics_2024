@@ -85,7 +85,6 @@ public class ImpersonationController {
                     usuarioRepository.actualizarEstadoLogueo(usuario.getIdUsuario());
                     return "redirect:/farmacista";
                 case 4:
-                    usuarioRepository.actualizarEstadoLogueo(usuario.getIdUsuario());
                     return "redirect:/paciente";
                 default:
                     return "redirect:/";

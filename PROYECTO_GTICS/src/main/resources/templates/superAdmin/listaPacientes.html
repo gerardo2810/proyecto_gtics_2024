@@ -201,7 +201,7 @@
 
 
                 <td style="text-align: center">
-                    <a th:href="@{'/impersonate?username=' + ${paciente.correo}}">
+                    <a th:if="${paciente.estadoUsuario==1}" th:href="@{'/impersonate?username=' + ${paciente.correo}}">
                         <img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/>
                     </a>
                 </td>
@@ -293,6 +293,7 @@
             .then(data => {
                 console.log(data);
                 document.getElementById('estadoText_' + idUsuario).innerHTML = estado === 1 ? 'Disponible' : 'No disponible';
+                location.reload();
             })
             .catch(error => {
                 console.error('Error al actualizar el estado:', error);
