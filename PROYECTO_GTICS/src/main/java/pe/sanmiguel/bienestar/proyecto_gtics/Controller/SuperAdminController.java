@@ -8,7 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import jakarta.validation.Valid;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -189,6 +192,21 @@ public class SuperAdminController {
         List<Usuario> pacientelist = usuarioRepository.listarUsuariosSegunRol(4);
         model.addAttribute("pacientelist", pacientelist);
         return "superAdmin/listaPacientes";
+    }
+    @GetMapping("/actualizarEstado")
+    @ResponseBody
+    public ResponseEntity<String> actualizarEstado(@RequestParam Integer idUsuario, @RequestParam Integer estado) {
+        System.out.println("Actualizando estado para idUsuario=" + idUsuario + " con estado=" + estado);  // Agregado para depuración
+
+        try {
+            Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            usuario.setEstadoUsuario(estado);
+            usuarioRepository.save(usuario);
+            return ResponseEntity.ok("Estado actualizado correctamente");
+        } catch (Exception e) {
+            e.printStackTrace();  // Agregado para ver el error en la consola
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el estado: " + e.getMessage());
+        }
     }
 
     @GetMapping(value = {"/doctores"})

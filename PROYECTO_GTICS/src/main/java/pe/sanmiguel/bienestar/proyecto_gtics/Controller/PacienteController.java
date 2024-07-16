@@ -34,7 +34,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
@@ -156,6 +159,8 @@ public class PacienteController {
         model.addAttribute("userId2", userId2);
         model.addAttribute("idOrden", idOrden);
         model.addAttribute("idOrdenInteger", Integer.parseInt(idOrden) + 10000);
+        model.addAttribute("orden",ordenRepository.getOrdenByIdOrden(Integer.valueOf(idOrden)));
+
 
         Chat chatActual  = chatRepository.buscarChat(Integer.parseInt(userId1),Integer.parseInt(userId2), Integer.parseInt(idOrden));
 
@@ -472,8 +477,16 @@ public class PacienteController {
 
             String tracking = new String();
             tracking= ordenRepository.findLastOrdenId()+1 + "-2024";
+
             LocalDateTime fechaIni = LocalDateTime.now();
-            LocalDateTime fechaFin = LocalDateTime.now();
+
+            // Convertir la hora actual a la zona horaria de Perú
+            ZoneId peruZoneId = ZoneId.of("America/Lima");
+            ZonedDateTime peruTime = fechaIni.atZone(ZoneId.systemDefault()).withZoneSameInstant(peruZoneId);
+
+            // Si solo necesitas LocalDateTime, puedes convertirlo de nuevo
+            LocalDateTime peruLocalDateTime = peruTime.toLocalDateTime();
+            LocalDateTime fechaFin = peruLocalDateTime.plus(5, ChronoUnit.DAYS);
             Integer idFarmacista = new Integer(120); //el id del Farmacista
             Sede s = sedeRepository.getById(ordenDto.getSedeId()); //el id de la Sede
             Doctor doc = doctorRepository.getById(idDoctor); //el id del doctor
@@ -485,7 +498,7 @@ public class PacienteController {
             orden.setIdOrden(ordenRepository.findLastOrdenId()+1);
             System.out.println("Ultimo id en db de orden: " + ordenRepository.findLastOrdenId());
             orden.setTracking(tracking);
-            orden.setFechaIni(fechaIni);
+            orden.setFechaIni(peruLocalDateTime);
             orden.setFechaFin(fechaFin);
             total = total.replace(",", "");
             orden.setPrecioTotal(Float.parseFloat(total));
@@ -522,8 +535,8 @@ public class PacienteController {
                 cantidad = lista.get(i+1);
 
                 //VERIFICAR Y REDUCIR EL STOCK DE UN MEDICAMENTO POR SU ID Y SU SEDE
-                if(cantidad <= sedeStockRepository.verificarCantidadStockPorSede(5, medicamento.getIdMedicamento())){
-                    sedeStockRepository.reducirStockPorSede(5,medicamento.getIdMedicamento(), cantidad);
+                if(cantidad <= sedeStockRepository.verificarCantidadStockPorSede(ordenDto.getSedeId(), medicamento.getIdMedicamento())){
+                    sedeStockRepository.reducirStockPorSede(ordenDto.getSedeId(),medicamento.getIdMedicamento(), cantidad);
                 }
 
 

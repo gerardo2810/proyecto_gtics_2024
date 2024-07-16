@@ -197,7 +197,7 @@
                     <div th:if="${farmacista.idFarmacista.estadoUsuario== 2}" class="no_disponible" style="margin-left: 35px"></div>
                 </td>
                 <td style="text-align: center">
-                    <a th:href="@{'/impersonate?username=' + ${farmacista.idFarmacista.correo}}">
+                    <a th:if="${farmacista.idFarmacista.estadoUsuario==1}" th:href="@{'/impersonate?username=' + ${farmacista.idFarmacista.correo}}">
                         <img width="24" height="24" th:src="@{/img/usuario.png}" alt="visible--v1"/>
                     </a>
                 </td>

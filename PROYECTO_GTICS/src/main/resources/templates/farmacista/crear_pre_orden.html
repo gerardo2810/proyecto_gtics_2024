@@ -162,7 +162,7 @@
                   <div class="order-items-2" id="order-items">
                       <div class="selected-item-2" th:each="medicamento, iterIndex : ${medicamentosConStock}" th:data-item-id="${medicamento.idMedicamento}">
 
-                          <img th:src="${medicamento.imagen}" width="40px" height="auto" th:alt="${medicamento.nombre}">
+                          <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" th:alt="${medicamento.nombre}" width="180px" height="auto">
                           <span class="item-title-clicked-2" th:text="${medicamento.nombre}">Medicamento</span>
                           <div class="item-on-list-2">
                               <div class="item-details-2">
@@ -206,7 +206,7 @@
                   <div class="preorder-items">
                       <div class="selected-item" th:each="medicamento, iterIndex : ${medicamentosSinStock}" th:data-item-id="${medicamento.idMedicamento}">
 
-                          <img th:src="${medicamento.imagen}" width="40px" height="auto" th:alt="${medicamento.nombre}">
+                          <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" th:alt="${medicamento.nombre}" width="180px" height="auto">
                           <span class="item-title-clicked" th:text="${medicamento.nombre}">Medicamento</span>
                           <div class="item-on-list">
                               <div class="item-details">

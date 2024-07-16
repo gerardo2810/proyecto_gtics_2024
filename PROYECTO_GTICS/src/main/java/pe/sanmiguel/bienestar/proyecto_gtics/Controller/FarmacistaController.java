@@ -1,9 +1,11 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import com.google.api.Http;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,6 +174,11 @@ public class FarmacistaController {
         }
         // Log para verificar si el parámetro categoria llega correctamente
         System.out.println("Categoría recibida: " + categoria);
+
+        // Normaliza el texto de la categoría
+        if (categoria != null) {
+            categoria = categoria.trim().toLowerCase();
+        }
 
         //Obtener la lista de medicamentos según la categoría seleccionada
         List<MedicamentosSedeStockDto> listaMedicamentos;
@@ -741,11 +748,18 @@ public class FarmacistaController {
     }
 
     @GetMapping("/farmacista/reemplazar_medicamentos")
-    public String replace(Model model, @RequestParam(value="id") Integer idOrden, HttpSession session) {
+    public String replace(Model model, @RequestParam(value="id") Integer idOrden,
+                                        @RequestParam(value="currentMed", required = false) List<Medicamento> listaMed,
+                                        @RequestParam(value="currentCant", required = false) List<String> listaInt, HttpSession session) {
 
         Usuario userSession = (Usuario) session.getAttribute("usuario");
 
         if (chatRepository.buscarChatReemplazarMed(userSession.getIdUsuario(), idOrden) != null){
+
+            if(listaMed != null){
+                model.addAttribute("currentMed", listaMed);
+                model.addAttribute("currentCant", listaInt);
+            }
 
             List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(idOrden));
             List<OrdenContenido> medicamentosEnStock = new ArrayList<>();
@@ -759,13 +773,111 @@ public class FarmacistaController {
             }
             model.addAttribute("medicamentosSinStock",medicamentosSinStock);
 
-            List<MedicamentosSedeStockDto> listaMedicamentos = sedeStockRepository.findMedicamentosConStock();
+            List<MedicamentosSedeStockDto> listaMedicamentos = sedeStockRepository.findMedicamentosConStockBySede(ordenRepository.getOrdenByIdOrden(Integer.parseInt(String.valueOf(idOrden))).getSede().getIdSede());
             model.addAttribute("listaMedicamentos",listaMedicamentos);
+
+
+            model.addAttribute("idOrden",idOrden);
 
             return "farmacista/chat_reemplazar_medicamentos";
         }else{
             return "redirect:/farmacista/mensajeria";
         }
+    }
+
+
+    @PostMapping("/farmacista/confirmar_cambio")
+    public String confirmarCambio(Model model, HttpSession session, @RequestParam("listaIds") List<Integer> lista,
+                                  @RequestParam("idOrden") String idOrden, RedirectAttributes redirectAttributes){
+
+        System.out.println("la lista es:" + lista);
+
+
+        Integer i = new Integer(0);
+        Integer cantidad = new Integer(0);
+
+        Integer verificar = null;
+        while(i < lista.size()){
+            Medicamento medicamento = medicamentoRepository.getById(lista.get(i));
+            cantidad = lista.get(i+1);
+
+            //VERIFICAR EL STOCK DE UN MEDICAMENTO POR SU ID Y SU SEDE
+            if(cantidad > sedeStockRepository.verificarCantidadStockPorSede(ordenRepository.getOrdenByIdOrden(Integer.parseInt(String.valueOf(idOrden))).getSede().getIdSede(), medicamento.getIdMedicamento())){
+                verificar = 1; //No hay stock suficiente
+                break;
+            }else{
+                verificar = 0; //Hay stock
+            }
+            i = i + 2;
+        }
+
+        if(verificar==1){
+            List<Medicamento> medicamentosSeleccionados = getMedicamentosFromListaInteger(lista);
+            List<String> listaCantidades = getCantidadesFromListaInteger(lista);
+            redirectAttributes.addAttribute("currentMed", medicamentosSeleccionados);
+            redirectAttributes.addAttribute("currentCant", listaCantidades);
+            redirectAttributes.addAttribute("id", idOrden);
+            return "redirect:/farmacista/reemplazar_medicamentos";
+
+        }else{
+
+            //eliminar medicamentos de orden contenido antiguos
+            List<OrdenContenido> lista2 = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(idOrden));
+            List<OrdenContenido> medicamentosEnStock = new ArrayList<>();
+            List<OrdenContenido> medicamentosSinStock = new ArrayList<>();
+            for(OrdenContenido oc : lista2){
+                if(oc.getCantidad() > sedeStockRepository.verificarCantidadStockPorSede(  ordenRepository.getOrdenByIdOrden(Integer.parseInt(String.valueOf(idOrden))).getSede().getIdSede(), oc.getIdMedicamento().getIdMedicamento())    ){
+                    ordenContenidoRepository.borrarContenidoOrden(oc.getIdMedicamento().getIdMedicamento(), idOrden);
+                }
+            }
+
+            //agregar los nuevos
+            Integer j = new Integer(0);
+            Integer cant = new Integer(0);
+
+            OrdenContenido ordenContenido = new OrdenContenido();
+            OrdenContenidoId oid = new OrdenContenidoId();
+
+            ordenContenido.setIdOrden(ordenRepository.getOrdenByIdOrden(Integer.valueOf(idOrden)));
+            oid.setIdOrden(ordenRepository.getOrdenByIdOrden(Integer.valueOf(idOrden)).getIdOrden());
+
+
+            while(j < lista.size()){
+
+
+                Medicamento medicamento = medicamentoRepository.getById(lista.get(j));
+                cant = lista.get(j+1);
+
+
+                //VERIFICAR Y REDUCIR EL STOCK DE UN MEDICAMENTO POR SU ID Y SU SEDE
+                if(cant <= sedeStockRepository.verificarCantidadStockPorSede(ordenRepository.getOrdenByIdOrden(Integer.parseInt(String.valueOf(idOrden))).getSede().getIdSede(), medicamento.getIdMedicamento())){
+                    sedeStockRepository.reducirStockPorSede(ordenRepository.getOrdenByIdOrden(Integer.parseInt(String.valueOf(idOrden))).getSede().getIdSede(),medicamento.getIdMedicamento(), cant);
+                }
+
+
+                oid.setIdMedicamento(medicamento.getIdMedicamento());
+                ordenContenido.setId(oid);
+                ordenContenido.setIdMedicamento(medicamento);
+                ordenContenido.setCantidad(cantidad);
+                ordenContenidoRepository.save(ordenContenido);
+
+
+
+                j = j + 2;
+
+
+            }
+
+
+            //cambiar el estado a pago disponible
+            ordenRepository.actualizarEstadoOrden(2, Integer.valueOf(idOrden));
+
+            return "redirect:/farmacista/ordenes_web";
+
+        }
+
+
+
     }
 
 
@@ -1147,6 +1259,9 @@ public class FarmacistaController {
         model.addAttribute("userId1", userId1);
         model.addAttribute("userId2", userId2);
         model.addAttribute("idOrden",idOrden);
+        model.addAttribute("idOrdenInteger", Integer.parseInt(idOrden) + 10000);
+        model.addAttribute("orden",ordenRepository.getOrdenByIdOrden(Integer.valueOf(idOrden)));
+
 
 
         /*----------------------IP LOCAL-------------------------*/
@@ -1222,6 +1337,26 @@ public class FarmacistaController {
         return cantidades;
     }
 
+
+
+    public List<Medicamento> getMedicamentosFromListaInteger(List<Integer> listaSelectedIds) {
+        List<Optional<Medicamento>> optionals = new ArrayList<>();
+        List<Medicamento> seleccionados;
+        for (int i = 0; i < listaSelectedIds.size(); i += 2) {
+            optionals.add(medicamentoRepository.findById(Integer.valueOf(listaSelectedIds.get(i))));
+        }
+        seleccionados = optionals.stream().flatMap(Optional::stream).collect(Collectors.toList());
+
+        return seleccionados;
+    }
+
+    public List<String> getCantidadesFromListaInteger(List<Integer> listaSelectedIds) {
+        List<String> cantidades = new ArrayList<>();
+        for (int i = 0; i + 1 < listaSelectedIds.size(); i += 2) {
+            cantidades.add(String.valueOf(listaSelectedIds.get(i + 1)));
+        }
+        return cantidades;
+    }
 
 
     @Getter
