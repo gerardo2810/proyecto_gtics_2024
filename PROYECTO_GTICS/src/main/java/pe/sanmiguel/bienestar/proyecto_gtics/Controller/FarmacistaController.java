@@ -173,6 +173,11 @@ public class FarmacistaController {
         // Log para verificar si el parámetro categoria llega correctamente
         System.out.println("Categoría recibida: " + categoria);
 
+        // Normaliza el texto de la categoría
+        if (categoria != null) {
+            categoria = categoria.trim().toLowerCase();
+        }
+
         //Obtener la lista de medicamentos según la categoría seleccionada
         List<MedicamentosSedeStockDto> listaMedicamentos;
         if (categoria != null && !categoria.isEmpty()) {
