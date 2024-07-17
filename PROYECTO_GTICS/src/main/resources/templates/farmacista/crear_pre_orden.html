@@ -25,6 +25,8 @@
     <link rel="stylesheet" th:href="@{/css/topbar.css}">
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+    <link rel="stylesheet" th:href="@{/css/loader.css}">
+
 
     <!--=============== FONT AWESOME ===============-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -92,143 +94,169 @@
 </head>
 
 <body>
+<div id="loader-container"  style="display: flex;flex-direction: column;">
 
+    <div style="display: flex; justify-content: center;margin-top: 250px;">
+        <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
+    </div>
+
+    <div id="loader-wrapper"  class="loader-wrapper">
+
+        <div class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader2" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader3" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+    </div>
+
+</div>
+        <div id="content-show" class="hidden">
   <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = '')}"></nav>
   </header>
 
-  <div th:replace="~{fragments/banner.html :: banner}"></div>
+      <div th:replace="~{fragments/banner.html :: banner}"></div>
 
 
-  <div class="container">
+      <div class="container">
 
-      <div style="padding-top: 30px; padding-bottom: 20px">
-          <div class="main-title montserrat-bold"> Interfaz de Atención al Cliente </div>
-          <div class="main-subtitle montserrat-regular"> Creación de Nueva PreoOrden </div>
+          <div style="padding-top: 30px; padding-bottom: 20px">
+              <div class="main-title montserrat-bold"> Interfaz de Atención al Cliente </div>
+              <div class="main-subtitle montserrat-regular"> Creación de Nueva PreoOrden </div>
+          </div>
+
+          <hr class="style-one">
+
+          <section class="items-list-2">
+
+              <div class="inside-items-list-2">
+                  <div class="preview-title-2 roboto-regular" style="display: flex; flex-direction: row; justify-content: space-between">
+                      <div>Productos de la Orden (Stock Disponible)</div>
+
+                      <div class="btn success btn-success" id="toggle-button">Mostrar</div>
+                  </div>
+
+                  <script>
+                      document.getElementById('toggle-button').addEventListener('click', function() {
+                          var orderItems = document.getElementById('order-items');
+
+                          if (orderItems.style.display === 'none') {
+                              orderItems.style.display = 'block';
+                              this.textContent = 'Ocultar';
+                          } else {
+                              orderItems.style.display = 'none';
+                              this.textContent = 'Mostrar';
+                          }
+                      });
+                  </script>
+
+                  <div class="order-items-2" id="order-items">
+                      <div class="selected-item-2" th:each="medicamento, iterIndex : ${medicamentosConStock}" th:data-item-id="${medicamento.idMedicamento}">
+
+                          <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" th:alt="${medicamento.nombre}" width="180px" height="auto">
+                          <span class="item-title-clicked-2" th:text="${medicamento.nombre}">Medicamento</span>
+                          <div class="item-on-list-2">
+                              <div class="item-details-2">
+                                  <div class="selector-cantidad-2">
+                                      <input type="text" disabled th:value="${cantidadesExistentes.get(iterIndex.index)}" class="item-quantity-clicked-2" th:data-item-id="${medicamento.idMedicamento}">
+                                  </div>
+
+                                  <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                                      <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked-2" th:text="${medicamento.precioVenta}"></span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+
+
+
+                  <div class="preview-title-2 roboto-regular" style="padding-top: 20px">
+
+
+                      <div class="price-total-div-2 roboto-medium">
+                          <input type="hidden" name="priceTotal" id="priceTotalOrden" value="">
+                          TOTAL <span class="price-total-2" th:text="${'S/' + montoTotalOrden}">S/0.00</span>
+                      </div>
+                  </div>
+
+              </div>
+
+          </section>
+
+          <form method="post" th:action="@{/farmacista/finalizar_preorden}">
+
+          <section class="items-list">
+
+              <div class="inside-items-list">
+                  <div class="preview-title roboto-regular">
+                      Nueva PreOrden
+                  </div>
+
+                  <div class="preorder-items">
+                      <div class="selected-item" th:each="medicamento, iterIndex : ${medicamentosSinStock}" th:data-item-id="${medicamento.idMedicamento}">
+
+                          <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" th:alt="${medicamento.nombre}" width="180px" height="auto">
+                          <span class="item-title-clicked" th:text="${medicamento.nombre}">Medicamento</span>
+                          <div class="item-on-list">
+                              <div class="item-details">
+                                  <div class="selector-cantidad">
+                                      <i class="fa-solid fa-minus restar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
+                                      <input type="text" th:value="${cantidadesFaltantes.get(iterIndex.index)}" class="item-quantity-clicked" th:data-item-id="${medicamento.idMedicamento}">
+                                      <i class="fa-solid fa-plus sumar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
+                                  </div>
+
+                                  <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                                      <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${medicamento.precioVenta}"></span>
+                                  </div>
+                              </div>
+
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="preview-title roboto-regular" style="padding-top: 20px">
+
+
+
+                      <div class="price-total-div roboto-medium">
+                          <input type="hidden" name="priceTotal" id="priceTotalPreOrden" value="">
+                          TOTAL <span class="price-total">S/0.00</span>
+                      </div>
+
+                      <input type="hidden" name="listaIds" id="listaIds"  value=""/>
+                  </div>
+
+              </div>
+
+          </section>
+
+              <div style="display: flex; flex-direction: row; justify-content: space-between; padding-top: 15px">
+                  <a href="/farmacista"><button class="return-button montserrat-medium" id="cancel">Cancelar</button></a>
+
+                  <button type="submit" id="continue" class="continue-button montserrat-medium">Generar PreOrden</button>
+              </div>
+
+
+
+
+          </form>
+        </div>
+
+
+      <div th:replace="~{fragments/navbar.html :: footer}">
       </div>
-
-      <hr class="style-one">
-
-      <section class="items-list-2">
-
-          <div class="inside-items-list-2">
-              <div class="preview-title-2 roboto-regular" style="display: flex; flex-direction: row; justify-content: space-between">
-                  <div>Productos de la Orden (Stock Disponible)</div>
-
-                  <div class="btn success btn-success" id="toggle-button">Mostrar</div>
-              </div>
-
-              <script>
-                  document.getElementById('toggle-button').addEventListener('click', function() {
-                      var orderItems = document.getElementById('order-items');
-
-                      if (orderItems.style.display === 'none') {
-                          orderItems.style.display = 'block';
-                          this.textContent = 'Ocultar';
-                      } else {
-                          orderItems.style.display = 'none';
-                          this.textContent = 'Mostrar';
-                      }
-                  });
-              </script>
-
-              <div class="order-items-2" id="order-items">
-                  <div class="selected-item-2" th:each="medicamento, iterIndex : ${medicamentosConStock}" th:data-item-id="${medicamento.idMedicamento}">
-
-                      <img th:src="${medicamento.imagen}" width="40px" height="auto" th:alt="${medicamento.nombre}">
-                      <span class="item-title-clicked-2" th:text="${medicamento.nombre}">Medicamento</span>
-                      <div class="item-on-list-2">
-                          <div class="item-details-2">
-                              <div class="selector-cantidad-2">
-                                  <input type="text" disabled th:value="${cantidadesExistentes.get(iterIndex.index)}" class="item-quantity-clicked-2" th:data-item-id="${medicamento.idMedicamento}">
-                              </div>
-
-                              <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
-                                  <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked-2" th:text="${medicamento.precioVenta}"></span>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-
-
-
-
-              <div class="preview-title-2 roboto-regular" style="padding-top: 20px">
-
-
-                  <div class="price-total-div-2 roboto-medium">
-                      <input type="hidden" name="priceTotal" id="priceTotalOrden" value="">
-                      TOTAL <span class="price-total-2" th:text="${'S/' + montoTotalOrden}">S/0.00</span>
-                  </div>
-              </div>
-
-          </div>
-
-      </section>
-
-      <form method="post" th:action="@{/farmacista/finalizar_preorden}">
-
-      <section class="items-list">
-
-          <div class="inside-items-list">
-              <div class="preview-title roboto-regular">
-                  Nueva PreOrden
-              </div>
-
-              <div class="preorder-items">
-                  <div class="selected-item" th:each="medicamento, iterIndex : ${medicamentosSinStock}" th:data-item-id="${medicamento.idMedicamento}">
-
-                      <img th:src="${medicamento.imagen}" width="40px" height="auto" th:alt="${medicamento.nombre}">
-                      <span class="item-title-clicked" th:text="${medicamento.nombre}">Medicamento</span>
-                      <div class="item-on-list">
-                          <div class="item-details">
-                              <div class="selector-cantidad">
-                                  <i class="fa-solid fa-minus restar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
-                                  <input type="text" th:value="${cantidadesFaltantes.get(iterIndex.index)}" class="item-quantity-clicked" th:data-item-id="${medicamento.idMedicamento}">
-                                  <i class="fa-solid fa-plus sumar-cantidad" th:data-item-id="${medicamento.idMedicamento}"></i>
-                              </div>
-
-                              <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
-                                  <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${medicamento.precioVenta}"></span>
-                              </div>
-                          </div>
-
-                      </div>
-                  </div>
-              </div>
-
-              <div class="preview-title roboto-regular" style="padding-top: 20px">
-
-
-
-                  <div class="price-total-div roboto-medium">
-                      <input type="hidden" name="priceTotal" id="priceTotalPreOrden" value="">
-                      TOTAL <span class="price-total">S/0.00</span>
-                  </div>
-
-                  <input type="hidden" name="listaIds" id="listaIds"  value=""/>
-              </div>
-
-          </div>
-
-      </section>
-
-          <div style="display: flex; flex-direction: row; justify-content: space-between; padding-top: 15px">
-              <a href="/farmacista"><button class="return-button montserrat-medium" id="cancel">Cancelar</button></a>
-
-              <button type="submit" id="continue" class="continue-button montserrat-medium">Generar PreOrden</button>
-          </div>
-
-
-
-
-      </form>
-    </div>
-
-
-  <div th:replace="~{fragments/navbar.html :: footer}">
-  </div>
+        </div>
 
   <script>
 
@@ -387,6 +415,7 @@
 
       });
   </script>
+<script th:src="@{/js/loader.js}"></script>
 
     </body>
 </html>

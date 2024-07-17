@@ -29,8 +29,10 @@
         <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
         <link rel="stylesheet" th:href="@{/css/datatables.css}">
         <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
-        <link th:href="@{/css/preloader.css}" rel="stylesheet" />
         <link th:href="@{/css/notificaciones.css}" rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/loader.css}">
+        <script th:src="@{/js/loader.js}"></script>
+
 
 
 
@@ -89,21 +91,51 @@
 
     <body class="loader-hidden">
 
-    <header class="header-topbar">
-        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
-    </header>
 
+    <div id="loader-container"  style="display: flex;flex-direction: column;">
 
-    <div th:replace="~{fragments/banner.html :: banner}"></div>
+        <div style="display: flex; justify-content: center;margin-top: 250px;">
+            <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
+        </div>
 
+        <div id="loader-wrapper"  class="loader-wrapper">
 
+            <div class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
 
-    <div class="container-loader loader-hidden" id="onload">
-        <div class="loader"></div>
+            <div id="loader2" class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+
+            <div id="loader3" class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+        </div>
+
     </div>
 
 
-    <div class="container" style="justify-content: center">
+    <div id="content-show" class="hidden">
+
+        <header class="header-topbar">
+            <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
+        </header>
+
+
+        <div th:replace="~{fragments/banner.html :: banner}"></div>
+
+
+
+        <div class="container-loader loader-hidden" id="onload">
+            <div class="loader"></div>
+        </div>
+
+
+        <div class="container" style="justify-content: center">
 
             <div style="padding-top: 20px; padding-bottom: 20px">
                 <div class="main-title open-sans-bold"> Editar farmacista </div>
@@ -188,95 +220,7 @@
 
                 <div class="column-start" style="justify-content: center">
 
-                    <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray; margin-bottom:8px">Captura de Foto de perfil:</label>
-                        <div id="upload" class="modal" data-state="0" data-ready="false">
 
-                            <div class="modal__body">
-                                <div class="modal__col">
-                                    <!-- up -->
-                                    <svg class="modal__icon modal__icon--blue" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
-                                        <g fill="none" stroke="hsl(223,90%,50%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
-                                            <polyline class="modal__icon-sdo14" points="7 12 12 7 17 12" stroke-dasharray="14.2 14.2" />
-                                            <line class="modal__icon-sdo10" x1="12" y1="7" x2="12" y2="17" stroke-dasharray="10 10" />
-                                        </g>
-                                    </svg>
-                                    <!-- error -->
-                                    <svg class="modal__icon modal__icon--red" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true" display="none">
-                                        <g fill="none" stroke="hsl(3,90%,50%)" stroke-width="2" stroke-linecap="round">
-                                            <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
-                                            <line class="modal__icon-sdo14" x1="7" y1="7" x2="17" y2="17" stroke-dasharray="14.2 14.2" />
-                                            <line class="modal__icon-sdo14" x1="17" y1="7" x2="7" y2="17" stroke-dasharray="14.2 14.2" />
-                                        </g>
-                                    </svg>
-                                    <!-- check -->
-                                    <svg class="modal__icon modal__icon--green" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true" display="none">
-                                        <g fill="none" stroke="hsl(138,90%,50%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
-                                            <polyline class="modal__icon-sdo14" points="7 12.5 10 15.5 17 8.5" stroke-dasharray="14.2 14.2" />
-                                        </g>
-                                    </svg>
-                                </div>
-                                <div class="modal__col">
-                                    <div class="modal__content">
-                                        <h2 class="modal__title" style="font-weight: 600">Suba la imagen de foto de perfil:</h2>
-                                        <p class="modal__message" style="color:dimgray">Selecciona la imagen para subirla desde tu dispositivo. Cuando estes seguro de subir el archivo correcto da click en el botón confirmar.</p>
-                                        <div class="modal__actions">
-                                            <button style="color:#333"  class="modal__button modal__button--upload" type="button" data-action="file">Seleccionar imagen</button>
-                                            <input id="file" type="file" hidden>
-                                        </div>
-                                        <div class="modal__actions" hidden>
-                                            <svg class="modal__file-icon" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
-                                                <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <polygon points="4 1 12 1 20 8 20 23 4 23" />
-                                                    <polyline points="12 1 12 8 20 8" />
-                                                </g>
-                                            </svg>
-                                            <div class="modal__file" data-file></div>
-                                            <button class="modal__close-button" type="button" data-action="fileReset">
-                                                <svg class="modal__close-icon" viewBox="0 0 16 16" width="16px" height="16px" aria-hidden="true">
-                                                    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                                                        <polyline points="4,4 12,12" />
-                                                        <polyline points="12,4 4,12" />
-                                                    </g>
-                                                </svg>
-                                                <span class="modal__sr">Remove</span>
-                                            </button>
-                                            <button class="btn-p" type="button" data-action="upload">Confirmar</button>
-                                        </div>
-                                    </div>
-                                    <div class="modal__content" hidden>
-                                        <h2 class="modal__title">Subiendo imagen…</h2>
-                                        <p class="modal__message">Solo danos un momento para procesar tu archivo.</p>
-                                        <div class="modal__actions">
-                                            <div class="modal__progress">
-                                                <div class="modal__progress-value" data-progress-value>0%</div>
-                                                <div class="modal__progress-bar">
-                                                    <div class="modal__progress-fill" data-progress-fill></div>
-                                                </div>
-                                            </div>
-                                            <button class="btn-cancel" type="button" data-action="cancel">Cancelar</button>
-                                        </div>
-                                    </div>
-                                    <div class="modal__content" hidden>
-                                        <h2 class="modal__title">Oops!</h2>
-                                        <p class="modal__message">Your file could not be uploaded due to an error. Try uploading it again?</p>
-                                        <div class="modal__actions modal__actions--center">
-                                            <button class="modal__button" type="button" data-action="upload">Retry</button>
-                                            <button class="modal__button" type="button" data-action="cancel">Cancel</button>
-                                        </div>
-                                    </div>
-                                    <div class="modal__content" hidden>
-                                        <h2 class="modal__title">Carga Exitosa!</h2>
-                                        <p class="modal__message">Tu receta médica ha sido subido con éxito.</p>
-                                        <div class="modal__actions modal__actions--center">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <br>
@@ -300,6 +244,10 @@
 
         <div th:replace="~{fragments/navbar.html :: footer}">
         </div>
+
+    </div>
+
+
 
         <script>
             const showPopup = document.querySelector('.btn-popup');

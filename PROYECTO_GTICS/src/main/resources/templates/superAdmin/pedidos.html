@@ -12,7 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
 
     <!--=============== CSS ===============-->
-    <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/loader.css}">
     <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
     <link rel="stylesheet" th:href="@{/css/superadmin/superadmin.css}">
 
@@ -24,6 +24,11 @@
     <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
+    <link th:href="@{/css/aracely1.css}" rel="stylesheet" />
+
+    <script th:href="@{/js/pagination.js}"></script>
+
+
 
     <!--=============== JAVASCRIPT ===============-->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
@@ -40,18 +45,41 @@
 </head>
 
 
-<body  class="loader-hidden">
+<body  >
 
-<div class="container-loader loader-hidden" id="onload">
-    <div class="loader"></div>
+<div id="loader-container"  style="display: flex;flex-direction: column;">
+
+    <div style="display: flex; justify-content: center;margin-top: 250px;">
+        <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
+    </div>
+
+    <div id="loader-wrapper"  class="loader-wrapper">
+
+        <div class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader2" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader3" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+    </div>
+
 </div>
+
+<div id="content-show" class="hidden">
 <!--=============== HEADER ===============-->
 <header class="header-topbar">
     <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Pedidos de reposición')}"></nav>
 </header>
 
 <div th:replace="~{fragments/banner.html :: banner}"></div>
-
 <div class="container">
     <div class="container" >
         <div style="padding-top: 20px; padding-bottom: 20px">
@@ -60,7 +88,6 @@
         </div>
         <hr class="style-one">
         <div style="margin-bottom: 40px"></div>
-        <div id="botonesExportacion"></div>
         <div>
             <table id="miTabla" class="table table-striped" style="padding-top: 10px">
                 <thead >
@@ -110,12 +137,34 @@
         </div>
     </div>
 </div>
+<!--div class="container">
+    <div th:each="reposicion : ${reposicionList}">
+        <div class="container5">
+            <div class="card5__container5">
+                <article class="card5__article">
+                    <img th:src="@{/img/aplicacion-de-seguimiento.png}" alt="image" class="card5__img">
+                    <div class="card5__data">
+                        <span class="card5__description" th:text="${reposicion.idSede.admin.nombres} + ' ' + ${reposicion.idSede.admin.apellidos} + ',' + ${reposicion.idSede.nombre}"></span>
+                        <h2 class="card5__title" th:text="${'TRK'+ (reposicion.idReposicion + 1000)} + '&' + ${reposicion.fechaIni}"></h2>
+                        <form th:action="@{'/superadmin/verOrdenReposicionId'}" method="post">
+                            <a name="idReposicion" th:value="${reposicion.idReposicion}" class="card5__button">Read More</a>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+    </div>
+    <div class="pagination" id="pagination">
+    </div>
+</div-->
 <br>
 <br>
 <br>
 
 
 <div th:replace="~{fragments/navbar.html :: footer}">
+</div>
 </div>
 
 <!-- JQuery -->
@@ -136,13 +185,13 @@
 <script>
     $(document).ready(function() {
         var table = $('#miTabla').DataTable({
-            "pageLength":5,
+            "pageLength": 5,
             "lengthChange": false,
             "language": {
                 "emptyTable": "No hay registros disponibles",
                 "zeroRecords": "No se encontraron registros coincidentes",
                 "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-                "search" : "Buscar:",
+                "search": "Buscar:",
                 "paginate": {
                     "first": "Primero",
                     "last": "Último",
@@ -151,22 +200,22 @@
                 },
                 "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
             },
-            dom: "Bfrtip",
-            buttons:{
-                dom:{
-                    button:{
+            dom: '<"top"fB>rt<"bottom"ip><"clear">',
+            buttons: {
+                dom: {
+                    button: {
                         className: 'btn-p',
                         tag: 'button',
                         style: 'background-color: #689F38'
                     }
                 },
-                buttons:[
+                buttons: [
                     {
-                        extend:"excel",
-                        text:'Exportar tabla en Excel',
+                        extend: "excel",
+                        text: 'Exportar tabla en Excel',
                         className: 'btn-p',
-                        excelStyles:{
-                            template:'blue_medium'
+                        excelStyles: {
+                            template: 'blue_medium'
                         },
                         init: function(api, node, config) {
                             $(node).css('background-color', '#689F38');
@@ -174,15 +223,11 @@
                     }
                 ]
             }
-
         });
-
-        table.buttons().container().appendTo('#botonesExportacion');
 
         $('#filtroEstado').on('change', function() {
             var estado = $(this).val();
             table.column(2).search(estado).draw();
-
         });
 
         $('#limpiarFiltros').on('click', function() {
@@ -193,6 +238,14 @@
 
 
 </script>
+    <style>
+        .dataTables_wrapper .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+
 <script>
     $(document).ready(function() {
         var opened = false;
@@ -211,6 +264,44 @@
     });
 </script>
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const itemsPerPage = 10;
+        let currentPage = 1;
+        const items = document.querySelectorAll('.card5__container5');
+        const totalItems = items.length;
+
+        function showItems() {
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            items.forEach((item, index) => {
+                item.style.display = (index >= start && index < end) ? 'block' : 'none';
+            });
+            showPagination();
+        }
+
+        function showPagination() {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.addEventListener('click', function() {
+                    currentPage = i;
+                    showItems();
+                });
+                if (i === currentPage) {
+                    button.classList.add('active');
+                }
+                pagination.appendChild(button);
+            }
+        }
+        showItems();
+    });
+
+</script>
+
+<script>
     window.onload = function () {
         $('#onload').fadeOut();
         $('body').removeClass('loader-hidden');
@@ -228,6 +319,7 @@
     <!-- Para los estilos en Excel     -->
     <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.templates.min.js"></script>
+<script th:src="@{/js/loader.js}"></script>
 
 
 </body>

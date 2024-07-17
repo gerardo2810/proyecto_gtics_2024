@@ -13,14 +13,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pe.sanmiguel.bienestar.proyecto_gtics.DniAPI;
-import pe.sanmiguel.bienestar.proyecto_gtics.EmailService;
+import pe.sanmiguel.bienestar.proyecto_gtics.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Doctor;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Medicamento;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.Usuario;
-import pe.sanmiguel.bienestar.proyecto_gtics.PasswordService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.UsuarioRepository;
-import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
+import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.CambioContraValidationGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.DniApiValidationGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.LoginValidationsGroup;
 import pe.sanmiguel.bienestar.proyecto_gtics.ValidationGroup.RegisterValidationsGroup;
@@ -42,8 +40,13 @@ import java.util.*;
 public class Login1 {
 final UsuarioRepository usuarioRepository;
 
+    private int idUsuario;
+
     @Autowired
     private PasswordService passwordService;
+
+    @Autowired
+    private EmailRetryService emailRetryService;
 
     @Autowired
     private DniAPI dniAPI;
@@ -159,14 +162,10 @@ final UsuarioRepository usuarioRepository;
                 variables.put("nombre", usuario.getNombres());
                 variables2.put("contra", temporaryPassword);
 
-                try {
-                    emailService.sendHtmlEmail2(usuario.getCorreo(), subject,"login/correo", variables, variables2);
-                    attributes.addFlashAttribute("mensaje", "Usuario creado correctamente y correo enviado.");
-                    return "redirect:/";
-                } catch (MessagingException e) {
-                    e.printStackTrace();
-                    attributes.addFlashAttribute("mensaje", "Usuario creado, pero hubo un error al enviar el correo: " + e.getMessage());
-                }
+                //emailService.sendHtmlEmail2(usuario.getCorreo(), subject,"login/correo2", variables, variables2);
+                attributes.addFlashAttribute("mensaje", "Usuario creado correctamente y correo enviado.");
+                emailRetryService.scheduleEmailRetry(usuario);
+                System.out.println("olaasdas");
 
                 return "redirect:/";
             } catch (DataIntegrityViolationException e) {
@@ -188,7 +187,52 @@ final UsuarioRepository usuarioRepository;
     }
 
   @GetMapping("/recuperarContra")
-    public String recuperarContra() {return "login/recuperarContrasena";}
+    public String recuperarContra(Model model) {
+      model.addAttribute("usuario", new Usuario());
+
+      return "login/recuperarContrasena";}
+
+    @PostMapping("/recuperarContraPost")
+    public String procesarRecuperarContra(@ModelAttribute("usuario") @Validated(CambioContraValidationGroup.class) Usuario usuario,
+                                          @RequestParam("correo") String correo, BindingResult bindingResult, RedirectAttributes attributes, Model model) throws MessagingException {
+        String subject = "Recuperación de Contraseña";
+        Map<String, Object> variables = new HashMap<>();
+        Map<String, Object> variables2 = new HashMap<>();
+
+        Usuario existingUsuario = usuarioRepository.findByCorreo(correo);
+        if (existingUsuario == null) {
+            bindingResult.rejectValue("correo", "error.usuario", "El correo no se encuentra registrado.");
+            model.addAttribute("usuario", usuario);
+            return "login/recuperarContrasena";
+        }
+
+        if (!bindingResult.hasErrors()) {
+            String temporaryPassword = passwordService.generateTemporaryPassword();
+            System.out.println(temporaryPassword);
+
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+            String encodedPassword = passwordEncoder.encode(temporaryPassword);
+            usuario.setContrasena(encodedPassword);
+            usuarioRepository.actualizarRecupearContra(encodedPassword, correo);
+            System.out.println(encodedPassword);
+            System.out.println(usuario.getContrasena());
+
+            variables.put("correo", correo);
+            variables2.put("contra", temporaryPassword);
+
+            try {
+                emailService.sendHtmlEmail2(correo, subject,"login/correo3", variables, variables2);
+                attributes.addFlashAttribute("mensaje", "Correo enviado.");
+                return "redirect:/";
+            } catch (MessagingException e) {
+                e.printStackTrace();
+                attributes.addFlashAttribute("mensaje", "Hubo un error al enviar el correo: " + e.getMessage());
+            }
+        }
+        model.addAttribute("usuario", usuario);
+        return "login/recuperarContrasena";
+
+    }
 
     @GetMapping("/access-denied")
     public String accessDenied() {

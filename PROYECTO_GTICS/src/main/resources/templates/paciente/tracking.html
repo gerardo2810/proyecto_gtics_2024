@@ -28,17 +28,13 @@
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
     <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
-
-
-
     <!--=============== DataTable ===============-->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
     <!--  Bootstrap-->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
     <!--==========================================-->
-
-
-
+    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
     <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAce4klBZuD60aEQidMVIbsoaiitxxQFpo"></script>
     <script scr="/js/map.js"></script>
@@ -96,7 +92,6 @@
         }
 
     </style>
-
     <style>
 
         #filtroEstado:focus {
@@ -153,7 +148,19 @@
             font-size: 1.1rem !important;
         }
     </style>
-
+    <style>
+        df-messenger {
+            z-index: 999;
+            position: fixed;
+            --df-messenger-font-color: #000000;
+            --df-messenger-font-family: Lato;
+            --df-messenger-chat-background: #FFFFFF;
+            --df-messenger-message-user-background: #4285F4;
+            --df-messenger-message-bot-background: #fff;
+            bottom: 16px;
+            right: 16px;
+        }
+    </style>
 
 
     <script>
@@ -188,6 +195,17 @@
 
 <div th:replace="~{fragments/banner.html :: banner}"></div>
 
+
+<df-messenger
+        location="us-east1"
+        project-id="focal-baton-405905"
+        agent-id="67add3f9-fc2b-46b3-81fe-332970bf4670"
+        language-code="es"
+        max-query-length="-1">
+    <df-messenger-chat-bubble
+            chat-title="Asistente Virtual - Clínica Bienestar">
+    </df-messenger-chat-bubble>
+</df-messenger>
 
 
 <div class="container" style="margin-top:90px;">
@@ -296,25 +314,12 @@
                 <button class="print">REGRESAR</button>
             </a>
 
-            <a th:if="${ordenActual.getEstadoOrden() != 1 && ordenActual.getEstadoOrden() != 2} " th:href="@{'/paciente/boleta_pago?id=' + ${ordenActual.getIdOrden()}}" >
+            <a th:if="${ordenActual.getEstadoOrden() != 1 && ordenActual.getEstadoOrden() != 2 && ordenActual.getEstadoOrden() != 9} " th:href="@{'/paciente/boleta_pago?id=' + ${ordenActual.getIdOrden()}}" >
                 <button class="print">VER BOLETA</button>
             </a>
 
 
-
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
     </div>
 
@@ -324,7 +329,12 @@
 
     <div th:case="1" style="display: flex;justify-content: center;align-items: center">
 
-        <p style="font-size: 30px;color:#0d6efd ">!Para empezar con el seguimiento del pedido su orden aún debe ser aprobada!</p>
+        <br>
+        <br>
+        <div style="display: flex;justify-content: start;align-items: center; flex-direction: row; background-color: white;column-gap: 40px;border:2px solid dimgray; border-radius: 8px;padding-left: 26px;padding-right: 10px">
+            <p style="font-size: 20px;color:dimgray">!Para empezar con el seguimiento del pedido su orden aún debe ser aprobada!</p>
+            <img src="/img/orden_anulada.png"  width="280px">
+        </div>
 
     </div>
 
@@ -468,8 +478,11 @@
 
     <div th:case="7" style="display: flex;flex-direction: column;justify-content: center;column-gap: 10px">
 
-        <div style="display: flex; flex-direction: row; justify-content: center">
-            <p style="font-size: 30px;color:#0d6efd ">!Su orden ha sido entregada exitosamente!</p>
+        <br>
+        <br>
+        <div style="display: flex;justify-content: start;align-items: center; flex-direction: row; background-color: white;column-gap: 40px;border:3px solid green; border-radius: 8px;padding-left: 26px;padding-right: 10px">
+            <p style="font-size: 20px;color:dimgray">¡Su orden ha sido entregada exitosamente!</p>
+            <img src="/img/orden_anulada.png"  width="280px">
         </div>
         <div class="preview-title roboto-regular" style="font-size: 1.3rem; padding-top: 20px;">
             Código único de Tracking:<span style="font-weight: bold" th:text="${'  TRK-' + ordenActual.getTracking()}"></span>
@@ -502,8 +515,18 @@
             </div>
 
         </div>
+    </div>
 
-
+    <div th:case="9" >
+        <br>
+        <div style="display: flex;justify-content: center;align-items: center; flex-direction: row">
+            <p style="font-size: 30px;color:#DC3545 ">Su orden fue anulada por el siguiente motivo: </p>
+        </div>
+        <br>
+        <div style="display: flex;justify-content: start;align-items: center; flex-direction: row; background-color: white;column-gap: 40px;border:2px solid dimgray; border-radius: 8px;padding-left: 26px;padding-right: 10px">
+            <p th:text="${ordenActual.getMotivoAnulado()}" style="font-size: 20px;color:dimgray"></p>
+            <img src="/img/orden_anulada.png"  width="280px">
+        </div>
     </div>
 
 

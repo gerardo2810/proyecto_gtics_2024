@@ -18,6 +18,4 @@ public class SedeStockId implements Serializable {
     @Column(name = "idMedicamento")
     private Integer idMedicamento;
 
-
-
 }

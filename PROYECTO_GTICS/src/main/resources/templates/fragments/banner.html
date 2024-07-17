@@ -24,28 +24,46 @@
 
                     <div style="display: flex; flex-direction: row; gap: 10px; align-items: center;">
 
-                        <!-- Configurar Notificaciones SUPERADMIN -->
-                        <div th:if="${session.usuario.getRol() == 1}" >
-                            <a style="color: white" th:href="@{/superadmin/perfil}" sec:authorize="hasAnyAuthority('SUPERADMIN')">
-                                <div class="banner-btn bell-btn">
-                                    <i class="fa-regular fa-bell"></i>
-                                </div>
-
-                                <div th:if="${session.usuario.getRol() == null}" class="banner-btn bell-btn">
-                                    <i class="fa-solid fa-bell"></i>
-                                </div>
-                            </a>
-                        </div>
-
-                        <!-- Configurar Notificaciones ADMINSEDE -->
-                        <div th:if="${session.usuario.getRol() == 2}" >
+                        <!-- Configurar Regresar a SUPERADMIN from PACIENTE -->
+                        <div th:if="${session.usuario.getRol() == 4 && session.usuario.getEstadologueo() == 1}" >
                             <nav4>
                                 <div class="logo"></div>
-                                <div class="banner-btn bell-btn" onclick="toggleNotifi2()">
+                                <a th:href="@{'/impersonate?username=' + 'a20206456@pucp.edu.pe'}">
+                                    <div class="banner-btn bell-btn"><span>Volver</span></div>
+                                </a>
+                            </nav4>
+                        </div>
+
+                        <!-- Configurar Regresar a SUPERADMIN from ADMINSEDE -->
+                        <div th:if="${session.usuario.getRol() == 2 && session.usuario.getEstadologueo() == 1}" >
+                            <nav4>
+                                <div class="logo"></div>
+                                <a th:href="@{'/impersonate?username=' + 'a20206456@pucp.edu.pe'}">
+                                    <div class="banner-btn bell-btn"><span>Volver</span></div>
+                                </a>
+                            </nav4>
+                        </div>
+
+                        <!-- Configurar Regresar a SUPERADMIN from FARMACISTA -->
+                        <div th:if="${session.usuario.getRol() == 3 && session.usuario.getEstadologueo() == 1}" >
+                            <nav4>
+                                <div class="logo"></div>
+                                <a th:href="@{'/impersonate?username=' + 'a20206456@pucp.edu.pe'}">
+                                    <div class="banner-btn bell-btn"><span>Volver</span></div>
+                                </a>
+                            </nav4>
+                        </div>
+
+
+                        <!-- Configurar Notificaciones ADMINSEDE -->
+                        <div th:if="${session.usuario.getRol() == 2}">
+                            <nav4>
+                                <div class="logo"></div>
+                                <div class="banner-btn bell-btn" onclick="toggleNotifi()">
                                     <i class="fa-regular fa-bell"></i>
                                     <span>17</span>
                                 </div>
-                                <div class="notifi-box" id="box3">
+                                <div class="notifi-box" id="box">
                                     <h2>Notifications <span>17</span></h2>
                                     <div class="notifi-item">
                                         <img class="image--cover" th:src="@{/img/default_profile.png}">
@@ -80,7 +98,7 @@
                         </div>
 
                         <!-- Configurar Notificaciones PACIENTE -->
-                        <div th:if="${session.usuario.getRol() == 4}" >
+                        <div th:if="${session.usuario.getRol() == 4}">
                             <nav4>
                                 <div class="logo"></div>
                                 <div class="banner-btn bell-btn" onclick="toggleNotifi3()">
@@ -131,7 +149,18 @@
                         </div>
 
                     </div>
-                    <img class="image--cover" th:src="@{/img/default_profile.png}">
+                    <div th:if="${session.usuario.getRol() == 1}">
+                        <img class="image--cover" style="background-color: #b1cece" th:src="@{/img/logoSuper1.png}">
+                    </div>
+                    <div th:if="${session.usuario.getRol() == 2}">
+                        <img class="image--cover" th:src="@{/img/3135768.png}">
+                    </div>
+                    <div th:if="${session.usuario.getRol() == 3}">
+                        <img class="image--cover" th:src="@{/img/farmaceuticologo3.png}">
+                    </div>
+                    <div th:if="${session.usuario.getRol() == 4}">
+                        <img class="image--cover" style="background-color: #b1cece" th:src="@{/img/logoPaciente.png}">
+                    </div>
                 </div>
 
             </div>

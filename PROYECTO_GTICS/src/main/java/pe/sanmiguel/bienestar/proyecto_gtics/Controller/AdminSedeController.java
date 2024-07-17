@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
@@ -17,10 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pe.sanmiguel.bienestar.proyecto_gtics.DniAPI;
-import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
-import pe.sanmiguel.bienestar.proyecto_gtics.Dto.ReposicionContenidoMedicamentoDto;
-import pe.sanmiguel.bienestar.proyecto_gtics.Dto.TopVentasDto;
-import pe.sanmiguel.bienestar.proyecto_gtics.Dto.UsuarioSedeFarmacistaDto;
+import pe.sanmiguel.bienestar.proyecto_gtics.Dto.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
 import pe.sanmiguel.bienestar.proyecto_gtics.PasswordService;
 import pe.sanmiguel.bienestar.proyecto_gtics.Repository.*;
@@ -34,6 +33,8 @@ import javax.naming.directory.InitialDirContext;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -64,6 +65,9 @@ public class AdminSedeController {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private TokenRepository tokenRepository;
 
     final DniAPI dniAPI;
 
@@ -140,14 +144,14 @@ public class AdminSedeController {
 
         Optional<Integer> optFinalNumReposicion = reposicionRepository.findLastNumeroporSede(idSede);
 
+        List<Token> listaTokens = tokenRepository.listarTokens();
+
         if(optFinalNumReposicion.isPresent()){
             int finalNumReposicion = optFinalNumReposicion.get();
             int preFinalNumReposicion = finalNumReposicion - 1;
 
             List<Reposicion> listaReposicionNoEntregadasUltimas = reposicionRepository.listarOrdenesReposicionNoEntregadasUltimas(idSede, finalNumReposicion, preFinalNumReposicion);
-            if(listaReposicionNoEntregadasUltimas.size() == 0){
-                return "adminsede/inicio";
-            }
+
             Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
 
             model.addAttribute("listaMedicamentos",medicamentoRepository.listarVentasMedicamentosporSede(idSede));
@@ -156,6 +160,7 @@ public class AdminSedeController {
             model.addAttribute("listaReposicionNoEntregadasUltimas", listaReposicionNoEntregadasUltimas);
             model.addAttribute("lista1", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
             model.addAttribute("lista2", medicamentoRepository.listarMedicamentosStockPorAgotar(idSede));
+            model.addAttribute("lista", listaTokens);
 
             return "adminsede/inicio";
 
@@ -165,6 +170,7 @@ public class AdminSedeController {
             model.addAttribute("listaReposicionNoEntregadasUltimas", listaReposicionNoEntregadasUltimas);
             model.addAttribute("usuario",usuario);
             model.addAttribute("sedesesion",sedeSession);
+            model.addAttribute("lista", listaTokens);
             return "adminsede/inicio";
 
         }
@@ -382,6 +388,9 @@ public class AdminSedeController {
     public String solicitudFarmacista(@ModelAttribute("usuarioFarmacista") Usuario usuarioFarmacista, //model attribute del farmacista
                                       @ModelAttribute("sedeFarmacista") SedeFarmacista sedeFarmacista,
                                       Model model){
+        //Sacamos todas los codigos
+        List<CodigoColegiatura> listaCodigos = codigoColegiaturaRepository.listarCodigos();
+        model.addAttribute("listaCodigos", listaCodigos);
         return "adminsede/solicitud_agregar_farmacista";
     }
 
@@ -561,6 +570,9 @@ public class AdminSedeController {
                                       @RequestParam(value = "dni") String dni,
                                       Model model){
 
+        List<CodigoColegiatura> listaCodigos = codigoColegiaturaRepository.listarCodigos();
+        model.addAttribute("listaCodigos", listaCodigos);
+
         List<String> values = DniAPI.getDni(dni);
 
         if (!(values.isEmpty())){
@@ -601,14 +613,28 @@ public class AdminSedeController {
                                              @RequestParam(value = "direccion") String direccion,
                                              @RequestParam(value = "correo") String correo,
                                              @RequestParam(value = "celular") String celular,
-                                             RedirectAttributes attr){
+                                             RedirectAttributes attr, Model model,
+                                             HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+
+        List<CodigoColegiatura> listaCodigos = codigoColegiaturaRepository.listarCodigos();
+        model.addAttribute("listaCodigos", listaCodigos);
+
+        //SESSION
+        //Iniciamos la sesión
+        HttpSession session = request.getSession();
+        Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+        session.setAttribute("usuario", usuario);
+
+        //Sacamos la sede del adminsede
+        Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
 
         if(!bindingResult.hasErrors() && !bindingResult1.hasErrors()){
             int estadoUsuario = 2;
             int idRol = 3;
             int idUsuario = usuarioRepository.findLastUsuarioId() + 1;
             int aprobado = 2; //El farmacista no está aprobado
-            int idSede = 1; //Cambiar
+
+            int idSede = sedeSession.getIdSede();
 
             if (!(isValidEmail(correo) || isDomainValid(correo))) {
                 System.out.println("Email is valid and domain is valid.");
@@ -618,6 +644,9 @@ public class AdminSedeController {
                     System.out.println("- " + error.getDefaultMessage());
                 }
                 System.out.println(bindingResult.getAllErrors());
+
+
+
                 return "adminsede/solicitud_agregar_farmacista";
             }
 
@@ -658,8 +687,8 @@ public class AdminSedeController {
 
             List<Usuario> listaUsuarios = usuarioRepository.findAll();
 
-            for (Usuario usuario : listaUsuarios){
-                if(usuarioFarmacista.getDni().equals(usuario.getDni())){
+            for (Usuario usuario1 : listaUsuarios){
+                if(usuarioFarmacista.getDni().equals(usuario1.getDni())){
                     //no se crea el farmacista debido a que es repetido el codigo medico
                     attr.addFlashAttribute("msgred", "DNI ya existente en el sistema, por favor ingrese uno nuevamente");
                     dniNoExistente  = false;
@@ -670,8 +699,8 @@ public class AdminSedeController {
             }
 
             //validamos correo
-            for (Usuario usuario : listaUsuarios){
-                if(usuarioFarmacista.getCorreo().equals(usuario.getCorreo())){
+            for (Usuario usuario2 : listaUsuarios){
+                if(usuarioFarmacista.getCorreo().equals(usuario2.getCorreo())){
                     //no se crea el farmacista debido a que es repetido el codigo medico
                     attr.addFlashAttribute("msgred", "Correo ya existente en el sistema, por favor ingrese uno nuevamente");
                     dniNoExistente  = false;
@@ -796,7 +825,7 @@ public class AdminSedeController {
                                     @RequestParam("direccionSede") String direccionSede,
                                     @RequestParam("correo") String correo,
                                     @RequestParam("nombreSede") String nombreSede,
-                                    @RequestParam("priceTotal") Float priceTotal,
+                                    @RequestParam("priceTotal") String priceTotal,
                                     @RequestParam("listaIds") List<String> listaIds,
                                     RedirectAttributes attr,
                                     HttpServletRequest request, HttpServletResponse response, Authentication authentication){
@@ -809,6 +838,10 @@ public class AdminSedeController {
 
         //Sacamos la sede del adminsede
         Sede sedeSession = sedeRepository.sedeAdminID(usuario.getIdUsuario());
+
+        //Cambiamos el string del precioTotal
+        priceTotal = priceTotal.replace(",", "");
+        Float priceTotalF = Float.parseFloat(priceTotal);
 
 
         // Crear orden de reposición
@@ -837,10 +870,20 @@ public class AdminSedeController {
         Integer newNumber = lastNumber + 1;
 
         LocalDateTime fechaIni = LocalDateTime.now();
-        LocalDateTime fechaFin = LocalDateTime.now().plus(5, ChronoUnit.DAYS);
+
+        // Convertir la hora actual a la zona horaria de Perú
+        ZoneId peruZoneId = ZoneId.of("America/Lima");
+        ZonedDateTime peruTime = fechaIni.atZone(ZoneId.systemDefault()).withZoneSameInstant(peruZoneId);
+
+        // Si solo necesitas LocalDateTime, puedes convertirlo de nuevo
+        LocalDateTime peruLocalDateTime = peruTime.toLocalDateTime();
+
+
+
+        LocalDateTime fechaFin = peruLocalDateTime.plus(5, ChronoUnit.DAYS);
         //Prueba
 
-        reposicionRepository.crearOrdenReposicion(idReposicion, tracking, priceTotal, idEstado, idSede,newNumber, fechaIni, fechaFin);
+        reposicionRepository.crearOrdenReposicion(idReposicion, tracking, priceTotalF, idEstado, idSede,newNumber, peruLocalDateTime, fechaFin);
 
         List<Medicamento> listaMedicamentosReposicion = new ArrayList<>();
 
@@ -851,6 +894,10 @@ public class AdminSedeController {
             Integer idMedicamento = Integer.parseInt(listaIds.get(m));
             Integer cantidadMedicamento = Integer.parseInt(listaIds.get(m+1));
             reposicionContenidoRepository.guardarContenidoReposicion(idMedicamento, idReposicion, cantidadMedicamento);
+
+            //Aumentamos el stock que hay en la sede
+            sedeStockRepository.actualizarSedeStock(idSede, idMedicamento, cantidadMedicamento);
+
             m = m + 2;
         }
 
@@ -1027,6 +1074,7 @@ public class AdminSedeController {
 
                 if (isValidPassword(newContrasena)){
                     usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
+                    usuarioRepository.actualizarEstadoContra(usuarioSession.getIdUsuario());
                     attr.addFlashAttribute("msgSuccess", "Contraseña actualizada correctamente.");
                 } else {
                     attr.addFlashAttribute("msg", "Ingrese una contraseña válida. De más de 8 carácteres, con dígitos y carácteres especiales.");
@@ -1051,6 +1099,13 @@ public class AdminSedeController {
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
     }
+
+
+
+
+
+
+
 
 
 

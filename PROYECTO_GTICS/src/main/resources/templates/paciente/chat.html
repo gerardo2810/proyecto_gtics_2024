@@ -9,6 +9,7 @@
     <!-- Font Awesome -->
 
     <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}">
 
 
     <link rel="stylesheet" th:href="@{/css/styles.css}">
@@ -21,6 +22,7 @@
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
     <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+    <link rel="stylesheet" th:href="@{/css/loader.css}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.css" integrity="sha512-0Nyh7Nf4sn+T48aTb6VFkhJe0FzzcOlqqZMahy/rhZ8Ii5Q9ZXG/1CbunUuEbfgxqsQfWXjnErKZosDSHVKQhQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -29,7 +31,8 @@
     <!--  Bootstrap-->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
     <!--==========================================-->
-
+    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
     <title>Chat | Bienestar San Miguel</title>
 
     <style>
@@ -166,8 +169,6 @@
 
 
     <style>
-
-
         .kapsayici{
             display:flex;
             padding:5px;
@@ -225,149 +226,202 @@
             cursor: pointer;
         }
     </style>
+    <style>
+        df-messenger {
+            z-index: 999;
+            position: fixed;
+            --df-messenger-font-color: #000000;
+            --df-messenger-font-family: Lato;
+            --df-messenger-chat-background: #FFFFFF;
+            --df-messenger-message-user-background: #4285F4;
+            --df-messenger-message-bot-background: #fff;
+            bottom: 16px;
+            right: 16px;
+        }
+    </style>
 </head>
-
 
 
 
 <body>
 
-
-<header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Mensajeria')}"></nav>
-</header>
-
-
-<div th:replace="~{fragments/banner.html :: banner}"></div>
+<div id="loader-container"  style="display: flex;flex-direction: column;">
 
 
 
-<div class="container">
-
-    <div style="margin-bottom: 50px"></div>
-    <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px" th:text="${'Orden :' + idOrdenInteger }" ></strong></h2>
-    <div style="margin-bottom: 20px"></div>
-    <hr style="border-top: 1px solid #DFDFDF;">
-    <div style="margin-bottom: 40px"></div>
-
-    <div style="padding-right: 0; padding-left: 0"> </div>
-    <div style="padding-top:1px; display:flex; justify-content: end " >
-        <a class="btn-p" href="/paciente/mensajeria">Regresar a la lista de chats</a>
-
+    <div style="display: flex; justify-content: center;margin-top: 250px;">
+        <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
     </div>
+
+    <div id="loader-wrapper"  class="loader-wrapper">
+
+        <div class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader2" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader3" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+    </div>
+
 </div>
 
 
-<br>
+<div id="content-show" class="hidden">
 
-<div class="container" style="display: flex; flex-direction: row; column-gap: 60px">
+    <df-messenger
+            location="us-east1"
+            project-id="focal-baton-405905"
+            agent-id="67add3f9-fc2b-46b3-81fe-332970bf4670"
+            language-code="es"
+            max-query-length="-1">
+        <df-messenger-chat-bubble
+                chat-title="Asistente Virtual - Clínica Bienestar">
+        </df-messenger-chat-bubble>
+    </df-messenger>
+
+    <header class="header-topbar">
+        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Mensajeria')}"></nav>
+    </header>
+
+
+    <div th:replace="~{fragments/banner.html :: banner}"></div>
+
+
+
+    <div class="container">
+
+        <div style="margin-bottom: 50px"></div>
+        <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px" th:text="${'Orden: ' + idOrdenInteger }" ></strong></h2>
+        <div style="margin-bottom: 20px"></div>
+        <hr style="border-top: 1px solid #DFDFDF;">
+        <div style="margin-bottom: 40px"></div>
+
+        <div style="padding-right: 0; padding-left: 0"> </div>
+        <div style="padding-top:1px; display:flex; justify-content: end " >
+            <a class="btn-p" href="/paciente/mensajeria">Regresar a la lista de chats</a>
+
+        </div>
+    </div>
+
+
+    <br>
+
+    <div class="container" style="display: flex; flex-direction: row; column-gap: 60px">
 
 
 
 
-    <div>
+        <div>
 
-        <section class="Chat">
-            <div class="ChatHead">
-                <li class="group">
-                    <div><img width="64" height="64" src="https://img.icons8.com/external-creatype-flat-colourcreatype/64/external-doctor-medic-health-creatype-flat-colourcreatype-2.png" alt="external-doctor-medic-health-creatype-flat-colourcreatype-2"/></div>
-                    <p class="GroupName" th:text="${ 'Farmacista: ' +   farmacista.getNombres() + ' ' + farmacista.getApellidos()}"></p>
+            <section class="Chat">
+                <div class="ChatHead">
+                    <li class="group">
+                        <div><img width="64" height="64" src="https://img.icons8.com/external-creatype-flat-colourcreatype/64/external-doctor-medic-health-creatype-flat-colourcreatype-2.png" alt="external-doctor-medic-health-creatype-flat-colourcreatype-2"/></div>
+                        <p class="GroupName" th:text="${ 'Farmacista: ' +   farmacista.getNombres() + ' ' + farmacista.getApellidos()}"></p>
 
-                </li>
-                <div class="callGroup">
+                    </li>
+                    <div class="callGroup">
 
+                    </div>
                 </div>
-            </div>
-            <div class="MessageContainer">
+                <div class="MessageContainer">
 
 
-                <div th:each="mensaje, index : ${mensajes}">
+                    <div th:each="mensaje, index : ${mensajes}">
 
 
-                    <th:block th:with="currentDate=${mensaje.getFormattedDate()}">
-                        <!-- Mostrar fecha solo si es el primer mensaje o si la fecha es diferente al mensaje anterior -->
-                        <th:block th:if="${index.index == 0 or mensajes[index.index - 1].getFormattedDate() != currentDate}">
-                            <div class="message-date">
-                                <div class="messageSeperator" th:text="${currentDate}"></div>
-                            </div>
+                        <th:block th:with="currentDate=${mensaje.getFormattedDate()}">
+                            <!-- Mostrar fecha solo si es el primer mensaje o si la fecha es diferente al mensaje anterior -->
+                            <th:block th:if="${index.index == 0 or mensajes[index.index - 1].getFormattedDate() != currentDate}">
+                                <div class="message-date">
+                                    <div class="messageSeperator" th:text="${currentDate}"></div>
+                                </div>
+                            </th:block>
                         </th:block>
-                    </th:block>
 
 
-                    <div th:switch="${mensaje.getIdRol()}">
+                        <div th:switch="${mensaje.getIdRol()}">
 
 
-                        <div th:case="'F'" class="message you">
-                            <p class="messageContent" th:text="${mensaje.getMensaje()}"></p>
-                            <div class="messageDetails">
-                                <div class="messageTime" th:text="${mensaje.getFormattedTime()}"></div>
-                            </div>
-                        </div>
-
-
-                        <div th:case="'P'">
-                            <div  class="message me">
+                            <div th:case="'F'" class="message you">
                                 <p class="messageContent" th:text="${mensaje.getMensaje()}"></p>
                                 <div class="messageDetails">
                                     <div class="messageTime" th:text="${mensaje.getFormattedTime()}"></div>
                                 </div>
                             </div>
 
+
+                            <div th:case="'P'">
+                                <div  class="message me">
+                                    <p class="messageContent" th:text="${mensaje.getMensaje()}"></p>
+                                    <div class="messageDetails">
+                                        <div class="messageTime" th:text="${mensaje.getFormattedTime()}"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+
                         </div>
 
+                    </div>
 
 
 
+
+
+                    <div id="messageArea">
 
                     </div>
 
                 </div>
 
+                <div style="display: flex; flex-direction: row; column-gap: 10px; padding: 15px">
+
+                    <input type="text" id="messageInput" class="inputMensaje" style="width: 300px" placeholder="Ingrese su mensaje">
 
 
-
-
-                <div id="messageArea">
+                    <button onclick="sendMessage()" class="enviar-msg" id="botonEnviar"><i class="fa-solid fa-paper-plane"></i></button>
 
                 </div>
 
-            </div>
-
-            <div style="display: flex; flex-direction: row; column-gap: 10px; padding: 15px">
-
-                <input type="text" id="messageInput" class="inputMensaje" style="width: 300px" placeholder="Ingrese su mensaje">
-
-
-                <button onclick="sendMessage()" class="enviar-msg" id="botonEnviar"><i class="fa-solid fa-paper-plane"></i></button>
-
-            </div>
 
 
 
 
-
-        </section>
-
+            </section>
 
 
 
-    </div>
 
-    <div style="display: flex; flex-direction: column;justify-content: center; width: 800px">
-        <div>
-            <table id="miTabla2" class="table table-striped">
-                <h2>Medicamentos con Stock</h2>
-                <thead>
-                <tr style="background-color: #378fff">
-                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
-                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
-                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
-                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio unitario</th>
-                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio total</th>
-                </tr>
-                </thead>
+        </div>
 
-                <tbody>
+        <div th:if="${orden.getEstadoOrden()==1}" style="display: flex; flex-direction: column;justify-content: center; width: 800px">
+            <div>
+                <table id="miTabla2" class="table table-striped">
+                    <h2>Medicamentos con Stock</h2>
+                    <thead>
+                    <tr style="background-color: #378fff">
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio unitario</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio total</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
 
                     <tr th:each="itemDeLaOrden: ${medicamentosEnStock}">
                         <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
@@ -378,27 +432,27 @@
                     </tr>
 
 
-                </tbody>
-            </table>
-        </div>
-        <br>
-        <br>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <br>
 
-        <div>
-            <table id="miTabla3" class="table table-striped">
-                <h2>Medicamentos sin Stock</h2>
-                <thead>
-                <tr style="background-color: #378fff">
-                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
-                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
-                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
-                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio unitario</th>
-                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio total</th>
-                </tr>
-                </thead>
+            <div>
+                <table id="miTabla3" class="table table-striped">
+                    <h2>Medicamentos sin Stock</h2>
+                    <thead>
+                    <tr style="background-color: #378fff">
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio unitario</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio total</th>
+                    </tr>
+                    </thead>
 
 
-                <tbody>
+                    <tbody>
 
                     <tr th:each="itemDeLaOrden: ${medicamentosSinStock}">
                         <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
@@ -408,32 +462,42 @@
                         <td th:text="${ 'S/.' +  #numbers.formatDecimal((itemDeLaOrden.getIdMedicamento().getPrecioVenta()*itemDeLaOrden.getCantidad()), 1, 'COMMA', 2, 'POINT')}"></td>
                     </tr>
 
-                </tbody>
-            </table>
-            <br>
-            <br>
-            <br>
+                    </tbody>
+                </table>
+                <br>
+                <br>
+                <br>
+
+            </div>
 
         </div>
+
+        <div th:if="${orden.getEstadoOrden()!=1}" style="display: flex; flex-direction: column;justify-content: center; width: 800px">
+
+            <div style="display: flex;justify-content: start;align-items: center; flex-direction: row; background-color: white;column-gap: 40px;border:2px solid dimgray; border-radius: 8px;padding-left: 26px;padding-right: 10px">
+                <p style="font-size: 20px;color:dimgray">!Esta orden ya no presenta problemas de stock!</p>
+                <img src="/img/orden_anulada.png"  width="280px">
+            </div>
+
+        </div>
+
+
 
     </div>
 
 
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div th:replace="~{fragments/navbar.html :: footer}">
+    </div>
+
 </div>
 
 
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
-
-
-
-<div th:replace="~{fragments/navbar.html :: footer}">
-</div>
 
 
 
@@ -640,7 +704,7 @@
 <!-- DataTable -->
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <!------>
-
+<script th:src="@{/js/loader.js}"></script>
 
 <script>
     // Seleccionar todos los elementos p dentro de la clase bar

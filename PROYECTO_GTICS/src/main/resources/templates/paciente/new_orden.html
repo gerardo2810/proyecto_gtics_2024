@@ -19,9 +19,12 @@
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/steps.css}">
     <link rel="stylesheet" th:href="@{/css/paciente/upload_img.css}">
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+    <link rel="stylesheet" th:href="@{/css/loader.css}">
+
 
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -115,494 +118,549 @@
     </script>
 </head>
 
-
-
-
 <body>
 
+<div id="loader-container"  style="display: flex;flex-direction: column;">
 
-<header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Boleta')}"></nav>
-</header>
+    <div style="display: flex; justify-content: center;margin-top: 250px;">
+        <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
+    </div>
 
+    <div id="loader-wrapper"  class="loader-wrapper">
 
-<div th:replace="~{fragments/banner.html :: banner}"></div>
+        <div class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
 
-<div class="container">
+        <div id="loader2" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
 
-    <div style="margin-bottom: 50px"></div>
-    <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Generar nuevo orden:</strong></h2>
-    <div style="margin-bottom: 20px"></div>
-    <hr style="border-top: 1px solid #DFDFDF;">
-    <div style="margin-bottom: 40px"></div>
+        <div id="loader3" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+    </div>
 
-    <div style="padding-right: 0; padding-left: 0"> </div>
 </div>
 
 
 
-<form id="form" method="post" th:action="@{'/paciente/guardarOrden'}"  th:object="${usuario}"  enctype="multipart/form-data">
+<div id="content-show" class="hidden">
 
-    <div class="container-form">
+    <header class="header-topbar">
+        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Ordenes Web')}"></nav>
+    </header>
 
-        <div style="display: flex;flex-direction: row; column-gap: 25px">
+    <div th:replace="~{fragments/banner.html :: banner}"></div>
 
-            <div>
-                <div class="column">
+    <div class="container" style="min-width: 1590px">
 
-                    <div class="input-label-box">
-                        <label style="font-weight: bold; color: dimgray">Nombre del paciente:</label>
+        <div style="margin-bottom: 50px"></div>
+        <h2 style="font-size: 30px"><strong>Generar nueva Orden Web:</strong></h2>
 
-                        <div style="position: relative;">
-                            <input class="input-form" type="text" th:field="*{nombres}" placeholder="Ingrese su nombre" th:classappend="${#fields.hasErrors('nombres') ? 'error' : ''}"  th:value="${session.usuario.getNombres()}" readonly>
-                            <i th:if="${#fields.hasErrors('nombres')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
-                        </div>
+        <div style="margin-bottom: 20px"></div>
+        <hr style="border-top: 1px solid #DFDFDF;">
+        <div style="margin-bottom: 40px"></div>
+        <div th:if="${errorGeneral != null}" style="display: flex;flex-direction: row; column-gap: 4px">
+            <i style=" color: #E72C2C; margin-top:4px" class="fas fa-exclamation-circle"></i>
+            <div class="error-message"  style="margin-bottom: 2px;font-size: 17px">El proceso de generar su Orden Web presentó algunos inconvenientes</div>
+        </div>
 
-                        <div class="error-message"  th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
-
-                    </div>
-
-                    <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray">Apellidos del paciente:</label>
-
-                        <div style="position: relative;">
-                            <input class="input-form" type="text" th:field="*{apellidos}" placeholder="Ingrese su apellido" th:classappend="${#fields.hasErrors('apellidos') ? 'error' : ''}" readonly>
-                            <i th:if="${#fields.hasErrors('apellidos')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
-                        </div>
-
-                        <div class="error-message"  th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
+        <div style="padding-right: 0; padding-left: 0"> </div>
+    </div>
 
 
-                    </div>
 
+    <form id="form" method="post" th:action="@{'/paciente/guardarOrden'}"  th:object="${usuario}"  enctype="multipart/form-data">
+
+        <div class="container-steps">
+            <div class="steps">
+                <div style="font-weight: bold" id="step1-tab" class="active" onclick="goToStep(1)">Medicamentos</div>
+                <div style="font-weight: bold" id="step2-tab" onclick="goToStep(2)">Datos del Cliente</div>
+                <div style="font-weight: bold" id="step3-tab" onclick="goToStep(3)" th:if="${carritoNumber == null}">
+                    Carrito de Compras<i id="cart-icon" class="fa fa-shopping-cart" style="font-size: 18px; margin-left: 5px; margin-right: 6px; color: #0d6efd;"></i><span style="color: #0d6efd;" id="cart-count" name="carrito">0</span>
                 </div>
-
-                <div class="column">
-
-                    <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray">DNI:</label>
-
-                        <div style="position: relative;">
-                            <input class="input-form" type="text" th:field="*{dni}" placeholder="Ingrese su DNI" th:classappend="${#fields.hasErrors('dni') ? 'error' : ''}" readonly>
-                            <i th:if="${#fields.hasErrors('dni')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
-                        </div>
-
-                        <div class="error-message"  th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
-
-                    </div>
-
-                    <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray">Dirección:</label>
-
-
-                        <div style="position: relative;">
-                            <input class="input-form" type="text" th:field="*{direccion}" placeholder="Ingrese su dirección:" th:classappend="${#fields.hasErrors('direccion') ? 'error' : ''}">
-                            <i th:if="${#fields.hasErrors('direccion')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
-                        </div>
-
-                        <div class="error-message"  th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></div>
-
-
-                    </div>
-
+                <div style="font-weight: bold" id="step3-tab" onclick="goToStep(3)" th:if="${carritoNumber != null}">
+                    Carrito de Compras<i id="cart-icon" class="fa fa-shopping-cart" style="font-size: 18px; margin-left: 5px; margin-right: 6px; color: #0d6efd;"></i><span style="color: #0d6efd;" id="cart-count" th:text="${carritoNumber}" name="carrito">asda</span>
                 </div>
-
-                <div class="column">
-
-                    <div class="input-label-box" th:object="${ordenDto}">
-                        <label style="font-weight: bold; color:dimgray">Doctor:</label>
-
-
-                        <select class="select-form" th:field="*{idDoctor}" th:classappend="${#fields.hasErrors('idDoctor') ? 'error' : ''}">
-                            <option value="" selected>Seleccionar Doctor</option>
-                            <option th:each="doc:${listaDoctores}" th:value="${doc.getIdDoctor()}" th:text="${doc.getNombres() + ' ' + doc.getApellidos()}">Seleccionar Doctor</option>
-                        </select>
-
-                        <div class="error-message"  th:if="${#fields.hasErrors('idDoctor')}" th:errors="*{idDoctor}"></div>
-
-
-                    </div>
-
-
-                    <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray">Distrito:</label>
-
-                        <div style="position: relative;">
-                            <input class="input-form" th:field="*{distrito}" type="text" placeholder="Ingrese el distrito donde reside" th:classappend="${#fields.hasErrors('distrito') ? 'error' : ''}">
-                            <i th:if="${#fields.hasErrors('distrito')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
-                        </div>
-
-                        <div class="error-message"  th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}"></div>
-
-
-                    </div>
-
-                </div>
-
-                <div class="column">
-
-                    <div class="input-label-box" th:object="${ordenDto}">
-                        <label style="font-weight: bold; color:dimgray">Hora de Entrega:</label>
-
-                        <div style="position: relative;">
-
-                            <input  class="input-form" type="time" th:field="*{horaEntrega}"   placeholder="Ingrese la hora de entrega" th:classappend="${#fields.hasErrors('horaEntrega') ? 'error' : ''}" >
-
-                        </div>
-
-                        <div class="error-message"  th:if="${#fields.hasErrors('horaEntrega')}" th:errors="*{horaEntrega}"></div>
-
-                    </div>
-
-
-
-                    <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray">Teléfono:</label>
-
-
-                        <div style="position: relative;">
-                            <input class="input-form" type="text" th:field="*{celular}"  placeholder="Ingrese su número de teléfono" th:classappend="${#fields.hasErrors('celular') ? 'error' : ''}" readonly>
-                            <i th:if="${#fields.hasErrors('celular')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
-                        </div>
-
-                        <div class="error-message"  th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}"></div>
-
-                    </div>
-
-                </div>
-
-                <div class="column-start">
-
-                    <div class="input-label-box">
-                        <label style="font-weight: bold; color:dimgray">Seguro:</label>
-
-
-
-                        <select class="select-form" th:field="*{seguro}" th:classappend="${#fields.hasErrors('seguro') ? 'error' : ''}">
-                            <option value=""  selected>Seleccionar seguro</option>
-                            <option value="false" >Ninguno</option>
-                            <option value="Estatal (SIS)" >Estatal (SIS)</option>
-                            <option value="Pacífico Seguros" >Pacífico Seguros</option>
-                            <option value="Mapfre" >Mapfre</option>
-                            <option value="Rimac Seguros" >Rimac Seguros</option>
-                            <option value="La Positiva" >La Positiva</option>
-                            <option value="Sanitas" >Sanitas</option>
-                            <option value="Seguro EsSalud" >Seguro EsSalud</option>
-                        </select>
-
-                        <div class="error-message"  th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}"></div>
-
-
-
-
-
-                    </div>
-
-                </div>
-
-                <div class="column-start">
-
-                    <div class="input-label-box" th:object="${ordenDto}">
-                        <label style="font-weight: bold; color:dimgray; margin-bottom:8px">Captura de Receta Médica:</label>
-
-                        <div style="display: flex;flex-direction: row; column-gap: 4px">
-                            <i th:if="${#fields.hasErrors('file')}" style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
-                            <div class="error-message"  th:if="${#fields.hasErrors('file')}" th:errors="*{file}" style="margin-bottom: 9px"></div>
-
-                        </div>
-
-
-
-
-                        <div id="upload" class="modal" data-state="0" data-ready="false">
-
-                            <div class="modal__body">
-                                <div class="modal__col">
-                                    <!-- up -->
-                                    <svg class="modal__icon modal__icon--blue" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
-                                        <g fill="none" stroke="hsl(223,90%,50%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
-                                            <polyline class="modal__icon-sdo14" points="7 12 12 7 17 12" stroke-dasharray="14.2 14.2" />
-                                            <line class="modal__icon-sdo10" x1="12" y1="7" x2="12" y2="17" stroke-dasharray="10 10" />
-                                        </g>
-                                    </svg>
-                                    <!-- error -->
-                                    <svg class="modal__icon modal__icon--red" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true" display="none">
-                                        <g fill="none" stroke="hsl(3,90%,50%)" stroke-width="2" stroke-linecap="round">
-                                            <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
-                                            <line class="modal__icon-sdo14" x1="7" y1="7" x2="17" y2="17" stroke-dasharray="14.2 14.2" />
-                                            <line class="modal__icon-sdo14" x1="17" y1="7" x2="7" y2="17" stroke-dasharray="14.2 14.2" />
-                                        </g>
-                                    </svg>
-                                    <!-- check -->
-                                    <svg class="modal__icon modal__icon--green" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true" display="none">
-                                        <g fill="none" stroke="hsl(138,90%,50%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
-                                            <polyline class="modal__icon-sdo14" points="7 12.5 10 15.5 17 8.5" stroke-dasharray="14.2 14.2" />
-                                        </g>
-                                    </svg>
-                                </div>
-                                <div class="modal__col">
-                                    <div class="modal__content" >
-
-                                        <h2 class="modal__title" style="font-weight: 600">Sube una imagen de tu receta médica:</h2>
-                                        <p class="modal__message" style="color:dimgray">Selecciona la imagen para subirla desde tu dispositivo</p>
-                                        <div class="modal__actions">
-                                            <button  class="modal__button modal__button--upload" type="button" data-action="file">Seleccionar imagen</button>
-                                            <input th:field="*{file}" type="file"  hidden>
-                                        </div>
-                                        <div class="modal__actions" hidden>
-                                            <svg class="modal__file-icon" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
-                                                <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <polygon points="4 1 12 1 20 8 20 23 4 23" />
-                                                    <polyline points="12 1 12 8 20 8" />
-                                                </g>
-                                            </svg>
-                                            <div class="modal__file" data-file></div>
-                                            <button class="modal__close-button" type="button" data-action="fileReset">
-                                                <svg class="modal__close-icon" viewBox="0 0 16 16" width="16px" height="16px" aria-hidden="true">
-                                                    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                                                        <polyline points="4,4 12,12" />
-                                                        <polyline points="12,4 4,12" />
-                                                    </g>
-                                                </svg>
-                                                <span class="modal__sr">Remove</span>
-                                            </button>
-                                            <!--     <button class="btn-p" type="button" data-action="upload">Confirmar</button>     -->
-                                        </div>
-                                    </div>
-                                    <div class="modal__content" hidden>
-                                        <h2 class="modal__title">Subiendo imagen…</h2>
-                                        <p class="modal__message">Solo danos un momento para procesar tu archivo.</p>
-                                        <div class="modal__actions">
-                                            <div class="modal__progress">
-                                                <div class="modal__progress-value" data-progress-value>0%</div>
-                                                <div class="modal__progress-bar">
-                                                    <div class="modal__progress-fill" data-progress-fill></div>
-                                                </div>
-                                            </div>
-                                            <button class="btn-cancel" type="button" data-action="cancel">Cancelar</button>
-                                        </div>
-                                    </div>
-                                    <div class="modal__content" hidden>
-                                        <h2 class="modal__title">Oops!</h2>
-                                        <p class="modal__message">Your file could not be uploaded due to an error. Try uploading it again?</p>
-                                        <div class="modal__actions modal__actions--center">
-                                            <button class="modal__button" type="button" data-action="upload">Retry</button>
-                                            <button class="modal__button" type="button" data-action="cancel">Cancel</button>
-                                        </div>
-                                    </div>
-                                    <div class="modal__content" hidden>
-                                        <h2 class="modal__title">Carga Exitosa!</h2>
-                                        <p class="modal__message">Tu receta médica ha sido subido con éxito.</p>
-                                        <div class="modal__actions modal__actions--center">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                    </div>
-
-                </div>
-
-
             </div>
 
-            <div style="width: 900px">
-                <div class="container" style="margin-top: 20px; background-color: #EEEEEE; border-radius: 14px" th:object="${ordenDto}">
-
-                    <div style="padding-top: 20px; padding-bottom: 10px">
-                        <div  style="font-size: 20px;color:dimgray; font-weight: bold;"> Seleccion de medicamentos: </div>
-                        <div style="display: flex;flex-direction: row; column-gap: 4px">
-                            <i th:if="${#fields.hasErrors('listaIds')}" style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
-                            <div class="error-message"  th:if="${#fields.hasErrors('listaIds')}" th:errors="*{listaIds}"></div>
-
-                        </div>
-                    </div>
-
-                    <hr class="style-one">
+            <div class="buttons">
+                <button type="button" id="prevBtn" onclick="prevStep()">Anterior</button>
+                <button type="button" id="nextBtn" onclick="nextStep()">Siguiente</button>
+            </div>
 
 
-                    <div class="items-preview hide" id="items-preview" >
+            <div id="step1" class="step active">
+                <h2 style="color: #0d6efd">Seleccione sus medicamentos</h2>
+                <div style="width: 1500px">
+                    <div class="container" style="margin-top: 20px; background-color: #EEEEEE; border-radius: 14px">
 
-                        <div class="container-preview">
-
-
-                            <div class="preview-title roboto-regular">
-                                Lista de Productos Seleccionados - Nueva Orden de Venta
-
-                                <div class="price-total-div roboto-medium">
-                                    <input type="text" th:field="*{priceTotal}" value="" hidden>
-                                    TOTAL <span class="price-total">S/0.00</span>
-                                </div>
-                                <div >
-
-                                    <input id="listaIds" type="text" th:field="*{listaIds}"   hidden  />
-
-                                </div>
-                            </div>
-
-                            <div class="lista-items-clicked">
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-
-
-                    <div style="padding-bottom: 20px; padding-top: 20px; display: flex; flex-direction: column; row-gap:3px; align-items: start">
-                        <div>
+                        <div style="padding-bottom: 20px; padding-top: 20px; display: flex; flex-direction: row; column-gap:3px; justify-content: space-between">
 
                             <input id="searchInput" type="text" class="input-form" style="outline: none" placeholder="Buscar medicamento" >
 
+                            <div>
+                                <label for="filtroCategoria">Filtrar: </label>
+                                <select class="select-form" id="filtroCategoria">
+                                    <option value="">Todos</option>
+                                    <option value="Analgesicos">Analgesicos</option>
+                                    <option value="Antiácidos/Antiulcerosos">Antiácidos/Antiulcerosos</option>
+                                    <option value="Antialérgicos">Antialérgicos</option>
+                                    <option value="Antidiarreicos">Antidiarreicos</option>
+                                    <option value="Laxantes">Laxantes</option>
+                                    <option value="Antiinflamatorios">Antiinflamatorios</option>
+                                    <option value="Mucoliticos">Mucolíticos</option>
+                                    <option value="Antitusivos">Antitusivos</option>
+                                    <option value="Antiemeticos">Antieméticos</option>
+                                    <option value="Antihipertensivos">Antihipertensivos</option>
+                                    <option value="Hipoglucemiantes">Hipoglucemiantes</option>
+                                    <option value="Antidepresivos">Antidepresivos</option>
+                                    <option value="Ansioliticos">Ansiolíticos</option>
+                                    <option value="Anticonceptivos">Anticonceptivos</option>
+                                    <option value="Vitaminas y Suplementos">Vitaminas y Suplementos</option>
+                                    <option value="Cuidado Bucal">Cuidado Bucal</option>
+                                    <option value="Salud de la Mujer">Salud de la Mujer</option>
+                                    <option value="Proteccion Sexual">Protección Sexual</option>
+
+                                </select>
+                            </div>
+
                         </div>
-                    </div>
 
 
+                        <div class="interface">
 
-                    <div class="interface">
+                            <section class="medicamentos">
+                                <!-- Contenedor de elementos -->
+                                <div class="med-container">
+                                    <div class="item" th:each="medicamento : ${listaMedicamentos}">
+                                        <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" class="img-item"/>
+                                        <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
+                                        <div class="item-title roboto-regular" th:text="${medicamento.nombre}"   th:style="${medicamento.nombre.length()>=21 ? 'font-size:15px' : ''}"  >Medicamento</div>
+                                        <p class="categoria"  th:text="${medicamento.getCategorias()}"></p>
+                                        <div style="display: flex; flex-direction: row; gap: 5px; align-items: end;">
+                                            <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
+                                        </div>
 
-
-
-
-
-                        <section class="medicamentos">
-                            <!-- Contenedor de elementos -->
-                            <div class="med-container">
-                                <div class="item" th:each="medicamento : ${listaMedicamentos}">
-                                    <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" class="img-item"/>
-                                    <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
-                                    <div class="item-title roboto-regular" th:text="${medicamento.nombre}"   th:style="${medicamento.nombre.length()>=21 ? 'font-size:15px' : ''}"  >Medicamento</div>
-                                    <div style="display: flex; flex-direction: row; gap: 5px; align-items: end;">
-                                        <span class="item-symbol">S/. </span><span class="item-price roboto-regular" th:text="${medicamento.precioVenta}">Precio</span>
+                                        <button class="add-item-button montserrat-medium" type="button" th:data-item-id="${medicamento.idMedicamento}">Seleccionar</button>
                                     </div>
-
-                                    <button class="add-item-button montserrat-medium" type="button" th:data-item-id="${medicamento.idMedicamento}">Añadir a la Orden</button>
                                 </div>
-                            </div>
 
 
-                            <div class="pagination" id="pagination">
-                                <!-- Aquí se añadirán los botones de paginación -->
-                            </div>
+                                <div class="pagination" id="pagination">
+                                </div>
 
-                            <br>
-                            <br>
+                                <br>
+                                <br>
 
 
-                        </section>
+                            </section>
+
+                        </div>
 
                     </div>
-
                 </div>
             </div>
 
 
 
+            <div id="step2" class="step">
+                <h2 style="padding-left: 6px;margin-bottom: 18px; color: #0d6efd">Ingrese sus datos</h2>
+                <!-- Contenido del paso 2 -->
+                <div style="background-color: #eeeeee; padding-left: 26px; border:none; border-radius: 14px;min-height: 725px">
+                    <div class="column">
+
+                        <div class="input-label-box">
+                            <label style="font-weight: bold; color: dimgray">Nombre del paciente:</label>
+
+                            <div style="position: relative;">
+                                <input style="background-color: #cfcfcf" class="input-form" type="text" th:field="*{nombres}" placeholder="Ingrese su nombre" th:classappend="${#fields.hasErrors('nombres') ? 'error' : ''}"  th:value="${session.usuario.getNombres()}" readonly>
+                                <i th:if="${#fields.hasErrors('nombres')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                            </div>
+
+                            <div class="error-message"  th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
+
+                        </div>
+
+                        <div class="input-label-box">
+                            <label style="font-weight: bold; color:dimgray">Apellidos del paciente:</label>
+
+                            <div style="position: relative;">
+                                <input style="background-color: #cfcfcf" class="input-form" type="text" th:field="*{apellidos}" placeholder="Ingrese su apellido" th:classappend="${#fields.hasErrors('apellidos') ? 'error' : ''}" readonly>
+                                <i th:if="${#fields.hasErrors('apellidos')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                            </div>
+
+                            <div class="error-message"  th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
+
+
+                        </div>
+
+                        <div class="input-label-box">
+                            <label style="font-weight: bold; color:dimgray">DNI:</label>
+
+                            <div style="position: relative;">
+                                <input style="background-color: #cfcfcf" class="input-form" type="text" th:field="*{dni}" placeholder="Ingrese su DNI" th:classappend="${#fields.hasErrors('dni') ? 'error' : ''}" readonly>
+                                <i th:if="${#fields.hasErrors('dni')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                            </div>
+
+                            <div class="error-message"  th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></div>
+
+                        </div>
+
+                        <div class="input-label-box">
+                            <label style="font-weight: bold; color:dimgray">Teléfono:</label>
+
+
+                            <div style="position: relative;">
+                                <input style="background-color: #cfcfcf" class="input-form" type="text" th:field="*{celular}"  placeholder="Ingrese su número de teléfono" th:classappend="${#fields.hasErrors('celular') ? 'error' : ''}" readonly>
+                                <i th:if="${#fields.hasErrors('celular')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                            </div>
+
+                            <div class="error-message"  th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}"></div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="column">
+
+                        <div class="input-label-box">
+                            <label style="font-weight: bold; color:dimgray">Dirección:</label>
+
+
+                            <div style="position: relative;">
+                                <input class="input-form" type="text" th:field="*{direccion}" placeholder="Ingrese su dirección:" th:classappend="${#fields.hasErrors('direccion') ? 'error' : ''}">
+                                <i th:if="${#fields.hasErrors('direccion')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                            </div>
+
+                            <div class="error-message"  th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></div>
+
+
+                        </div>
+
+                        <div class="input-label-box" th:object="${ordenDto}">
+                            <label style="font-weight: bold; color:dimgray">Doctor:</label>
+
+
+                            <select class="select-form" th:field="*{idDoctor}" th:classappend="${#fields.hasErrors('idDoctor') ? 'error' : ''}">
+                                <option value="" selected>Seleccionar Doctor</option>
+                                <option th:each="doc:${listaDoctores}" th:value="${doc.getIdDoctor()}" th:text="${doc.getNombres() + ' ' + doc.getApellidos()}">Seleccionar Doctor</option>
+                            </select>
+
+                            <div class="error-message"  th:if="${#fields.hasErrors('idDoctor')}" th:errors="*{idDoctor}"></div>
+
+
+                        </div>
+
+                        <div class="input-label-box">
+                            <label style="font-weight: bold; color:dimgray">Distrito:</label>
+
+                            <div style="position: relative;">
+                                <input class="input-form" th:field="*{distrito}" type="text" placeholder="Ingrese el distrito donde reside" th:classappend="${#fields.hasErrors('distrito') ? 'error' : ''}">
+                                <i th:if="${#fields.hasErrors('distrito')}" style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                            </div>
+
+                            <div class="error-message"  th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}"></div>
+
+
+                        </div>
+
+                        <div class="input-label-box" th:object="${ordenDto}">
+                            <label style="font-weight: bold; color:dimgray">Hora de Entrega:</label>
+
+                            <div style="position: relative;">
+
+                                <input  class="input-form" type="time" th:field="*{horaEntrega}"   placeholder="Ingrese la hora de entrega" th:classappend="${#fields.hasErrors('horaEntrega') ? 'error' : ''}" >
+
+                            </div>
+
+                            <div class="error-message"  th:if="${#fields.hasErrors('horaEntrega')}" th:errors="*{horaEntrega}"></div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="column">
+
+                        <div class="input-label-box">
+                            <label style="font-weight: bold; color:dimgray">Seguro:</label>
+
+
+
+                            <select class="select-form" th:field="*{seguro}" th:classappend="${#fields.hasErrors('seguro') ? 'error' : ''}">
+                                <option value=""  selected>Seleccionar seguro</option>
+                                <option value="false" >Ninguno</option>
+                                <option value="Estatal (SIS)" >Estatal (SIS)</option>
+                                <option value="Pacífico Seguros" >Pacífico Seguros</option>
+                                <option value="Mapfre" >Mapfre</option>
+                                <option value="Rimac Seguros" >Rimac Seguros</option>
+                                <option value="La Positiva" >La Positiva</option>
+                                <option value="Sanitas" >Sanitas</option>
+                                <option value="Seguro EsSalud" >Seguro EsSalud</option>
+                            </select>
+
+                            <div class="error-message"  th:if="${#fields.hasErrors('seguro')}" th:errors="*{seguro}"></div>
+
+
+
+
+
+                        </div>
+
+                        <div class="input-label-box" th:object="${ordenDto}">
+                            <label style="font-weight: bold; color:dimgray">Sede:</label>
+
+                            <select class="select-form" th:field="*{sedeId}" th:classappend="${#fields.hasErrors('sedeId') ? 'error' : ''}">
+                                <option value=""  selected>Seleccionar sede</option>
+                                <option value="1" >Sede Central</option>
+                                <option value="2" >Sede Norte</option>
+                                <option value="3" >Sede Sur</option>
+                                <option value="4" >Sede Este</option>
+                                <option value="5" >Sede Oeste</option>
+                            </select>
+
+                            <div class="error-message"  th:if="${#fields.hasErrors('sedeId')}" th:errors="*{sedeId}"></div>
+
+
+
+
+
+                        </div>
+
+
+                    </div>
+                    <br>
+
+                    <div class="columns">
+                        <div class="input-label-box" th:object="${ordenDto}">
+                            <label style="font-weight: bold; color:dimgray; margin-bottom:8px">Captura de Receta Médica:</label>
+
+                            <div style="display: flex;flex-direction: row; column-gap: 4px">
+                                <i th:if="${#fields.hasErrors('file')}" style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                                <div class="error-message"  th:if="${#fields.hasErrors('file')}" th:errors="*{file}" style="margin-bottom: 9px"></div>
+
+                            </div>
+
+
+                            <div th:if="${extensionIncorrecta != null}" style="display: flex;flex-direction: row; column-gap: 4px">
+                                <i style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                                <div class="error-message"  style="margin-bottom: 9px">El formato de imagen debe ser PNG o JPG</div>
+                            </div>
+
+                            <div th:if="${archivoPesado != null}" style="display: flex;flex-direction: row; column-gap: 4px">
+                                <i style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                                <div class="error-message"  style="margin-bottom: 9px">El archivo subido es muy pesado (debe ser menor a 3MB)</div>
+                            </div>
+
+                            <div th:if="${archivoSinExtension != null}" style="display: flex;flex-direction: row; column-gap: 4px">
+                                <i style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                                <div class="error-message"  style="margin-bottom: 9px">El formato de imagen debe ser PNG o JPG</div>
+                            </div>
+
+
+                            <div id="upload" class="modal" data-state="0" data-ready="false">
+
+                                <div class="modal__body">
+                                    <div class="modal__col">
+                                        <!-- up -->
+                                        <svg class="modal__icon modal__icon--blue" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
+                                            <g fill="none" stroke="hsl(223,90%,50%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
+                                                <polyline class="modal__icon-sdo14" points="7 12 12 7 17 12" stroke-dasharray="14.2 14.2" />
+                                                <line class="modal__icon-sdo10" x1="12" y1="7" x2="12" y2="17" stroke-dasharray="10 10" />
+                                            </g>
+                                        </svg>
+                                        <!-- error -->
+                                        <svg class="modal__icon modal__icon--red" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true" display="none">
+                                            <g fill="none" stroke="hsl(3,90%,50%)" stroke-width="2" stroke-linecap="round">
+                                                <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
+                                                <line class="modal__icon-sdo14" x1="7" y1="7" x2="17" y2="17" stroke-dasharray="14.2 14.2" />
+                                                <line class="modal__icon-sdo14" x1="17" y1="7" x2="7" y2="17" stroke-dasharray="14.2 14.2" />
+                                            </g>
+                                        </svg>
+                                        <!-- check -->
+                                        <svg class="modal__icon modal__icon--green" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true" display="none">
+                                            <g fill="none" stroke="hsl(138,90%,50%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12" />
+                                                <polyline class="modal__icon-sdo14" points="7 12.5 10 15.5 17 8.5" stroke-dasharray="14.2 14.2" />
+                                            </g>
+                                        </svg>
+                                    </div>
+                                    <div class="modal__col">
+                                        <div class="modal__content" >
+
+                                            <h2 class="modal__title" style="font-weight: 600">Sube una imagen de tu receta médica:</h2>
+                                            <p class="modal__message" style="color:dimgray">Selecciona la imagen para subirla desde tu dispositivo</p>
+                                            <div class="modal__actions">
+                                                <button  class="modal__button modal__button--upload" type="button" data-action="file">Seleccionar imagen</button>
+                                                <input th:field="*{file}" type="file"  hidden>
+                                            </div>
+                                            <div class="modal__actions" hidden>
+                                                <svg class="modal__file-icon" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
+                                                    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <polygon points="4 1 12 1 20 8 20 23 4 23" />
+                                                        <polyline points="12 1 12 8 20 8" />
+                                                    </g>
+                                                </svg>
+                                                <div class="modal__file" data-file></div>
+                                                <button class="modal__close-button" type="button" data-action="fileReset">
+                                                    <svg class="modal__close-icon" viewBox="0 0 16 16" width="16px" height="16px" aria-hidden="true">
+                                                        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                                            <polyline points="4,4 12,12" />
+                                                            <polyline points="12,4 4,12" />
+                                                        </g>
+                                                    </svg>
+                                                    <span class="modal__sr">Remove</span>
+                                                </button>
+                                                <!--     <button class="btn-p" type="button" data-action="upload">Confirmar</button>     -->
+                                            </div>
+                                        </div>
+                                        <div class="modal__content" hidden>
+                                            <h2 class="modal__title">Subiendo imagen…</h2>
+                                            <p class="modal__message">Solo danos un momento para procesar tu archivo.</p>
+                                            <div class="modal__actions">
+                                                <div class="modal__progress">
+                                                    <div class="modal__progress-value" data-progress-value>0%</div>
+                                                    <div class="modal__progress-bar">
+                                                        <div class="modal__progress-fill" data-progress-fill></div>
+                                                    </div>
+                                                </div>
+                                                <button class="btn-cancel" type="button" data-action="cancel">Cancelar</button>
+                                            </div>
+                                        </div>
+                                        <div class="modal__content" hidden>
+                                            <h2 class="modal__title">Oops!</h2>
+                                            <p class="modal__message">Your file could not be uploaded due to an error. Try uploading it again?</p>
+                                            <div class="modal__actions modal__actions--center">
+                                                <button class="modal__button" type="button" data-action="upload">Retry</button>
+                                                <button class="modal__button" type="button" data-action="cancel">Cancel</button>
+                                            </div>
+                                        </div>
+                                        <div class="modal__content" hidden>
+                                            <h2 class="modal__title">Carga Exitosa!</h2>
+                                            <p class="modal__message">Tu receta médica ha sido subido con éxito.</p>
+                                            <div class="modal__actions modal__actions--center">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div id="step3" class="step" th:object="${ordenDto}">
+                <h2  style="color: #0d6efd">Carrito de Compras</h2>
+                <div style="display: flex;flex-direction: row; column-gap: 4px;margin-top: 10px;margin-bottom: 6px">
+                    <i th:if="${#fields.hasErrors('listaIds')}" style=" color: #E72C2C;" class="fas fa-exclamation-circle"></i>
+                    <div class="error-message"  th:if="${#fields.hasErrors('listaIds')}" th:errors="*{listaIds}"></div>
+
+                </div>
+                <p id="empty-cart-message" style="display: none; font-size: 20px">No hay ningún medicamento seleccionado.</p>
+
+
+
+                <div class="items-preview hide" id="items-preview" >
+
+                    <div class="container-preview">
+
+
+                        <div class="preview-title roboto-regular">
+                            Lista de Productos Seleccionados - Nueva Orden de Venta
+
+                            <div class="price-total-div roboto-medium">
+                                <input type="text" th:field="*{priceTotal}" value="" hidden>
+                                TOTAL <span class="price-total">S/0.00</span>
+                            </div>
+                            <div >
+
+                                <input id="listaIds" type="text" th:field="*{listaIds}"   hidden  />
+
+                            </div>
+                        </div>
+
+                        <div class="lista-items-clicked">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <br>
+                <br>
+                <br>
+
+                <div class="column-buttons">
+
+                    <a th:href="@{/paciente/ordenes}"><button class="btn-cancel" type="button">Cancelar</button></a>
+                    <button class="btn-p2" type="submit">Generar Orden Web</button>
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
+    </form>
+
+    <br>
 
 
-
-
-
-
-
-
-
-
-
-        <br>
-        <br>
-        <br>
-
-        <div class="column-buttons">
-
-            <a href="/paciente/ordenes"><button class="btn-cancel" type="button">Cancelar</button></a>
-            <button class="btn-p" type="submit">Confirmar</button>
-
-        </div>
-
-
+    <!--Footer-->
+    <div th:replace="~{fragments/navbar.html :: footer}">
     </div>
-</form>
 
-<br>
-
-
-<!--Footer-->
-<div th:replace="~{fragments/navbar.html :: footer}">
 </div>
 
-
-
-
-
-<!---------Pop up---------->
-<script>
-    const showPopup = document.querySelector('.btn-popup');
-    const popupContainer = document.querySelector('.popup-container');
-    const closePopup = document.getElementById('closePopup');
-
-    showPopup.onclick = () => {
-        popupContainer.classList.add('active');
-    }
-
-    closePopup.onclick = () =>{
-        popupContainer.classList.remove('active');
-    }
-</script>
 
 
 <script th:src="@{/js/upload_img.js}"></script>
 <script th:src="@{/js/topbar.js}"></script>
-
-
 <!---------Datatable---------->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        var table = $('#miTabla').DataTable({
-            "pageLength":4,
-            "lengthChange": false,
-            "language": {
-                "emptyTable": "No hay registros disponibles",
-                "zeroRecords": "No se encontraron registros coincidentes",
-                "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-                "Search" : "Buscar:",
-                "paginate": {
-                    "first": "Primero",
-                    "last": "Último",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                },
-                "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
-
-            },
-
-
-        });
-
-        $('#filtroEstado').on('change', function() {
-            var estado = $(this).val();
-            table.column(2).search(estado).draw();
-
-        });
-
-        $('#limpiarFiltros').on('click', function() {
-            $('#filtroEstado').val('');
-            table.search('').columns().search('').draw();
-        });
-    });
-</script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+<script th:src="@{/js/loader.js}"></script>
+<script th:src="@{/js/steps.js}"></script>
+<script>
+    const cartCountElement = document.getElementById('cart-count');
+    let count = parseInt(cartCountElement.textContent);
+    cartCountElement.textContent = count;
 
-
+    const emptyCartMessage = document.getElementById('empty-cart-message');
+    if (count === 0) {
+    emptyCartMessage.style.display = 'block';
+    } else {
+    emptyCartMessage.style.display = 'none';
+    }
+</script>
 <!---------SweetAlert---------->
 <style>
     .swal2-title {
@@ -612,8 +670,6 @@
     }
 
 </style>
-
-
 <script>
     const form = document.getElementById("form");
 
@@ -621,7 +677,7 @@
         e.preventDefault(); // Evita que el formulario se envíe de inmediato
 
         Swal.fire({
-            title: '¿Estás seguro de crear esta orden web?',
+            title: '¿Estás seguro de generar esta Orden Web?',
             icon: 'warning',
             iconColor: '#DC3545',
             showCancelButton: true,
@@ -637,21 +693,11 @@
         });
     });
 </script>
-
-
 <!---------Medicamentos---------->
-
-
-
 <script th:inline="javascript">
-
-
-
 
     var cantidades = /*[[${currentCant}]]*/ [];
     var medicamentos = /*[[${currentMed}]]*/ [];
-
-
 
     if (cantidades && cantidades.length > 0) {
 
@@ -666,17 +712,11 @@
         var preciosVenta = medicamentos.map(function(medicamento) {
             return medicamento.precioVenta;
         });
-
-        console.log(idsMedicamentos);
-        console.log(nombresMedicamentos);
-        console.log(preciosVenta);
-        console.log(cantidades);
+        var fotos = medicamentos.map(function(medicamento) {
+            return medicamento.imagen;
+        });
 
     }
-
-
-
-
 
 
     listaSelectedIds = []
@@ -718,7 +758,7 @@
                 const id = idsMedicamentos[i];
                 const title = nombresMedicamentos[i] + '';
                 const price = preciosVenta[i];
-                const imagenSrc = 'aaa';
+                const imagenSrc = 'data:image/jpeg;base64,'+fotos[i];
                 const cant = parseInt(cantidades[i]);
 
                 listaSelectedIds.push(id.toString()); //idMedicamento
@@ -782,6 +822,31 @@
             if (listaSelectedIds.indexOf(idAdd) === -1) {
                 listaSelectedIds.push(idAdd);
                 listaSelectedIds.push(1);
+
+                // Aumentar el contador del carrito
+                const cartCountElement = document.getElementById('cart-count');
+                cartCountElement.textContent = parseInt(cartCountElement.textContent) + 1;
+                //------------------------
+
+                // Añadir y quitar animación al icono del carrito
+                const cartIcon = document.getElementById('cart-icon');
+                cartIcon.classList.add('cart-jump');
+                setTimeout(() => {
+                    cartIcon.classList.remove('cart-jump');
+                }, 300);
+                //------------------------
+
+
+                //Mensaje de no hay medicamentos en el carrito
+                let count = parseInt(cartCountElement.textContent);
+                cartCountElement.textContent = count;
+                const emptyCartMessage = document.getElementById('empty-cart-message');
+                if (count === 0) {
+                    emptyCartMessage.style.display = 'block';
+                } else {
+                    emptyCartMessage.style.display = 'none';
+                }
+                //------------------------
             }
 
             const listaIdsInput = document.getElementById('listaIds');
@@ -799,6 +864,20 @@
             let pos = listaSelectedIds.indexOf(idDelete);
             listaSelectedIds.splice(pos,1);
             listaSelectedIds.splice(pos+1,1);
+
+            /// Disminuir el contador del carrito
+            const cartCountElement = document.getElementById('cart-count');
+            cartCountElement.textContent = Math.max(0, parseInt(cartCountElement.textContent) - 1);
+            //Mensaje de no hay medicamentos en el carrito
+            let count = parseInt(cartCountElement.textContent);
+            cartCountElement.textContent = count;
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            if (count === 0) {
+                emptyCartMessage.style.display = 'block';
+            } else {
+                emptyCartMessage.style.display = 'none';
+            }
+            //------------------------
 
             const listaIdsInput = document.getElementById('listaIds');
             listaIdsInput.value = listaSelectedIds;
@@ -837,7 +916,7 @@
             const itemNewSelected = `
         <div class="selected-item">
 
-            <img src="${imagenSrc}" width="40px" height="auto" alt="">
+            <img style="margin-left: 30px" src="${imagenSrc}" width="100px" height="auto" alt="">
 
             <span class="item-title-clicked">${titulo}</span>
 
@@ -992,79 +1071,48 @@
 
 
 </script>
-
-
-<!-----Top bar ------------->
-<script>
-    $(document).ready(function() {
-
-
-        var opened = false;
-
-        $('#menu-small').hide();
-
-        $('#nav-toggle').click(function (e) {
-            e.stopPropagation();
-            if (opened) {
-                $('#menu-small').hide();
-            } else {
-                $('#menu-small').show();
-            }
-            opened = !opened;
-        });
-    });
-</script>
-
-
-
-
-
-
-<script>
-
-    $(document).ready(function() {
-        $('#searchInput').on('input', function() { // Escuchar el evento 'input'
-            var searchTerm = $(this).val().trim().toLowerCase();
-            $('.item').each(function() {
-                var itemName = $(this).find('.item-title').text().trim().toLowerCase();
-                if (itemName.includes(searchTerm)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        });
-
-    });
-
-</script>
-
-
+<!-----Paginación y Filtros Medicamentos------------->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const itemsPerPage = 6; // Número de medicamentos por página
+        const itemsPerPage = 12; // Número de medicamentos por página
         let currentPage = 1; // Página actual
 
-        const medicamentos = document.querySelectorAll('.med-container .item');
-        const totalMedicamentos = medicamentos.length;
+        const filtroCategoria = document.getElementById("filtroCategoria");
+        const searchInput = document.getElementById("searchInput");
+        const medicamentos = Array.from(document.querySelectorAll('.med-container .item'));
+
+        function getVisibleMedicamentos() {
+            const categoriaSeleccionada = filtroCategoria.value;
+            const searchTerm = searchInput.value.trim().toLowerCase();
+
+            return medicamentos.filter(function(item) {
+                const categoriaItem = item.querySelector(".categoria").innerText.trim();
+                const itemName = item.querySelector('.item-title').innerText.trim().toLowerCase();
+                const matchesCategoria = categoriaSeleccionada === "" || categoriaItem === categoriaSeleccionada;
+                const matchesSearch = itemName.includes(searchTerm);
+
+                return matchesCategoria && matchesSearch;
+            });
+        }
 
         function mostrarMedicamentos() {
+            const visibleMedicamentos = getVisibleMedicamentos();
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
 
-            medicamentos.forEach((medicamento, index) => {
+            medicamentos.forEach(medicamento => medicamento.style.display = 'none');
+
+            visibleMedicamentos.forEach((medicamento, index) => {
                 if (index >= startIndex && index < endIndex) {
                     medicamento.style.display = 'block';
-                } else {
-                    medicamento.style.display = 'none';
                 }
             });
 
-            mostrarPaginacion();
+            mostrarPaginacion(visibleMedicamentos.length);
         }
 
-        function mostrarPaginacion() {
-            const totalPages = Math.ceil(totalMedicamentos / itemsPerPage);
+        function mostrarPaginacion(totalVisible) {
+            const totalPages = Math.ceil(totalVisible / itemsPerPage);
             const pagination = document.getElementById('pagination');
             pagination.innerHTML = '';
 
@@ -1082,11 +1130,29 @@
 
                 pagination.appendChild(button);
             }
+
+            // Ocultar la paginación si no hay páginas
+            if (totalPages <= 1) {
+                pagination.style.display = 'none';
+            } else {
+                pagination.style.display = 'block';
+            }
         }
+
+        filtroCategoria.addEventListener("change", function() {
+            currentPage = 1; // Resetear a la primera página al filtrar
+            mostrarMedicamentos();
+        });
+
+        searchInput.addEventListener("input", function() {
+            currentPage = 1; // Resetear a la primera página al buscar
+            mostrarMedicamentos();
+        });
 
         // Mostrar la paginación y la primera página al cargar la página
         mostrarMedicamentos();
     });
+
 
 </script>
 

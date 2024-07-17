@@ -21,7 +21,9 @@
         <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
         <link rel="stylesheet" th:href="@{/css/adminsede/estilos.css}">
         <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
-        <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/loader.css}">
+        <script th:src="@{/js/loader.js}"></script>
+
 
 
 
@@ -39,21 +41,49 @@
         <style>
         </style>
     </head>
-    <body class="loader-hidden">
+    <body>
 
 
-    <header class="header-topbar">
-        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
-    </header>
+    <div id="loader-container"  style="display: flex;flex-direction: column;">
 
-    <div th:replace="~{fragments/banner.html :: banner}"></div>
+        <div style="display: flex; justify-content: center;margin-top: 250px;">
+            <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
+        </div>
 
-    <div class="container-loader loader-hidden" id="onload">
-        <div class="loader"></div>
+        <div id="loader-wrapper"  class="loader-wrapper">
+
+            <div class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+
+            <div id="loader2" class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+
+            <div id="loader3" class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+        </div>
+
     </div>
 
 
-    <div class="container">
+    <div id="content-show" class="hidden">
+        <header class="header-topbar">
+            <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
+        </header>
+
+        <div th:replace="~{fragments/banner.html :: banner}"></div>
+
+        <div class="container-loader loader-hidden" id="onload">
+            <div class="loader"></div>
+        </div>
+
+
+        <div class="container">
             <div style="padding-top: 20px; padding-bottom: 20px">
                 <div class="main-title open-sans-bold"> Lista de órdenes entregadas </div>
                 <div class="main-subtitle helvetica-medium"> Vista de órdenes de reposición entregadas</div>
@@ -72,29 +102,29 @@
                 <button id="limpiarFiltros" class="btn-p" style="font-size: 17px; padding: 12px 20px">Limpiar Filtros</button>
 
                 <thead>
-                    <tr style="background-color: #378fff">
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Número de orden</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha Inicio</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha Fin</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamentos solicitados</th>
-                    </tr>
+                <tr style="background-color: #378fff">
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Número de orden</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha Inicio</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha Fin</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamentos solicitados</th>
+                </tr>
                 </thead>
 
 
                 <tbody>
-                    <tr th:each="orden, iterador: ${listaOrdenesEntregadas}">
-                        <td th:text="${orden.getIdReposicion()}"></td>
-                        <td th:text="${orden.getFechaIni()}"></td>
-                        <td th:text="${orden.getFechaFin()}"></td>
-                        <td style="text-align: center; display: flex; flex-direction: row; justify-content: center; gap: 5px;">
-                            <form th:action="@{'/adminsede/verDetallesOrdenEntregado'}" method="post">
-                                <input type="hidden" name="idOrden" th:value="${orden.getIdReposicion()}">
-                                <button type="submit" class="btn btn-sm btn-info" >
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
+                <tr th:each="orden, iterador: ${listaOrdenesEntregadas}">
+                    <td th:text="${orden.getNumero()}"></td>
+                    <td th:text="${orden.getFechaIni()}"></td>
+                    <td th:text="${orden.getFechaFin()}"></td>
+                    <td style="text-align: center; display: flex; flex-direction: row; justify-content: center; gap: 5px;">
+                        <form th:action="@{'/adminsede/verDetallesOrdenEntregado'}" method="post">
+                            <input type="hidden" name="idOrden" th:value="${orden.getIdReposicion()}">
+                            <button type="submit" class="btn btn-sm btn-info" >
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
 
                 </tbody>
             </table>
@@ -125,7 +155,9 @@
 
 
         <div th:replace="~{fragments/navbar.html :: footer}">
-        </div>
+        </div></div>
+
+
 
 
 

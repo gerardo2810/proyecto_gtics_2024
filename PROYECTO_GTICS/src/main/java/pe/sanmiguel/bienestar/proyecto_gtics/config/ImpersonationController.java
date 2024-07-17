@@ -36,7 +36,10 @@ public class ImpersonationController {
     public String impersonateUser(@RequestParam("username") String username, RedirectAttributes redirectAttributes, HttpServletRequest request) {
         // Ensure the current user has the role of SUPERADMIN
         if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
-                .anyMatch(auth -> auth.getAuthority().equals("SUPERADMIN"))) {
+                .anyMatch(auth -> auth.getAuthority().equals("SUPERADMIN")||
+                        auth.getAuthority().equals("ADMINSEDE") ||
+                        auth.getAuthority().equals("PACIENTE") ||
+                        auth.getAuthority().equals("FARMACISTA"))) {
 
             UserDetails userDetails = userDetailsManager.loadUserByUsername(username);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
@@ -49,6 +52,7 @@ public class ImpersonationController {
             // Close the current session
             HttpSession session = request.getSession(false);
             if (session != null) {
+                System.out.println("ID Sesion: " + session.getId());
                 session.invalidate();
             }
 
@@ -72,10 +76,13 @@ public class ImpersonationController {
 
             switch (usuario.getRol()) {
                 case 1:
+                    usuarioRepository.actualizarEstadoLogueoSuperadmin();
                     return "redirect:/superadmin";
                 case 2:
+                    usuarioRepository.actualizarEstadoLogueo(usuario.getIdUsuario());
                     return "redirect:/adminsede";
                 case 3:
+                    usuarioRepository.actualizarEstadoLogueo(usuario.getIdUsuario());
                     return "redirect:/farmacista";
                 case 4:
                     return "redirect:/paciente";

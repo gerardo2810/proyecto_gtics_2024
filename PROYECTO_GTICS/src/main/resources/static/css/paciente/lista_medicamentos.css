@@ -56,11 +56,11 @@
 
 .items-preview {
     margin-top: 20px;
-    max-height: 276px;
+    max-height: 412px;
     overflow: auto;
     border-radius: 0.25rem;
     color: var(--color-black);
-    background: var(--color-white);
+    background-color: #eeeeee;
 }
 
 .container-preview {
@@ -102,8 +102,8 @@
     border: none;
     background-color: var(--color-blue);
     color: #fff;
-    padding: 5px 20px;
-    border-radius: 20px;
+    padding: 8px 20px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color ease 0.2s;
 }
@@ -228,7 +228,7 @@
     background-color: var(--color-blue);
     color: #fff;
     padding: 10px 20px;
-    border-radius: 20px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color ease 0.2s;
 }

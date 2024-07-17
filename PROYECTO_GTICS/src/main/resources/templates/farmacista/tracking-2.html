@@ -14,7 +14,7 @@
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
     <link th:href="@{/css/fonts.css}" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
-    <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/loader.css}">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" th:href="@{/css/fonts.css}">
     <link rel="stylesheet" th:href="@{/css/topbar.css}">
@@ -153,13 +153,38 @@
 
 </script>
 
-<body class="loader-hidden">
+<body >
 
-    <div class="container-loader loader-hidden" id="onload">
-        <div class="loader"></div>
+<div id="loader-container"  style="display: flex;flex-direction: column;">
+
+    <div style="display: flex; justify-content: center;margin-top: 250px;">
+        <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
     </div>
 
-    <header class="header-topbar">
+    <div id="loader-wrapper"  class="loader-wrapper">
+
+        <div class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader2" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader3" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+    </div>
+
+</div>
+
+<div id="content-show" class="hidden">
+
+
+<header class="header-topbar">
         <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Tracking')}"></nav>
     </header>
 
@@ -348,7 +373,7 @@
 
     <div class="container" th:if="${orden.getTipoOrden() == 2 && (orden.getEstadoOrden() != 1 && orden.getEstadoOrden() != 2)}">
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr">
+        <div th:if="${orden.getEstadoOrden()==9}" style="display: grid; grid-template-columns: 1fr; grid-template-rows: 1fr">
             <div>
                 <section class="items-list-trk">
 
@@ -387,6 +412,91 @@
                         <div class="order-items-trk">
                             <div th:each="med : ${contenidoOrden}">
 
+                                <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between !important; padding: 15px; border-bottom:solid 1px #d3d3d3;">
+
+                                    <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                        <img th:src="'data:image/jpeg;base64,' + ${med.getIdMedicamento().imagenBase64}" width="80px" height="auto" th:alt="${med.getIdMedicamento().getNombre()}">
+                                    </div>
+
+                                    <div style="min-width: 180px; display: flex; align-items: center; justify-content: start">
+                                        <div style="display: flex; flex-direction: column; gap: 10px">
+                                            <span style="font-size: 1.2rem; max-width: 180px" class="item-title-clicked" th:text="${med.getIdMedicamento().getNombre()}">Medicamento</span>
+                                            <span style="font-size: 0.8rem; max-width: 180px" class="item-title-clicked" th:text="${med.getIdMedicamento().getDescripcion()}">Medicamento</span>
+                                        </div>
+                                    </div>
+
+                                    <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                        <span type="text" th:text="${med.getCantidad()}" class="item-quantity-clicked"></span>
+                                    </div>
+
+                                    <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                        <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${med.getIdMedicamento().getPrecioVenta()}"></span>
+                                    </div>
+
+                                    <div style="min-width: 80px; display: flex; align-items: end; justify-content: center">
+                                        <span style="padding-top: 5px;">S/. </span><span class="item-price-clicked" th:text="${ #numbers.formatDecimal((med.getIdMedicamento().getPrecioVenta()*med.getCantidad()), 1, 'COMMA', 2, 'POINT')}"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; align-items: center; gap: 15px;">
+                                <input type="hidden" name="priceTotal" value="">
+                                TOTAL <span class="price-total" th:text="${'S/.   ' + #numbers.formatDecimal(orden.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}">S/0.00</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </section>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div th:if="${orden.getEstadoOrden()!=9}" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr">
+
+
+            <div>
+                <section class="items-list-trk">
+
+                    <div class="inside-items-list-trk">
+
+                        <div class="preview-title roboto-regular" style="font-size: 1.3rem">
+                            Contenido de la Orden Web<span style="font-weight: bold" th:text="${orden.getIdOrden() + 10000}"></span>
+                        </div>
+
+                        <div class="preview-title-trk roboto-regular">
+                            <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between">
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    Imagen
+                                </div>
+
+                                <div style="min-width: 180px; display: flex; align-items: center; justify-content: center">
+                                    Descripción
+                                </div>
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    Cantidad
+                                </div>
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    P. Uni.
+                                </div>
+
+                                <div style="min-width: 80px; display: flex; align-items: center; justify-content: center">
+                                    Precio
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="order-items-trk">
+                            <div th:each="med : ${contenidoOrden}">
 
                                 <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between !important; padding: 15px; border-bottom:solid 1px #d3d3d3;">
 
@@ -655,7 +765,7 @@
                     <div class="inside-items-list-trk">
 
                         <div class="preview-title roboto-regular" style="font-size: 1.3rem">
-                            Contenido de la PreOrden<span style="font-weight: bold" th:text="${orden.getIdOrden() + 10000}"></span>
+                            Contenido de la PreOrden<span style="font-weight: bold" th:text="${preOrden.getIdOrden() + 10000}"></span>
                         </div>
 
                         <div class="preview-title-trk roboto-regular">
@@ -718,7 +828,7 @@
 
                             <div class="roboto-medium container" style="padding-top: 10px; display: flex; justify-content: end; align-items: center; gap: 15px;">
                                 <input type="hidden" name="priceTotal" value="">
-                                TOTAL <span class="price-total" th:text="${'S/.   ' + #numbers.formatDecimal(orden.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}">S/0.00</span>
+                                TOTAL <span class="price-total" th:text="${'S/.   ' + #numbers.formatDecimal(preOrden.getPrecioTotal(), 1, 'COMMA', 2, 'POINT')}">S/0.00</span>
                             </div>
 
                         </div>
@@ -962,15 +1072,6 @@
         }
     </style>
 
-    <div th:if="${(orden.getTipoOrden() == 2 && !hayProblemasStock) && orden.getEstadoOrden() == 1}" class="container" style="padding-top: 15px">
-
-        <div class="alert alert-success" role="alert">
-            <p class="main-subtitle" style="color: #155724 !important;">¡La orden web no presenta problemas de Stock!</p>
-            <p>No hay inconvenientes para procesar la orden, puede aprobarla para que el paciente pueda pagarla e iniciar el proceso de envío. Recuerde que podrá anular esta orden solo antes de que sea empaquetada.</p>
-        </div>
-
-    </div>
-
     <div th:if="${(orden.getTipoOrden() == 2 && hayProblemasStock) && orden.getEstadoOrden() == 1}" class="container" style="padding-top: 15px">
 
         <div class="alert alert-warning" role="alert">
@@ -1074,6 +1175,7 @@
 
     <div th:replace="~{fragments/navbar.html :: footer}">
     </div>
+    </div>
 
     <script>
 
@@ -1116,13 +1218,7 @@
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        window.onload = function () {
-            $('#onload').fadeOut();
-            $('body').removeClass('loader-hidden');
-        }
 
-    </script>
 
     <script>
         $(document).ready(function() {
@@ -1155,6 +1251,10 @@
             }
         }
     </script>
+<script th:src="@{/js/loader.js}"></script>
+
+
+
 
 
 </body>

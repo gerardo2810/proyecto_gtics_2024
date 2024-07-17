@@ -31,6 +31,7 @@
     <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
     <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+    <link rel="stylesheet" th:href="@{/css/loader.css}">
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!--=============== DataTable ===============-->
@@ -40,168 +41,243 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.3/css/buttons.bootstrap5.min.css"/>
     <!--==========================================-->
-
-
-
+    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
     <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
     <title>Ordenes Web | Bienestar San Miguel</title>
 
 
     <style>
-
+        df-messenger {
+            z-index: 999;
+            position: fixed;
+            --df-messenger-font-color: #000000;
+            --df-messenger-font-family: Lato;
+            --df-messenger-chat-background: #FFFFFF;
+            --df-messenger-message-user-background: #4285F4;
+            --df-messenger-message-bot-background: #fff;
+            bottom: 16px;
+            right: 16px;
+        }
     </style>
+
 </head>
 
 <body>
 
 
+<div id="loader-container"  style="display: flex;flex-direction: column;">
 
-<header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Ordenes Web')}"></nav>
-</header>
-
-
-<div th:replace="~{fragments/banner.html :: banner}"></div>
-
-
-<script th:if="${msg != null}">
-    Swal.fire({
-        icon: "success",
-        iconColor: '#4da642',
-        title: "Orden Web Creada",
-        text: "Debera esperar a que su orden sea aprobada. De haber algún problema, el farmacista encargado se comunicará con usted para que finalmente su orden sea aprobada y pueda realizar el pago correspondiente.",
-        confirmButtonText: "OK",
-        confirmButtonColor: '#3f883b',
-        width: 500,
-    });
-</script>
-
-
-
-<div class="container">
-
-    <div style="margin-bottom: 50px"></div>
-    <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Ordenes Web:</strong></h2>
-    <div style="margin-bottom: 20px"></div>
-    <hr style="border-top: 1px solid #DFDFDF;">
-    <div style="margin-bottom: 20px"></div>
-
-    <div style="padding-right: 0; padding-left: 0"> </div>
-</div>
-
-
-
-
-<div class="container">
-
-    <br>
-
-    <div style="display: flex; flex-direction: row; justify-content: space-between">
-        <div class="column-start" style="padding-bottom: 1px">
-
-            <div style="display: flex;flex-direction: row;column-gap: 8px">
-
-                <div style="display: flex; flex-direction: column; justify-content: center">
-
-                    <label style="color:dimgray;font-weight: bold; margin-left: 2px; margin-bottom:4px">Filtrar por Estado:</label>
-
-                </div>
-
-                <div style="display: flex; flex-direction: column; justify-content: start">
-
-
-                    <select class="select-p" id="filtroEstado" >
-                        <option value="">Mostrar Todos</option>
-                        <option value="RECIBIDO">Recibido</option>
-                        <option value="EN PROCESO">En proceso</option>
-                        <option value="EMPAQUETANDO">Empaquetando</option>
-                        <option value="EN RUTA">En ruta</option>
-                        <option value="ENTREGADO">Entregado</option>
-                    </select>
-
-                </div>
-            </div>
-
-
-            <div style="display: flex; flex-direction: column; justify-content: start">
-                <input id="searchInput" type="text" class="input-form" style="margin-top: 4px;width: 300px;height: 40px" placeholder="Buscar">
-            </div>
-
-        </div>
-
-        <div style="display:flex; justify-content: end;flex-direction: column" >
-            <a class="btn-p" href="/paciente/new_orden">Generar nueva orden</a>
-
-        </div>
-
+    <div style="display: flex; justify-content: center;margin-top: 250px;">
+        <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
     </div>
 
+    <div id="loader-wrapper"  class="loader-wrapper">
+
+        <div class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader2" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader3" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="content-show" class="hidden">
+
+    <df-messenger
+            location="us-east1"
+            project-id="focal-baton-405905"
+            agent-id="67add3f9-fc2b-46b3-81fe-332970bf4670"
+            language-code="es"
+            max-query-length="-1">
+        <df-messenger-chat-bubble
+                chat-title="Asistente Virtual - Clínica Bienestar">
+        </df-messenger-chat-bubble>
+    </df-messenger>
+
+    <script>
+        function generateSessionId() {
+            // Generar un ID de sesión único
+            return 'session-' + Math.random().toString(36).substr(2, 16);
+        }
+
+        function initializeSession() {
+            // Siempre generar una nueva sesión cuando se carga la página
+            const sessionId = generateSessionId();
+            localStorage.setItem('dialogflowSessionId', sessionId);
+            return sessionId;
+        }
+
+        window.addEventListener('dfMessengerLoaded', function (event) {
+            const dfMessenger = document.querySelector('df-messenger');
+            const sessionId = generateSessionId();
+
+            // Configurar el ID de sesión único
+            dfMessenger.addEventListener('df-request-sent', function(event) {
+                const request = event.detail.requestPayload;
+                request.session = `projects/focal-baton-405905/locations/us-east1/agents/67add3f9-fc2b-46b3-81fe-332970bf4670/sessions/${sessionId}`;
+            });
+        });
+    </script>
+
+
+    <header class="header-topbar">
+        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Ordenes Web')}"></nav>
+    </header>
+
+
+    <div th:replace="~{fragments/banner.html :: banner}"></div>
+
+    <div class="container">
+
+        <div style="margin-bottom: 50px"></div>
+        <h2><i class="fa-solid fa-star" style="color: #8de7ef;"></i><strong style="padding-left: 10px">Ordenes Web:</strong></h2>
+        <div style="margin-bottom: 20px"></div>
+        <hr style="border-top: 1px solid #DFDFDF;">
+        <div style="margin-bottom: 20px"></div>
+
+        <div style="padding-right: 0; padding-left: 0"> </div>
+    </div>
+
+    <div class="container">
+
+        <br>
+
+        <div style="display: flex; flex-direction: row; justify-content: space-between">
+            <div class="column-start" style="padding-bottom: 1px">
+
+                <div style="display: flex;flex-direction: row;column-gap: 8px">
+
+                    <div style="display: flex; flex-direction: column; justify-content: center">
+
+                        <label style="color:dimgray;font-weight: bold; margin-left: 2px; margin-bottom:4px">Filtrar por Estado:</label>
+
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; justify-content: start">
+
+
+                        <select class="select-p" id="filtroEstado" >
+                            <option value="">Mostrar Todos</option>
+                            <option value="PENDIENTE">Pendiente</option>
+                            <option value="PAGO DISPONIBLE">Pago Disponible</option>
+                            <option value="RECIBIDO">Recibido</option>
+                            <option value="EN PROCESO">En proceso</option>
+                            <option value="EMPAQUETANDO">Empaquetando</option>
+                            <option value="EN RUTA">En ruta</option>
+                            <option value="ENTREGADO">Entregado</option>
+                        </select>
+
+                    </div>
+                </div>
+
+
+                <div style="display: flex; flex-direction: column; justify-content: start">
+                    <input id="searchInput" type="text" class="input-form" style="margin-top: 4px;width: 300px;height: 40px" placeholder="Buscar">
+                </div>
+
+            </div>
+
+            <div style="display:flex; justify-content: end;flex-direction: column" >
+                <a class="btn-p" href="/paciente/new_orden">Generar nueva orden</a>
+
+            </div>
+
+        </div>
+
+        <br>
+
+
+        <table id="miTabla" class="table table-striped">
+            <thead>
+            <tr style="background-color: #378fff">
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Número de Tracking</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha de registro</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Estado</th>
+                <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+
+
+            <tr th:each="orden : ${lista}">
+                <td th:text="${orden.getTracking()}"></td>
+                <td style="text-align: center" th:text="${#temporals.format(orden.getFechaIni(), 'dd/MM/yyyy   -   HH:mm')}"></td>
+                <td th:switch="${orden.getEstadoOrden()}">
+                    <button class="btn-pend"          th:case="1">PENDIENTE</button>
+                    <button class="animationButton22" th:case="2">PAGO DISPONIBLE</button>
+                    <button class="btn-rcb"           th:case="3">RECIBIDO</button>
+                    <button class="btn-pro"           th:case="4">EN PROCESO</button>
+                    <button class="btn-empa"          th:case="5">EMPAQUETANDO</button>
+                    <button class="btn-ruta"          th:case="6">EN RUTA</button>
+                    <button class="btn-listo"         th:case="7">ENTREGADO</button>
+                    <button class="btn-anulado"        th:case="9">ANULADO</button>
+
+                </td>
+                <td class="action" th:switch="${orden.getEstadoOrden()}">
+
+                    <a th:case="1"  th:href="@{'/paciente/tracking' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
+                    <a th:case="2"  th:href="@{'/paciente/confirmar_pago' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info" style="background-color: #3F71EA;border:none"><i class="fa-regular fa-credit-card"></i></button></a>
+                    <a th:case="*"  th:href="@{'/paciente/tracking' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
+
+
+                </td>
+            </tr>
+
+
+
+            </tbody>
+        </table>
+
+    </div>
     <br>
-
-
-    <table id="miTabla" class="table table-striped">
-        <thead>
-        <tr style="background-color: #378fff">
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Número de Tracking</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Fecha de registro</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Estado</th>
-            <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-
-
-        <tr th:each="orden : ${lista}">
-            <td th:text="${orden.getTracking()}"></td>
-            <td style="text-align: center" th:text="${#temporals.format(orden.getFechaIni(), 'dd/MM/yyyy   -   HH:mm')}"></td>
-            <td th:switch="${orden.getEstadoOrden()}">
-                <button class="btn-pend"          th:case="1">PENDIENTE</button>
-                <button class="animationButton22" th:case="2">PAGO DISPONIBLE</button>
-                <button class="btn-rcb"           th:case="3">RECIBIDO</button>
-                <button class="btn-pro"           th:case="4">EN PROCESO</button>
-                <button class="btn-empa"          th:case="5">EMPAQUETANDO</button>
-                <button class="btn-ruta"          th:case="6">EN RUTA</button>
-                <button class="btn-listo"         th:case="7">ENTREGADO</button>
-            </td>
-            <td class="action" th:switch="${orden.getEstadoOrden()}">
-
-                <a th:case="1"  th:href="@{'/paciente/tracking' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-                <a th:case="2"  th:href="@{'/paciente/confirmar_pago' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info" style="background-color: #3F71EA;border:none"><i class="fa-regular fa-credit-card"></i></button></a>
-                <a th:case="*"  th:href="@{'/paciente/tracking' + '?id=' + ${orden.getIdOrden()} }"><button  class="btn btn-sm btn-info"><i class="fa-regular fa-eye"></i></button></a>
-
-
-            </td>
-        </tr>
-
-
-
-        </tbody>
-    </table>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div th:replace="~{fragments/navbar.html :: footer}">
+    </div>
 
 </div>
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
-<div th:replace="~{fragments/navbar.html :: footer}">
-</div>
-
-
+<script th:if="${msg != null}">
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            Swal.fire({
+                icon: "success",
+                iconColor: '#4da642',
+                title: "Orden Web Creada",
+                text: "Debera esperar a que su orden sea aprobada. De haber algún problema, el farmacista encargado se comunicará con usted para que finalmente su orden sea aprobada y pueda realizar el pago correspondiente.",
+                confirmButtonText: "OK",
+                confirmButtonColor: '#3f883b',
+                width: 500,
+            });
+        }, 2200);
+    });
+</script>
+<script th:src="@{/js/loader.js}"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <script th:src="@{/js/topbar.js}"></script>

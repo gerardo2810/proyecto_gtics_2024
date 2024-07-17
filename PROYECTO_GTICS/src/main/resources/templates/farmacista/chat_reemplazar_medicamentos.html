@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec = "http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+    <!--=============== CSS ===============-->
+    <!-- Font Awesome -->
+
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/fonts.css}">
+    <link rel="stylesheet" th:href="@{/css/topbar.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/paciente.css}">
+    <link rel="stylesheet" th:href="@{/css/datatables.css}">
+    <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
+    <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+    <link rel="stylesheet" th:href="@{/css/paciente/lista_medicamentos.css}">
+    <link rel="stylesheet" th:href="@{/css/loader.css}">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css" rel="stylesheet">
+    <!--=============== DataTable ===============-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css"/>
+    <!--  Bootstrap-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"/>
+    <!--==========================================-->
+
+
+    <title>Mensajería | Bienestar San Miguel</title>
+
+    <style>
+
+        .pagination {
+            margin-top: 2px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .pagination button {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: "Roboto", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            color: black;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .pagination button:hover {
+            background-color: #ddd;
+        }
+
+        .pagination button.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .container2 {
+            border: 2px solid #dedede;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        /* Darker chat container */
+        .darker {
+            border-color: #ccc;
+            background-color: #ddd;
+        }
+
+        /* Clear floats */
+        .container2::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        /* Style images */
+        .container2 img {
+            float: left;
+            max-width: 60px;
+            width: 100%;
+            margin-right: 20px;
+            border-radius: 50%;
+        }
+
+        /* Style the right image */
+        .container2 img.right {
+            float: right;
+            margin-left: 20px;
+            margin-right:0;
+        }
+
+        /* Style time text */
+        .time-right {
+            float: right;
+            color: #aaa;
+        }
+
+        /* Style time text */
+        .time-left {
+            float: left;
+            color: #999;
+        }
+        /* Estilos para el input de texto */
+        .container2:last-child {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px; /* Espacio entre el último mensaje y el input */
+        }
+
+        .container2:last-child input[type="text"] {
+            width: 70%; /* Ancho del input */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px; /* Espacio entre el input y el botón */
+            box-sizing: border-box;
+        }
+
+        /* Estilos para el botón de enviar */
+        .container2:last-child button {
+            background-color: #4CAF50; /* Color de fondo */
+            color: white; /* Color del texto */
+            padding: 10px 20px; /* Espaciado interno */
+            border: none; /* Sin borde */
+            border-radius: 5px; /* Borde redondeado */
+            cursor: pointer; /* Cursor al pasar */
+        }
+
+        /* Estilos para el icono del botón */
+        .container2:last-child button i {
+            margin-right: 5px; /* Espacio entre el icono y el texto */
+        }
+        .area {
+            height: 12vh !important;
+        }
+
+        .circles {
+            height: 19vh !important;
+        }
+
+        .banner-btn {
+            color: #fff !important;
+            border: solid 1px #fff !important;
+            border-radius: 5px !important;
+            cursor: pointer !important;
+            align-items: center !important;
+            display: flex !important;
+            background: none !important;
+        }
+
+        .bell-btn {
+            padding: 14px 14px 14px 14px;
+            font-size: 1.1rem !important;
+        }
+
+        .user-btn {
+            padding: 13px 14px 13px 14px;
+            font-size: 1.1rem !important;
+        }
+
+        .exit-btn {
+            padding: 14px 12px 14px 12px;
+            font-size: 1.1rem !important;
+        }
+    </style>
+
+
+    <style>
+
+        .sold-out-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 10; /* Asegura que esté sobre el contenido de la tarjeta */
+        }
+
+        .sold-out-sign {
+            background-color: #d90b11; /* Color de fondo del cartel */
+            color: white; /* Color del texto */
+            font-size: 16px; /* Tamaño del texto */
+            font-weight: bold; /* Negrita para el texto */
+            padding: 5px 10px; /* Espaciado interno del cartel */
+            border-radius: 5px; /* Bordes redondeados */
+            position: relative;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px #a5aaad;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #0d6efd;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #0d6efd;
+        }
+
+
+        .kapsayici{
+            display:flex;
+            padding:5px;
+            text-align:center;
+            max-width:500px;
+            min-width:0px;
+            height:auto;
+            margin:200px auto;
+            flex-direction: row;
+            align-items: center;
+
+        }
+
+
+        .emoji{
+            max-width:30px;
+            border-radius:50%;
+            cursor:pointer;
+        }
+        .bar{
+            width:200px;
+            height:170px;
+            border-radius:10px;
+            background:#fff;
+            position:absolute;
+            right:10px;
+            top:40px;
+            box-shadow:0px 0px 20px 0px #272727;
+            visibility:hidden;
+            opacity:0;
+            display:flex;
+
+            font-size:35px;
+            transition:all 0.3s;
+        }
+        .emoji:focus + .bar{
+            top:60px;
+            visibility:visible;
+            opacity:1;
+        }
+        .bar:focus{
+            top:60px;
+            visibility:visible;
+            opacity:1;
+        }
+        .emoticon{
+            padding:10px;
+            border-radius:50%;
+            cursor:pointer;
+            transition:all 0.3s;
+        }
+        .emoticon:hover{
+            background:mediumslateblue;
+            color:white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+
+<body>
+<div id="loader-container"  style="display: flex;flex-direction: column;">
+
+    <div style="display: flex; justify-content: center;margin-top: 250px;">
+        <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
+    </div>
+
+    <div id="loader-wrapper"  class="loader-wrapper">
+
+        <div class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader2" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader3" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+    </div>
+
+</div>
+
+<div id="content-show" class="hidden">
+
+    <header class="header-topbar">
+        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Mensajeria')}"></nav>
+    </header>
+
+    <div th:replace="~{fragments/banner.html :: banner}"></div>
+
+
+    <div class="container">
+
+        <div style="margin-bottom: 50px"></div>
+        <div style="display: flex;flex-direction: row; justify-content: space-between">
+            <h2><strong style="padding-left: 10px; font-size: 30px">Reemplazar Medicamentos</strong></h2>
+            <a class="btn-p" onclick="goBack()">Regresar</a>
+        </div>
+        <div style="margin-bottom: 20px"></div>
+        <hr style="border-top: 1px solid #DFDFDF;">
+        <div style="margin-bottom: 40px"></div>
+
+        <div style="padding-right: 0; padding-left: 0"> </div>
+    </div>
+
+
+    <br>
+
+    <div class="container" style="display: flex; flex-direction: row; column-gap: 60px">
+
+            <div style="width: 800px;">
+                <table id="miTabla" class="table table-striped">
+                    <h2>Medicamentos sin Stock</h2>
+                    <thead>
+                    <tr style="background-color: #378fff">
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Medicamento</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Cantidad</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio Unitario</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Precio Total</th>
+                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Categoría</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="itemDeLaOrden: ${medicamentosSinStock}">
+                        <td th:text="${itemDeLaOrden.getIdMedicamento().nombre}"></td>
+                        <td><img th:src="'data:image/jpeg;base64,' + ${itemDeLaOrden.getIdMedicamento().imagenBase64}" class="medicamento"/></td>
+                        <td th:text="${itemDeLaOrden.getCantidad()}"></td>
+                        <td th:text="${ 'S/.' + itemDeLaOrden.getIdMedicamento().precioVenta}"></td>
+                        <td th:text="${ 'S/.' +  #numbers.formatDecimal((itemDeLaOrden.getIdMedicamento().getPrecioVenta()*itemDeLaOrden.getCantidad()), 1, 'COMMA', 2, 'POINT')}"></td>
+                        <td th:text="${itemDeLaOrden.getIdMedicamento().categorias}"></td>
+                    </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="container">
+            <h2 style="color: #0d6efd">Elegir Nuevo(s) Medicamentos : </h2>
+            <div th:if="${currentMed != null}" style="display: flex;flex-direction: row; column-gap: 4px;margin-top: 15px">
+                <i style=" color: #E72C2C; margin-top:2px" class="fas fa-exclamation-circle"></i>
+                <div class="error-message"  style="margin-bottom: 2px;font-size: 17px">Debe seleccionar una cantidad de medicamentos que tengan stock</div>
+            </div>
+            <div style="width: 1500px">
+                <div class="container" style="margin-top: 20px; background-color: #EEEEEE; border-radius: 14px">
+
+
+                    <div class="items-preview hide" id="items-preview" >
+
+                        <div class="container-preview">
+
+
+                            <div class="preview-title roboto-regular">
+                                Lista de Productos Seleccionados - Nueva Orden de Venta
+
+                                <div class="price-total-div roboto-medium">
+                                    <input type="text" name="priceTotal" id="priceTotal" value="" hidden>
+                                    TOTAL <span class="price-total">S/0.00</span>
+                                </div>
+
+                                <div>
+
+                                    <form id="form" th:action="@{/farmacista/confirmar_cambio}" method="post">
+                                        <input id="listaIds" type="hidden" name="listaIds" value=""/>
+                                        <input name="idOrden" th:value="${idOrden}" type="hidden">
+                                        <button type="submit" class="continue-button montserrat-medium">Confirmar cambio de medicamentos</button>
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                            <div class="lista-items-clicked">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div style="padding-bottom: 20px; padding-top: 20px; display: flex; flex-direction: row; column-gap:3px; justify-content: space-between">
+
+                        <input id="searchInput" type="text" class="input-form" style="outline: none" placeholder="Buscar medicamento" >
+
+                        <div>
+                            <label for="filtroCategoria">Filtrar: </label>
+                            <select class="select-form" id="filtroCategoria">
+                                <option value="">Todos</option>
+                                <option value="Analgesicos">Analgesicos</option>
+                                <option value="Antiácidos/Antiulcerosos">Antiácidos/Antiulcerosos</option>
+                                <option value="Antialérgicos">Antialérgicos</option>
+                                <option value="Antidiarreicos">Antidiarreicos</option>
+                                <option value="Laxantes">Laxantes</option>
+                                <option value="Antiinflamatorios">Antiinflamatorios</option>
+                                <option value="Mucoliticos">Mucolíticos</option>
+                                <option value="Antitusivos">Antitusivos</option>
+                                <option value="Antiemeticos">Antieméticos</option>
+                                <option value="Antihipertensivos">Antihipertensivos</option>
+                                <option value="Hipoglucemiantes">Hipoglucemiantes</option>
+                                <option value="Antidepresivos">Antidepresivos</option>
+                                <option value="Ansioliticos">Ansiolíticos</option>
+                                <option value="Anticonceptivos">Anticonceptivos</option>
+                                <option value="Vitaminas y Suplementos">Vitaminas y Suplementos</option>
+                                <option value="Cuidado Bucal">Cuidado Bucal</option>
+                                <option value="Salud de la Mujer">Salud de la Mujer</option>
+                                <option value="Proteccion Sexual">Protección Sexual</option>
+
+                            </select>
+                        </div>
+
+                    </div>
+
+
+                    <div class="interface">
+
+                        <section class="medicamentos">
+                            <!-- Contenedor de elementos -->
+                            <div class="med-container">
+                                <div class="item" th:each="medicamento : ${listaMedicamentos}">
+                                    <div class="sold-out-container" th:if="${medicamento.getCantidad() == 0}">
+                                        <div class="sold-out-sign">SOLD OUT</div>
+                                    </div>
+                                    <div class="sold-out-container" th:if="${medicamento.getCantidad() > 0}">
+                                        <!--div class="chau" th:if="${medicamento.getCantidad() <= 25}">
+                                            POR AGOTAR
+                                        </div>
+                                        <div class="hola" th:if="${medicamento.getCantidad() > 25}">
+                                            STOCK ACEPTABLE
+                                        </div-->
+                                    </div>
+                                    <img th:src="'data:image/jpeg;base64,' + ${medicamento.imagenBase64}" class="img-item"/>
+                                    <div class="subtitulo-item roboto-bold" th:text="${medicamento.unidad}" >Unidad</div>
+                                    <div class="item-title roboto-regular" th:text="${medicamento.nombre}"   th:style="${medicamento.nombre.length()>=21 ? 'font-size:15px' : ''}"  >Medicamento</div>
+                                    <p class="categoria"  th:text="${medicamento.getCategorias()}"></p>
+                                    <span th:text="${medicamento.cantidad}" style="display: none"></span>
+                                    <div style="display: flex; flex-direction: row; justify-content: space-between">
+                                        <div>
+                                            <p style="padding-top: 0" class="item-price" th:text="${'S/.' + medicamento.precioVenta}"></p>
+                                        </div>
+                                        <div th:if="${medicamento.cantidad == 0}">
+                                            <p style="color:red;font-size: 1.15rem"  th:text="${'Stock: ' + medicamento.cantidad}"></p>
+                                        </div>
+                                        <div th:if="${medicamento.cantidad != 0}">
+                                            <p style="color:dimgray;font-size: 1.15rem"  th:text="${'Stock: ' + medicamento.cantidad}"></p>
+                                        </div>
+                                    </div>
+
+                                    <button class="add-item-button montserrat-medium" type="button" th:data-item-id="${medicamento.idMedicamento}">Seleccionar</button>
+                                </div>
+                            </div>
+
+
+                            <div class="pagination" id="pagination">
+                            </div>
+
+                            <br>
+                            <br>
+
+
+                        </section>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+    </div>
+
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+    <div th:replace="~{fragments/navbar.html :: footer}"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script th:src="@{/js/topbar.js}"></script>
+
+
+<script>
+    $(document).ready(function() {
+        var table = $('#miTabla').DataTable({
+            "pageLength":6,
+            "lengthChange": false,
+            "language": {
+                "emptyTable": "No hay registros disponibles",
+                "zeroRecords": "No se encontraron registros coincidentes",
+                "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                "search" : "Buscar:",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "info": "Mostrando de _START_ a _END_ de _TOTAL_ entradas",
+            },
+            "drawCallback": function(settings) {
+                var api = this.api();
+                var pages = api.page.info().pages;
+
+                if (pages <= 1) {
+                    $('.dataTables_paginate').hide();
+                } else {
+                    $('.dataTables_paginate').show();
+                }
+            }
+
+        });
+
+        $('#filtroEstado').on('change', function() {
+            var estado = $(this).val();
+            table.column(2).search(estado).draw();
+
+        });
+
+        $('#limpiarFiltros').on('click', function() {
+            $('#filtroEstado').val('');
+            table.search('').columns().search('').draw();
+        });
+    });
+
+
+</script>
+<!-- DataTable -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+<!------>
+<!---------Medicamentos---------->
+<script th:inline="javascript">
+
+    var cantidades = /*[[${currentCant}]]*/ [];
+    var medicamentos = /*[[${currentMed}]]*/ [];
+
+    if (cantidades && cantidades.length > 0) {
+
+        var iteraciones = medicamentos.length;
+
+        var nombresMedicamentos = medicamentos.map(function(medicamento) {
+            return medicamento.nombre;
+        });
+        var idsMedicamentos = medicamentos.map(function(medicamento) {
+            return medicamento.idMedicamento;
+        });
+        var preciosVenta = medicamentos.map(function(medicamento) {
+            return 'S/.' + medicamento.precioVenta;
+        });
+        var fotos = medicamentos.map(function(medicamento) {
+            return medicamento.imagen;
+        });
+
+    }
+
+
+    listaSelectedIds = []
+
+
+
+    $(document).ready(function() {
+
+
+        const botonesEliminarItem = document.getElementsByClassName('btn-eliminar');
+        for(var i=0;i<botonesEliminarItem.length; i++){
+            const buttonEliminar = botonesEliminarItem[i];
+            buttonEliminar.addEventListener('click',eliminarItemCarrito);
+        }
+        var botonesSumarCantidad = document.getElementsByClassName('sumar-cantidad');
+        for(var i=0;i<botonesSumarCantidad.length; i++){
+            const buttonSumar = botonesSumarCantidad[i];
+            buttonSumar.addEventListener('click',sumarCantidad);
+        }
+        var botonesRestarCantidad = document.getElementsByClassName('restar-cantidad');
+        for(var i=0;i<botonesRestarCantidad.length; i++){
+            const buttonRestar = botonesRestarCantidad[i];
+            buttonRestar.addEventListener('click',restarCantidad);
+        }
+        var botonesAgregar = document.getElementsByClassName('add-item-button');
+        for(var i=0; i<botonesAgregar.length;i++){
+            const buttonAgregar = botonesAgregar[i];
+            buttonAgregar.addEventListener('click', clickItemAdd);
+        }
+
+
+
+
+
+        if (cantidades && cantidades.length > 0) {
+
+
+            for (var i = 0; i < iteraciones; i++) {
+                const id = idsMedicamentos[i];
+                const title = nombresMedicamentos[i] + '';
+                const price = preciosVenta[i];
+                const imagenSrc = 'data:image/jpeg;base64,'+fotos[i];
+                const cant = parseInt(cantidades[i]);
+
+                listaSelectedIds.push(id.toString()); //idMedicamento
+                listaSelectedIds.push(cant); //cantidad
+
+
+                addItemToList(id, title.toString(), price.toString(), imagenSrc);
+                ShowList();
+
+            }
+
+            const listaIdsInput = document.getElementById('listaIds');
+            listaIdsInput.value = listaSelectedIds;
+
+            console.log(listaSelectedIds)
+
+        }
+
+        $(document).ready(function() {
+            // Tu código existente para el manejo de eventos y funciones
+
+            // Función para actualizar las cantidades y el monto total
+            function actualizarCantidadesYTotal() {
+                const listItems = document.getElementsByClassName('lista-items-clicked')[0];
+                const selectedItems = listItems.getElementsByClassName('selected-item');
+
+                // Recorrer cada elemento seleccionado
+                for (let i = 0; i < selectedItems.length; i++) {
+                    const item = selectedItems[i];
+                    const idMedicamento = listaSelectedIds[i * 2]; // ID del medicamento en la posición par
+                    const cantidad = listaSelectedIds[i * 2 + 1]; // Cantidad del medicamento en la posición impar
+
+                    // Actualizar la cantidad en el elemento HTML correspondiente
+                    item.getElementsByClassName('item-quantity-clicked')[0].value = cantidad;
+                }
+
+                // Actualizar el monto total
+                actualizarMontoTotal();
+            }
+
+            // Llamar a la función al cargar la página
+            actualizarCantidadesYTotal();
+        });
+
+
+        function clickItemAdd(event){
+
+            const button = event.target;
+            const idAdd = button.dataset.itemId;
+            const item = button.parentElement;
+            const titulo = item.getElementsByClassName('item-title')[0].innerText;
+            const precio = item.getElementsByClassName('item-price')[0].innerText;
+            const imagenSrc = item.getElementsByClassName('img-item')[0].src;
+            const cantidad = parseInt(item.querySelector('span').innerText); // Obtener la cantidad de stock
+
+            // Verificar si hay stock disponible
+            if (cantidad === 0) {
+                Swal.fire({
+                    title: "Sin stock disponible",
+                    text: `El medicamento no tiene stock disponible. Le sugerimos reemplazarlo por medicamentos de la misma categoria usando nuestro filtro.`,
+                    icon: "error"
+                });
+                return; // Detener la ejecución si no hay stock
+            }
+
+
+            if (listaSelectedIds.indexOf(idAdd) === -1) {
+                listaSelectedIds.push(idAdd);
+                listaSelectedIds.push(1);
+
+            }
+
+            const listaIdsInput = document.getElementById('listaIds');
+            listaIdsInput.value = listaSelectedIds;
+
+            addItemToList(idAdd, titulo, precio, imagenSrc);
+            ShowList();
+        }
+
+        function deleteItem(event){
+
+            const button = event.target;
+            const idDelete = button.dataset.itemId;
+
+            let pos = listaSelectedIds.indexOf(idDelete);
+            listaSelectedIds.splice(pos,1);
+            listaSelectedIds.splice(pos+1,1);
+
+
+            const listaIdsInput = document.getElementById('listaIds');
+            listaIdsInput.value = listaSelectedIds;
+
+            button.parentElement.parentElement.parentElement.remove();
+            hideorShowList();
+            actualizarMontoTotal();
+
+        }
+
+
+        function addItemToList(id, titulo, precio, imagenSrc){
+            const Swal = window.Swal;
+
+            const item = document.createElement('div');
+            item.classList.add = ('item-clicked');
+            const itemsList = document.getElementsByClassName('lista-items-clicked')[0];
+
+            if (itemsList.getElementsByClassName('item-title-clicked').length > 0){
+
+                const alreadyOnList = itemsList.getElementsByClassName('item-title-clicked');
+
+                for(let i=0; i < alreadyOnList.length; i++){
+                    if(alreadyOnList[i].innerText===titulo){
+                        Swal.fire({
+                            title: "Ya está en la lista",
+                            text: "El medicamento ya fue agregado.",
+                            icon: "info"
+                        });
+                        return;
+                    }
+                }
+            }
+
+
+            const itemNewSelected = `
+        <div class="selected-item">
+
+            <img style="margin-left: 30px" src="${imagenSrc}" width="100px" height="auto" alt="">
+
+            <span class="item-title-clicked">${titulo}</span>
+
+            <div class="item-on-list">
+
+                <div class="item-details">
+                    <div class="selector-cantidad">
+                        <i class="fa-solid fa-minus restar-cantidad" data-item-id="${id}"></i>
+                        <input type="text" value="1" class="item-quantity-clicked" data-item-id="${id}">
+                        <i class="fa-solid fa-plus sumar-cantidad" data-item-id="${id}"></i>
+                    </div>
+
+                    <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                            <span class="item-price-clicked">${precio}</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-danger btn-eliminar" data-item-id="${id}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+
+        </div>
+    `;
+            item.innerHTML = itemNewSelected;
+            itemsList.append(item);
+
+            item.getElementsByClassName('btn-eliminar')[0].addEventListener('click', deleteItem);
+
+            const botonRestarCantidad = item.getElementsByClassName('restar-cantidad')[0];
+            botonRestarCantidad.addEventListener('click',restarCantidad);
+
+            const botonSumarCantidad = item.getElementsByClassName('sumar-cantidad')[0];
+            botonSumarCantidad.addEventListener('click',sumarCantidad);
+
+            const inputCantidad = item.getElementsByClassName('item-quantity-clicked')[0];
+            inputCantidad.addEventListener('change', setearCantidad);
+            inputCantidad.addEventListener('focus', function(event) {
+                event.target.dataset.previousValue = event.target.value;
+            });
+
+            actualizarMontoTotal();
+            ShowList();
+        }
+
+
+        function sumarCantidad(event){
+            const buttonClicked = event.target;
+            const idAddQuantity = buttonClicked.dataset.itemId;
+            const selector = buttonClicked.parentElement;
+            console.log(selector.getElementsByClassName('item-quantity-clicked')[0].value);
+            let cantidadActual = selector.getElementsByClassName('item-quantity-clicked')[0].value;
+            cantidadActual++;
+            selector.getElementsByClassName('item-quantity-clicked')[0].value = cantidadActual;
+
+            const toPlus = listaSelectedIds.indexOf(idAddQuantity);
+
+            listaSelectedIds[toPlus+1] = cantidadActual;
+
+            console.log(listaSelectedIds)
+
+            actualizarMontoTotal();
+        }
+
+        function restarCantidad(event){
+            const buttonClicked = event.target;
+            const idQuitQuantity = buttonClicked.dataset.itemId;
+            const selector = buttonClicked.parentElement;
+            console.log(selector.getElementsByClassName('item-quantity-clicked')[0].value);
+
+
+            let cantidadActual = selector.getElementsByClassName('item-quantity-clicked')[0].value;
+            cantidadActual--;
+            if(cantidadActual>=1){
+                selector.getElementsByClassName('item-quantity-clicked')[0].value = cantidadActual;
+
+                const toMinus = listaSelectedIds.indexOf(idQuitQuantity);
+
+                listaSelectedIds[toMinus+1] = cantidadActual;
+
+                actualizarMontoTotal();
+            }
+        }
+
+        function setearCantidad(event){
+            const inputFilled = event.target;
+            const idSetQuantity = inputFilled.dataset.itemId;
+            const valor = inputFilled.value;
+            const cantidadActual = parseInt(valor); // Convertir a número entero
+
+            // Verificar si el valor es un número válido
+            if (!isNaN(cantidadActual) && cantidadActual >= 1) {
+                // Actualizar el valor del input y el monto total
+
+                const toSet = listaSelectedIds.indexOf(idSetQuantity);
+
+                listaSelectedIds[toSet+1] = cantidadActual;
+
+                actualizarMontoTotal();
+            } else {
+                // Restaurar el valor anterior si no es válido
+                inputFilled.value = inputFilled.dataset.previousValue;
+            }
+        }
+
+        function actualizarMontoTotal() {
+            const listItems = document.getElementsByClassName('lista-items-clicked')[0];
+            const selectedItems = listItems.getElementsByClassName('selected-item');
+            let totalCentavos = 0;
+
+            for (let i = 0; i < selectedItems.length; i++) {
+                const item = selectedItems[i];
+                const precioItem = Math.round(parseFloat(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/.', '').replace(/,/g, '')) * 100);
+
+                console.log(item.getElementsByClassName('item-price-clicked')[0].innerText)
+                console.log(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/.', ''))
+                console.log(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/.', '').replace(/,/g, ''))
+                console.log(parseFloat(item.getElementsByClassName('item-price-clicked')[0].innerText.replace('S/.', '').replace(/,/g, '')) * 100);
+
+                const cantidadItem = item.getElementsByClassName('item-quantity-clicked')[0].value;
+                totalCentavos += precioItem * cantidadItem;
+            }
+            const totalSoles = totalCentavos / 100;
+            document.getElementsByClassName('price-total')[0].innerText = 'S/' + totalSoles.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+            const listaIdsInput = document.getElementById('listaIds');
+            listaIdsInput.value = listaSelectedIds.join(',');
+
+            precioTotal = document.getElementsByClassName('price-total')[0].innerText.split('/')[1];
+            const precioTotalInput = document.getElementById('priceTotal');
+            precioTotalInput.value = precioTotal;
+
+        }
+
+        function hideorShowList(){
+            const someElement = document.getElementsByClassName('selected-item');
+
+            if(someElement.length === 0){
+                listaSelectedIds = [];
+                HideList();
+            }
+        }
+
+        function HideList(){
+            const itemsPreview = document.getElementById('items-preview');
+            itemsPreview.classList.add('hide');
+        }
+
+        function ShowList(){
+            const itemsPreview = document.getElementById('items-preview');
+            itemsPreview.classList.remove('hide');
+        }
+
+
+
+    });
+
+
+
+</script>
+<!-----Paginación y Filtros Medicamentos------------->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const itemsPerPage = 12; // Número de medicamentos por página
+        let currentPage = 1; // Página actual
+
+        const filtroCategoria = document.getElementById("filtroCategoria");
+        const searchInput = document.getElementById("searchInput");
+        const medicamentos = Array.from(document.querySelectorAll('.med-container .item'));
+
+        function getVisibleMedicamentos() {
+            const categoriaSeleccionada = filtroCategoria.value;
+            const searchTerm = searchInput.value.trim().toLowerCase();
+
+            return medicamentos.filter(function(item) {
+                const categoriaItem = item.querySelector(".categoria").innerText.trim();
+                const itemName = item.querySelector('.item-title').innerText.trim().toLowerCase();
+                const matchesCategoria = categoriaSeleccionada === "" || categoriaItem === categoriaSeleccionada;
+                const matchesSearch = itemName.includes(searchTerm);
+
+                return matchesCategoria && matchesSearch;
+            });
+        }
+
+        function mostrarMedicamentos() {
+            const visibleMedicamentos = getVisibleMedicamentos();
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+
+            medicamentos.forEach(medicamento => medicamento.style.display = 'none');
+
+            visibleMedicamentos.forEach((medicamento, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    medicamento.style.display = 'block';
+                }
+            });
+
+            mostrarPaginacion(visibleMedicamentos.length);
+        }
+
+        function mostrarPaginacion(totalVisible) {
+            const totalPages = Math.ceil(totalVisible / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.addEventListener('click', function() {
+                    currentPage = i;
+                    mostrarMedicamentos();
+                });
+
+                if (i === currentPage) {
+                    button.classList.add('active'); // Añadir clase 'active' al botón de la página actual
+                }
+
+                pagination.appendChild(button);
+            }
+
+            // Ocultar la paginación si no hay páginas
+            if (totalPages <= 1) {
+                pagination.style.display = 'none';
+            } else {
+                pagination.style.display = 'block';
+            }
+        }
+
+        filtroCategoria.addEventListener("change", function() {
+            currentPage = 1; // Resetear a la primera página al filtrar
+            mostrarMedicamentos();
+        });
+
+        searchInput.addEventListener("input", function() {
+            currentPage = 1; // Resetear a la primera página al buscar
+            mostrarMedicamentos();
+        });
+
+        // Mostrar la paginación y la primera página al cargar la página
+        mostrarMedicamentos();
+    });
+
+
+</script>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+<script>
+
+    $(document).ready(function() {
+        $('#searchInput').on('input', function() { // Escuchar el evento 'input'
+            var searchTerm = $(this).val().trim().toLowerCase();
+            $('.item').each(function() {
+                var itemName = $(this).find('.item-title').text().trim().toLowerCase();
+                if (itemName.includes(searchTerm)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+
+    });
+
+</script>
+
+<script>
+    const form = document.getElementById("form");
+
+    form.addEventListener("submit", e => {
+        e.preventDefault();
+
+        Swal.fire({
+            title: '¿Estás seguro de reemplazar estos medicamentos?',
+            icon: 'warning',
+            iconColor: '#DC3545',
+            showCancelButton: true,
+            cancelButtonColor: '#DC3545',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#0D6EFD',
+            confirmButtonText: 'Aplicar cambios',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+</script>
+
+<script th:src="@{/js/loader.js}"></script>
+
+</body>
+
+</html>

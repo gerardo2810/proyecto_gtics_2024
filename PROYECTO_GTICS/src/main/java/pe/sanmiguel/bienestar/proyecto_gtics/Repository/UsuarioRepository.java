@@ -17,6 +17,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     Optional<Usuario> findByCorreoAndDni(String correo, String dni);
 
+
+    /* QUERYS PARA EL CHATBOT - WEBHOOK */
+
+    @Query(nativeQuery = true, value="SELECT * FROM proyecto_gtics.usuario u WHERE u.dni = ?1")
+    Optional<Usuario> verifyDNI(String dni);
+
+    /* FIN QUERYS PARA EL CHATBOT - WEBHOOK */
+
     @Query(nativeQuery = true, value="SELECT * FROM proyecto_gtics.usuario u WHERE u.dni = ?1")
     Optional<Usuario> findPacienteByDni(String dni);
 
@@ -107,7 +115,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     //Crear Farmacista
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "INSERT INTO usuario VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, null ,?12, 0)")
+    @Query(nativeQuery = true, value = "INSERT INTO usuario VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, null ,?12, 0, null)")
     void crearFarmacistaSinAprobar(int idUsuario, int idRol, String correo, String contrasena, String nombres, String apellidos, String celular, String dni, String direccion, String distrito, String seguro, int estadoUsuario);
 
     @Transactional
@@ -168,10 +176,39 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_usuario = 1 WHERE id = ?")
     void actualizarEstadoFarmacista(int id);
 
+    //Estado contrasena
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_contra = 1 WHERE id = ?")
+    void actualizarEstadoContra(int idUsuario);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET contrasena = ?1 WHERE correo = ?2")
+    void actualizarRecupearContra(String contrasena, String correo);
 
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.usuario where idRol = 2 and id = ?1")
+    Usuario encontrarAdministradorId(int id);
 
+    @Query(nativeQuery = true, value = "SELECT u.correo FROM proyecto_gtics.usuario u where idRol = 2 and id = ?1")
+    String encontrarCorreoAdministrador(int id);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_logueo = 1 WHERE id = ?")
+    void actualizarEstadoLogueo(int idUsuario);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_logueo = 0 WHERE id = ?")
+    void actualizarEstadoDeslogueo(int idUsuario);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE proyecto_gtics.usuario SET estado_logueo = 0")
+    void actualizarEstadoLogueoSuperadmin();
+
+    @Query(nativeQuery = true, value = "SELECT * FROM proyecto_gtics.usuario where id = ?1")
+    Usuario encontrarUsuario(int id);
 }

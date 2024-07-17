@@ -23,6 +23,7 @@
     <link rel="stylesheet" th:href="@{/css/topbar.css}">
     <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/notificaciones.css}">
+    <link rel="stylesheet" th:href="@{/css/loader.css}">
 
 
 
@@ -40,8 +41,35 @@
     <title>Bienestar San Miguel | Generar Orden de Venta</title>
 </head>
     <body style="background-color: white;">
+    <div id="loader-container"  style="display: flex;flex-direction: column;">
 
-        <header class="header-topbar">
+        <div style="display: flex; justify-content: center;margin-top: 250px;">
+            <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
+        </div>
+
+        <div id="loader-wrapper"  class="loader-wrapper">
+
+            <div class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+
+            <div id="loader2" class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+
+            <div id="loader3" class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+        </div>
+
+    </div>
+    <div id="content-show" class="hidden">
+
+
+    <header class="header-topbar">
             <nav th:replace="~{fragments/navbar.html :: navbar( active = '')}"></nav>
         </header>
 
@@ -238,6 +266,7 @@
 
     <div th:replace="~{fragments/navbar.html :: footer}">
     </div>
+    </div>
 
 </body>
 
@@ -303,21 +332,14 @@
                     text: "Recuerde que al elegir crear una preorden no podrá volver a este formulario",
                     icon: 'warning',
                     showCancelButton: true,
-                    showDenyButton: true,
                     confirmButtonColor: '#3085d6',
-                    denyButtonColor: '#3085d6',
                     cancelButtonText: 'Cancelar',
                     confirmButtonText: 'Nueva Preorden',
-                    denyButtonText: 'Cambiar Medicinas'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         event.preventDefault();
                         form.submit();
-                    } else if (result.isDismissed) {
-
-                    } else if (result.isDenied && hayProblemaConStock && verificarCamposLlenos(form)){
-                        window.location.href = '/farmacista/cambiar_medicamentos';
-                    } else {
+                    }  else {
                         Swal.fire({
                             title: 'Faltan Datos',
                             text: 'Por favor, completa todos los campos antes de enviar el formulario.',
@@ -477,6 +499,7 @@
             }
         }
     </script>
+    <script th:src="@{/js/loader.js}"></script>
 
 
 <script>

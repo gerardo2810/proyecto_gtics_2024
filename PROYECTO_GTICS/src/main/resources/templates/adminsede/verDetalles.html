@@ -22,7 +22,8 @@
         <link th:href="@{/css/notificaciones.css}" rel="stylesheet" />
         <link th:href="@{/css/footer.css}" rel="stylesheet" />
         <link th:href="@{/css/topbar.css}" rel="stylesheet" />
-        <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/loader.css}">
+        <script th:src="@{/js/loader.js}"></script>
 
         <link rel="stylesheet" th:href="@{/css/adminsede/indexstyle.css}">
 
@@ -82,24 +83,49 @@
 
         </style>
 
-
-
-
         <title>Bienestar San Miguel | Orden de reposición</title>
 
     </head>
-    <body class="loader-hidden">
-
-    <header class="header-topbar">
-        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
-    </header>
+    <body>
 
 
-    <div th:replace="~{fragments/banner.html :: banner}"></div>
+    <div id="loader-container"  style="display: flex;flex-direction: column;">
 
-    <div class="container-loader loader-hidden" id="onload">
-        <div class="loader"></div>
+        <div style="display: flex; justify-content: center;margin-top: 250px;">
+            <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
+        </div>
+
+        <div id="loader-wrapper"  class="loader-wrapper">
+
+            <div class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+
+            <div id="loader2" class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+
+            <div id="loader3" class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+        </div>
+
     </div>
+
+
+    <div id="content-show" class="hidden">
+
+        <header class="header-topbar">
+            <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
+        </header>
+
+
+        <div th:replace="~{fragments/banner.html :: banner}"></div>
+
+
 
         <div class="container" >
 
@@ -160,28 +186,28 @@
                 <div>
                     <table class="order-table">
                         <thead style="padding-bottom: 10px">
-                            <tr>
-                                <th class="text-start" style="max-width: 90px;">No.</th>
-                                <th class="text-start" style="max-width: 200px;">Artículo</th>
-                                <th class="text-center">Precio</th>
-                                <th class="text-center">Cantidad</th>
-                                <th class="text-end" style="width: 120px;">Total</th>
-                            </tr>
+                        <tr>
+                            <th class="text-start" style="max-width: 90px;">No.</th>
+                            <th class="text-start" style="max-width: 200px;">Artículo</th>
+                            <th class="text-center">Precio</th>
+                            <th class="text-center">Cantidad</th>
+                            <th class="text-end" style="width: 120px;">Total</th>
+                        </tr>
                         </thead>
 
                         <tbody>
-                            <tr th:each="compra, iterIndex : ${listaMostrarNuevaCompra}">
-                                <th class="text-start" style="width: 90px;"><span th:text="${iterIndex.index + 1}"></span></th>
-                                <td>
-                                    <div class="name-unit-item">
-                                        <div class="text-truncate font-size-14 mb-1" th:text="${compra.getNombre()}">Panadol</div>
-                                        <div class="text-muted mb-0" th:text="${compra.getUnidad()}">TABLETAS 50 U.</div>
-                                    </div>
-                                </td>
-                                <td class="text-center" th:text="${'S/. ' + #numbers.formatDecimal(compra.getPrecioCompra(), 1, 'COMMA', 2, 'POINT')}">$ 245.50</td>
-                                <td class="text-center" th:text="${compra.getCantidad()}">1</td>
-                                <td class="text-end" th:text="${'S/. ' + #numbers.formatDecimal(compra.getCantidad() * compra.getPrecioCompra(), 1, 'COMMA', 2, 'POINT')}">$ 245.50</td>
-                            </tr>
+                        <tr th:each="compra, iterIndex : ${listaMostrarNuevaCompra}">
+                            <th class="text-start" style="width: 90px;"><span th:text="${iterIndex.index + 1}"></span></th>
+                            <td>
+                                <div class="name-unit-item">
+                                    <div class="text-truncate font-size-14 mb-1" th:text="${compra.getNombre()}">Panadol</div>
+                                    <div class="text-muted mb-0" th:text="${compra.getUnidad()}">TABLETAS 50 U.</div>
+                                </div>
+                            </td>
+                            <td class="text-center" th:text="${'S/. ' + #numbers.formatDecimal(compra.getPrecioCompra(), 1, 'COMMA', 2, 'POINT')}">$ 245.50</td>
+                            <td class="text-center" th:text="${compra.getCantidad()}">1</td>
+                            <td class="text-end" th:text="${'S/. ' + #numbers.formatDecimal(compra.getCantidad() * compra.getPrecioCompra(), 1, 'COMMA', 2, 'POINT')}">$ 245.50</td>
+                        </tr>
                         </tbody>
 
                     </table>
@@ -202,6 +228,9 @@
 
         <div th:replace="~{fragments/navbar.html :: footer}">
         </div>
+    </div>
+
+
         <script>
             $(document).ready(function() {
                 let opened = false;

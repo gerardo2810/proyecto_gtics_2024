@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pe.sanmiguel.bienestar.proyecto_gtics.Dto.MedicamentosSedeStockDto;
 import pe.sanmiguel.bienestar.proyecto_gtics.Entity.*;
@@ -35,5 +36,53 @@ public interface SedeStockRepository extends JpaRepository<SedeStock, SedeStockI
 
     @Query(nativeQuery = true, value = "SELECT cantidad FROM proyecto_gtics.sede_stock where idSede =?1 and idMedicamento = ?2")
     Integer verificarCantidadStockPorSede(int idSede, int idMedicamento);
+
+    //Aumentamos la cantidad de stock en la sede
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE sede_stock SET cantidad = cantidad + ?3 WHERE idSede = ?1 and idMedicamento = ?2")
+    void actualizarSedeStock(int idSede, int idMedicamento, Integer cantidadAumentada);
+
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE sede_stock SET cantidad = cantidad - ?3 WHERE idSede = ?1 and idMedicamento = ?2")
+    void reducirStockPorSede(int idSede, int idMedicamento, Integer cantidad);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE sede_stock SET cantidad = cantidad + ?3 WHERE idSede = ?1 and idMedicamento = ?2")
+    void aumentarStockPorSede(int idSede, int idMedicamento, Integer cantidad);
+
+
+
+    @Query("SELECT m.idMedicamento AS idMedicamento, m.nombre AS nombre, m.unidad AS unidad, m.descripcion AS descripcion, m.categorias AS categorias, m.componente AS componente, m.precioCompra AS precioCompra, m.precioVenta AS precioVenta, m.recetable AS recetable, m.imagen AS imagen, SUM(s.cantidad) AS cantidad " +
+            "FROM SedeStock s " +
+            "JOIN s.idMedicamento m " +
+            "GROUP BY m.idMedicamento, m.nombre, m.unidad, m.descripcion, m.categorias, m.componente, m.precioCompra, m.precioVenta, m.recetable, m.imagen")
+    List<MedicamentosSedeStockDto> findMedicamentosConStock();
+
+
+    @Query("SELECT m.idMedicamento AS idMedicamento, m.nombre AS nombre, m.unidad AS unidad, m.descripcion AS descripcion, " +
+            "m.categorias AS categorias, m.componente AS componente, m.precioCompra AS precioCompra, m.precioVenta AS precioVenta, " +
+            "m.recetable AS recetable, m.imagen AS imagen, SUM(s.cantidad) AS cantidad " +
+            "FROM SedeStock s " +
+            "JOIN s.idMedicamento m " +
+            "WHERE m.categorias LIKE %:categoria% " + // Filtrar por categoría usando LIKE
+            "GROUP BY m.idMedicamento, m.nombre, m.unidad, m.descripcion, m.categorias, m.componente, m.precioCompra, m.precioVenta, m.recetable, m.imagen")
+    List<MedicamentosSedeStockDto> findMedicamentosConStockByCategoria(@Param("categoria") String categoria);
+
+
+
+    @Query("SELECT m.idMedicamento AS idMedicamento, m.nombre AS nombre, m.unidad AS unidad, m.descripcion AS descripcion, " +
+            "m.categorias AS categorias, m.componente AS componente, m.precioCompra AS precioCompra, m.precioVenta AS precioVenta, " +
+            "m.recetable AS recetable, m.imagen AS imagen, s.idSede.idSede AS idSede, SUM(s.cantidad) AS cantidad " +
+            "FROM SedeStock s " +
+            "JOIN s.idMedicamento m " +
+            "WHERE s.idSede.idSede = :idSede " +
+            "GROUP BY m.idMedicamento, m.nombre, m.unidad, m.descripcion, m.categorias, m.componente, m.precioCompra, " +
+            "m.precioVenta, m.recetable, m.imagen, s.idSede.idSede")
+    List<MedicamentosSedeStockDto> findMedicamentosConStockBySede(@Param("idSede") Integer idSede);
 
 }

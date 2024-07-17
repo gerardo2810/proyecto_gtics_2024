@@ -21,8 +21,10 @@
         <link rel="stylesheet" th:href="@{/css/boostrap-datatables.css}">
         <link rel="stylesheet" th:href="@{/css/adminsede/estilos.css}">
         <link rel="stylesheet" th:href="@{/css/farmacista/farmacista.css}">
-        <link th:href="@{/css/preloader.css}" rel="stylesheet" />
         <link th:href="@{/css/notificaciones.css}" rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/loader.css}">
+        <script th:src="@{/js/loader.js}"></script>
+
 
 
 
@@ -86,21 +88,49 @@
         </style>
     </head>
 
-    <body class="loader-hidden">
+    <body>
 
-    <header class="header-topbar">
-        <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Farmacistas')}"></nav>
-    </header>
+    <div id="loader-container"  style="display: flex;flex-direction: column;">
 
-    <div th:replace="~{fragments/banner.html :: banner}"></div>
+        <div style="display: flex; justify-content: center;margin-top: 250px;">
+            <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
+        </div>
 
+        <div id="loader-wrapper"  class="loader-wrapper">
 
-    <div class="container-loader loader-hidden" id="onload">
-        <div class="loader"></div>
+            <div class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+
+            <div id="loader2" class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+
+            <div id="loader3" class="loader">
+                <div class="roller"></div>
+                <div class="roller"></div>
+            </div>
+        </div>
+
     </div>
 
 
-    <div class="container">
+    <div id="content-show" class="hidden">
+        <header class="header-topbar">
+            <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Farmacistas')}"></nav>
+        </header>
+
+        <div th:replace="~{fragments/banner.html :: banner}"></div>
+
+
+        <div class="container-loader loader-hidden" id="onload">
+            <div class="loader"></div>
+        </div>
+
+
+        <div class="container">
             <div style="padding-top: 20px; padding-bottom: 20px">
                 <div class="main-title open-sans-bold"> Farmacistas </div>
                 <div class="main-subtitle helvetica-medium"> Vista de farmacistas pertenecientes a la sede</div>
@@ -120,52 +150,57 @@
 
             <table id="miTabla" class="table table-striped">
                 <div style="display: flex">
-                    <button id="limpiarFiltros" class="btn-p" style="font-size: 17px; padding: 12px 20px">Limpiar Filtros</button>
                     <button class="btn-p" type="button" th:if="${listaFarmacistasNew.size() <= 2}" onclick="window.location.href = '/adminsede/solicitud_farmacista'" style="margin-left: 20px; font-size: 17px; padding: 12px 20px">Solicitud de nuevo farmacista</button>
                 </div>
 
 
 
                 <thead>
-                    <tr style="background-color: #378fff">
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y apellidos</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Distrito de residencia</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Código (colegio médico)</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">DNI</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Editar</th>
-                        <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Eliminar</th>
-                    </tr>
+                <tr style="background-color: #378fff">
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Nombre y apellidos</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Imagen</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Distrito de residencia</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Código (colegio médico)</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Correo</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">DNI</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Editar</th>
+                    <th style="text-align: center; color: #ffffff; font-weight: normal !important;">Eliminar</th>
+                </tr>
                 </thead>
 
 
                 <tbody>
 
-                    <tr th:each="farmacista : ${listaFarmacistasNew}">
-                        <td th:text="${farmacista.getNombres()} + '  ' +${farmacista.getApellidos()}"></td>
-                        <td><img class="medicamento" src="/img/doctor.png"></td>
-                        <td th:text="${farmacista.getDistrito()}"></td>
-                        <td th:text="${farmacista.getCodigoMed()}"></td>
-                        <td th:text="${farmacista.getCorreo()}"></td>
-                        <td th:text="${farmacista.getDni()}"></td>
+                <tr th:each="farmacista : ${listaFarmacistasNew}">
+                    <td th:text="${farmacista.getNombres()} + '  ' +${farmacista.getApellidos()}"></td>
+                    <td style="text-align: center">
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <label>
+                                <img th:src="@{/img/farmaceutico.png}" alt="" style="width: 45px; height: 45px;">
+                            </label>
+                        </div>
+                    </td>
+                    <td th:text="${farmacista.getDistrito()}"></td>
+                    <td th:text="${farmacista.getCodigoMed()}"></td>
+                    <td th:text="${farmacista.getCorreo()}"></td>
+                    <td th:text="${farmacista.getDni()}"></td>
 
-                        <td>
-                            <a th:href="@{'/adminsede/editar_farmacista?id=' + ${farmacista.getId()}}" class="edit-icon" style="margin-left: 30px"><i class="fas fa-pencil-alt"></i></a>
-                            <!--a th:href="@{'/adminsede/eliminar_farmacista?id=' + ${farmacista.getId()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a-->
-                        </td>
+                    <td>
+                        <a th:href="@{'/adminsede/editar_farmacista?id=' + ${farmacista.getId()}}" class="edit-icon" style="margin-left: 30px"><i class="fas fa-pencil-alt"></i></a>
+                        <!--a th:href="@{'/adminsede/eliminar_farmacista?id=' + ${farmacista.getId()}}" class="delete-icon"><i class="fas fa-trash-alt" style="margin-left: 10px"></i></a-->
+                    </td>
 
-                        <td>
-                            <form class="formEstadoSolicitud" th:action="@{'/adminsede/eliminar_farmacista'}" method="post">
-                                <input type="hidden" name="idFarmacista" th:value="${farmacista.getId()}">
-                                <button type="submit" class="delete-icon" style="background: none; border: none; text-decoration: underline; color: blue;">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
-                        </td>
+                    <td>
+                        <form class="formEstadoSolicitud" th:action="@{'/adminsede/eliminar_farmacista'}" method="post">
+                            <input type="hidden" name="idFarmacista" th:value="${farmacista.getId()}">
+                            <button type="submit" class="delete-icon" style="background: none; border: none; text-decoration: underline; color: blue;">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>
 
 
-                    </tr>
+                </tr>
 
 
 
@@ -199,6 +234,11 @@
 
         <div th:replace="~{fragments/navbar.html :: footer}">
         </div>
+
+
+
+    </div>
+
 
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

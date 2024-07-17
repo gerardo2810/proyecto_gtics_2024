@@ -1,9 +1,11 @@
 package pe.sanmiguel.bienestar.proyecto_gtics.Controller;
 
+import com.google.api.Http;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
@@ -141,7 +146,9 @@ public class FarmacistaController {
 
     @GetMapping(value = {"/farmacista", "/farmacista/"})
     public String farmacistaInicio(Model model,
-                                   HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+                                   HttpServletRequest request, HttpServletResponse response,
+                                   Authentication authentication,
+                                   @RequestParam(name = "categoria", required = false) String categoria) {
 
         //SESSION
         //Iniciamos la sesión
@@ -163,15 +170,35 @@ public class FarmacistaController {
                 session.setAttribute("idSede", idSede);
             } else {
                 // Manejar el caso cuando sedeSession es nulo
-                return "errorPage"; // O alguna página de error apropiada
+                return "login/error"; // O alguna página de error apropiada
             }
         }
+        // Log para verificar si el parámetro categoria llega correctamente
+        System.out.println("Categoría recibida: " + categoria);
 
-        List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
+        // Normaliza el texto de la categoría
+        if (categoria != null) {
+            categoria = categoria.trim().toLowerCase();
+        }
+
+        //Obtener la lista de medicamentos según la categoría seleccionada
+        List<MedicamentosSedeStockDto> listaMedicamentos;
+        if (categoria != null && !categoria.isEmpty()) {
+            listaMedicamentos = sedeStockRepository.findMedicamentosConStockByCategoria(categoria);
+            System.out.println(listaMedicamentos);
+        } else {
+            listaMedicamentos = sedeStockRepository.findMedicamentosConStock();
+        }
+        System.out.println(listaMedicamentos);
+
         int numeroOrdenesPendientes = 0;
         model.addAttribute("sedeSession", sedeSession);
         model.addAttribute("listaMedicamentos", listaMedicamentos);
         model.addAttribute("numeroOrdenesPendientes", numeroOrdenesPendientes);
+        model.addAttribute("categoriaSeleccionada", categoria);
+        model.addAttribute("lista1",listaMedicamentos);
+
+
         return "farmacista/inicio";
     }
     @GetMapping("/farmacista/ver_detalles")
@@ -468,8 +495,15 @@ public class FarmacistaController {
 
                 LocalDateTime now = LocalDateTime.now();
 
+                // Convertir la hora actual a la zona horaria de Perú
+                ZoneId peruZoneId = ZoneId.of("America/Lima");
+                ZonedDateTime peruTime = now.atZone(ZoneId.systemDefault()).withZoneSameInstant(peruZoneId);
+
+                // Si solo necesitas LocalDateTime, puedes convertirlo de nuevo
+                LocalDateTime peruLocalDateTime = peruTime.toLocalDateTime();
+
                 Orden newOrden = new Orden();
-                newOrden.setFechaIni(now);
+                newOrden.setFechaIni(peruLocalDateTime);
                 priceTotal = priceTotal.replace(",", "");
                 newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
                 newOrden.setIdFarmacista(usuarioSession.getIdUsuario());
@@ -511,6 +545,14 @@ public class FarmacistaController {
                     contenido.setIdMedicamento(med);
                     contenido.setCantidad(Integer.parseInt(listaCantidades.get(i)));
 
+                    //----VERIFICAR Y REDUCIR EL STOCK DE UN MEDICAMENTO POR SU ID Y SU SEDE----//
+                    if(Integer.parseInt(listaCantidades.get(i)) <= sedeStockRepository.verificarCantidadStockPorSede(sedeSession.getIdSede(), med.getIdMedicamento())){
+                        sedeStockRepository.reducirStockPorSede(sedeSession.getIdSede(),med.getIdMedicamento(), Integer.parseInt(listaCantidades.get(i)));
+                    }
+                    //-------------------------------------------------------------------------//
+
+
+
                     ordenContenidoRepository.save(contenido);
                     i++;
                 }
@@ -522,8 +564,15 @@ public class FarmacistaController {
 
                 LocalDateTime now = LocalDateTime.now();
 
+                // Convertir la hora actual a la zona horaria de Perú
+                ZoneId peruZoneId = ZoneId.of("America/Lima");
+                ZonedDateTime peruTime = now.atZone(ZoneId.systemDefault()).withZoneSameInstant(peruZoneId);
+
+                // Si solo necesitas LocalDateTime, puedes convertirlo de nuevo
+                LocalDateTime peruLocalDateTime = peruTime.toLocalDateTime();
+
                 Orden newOrden = new Orden();
-                newOrden.setFechaIni(now);
+                newOrden.setFechaIni(peruLocalDateTime);
                 priceTotal = priceTotal.replace(",", "");
                 newOrden.setPrecioTotal(Float.parseFloat(priceTotal));
                 newOrden.setIdFarmacista(usuarioSession.getIdUsuario());
@@ -554,7 +603,6 @@ public class FarmacistaController {
         }
     }
 
-
     @GetMapping("/farmacista/crear_preorden")
     public String createPreOrden(Model model) {
 
@@ -565,8 +613,8 @@ public class FarmacistaController {
         System.out.println(cantidadesFaltantes);
         int j = 0;
         for (String cant: cantidadesFaltantes) {
-            if (Integer.parseInt(cant) > 10){
-                cantidadesFaltantes.set(j,"10");
+            if (Integer.parseInt(cant) > 30){
+                cantidadesFaltantes.set(j,"30");
             }
             j++;
         }
@@ -674,14 +722,298 @@ public class FarmacistaController {
 
     @GetMapping("/farmacista/cambiar_medicamentos")
     public String changeMedicamentos(Model model) {
+        if (medicamentosSeleccionados.isEmpty()) {
+            return "redirect:/farmacista";
+        } else {
+            // Obtener todas las categorías de los medicamentos seleccionados
+            Set<String> categoriasMedicamentos = new HashSet<>();
+            for (Medicamento medicamento : medicamentosSeleccionados) {
+                categoriasMedicamentos.add(medicamento.getCategorias());
+            }
 
-        model.addAttribute("medicamentosSinStock", medicamentosSinStock);
-        model.addAttribute("medicamentosConStock", medicamentosConStock);
-        model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
-        model.addAttribute("cantidadesExistentes", cantidadesExistentes);
+            // Crear una lista de listas de medicamentos agrupados por categoría
+            List<List<Medicamento>> medicamentosAgrupados = new ArrayList<>();
+            for (Medicamento medicamento : medicamentosSeleccionados) {
+                String categoriaMedicamento = medicamento.getCategorias();
+                List<Medicamento> medicamentosPorCategoria = medicamentoRepository.findByCategorias(categoriaMedicamento);
+                medicamentosAgrupados.add(medicamentosPorCategoria);
+            }
+
+            model.addAttribute("medicamentosSeleccionados", medicamentosSeleccionados);
+            model.addAttribute("medicamentosAgrupados", medicamentosAgrupados);
+            model.addAttribute("cantidadesFaltantes", cantidadesFaltantes);
+            model.addAttribute("cantidadesExistentes", cantidadesExistentes);
+        }
 
         return "farmacista/cambiar_medicamentos";
     }
+
+    @GetMapping("/farmacista/reemplazar_medicamentos")
+    public String replace(Model model, @RequestParam(value="id") Integer idOrden,
+                                        @RequestParam(value="currentMed", required = false) List<Medicamento> listaMed,
+                                        @RequestParam(value="currentCant", required = false) List<String> listaInt, HttpSession session) {
+
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
+
+        if (chatRepository.buscarChatReemplazarMed(userSession.getIdUsuario(), idOrden) != null){
+
+            if(listaMed != null){
+                model.addAttribute("currentMed", listaMed);
+                model.addAttribute("currentCant", listaInt);
+            }
+
+            List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(idOrden));
+            List<OrdenContenido> medicamentosEnStock = new ArrayList<>();
+            List<OrdenContenido> medicamentosSinStock = new ArrayList<>();
+            for(OrdenContenido oc : lista){
+                if(oc.getCantidad() > sedeStockRepository.verificarCantidadStockPorSede(  ordenRepository.getOrdenByIdOrden(Integer.parseInt(String.valueOf(idOrden))).getSede().getIdSede(), oc.getIdMedicamento().getIdMedicamento())    ){
+                    medicamentosSinStock.add(oc);
+                }else{
+                    medicamentosEnStock.add(oc);
+                }
+            }
+            model.addAttribute("medicamentosSinStock",medicamentosSinStock);
+
+            List<MedicamentosSedeStockDto> listaMedicamentos = sedeStockRepository.findMedicamentosConStockBySede(ordenRepository.getOrdenByIdOrden(Integer.parseInt(String.valueOf(idOrden))).getSede().getIdSede());
+            model.addAttribute("listaMedicamentos",listaMedicamentos);
+
+
+            model.addAttribute("idOrden",idOrden);
+
+            return "farmacista/chat_reemplazar_medicamentos";
+        }else{
+            return "redirect:/farmacista/mensajeria";
+        }
+    }
+
+
+    @PostMapping("/farmacista/confirmar_cambio")
+    public String confirmarCambio(Model model, HttpSession session, @RequestParam("listaIds") List<Integer> lista,
+                                  @RequestParam("idOrden") String idOrden, RedirectAttributes redirectAttributes){
+
+        System.out.println("la lista es:" + lista);
+
+
+        Integer i = new Integer(0);
+        Integer cantidad = new Integer(0);
+
+        Integer verificar = null;
+        while(i < lista.size()){
+            Medicamento medicamento = medicamentoRepository.getById(lista.get(i));
+            cantidad = lista.get(i+1);
+
+            //VERIFICAR EL STOCK DE UN MEDICAMENTO POR SU ID Y SU SEDE
+            if(cantidad > sedeStockRepository.verificarCantidadStockPorSede(ordenRepository.getOrdenByIdOrden(Integer.parseInt(String.valueOf(idOrden))).getSede().getIdSede(), medicamento.getIdMedicamento())){
+                verificar = 1; //No hay stock suficiente
+                break;
+            }else{
+                verificar = 0; //Hay stock
+            }
+            i = i + 2;
+        }
+
+        if(verificar==1){
+            List<Medicamento> medicamentosSeleccionados = getMedicamentosFromListaInteger(lista);
+            List<String> listaCantidades = getCantidadesFromListaInteger(lista);
+            redirectAttributes.addAttribute("currentMed", medicamentosSeleccionados);
+            redirectAttributes.addAttribute("currentCant", listaCantidades);
+            redirectAttributes.addAttribute("id", idOrden);
+            return "redirect:/farmacista/reemplazar_medicamentos";
+
+        }else{
+
+            //eliminar medicamentos de orden contenido antiguos
+            List<OrdenContenido> lista2 = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(idOrden));
+            List<OrdenContenido> medicamentosEnStock = new ArrayList<>();
+            List<OrdenContenido> medicamentosSinStock = new ArrayList<>();
+            for(OrdenContenido oc : lista2){
+                if(oc.getCantidad() > sedeStockRepository.verificarCantidadStockPorSede(  ordenRepository.getOrdenByIdOrden(Integer.parseInt(String.valueOf(idOrden))).getSede().getIdSede(), oc.getIdMedicamento().getIdMedicamento())    ){
+                    ordenContenidoRepository.borrarContenidoOrden(oc.getIdMedicamento().getIdMedicamento(), idOrden);
+                }
+            }
+
+            //agregar los nuevos
+            Integer j = new Integer(0);
+            Integer cant = new Integer(0);
+
+            OrdenContenido ordenContenido = new OrdenContenido();
+            OrdenContenidoId oid = new OrdenContenidoId();
+
+            ordenContenido.setIdOrden(ordenRepository.getOrdenByIdOrden(Integer.valueOf(idOrden)));
+            oid.setIdOrden(ordenRepository.getOrdenByIdOrden(Integer.valueOf(idOrden)).getIdOrden());
+
+
+            while(j < lista.size()){
+
+
+                Medicamento medicamento = medicamentoRepository.getById(lista.get(j));
+                cant = lista.get(j+1);
+
+
+                //VERIFICAR Y REDUCIR EL STOCK DE UN MEDICAMENTO POR SU ID Y SU SEDE
+                if(cant <= sedeStockRepository.verificarCantidadStockPorSede(ordenRepository.getOrdenByIdOrden(Integer.parseInt(String.valueOf(idOrden))).getSede().getIdSede(), medicamento.getIdMedicamento())){
+                    sedeStockRepository.reducirStockPorSede(ordenRepository.getOrdenByIdOrden(Integer.parseInt(String.valueOf(idOrden))).getSede().getIdSede(),medicamento.getIdMedicamento(), cant);
+                }
+
+
+                oid.setIdMedicamento(medicamento.getIdMedicamento());
+                ordenContenido.setId(oid);
+                ordenContenido.setIdMedicamento(medicamento);
+                ordenContenido.setCantidad(cantidad);
+                ordenContenidoRepository.save(ordenContenido);
+
+
+
+                j = j + 2;
+
+
+            }
+
+            //cambiar el estado a pago disponible
+            ordenRepository.actualizarEstadoOrden(2, Integer.valueOf(idOrden));
+
+            return "redirect:/farmacista/ordenes_web";
+
+        }
+
+    }
+
+    @PostMapping("/farmacista/generar_preorden_chat")
+    public String preordenChat(Model model, HttpSession session, @RequestParam("idOrden") String idOrden, RedirectAttributes redirectAttributes){
+
+        System.out.println(idOrden);
+
+        List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+        List<OrdenContenido> medicamentosEnStock = new ArrayList<>();
+        List<OrdenContenido> medicamentosSinStock = new ArrayList<>();
+        for(OrdenContenido oc : lista){
+            if(oc.getCantidad() > sedeStockRepository.verificarCantidadStockPorSede(  ordenRepository.getOrdenByIdOrden(Integer.parseInt(idOrden)).getSede().getIdSede(), oc.getIdMedicamento().getIdMedicamento())    ){
+                medicamentosSinStock.add(oc);
+            }else{
+                medicamentosEnStock.add(oc);
+            }
+        }
+
+        Optional<Orden> ordenAntiguaOptional = ordenRepository.findById(Integer.valueOf(idOrden));
+
+        //Generar Pre Orden:
+        if(ordenAntiguaOptional.isPresent()){
+
+            Orden ordenAntigua = ordenAntiguaOptional.get();
+
+            String tracking = new String();
+            tracking= ordenRepository.findLastOrdenId()+1 + "-2024";
+
+            LocalDateTime fechaIni = LocalDateTime.now();
+            // Convertir la hora actual a la zona horaria de Perú
+            ZoneId peruZoneId = ZoneId.of("America/Lima");
+            ZonedDateTime peruTime = fechaIni.atZone(ZoneId.systemDefault()).withZoneSameInstant(peruZoneId);
+
+            // Si solo necesitas LocalDateTime, puedes convertirlo de nuevo
+            LocalDateTime peruLocalDateTime = peruTime.toLocalDateTime();
+            LocalDateTime fechaFin = peruLocalDateTime.plus(5, ChronoUnit.DAYS);
+            Integer idFarmacista = new Integer(120); //el id del Farmacista
+            Sede s = sedeRepository.getById(ordenAntigua.getSede().getIdSede()); //el id de la Sede
+            Doctor doc = doctorRepository.getById(ordenAntigua.getDoctor().getIdDoctor()); //el id del doctor
+
+            Orden orden = new Orden();
+            orden.setIdOrden(ordenRepository.findLastOrdenId()+1);
+            orden.setTracking(tracking);
+            orden.setFechaIni(peruLocalDateTime);
+            orden.setFechaFin(fechaFin);
+
+            Float priceTotal = 0.0F;
+
+            for (OrdenContenido ordenContenido : medicamentosSinStock) {
+                BigDecimal precioVenta = ordenContenido.getIdMedicamento().getPrecioVenta();
+                int cantidad = ordenContenido.getCantidad();
+
+                // Multiplicar BigDecimal por int y convertir el resultado a float
+                float precioVentaFloat = precioVenta.floatValue();
+                float subtotal = precioVentaFloat * cantidad;
+
+                // Acumular el resultado
+                priceTotal += subtotal;
+            }
+
+            System.out.println(priceTotal);
+
+            orden.setPrecioTotal(priceTotal);
+            orden.setIdFarmacista(idFarmacista);
+            orden.setPaciente(ordenAntigua.getPaciente());
+            orden.setTipoOrden(3);
+            orden.setEstadoOrden(2);
+            orden.setSede(s);
+            orden.setDoctor(doc);
+            orden.setEstadoPreOrden(1);
+            orden.setSeguroUsado(ordenAntigua.getSeguroUsado());
+            ordenRepository.save(orden);
+
+
+            //Contenido de la pre orden:
+            Integer cantidad = new Integer(0);
+            OrdenContenido ordenContenido = new OrdenContenido();
+            OrdenContenidoId oid = new OrdenContenidoId();
+            ordenContenido.setIdOrden(orden);
+            oid.setIdOrden(orden.getIdOrden());
+
+            for(OrdenContenido med : medicamentosSinStock){
+                oid.setIdMedicamento(med.getIdMedicamento().getIdMedicamento());
+                ordenContenido.setId(oid);
+                ordenContenido.setIdMedicamento(med.getIdMedicamento());
+                ordenContenido.setCantidad(med.getCantidad());
+                ordenContenidoRepository.save(ordenContenido);
+            }
+
+
+            //Eliminar los medicamentos de la orden antigua:
+            List<OrdenContenido> lista2 = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(idOrden));
+            for(OrdenContenido oc : lista2){
+                if(oc.getCantidad() > sedeStockRepository.verificarCantidadStockPorSede( ordenRepository.getOrdenByIdOrden(Integer.parseInt(String.valueOf(idOrden))).getSede().getIdSede(), oc.getIdMedicamento().getIdMedicamento())    ){
+                    ordenContenidoRepository.borrarContenidoOrden(oc.getIdMedicamento().getIdMedicamento(), idOrden);
+                }
+            }
+
+
+
+            if(medicamentosEnStock.size()==0){
+                System.out.println("La orden antigua se quedó vacia");
+                ordenAntigua.setPrecioTotal(0);
+                ordenAntigua.setEstadoOrden(9);
+                ordenAntigua.setMotivoAnulado("El contenido de esta orden pasó a una Pre Orden");
+
+            }else{
+                //Recalcular el precio total de la ordenAntigua
+                Float priceTotal2 = 0.0F;
+                for (OrdenContenido ordenContenido2 : medicamentosEnStock) {
+                    BigDecimal precioVenta = ordenContenido2.getIdMedicamento().getPrecioVenta();
+                    int cantidad2 = ordenContenido2.getCantidad();
+                    float precioVentaFloat = precioVenta.floatValue();
+                    float subtotal = precioVentaFloat * cantidad2;
+                    priceTotal2 += subtotal;
+                }
+                ordenAntigua.setPrecioTotal(priceTotal2);
+                ordenAntigua.setEstadoOrden(2);
+            }
+
+
+
+            redirectAttributes.addFlashAttribute("msg", "Orden Creada");
+
+
+            return "redirect:/farmacista/ordenes_web";
+        }else{
+            return "redirect:/farmacista/ordenes_web";
+        }
+
+
+
+    }
+
+
+
+
+
 
 
     @GetMapping("/farmacista/ordenes_venta")
@@ -754,7 +1086,7 @@ public class FarmacistaController {
             model.addAttribute("idOrden", idOrden);
             model.addAttribute("contenidoOrden", contenidoOrdenWeb);
             model.addAttribute("orden",ordenWebComprobada);
-            return "farmacista/tracking";
+            return "farmacista/tracking-2";
         } else {
             return "farmacista/errorPages/no_existe_orden";
         }
@@ -886,6 +1218,19 @@ public class FarmacistaController {
                 preOrdenChild.setMotivoAnulado(motivo);
             }
 
+            //---------RESTABLECER EL STOCK-----------------//
+            List<OrdenContenido> medicamentosPedidos = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+            Integer idSede = ordenComprobada.getSede().getIdSede();
+
+            for(OrdenContenido oc : medicamentosPedidos){
+                sedeStockRepository.aumentarStockPorSede(idSede, oc.getIdMedicamento().getIdMedicamento(),oc.getCantidad());
+            }
+            //---------------------------------------------//
+
+
+
+
+
             attr.addFlashAttribute("msg", "La orden ha sido anulada exitosamente.");
             return "redirect:/farmacista/ver_orden_tracking?id=" + idOrden;
 
@@ -986,6 +1331,7 @@ public class FarmacistaController {
 
                 if (isValidPassword(newContrasena)){
                     usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
+                    usuarioRepository.actualizarEstadoContra(usuarioSession.getIdUsuario());
                     attr.addFlashAttribute("msgSuccess", "Contraseña actualizada correctamente.");
                 } else {
                     attr.addFlashAttribute("msg", "Ingrese una contraseña válida. De más de 8 carácteres, con dígitos y carácteres especiales.");
@@ -1048,6 +1394,9 @@ public class FarmacistaController {
         model.addAttribute("userId1", userId1);
         model.addAttribute("userId2", userId2);
         model.addAttribute("idOrden",idOrden);
+        model.addAttribute("idOrdenInteger", Integer.parseInt(idOrden) + 10000);
+        model.addAttribute("orden",ordenRepository.getOrdenByIdOrden(Integer.valueOf(idOrden)));
+
 
 
         /*----------------------IP LOCAL-------------------------*/
@@ -1123,6 +1472,26 @@ public class FarmacistaController {
         return cantidades;
     }
 
+
+
+    public List<Medicamento> getMedicamentosFromListaInteger(List<Integer> listaSelectedIds) {
+        List<Optional<Medicamento>> optionals = new ArrayList<>();
+        List<Medicamento> seleccionados;
+        for (int i = 0; i < listaSelectedIds.size(); i += 2) {
+            optionals.add(medicamentoRepository.findById(Integer.valueOf(listaSelectedIds.get(i))));
+        }
+        seleccionados = optionals.stream().flatMap(Optional::stream).collect(Collectors.toList());
+
+        return seleccionados;
+    }
+
+    public List<String> getCantidadesFromListaInteger(List<Integer> listaSelectedIds) {
+        List<String> cantidades = new ArrayList<>();
+        for (int i = 0; i + 1 < listaSelectedIds.size(); i += 2) {
+            cantidades.add(String.valueOf(listaSelectedIds.get(i + 1)));
+        }
+        return cantidades;
+    }
 
 
     @Getter

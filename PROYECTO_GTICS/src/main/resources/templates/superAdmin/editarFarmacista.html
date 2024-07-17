@@ -13,7 +13,7 @@
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
     <!--=============== CSS ===============-->
-    <link th:href="@{/css/preloader.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/loader.css}">
 
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
     <link th:href="@{/css/fonts.css}" rel="stylesheet" />
@@ -106,7 +106,7 @@
             width: 300px;
             height: 300px;
             background-color: lightgray;
-            background-image: url('https://static.vecteezy.com/system/resources/previews/014/591/700/non_2x/office-manager-man-icon-outline-style-vector.jpg');
+            background-image: url('/img/farmaceuticologo3.png');
             background-size: cover;
             background-position: center;
             border: 2px solid lightgray;
@@ -167,13 +167,36 @@
 </head>
 
 
-<body class="loader-hidden">
-<div class="container-loader loader-hidden" id="onload">
-    <div class="loader"></div>
+<body >
+<div id="loader-container"  style="display: flex;flex-direction: column;">
+
+    <div style="display: flex; justify-content: center;margin-top: 250px;">
+        <img th:src="@{/media/logo_large_2.png}" style="width: 550px; ">
+    </div>
+
+    <div id="loader-wrapper"  class="loader-wrapper">
+
+        <div class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader2" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+
+        <div id="loader3" class="loader">
+            <div class="roller"></div>
+            <div class="roller"></div>
+        </div>
+    </div>
+
 </div>
+<div id="content-show" class="hidden">
 <!--=============== HEADER ===============-->
 <header class="header-topbar">
-    <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Inicio')}"></nav>
+    <nav th:replace="~{fragments/navbar.html :: navbar( active = '')}"></nav>
 </header>
 
 <div th:replace="~{fragments/banner.html :: banner}"></div>
@@ -197,7 +220,7 @@
                         <div class="input-label-box" style="display:flex; flex-direction:column; align-items:center;">
                             <label style="font-weight: bold; color:dimgray; margin-bottom:8px;"  th:text="${'Farmacista de ' + datosFarmacistaSede.idSede.nombre}"></label>
                             <div class="profile-picture-container" style="display:flex; justify-content:center;" >
-                                <div class="profile-picture"></div>
+                                <img th:src="@{/img/farmaceuticologo3.png}" alt="" style="width: 350px; height: 350px;">
                             </div>
                         </div>
                         <label style="font-weight: bold; color:dimgray; ; font-size: large ">Cambiar contraseña:</label>
@@ -230,7 +253,7 @@
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Nombre del farmacista:</label>
-                                        <input th:field="*{nombres}" class="input-form" type="text" name="nombres" th:classappend="${#fields.hasErrors('nombres')?'is-invalid':''}" >
+                                        <input style="background-color: #d9dbe0" th:field="*{nombres}" class="input-form" type="text" name="nombres" th:classappend="${#fields.hasErrors('nombres')?'is-invalid':''}" readonly>
                                         <div style="width: 300px" class="invalid-feedback"
                                               th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}">
                                             No puede estar vacío
@@ -239,7 +262,7 @@
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray">Apellidos del farmacista:</label>
-                                        <input th:field="*{apellidos}" class="input-form" type="text" name="apellidos"  th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}" >
+                                        <input style="background-color: #d9dbe0" th:field="*{apellidos}" class="input-form" type="text" name="apellidos"  th:classappend="${#fields.hasErrors('apellidos')?'is-invalid':''}" readonly>
                                         <div style="width: 300px" class="invalid-feedback"
                                               th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}">
                                             No puede estar vacío
@@ -340,6 +363,7 @@
 <br><br><br>
 
 <div th:replace="~{fragments/navbar.html :: footer}">
+</div>
 </div>
 <!-- JQuery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -459,13 +483,8 @@
 <script th:src="@{/js/topbar.js}"></script>
 
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
-<script>
-    window.onload = function () {
-        $('#onload').fadeOut();
-        $('body').removeClass('loader-hidden');
-    }
+<script th:src="@{/js/loader.js}"></script>
 
-</script>
 </body>
 
 </html>

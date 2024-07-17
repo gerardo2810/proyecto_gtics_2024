@@ -10,6 +10,7 @@ import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
 import jakarta.websocket.SessionException;
 import org.apache.catalina.Session;
+import org.apache.poi.ddf.EscherPictBlip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +34,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
@@ -51,13 +55,6 @@ import pe.sanmiguel.bienestar.proyecto_gtics.SHA256;
 @Controller
 @RequestMapping(value="/paciente", method= RequestMethod.GET)
 public class PacienteController {
-
-
-
-
-
-
-
 
 
     /*----------------- Repositories -----------------*/
@@ -122,7 +119,7 @@ public class PacienteController {
         HttpSession session = request.getSession();
         Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-        List<Orden> lista =  ordenRepository.listarOrdenes(usuario.getIdUsuario());
+        List<Orden> lista =  ordenRepository.listarOrdenesPriceNoZero(usuario.getIdUsuario());
 
         if (usuario != null) {
             // Imprimir el nombre del usuario autenticado
@@ -141,15 +138,19 @@ public class PacienteController {
 
 
     @GetMapping(value="/pago_tarjeta")
-    public String pago_tarjeta(Model model, @RequestParam(value="id") Integer id,  @ModelAttribute("tarjeta") Tarjeta tarjeta){
+    public String pago_tarjeta(HttpSession session, Model model, @RequestParam(value="id") Integer id,  @ModelAttribute("tarjeta") Tarjeta tarjeta){
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
 
-        Orden orden = ordenRepository.getOrdenByIdOrden(id);
+        Optional<Orden> orden = Optional.ofNullable(ordenRepository.ordenFaltaPago(id, userSession.getIdUsuario()));
 
-        model.addAttribute("idOrden", orden.getIdOrden());
+        if(orden.isPresent()){
+            model.addAttribute("idOrden", orden.get().getIdOrden());
+            return "paciente/pago_tarjeta";
+        }else{
+            return "redirect:/paciente/ordenes";
+        }
 
-        return "paciente/pago_tarjeta";
     }
-
 
 
     @GetMapping(value = "/chat/{idOrden}/{userId1}/{userId2}")
@@ -158,6 +159,8 @@ public class PacienteController {
         model.addAttribute("userId2", userId2);
         model.addAttribute("idOrden", idOrden);
         model.addAttribute("idOrdenInteger", Integer.parseInt(idOrden) + 10000);
+        model.addAttribute("orden",ordenRepository.getOrdenByIdOrden(Integer.valueOf(idOrden)));
+
 
         Chat chatActual  = chatRepository.buscarChat(Integer.parseInt(userId1),Integer.parseInt(userId2), Integer.parseInt(idOrden));
 
@@ -215,18 +218,25 @@ public class PacienteController {
 
 
     @GetMapping(value="/tracking")
-    public String tracking(Model model, @RequestParam("id") String idOrden){
+    public String tracking(Model model, @RequestParam("id") String idOrden, HttpSession session){
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
 
         Integer idInteger = Integer.parseInt(idOrden);
-        Orden orden = ordenRepository.getById(idInteger);
-        Integer cantProductos = ordenContenidoRepository.cantProductos(idOrden);
-        List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+        Optional<Orden> orden = Optional.ofNullable(ordenRepository.ordenXusuario(idInteger, userSession.getIdUsuario()));
 
-        model.addAttribute("cantProductos", cantProductos);
-        model.addAttribute("lista", lista);
-        model.addAttribute("ordenActual", orden);
+        if(orden.isPresent()){
+            Integer cantProductos = ordenContenidoRepository.cantProductos(idOrden);
+            List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
 
-        return "paciente/tracking";
+            model.addAttribute("cantProductos", cantProductos);
+            model.addAttribute("lista", lista);
+            model.addAttribute("ordenActual", orden.get());
+
+            return "paciente/tracking";
+        }else{
+            return "redirect:/paciente";
+        }
+
     }
 
 
@@ -298,6 +308,7 @@ public class PacienteController {
 
                 if (isValidPassword(newContrasena)){
                     usuarioRepository.actualizarContrasenaUsuario(SHA256.cipherPassword(newContrasena), usuarioSession.getIdUsuario());
+                    usuarioRepository.actualizarEstadoContra(usuarioSession.getIdUsuario());
                     attr.addFlashAttribute("msgSuccess", "Contraseña actualizada correctamente.");
                 } else {
                     attr.addFlashAttribute("msg", "Ingrese una contraseña válida. De más de 8 carácteres, con dígitos y carácteres especiales.");
@@ -309,36 +320,47 @@ public class PacienteController {
         } else {
             attr.addFlashAttribute("msg", "Introduzca su contraseña actual.");
         }
-        return "redirect:/farmacista/perfil";
+        return "redirect:/paciente/perfil";
     }
 
     @GetMapping(value = "/confirmar_pago")
-    public String confirmarPago(Model model, @RequestParam("id") String idOrden){
-
-        Integer cantProductos = ordenContenidoRepository.cantProductos(idOrden);
+    public String confirmarPago(Model model, HttpSession session, @RequestParam("id") String idOrden){
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
 
         Integer idInteger = Integer.parseInt(idOrden);
-        Orden orden = ordenRepository.getById(idInteger);
+        Optional<Orden> orden = Optional.ofNullable(ordenRepository.ordenFaltaPago(idInteger, userSession.getIdUsuario()));
 
-        List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+        if(orden.isPresent()){
 
-        model.addAttribute("lista", lista);
-        model.addAttribute("cantProductos", cantProductos);
-        model.addAttribute("ordenActual", orden);
+            Integer cantProductos = ordenContenidoRepository.cantProductos(idOrden);
+            List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(idOrden);
+            model.addAttribute("lista", lista);
+            model.addAttribute("cantProductos", cantProductos);
+            model.addAttribute("ordenActual", orden.get());
 
-        return "paciente/confirmar_pago";
+            return "paciente/confirmar_pago";
+
+        }else{
+            return "redirect:/paciente/ordenes";
+        }
     }
 
     @GetMapping(value="/boleta_pago")
-    public String boletaPago(Model model, @RequestParam(value="id") Integer idOrden){
+    public String boletaPago(Model model, @RequestParam(value="id") Integer idOrden, HttpSession session){
+        Usuario userSession = (Usuario) session.getAttribute("usuario");
+        Optional<Orden> orden = Optional.ofNullable(ordenRepository.ordenesPagadas(idOrden, userSession.getIdUsuario()));
 
-        List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(idOrden));
+        if(orden.isPresent()){
+            List<OrdenContenido> lista = ordenContenidoRepository.findMedicamentosByOrdenId(String.valueOf(idOrden));
+            model.addAttribute("orden", ordenRepository.getOrdenByIdOrden(idOrden));
+            model.addAttribute("medicamentos", lista);
+
+            return "paciente/boleta";
+        }else{
+            return "redirect:/paciente/ordenes";
+        }
 
 
-        model.addAttribute("orden", ordenRepository.getOrdenByIdOrden(idOrden));
-        model.addAttribute("medicamentos", lista);
-
-        return "paciente/boleta";
     }
 
     /*----------------- Foto de medicamentos-----------------*/
@@ -390,32 +412,59 @@ public class PacienteController {
                                @RequestParam(value = "seguro", required = false) String seguro,
                                Model model, RedirectAttributes redirectAttributes,
                                HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-
-
         HttpSession session = request.getSession();
         Usuario usuario1 = (Usuario) session.getAttribute("usuario");
 
+        System.out.println("\n LA SEDE ELEGIDA ES:" + ordenDto.getSedeId() );
 
-        System.out.println("El precio total es:" + total);
+        //-----------IMAGEN DEBE SER PNG O JPG------------------//
+        String fileName = file.getSubmittedFileName();
+        String[] partes = fileName.split("\\.");
+        System.out.println(partes);
+        String extension = null;
+        if (partes.length > 1) {
+            extension = partes[partes.length - 1];  // Obtener la última parte como extensión
+            System.out.printf("La Extensión es: " + extension);
+        } else {
+            System.out.println("No se pudo determinar la extensión del archivo.");}
+        //---------------------------------------------------------------//
 
-        if(bindingResult.hasErrors() || bin2.hasErrors()){
+
+        //-----------IMAGEN DEBE SER MENOR A 3MB------------------//
+        long size = file.getSize();
+        long maxSize = 3 * 1024 * 1024;
+
+        System.out.println("\n EL tamaño del archivo es: " + size + "| el maximo es: "+maxSize);
+        //---------------------------------------------------------------//
 
 
+        if(bindingResult.hasErrors() || bin2.hasErrors() || (extension != null && !extension.equals("png") && !extension.equals("jpg")) || (size > maxSize) || extension==null){
             System.out.println(bindingResult.getAllErrors());
             System.out.printf(String.valueOf(file));
+            model.addAttribute("errorGeneral", 0);
 
             List<Medicamento> listaMedicamentos = medicamentoRepository.findAll();
             List<Doctor> listaDoctores = doctorRepository.findAll();
             model.addAttribute("listaDoctores", listaDoctores);
             model.addAttribute("listaMedicamentos", listaMedicamentos);
-
             if(!lista.isEmpty()){
                 List<Medicamento> medicamentosSeleccionados = getMedicamentosFromLista(lista);
                 List<String> listaCantidades = getCantidadesFromLista(lista);
-
                 model.addAttribute("currentMed", medicamentosSeleccionados);
                 model.addAttribute("currentCant", listaCantidades);
+
+                model.addAttribute("carritoNumber",lista.size()/2);
             }
+            if(extension != null && (!extension.equals("png") && !extension.equals("jpg") && !extension.equals("jpeg")) ){
+                model.addAttribute("extensionIncorrecta", 0);
+            }
+            if(size > maxSize){
+                model.addAttribute("archivoPesado",0);
+            }
+            if(extension==null){
+                model.addAttribute("archivoSinExtension",0);
+            }
+
 
             return "paciente/new_orden";
 
@@ -428,10 +477,18 @@ public class PacienteController {
 
             String tracking = new String();
             tracking= ordenRepository.findLastOrdenId()+1 + "-2024";
+
             LocalDateTime fechaIni = LocalDateTime.now();
-            LocalDateTime fechaFin = LocalDateTime.now();
+
+            // Convertir la hora actual a la zona horaria de Perú
+            ZoneId peruZoneId = ZoneId.of("America/Lima");
+            ZonedDateTime peruTime = fechaIni.atZone(ZoneId.systemDefault()).withZoneSameInstant(peruZoneId);
+
+            // Si solo necesitas LocalDateTime, puedes convertirlo de nuevo
+            LocalDateTime peruLocalDateTime = peruTime.toLocalDateTime();
+            LocalDateTime fechaFin = peruLocalDateTime.plus(5, ChronoUnit.DAYS);
             Integer idFarmacista = new Integer(120); //el id del Farmacista
-            Sede s = sedeRepository.getById(5); //el id de la Sede
+            Sede s = sedeRepository.getById(ordenDto.getSedeId()); //el id de la Sede
             Doctor doc = doctorRepository.getById(idDoctor); //el id del doctor
 
 
@@ -441,7 +498,7 @@ public class PacienteController {
             orden.setIdOrden(ordenRepository.findLastOrdenId()+1);
             System.out.println("Ultimo id en db de orden: " + ordenRepository.findLastOrdenId());
             orden.setTracking(tracking);
-            orden.setFechaIni(fechaIni);
+            orden.setFechaIni(peruLocalDateTime);
             orden.setFechaFin(fechaFin);
             total = total.replace(",", "");
             orden.setPrecioTotal(Float.parseFloat(total));
@@ -470,10 +527,18 @@ public class PacienteController {
             ordenContenido.setIdOrden(orden);
             oid.setIdOrden(orden.getIdOrden());
 
+
+
             while(i < lista.size()){
 
                 Medicamento medicamento = medicamentoRepository.getById(lista.get(i));
                 cantidad = lista.get(i+1);
+
+                //VERIFICAR Y REDUCIR EL STOCK DE UN MEDICAMENTO POR SU ID Y SU SEDE
+                if(cantidad <= sedeStockRepository.verificarCantidadStockPorSede(ordenDto.getSedeId(), medicamento.getIdMedicamento())){
+                    sedeStockRepository.reducirStockPorSede(ordenDto.getSedeId(),medicamento.getIdMedicamento(), cantidad);
+                }
+
 
                 oid.setIdMedicamento(medicamento.getIdMedicamento());
                 ordenContenido.setId(oid);

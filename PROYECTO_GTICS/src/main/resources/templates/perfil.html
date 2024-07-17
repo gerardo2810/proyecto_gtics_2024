@@ -75,15 +75,24 @@
             <div class="container" style="display: flex; flex-direction: row; gap: 20px; padding: 0 !important;">
 
                 <!-- Profile picture card-->
-                <div class="card card-perfil" style="max-height: 400px;">
+                <div class="card card-perfil" style="max-height: 320px;">
                     <div class="card-header">Foto de perfil</div>
                     <div class="card-body text-center">
                         <!-- Profile picture image-->
-                        <img class="img-account-profile rounded-circle" style="padding-top: 15px;" src="https://via.placeholder.com/300" alt="">
-                        <!-- Profile picture help block-->
-                        <div class="small font-italic text-muted"  style="padding-top: 20px; padding-bottom: 15px" >JPG o PNG no mayor a 5 MB</div>
-                        <!-- Profile picture upload button-->
-                        <button class="btn btn-primary" type="button" >Actualizar Foto</button>
+                        <div th:if="${session.usuario.getRol() == 1}">
+                            <img class="img-account-profile rounded-circle" style="padding-top: 15px;" th:src="@{/img/logoSuper1.png}" alt="">
+                        </div>
+                        <div th:if="${session.usuario.getRol() == 2}">
+                            <img class="img-account-profile rounded-circle" style="padding-top: 15px;" th:src="@{/img/3135768.png}" alt="">
+                        </div>
+
+                        <div th:if="${session.usuario.getRol() == 3}">
+                            <img class="img-account-profile rounded-circle" style="padding-top: 15px;" th:src="@{/img/farmaceuticologo3.png}" alt="">
+                        </div>
+                        <div th:if="${session.usuario.getRol() == 4}">
+                            <img class="img-account-profile rounded-circle" style="padding-top: 15px;" th:src="@{/img/logoPaciente.png}" alt="">
+                        </div>
+
                     </div>
                 </div>
 
@@ -97,27 +106,27 @@
                                 <div>
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Puesto</label>
-                                        <input class="input-form-3" name="inputRol" th:if="${session.usuario.getRol() == 1}" type="text"  th:value="${'Administrador Principal'}" readonly>
-                                        <input class="input-form-3" name="inputRol" th:if="${session.usuario.getRol() == 2}" type="text"  th:value="${'Administrador de sede'}" readonly>
-                                        <input class="input-form-3" name="inputRol" th:if="${session.usuario.getRol() == 3}" type="text"  th:value="${'Farmacista'}" readonly>
-                                        <input class="input-form-3" name="inputRol" th:if="${session.usuario.getRol() == 4}" type="text"  th:value="${'Paciente'}" readonly>
+                                        <input style="background-color: #E5F0FF" class="input-form-3" name="inputRol" th:if="${session.usuario.getRol() == 1}" type="text" th:value="${'Administrador Principal'}" readonly>
+                                        <input style="background-color: #E5F0FF" class="input-form-3" name="inputRol" th:if="${session.usuario.getRol() == 2}" type="text"  th:value="${'Administrador de sede'}" readonly>
+                                        <input style="background-color: #E5F0FF" class="input-form-3" name="inputRol" th:if="${session.usuario.getRol() == 3}" type="text"  th:value="${'Farmacista'}" readonly>
+                                        <input style="background-color: #E5F0FF" class="input-form-3" name="inputRol" th:if="${session.usuario.getRol() == 4}" type="text"  th:value="${'Paciente'}" readonly>
 
 
                                     </div>
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Correo Electrónico</label>
-                                        <input class="input-form-3" type="text"  name="inputEmailAddress" th:value="${session.usuario.getCorreo()}" readonly>
+                                        <input style="background-color: #E5F0FF" class="input-form-3" type="text"  name="inputEmailAddress" th:value="${session.usuario.getCorreo()}" readonly>
                                     </div>
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Nombres</label>
-                                        <input class="input-form-3" type="text" name="nombres" id="name" th:value="${session.usuario.getNombres()}" readonly>
+                                        <input style="background-color: #E5F0FF" class="input-form-3" type="text" name="nombres" id="name" th:value="${session.usuario.getNombres()}" readonly>
                                     </div>
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Apellidos</label>
-                                        <input class="input-form-3" type="text" name="apellidos" th:value="${session.usuario.getApellidos()}" readonly>
+                                        <input style="background-color: #E5F0FF" class="input-form-3" type="text" name="apellidos" th:value="${session.usuario.getApellidos()}" readonly>
                                     </div>
 
                                 </div>
@@ -126,22 +135,22 @@
                                 <div>
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Direccion</label>
-                                        <input class="input-form-3"  name="direccion" type="text" th:value="${session.usuario.getDireccion()}" readonly>
+                                        <input style="background-color: #E5F0FF" class="input-form-3"  name="direccion" type="text" th:value="${session.usuario.getDireccion()}" readonly>
                                     </div>
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Distrito</label>
-                                        <input class="input-form-3"  name="distrito" type="text" th:value="${session.usuario.getDistrito()}" readonly>
+                                        <input style="background-color: #E5F0FF" class="input-form-3"  name="distrito" type="text" th:value="${session.usuario.getDistrito()}" readonly>
                                     </div>
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">DNI</label>
-                                        <input class="input-form-3" type="text" name="dni" th:value="${session.usuario.getDni()}" readonly>
+                                        <input style="background-color: #E5F0FF" class="input-form-3" type="text" name="dni" th:value="${session.usuario.getDni()}" readonly>
                                     </div>
 
                                     <div class="input-label-box">
                                         <label style="font-weight: bold; color:dimgray; width: 100px">Teléfono</label>
-                                        <input class="input-form-3" type="text" name="celular"  th:value="${session.usuario.getCelular()}" readonly>
+                                        <input style="background-color: #E5F0FF" class="input-form-3" type="text" name="celular"  th:value="${session.usuario.getCelular()}" readonly>
                                     </div>
                                 </div>
 
@@ -191,7 +200,7 @@
                                         <div class="input-label-box">
 
                                             <div>
-                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Contraseña Anterior</label>
+                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Contraseña Actual</label>
                                                 <input class="input-form-3 form-control" th:value="${oldContrasena}" type="password" name="oldContrasena">
 
 
@@ -254,7 +263,7 @@
                                         <div class="input-label-box">
 
                                             <div>
-                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Contraseña Anterior</label>
+                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Contraseña Actual</label>
                                                 <input class="input-form-3 form-control" th:value="${oldContrasena}" type="password" name="oldContrasena">
 
 
@@ -317,7 +326,7 @@
                                         <div class="input-label-box">
 
                                         <div>
-                                            <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Contraseña Anterior</label>
+                                            <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Contraseña Actual</label>
                                             <input class="input-form-3 form-control" th:value="${oldContrasena}" type="password" name="oldContrasena">
 
 
@@ -379,7 +388,7 @@
                                         <div class="input-label-box">
 
                                             <div>
-                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Contraseña Anterior</label>
+                                                <label style="font-weight: bold; color:dimgray; width: 110px; padding-right: 10px">Contraseña Actual</label>
                                                 <input class="input-form-3 form-control" th:value="${oldContrasena}" type="password" name="oldContrasena">
 
 

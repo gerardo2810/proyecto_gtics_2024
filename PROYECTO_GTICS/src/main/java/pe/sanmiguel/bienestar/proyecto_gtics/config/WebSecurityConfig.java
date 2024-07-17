@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -59,19 +60,19 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests() //Autenticación por roles
+        http
+                .csrf().disable()
+                .authorizeHttpRequests() //Autenticación por roles
                 //Rutas para autenticación
-                /*.requestMatchers("/superadmin", "/superadmin/**").authenticated()
-                .requestMatchers("/adminsede", "/adminsede/**").authenticated()
-                .requestMatchers("/farmacista", "/farmacista/**").authenticated()
-                .requestMatchers("/paciente", "/paciente/**").authenticated()*/
-                //Autenticación por rol
+                .requestMatchers(HttpMethod.GET, "/service/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/chatbot_gtics/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/chatbot_gtics/**").permitAll()
                 .requestMatchers("/superadmin", "/superadmin/**").hasAnyAuthority("SUPERADMIN")
                 .requestMatchers("/adminsede", "/adminsede/**").hasAnyAuthority("SUPERADMIN", "ADMINSEDE")
                 .requestMatchers("/farmacista", "/farmacista/**").hasAnyAuthority("SUPERADMIN", "FARMACISTA")
                 .requestMatchers("/paciente", "/paciente/**").hasAnyAuthority("SUPERADMIN", "PACIENTE")
                 .requestMatchers("/cambiarcontra").hasAnyAuthority("TEMPORAL")
-                .requestMatchers("/impersonate").hasAuthority("SUPERADMIN")
+                .requestMatchers("/impersonate").hasAnyAuthority("SUPERADMIN", "ADMINSEDE","FARMACISTA", "PACIENTE")
                 .anyRequest().permitAll()
                 .and()
                 .exceptionHandling()
@@ -133,6 +134,14 @@ public class WebSecurityConfig {
                 .logoutSuccessHandler(new SimpleUrlLogoutSuccessHandler() {
                     @Override
                     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                        if (authentication != null) {
+                            String userEmail = authentication.getName();
+                            Usuario usuario = usuarioRepository.findByCorreo(userEmail);
+                            if (usuario != null) {
+                                usuarioRepository.actualizarEstadoDeslogueo(usuario.getIdUsuario());
+                            }
+                        }
+
                         logger.info("Logout successful. Adding logout message to session.");
                         request.getSession().setAttribute("logoutMessage", "Se cerró sesión exitosamente");
                         setDefaultTargetUrl("/");
