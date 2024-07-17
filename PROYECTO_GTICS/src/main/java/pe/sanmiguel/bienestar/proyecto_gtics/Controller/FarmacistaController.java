@@ -944,6 +944,7 @@ public class FarmacistaController {
             orden.setTipoOrden(3);
             orden.setEstadoOrden(2);
             orden.setSede(s);
+            orden.setOrdenParent(ordenAntigua.getIdOrden());
             orden.setDoctor(doc);
             orden.setEstadoPreOrden(1);
             orden.setSeguroUsado(ordenAntigua.getSeguroUsado());
